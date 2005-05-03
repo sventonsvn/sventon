@@ -1,0 +1,3 @@
+<html>
+Session cleared.
+</html>
