@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="springapp" basedir="." default="usage">
+<project name="sventon" basedir="." default="usage">
 	<property file="build.properties" />
 
 	<property name="src.dir" value="../java/src" />
