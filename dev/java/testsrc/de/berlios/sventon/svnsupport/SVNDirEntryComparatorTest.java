@@ -16,8 +16,6 @@ import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.DATE;
 import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
 import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.REVISION;
 
-;
-
 public class SVNDirEntryComparatorTest extends TestCase {
 
   public static void main(String[] args) {
