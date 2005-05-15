@@ -8,6 +8,18 @@ import java.util.Set;
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNNodeKind;
 
+import static org.tmatesoft.svn.core.io.SVNNodeKind.DIR;
+
+
+/**
+ * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
+ * ordering of <code>org.tmatesoft.svn.core.io.SVNDirEntry</code> objects.
+ * <p>
+ * The comparator can be configured during construction to tweak sorting
+ * behavior.
+ * 
+ * @author patrikfr@users.berlios.de
+ */
 public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
 
   /**
@@ -72,9 +84,9 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
       SVNNodeKind kind2 = entry2.getKind();
       if (kind1 != kind2) // Not equal kinds, have to inspect.
       {
-        if (kind1 == SVNNodeKind.DIR) {
+        if (kind1 == DIR) {
           return -1;
-        } else if (kind2 == SVNNodeKind.DIR) {
+        } else if (kind2 == DIR) {
           return 1;
         }
       }// not equal kind, but neither is DIR
@@ -86,28 +98,39 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
     // Natural ordering of strings as used below may not always be desirable?
     switch (sortType) {
     case NAME:
-      return entryName1.compareTo(entryName2);
+      return nullSafeCompare(entryName1, entryName2);
     case AUTHOR:
       final String author1 = entry1.getAuthor();
       final String author2 = entry2.getAuthor();
-      final int authCompare = author1.compareTo(author2);
-      return authCompare == 0 ? entryName1.compareTo(entryName2) : authCompare;
+      final int authCompare = nullSafeCompare(author1, author2);
+      return authCompare == 0 ? nullSafeCompare(entryName1, entryName2) : authCompare;
     case REVISION:
       final long revision1 = entry1.getRevision();
       final long revision2 = entry2.getRevision();
       final boolean revCompare = revision1 < revision2;
       if (revision1 == revision2) {
-        return entryName1.compareTo(entryName2);
+        return nullSafeCompare(entryName1, entryName2);
       } else {
         return revision1 < revision2 ? -1 : 1;
       }
     case DATE:
       final Date date1 = entry1.getDate();
       final Date date2 = entry2.getDate();
-      final int dateCompare = date1.compareTo(date2);
-      return dateCompare == 0 ? entryName1.compareTo(entryName2) : dateCompare;
+      final int dateCompare = nullSafeCompare(date1, date2);
+      return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
     default:
       throw new IllegalStateException("Illegal sort type: " + sortType);
     }
+  }
+
+  private <T> int nullSafeCompare(Comparable<T> o1, T o2) {
+    if (o1 != null && o2 != null) {
+      return o1.compareTo(o2);
+    } else if (o1 == null && o2 == null) {
+      return 0;
+    } else {
+      return o1 == null ? -1 : 1;
+    }
+
   }
 }

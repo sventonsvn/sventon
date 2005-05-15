@@ -18,12 +18,36 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.ISVNWorkspace;
-import org.tmatesoft.svn.core.io.SVNAuthenticationException;
+import org.tmatesoft.svn.core.io. SVNAuthenticationException;
 import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
 
+/**
+ * Abstract base class for use by controllers whishing to make use of basic plumbing functionalit such as authorization
+ * and basic repository configuration.
+ * <p>
+ * This abstract controller is based on the GoF Template pattern, the method to implement for extending controllers 
+ * is <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}</code>.
+ * <p>
+ * Workflow for this controller:
+ * <ol>
+ * <li>The controller inspects the user HttpSession to see if it contains a {@link de.berlios.sventon.ctrl.Credentials} 
+ * object named <code>sventon.credentials</code>. If this object exists information contained in it will be used for 
+ * authorized repository access, if it does not exist the controller will try to set up the repository with anonymous 
+ * access.
+ * <li>The controller configures the SVNRepository object and calls the extending class' 
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)} method with the given
+ * {@link de.berlios.sventon.ctrl.SVNBaseCommand} containing request parameters.
+ * <li>After the call returns, the controller adds additional information to the the model (see below) and forwards
+ * the request to the view returned together with the model by the 
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)} method. 
+ * </ol>
+ * Exception handling
+ * @author patrikfr@users.berlios.de
+ *
+ */
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   protected RepositoryConfiguration configuration = null;
@@ -55,7 +79,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
        ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
        
        //Fill in some common info
-       Map model = new HashMap<String, Object>();
+       Map<String, Object> model = new HashMap<String, Object>();
        model.put("url", configuration.getUrl());
        model.put("revision", revision == ISVNWorkspace.HEAD ? "HEAD" : Long.toString(revision));
        model.put("path", svnCommand.getPath());
