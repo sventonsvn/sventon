@@ -18,13 +18,13 @@
 	</tr>
 	<c:forEach items="${svndir}" var="entry">
 		<c:url value="repobrowser.svn" var="viewUrl">
-			<c:param name="path" value="${path}/${entry.name}" />
+			<c:param name="path" value="${path}${entry.name}" />
 		</c:url>
 		<c:url value="showlog.svn" var="showLogUrl">
-			<c:param name="path" value="${path}/${entry.name}" />
+			<c:param name="path" value="${path}${entry.name}" />
 		</c:url>
 		<c:url value="showfile.svn" var="showFileUrl">
-			<c:param name="path" value="${path}/${entry.name}" />
+			<c:param name="path" value="${path}${entry.name}" />
 		</c:url>
 		<tr>
 
@@ -35,7 +35,7 @@
 
     %>
 			<% if (nodeKind == SVNNodeKind.DIR) { %>
-			<td><a href="<c:out value="${viewUrl}"/>"><c:out
+			<td><a href="<c:out value="${viewUrl}/"/>"><c:out
 				value="${entry.name}" /></a></td>
 			<% } else { %>
 			<td><c:out value="${entry.name}" /></td>

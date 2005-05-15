@@ -16,21 +16,33 @@ public class RepositoryConfiguration {
   
   private SVNRepositoryLocation location = null;
 
-  protected final Log log = LogFactory.getLog(getClass());
-  
+  protected final Log logger = LogFactory.getLog(getClass());
+
   /**
-   * @param url
+   * Configures and initializes the repository.
+   * @param url The repository url.
    * @throws SVNException Thrown in URL-parsing fails
    */
   public RepositoryConfiguration(String url) throws SVNException {
     super();
+    if (url == null) {
+      throw new SVNException("No repository URL was provided.");
+    }
+
+    // Strip last slash if any.
+    if (url.endsWith("/")) {
+      logger.debug("Removing trailing slash from url.");
+      url = url.substring(0, url.length()-1);
+    }
+
     this.url = url;
-    log.debug("Configuring SVN Repository...");
+    logger.debug("Configuring SVN Repository...");
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
-    log.debug("Getting SVN location");
+    logger.debug("Getting SVN location");
+
     location = SVNRepositoryLocation.parseURL(url);
-    log.debug("Configuration done.");
+    logger.debug("Configuration done.");
   }
 
 

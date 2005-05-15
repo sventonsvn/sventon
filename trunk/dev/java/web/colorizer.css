@@ -1,0 +1,65 @@
+/*
+ * Style definition for Sventon Colorizer
+ * TODO: Complete...
+ */
+
+body {
+	font-family: Courier
+	font-size: 10px;
+	color: #000000;
+}
+
+.srcKeyword {
+	font-size: 12px;
+	font-weight: bold;
+	color: #0000FF;
+}
+
+.srcComment {
+	font-size: 12px;
+	font-weight: bold;
+	color: #00FF00;
+}
+
+.srcString {
+	font-size: 12px;
+	font-weight: bold;
+	color: #FF0000;
+}
+
+.srcInteger {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.srcFloat {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.srcCharacter {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.srcPreproc {
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+
+/* set default text color to black */
+/* set default remark color to gray */
+/* set default char color to red */
+/* set default int color to red */
+/* set default float color to maroon */
+/* set default string color to green */
+/* set default keyword color to blue */
+/* set default preprocessor color to purple */
+/* set default operator color to navy blue */
+/* set default background color to white */ 
+

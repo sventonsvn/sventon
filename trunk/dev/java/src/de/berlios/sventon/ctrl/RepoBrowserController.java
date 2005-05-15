@@ -28,7 +28,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     
     List<SVNDirEntry> dir = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
     
-    logger.debug("Getting directory contents");
+    logger.debug("Getting directory contents for: " + svnCommand.getPath());
     dir.addAll(repository.getDir(svnCommand.getPath(), revision, new HashMap(), new ArrayList()));
     Collections.sort(dir, new SVNDirEntryComparator(NAME, true));
     
