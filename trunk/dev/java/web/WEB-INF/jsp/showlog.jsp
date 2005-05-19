@@ -6,7 +6,7 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
-<h3><c:out value="${url}${path}" /> Rev: <c:out
+<h3><c:out value="${url}/${path}" /> Rev: <c:out
 	value="${revision}" />
 <table>
 	<tr>
