@@ -1,7 +1,8 @@
 package de.berlios.sventon.ctrl;
 
+import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +18,6 @@ import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import de.berlios.sventon.svnsupport.SVNDirEntryComparator;
-
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
 
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
 
