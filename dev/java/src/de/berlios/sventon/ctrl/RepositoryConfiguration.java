@@ -9,6 +9,8 @@ import org.tmatesoft.svn.core.io.SVNRepositoryLocation;
 
 /**
  * Small wrapper class to hold connection info for the repository.
+ * <p>
+ * This class is preferably configured using Spring.
  */
 public class RepositoryConfiguration {
 
