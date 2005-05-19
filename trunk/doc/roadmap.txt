@@ -1,0 +1,36 @@
+Release road map
+
+This is a rough release plan for the sventon, it will be updated and changed 
+irregularily.
+
+[ ] = planned
+[x] = in progress
+[<rev>] = completed in revision
+
+Release 1
+[x] Browse WebDAV and svnserve repositories (anon and authorized login).
+[x] View file for any given revision.
+[x] Source code markup.
+[x] View logs for a file/directory.
+[ ] View all changes in one revision (log entry).
+[ ] Download file (any given revision).
+[ ] Browse repository for any given revision.
+[ ] Possibility to navigate in repository by typing path.
+[ ] Clickable revision path info for quick navigation in browser.
+[ ] Basic look and feel
+
+Not scheduled
+[ ] Commit statistics (different kinds)
+[ ] Blame
+[ ] Diff revisions of same file
+[ ] Diff same revision of different files
+[ ] Flatten path structure view
+[ ] View contents of zip archives (including jar)
+[ ] Download file(s) and directories as zip files
+[ ] JSPWiki integration
+[ ] Keyword expansion when viewing files
+[ ] User bookmark support using persistent cookies
+[ ] View metadata (e.g. mime types)
+[ ] Installation wizard
+[ ] Subversion 1.2 feature support, notably file locking.
+[ ] Integration with other tools and IDE:s
