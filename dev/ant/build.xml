@@ -2,6 +2,10 @@
 
 <project name="sventon" basedir="." default="usage">
 	<property file="build.properties" />
+	<property file="default-build.properties" />
+
+	<property file="../java/conf/sventon.properties" />
+	<property file="../java/conf/sventon-default.properties" />
 
 	<property name="src.dir" value="../java/src" />
 	<property name="web.dir" value="../java/web" />
@@ -40,7 +44,7 @@
 		<echo message="" />
 	</target>
 
-	<target name="build" description="Compile main source tree java files">
+	<target name="build" description="Compile main source tree java files" depends="copy-config-files">
 		<mkdir dir="${build.dir}" />
 		<javac destdir="${build.dir}" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<src path="${src.dir}" />
@@ -48,32 +52,42 @@
 			<classpath refid="master-classpath" />
 		</javac>
 	</target>
-	
+
+	<target name="copy-config-files">
+		<copy file="../java/conf/messages.properties" todir="${build.dir}"/>
+		<copy file="../java/conf/log4j.properties" todir="${build.dir}">
+			<filterset>
+				<filter token="LOG_DIR" value="${log4j.logdir}" />
+			</filterset>
+		</copy>
+		<copy file="../java/conf/sventon-servlet.xml" todir="${web.dir}/WEB-INF">
+			<filterset>
+				<filter token="SVN_ROOT" value="${svn.root}" />
+			</filterset>
+		</copy>
+	</target>
+
 	<target name="junit" depends="build" description="Run JUnit Tests">
-	        <junit printsummary="on"
-	               fork="false"
-	               haltonfailure="false"
-	               failureproperty="tests.failed"
-	               showoutput="true">
-	            <classpath refid="master-classpath"/>
-	            <formatter type="brief" usefile="false"/>
+		<junit printsummary="on" fork="false" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
+			<classpath refid="master-classpath" />
+			<formatter type="brief" usefile="false" />
 
-	            <batchtest>
-	                <fileset dir="${build.dir}">
-	                    <include name="**/*Test.*"/>
-	                </fileset>
-	            </batchtest>
+			<batchtest>
+				<fileset dir="${build.dir}">
+					<include name="**/*Test.*" />
+				</fileset>
+			</batchtest>
 
-	        </junit>
+		</junit>
 
-	        <fail if="tests.failed">
+		<fail if="tests.failed">
 	        ***********************************************************
 	        ***********************************************************
 	        ****  One or more tests failed!  Check the output ...  ****
 	        ***********************************************************
 	        ***********************************************************
 	        </fail>
-	    </target>
+	</target>
 
 	<target name="deploy" depends="build" description="Deploy application">
 		<copy todir="${tomcat.home}/webapps/${name}" preservelastmodified="true">
@@ -111,7 +125,7 @@
 			</fileset>
 		</delete>
 	</target>
-	
+
 	<target name="deploy and restart" description="deploy and restart (stop/start) Tomcat" depends="deploy, stop, start">
 		<echo level="info">Re-deploy done.</echo>
 	</target>

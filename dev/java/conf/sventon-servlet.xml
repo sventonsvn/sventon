@@ -57,7 +57,8 @@
 		class="de.berlios.sventon.ctrl.RepositoryConfiguration"
 		singleton="true">
 		<constructor-arg>
-			<value>svn://host/repository</value>
+			<value>@SVN_ROOT@</value>
+			<!-- value>svn://localhost/servletsvn/</value-->
 		</constructor-arg>
 	</bean>
 
@@ -65,7 +66,9 @@
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
-				<prop key="/repobrowser.svn">repoBrowserController</prop>
+				<prop key="/repobrowser.svn">
+					repoBrowserController
+				</prop>
 				<prop key="/showlog.svn">showLogsController</prop>
 				<prop key="/showfile.svn">showFileController</prop>
 				<prop key="/authenticate.svn">
@@ -77,10 +80,13 @@
 			</props>
 		</property>
 	</bean>
-	
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename"><value>messages</value></property>
-    </bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>messages</value>
+		</property>
+	</bean>
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
