@@ -1,7 +1,8 @@
 <%@ page session="false"%>
-<table width="100%"><tr>
+<table width="100%" class="sventonHeader"><tr>
+<td>sventon subversion web client</td>
 <td align="right">
-<c:choose> 
+<c:choose>
   <c:when test="${empty uid}" > 
 You are not logged in
   </c:when> 
@@ -10,5 +11,4 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
   </c:otherwise> 
 </c:choose>  
 </td></tr></table>
-<hr/>
 

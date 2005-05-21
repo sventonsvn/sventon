@@ -29,7 +29,9 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     logger.debug("Assembling file contents for: " + svnCommand.getPath());
 
-    repository.getFile(svnCommand.getPath(), revision, new HashMap(), outStream);
+    HashMap properties = new HashMap();
+    repository.getFile(svnCommand.getPath(), revision, properties, outStream);
+    logger.debug(properties);
     StringReader reader = new StringReader(outStream.toString());
     Colorizer colorizer = new Colorizer(reader);
     StringBuffer sb = new StringBuffer();

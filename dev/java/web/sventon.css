@@ -1,0 +1,67 @@
+/*
+ * Style definition for Sventon user interface
+ * TODO: Complete...
+ */
+
+body {
+	font-family: Verdana;
+	font-size: 12px;
+	color: #000000;
+	font-weight: normal;
+}
+
+a {
+	font-family: Verdana;
+	font-size: 12px;
+	color: 0060CB;
+	text-decoration: underline;
+}
+
+input, select, textarea {
+  font-family: Verdana;
+	font-size: 12px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-color: #333333 #999999 #999999 #333333;
+	padding-right: 0px;
+}
+
+.sventonHeader {
+  background-color: #ccccff;
+  border: 1px solid black;
+}
+
+td, th {
+
+}
+
+.sventonLocation {
+  font-family: Verdana;
+	font-size: 12px;
+  font-weight: bold;
+}
+
+.sventonGoTo {
+  width: 30em;
+}
+
+.sventonEntriesTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+}
+
+.sventonEntry1 {
+  background-color: #ddddff;
+}
+
+.sventonEntry2 {
+  background-color: #eeeeff;
+}
+
+.sventonLogEntriesTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+}
+

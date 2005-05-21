@@ -2,11 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,9 +24,11 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     List<SVNDirEntry> dir = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
     
     logger.debug("Getting directory contents for: " + svnCommand.getPath());
-    dir.addAll(repository.getDir(svnCommand.getPath(), revision, new HashMap(), new ArrayList()));
+    HashMap properties = new HashMap();
+    dir.addAll(repository.getDir(svnCommand.getPath(), revision, properties, new ArrayList()));
+    logger.debug(properties);
     Collections.sort(dir, new SVNDirEntryComparator(NAME, true));
-    
+
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", dir);
