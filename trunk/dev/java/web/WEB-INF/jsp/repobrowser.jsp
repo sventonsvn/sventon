@@ -20,6 +20,7 @@
 <table class="sventonEntriesTable">
 	<tr>
     <th></th>
+    <th></th>
 		<th>File</th>
 		<th>Last changed rev</th>
 		<th>File type</th>
@@ -45,15 +46,16 @@
     %>
       <td align="right"><input type="checkbox" name="entries" value="<c:out value="${entry.name}" />"/></td>
       <% if (nodeKind == SVNNodeKind.DIR) { %>
+      <td><img src="images/icon_dir.gif"/></td>
       <td><a href="<c:out value="${viewUrl}/"/>"><c:out
         value="${entry.name}" /></a></td>
       <% } else { %>
-      <td><c:out value="${entry.name}" /></td>
+      <td><img src="images/icon_file.gif"/></td>
+      <td><a href="<c:out value="${showFileUrl}"/>"><c:out value="${entry.name}"/></a></td>
       <% } %>
       <td><c:out value="${entry.revision}" /></td>
       <td><c:out value="${entry.kind}" /></td>
       <td><a href="<c:out value="${showLogUrl}"/>">[Show log]</a></td>
-      <td><% if (nodeKind == SVNNodeKind.FILE) { %><a href="<c:out value="${showFileUrl}"/>">[View]</a> <% } %></td>
     </tr>
     <% rowCount++; %>
 	</c:forEach>
