@@ -3,12 +3,20 @@
 <html>
 <head>
 <title>Logs view</title>
+<%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
 <body>
-<%@ include file="/WEB-INF/jsp/header.jsp"%>
-<h3><c:out value="${url}/${path}" /> Rev: <c:out
-	value="${revision}" />
-<table>
+<%@ include file="/WEB-INF/jsp/top.jsp"%>
+<p>
+ <span class="sventonLocation">
+   <c:out value="${url}/${path}" /> Rev: <c:out value="${revision}" />
+ </span>
+</p>
+<p>
+  <input class="sventonGoTo" type="text" name="goto_url" value="" />[GoTo]
+</p>
+
+<table class="sventonLogEntriesTable">
 	<tr>
 		<th>Rev</th>
 		<th>Message</th>
