@@ -18,6 +18,7 @@ Release 1
 [ ] Possibility to navigate in repository by typing path.
 [ ] Clickable revision path info for quick navigation in browser.
 [ ] Basic look and feel
+[ ] Support for language specific characters.
 
 Not scheduled
 [ ] Commit statistics (different kinds)
