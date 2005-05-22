@@ -10,7 +10,10 @@
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 <p>
   <span class="sventonLocation">
-    <c:out value="${url}/${path}" /> Rev: <c:out value="${revision}" />
+  Repository path: <a href="repobrowser.svn"><c:out value="${url}"/></a>/<c:forTokens items="${path}" delims="/" var="drutten"><c:set var="accuPath" scope="page" value="${accuPath}${drutten}/"/><a href="<c:out value="repobrowser.svn?path=${accuPath}"/>"><c:out value="${drutten}"/></a>/</c:forTokens>
+  <p> 
+  Revision: <c:out value="${revision}" />
+  </p>
   </span>
 </p>
 <p>
