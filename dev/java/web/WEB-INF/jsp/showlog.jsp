@@ -21,6 +21,7 @@
 		<th>Rev</th>
 		<th>Message</th>
 		<th>Author</th>
+		<th>Date</th>
 	</tr>
 	<c:forEach items="${logEntries}" var="entry">
 		<c:url value="showfile.svn" var="showUrl">
@@ -40,6 +41,7 @@
 			</c:choose>
 			<td><c:out value="${entry.message}" /></td>
 			<td><c:out value="${entry.author}" /></td>
+			<td><c:out value="${entry.date}" /></td>
 		</tr>
 	</c:forEach>
 </table>
