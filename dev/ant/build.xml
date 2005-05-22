@@ -60,7 +60,7 @@
 				<filter token="LOG_DIR" value="${log4j.logdir}" />
 			</filterset>
 		</copy>
-		<copy file="../java/conf/sventon-servlet.xml" todir="${web.dir}/WEB-INF">
+		<copy file="../java/conf/sventon-servlet.xml" todir="${web.dir}/WEB-INF" overwrite="true">
 			<filterset>
 				<filter token="SVN_ROOT" value="${svn.root}" />
 			</filterset>
