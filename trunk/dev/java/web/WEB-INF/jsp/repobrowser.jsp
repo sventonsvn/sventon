@@ -26,7 +26,7 @@
     <th></th>
 		<th>File</th>
 		<th>Last changed rev</th>
-		<th>File type</th>
+		<th>Last changed by</th>
 		<th colspan="2">Options</th>
 	</tr>
   <% int rowCount = 0; %>
@@ -57,7 +57,7 @@
       <td><a href="<c:out value="${showFileUrl}"/>"><c:out value="${entry.name}"/></a></td>
       <% } %>
       <td><c:out value="${entry.revision}" /></td>
-      <td><c:out value="${entry.kind}" /></td>
+      <td><c:out value="${entry.author}" /></td>
       <td><a href="<c:out value="${showLogUrl}"/>">[Show log]</a></td>
     </tr>
     <% rowCount++; %>
