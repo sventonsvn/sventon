@@ -20,6 +20,7 @@ public class JavaFormatter extends AbstractFormatter {
    * {@inheritDoc}
    */
   public String format(String line) {
+    line = replaceEntities(line);
     logger.debug("Before: " + line);
     Matcher matcher = KEYWORDS_PATTERN.matcher(line);
     StringBuffer sb = new StringBuffer();

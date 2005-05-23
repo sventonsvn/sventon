@@ -3,6 +3,9 @@ package de.berlios.sventon.colorizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 /**
  * Abstract formatter.
  *
@@ -21,4 +24,20 @@ public abstract class AbstractFormatter implements Formatter{
   public static String CHARACTER_SPAN_TAG = "<span class=\"srcCharacter\">";
   public static String PREPROCESSOR_SPAN_TAG = "<span class=\"srcPreproc\">";
   public static String SPAN_END = "</span>";
+
+  /**
+   * Replaces illegal characters with corresponding <code>HTML</code> entities.
+   * <p/>
+   * @param line
+   * @return The replaced line
+   */
+  public String replaceEntities(String line) {
+    // TODO: Will probably have to modify this later as we for instance want
+    // to colorize quoted strings, e.g. String s = "hello";
+
+    line = line.replaceAll("[&]","&amp;");
+    line = line.replaceAll("[<]", "&lt;");
+    line = line.replaceAll("[>]", "&gt;");
+    return line.replaceAll("[\"]", "&quot;");
+  }
 }

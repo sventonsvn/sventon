@@ -33,9 +33,15 @@ input, select, textarea {
   border: 1px solid black;
 }
 
-td, th {
-
+td {
+  white-space: nowrap;
 }
+
+th {
+  text-align: left;
+  white-space: nowrap;
+}
+
 
 .sventonLocation {
   font-family: Verdana;
@@ -50,6 +56,7 @@ td, th {
 .sventonEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
+  width: 750px
 }
 
 .sventonEntry1 {

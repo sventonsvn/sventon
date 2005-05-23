@@ -42,4 +42,12 @@ public class ColorizerTest extends TestCase {
     assertEquals("<span class=\"srcKeyword\">public</span> <span class=\"srcKeyword\">class</span> Test", colorizedString);
   }
 
+  public void testReadLineAndEntityReplacement() throws Exception {
+    StringReader input = new StringReader("<input type=\"text\" value=\"&\">");
+    Colorizer colorizer = new Colorizer(input);
+    String colorizedString;
+    colorizedString = colorizer.readLine();
+    assertEquals("&lt;input type=&quot;text&quot; value=&quot;&amp;&quot;&gt;", colorizedString);
+  }
+
 }
