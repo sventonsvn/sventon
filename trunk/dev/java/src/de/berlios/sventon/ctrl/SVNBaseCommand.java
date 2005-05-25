@@ -1,7 +1,7 @@
 package de.berlios.sventon.ctrl;
 
 public class SVNBaseCommand {
-  private String path  = "";
+  private String path = "";
 
   private String revision = null;
 
@@ -13,10 +13,16 @@ public class SVNBaseCommand {
   }
 
   /**
-   * @param path The path to set.
+   * @param path
+   *          The path to set.
    */
   public void setPath(String path) {
-    this.path = path;
+    if (path != null) {
+      this.path = path.trim();
+    } else {
+      this.path = "";
+    }
+
   }
 
   /**
@@ -27,11 +33,55 @@ public class SVNBaseCommand {
   }
 
   /**
-   * @param revision The revision to set.
+   * @param revision
+   *          The revision to set.
    */
   public void setRevision(String revision) {
     this.revision = revision;
   }
-  
-  
+
+  /**
+   * Get target (leaf/end) part of the <code>completePath</code>, it could be
+   * a file or a directory.
+   * <p>
+   * The returned string will have no final "/", even if it is a directory.
+   * will be returned.
+   * 
+   * @return Target part of th epath.
+   */
+  public String getTarget() {
+
+    String[] splittedString = path.split("/");
+    int length = splittedString.length;
+    if (length == 0) {
+      return "";
+    } else {
+      return splittedString[splittedString.length - 1];
+    }
+
+  }
+
+  /**
+   * Get full path, excluding the end/leaf. For complete path including target,
+   * see {@link SVNBaseCommand#getCompletePath()}
+   * <p>
+   * The returned string will have a final "/", if the path info is empty, "" (empty string)
+   * will be returned.
+   * 
+   * @return Path excluding taget (end/leaf)
+   */
+  public String getPathPart() {
+    String work = path;
+    if (work.endsWith("/")) {
+      work = work.substring(0, work.length() - 1);
+    }
+
+    int lastIndex = work.lastIndexOf('/');
+    if (lastIndex == -1) {
+      return "";
+    } else {
+      return work.substring(0, lastIndex) + "/";
+    }
+  }
+
 }
