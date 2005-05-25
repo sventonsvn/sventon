@@ -17,7 +17,7 @@ Release 1
 [ ] Browse repository for any given revision.
 [ ] Possibility to navigate in repository by typing path.
 [x] Clickable revision path info for quick navigation in browser.
-[ ] Basic look and feel
+[x] Basic look and feel
 [ ] Support for language specific characters.
 
 Not scheduled
