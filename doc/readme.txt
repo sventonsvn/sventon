@@ -6,7 +6,7 @@ Java 1.5 is required for build and deploy, thus Tomcat 5.5 may be a good
 container companion. Jakarta Ant build files are supplied for building.
 
 Build instructions:
-1: Create file 'sventon.properties' in dir dev/java/conf and overrride properties from 'default-sventon.properties' and 
+1: Create file 'sventon.properties' in dir dev/java/conf and override properties from 'default-sventon.properties' and 
 'log4j.properties' in same path as needed.
 
 2: Run ant/build.xml for info on building.
