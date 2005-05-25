@@ -7,14 +7,6 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
-<p>
- <span class="sventonLocation">
-   <c:out value="${url}/${path}" /> Rev: <c:out value="${revision}" />
- </span>
-</p>
-<p>
-  <input class="sventonGoTo" type="text" name="goto_url" value="" />[GoTo]
-</p>
 
 <table class="sventonLogEntriesTable">
 	<tr>

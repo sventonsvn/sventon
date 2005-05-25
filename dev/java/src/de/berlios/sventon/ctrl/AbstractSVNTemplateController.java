@@ -83,6 +83,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
        model.put("url", configuration.getUrl());
        model.put("revision", revision == ISVNWorkspace.HEAD ? "HEAD" : Long.toString(revision));
        model.put("path", svnCommand.getPath());
+       model.put("target", svnCommand.getTarget());
+       model.put("pathPart", svnCommand.getPathPart());
        fillInCredentials(credentials, model);
        modelAndView.addAllObjects(model);
        return modelAndView;
