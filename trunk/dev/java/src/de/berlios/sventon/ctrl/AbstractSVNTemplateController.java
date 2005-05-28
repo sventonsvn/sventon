@@ -3,6 +3,7 @@ package de.berlios.sventon.ctrl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.ISVNWorkspace;
-import org.tmatesoft.svn.core.io. SVNAuthenticationException;
+import org.tmatesoft.svn.core.io.SVNAuthenticationException;
 import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
@@ -92,10 +93,22 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return handleAuthenticationRedirect(request, svnCommand);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
+      Throwable cause = e.getCause();
+      if (cause instanceof java.net.NoRouteToHostException ||
+          cause instanceof ConnectException) {
+        return fillInNoRouteToHostError();
+      }
       StringWriter writer = new StringWriter();
       e.printStackTrace(new PrintWriter(writer));
       return new ModelAndView("error", "throwable", writer.toString());
     }
+  }
+
+  private ModelAndView fillInNoRouteToHostError() {
+    Map<String, String> model = new HashMap<String, String>();
+    model.put("errorHeadingKey", "error.heading.no-route-to-host");
+    model.put("errorMessageKey", "error.message.no-route-to-host");
+    return new ModelAndView("handledError", model);
   }
 
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
