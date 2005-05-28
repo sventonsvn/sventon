@@ -11,7 +11,13 @@
 		<property name="repositoryConfiguration">
 			<ref bean="repositoryConfig" />
 		</property>
+		<property name="validator">
+			<ref bean="svnBaseCommandValidator" />
+		</property>
 	</bean>
+	
+		<bean id="svnBaseCommandValidator"
+		class="de.berlios.sventon.ctrl.SVNBaseCommandValidator" />
 
 	<bean id="showLogsController"
 		class="de.berlios.sventon.ctrl.ShowLogController">

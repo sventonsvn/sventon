@@ -17,16 +17,27 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
   <c:out value="${url}"/></a> /
   <c:forTokens items="${pathPart}" delims="/" var="pathSegment">
   	<c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-  	<a href="<c:out value="repobrowser.svn?path=${accuPath}"/>"><c:out value="${pathSegment}"/></a> /
+  	<a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${revision}"/>"><c:out value="${pathSegment}"/></a> /
   </c:forTokens>
    	<c:out value="${target}"/>
   <p> 
-  Revision: <c:out value="${revision}" />
-  </p>
-  </span>
-</p>
-<p>
-  <input class="sventonGoTo" type="text" name="goto_url" value="" />[GoTo]
+      Revision: <c:out value="${revision}" /> 
+      </p>
+      </span>
+ <p> 
+ <form method="get" action="repobrowser.svn">
+    <c:out value="${status.errorMessage}"/>
+ <table>
+ <tr>
+ <td>Go to Revision</td><td colspan="2">Go to path</td>
+ </tr>
+<tr>
+<td><input type="text" name="revision" value="<c:out value="${revision}"/>"/></td>
+<td><input class="sventonGoTo" type="text" name="path" value="<c:out value="${path}"/>" /></td>
+<td><input type="submit" value="go to"/></td>
+</tr>
+</table>
+</form>
 </p>
 
 

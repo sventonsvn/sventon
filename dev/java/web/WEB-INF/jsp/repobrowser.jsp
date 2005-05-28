@@ -39,15 +39,15 @@
       <td align="right"><input type="checkbox" name="entries" value="<c:out value="${entry.name}" />"/></td>
       <% if (nodeKind == SVNNodeKind.DIR) { %>
       <td><img src="images/icon_dir.gif"/></td>
-      <td><a href="<c:out value="${viewUrl}/"/>"><c:out
+      <td><a href="<c:out value="${viewUrl}/&revision=${revision}"/>"><c:out
         value="${entry.name}" /></a></td>
       <% } else { %>
       <td><img src="images/icon_file.gif"/></td>
-      <td><a href="<c:out value="${showFileUrl}"/>"><c:out value="${entry.name}"/></a></td>
+      <td><a href="<c:out value="${showFileUrl}&revision=${revision}"/>"><c:out value="${entry.name}"/></a></td>
       <% } %>
       <td><c:out value="${entry.revision}" /></td>
       <td><c:out value="${entry.author}" /></td>
-      <td><a href="<c:out value="${showLogUrl}"/>">[Show log]</a></td>
+      <td><a href="<c:out value="${showLogUrl}&revision=${revision}"/>">[Show log]</a></td>
     </tr>
     <% rowCount++; %>
 	</c:forEach>

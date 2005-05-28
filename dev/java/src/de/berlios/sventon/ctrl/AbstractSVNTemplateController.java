@@ -26,28 +26,36 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
 
 /**
- * Abstract base class for use by controllers whishing to make use of basic plumbing functionalit such as authorization
- * and basic repository configuration.
+ * Abstract base class for use by controllers whishing to make use of basic
+ * plumbing functionalit such as authorization and basic repository
+ * configuration.
  * <p>
- * This abstract controller is based on the GoF Template pattern, the method to implement for extending controllers 
- * is <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}</code>.
+ * This abstract controller is based on the GoF Template pattern, the method to
+ * implement for extending controllers is
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}</code>.
  * <p>
  * Workflow for this controller:
  * <ol>
- * <li>The controller inspects the user HttpSession to see if it contains a {@link de.berlios.sventon.ctrl.Credentials} 
- * object named <code>sventon.credentials</code>. If this object exists information contained in it will be used for 
- * authorized repository access, if it does not exist the controller will try to set up the repository with anonymous 
- * access.
- * <li>The controller configures the SVNRepository object and calls the extending class' 
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)} method with the given
- * {@link de.berlios.sventon.ctrl.SVNBaseCommand} containing request parameters.
- * <li>After the call returns, the controller adds additional information to the the model (see below) and forwards
- * the request to the view returned together with the model by the 
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)} method. 
+ * <li>The controller inspects the user HttpSession to see if it contains a
+ * {@link de.berlios.sventon.ctrl.Credentials} object named
+ * <code>sventon.credentials</code>. If this object exists information
+ * contained in it will be used for authorized repository access, if it does not
+ * exist the controller will try to set up the repository with anonymous access.
+ * <li>The controller configures the SVNRepository object and calls the
+ * extending class'
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
+ * method with the given {@link de.berlios.sventon.ctrl.SVNBaseCommand}
+ * containing request parameters.
+ * <li>After the call returns, the controller adds additional information to
+ * the the model (see below) and forwards the request to the view returned
+ * together with the model by the
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
+ * method.
  * </ol>
  * Exception handling
+ * 
  * @author patrikfr@users.berlios.de
- *
+ * 
  */
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
@@ -58,13 +66,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
       BindException exception) throws ServletException, IOException {
-    
+
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     
-    long revision = ISVNWorkspace.HEAD;
-    if (svnCommand.getRevision() != null) {
-      revision = Long.parseLong(svnCommand.getRevision());
+    if (exception.hasErrors()) {
+      svnCommand.setPath(null);
+      svnCommand.setRevision("HEAD");
     }
+
+    long revision = ISVNWorkspace.HEAD;
 
     try {
       logger.debug("Getting SVN repository");
@@ -74,28 +84,33 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       if (credentials != null) {
         SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
             .getPwd());
-        repository.setCredentialsProvider(provider);        
+        repository.setCredentialsProvider(provider);
         logger.debug("Setting credentials");
       }
-       ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
-       
-       //Fill in some common info
-       Map<String, Object> model = new HashMap<String, Object>();
-       model.put("url", configuration.getUrl());
-       model.put("revision", revision == ISVNWorkspace.HEAD ? "HEAD" : Long.toString(revision));
-       model.put("path", svnCommand.getPath());
-       model.put("target", svnCommand.getTarget());
-       model.put("pathPart", svnCommand.getPathPart());
-       fillInCredentials(credentials, model);
-       modelAndView.addAllObjects(model);
-       return modelAndView;
+
+      // TODO: Parsing of revision must be stricter
+      if (svnCommand.getRevision() != null && !"HEAD".equals(svnCommand.getRevision())) {
+        revision = Long.parseLong(svnCommand.getRevision());
+      }
+
+      ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
+
+      // Fill in some common info
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("url", configuration.getUrl());
+      model.put("revision", svnCommand.getRevision() == null ? "HEAD" : svnCommand.getRevision());
+      model.put("path", svnCommand.getPath());
+      model.put("target", svnCommand.getTarget());
+      model.put("pathPart", svnCommand.getPathPart());
+      fillInCredentials(credentials, model);
+      modelAndView.addAllObjects(model);
+      return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return handleAuthenticationRedirect(request, svnCommand);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
-      if (cause instanceof java.net.NoRouteToHostException ||
-          cause instanceof ConnectException) {
+      if (cause instanceof java.net.NoRouteToHostException || cause instanceof ConnectException) {
         return fillInNoRouteToHostError();
       }
       StringWriter writer = new StringWriter();
@@ -138,6 +153,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     if (credentials != null)
       model.put("uid", credentials.getUid());
   }
-  
-  protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision, HttpServletRequest request, HttpServletResponse response) throws SVNException;
+
+  protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
+      HttpServletRequest request, HttpServletResponse response) throws SVNException;
 }
