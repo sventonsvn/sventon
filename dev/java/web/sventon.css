@@ -72,3 +72,16 @@ th {
   border: 1px solid black;
 }
 
+.sventonStackTraceTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  font-size: 12 px;
+}
+
+.sventonErrorMessageTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  width: 250px;
+  font-size: 12 px;
+}
+

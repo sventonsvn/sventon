@@ -14,6 +14,6 @@ Build instructions:
 Contact sventon developers using the sventon dev mailing list: 
 http://developer.berlios.de/projects/sventon
 
-Many thanks to the developers of sventon dependent libraries!
+Many thanks to the developers of the libraries that sventon depends on!
 
 Enjoy!
