@@ -16,6 +16,7 @@ public class AllTests {
     suite.addTestSuite(ColorizerTest.class);
     suite.addTestSuite(FormatterImplTest.class);
     suite.addTestSuite(JavaFormatterTest.class);
+    suite.addTestSuite(CPlusPlusFormatterTest.class);
     //$JUnit-END$
     return suite;
   }
