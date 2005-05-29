@@ -56,7 +56,7 @@ th {
 .sventonEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
-  width: 750px
+  width: 750px;
 }
 
 .sventonEntry1 {
@@ -85,3 +85,21 @@ th {
   font-size: 12 px;
 }
 
+.sventonCol1 {
+  width: 10px;
+}
+
+.sventonCol2 {
+}
+
+.sventonCol3 {
+}
+
+.sventonCol4 {
+}
+
+.sventonCol5 {
+}
+
+.sventonCol6 {
+}

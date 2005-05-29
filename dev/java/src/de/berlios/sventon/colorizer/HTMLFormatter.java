@@ -5,7 +5,7 @@ package de.berlios.sventon.colorizer;
  *
  * @author jesper@users.berlios.de
  */
-public class HTMLFormatter extends AbstractFormatter{
+public class HTMLFormatter extends FormatterImpl {
 
   /**
    * {@inheritDoc}

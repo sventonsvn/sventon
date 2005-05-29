@@ -7,7 +7,7 @@ import java.util.regex.*;
  *
  * @author jesper@users.berlios.de
  */
-public class JavaFormatter extends AbstractFormatter {
+public class JavaFormatter extends FormatterImpl {
 
   private static Pattern KEYWORDS_PATTERN = Pattern.compile(
       "\\b(abstract|boolean|break|byte|byvalue|case|catch|char|class|const|continue|default|do|double|else|" +
