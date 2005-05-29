@@ -14,6 +14,8 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.colorizer");
     //$JUnit-BEGIN$
     suite.addTestSuite(ColorizerTest.class);
+    suite.addTestSuite(FormatterImplTest.class);
+    suite.addTestSuite(JavaFormatterTest.class);
     //$JUnit-END$
     return suite;
   }
