@@ -9,7 +9,7 @@ public class ColorizerTest extends TestCase {
 
   public void testUnsupportedOperations() throws Exception {
     StringReader input = new StringReader("Test!");
-    Colorizer colorizer = new Colorizer(input);
+    Colorizer colorizer = new Colorizer(input, null);
     assertFalse(colorizer.markSupported());
     try {
       colorizer.read();
