@@ -1,6 +1,8 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.colorizer.Colorizer;
+import de.berlios.sventon.colorizer.FormatterFactory;
+import de.berlios.sventon.colorizer.Formatter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -33,9 +35,14 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     repository.getFile(svnCommand.getPath(), revision, properties, outStream);
     logger.debug(properties);
     StringReader reader = new StringReader(outStream.toString());
-    Colorizer colorizer = new Colorizer(reader);
-    StringBuffer sb = new StringBuffer();
 
+    String fileExtension = svnCommand.getTarget().substring(svnCommand.getTarget().lastIndexOf(".") + 1);
+    logger.debug("File extension identified as: " + fileExtension);
+    Formatter formatter = ((FormatterFactory)
+        getApplicationContext().getBean("formatterFactory")).getFormatterForExtension(fileExtension);
+    Colorizer colorizer = new Colorizer(reader, formatter);
+
+    StringBuffer sb = new StringBuffer();
     String line = "";
     try {
       while ((line = colorizer.readLine()) != null) {

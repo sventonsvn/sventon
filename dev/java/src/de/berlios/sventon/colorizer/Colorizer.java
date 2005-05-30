@@ -19,10 +19,11 @@ public class Colorizer extends LineNumberReader {
    * size.
    *
    * @param in a Reader object to provide the underlying stream.
+   * @param formatter The <code>Formatter</code> instance to use.
    */
-  public Colorizer(final Reader in) {
+  public Colorizer(final Reader in, final Formatter formatter) {
     super(in);
-    init();
+    this.formatter = formatter;
   }
 
   /**
@@ -31,18 +32,11 @@ public class Colorizer extends LineNumberReader {
    *
    * @param in a Reader object to provide the underlying stream.
    * @param size an int specifying the size of the buffer.
+   * @param formatter The <code>Formatter</code> instance to use.
    */
-  public Colorizer(Reader in, int size) {
+  public Colorizer(Reader in, int size, final Formatter formatter) {
     super(in, size);
-    init();
-  }
-
-  /**
-   * Initializes the colorizer and determines
-   * how to handle the input.
-   */
-  private void init() {
-    formatter = new JavaFormatter();
+    this.formatter = formatter;
   }
 
   /**
