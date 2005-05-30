@@ -106,4 +106,27 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
+
+<!-- Begin Bean configuration for Sventon Colorizer -->
+
+  <bean name="formatterFactory" class="de.berlios.sventon.colorizer.FormatterFactory" singleton="true">
+    <property name="availableFormatters">
+      <!-- Make sure file extensions are in lower case -->
+      <map>
+        <entry key="java">
+          <ref bean="javaFormatter"/>
+        </entry>
+        <entry key="html">
+          <ref bean="htmlFormatter"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+	<bean id="javaFormatter" class="de.berlios.sventon.colorizer.JavaFormatter"/>
+	<bean id="htmlFormatter" class="de.berlios.sventon.colorizer.HTMLFormatter"/>
+
+<!-- End Bean configuration for Sventon Colorizer -->
+
+
 </beans>
