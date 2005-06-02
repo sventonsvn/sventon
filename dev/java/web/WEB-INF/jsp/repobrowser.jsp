@@ -14,8 +14,10 @@
     <th></th>
     <th></th>
 		<th>File</th>
+    <th>Size (bytes)</th>
 		<th>Last changed rev</th>
 		<th>Last changed by</th>
+    <th>Date</th>
 		<th>Options</th>
 	</tr>
   <% int rowCount = 0; %>
@@ -34,6 +36,7 @@
     <%
     SVNDirEntry type = (SVNDirEntry) pageContext.getAttribute("entry");
     SVNNodeKind nodeKind = type.getKind();
+    long entrySize = type.size();
     %>
       <td class="sventonCol1"><input type="checkbox" name="entries" value="<c:out value="${entry.name}" />"/></td>
       <% if (nodeKind == SVNNodeKind.DIR) { %>
@@ -44,15 +47,17 @@
       <td class="sventonCol2"><img src="images/icon_file.gif"/></td>
       <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${revision}"/>"><c:out value="${entry.name}"/></a></td>
       <% } %>
-      <td class="sventonCol4"><c:out value="${entry.revision}" /></td>
-      <td class="sventonCol5"><c:out value="${entry.author}" /></td>
-      <td class="sventonCol6"><a href="<c:out value="${showLogUrl}&revision=${revision}"/>">[Show log]</a></td>
+      <td class="sventonCol4"><%=entrySize%></td>
+      <td class="sventonCol5"><c:out value="${entry.revision}" /></td>
+      <td class="sventonCol6"><c:out value="${entry.author}" /></td>
+      <td class="sventonCol7"><c:out value="${entry.date}" /></td>
+      <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${revision}"/>">[Show log]</a></td>
     </tr>
     <% rowCount++; %>
 	</c:forEach>
 
   <tr>
-    <td colspan="6">[Toggle]</td>
+    <td colspan="8">[Toggle]</td>
   </tr>
 </table>
 <br>
