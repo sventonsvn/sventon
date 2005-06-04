@@ -41,8 +41,8 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <code>sventon.credentials</code>. If this object exists information
  * contained in it will be used for authorized repository access, if it does not
  * exist the controller will try to set up the repository with anonymous access.
- * <li>The controller configures the SVNRepository object and calls the
- * extending class'
+ * <li>The controller configures the <code>SVNRepository</code> object and
+ * calls the extending class'
  * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
  * method with the given {@link de.berlios.sventon.ctrl.SVNBaseCommand}
  * containing request parameters.
@@ -52,7 +52,51 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
  * method.
  * </ol>
- * Exception handling
+ * 
+ * <b>Model</b><br>
+ * The following information will be added by this controller to the model returned by the
+ * controller called (see flow above):
+ * <table>
+ * <tr><th>key</th><th>content</th></tr>
+ * <tr>
+ *  <td>url</td>
+ *  <td>SVN URL as configured for this webb application</td>
+ * </tr>
+ * <tr>
+ *  <td>revision</td>
+ *  <td>SVN revision this request concerns, either an actual revision number or <code>HEAD</code></td>
+ * </tr>
+ * <tr>
+ *  <td>path</td>
+ *  <td>SVN path this request concerns</td>
+ * </tr>
+ * <tr>
+ *  <td>target</td>
+ *  <td>target part of the complete path, see {@link de.berlios.sventon.ctrl.SVNBaseCommand#getTarget()}</td>
+ * </tr>
+ * <tr>
+ *  <td>pathPart</td>
+ *  <td>path part of the complete path, see {@link de.berlios.sventon.ctrl.SVNBaseCommand#getPathPart()}</td>
+ * </tr>
+ * </table>
+ * <p/>
+ * 
+ * <b>Input arguments</b><br>
+ * Input to this argument is wrapped in a <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object 
+ * by the Spring framework. If the extending controller is configured in the Spring config file with a validator 
+ * for the <code>SVNBaseCommand</code> it will be checked for binding errors. If binding errors were detected
+ * the SVN path and revision will be reset to <code>root</code> (/) and <code>HEAD</code> respectively.
+ * 
+ * <b>Exception handling</b>
+ * <dl>
+ * <dt>Authentication exception
+ * <dd>If a SVN authentication exception occurs during the call the command paramters and the original request URL
+ * is stored in the session (using keys <code>sventon.command</code> and <code>sventon.url</code>), a redirect to the
+ * authentication page is made. The authentication page will redirect back to this page after credentials have been
+ * collected from the user.
+ * <dt>Other SVN exceptions
+ * <dd>Other SVN exceptons are currently forwarded to a generic error handlng page.
+ * </dl>
  * 
  * @author patrikfr@users.berlios.de
  * 
@@ -64,11 +108,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /** Logger for this class and subclasses */
   protected final Log logger = LogFactory.getLog(getClass());
 
+  /**
+   * {@inheritDoc}
+   */
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
       BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-    
+
     if (exception.hasErrors()) {
       svnCommand.setPath(null);
       svnCommand.setRevision("HEAD");
@@ -79,7 +126,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     try {
       logger.debug("Getting SVN repository");
       HttpSession session = request.getSession(true);
-      Credentials credentials = (Credentials) session.getAttribute("credentials");
+      Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
       if (credentials != null) {
         SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
@@ -93,9 +140,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         revision = Long.parseLong(svnCommand.getRevision());
       }
 
-      ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
       // Fill in some common info
+      //TODO: Perhaps add entire command object instead of the stringified version?s
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("url", configuration.getUrl());
       model.put("revision", svnCommand.getRevision() == null ? "HEAD" : svnCommand.getRevision());
@@ -144,8 +192,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     m.put("path", svnCommand.getPath());
     m.put("revision", svnCommand.getRevision());
     HttpSession session = request.getSession(true);
-    session.setAttribute("command", m);
-    session.setAttribute("url", request.getRequestURL());
+    session.setAttribute("sventon.command", m);
+    session.setAttribute("sventon.url", request.getRequestURL());
     return new ModelAndView(new RedirectView("authenticate.svn"));
   }
 

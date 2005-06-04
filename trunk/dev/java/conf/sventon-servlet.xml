@@ -15,8 +15,8 @@
 			<ref bean="svnBaseCommandValidator" />
 		</property>
 	</bean>
-	
-		<bean id="svnBaseCommandValidator"
+
+	<bean id="svnBaseCommandValidator"
 		class="de.berlios.sventon.ctrl.SVNBaseCommandValidator" />
 
 	<bean id="showLogsController"
@@ -62,9 +62,11 @@
 	<bean id="repositoryConfig"
 		class="de.berlios.sventon.ctrl.RepositoryConfiguration"
 		singleton="true">
-		<constructor-arg>
+		<constructor-arg index="0">
 			<value>@SVN_ROOT@</value>
-			<!-- value>svn://localhost/servletsvn/</value-->
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>@SVN_LOG_DIR@</value>
 		</constructor-arg>
 	</bean>
 
@@ -107,26 +109,30 @@
 		</property>
 	</bean>
 
-<!-- Begin Bean configuration for Sventon Colorizer -->
+	<!-- Begin Bean configuration for Sventon Colorizer -->
 
-  <bean name="formatterFactory" class="de.berlios.sventon.colorizer.FormatterFactory" singleton="true">
-    <property name="availableFormatters">
-      <!-- Make sure file extensions are in lower case -->
-      <map>
-        <entry key="java">
-          <ref bean="javaFormatter"/>
-        </entry>
-        <entry key="html">
-          <ref bean="htmlFormatter"/>
-        </entry>
-      </map>
-    </property>
-  </bean>
+	<bean name="formatterFactory"
+		class="de.berlios.sventon.colorizer.FormatterFactory"
+		singleton="true">
+		<property name="availableFormatters">
+			<!-- Make sure file extensions are in lower case -->
+			<map>
+				<entry key="java">
+					<ref bean="javaFormatter" />
+				</entry>
+				<entry key="html">
+					<ref bean="htmlFormatter" />
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-	<bean id="javaFormatter" class="de.berlios.sventon.colorizer.JavaFormatter"/>
-	<bean id="htmlFormatter" class="de.berlios.sventon.colorizer.HTMLFormatter"/>
+	<bean id="javaFormatter"
+		class="de.berlios.sventon.colorizer.JavaFormatter" />
+	<bean id="htmlFormatter"
+		class="de.berlios.sventon.colorizer.HTMLFormatter" />
 
-<!-- End Bean configuration for Sventon Colorizer -->
+	<!-- End Bean configuration for Sventon Colorizer -->
 
 
 </beans>
