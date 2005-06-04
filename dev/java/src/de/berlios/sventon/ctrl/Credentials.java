@@ -1,5 +1,11 @@
 package de.berlios.sventon.ctrl;
 
+/**
+ * Wrapper class to hold credentials data.
+ * 
+ * @author patrikfr@users.berlios.de
+ *
+ */
 public class Credentials {
   private String pwd;
 
@@ -39,7 +45,7 @@ public class Credentials {
   public String toString() {
     return "Credential{" + 
     "uid=" + uid +
-    ", pwd=" + pwd;
+    ", pwd=(nope, will not tell)";
   }
   
   
