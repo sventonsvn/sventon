@@ -31,7 +31,13 @@
 						value="${entry.svnLogEntry.revision}" /></td>
 				</c:otherwise>
 			</c:choose>
-			<td><c:out value="${entry.svnLogEntry.message}" /></td>
+			<c:set var="message" value="${entry.svnLogEntry.message}" />
+			<jsp:useBean id="message" type="java.lang.String" />
+			<% 
+				//fn:replace(entry.svnLogEntry.message, '\\\n', '<br/>' simply refused to work... 
+            	//Perhaps other replacements have to be made for this to work for all types of line breaks?
+			%>
+			<td><%= message.replace("\n", "<br/>\n") %></td>
 			<td><c:out value="${entry.svnLogEntry.author}" /></td>
 			<td><c:out value="${entry.svnLogEntry.date}" /></td>
 		</tr>
