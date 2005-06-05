@@ -22,6 +22,7 @@
 	</tr>
   <% int rowCount = 0; %>
   <c:forEach items="${svndir}" var="entry">
+  <jsp:useBean id="entry" type="org.tmatesoft.svn.core.io.SVNDirEntry" />
     <c:url value="repobrowser.svn" var="viewUrl">
       <c:param name="path" value="${path}${entry.name}" />
     </c:url>
@@ -34,7 +35,7 @@
 
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
     <%
-    SVNDirEntry type = (SVNDirEntry) pageContext.getAttribute("entry");
+    SVNDirEntry type = entry;
     SVNNodeKind nodeKind = type.getKind();
     long entrySize = type.size();
     %>
