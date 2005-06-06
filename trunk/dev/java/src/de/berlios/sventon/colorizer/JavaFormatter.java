@@ -15,26 +15,65 @@ public class JavaFormatter extends FormatterImpl {
       "package|private|public|return|short|static|super|switch|synchronized|this|threadsafe|throw|transient|" +
       "true|try|void|while)\\b");
 
-  
+  private static Pattern COMMENT_PATTERN = Pattern.compile("(/\\*).*(\\*/)");
+  private static Pattern COMMENT_MULTILINE_START_PATTERN = Pattern.compile("(/\\*.*)");
+  private static Pattern COMMENT_MULTILINE_END_PATTERN = Pattern.compile("(.*\\*/)");
+
+  private boolean previousLineWasComment = false;
+
   /**
    * {@inheritDoc}
    */
   public String format(String line) {
     line = replaceEntities(line);
     logger.debug("Before: " + line);
-    Matcher matcher = KEYWORDS_PATTERN.matcher(line);
+    Matcher matcher = null;
     StringBuffer sb = new StringBuffer();
-    boolean result = matcher.find();
-    // Loop through and create a new String with the replacements
-    while(result) {
-      matcher.appendReplacement(sb, KEYWORD_SPAN_TAG);
+
+    if (previousLineWasComment) {
+      sb.append(COMMENT_SPAN_TAG);
+      matcher = COMMENT_MULTILINE_END_PATTERN.matcher(line);
+      if (matcher.find()) {
+        sb.append(matcher.group());
+        sb.append(SPAN_END);
+        previousLineWasComment = false;
+      } else {
+        // Previous line was a comment and we did not find any comment-closing on this line
+        sb.append(line);
+        sb.append(SPAN_END);
+        return sb.toString();
+      }
+    }
+
+    matcher = COMMENT_PATTERN.matcher(line);
+    if (matcher.find()) {
+      matcher.appendReplacement(sb, COMMENT_SPAN_TAG);
       sb.append(matcher.group());
       sb.append(SPAN_END);
-      result = matcher.find();
+    } else {
+      matcher = COMMENT_MULTILINE_START_PATTERN.matcher(line);
+      if (matcher.find()) {
+        matcher.appendReplacement(sb, COMMENT_SPAN_TAG);
+        sb.append(matcher.group());
+        sb.append(SPAN_END);
+        previousLineWasComment = true;
+      } else {
+        // Start processing the keywords.
+        matcher = KEYWORDS_PATTERN.matcher(line);
+
+        if (matcher.find()) {
+          // Loop through and create a new String with the replacements
+          do {
+            matcher.appendReplacement(sb, KEYWORD_SPAN_TAG);
+            sb.append(matcher.group());
+            sb.append(SPAN_END);
+          } while (matcher.find());
+          // Add the last segment of input to
+          // the new String
+          matcher.appendTail(sb);
+        }
+      }
     }
-    // Add the last segment of input to
-    // the new String
-    matcher.appendTail(sb);
     logger.debug("After:  " + sb.toString());
     return sb.toString();
   }

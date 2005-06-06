@@ -16,7 +16,7 @@ public class FormatterImplTest extends TestCase {
 
   public void testReadLineAndEntityReplacement() throws Exception {
     String input = "<input type=\"text\" value=\"&\">";
-    Formatter formatter = new JavaFormatter();
+    Formatter formatter = new FormatterImpl();
     assertEquals("&lt;input type=&quot;text&quot; value=&quot;&amp;&quot;&gt;", formatter.format(input));
   }
   
