@@ -40,6 +40,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     logger.debug("File extension identified as: " + fileExtension);
     Formatter formatter = ((FormatterFactory)
         getApplicationContext().getBean("formatterFactory")).getFormatterForExtension(fileExtension);
+    logger.debug("Using formatter: " + formatter.getClass().getName());
     Colorizer colorizer = new Colorizer(reader, formatter);
 
     StringBuffer sb = new StringBuffer();

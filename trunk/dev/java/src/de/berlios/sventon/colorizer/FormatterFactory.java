@@ -10,7 +10,7 @@ import java.util.Map;
 public class FormatterFactory {
 
   /** The map of available formatters in the factory. */
-  private Map<String, Formatter> formatters = null;
+  private Map<String, String> formatters = null;
 
   /**
    * Constructor.
@@ -24,7 +24,7 @@ public class FormatterFactory {
    * @param formatters The <code>Map</code> of file extensions (in
    * <u>lower case</u>) and <code>Formatter</code> instances.
    */
-  public void setAvailableFormatters(final Map<String, Formatter> formatters) {
+  public void setAvailableFormatters(final Map<String, String> formatters) {
     this.formatters = formatters;
   }
 
@@ -36,11 +36,33 @@ public class FormatterFactory {
    * exist for given file extension, a generic formatter will be returned.
    */
   public Formatter getFormatterForExtension(final String fileExtension) {
-    Formatter formatter = formatters.get(fileExtension.toLowerCase());
-    if (formatter == null) {
-      return new FormatterImpl();
+    if (formatters == null || formatters.size() == 0) {
+      throw new IllegalStateException("Method 'setAvailableFormatters()' must be called before any formatter can be gotten.");
     }
-    return formatter;
+    Object formatter = null;
+    String formatterClassName = formatters.get(fileExtension.toLowerCase());
+    if (formatterClassName == null) {
+      return new FormatterImpl();
+    } else {
+      try {
+          formatter = Class.forName(formatterClassName).newInstance();
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+    return (Formatter) formatter;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public String toString() {
+    return "FormatterFactory{" +
+    "formatters=" + formatters +
+    "}";
+  }
 }

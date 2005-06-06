@@ -1,22 +1,16 @@
 package de.berlios.sventon.colorizer;
 
-import junit.framework.*;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import junit.framework.TestCase;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Map;
-import java.util.List;
 
 public class FormatterFactoryTest extends TestCase {
   private ApplicationContext context;
 
   public void setUp() throws IOException {
-      context = new FileSystemXmlApplicationContext("dev/java/web/web-inf/sventon-servlet.xml");
+    context = new FileSystemXmlApplicationContext("dev/java/web/web-inf/sventon-servlet.xml");
   }
 
   public void testGetFormatterForExtension() throws Exception {
@@ -24,7 +18,9 @@ public class FormatterFactoryTest extends TestCase {
 
     // Normal behaviour
     assertTrue(ff.getFormatterForExtension("java") instanceof JavaFormatter);
+    assertTrue(ff.getFormatterForExtension("xml") instanceof XMLFormatter);
     assertTrue(ff.getFormatterForExtension("html") instanceof HTMLFormatter);
+    assertTrue(ff.getFormatterForExtension("c") instanceof CPlusPlusFormatter);
 
     //Upper case will be converted into lower case.
     assertTrue(ff.getFormatterForExtension("JAVA") instanceof JavaFormatter);

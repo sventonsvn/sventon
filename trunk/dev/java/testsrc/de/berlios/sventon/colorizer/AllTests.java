@@ -18,6 +18,8 @@ public class AllTests {
     suite.addTestSuite(FormatterImplTest.class);
     suite.addTestSuite(JavaFormatterTest.class);
     suite.addTestSuite(CPlusPlusFormatterTest.class);
+    suite.addTestSuite(XMLFormatterTest.class);
+    suite.addTestSuite(HTMLFormatterTest.class);
     //$JUnit-END$
     return suite;
   }

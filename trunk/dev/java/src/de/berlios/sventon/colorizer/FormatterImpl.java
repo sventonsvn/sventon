@@ -40,9 +40,9 @@ public class FormatterImpl implements Formatter{
     // to colorize quoted strings, e.g. String s = "hello";
 
     line = line.replaceAll("[&]","&amp;");
+    line = line.replaceAll("[\"]", "&quot;");
     line = line.replaceAll("[<]", "&lt;");
-    line = line.replaceAll("[>]", "&gt;");
-    return line.replaceAll("[\"]", "&quot;");
+    return line.replaceAll("[>]", "&gt;");
   }
 
 }

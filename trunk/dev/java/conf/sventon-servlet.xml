@@ -118,19 +118,20 @@
 			<!-- Make sure file extensions are in lower case -->
 			<map>
 				<entry key="java">
-					<ref bean="javaFormatter" />
+					<value>de.berlios.sventon.colorizer.JavaFormatter</value>
 				</entry>
 				<entry key="html">
-					<ref bean="htmlFormatter" />
+					<value>de.berlios.sventon.colorizer.HTMLFormatter</value>
+				</entry>
+				<entry key="xml">
+					<value>de.berlios.sventon.colorizer.XMLFormatter</value>
+				</entry>
+				<entry key="c">
+					<value>de.berlios.sventon.colorizer.CPlusPlusFormatter</value>
 				</entry>
 			</map>
 		</property>
 	</bean>
-
-	<bean id="javaFormatter"
-		class="de.berlios.sventon.colorizer.JavaFormatter" />
-	<bean id="htmlFormatter"
-		class="de.berlios.sventon.colorizer.HTMLFormatter" />
 
 	<!-- End Bean configuration for Sventon Colorizer -->
 

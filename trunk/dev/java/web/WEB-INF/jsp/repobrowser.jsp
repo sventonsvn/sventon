@@ -10,15 +10,15 @@
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
 <table class="sventonEntriesTable">
-	<tr>
+  <tr>
     <th></th>
     <th></th>
-		<th>File</th>
+    <th>File</th>
     <th>Size (bytes)</th>
-		<th>Last changed rev</th>
-		<th>Last changed by</th>
+    <th>Last changed rev</th>
+    <th>Last changed by</th>
     <th>Date</th>
-		<th>Options</th>
+    <th>Options</th>
 	</tr>
   <% int rowCount = 0; %>
   <c:forEach items="${svndir}" var="entry">
@@ -55,7 +55,7 @@
       <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${revision}"/>">[Show log]</a></td>
     </tr>
     <% rowCount++; %>
-	</c:forEach>
+  </c:forEach>
 
   <tr>
     <td colspan="8">[Toggle]</td>
