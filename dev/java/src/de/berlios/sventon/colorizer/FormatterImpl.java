@@ -26,7 +26,7 @@ public class FormatterImpl implements Formatter{
    * {@inheritDoc}
    */
   public String format(String line) {
-    return line;
+    return replaceEntities(line);
   }
 
   /**
