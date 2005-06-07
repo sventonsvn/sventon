@@ -4,51 +4,51 @@
  */
 
 body {
-	font-family: Courier
-	font-size: 10px;
-	color: #000000;
+  font-family: Courier
+  font-size: 10px;
+  color: #000000;
 }
 
 .srcKeyword {
-	font-size: 12px;
-	font-weight: bold;
-	color: #0000FF;
+  font-size: 12px;
+  font-weight: bold;
+  color: #0000FF;
 }
 
 .srcComment {
-	font-size: 12px;
-	font-weight: bold;
-	color: #008800;
+  font-size: 12px;
+  color: #008800;
+  font-style: italic;
 }
 
 .srcString {
-	font-size: 12px;
-	font-weight: bold;
-	color: #FF0000;
+  font-size: 12px;
+  font-weight: bold;
+  color: #FF0000;
 }
 
 .srcInteger {
-	font-size: 12px;
-	font-weight: bold;
-	color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333333;
 }
 
 .srcFloat {
-	font-size: 12px;
-	font-weight: bold;
-	color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333333;
 }
 
 .srcCharacter {
-	font-size: 12px;
-	font-weight: bold;
-	color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333333;
 }
 
 .srcPreproc {
-	font-size: 12px;
-	font-weight: bold;
-	color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333333;
 }
 
 
