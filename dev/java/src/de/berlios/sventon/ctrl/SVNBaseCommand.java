@@ -1,6 +1,7 @@
 package de.berlios.sventon.ctrl;
 
 public class SVNBaseCommand {
+  
   private String path = "";
 
   private String revision = null;
@@ -82,6 +83,10 @@ public class SVNBaseCommand {
     } else {
       return work.substring(0, lastIndex) + "/";
     }
+  }
+  
+  public String toString() {
+    return "SVNBaseCommand{path=" + path + ", revision=" + revision + "}";
   }
 
 }
