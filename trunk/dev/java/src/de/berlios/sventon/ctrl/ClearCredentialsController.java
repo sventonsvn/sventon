@@ -9,7 +9,6 @@ import org.springframework.web.servlet.mvc.AbstractController;
 
 public class ClearCredentialsController extends AbstractController {
 
-  @Override
   protected ModelAndView handleRequestInternal(HttpServletRequest request, 
       HttpServletResponse response) throws Exception {
     HttpSession session = request.getSession(false);

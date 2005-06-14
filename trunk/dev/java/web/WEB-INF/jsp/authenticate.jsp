@@ -1,6 +1,4 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<%@ taglib prefix="spring" uri="/spring"%>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
 <html>
 <head>
 <title><fmt:message key="authenticate.title" /></title>
