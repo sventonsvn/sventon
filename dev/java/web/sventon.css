@@ -4,28 +4,28 @@
  */
 
 body {
-	font-family: Verdana;
-	font-size: 12px;
-	color: #000000;
-	font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color: #000000;
+  font-weight: normal;
 }
 
 a {
-	font-family: Verdana;
-	font-size: 12px;
-	color: 0060CB;
-	text-decoration: underline;
+  font-family: Verdana;
+  font-size: 12px;
+  color: 0060CB;
+  text-decoration: underline;
 }
 
 .sventonInput, sventonSelect, sventonTextarea {
   font-family: Verdana;
-	font-size: 12px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-color: #333333 #999999 #999999 #333333;
-	padding-right: 0px;
+  font-size: 12px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-color: #333333 #999999 #999999 #333333;
+  padding-right: 0px;
 }
 
 .sventonSelect {
@@ -53,9 +53,9 @@ th {
 .sventonRevision {
 }
 
-.sventonLocation {
+.sventonHeadlines {
   font-family: Verdana;
-	font-size: 12px;
+  font-size: 12px;
   font-weight: bold;
 }
 
@@ -126,4 +126,6 @@ th {
 .sventonEntriesDiv {
 }
 
-
+.sventonTopTable {
+  width: 100%;
+}
