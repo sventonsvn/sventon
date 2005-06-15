@@ -17,7 +17,7 @@ a {
 	text-decoration: underline;
 }
 
-input, select, textarea {
+.sventonInput, sventonSelect, sventonTextarea {
   font-family: Verdana;
 	font-size: 12px;
 	border-top-width: 1px;
@@ -26,6 +26,14 @@ input, select, textarea {
 	border-left-width: 1px;
 	border-color: #333333 #999999 #999999 #333333;
 	padding-right: 0px;
+}
+
+.sventonSelect {
+  vertical-align: middle;
+}
+
+.sventonSelectOption {
+  color: rgb(119, 119, 119);
 }
 
 .sventonHeader {
@@ -42,6 +50,8 @@ th {
   white-space: nowrap;
 }
 
+.sventonRevision {
+}
 
 .sventonLocation {
   font-family: Verdana;
@@ -87,6 +97,7 @@ th {
 
 .sventonCol1 {
   width: 10px;
+  text-align: center;
 }
 
 .sventonCol2 {
@@ -111,3 +122,8 @@ th {
 
 .sventonCol8 {
 }
+
+.sventonEntriesDiv {
+}
+
+

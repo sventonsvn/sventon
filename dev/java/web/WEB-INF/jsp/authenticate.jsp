@@ -24,7 +24,7 @@ You are logged in as: <c:out value="${uid}" /> - <a
 <p />
 
 <h3><fmt:message key="authenticate.heading" /></h3>
-<form method="post">
+<form name="loginForm" method="post">
 <table>
    <spring:hasBindErrors name="auth">
 		<tr>

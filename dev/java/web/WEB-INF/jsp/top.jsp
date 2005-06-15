@@ -27,11 +27,11 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
  <p> 
 
  <spring:hasBindErrors name="command">
- <table bgcolor>
+ <table>
 <tr><td><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font></td></tr>
 </table>
  </spring:hasBindErrors>
-<form method="post" action="repobrowser.svn">
+<form name="gotoForm" method="post" action="repobrowser.svn">
  <table>
  <tr>
  <td>Go to Revision</td><td colspan="2">Go to path</td>
@@ -43,9 +43,9 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
 </tr>
 </spring:hasBindErrors>
 <tr>
-<td><spring:bind path="command.revision"><input type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
+<td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
 <td><spring:bind path="command.path"><input class="sventonGoTo" type="text" name="path" value="<c:out value="${status.value}"/>" /></spring:bind></td>
-<td><input type="submit" value="go to"/></td>
+<td><input class="sventonGoToSubmit" type="submit" value="go to"/></td>
 </tr>
 </table>
 </form>
