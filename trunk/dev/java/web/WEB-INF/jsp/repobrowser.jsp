@@ -72,7 +72,7 @@
 
       </td>
       <td colspan="5">
-        <input type="button" name="actionButton" value="go!"/>
+        <input type="button" name="actionButton" value="go!" onClick="javascript:alert('Not implemented.');"/>
       </td>
     </tr>
   </table>

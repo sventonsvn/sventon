@@ -9,23 +9,33 @@ You are not logged in
   <c:otherwise> 
 You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log out</a>
   </c:otherwise> 
-</c:choose>  
+</c:choose>
 </td></tr></table>
-<p>
-  <span class="sventonLocation">
-  Repository path: <a href="repobrowser.svn">
-  <c:out value="${url}"/></a> /
-  <c:forTokens items="${pathPart}" delims="/" var="pathSegment">
-  	<c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-  	<a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${revision}"/>"><c:out value="${pathSegment}"/></a> /
-  </c:forTokens>
-   	<c:out value="${target}"/>
-  <p> 
-      Revision: <c:out value="${revision}" /> 
-      </p>
+<p/>
+<table class="sventonTopTable">
+  <tr>
+    <td class="sventonHeadlines">
+     Repository path: <a href="repobrowser.svn">
+      <c:out value="${url}"/></a> /
+      <c:forTokens items="${pathPart}" delims="/" var="pathSegment">
+        <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
+        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${revision}"/>"><c:out value="${pathSegment}"/></a> /
+      </c:forTokens>
+        <c:out value="${target}"/>
+    </td>
+    <td align="right">
+      <input type="text" class="sventonSearchField" value="search..."/>
+      <input type="button" name="sventonSearchButton" value="go!" onClick="javascript:alert('Not implemented');"/>
+    </td>
+  <tr>
+    <td class="sventonHeadlines">
+      Revision: <c:out value="${revision}" /></p>
       </span>
- <p> 
-
+    </td>
+  </tr>
+ <p>
+</table>
+<p/>
  <spring:hasBindErrors name="command">
  <table>
 <tr><td><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font></td></tr>
