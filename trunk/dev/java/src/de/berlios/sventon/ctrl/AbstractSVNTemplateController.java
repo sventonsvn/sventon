@@ -1,8 +1,6 @@
 package de.berlios.sventon.ctrl;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
@@ -140,6 +138,21 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     logger.debug("Getting SVN repository");
     HttpSession session = request.getSession(true);
     Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
+
+    if (exception.hasErrors()) {
+      Map model = exception.getModel();
+      logger.info("'command' set to: " + svnCommand);
+      model.put("command", svnCommand); // This is for the form to work
+      model.put("url", configuration.getUrl());
+      model.put("revision", svnCommand.getRevision());
+      model.put("numrevision", null);
+      model.put("path", svnCommand.getPath());
+      model.put("target", svnCommand.getTarget());
+      model.put("pathPart", svnCommand.getPathPart());
+      fillInCredentials(credentials, model);
+      return new ModelAndView("goto", model);
+    }
+
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
     if (credentials != null) {
       logger.debug("Credentials found, configureing repository with: " + credentials);
@@ -178,6 +191,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", configuration.getUrl());
         model.put("revision", svnCommand.getRevision());
+        model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : svnCommand.getRevision()));
         model.put("path", svnCommand.getPath());
         model.put("target", svnCommand.getTarget());
         model.put("pathPart", svnCommand.getPathPart());
@@ -258,6 +272,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
       model.put("revision", svnCommand.getRevision());
+      model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : svnCommand.getRevision()));
       model.put("path", svnCommand.getPath());
       model.put("target", svnCommand.getTarget());
       model.put("pathPart", svnCommand.getPathPart());
