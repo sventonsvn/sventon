@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNException;
@@ -46,15 +47,24 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     nodeKind = repository.checkPath(path, revision);
 
     for (SVNLogEntry logEntry : logEntries) {
+      
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
       Set<String> changedPaths = m.keySet();
       for (String entryPath : changedPaths) {
-        if (!entryPath.equals(pathAtRevision))
+        int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
+        if (i == -1) { //Same path
+          SVNLogEntryPath logEntryPath = m.get(entryPath);
+          if (logEntryPath.getCopyPath() != null) {
+            pathAtRevision = logEntryPath.getCopyPath();
+          }
+        } else if (entryPath.length() == i) { //Part path, can be a branch
+          SVNLogEntryPath logEntryPath = m.get(entryPath);
+          if (logEntryPath.getCopyPath() != null) {
+            pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
+          }
+        } else {
           continue;
-        SVNLogEntryPath logEntryPath = m.get(entryPath);
-        if (logEntryPath.getCopyPath() != null) {
-          pathAtRevision = logEntryPath.getCopyPath();
         }
       }
     }

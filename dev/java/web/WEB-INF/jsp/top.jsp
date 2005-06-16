@@ -29,7 +29,7 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
     </td>
   <tr>
     <td class="sventonHeadlines">
-      Revision: <c:out value="${revision}" /></p>
+      Revision: <c:out value="${revision}" /> (<c:out value="${numrevision}"/>)</p>
       </span>
     </td>
   </tr>
