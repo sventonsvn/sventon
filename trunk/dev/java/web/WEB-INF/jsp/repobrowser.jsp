@@ -26,13 +26,13 @@
     <c:forEach items="${svndir}" var="entry">
     <jsp:useBean id="entry" type="org.tmatesoft.svn.core.io.SVNDirEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
-        <c:param name="path" value="${path}${entry.name}" />
+        <c:param name="path" value="${command.path}${entry.name}" />
       </c:url>
       <c:url value="showlog.svn" var="showLogUrl">
-        <c:param name="path" value="${path}${entry.name}" />
+        <c:param name="path" value="${command.path}${entry.name}" />
       </c:url>
       <c:url value="showfile.svn" var="showFileUrl">
-        <c:param name="path" value="${path}${entry.name}" />
+        <c:param name="path" value="${command.path}${entry.name}" />
       </c:url>
 
       <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
@@ -44,17 +44,17 @@
         <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${entry.name}" />"/></td>
         <% if (nodeKind == SVNNodeKind.DIR) { %>
         <td class="sventonCol2"><img src="images/icon_dir.gif"/></td>
-        <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${revision}"/>"><c:out
+        <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>"><c:out
           value="${entry.name}" /></a></td>
         <% } else { %>
         <td class="sventonCol2"><img src="images/icon_file.gif"/></td>
-        <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${revision}"/>"><c:out value="${entry.name}"/></a></td>
+        <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>"><c:out value="${entry.name}"/></a></td>
         <% } %>
-        <td class="sventonCol4"><%=entrySize%></td>
+        <td class="sventonCol4"><% if (nodeKind == SVNNodeKind.FILE) { %><%= entrySize %><% } %></td>
         <td class="sventonCol5"><c:out value="${entry.revision}" /></td>
         <td class="sventonCol6"><c:out value="${entry.author}" /></td>
         <td class="sventonCol7"><c:out value="${entry.date}" /></td>
-        <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${revision}"/>">[Show log]</a></td>
+        <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
       </tr>
       <% rowCount++; %>
     </c:forEach>

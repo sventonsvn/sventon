@@ -1,27 +1,16 @@
 <%@ page session="false"%>
-<table width="100%" class="sventonHeader"><tr>
-<td>sventon subversion web client - (<a href="http://sventon.berlios.de" target="page">sventon.berlios.de</a>)</td>
-<td align="right">
-<c:choose>
-  <c:when test="${empty uid}" > 
-You are not logged in
-  </c:when> 
-  <c:otherwise> 
-You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log out</a>
-  </c:otherwise> 
-</c:choose>
-</td></tr></table>
+<%@ include file="/WEB-INF/jsp/sventonbar.jsp"%>
 <p/>
 <table class="sventonTopTable">
   <tr>
     <td class="sventonHeadlines">
      Repository path: <a href="repobrowser.svn">
       <c:out value="${url}"/></a> /
-      <c:forTokens items="${pathPart}" delims="/" var="pathSegment">
+      <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${revision}"/>"><c:out value="${pathSegment}"/></a> /
+        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a> /
       </c:forTokens>
-        <c:out value="${target}"/>
+        <c:out value="${command.target}"/>
     </td>
     <td align="right">
       <form action="search.svn" method="get">
@@ -32,29 +21,27 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
     </td>
   <tr>
     <td class="sventonHeadlines">
-      Revision: <c:out value="${revision}" /> (<c:out value="${numrevision}"/>)</p>
+      Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if></p>
       </span>
     </td>
   </tr>
  <p>
 </table>
 <p/>
- <spring:hasBindErrors name="command">
+
  <table>
-<tr><td><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font></td></tr>
+<tr><td><spring:hasBindErrors name="command"><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font> </spring:hasBindErrors></td></tr>
 </table>
- </spring:hasBindErrors>
+
 <form name="gotoForm" method="post" action="repobrowser.svn">
  <table>
+<tr>
+<td><font color="#FF0000"><spring:bind path="command.revision"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
+<td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
+</tr>
  <tr>
  <td>Go to Revision</td><td colspan="2">Go to path</td>
  </tr>
-<spring:hasBindErrors name="command">
-<tr>
-<td><spring:bind path="command.revision"><c:out value="${status.errorMessage}" /></spring:bind></td>
-<td><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></td>
-</tr>
-</spring:hasBindErrors>
 <tr>
 <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
 <td><spring:bind path="command.path"><input class="sventonGoTo" type="text" name="path" value="<c:out value="${status.value}"/>" /></spring:bind></td>
