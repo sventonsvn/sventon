@@ -5,7 +5,7 @@
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 <link href="colorizer.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body onLoad="document.loginForm.uid.focus();">
 <table width="100%" class="sventonHeader">
 	<tr>
 		<td>sventon subversion web client</td>

@@ -6,7 +6,7 @@
 <title>Repository browser view</title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
-<body>
+<body onLoad="document.gotoForm.path.focus();">
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
 <div id="entriesDiv" class="sventonEntriesDiv">

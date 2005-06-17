@@ -43,7 +43,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     logger.debug("Using formatter: " + formatter.getClass().getName());
     Colorizer colorizer = new Colorizer(reader, formatter);
 
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     String line = "";
     try {
       while ((line = colorizer.readLine()) != null) {
