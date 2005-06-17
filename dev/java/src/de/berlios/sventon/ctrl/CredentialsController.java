@@ -49,6 +49,7 @@ public class CredentialsController extends SimpleFormController {
     final Map model = (Map) session.getAttribute("sventon.model");
     session.removeAttribute("sventon.url");
     session.removeAttribute("sventon.model");
+    //TODO: url may be null!
     return new ModelAndView(new RedirectView(url.toString()),model);
 
   }

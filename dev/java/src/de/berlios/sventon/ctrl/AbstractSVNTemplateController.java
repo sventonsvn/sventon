@@ -122,84 +122,62 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     setBindOnNewForm(true);
     setSessionForm(false);
   }
+  
+  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+    this.configuration = configuration;
+  }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.springframework.web.servlet.mvc.AbstractFormController#processFormSubmission(javax.servlet.http.HttpServletRequest,
-   *      javax.servlet.http.HttpServletResponse, java.lang.Object,
-   *      org.springframework.validation.BindException)
+  public RepositoryConfiguration getRepository() {
+    return configuration;
+  }
+
+  /**
+   * {@inheritDoc}
    */
   @Override
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
       Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
-    logger.debug("Getting SVN repository");
     HttpSession session = request.getSession(true);
     Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
     if (exception.hasErrors()) {
-      Map model = exception.getModel();
-      logger.info("'command' set to: " + svnCommand);
-      model.put("command", svnCommand); // This is for the form to work
-      model.put("url", configuration.getUrl());
-      model.put("revision", svnCommand.getRevision());
-      model.put("numrevision", null);
-      model.put("path", svnCommand.getPath());
-      model.put("target", svnCommand.getTarget());
-      model.put("pathPart", svnCommand.getPathPart());
-      fillInCredentials(credentials, model);
-      return new ModelAndView("goto", model);
+      return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
     if (credentials != null) {
       logger.debug("Credentials found, configureing repository with: " + credentials);
-      SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
-          .getPwd());
+      SVNSimpleCredentialsProvider provider = 
+        new SVNSimpleCredentialsProvider(credentials.getUid(), credentials.getPwd());
       repository.setCredentialsProvider(provider);
-      logger.debug("Setting credentials");
     }
 
-    long revision = ISVNWorkspace.HEAD;
-    // TODO: Parsing of revision must be stricter
-    if (svnCommand.getRevision() != null && !"HEAD".equals(svnCommand.getRevision())) {
-      revision = Long.parseLong(svnCommand.getRevision());
-    }
+    long revision = revision = convertAndUpdateRevision(svnCommand);
 
     String redirectUrl = null;
 
     try {
 
+      logger.debug("Checking node kind for command: " + svnCommand);
       SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision);
 
       logger.debug("Node kind: " + kind);
 
-      // TODO: Handle invalid path/revision combo
       if (kind == SVNNodeKind.DIR) {
         redirectUrl = "repobrowser.svn";
       } else if (kind == SVNNodeKind.FILE) {
         redirectUrl = "showfile.svn";
       } else {
+        //Invalid path/rev combo. Forward to error page.
         exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
-        // Fill in some common info
-        // TODO: Perhaps add entire command object instead of the stringified
-        // version?s
-        Map model = exception.getModel();
-        logger.info("'command' set to: " + svnCommand);
-        model.put("command", svnCommand); // This is for the form to work
-        model.put("url", configuration.getUrl());
-        model.put("revision", svnCommand.getRevision());
-        model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : svnCommand.getRevision()));
-        model.put("path", svnCommand.getPath());
-        model.put("target", svnCommand.getTarget());
-        model.put("pathPart", svnCommand.getPathPart());
-        fillInCredentials(credentials, model);
-        return new ModelAndView("goto", model);
+        return prepareExceptionModelAndView(exception, svnCommand, credentials);
       }
     } catch (SVNAuthenticationException svnae) {
-      return handleAuthenticationRedirect(request, svnCommand);
+      //Redirect to login page. This will lose track of the submit, the user will have to start over
+      //after logging in. That's OK. Yes.
+      return prepareAuthenticationModelAndView(request, svnCommand);
     }
 
     logger.debug("Submitted command: " + svnCommand);
@@ -211,19 +189,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     return new ModelAndView(new RedirectView(redirectUrl), m);
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.springframework.web.servlet.mvc.AbstractFormController#showForm(javax.servlet.http.HttpServletRequest,
-   *      javax.servlet.http.HttpServletResponse,
-   *      org.springframework.validation.BindException)
+  /**
+   * {@inheritDoc}
    */
   @Override
   protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException exception)
       throws Exception {
     // This is for preparing the requested model and view and also rendering the
     // "Go To" form.
-
     return handle(request, response, exception.getTarget(), exception);
   }
 
@@ -234,21 +207,20 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
+    HttpSession session = request.getSession(true);
+    Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
-    // Move error handling, this should not be OK!
+    
     if (exception.hasErrors()) {
-      svnCommand.setPath(null);
-      svnCommand.setRevision("HEAD");
+      if (exception.hasErrors()) {
+        return prepareExceptionModelAndView(exception, svnCommand, credentials);
+      }
     }
 
-    svnCommand.setRevision(svnCommand.getRevision() == null ? "HEAD" : svnCommand.getRevision());
-
-    long revision = ISVNWorkspace.HEAD;
+    long revision = convertAndUpdateRevision(svnCommand);
 
     try {
       logger.debug("Getting SVN repository");
-      HttpSession session = request.getSession(true);
-      Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
       if (credentials != null) {
         SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
@@ -257,30 +229,18 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
         logger.debug("Setting credentials");
       }
 
-      // TODO: Parsing of revision must be stricter
-      if (svnCommand.getRevision() != null && !"HEAD".equals(svnCommand.getRevision())) {
-        revision = Long.parseLong(svnCommand.getRevision());
-      }
-
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
-      // Fill in some common info
-      // TODO: Perhaps add entire command object instead of the stringified
-      // version?s
       Map<String, Object> model = new HashMap<String, Object>();
       logger.info("'command' set to: " + svnCommand);
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
-      model.put("revision", svnCommand.getRevision());
-      model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : svnCommand.getRevision()));
-      model.put("path", svnCommand.getPath());
-      model.put("target", svnCommand.getTarget());
-      model.put("pathPart", svnCommand.getPathPart());
+      model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : null));
       fillInCredentials(credentials, model);
       modelAndView.addAllObjects(model);
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return handleAuthenticationRedirect(request, svnCommand);
+      return prepareAuthenticationModelAndView(request, svnCommand);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -289,20 +249,21 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       } else {
         exception.reject(null, e.getMessage());
       }
-      return new ModelAndView("goto", exception.getModel());
+      
+      return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
   }
 
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
-    this.configuration = configuration;
-  }
-
-  public RepositoryConfiguration getRepository() {
-    return configuration;
-  }
-
-  protected ModelAndView handleAuthenticationRedirect(HttpServletRequest request, SVNBaseCommand svnCommand) {
+  /**
+   * Prepare authentication model. This setus up a model and redirect view with all stuff needed to redirect
+   * control to the login page.
+   * @param request Servlet request, original command and url info will be stored here during authentication. 
+   * @param svnCommand Command object.
+   * @return Redirect view for logging in, with original request info stored in session to enable the
+   * authentication control to proceed with original request once the user is authenticated.
+   */
+  private ModelAndView prepareAuthenticationModelAndView(HttpServletRequest request, SVNBaseCommand svnCommand) {
     logger.debug("Authentication failed, redirecting to 'authenticate' view");
     Map<String, String> m = new HashMap<String, String>();
     m.put("path", svnCommand.getPath());
@@ -312,12 +273,72 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     session.setAttribute("sventon.url", request.getRequestURL());
     return new ModelAndView(new RedirectView("authenticate.svn"));
   }
+  
 
+  /**
+   * Prepare the exception model. This sets up a model and view with all stuff needed to for displaying a useful
+   * error mesage.
+   * @param exception Bind exception from Spring MVC validation.
+   * @param svnCommand Command object.
+   * @param credentials Credentials, may be <code>null</code> if the user is not authenticated.
+   * @return The packaged model and view.
+   */
+  private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand, Credentials credentials) {
+    final Map model = exception.getModel();
+    logger.info("'command' set to: " + svnCommand);
+    model.put("command", svnCommand);
+    model.put("url", configuration.getUrl());
+    model.put("numrevision", null);
+    fillInCredentials(credentials, model);
+    return new ModelAndView("goto", model);
+  }
+
+  /**
+   * Convenience method for updating the model with uid from the credentials object.
+   * @param credentials Credentials object, may be <code>null</code> if the user was not authenticated.
+   * @param model Model instance to update.
+   */
   protected void fillInCredentials(Credentials credentials, Map<String, Object> model) {
     if (credentials != null)
       model.put("uid", credentials.getUid());
   }
+  
+  /**
+   * Converts the revision <code>String</code> to a format suitable for SVN,
+   * also handles special logical revision HEAD. <code>null</code> and empty
+   * string revision are converted to the HEAD revision.
+   * <p>
+   * The given <code>SVNBaseCommand</code> instance will be updated with key word HEAD, if revision
+   * was <code>null</code> or empty <code>String</code>.
+   * <p>
+   * TODO: This (could perhaps) be a suitable place to also handle conversion of
+   * date to revision to expand possilbe user input to handle calendar
+   * intervalls.
+   * 
+   * @param svnCommand Command object.
+   * @return The converted SVN revision.
+   */
+  private long convertAndUpdateRevision(final SVNBaseCommand svnCommand) {
+    if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
+        && !"HEAD".equals(svnCommand.getRevision())) {
+      return Long.parseLong(svnCommand.getRevision());
+    } else {
+      svnCommand.setRevision("HEAD");
+      return ISVNWorkspace.HEAD;
+    }
+  }
 
+  /** 
+   * Abstract method to be implemented by the controller subclassing this controller. This is where the actual work
+   * takes place. See class documentation for info on workflow and on how all this works together. 
+   * @param repository Reference to the repository, prepared with authentication if applicable.
+   * @param svnCommand Command (basically request parameters submitted in user request)
+   * @param revision SVN type revision.
+   * @param request Servlet request.
+   * @param response Servlet response.
+   * @return Model and view to render.
+   * @throws SVNException Thrown if exception occurs during SVN operations.
+   */
   protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException;
 }

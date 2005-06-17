@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<title>Repository browser view</title>
+<title>sventon - error</title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
 <body>
