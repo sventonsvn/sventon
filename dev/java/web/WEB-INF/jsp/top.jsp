@@ -1,6 +1,6 @@
 <%@ page session="false"%>
 <table width="100%" class="sventonHeader"><tr>
-<td>sventon subversion web client</td>
+<td>sventon subversion web client - (<a href="http://sventon.berlios.de" target="page">sventon.berlios.de</a>)</td>
 <td align="right">
 <c:choose>
   <c:when test="${empty uid}" > 
@@ -24,8 +24,11 @@ You are logged in as: <c:out value="${uid}" /> - <a href="clearsession.svn">Log 
         <c:out value="${target}"/>
     </td>
     <td align="right">
-      <input type="text" class="sventonSearchField" value="search..."/>
-      <input type="button" name="sventonSearchButton" value="go!" onClick="javascript:alert('Not implemented');"/>
+      <form action="search.svn" method="get">
+        Search:
+        <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/>
+        <input type="submit" name="sventonSearchButton" value="go!"/>
+      </form>
     </td>
   <tr>
     <td class="sventonHeadlines">
