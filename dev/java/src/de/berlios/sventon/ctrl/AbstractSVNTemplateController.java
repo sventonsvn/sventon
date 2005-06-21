@@ -64,23 +64,12 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <td>SVN URL as configured for this webb application</td>
  * </tr>
  * <tr>
- * <td>revision</td>
- * <td>SVN revision this request concerns, either an actual revision number or
- * <code>HEAD</code></td>
+ * <td>nurevision</td>
+ * <td>SVN revision this request concerns, actual revision number</td>
  * </tr>
  * <tr>
- * <td>path</td>
- * <td>SVN path this request concerns</td>
- * </tr>
- * <tr>
- * <td>target</td>
- * <td>target part of the complete path, see
- * {@link de.berlios.sventon.ctrl.SVNBaseCommand#getTarget()}</td>
- * </tr>
- * <tr>
- * <td>pathPart</td>
- * <td>path part of the complete path, see
- * {@link de.berlios.sventon.ctrl.SVNBaseCommand#getPathPart()}</td>
+ * <td>command</td>
+ * <td>{@link de.berlios.sventon.ctrl.SVNBaseCommand}-object</td>
  * </tr>
  * </table> <p/>
  * 
@@ -89,15 +78,15 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
- * checked for binding errors. If binding errors were detected the SVN path and
- * revision will be reset to <code>root</code> (/) and <code>HEAD</code>
+ * checked for binding errors. If binding errors were detected an exception model will be
+ * created an control forwarded to an error view.
  * respectively.
  * 
  * <b>Exception handling</b>
  * <dl>
  * <dt>Authentication exception
  * <dd>If a SVN authentication exception occurs during the call the command
- * paramters and the original request URL is stored in the session (using keys
+ * object and the original request URL is stored in the session (using keys
  * <code>sventon.command</code> and <code>sventon.url</code>), a redirect
  * to the authentication page is made. The authentication page will redirect
  * back to this page after credentials have been collected from the user.
@@ -105,6 +94,10 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
  * page.
  * </dl>
+ * 
+ * <b>GoTo form support</b>
+ * This controller also contains support for rendering the GoTo form and processing GoTo
+ * form submission.
  * 
  * @author patrikfr@users.berlios.de
  * 
@@ -265,11 +258,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   private ModelAndView prepareAuthenticationModelAndView(HttpServletRequest request, SVNBaseCommand svnCommand) {
     logger.debug("Authentication failed, redirecting to 'authenticate' view");
-    Map<String, String> m = new HashMap<String, String>();
-    m.put("path", svnCommand.getPath());
-    m.put("revision", svnCommand.getRevision());
     HttpSession session = request.getSession(true);
-    session.setAttribute("sventon.command", m);
+    session.setAttribute("sventon.command", svnCommand);
     session.setAttribute("sventon.url", request.getRequestURL());
     return new ModelAndView(new RedirectView("authenticate.svn"));
   }
@@ -284,7 +274,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @return The packaged model and view.
    */
   private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand, Credentials credentials) {
-    final Map model = exception.getModel();
+    final Map<String, Object> model = exception.getModel();
     logger.info("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
     model.put("url", configuration.getUrl());

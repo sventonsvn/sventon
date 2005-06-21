@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<title>Repository browser view</title>
+<title>sventon repository browser - <c:out value="${url}"/></title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
 <body onLoad="document.gotoForm.path.focus();">

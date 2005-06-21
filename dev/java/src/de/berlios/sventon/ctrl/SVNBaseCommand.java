@@ -1,5 +1,8 @@
 package de.berlios.sventon.ctrl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SVNBaseCommand {
   
   private String path = "";
@@ -83,6 +86,18 @@ public class SVNBaseCommand {
     } else {
       return work.substring(0, lastIndex) + "/";
     }
+  }
+  
+  /**
+   * Return the contents of this object as a map model where properties are mapped 
+   * to map values.
+   * @return The model map.
+   */
+  public Map<String, Object> asModel() {
+    Map<String, Object> m = new HashMap<String, Object>();
+    m.put("path", getPath());
+    m.put("revision", getRevision());
+    return m;
   }
   
   public String toString() {

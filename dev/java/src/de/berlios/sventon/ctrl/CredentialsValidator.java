@@ -20,7 +20,7 @@ public class CredentialsValidator implements Validator {
     if (cred.getUid() == null || cred.getUid().equals("")) {
       errors.rejectValue("uid", "authenticate.error.uid-empty", "User id must not be empty.");
     } else {
-      logger.info("Validating with uid: " + cred.getUid() + ", pwd: " + cred.getPwd());
+      logger.info("Validating with uid: " + cred.getUid() + ", pwd: (nope, will not tell)");
     }
   }
 }

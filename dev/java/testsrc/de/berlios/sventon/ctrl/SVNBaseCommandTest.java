@@ -1,5 +1,7 @@
 package de.berlios.sventon.ctrl;
 
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 public class SVNBaseCommandTest extends TestCase {
@@ -48,6 +50,16 @@ public class SVNBaseCommandTest extends TestCase {
     
     command.setPath(null);
     assertEquals("", command.getPathPart());
+  }
+  
+  public void testAsMap() throws Exception {
+    SVNBaseCommand command = new SVNBaseCommand();
+    command.setPath("/trunk/src/File.java");
+    command.setRevision("123");
+    Map<String, Object> model = command.asModel();
+    
+    assertEquals("/trunk/src/File.java", model.get("path"));
+    assertEquals("123", model.get("revision"));
   }
 
 }
