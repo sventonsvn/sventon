@@ -63,8 +63,6 @@ public class CredentialsController extends SimpleFormController {
     logger.debug("Forwarding to url: " + url);
     logger.debug("Forwarding command: " + storedCommand);
 
-    
-    
     if (url == null || storedCommand == null) {
       RedirectView view = new RedirectView("/");
       view.setContextRelative(CONTEXT_RELATIVE);
