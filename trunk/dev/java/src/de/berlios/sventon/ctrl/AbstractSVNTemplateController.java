@@ -64,7 +64,7 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <td>SVN URL as configured for this webb application</td>
  * </tr>
  * <tr>
- * <td>nurevision</td>
+ * <td>numrevision</td>
  * <td>SVN revision this request concerns, actual revision number</td>
  * </tr>
  * <tr>
