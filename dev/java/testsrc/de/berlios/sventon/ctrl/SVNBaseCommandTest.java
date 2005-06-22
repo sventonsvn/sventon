@@ -1,8 +1,8 @@
 package de.berlios.sventon.ctrl;
 
-import java.util.Map;
+import junit.framework.*;
 
-import junit.framework.TestCase;
+import java.util.Map;
 
 public class SVNBaseCommandTest extends TestCase {
 

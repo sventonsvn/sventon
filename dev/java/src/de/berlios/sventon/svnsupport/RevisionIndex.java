@@ -14,7 +14,7 @@ import java.util.*;
 public class RevisionIndex {
 
   /** The index. */
-  private List<SVNDirEntry> index;
+  private List<IndexEntry> index;
 
   /** The repository instance to index. */
   private SVNRepository repository;
@@ -29,7 +29,7 @@ public class RevisionIndex {
    * Default constructor.
    */
   public RevisionIndex() {
-    index = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
+    index = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
   }
 
   /**
@@ -100,7 +100,7 @@ public class RevisionIndex {
     Iterator entries = entriesList.iterator();
     while (entries.hasNext()) {
       SVNDirEntry entry = (SVNDirEntry) entries.next();
-      index.add(entry);
+      index.add(new IndexEntry(entry, path));
       if (entry.getKind() == SVNNodeKind.DIR) {
         populateIndex(path + entry.getName() + "/");
       }
@@ -118,7 +118,8 @@ public class RevisionIndex {
   /**
    * Finds index entries by a search string.
    * @param searchString The string to search for.
-   * @return The <code>List</code> of entries found.
+   * @return The <code>List</code> of <code>IndexEntry</code> instances found.
+   * @see de.berlios.sventon.svnsupport.IndexEntry
    * @throws SVNException if a Subverions error occurs.
    */
   public List find(final String searchString) throws SVNException {
@@ -131,11 +132,11 @@ public class RevisionIndex {
       index();
     }
 
-    List<SVNDirEntry> result = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
+    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
     Iterator indexIterator = index.iterator();
     while (indexIterator.hasNext()) {
-      SVNDirEntry entry = (SVNDirEntry) indexIterator.next();
-      if (entry.getName().indexOf(searchString) > -1) {
+      IndexEntry entry = (IndexEntry) indexIterator.next();
+      if (entry.getFullEntryName().indexOf(searchString) > -1) {
         result.add(entry);
       }
     }
@@ -159,11 +160,11 @@ public class RevisionIndex {
       index();
     }
 
-    List<SVNDirEntry> result = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
+    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
     Iterator indexIterator = index.iterator();
     while (indexIterator.hasNext()) {
-      SVNDirEntry entry = (SVNDirEntry) indexIterator.next();
-      if (entry.getName().matches(searchPattern)) {
+      IndexEntry entry = (IndexEntry) indexIterator.next();
+      if (entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
       }
     }
