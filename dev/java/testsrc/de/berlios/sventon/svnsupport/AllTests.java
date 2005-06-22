@@ -13,6 +13,7 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
     //$JUnit-BEGIN$
     suite.addTestSuite(SVNDirEntryComparatorTest.class);
+    suite.addTestSuite(IndexEntryTest.class);
     //$JUnit-END$
     return suite;
   }
