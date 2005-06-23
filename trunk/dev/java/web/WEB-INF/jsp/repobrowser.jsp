@@ -68,8 +68,8 @@
 			<td class="sventonCol8"><a
 				href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show
 			log]</a></td>
-			<td class="sventonCol9"><a
-				href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
+			<td class="sventonCol9"><%if (nodeKind == SVNNodeKind.FILE) { %><a
+				href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a><% } %></td>
 		</tr>
 		<% rowCount++; %>
 	</c:forEach>
