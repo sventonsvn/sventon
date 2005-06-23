@@ -8,7 +8,7 @@ import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepositoryLocation;
 import org.tmatesoft.svn.util.DebugLog;
 
-import de.berlios.sventon.SventonSVNLogger;
+import de.berlios.sventon.svnsupport.SventonSVNLogger;
 
 /**
  * Small wrapper class to hold connection info for the repository.
@@ -18,31 +18,31 @@ import de.berlios.sventon.SventonSVNLogger;
 public class RepositoryConfiguration {
 
   private String url = null;
-  
+
   private SVNRepositoryLocation location = null;
 
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Configures and initializes the repository.
+   * 
    * @param url The repository url.
    * @param svnLogPath Path to where svn log files will be stored.
    * @throws SVNException Thrown in URL-parsing fails
    */
   public RepositoryConfiguration(String url) throws SVNException {
     super();
-    
-    
+
     if (url == null) {
       throw new SVNException("No repository URL was provided.");
     }
-    
+
     configureLogging();
 
     // Strip last slash if any.
     if (url.endsWith("/")) {
       logger.debug("Removing trailing slash from url.");
-      url = url.substring(0, url.length()-1);
+      url = url.substring(0, url.length() - 1);
     }
 
     this.url = url;
@@ -55,8 +55,6 @@ public class RepositoryConfiguration {
     logger.debug("Configuration done.");
   }
 
-
-
   private void configureLogging() {
     DebugLog.setLogger(new SventonSVNLogger());
   }
@@ -68,14 +66,10 @@ public class RepositoryConfiguration {
     return url;
   }
 
-
-
   /**
    * @return Returns the location.
    */
   public SVNRepositoryLocation getLocation() {
     return location;
-  }  
-  
-  
+  }
 }
