@@ -39,6 +39,13 @@
       <ref bean="repositoryConfig" />
     </property>
   </bean>
+  
+    <bean id="blameController"
+	  class="de.berlios.sventon.ctrl.BlameController">
+      <property name="repositoryConfiguration">
+       <ref bean="repositoryConfig" />
+    </property>
+  </bean>
 
   <bean id="clearSessionController"
     class="de.berlios.sventon.ctrl.ClearCredentialsController">
@@ -84,6 +91,7 @@
         <prop key="/authenticate.svn">credentialsController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/search.svn">searchController</prop>
+        <prop key="/blame.svn">blameController</prop>
       </props>
     </property>
   </bean>

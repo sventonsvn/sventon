@@ -78,9 +78,8 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
- * checked for binding errors. If binding errors were detected an exception model will be
- * created an control forwarded to an error view.
- * respectively.
+ * checked for binding errors. If binding errors were detected an exception
+ * model will be created an control forwarded to an error view. respectively.
  * 
  * <b>Exception handling</b>
  * <dl>
@@ -95,9 +94,8 @@ import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
  * page.
  * </dl>
  * 
- * <b>GoTo form support</b>
- * This controller also contains support for rendering the GoTo form and processing GoTo
- * form submission.
+ * <b>GoTo form support</b> This controller also contains support for rendering
+ * the GoTo form and processing GoTo form submission.
  * 
  * @author patrikfr@users.berlios.de
  * 
@@ -115,7 +113,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     setBindOnNewForm(true);
     setSessionForm(false);
   }
-  
+
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
     this.configuration = configuration;
   }
@@ -142,8 +140,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
     if (credentials != null) {
       logger.debug("Credentials found, configureing repository with: " + credentials);
-      SVNSimpleCredentialsProvider provider = 
-        new SVNSimpleCredentialsProvider(credentials.getUid(), credentials.getPwd());
+      SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
+          .getPwd());
       repository.setCredentialsProvider(provider);
     }
 
@@ -163,13 +161,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       } else if (kind == SVNNodeKind.FILE) {
         redirectUrl = "showfile.svn";
       } else {
-        //Invalid path/rev combo. Forward to error page.
+        // Invalid path/rev combo. Forward to error page.
         exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
         return prepareExceptionModelAndView(exception, svnCommand, credentials);
       }
     } catch (SVNAuthenticationException svnae) {
-      //Redirect to login page. This will lose track of the submit, the user will have to start over
-      //after logging in. That's OK. Yes.
+      // Redirect to login page. This will lose track of the submit, the user
+      // will have to start over
+      // after logging in. That's OK. Yes.
       return prepareAuthenticationModelAndView(request, svnCommand);
     }
 
@@ -203,11 +202,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     HttpSession session = request.getSession(true);
     Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
-    
     if (exception.hasErrors()) {
-      if (exception.hasErrors()) {
-        return prepareExceptionModelAndView(exception, svnCommand, credentials);
-      }
+      return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
     long revision = convertAndUpdateRevision(svnCommand);
@@ -242,19 +238,22 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       } else {
         exception.reject(null, e.getMessage());
       }
-      
+
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
   }
 
   /**
-   * Prepare authentication model. This setus up a model and redirect view with all stuff needed to redirect
-   * control to the login page.
-   * @param request Servlet request, original command and url info will be stored here during authentication. 
+   * Prepare authentication model. This setus up a model and redirect view with
+   * all stuff needed to redirect control to the login page.
+   * 
+   * @param request Servlet request, original command and url info will be
+   *          stored here during authentication.
    * @param svnCommand Command object.
-   * @return Redirect view for logging in, with original request info stored in session to enable the
-   * authentication control to proceed with original request once the user is authenticated.
+   * @return Redirect view for logging in, with original request info stored in
+   *         session to enable the authentication control to proceed with
+   *         original request once the user is authenticated.
    */
   private ModelAndView prepareAuthenticationModelAndView(HttpServletRequest request, SVNBaseCommand svnCommand) {
     logger.debug("Authentication failed, redirecting to 'authenticate' view");
@@ -263,17 +262,19 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     session.setAttribute("sventon.url", request.getRequestURL());
     return new ModelAndView(new RedirectView("authenticate.svn"));
   }
-  
 
   /**
-   * Prepare the exception model. This sets up a model and view with all stuff needed to for displaying a useful
-   * error mesage.
+   * Prepare the exception model. This sets up a model and view with all stuff
+   * needed to for displaying a useful error mesage.
+   * 
    * @param exception Bind exception from Spring MVC validation.
    * @param svnCommand Command object.
-   * @param credentials Credentials, may be <code>null</code> if the user is not authenticated.
+   * @param credentials Credentials, may be <code>null</code> if the user is
+   *          not authenticated.
    * @return The packaged model and view.
    */
-  private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand, Credentials credentials) {
+  private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand,
+      Credentials credentials) {
     final Map<String, Object> model = exception.getModel();
     logger.info("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -284,22 +285,25 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Convenience method for updating the model with uid from the credentials object.
-   * @param credentials Credentials object, may be <code>null</code> if the user was not authenticated.
+   * Convenience method for updating the model with uid from the credentials
+   * object.
+   * 
+   * @param credentials Credentials object, may be <code>null</code> if the
+   *          user was not authenticated.
    * @param model Model instance to update.
    */
   protected void fillInCredentials(Credentials credentials, Map<String, Object> model) {
     if (credentials != null)
       model.put("uid", credentials.getUid());
   }
-  
+
   /**
    * Converts the revision <code>String</code> to a format suitable for SVN,
    * also handles special logical revision HEAD. <code>null</code> and empty
    * string revision are converted to the HEAD revision.
    * <p>
-   * The given <code>SVNBaseCommand</code> instance will be updated with key word HEAD, if revision
-   * was <code>null</code> or empty <code>String</code>.
+   * The given <code>SVNBaseCommand</code> instance will be updated with key
+   * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
    * <p>
    * TODO: This (could perhaps) be a suitable place to also handle conversion of
    * date to revision to expand possilbe user input to handle calendar
@@ -318,11 +322,15 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     }
   }
 
-  /** 
-   * Abstract method to be implemented by the controller subclassing this controller. This is where the actual work
-   * takes place. See class documentation for info on workflow and on how all this works together. 
-   * @param repository Reference to the repository, prepared with authentication if applicable.
-   * @param svnCommand Command (basically request parameters submitted in user request)
+  /**
+   * Abstract method to be implemented by the controller subclassing this
+   * controller. This is where the actual work takes place. See class
+   * documentation for info on workflow and on how all this works together.
+   * 
+   * @param repository Reference to the repository, prepared with authentication
+   *          if applicable.
+   * @param svnCommand Command (basically request parameters submitted in user
+   *          request)
    * @param revision SVN type revision.
    * @param request Servlet request.
    * @param response Servlet response.

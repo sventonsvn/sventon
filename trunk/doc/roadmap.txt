@@ -20,10 +20,10 @@ Release 1
 [x] Basic look and feel
 [ ] Support for language specific characters and white space in paths.
 [x] Possibility to search for files and directories.
+[x] Blame
 
 Not scheduled
 [ ] Commit statistics (different kinds)
-[ ] Blame
 [ ] Diff revisions of same file
 [ ] Diff same revision of different files
 [ ] Flatten path structure view
