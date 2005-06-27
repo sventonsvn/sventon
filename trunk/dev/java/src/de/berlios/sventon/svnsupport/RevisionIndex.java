@@ -97,9 +97,7 @@ public class RevisionIndex {
     List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
     entriesList.addAll(repository.getDir(path, getIndexRevision(), new HashMap(), new ArrayList()));
-    Iterator entries = entriesList.iterator();
-    while (entries.hasNext()) {
-      SVNDirEntry entry = (SVNDirEntry) entries.next();
+    for (SVNDirEntry entry : entriesList) {
       index.add(new IndexEntry(entry, path));
       if (entry.getKind() == SVNNodeKind.DIR) {
         populateIndex(path + entry.getName() + "/");
@@ -133,9 +131,7 @@ public class RevisionIndex {
     }
 
     List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
-    Iterator indexIterator = index.iterator();
-    while (indexIterator.hasNext()) {
-      IndexEntry entry = (IndexEntry) indexIterator.next();
+    for (IndexEntry entry : index) {
       if (entry.getFullEntryName().indexOf(searchString) > -1) {
         result.add(entry);
       }
@@ -161,9 +157,7 @@ public class RevisionIndex {
     }
 
     List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
-    Iterator indexIterator = index.iterator();
-    while (indexIterator.hasNext()) {
-      IndexEntry entry = (IndexEntry) indexIterator.next();
+    for (IndexEntry entry : index) {
       if (entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
       }

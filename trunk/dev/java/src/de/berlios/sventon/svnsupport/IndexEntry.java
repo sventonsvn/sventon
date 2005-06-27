@@ -1,6 +1,7 @@
 package de.berlios.sventon.svnsupport;
 
 import org.tmatesoft.svn.core.io.SVNDirEntry;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Represents an entry in the revision index.
@@ -65,26 +66,11 @@ public class IndexEntry {
   /**
    * Gets the full entry name in a display friendly format.
    * <p/>
-   * If the file name alone is more than 50 characters, only
-   * the file name will be returned.
-   * @return
+   * The file name and path will be abbreviated down to 50 characters.
+   * @return The abbreviated display friendly entry name
    */
   public String getFriendlyFullEntryName() {
-    StringBuilder sb = new StringBuilder();
-    if (getName().length() < 45) {
-      sb.append(entryPath);
-      sb.append(getName());
-      if (sb.length() > 49) {
-        System.out.println(getName() + " - " + sb.lastIndexOf("/" + getName()));
-        System.out.println(sb);
-        System.out.println(sb.length());
-        sb.replace(sb.lastIndexOf("/" + getName()) - (sb.length() - 46), sb.lastIndexOf("/" + getName()) , "....");
-      }
-    } else {
-      sb.append("/");
-      sb.append(getName());
-    }
-    return sb.toString();
+    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 50));
   }
 
 }
