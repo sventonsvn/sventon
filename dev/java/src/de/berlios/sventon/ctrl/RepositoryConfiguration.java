@@ -27,7 +27,6 @@ public class RepositoryConfiguration {
    * Configures and initializes the repository.
    * 
    * @param url The repository url.
-   * @param svnLogPath Path to where svn log files will be stored.
    * @throws SVNException Thrown in URL-parsing fails
    */
   public RepositoryConfiguration(String url) throws SVNException {

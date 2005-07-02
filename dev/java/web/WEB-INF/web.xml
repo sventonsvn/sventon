@@ -4,6 +4,15 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4"> 
 
+  <listener>
+    <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>sventon.root</param-value>
+  </context-param>
+
   <servlet>
     <servlet-name>sventon</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

@@ -4,7 +4,6 @@
 <head>
 <title>Logged out</title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
-  <link href="colorizer.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 
