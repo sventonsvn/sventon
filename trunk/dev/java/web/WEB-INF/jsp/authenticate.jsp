@@ -3,7 +3,6 @@
 <head>
 <title><fmt:message key="authenticate.title" /></title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
-<link href="colorizer.css" rel="stylesheet" type="text/css" />
 </head>
 <body onLoad="document.loginForm.uid.focus();">
 <%@ include file="/WEB-INF/jsp/sventonbar.jsp"%>
