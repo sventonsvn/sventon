@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-  - Application context definition for "springapp" DispatcherServlet.
+  - Application context definition for Sventon DispatcherServlet.
 -->
 
 <beans>
@@ -40,7 +40,7 @@
     </property>
   </bean>
   
-    <bean id="blameController"
+  <bean id="blameController"
 	  class="de.berlios.sventon.ctrl.BlameController">
       <property name="repositoryConfiguration">
        <ref bean="repositoryConfig" />
@@ -124,31 +124,10 @@
     </property>
   </bean>
 
-  <!-- Begin Bean configuration for Sventon Colorizer -->
-
-  <bean name="formatterFactory"
-    class="de.berlios.sventon.colorizer.FormatterFactory"
-    singleton="true">
-    <property name="availableFormatters">
-      <!-- Make sure file extensions are in lower case -->
-      <map>
-        <entry key="java">
-          <value>de.berlios.sventon.colorizer.JavaFormatter</value>
-        </entry>
-        <entry key="html">
-          <value>de.berlios.sventon.colorizer.HTMLFormatter</value>
-        </entry>
-        <entry key="xml">
-          <value>de.berlios.sventon.colorizer.XMLFormatter</value>
-        </entry>
-        <entry key="c">
-          <value>de.berlios.sventon.colorizer.CPlusPlusFormatter</value>
-        </entry>
-      </map>
-    </property>
+  <bean id="propertyConfigurer" 
+      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
   </bean>
-
-  <!-- End Bean configuration for Sventon Colorizer -->
-
+  
+  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true"/>
 
 </beans>
