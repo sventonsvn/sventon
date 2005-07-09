@@ -17,10 +17,13 @@ import de.berlios.sventon.svnsupport.SventonSVNLogger;
  */
 public class RepositoryConfiguration {
 
+  /** The url. */
   private String url = null;
 
+  /** The repository location. */
   private SVNRepositoryLocation location = null;
 
+  /** The logging instance. */
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
@@ -30,7 +33,6 @@ public class RepositoryConfiguration {
    * @throws SVNException Thrown in URL-parsing fails
    */
   public RepositoryConfiguration(String url) throws SVNException {
-    super();
 
     if (url == null) {
       throw new SVNException("No repository URL was provided.");

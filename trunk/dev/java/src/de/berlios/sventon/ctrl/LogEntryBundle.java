@@ -2,16 +2,22 @@ package de.berlios.sventon.ctrl;
 
 import org.tmatesoft.svn.core.io.SVNLogEntry;
 
+/**
+ * @author patrikfr@users.berlios.de
+ */
 public class LogEntryBundle {
+
+  /** Subversion log entry. */
   private SVNLogEntry svnLogEntry;
+
+  /** The path at revision. */
   private String pathAtRevision;
   
   /**
-   * @param entry
-   * @param entry
+   * @param logEntry
+   * @param pathAtRevision
    */
   public LogEntryBundle(SVNLogEntry logEntry, String pathAtRevision) {
-    super();
     // TODO Auto-generated constructor stub
     svnLogEntry = logEntry;
     this.pathAtRevision = pathAtRevision;

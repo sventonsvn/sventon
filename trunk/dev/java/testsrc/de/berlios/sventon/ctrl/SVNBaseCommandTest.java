@@ -62,4 +62,15 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("123", model.get("revision"));
   }
 
+  public void testGetFileExtension() throws Exception {
+    SVNBaseCommand command = new SVNBaseCommand();
+    command.setPath("trunk/src/File.java");
+    assertEquals("java", command.getFileExtension());
+
+    command.setPath("trunk/src/File");
+    assertEquals("", command.getFileExtension());
+
+    command.setPath("trunk/src/.htpasswd");
+    assertEquals("htpasswd", command.getFileExtension());
+  }
 }

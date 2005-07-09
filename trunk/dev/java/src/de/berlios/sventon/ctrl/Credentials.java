@@ -7,8 +7,11 @@ package de.berlios.sventon.ctrl;
  *
  */
 public class Credentials {
+
+  /** Password. */
   private String pwd;
 
+  /** The user identification. */
   private String uid;
 
   /**
@@ -47,7 +50,5 @@ public class Credentials {
     "uid=" + uid +
     ", pwd=(nope, will not tell)";
   }
-  
-  
-  
+
 }
