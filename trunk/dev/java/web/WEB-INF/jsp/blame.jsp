@@ -5,7 +5,7 @@
 <title>sventon blame - <c:out value="${url}" /></title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
-<body onLoad="document.gotoForm.path.focus();">
+<body>
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
 Blame
