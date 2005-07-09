@@ -80,6 +80,7 @@ th {
 .sventonLogEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
+  width: 750px;
 }
 
 .sventonStackTraceTable {

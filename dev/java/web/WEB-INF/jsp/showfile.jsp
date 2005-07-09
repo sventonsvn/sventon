@@ -9,6 +9,19 @@
 
   <body>
     <%@ include file="/WEB-INF/jsp/top.jsp"%>
+
+    <c:url value="blame.svn" var="blameUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+    </c:url>
+
+    <table cellspacing="3">
+      <tr>
+        <td><a href="#">[Download]</a></td>
+        <td><a href="#">[Diff with previous]</a></td>
+        <td><a href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
+      </tr>
+    </table>
+
     <c:choose>
       <c:when test="${empty fileContents}">
 This is a binary file.
