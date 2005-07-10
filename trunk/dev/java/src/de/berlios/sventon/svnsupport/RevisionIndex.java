@@ -4,6 +4,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNNodeKind;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
@@ -25,10 +27,14 @@ public class RevisionIndex {
   /** Current indexed revision. */
   private long indexRevision = 0;
 
+  /** The logging instance. */
+  private final Log logger = LogFactory.getLog(getClass());
+
   /**
    * Default constructor.
    */
   public RevisionIndex() {
+    logger.debug("Creating index instance.");
     index = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
   }
 
@@ -37,6 +43,7 @@ public class RevisionIndex {
    * @param repository
    */
   public void setRepository(final SVNRepository repository) {
+    logger.debug("Setting repository.");
     this.repository = repository;
   }
 
@@ -46,6 +53,7 @@ public class RevisionIndex {
    * @throws SVNException if a Subversion error occurs.
    */
   public long getIndexRevision() throws SVNException {
+    logger.debug("Current indexed revision: " + this.indexRevision);
     return this.indexRevision;
   }
 
@@ -81,9 +89,11 @@ public class RevisionIndex {
    * @throws SVNException if a Subversion error occurs.
    */
   public void index() throws SVNException {
+    logger.info("Building index.");
     clearIndex();
     this.indexRevision = this.repository.getLatestRevision();
     populateIndex(startPath);
+    logger.info("Number of indexed entries: " + index.size());
   }
 
   /**
@@ -96,7 +106,7 @@ public class RevisionIndex {
   private void populateIndex(final String path) throws SVNException {
     List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
-    entriesList.addAll(repository.getDir(path, getIndexRevision(), new HashMap(), new ArrayList()));
+    entriesList.addAll(repository.getDir(path, this.indexRevision, new HashMap(), new ArrayList()));
     for (SVNDirEntry entry : entriesList) {
       index.add(new IndexEntry(entry, path));
       if (entry.getKind() == SVNNodeKind.DIR) {
@@ -136,6 +146,7 @@ public class RevisionIndex {
         result.add(entry);
       }
     }
+    logger.debug("Found " + result.size() + " entries matching search: " + searchString);
     return result;
   }
 
@@ -162,6 +173,7 @@ public class RevisionIndex {
         result.add(entry);
       }
     }
+    logger.debug("Found " + result.size() + " entries matching search: " + searchPattern);
     return result;
   }
 
@@ -169,6 +181,41 @@ public class RevisionIndex {
    * Clears the index.
    */
   public void clearIndex() {
+    logger.debug("Clearing index.");
     index.clear();
   }
+
+  /**
+   * @return Returns the number of indexed repository items.
+   */
+  public long getIndexCount() {
+    return index.size();
+  }
+
+  /**
+   * Gets all subdirectory entries below given <code>fromPath</code>.
+   * @param fromPath The base path to start from.
+   * @return A list containing all subdirectory entries below <code>fromPath</code>.
+   * @throws SVNException if a Subverions error occurs.
+   */
+  public List getDirectories(final String fromPath) throws SVNException {
+    if (fromPath == null || fromPath.equals("")) {
+      throw new IllegalArgumentException("Path was null or empty.");
+    }
+
+    //TODO: Temp fix until index refreshing code is added.
+    if (!isLatestRevision()) {
+      index();
+    }
+
+    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
+    for (IndexEntry entry : index) {
+      if (entry.getEntry().getKind() == SVNNodeKind.DIR && entry.getFullEntryName().startsWith(fromPath)) {
+        result.add(entry);
+      }
+    }
+    logger.debug("Found " + result.size() + " directories below: " + fromPath);
+    return result;
+  }
+
 }

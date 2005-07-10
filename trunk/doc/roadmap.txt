@@ -10,7 +10,7 @@ irregularily.
 Release 1
 [x] Browse WebDAV and svnserve repositories (anon and authorized login).
 [x] View file for any given revision.
-[x] Source code markup.
+[x] Source code syntax highlighting.
 [x] View logs for a file/directory.
 [ ] View all changes in one revision (log entry).
 [ ] Download file (any given revision).
@@ -21,12 +21,12 @@ Release 1
 [ ] Support for language specific characters and white space in paths.
 [x] Possibility to search for files and directories.
 [x] Blame
+[x] Flatten path structure view
 
 Not scheduled
 [ ] Commit statistics (different kinds)
 [ ] Diff revisions of same file
 [ ] Diff same revision of different files
-[ ] Flatten path structure view
 [ ] View contents of zip archives (including jar)
 [ ] Download file(s) and directories as zip files
 [ ] JSPWiki integration

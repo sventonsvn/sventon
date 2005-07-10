@@ -33,6 +33,13 @@
     </property>
   </bean>
 
+  <bean id="flattenController"
+    class="de.berlios.sventon.ctrl.FlattenController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
   <bean id="showFileController"
     class="de.berlios.sventon.ctrl.ShowFileController">
     <property name="repositoryConfiguration">
@@ -92,6 +99,7 @@
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/search.svn">searchController</prop>
         <prop key="/blame.svn">blameController</prop>
+        <prop key="/flatten.svn">flattenController</prop>
       </props>
     </property>
   </bean>
