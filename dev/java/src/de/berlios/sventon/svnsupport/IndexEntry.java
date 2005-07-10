@@ -2,6 +2,8 @@ package de.berlios.sventon.svnsupport;
 
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an entry in the revision index.
@@ -71,6 +73,13 @@ public class IndexEntry {
    */
   public String getFriendlyFullEntryName() {
     return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 50));
+  }
+
+  /**
+   * @return String representation of this object.
+   */
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }
 
 }

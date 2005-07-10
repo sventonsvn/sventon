@@ -14,6 +14,7 @@ public class AllTests {
     //$JUnit-BEGIN$
     suite.addTestSuite(SVNDirEntryComparatorTest.class);
     suite.addTestSuite(IndexEntryTest.class);
+    suite.addTestSuite(RevisionIndexTest.class);
     //$JUnit-END$
     return suite;
   }

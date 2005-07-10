@@ -29,12 +29,12 @@
 </table>
 <p/>
 
- <table>
+<table>
 <tr><td><spring:hasBindErrors name="command"><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font> </spring:hasBindErrors></td></tr>
 </table>
 
 <form name="gotoForm" method="post" action="repobrowser.svn">
- <table>
+<table>
 <tr>
 <td><font color="#FF0000"><spring:bind path="command.revision"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
 <td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
@@ -46,6 +46,8 @@
 <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
 <td><spring:bind path="command.path"><input class="sventonGoTo" type="text" name="path" value="<c:out value="${status.value}"/>" /></spring:bind></td>
 <td><input class="sventonGoToSubmit" type="submit" value="go to"/></td>
+<td><input class="sventonFlattenSubmit" type="button" value="flatten dirs" onclick="javascript:location.href='flatten.svn?path=${command.path}';"/></td>
+
 </tr>
 </table>
 </form>
