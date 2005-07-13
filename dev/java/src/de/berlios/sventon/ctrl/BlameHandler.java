@@ -1,14 +1,18 @@
 package de.berlios.sventon.ctrl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.io.ISVNAnnotateHandler;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * BlameHandler.
+ * @author patrikfr@users.berlios.de
+ */
 public class BlameHandler implements ISVNAnnotateHandler {
 
   protected final Log logger = LogFactory.getLog(getClass());

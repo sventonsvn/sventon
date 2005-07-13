@@ -9,6 +9,7 @@ import java.util.Date;
  * Wrapper class for blame lines.
  * Contains information about who added the line to the file
  * and what revision it was done at.
+ * 
  * @author patrikfr@users.berlios.de
  */
 public class BlameLine {

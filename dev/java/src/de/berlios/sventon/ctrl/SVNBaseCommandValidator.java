@@ -5,6 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * SVNBaseCommandValidator.
+ * @author patrikfr@users.berlios.de
+ */
 public class SVNBaseCommandValidator implements Validator {
 
   /** Logger for this class and subclasses */

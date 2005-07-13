@@ -13,6 +13,10 @@ import java.util.*;
 
 import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
 
+/**
+ * RepoBrowserController.
+ * @author patrikfr@users.berlios.de
+ */
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
 
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
@@ -22,7 +26,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     
     logger.debug("Getting directory contents for: " + svnCommand.getPath());
     HashMap properties = new HashMap();
-    dir.addAll(repository.getDir(svnCommand.getPath(), revision, properties, new ArrayList()));
+    dir.addAll(repository.getDir(svnCommand.getPath(), revision, properties, (Collection) null));
     logger.debug(properties);
     Collections.sort(dir, new SVNDirEntryComparator(NAME, true));
 

@@ -13,7 +13,7 @@ Release 1
 [x] Source code syntax highlighting.
 [x] View logs for a file/directory.
 [ ] View all changes in one revision (log entry).
-[ ] Download file (any given revision).
+[x] Download file (any given revision).
 [x] Browse repository for any given revision.
 [x] Possibility to navigate in repository by typing path.
 [x] Clickable revision path info for quick navigation in browser.

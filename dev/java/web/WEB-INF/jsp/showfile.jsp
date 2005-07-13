@@ -14,9 +14,18 @@
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
 
+    <c:url value="download.svn" var="downloadUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+    </c:url>
+
+    <c:url value="showlog.svn" var="showLogUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+    </c:url>
+
     <table cellspacing="3">
       <tr>
-        <td><a href="#">[Download]</a></td>
+        <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
+        <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
         <td><a href="#">[Diff with previous]</a></td>
         <td><a href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
       </tr>
@@ -24,10 +33,10 @@
 
     <c:choose>
       <c:when test="${empty fileContents}">
-This is a binary file.
+<p>This is a binary file.</p>
       </c:when>
      	<c:otherwise>
-<c:out value="${fileContents}" escapeXml="false"/>
+<p><c:out value="${fileContents}" escapeXml="false"/></p>
       </c:otherwise>
     </c:choose>
   </body>

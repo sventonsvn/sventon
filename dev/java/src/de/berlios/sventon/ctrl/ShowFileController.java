@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 
+/**
+ * ShowFileController.
+ * @author patrikfr@users.berlios.de
+ */
 public class ShowFileController extends AbstractSVNTemplateController implements Controller {
 
   /**

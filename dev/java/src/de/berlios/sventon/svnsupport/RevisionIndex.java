@@ -106,7 +106,7 @@ public class RevisionIndex {
   private void populateIndex(final String path) throws SVNException {
     List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
-    entriesList.addAll(repository.getDir(path, this.indexRevision, new HashMap(), new ArrayList()));
+    entriesList.addAll(repository.getDir(path, this.indexRevision, new HashMap(), (Collection) null));
     for (SVNDirEntry entry : entriesList) {
       index.add(new IndexEntry(entry, path));
       if (entry.getKind() == SVNNodeKind.DIR) {
