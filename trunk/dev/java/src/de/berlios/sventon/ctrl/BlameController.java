@@ -13,6 +13,10 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import com.sun.crypto.provider.BlowfishParameters;
 
+/**
+ * BlameController.
+ * @author patrikfr@users.berlios.de
+ */
 public class BlameController extends AbstractSVNTemplateController implements Controller {
 
   private static final int FIRST_REVISION = 1;

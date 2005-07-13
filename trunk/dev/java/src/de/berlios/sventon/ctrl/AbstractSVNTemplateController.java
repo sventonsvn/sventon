@@ -226,7 +226,11 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : null));
       fillInCredentials(credentials, model);
-      modelAndView.addAllObjects(model);
+
+      // It's ok for svnHandle to return null in cases like DownloadController. 
+      if (modelAndView != null) {
+        modelAndView.addAllObjects(model);
+      }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return prepareAuthenticationModelAndView(request, svnCommand);

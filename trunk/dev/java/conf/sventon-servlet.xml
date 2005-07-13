@@ -46,6 +46,13 @@
       <ref bean="repositoryConfig" />
     </property>
   </bean>
+
+  <bean id="downloadController"
+    class="de.berlios.sventon.ctrl.DownloadController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
   
   <bean id="blameController"
 	  class="de.berlios.sventon.ctrl.BlameController">
@@ -100,6 +107,7 @@
         <prop key="/search.svn">searchController</prop>
         <prop key="/blame.svn">blameController</prop>
         <prop key="/flatten.svn">flattenController</prop>
+        <prop key="/download.svn">downloadController</prop>
       </props>
     </property>
   </bean>

@@ -5,6 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * CredentialsValidator.
+ * @author patrikfr@users.berlios.de
+ */
 public class CredentialsValidator implements Validator {
 
   /** Logger for this class and subclasses */
