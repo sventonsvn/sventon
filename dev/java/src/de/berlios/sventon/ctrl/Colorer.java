@@ -40,7 +40,7 @@ public class Colorer {
                                     final boolean appendLineNumbers) {
     logger.debug("Colorizing content, file extension: " + fileExtension);
 
-    StringReader reader = new StringReader(content);
+    StringReader reader = new StringReader(content.trim());
     StringWriter writer = new StringWriter();
     StringBuilder sb = null;
 
@@ -70,8 +70,14 @@ public class Colorer {
         sb.append("<pre>\n");
         while ((line = lineReader.readLine()) != null) {
           sb.append("<span class=text>");
+          sb.append("<a style=\"text-decoration: none;\" name=\"");
+          sb.append(lineReader.getLineNumber());
+          sb.append("\" href=\"#");
+          sb.append(lineReader.getLineNumber());
+          sb.append("\">");
           sb.append(StringUtils.leftPad(String.valueOf(lineReader.getLineNumber()), 5, " "));
           sb.append(": ");
+          sb.append("</a>");
           sb.append("</span>");
           sb.append(line);
           sb.append("\n");
