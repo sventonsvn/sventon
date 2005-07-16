@@ -8,21 +8,29 @@
 <body>
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-Blame
-
 <table>
-	<tr>
-		<th>Revision</th>
-		<th>Author</th>
-		<th>Line</th>
-	</tr>
-	<c:forEach items="${handler.blameLines}" var="line">
-	<tr>
-		<td><c:out value="${line.revision}" /></td>
-		<td><c:out value="${line.author}" /></td>
-		<td><pre><c:out value="${line.line}" /></pre></td>
-	</tr>
-	</c:forEach>
+  <tr>
+    <th>Revision</th>
+    <th>Author</th>
+    <th>Line</th>
+  </tr>
+  <tr>
+    <td>
+      <c:forEach items="${handler.blameLines}" var="line">
+        <a href="#"><c:out value="${line.revision}"/></a><br/>
+      </c:forEach>
+    </td>
+    <td>
+      <c:forEach items="${handler.blameLines}" var="line">
+        <c:out value="${line.author}"/><br/>
+      </c:forEach>
+    </td>
+    <td>
+      <c:forEach items="${handler.blameLines}" var="line">
+        <c:out value="${line.line}"/><br/>
+      </c:forEach>
+    </td>
+  </tr>
 </table>
 </body>
 </html>
