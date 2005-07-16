@@ -4,13 +4,8 @@
 <table class="sventonTopTable">
   <tr>
     <td class="sventonHeadlines">
-     Repository path: <a href="repobrowser.svn">
-      <c:out value="${url}"/></a> /
-      <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
-        <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a> /
-      </c:forTokens>
-        <c:out value="${command.target}"/>
+      Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if></p>
+      </span>
     </td>
     <td align="right">
       <form action="search.svn" method="get">
@@ -19,10 +14,16 @@
         <input type="submit" name="sventonSearchButton" value="go!"/>
       </form>
     </td>
+  </tr>
   <tr>
     <td class="sventonHeadlines">
-      Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if></p>
-      </span>
+     Repository path: <a href="repobrowser.svn">
+      <c:out value="${url}"/></a> /
+      <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
+        <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
+        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a> /
+      </c:forTokens>
+        <c:out value="${command.target}"/>
     </td>
   </tr>
  <p>
