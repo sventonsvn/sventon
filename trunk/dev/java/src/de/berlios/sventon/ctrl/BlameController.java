@@ -11,8 +11,6 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import com.sun.crypto.provider.BlowfishParameters;
-
 /**
  * BlameController.
  * @author patrikfr@users.berlios.de
