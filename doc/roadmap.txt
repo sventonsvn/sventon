@@ -18,12 +18,13 @@ Release 1
 [x] Possibility to navigate in repository by typing path.
 [x] Clickable revision path info for quick navigation in browser.
 [x] Basic look and feel
-[ ] Support for language specific characters and white space in paths.
+[ ] Support for language specific characters and white space in paths (WebDAV)
 [x] Possibility to search for files and directories.
 [x] Blame
 [x] Flatten path structure view
 
 Not scheduled
+[ ] Possibility to configure a view only user + pwd to avoid end user authentication
 [ ] Commit statistics (different kinds)
 [ ] Diff revisions of same file
 [ ] Diff same revision of different files
@@ -36,3 +37,5 @@ Not scheduled
 [ ] Installation wizard
 [ ] Subversion 1.2 feature support, notably file locking.
 [ ] Integration with other tools and IDE:s
+[ ] Content search using lucene (files in HEAD)
+[ ] Graph logs

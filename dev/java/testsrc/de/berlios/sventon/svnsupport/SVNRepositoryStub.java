@@ -69,7 +69,7 @@ public class SVNRepositoryStub extends SVNRepository {
     return 0;
   }
 
-  public int log(String[] strings, long l, long l1, boolean b, boolean b1, ISVNLogEntryHandler isvnLogEntryHandler) throws SVNException {
+  public long log(String[] strings, long l, long l1, boolean b, boolean b1, ISVNLogEntryHandler isvnLogEntryHandler) throws SVNException {
     return 0;
   }
 
@@ -114,5 +114,14 @@ public class SVNRepositoryStub extends SVNRepository {
   }
 
   public void removeLock(String s, String s1, boolean b) throws SVNException {
+  }
+
+  public long log(String[] arg0, long arg1, long arg2, boolean arg3, boolean arg4, long arg5, ISVNLogEntryHandler arg6) throws SVNException {
+     throw new UnsupportedOperationException();
+  }
+
+  public void diff(String arg0, long arg1, long arg2, String arg3, boolean arg4, boolean arg5, ISVNReporterBaton arg6, ISVNEditor arg7) throws SVNException {
+      throw new UnsupportedOperationException();
+    
   }
 }

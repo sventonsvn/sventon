@@ -23,6 +23,8 @@ import org.tmatesoft.svn.core.io.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
+import org.tmatesoft.svn.core.wc.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -140,9 +142,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
     if (credentials != null) {
       logger.debug("Credentials found, configureing repository with: " + credentials);
-      SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
-          .getPwd());
-      repository.setCredentialsProvider(provider);
+      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultOptions(false);
+      authManager.setDefaultAuthentication(credentials.getUid(), credentials.getPwd());
+      repository.setAuthenticationManager(authManager);
     }
 
     long revision = revision = convertAndUpdateRevision(svnCommand);
@@ -212,9 +214,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       logger.debug("Getting SVN repository");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
       if (credentials != null) {
-        SVNSimpleCredentialsProvider provider = new SVNSimpleCredentialsProvider(credentials.getUid(), credentials
-            .getPwd());
-        repository.setCredentialsProvider(provider);
+        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultOptions(false);
+        authManager.setDefaultAuthentication(credentials.getUid(), credentials.getPwd());
+        repository.setAuthenticationManager(authManager);
         logger.debug("Setting credentials");
       }
 
@@ -227,7 +229,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : null));
       fillInCredentials(credentials, model);
 
-      // It's ok for svnHandle to return null in cases like DownloadController. 
+      // It's ok for svnHandle to return null in cases like DownloadController.
       if (modelAndView != null) {
         modelAndView.addAllObjects(model);
       }
