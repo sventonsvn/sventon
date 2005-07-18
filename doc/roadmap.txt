@@ -8,7 +8,7 @@ irregularily.
 [<rev>] = completed in revision
 
 Release 1
-[x] Browse WebDAV and svnserve repositories (anon and authorized login).
+[x] Browse WebDAV and svnserve repositories (anonymous and authorized login).
 [x] View file for any given revision.
 [x] Source code syntax highlighting.
 [x] View logs for a file/directory.
@@ -22,9 +22,14 @@ Release 1
 [x] Possibility to search for files and directories.
 [x] Blame
 [x] Flatten path structure view
+[x] Full style sheet usage to enable easy customization
 
 Not scheduled
 [ ] Possibility to configure a view only user + pwd to avoid end user authentication
+[ ] Serialize the RevisionIndex to disk
+[ ] Only append repository changes if index is out-of-date instead of full reindexing
+[ ] Apply Observer pattern and make RevisionIndex Observable
+[ ] RSS feeds of repository changes, RevisionIndexObserver
 [ ] Commit statistics (different kinds)
 [ ] Diff revisions of same file
 [ ] Diff same revision of different files
