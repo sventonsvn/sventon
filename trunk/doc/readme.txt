@@ -5,14 +5,14 @@ all necessary libraries are included in the project.
 Java 1.5 is required for build and deploy, thus Tomcat 5.5 may be a good 
 container companion. Jakarta Ant build files are supplied for building.
 
-The Ostermiller syntax highlighting library from http://ostermiller.org/syntax/ is used.
+The JHighlight library from https://jhighlight.dev.java.net is used for
+syntax highlighting.
 Currently the library supports colorization of the following file formats:
-* HTML (html, htm)
-* Java (java, jav)
-* SQL (sql)
-* C/C++ (c, h, cc, cpp, cxx, c++, hpp, hxx, hh)
-* Java properties (properties, props)
-* Latex (tex, sty, cls, dtx, ins, latex)
+* HTML/XHTML
+* Java
+* XML
+* LZX
+* RIFE (https://rife.dev.java.net)
 
 Build instructions:
 1: Create file 'sventon.properties' in dir dev/java/conf and override properties
