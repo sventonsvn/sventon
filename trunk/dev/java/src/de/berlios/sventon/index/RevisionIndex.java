@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.index;
 
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNException;
@@ -127,7 +127,7 @@ public class RevisionIndex {
    * Finds index entries by a search string.
    * @param searchString The string to search for.
    * @return The <code>List</code> of <code>IndexEntry</code> instances found.
-   * @see de.berlios.sventon.svnsupport.IndexEntry
+   * @see de.berlios.sventon.index.IndexEntry
    * @throws SVNException if a Subverions error occurs.
    */
   public List find(final String searchString) throws SVNException {

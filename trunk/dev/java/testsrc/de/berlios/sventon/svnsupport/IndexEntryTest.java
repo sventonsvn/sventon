@@ -3,6 +3,8 @@ package de.berlios.sventon.svnsupport;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 
+import de.berlios.sventon.index.IndexEntry;
+
 import java.util.Date;
 
 public class IndexEntryTest extends TestCase {

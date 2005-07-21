@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNNodeKind;
 
+import de.berlios.sventon.index.RevisionIndex;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

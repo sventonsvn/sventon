@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.index;
 
 import org.tmatesoft.svn.core.io.SVNDirEntry;
 import org.apache.commons.lang.StringUtils;
@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an entry in the revision index.
- * @see de.berlios.sventon.svnsupport.RevisionIndex
+ * @see de.berlios.sventon.index.RevisionIndex
  * @author jesper@users.berlios.de
  */
 public class IndexEntry {

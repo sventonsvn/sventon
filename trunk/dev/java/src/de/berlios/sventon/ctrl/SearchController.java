@@ -1,7 +1,8 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.svnsupport.IndexEntry;
-import de.berlios.sventon.svnsupport.RevisionIndex;
+import de.berlios.sventon.index.IndexEntry;
+import de.berlios.sventon.index.RevisionIndex;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNException;
