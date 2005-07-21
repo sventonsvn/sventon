@@ -24,15 +24,21 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     
     List<SVNDirEntry> dir = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
     
-    logger.debug("Getting directory contents for: " + svnCommand.getPath());
+    String path = svnCommand.getPath();
+    logger.debug("Getting directory contents for: " + path);
     HashMap properties = new HashMap();
-    dir.addAll(repository.getDir(svnCommand.getPath(), revision, properties, (Collection) null));
+    dir.addAll(repository.getDir(path, revision, properties, (Collection) null));
     logger.debug(properties);
     Collections.sort(dir, new SVNDirEntryComparator(NAME, true));
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", dir);
+    
+    //Update trailing / for path
+    if (!path.endsWith("/")) {
+      svnCommand.setPath(path + "/");
+    }
 
     return new ModelAndView("repobrowser", model);
   }

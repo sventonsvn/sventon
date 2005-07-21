@@ -5,9 +5,12 @@ import java.util.Map;
 
 /**
  * SVNBaseCommand.
+ * <p>
+ * Command class used to bind and pass servlet parameter arguments in sventon.
+ * @author patrikfr@users.berlios.de
  */
 public class SVNBaseCommand {
-  
+
   /** The full path. */
   private String path = "";
 
@@ -24,7 +27,7 @@ public class SVNBaseCommand {
   /**
    * @param path The path to set.
    */
-  public void setPath(String path) {
+  public void setPath(final String path) {
     if (path != null) {
       this.path = path.trim();
     } else {
@@ -41,18 +44,27 @@ public class SVNBaseCommand {
   }
 
   /**
+   * Set revision. Any revision is legal here (but may be rejected by the validator,
+   * {@link SVNBaseCommandValidator}). 
+   * <p>
+   * All case variations of the logical name "HEAD" will be converted to HEAD, all other
+   * revision arguments will be set as is.
    * @param revision The revision to set.
    */
-  public void setRevision(String revision) {
-    this.revision = revision;
+  public void setRevision(final String revision) {
+    if (revision != null && "HEAD".equalsIgnoreCase(revision)) {
+      this.revision = "HEAD";
+    } else {
+      this.revision = revision;
+    }
   }
 
   /**
-   * Get target (leaf/end) part of the <code>path</code>, it could be
-   * a file or a directory.
+   * Get target (leaf/end) part of the <code>path</code>, it could be a file
+   * or a directory.
    * <p>
-   * The returned string will have no final "/", even if it is a directory.
-   * will be returned.
+   * The returned string will have no final "/", even if it is a directory. will
+   * be returned.
    * 
    * @return Target part of the path.
    */
@@ -69,11 +81,11 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Get path, excluding the end/leaf.
-   * For complete path including target,see {@link SVNBaseCommand#getPath()}
+   * Get path, excluding the end/leaf. For complete path including target,see
+   * {@link SVNBaseCommand#getPath()}
    * <p>
-   * The returned string will have a final "/", if the path info is empty, "" (empty string)
-   * will be returned.
+   * The returned string will have a final "/", if the path info is empty, ""
+   * (empty string) will be returned.
    * 
    * @return Path excluding taget (end/leaf)
    */
@@ -90,10 +102,11 @@ public class SVNBaseCommand {
       return work.substring(0, lastIndex) + "/";
     }
   }
-  
+
   /**
-   * Return the contents of this object as a map model where properties are mapped 
-   * to map values.
+   * Return the contents of this object as a map model where properties are
+   * mapped to map values.
+   * 
    * @return The model map.
    */
   public Map<String, Object> asModel() {
@@ -105,6 +118,7 @@ public class SVNBaseCommand {
 
   /**
    * Gets the file extension.
+   * 
    * @return The file extension if any. Empty string otherwise.
    */
   public String getFileExtension() {

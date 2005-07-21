@@ -24,7 +24,7 @@
     </tr>
     <% int rowCount = 0; %>
     <c:forEach items="${svndir}" var="indexentry">
-    <jsp:useBean id="indexentry" type="de.berlios.sventon.svnsupport.IndexEntry" />
+    <jsp:useBean id="indexentry" type="de.berlios.sventon.index.IndexEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
         <c:param name="path" value="${indexentry.fullEntryName}" />
       </c:url>

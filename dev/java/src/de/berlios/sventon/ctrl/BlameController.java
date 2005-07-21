@@ -13,6 +13,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * BlameController.
+ * <P>
+ * Controller to support the blame/praise/annotate functionality of Subversion.
  * @author patrikfr@users.berlios.de
  */
 public class BlameController extends AbstractSVNTemplateController implements Controller {

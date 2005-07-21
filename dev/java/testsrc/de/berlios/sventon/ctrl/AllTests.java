@@ -14,6 +14,7 @@ public class AllTests {
     //$JUnit-BEGIN$
     suite.addTestSuite(SVNBaseCommandTest.class);
     suite.addTestSuite(ColorerTest.class);
+    suite.addTestSuite(SVNBaseCommandValidatorTest.class);
     //$JUnit-END$
     return suite;
   }

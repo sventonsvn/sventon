@@ -9,6 +9,42 @@ public class SVNBaseCommandTest extends TestCase {
   public static void main(String[] args) {
     junit.textui.TestRunner.run(SVNBaseCommandTest.class);
   }
+  
+  public void testSetPath() {
+    SVNBaseCommand command = new SVNBaseCommand();
+    
+    //null is OK, will be converted to ""
+    command.setPath(null);
+    assertEquals("", command.getPath());
+    
+    command.setPath("Drutten.java");
+    assertEquals("Drutten.java", command.getPath());
+    
+  }
+  
+  public void testSetRevision() {
+    SVNBaseCommand command = new SVNBaseCommand();
+    command.setRevision(null);
+    assertNull(command.getRevision());
+    
+    command.setRevision("2");
+    assertEquals("2", command.getRevision());
+    
+    //Drutten is accepted as a revision here, but not by the SVNBaseCommandValidator
+    command.setRevision("Drutten");
+    assertEquals("Drutten", command.getRevision());
+    
+    //HEAD in different cases are converted to HEAD
+    command.setRevision("HEAD");
+    assertEquals("HEAD", command.getRevision());
+    
+    command.setRevision("head");
+    assertEquals("HEAD", command.getRevision());
+    
+    command.setRevision("HEad");
+    assertEquals("HEAD", command.getRevision());
+    
+  }
 
   public void testGetCompletePath() {
     SVNBaseCommand command = new SVNBaseCommand();
