@@ -5,7 +5,7 @@
 	<property file="default-build.properties" />
 
 	<property file="../java/conf/sventon.properties" />
-	<property file="../java/conf/sventon-default.properties" />
+	<property file="../java/conf/default-sventon.properties" />
 
 	<property name="src.dir" value="../java/src" />
 	<property name="web.dir" value="../java/web" />
