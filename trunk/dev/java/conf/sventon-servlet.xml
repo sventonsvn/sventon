@@ -133,11 +133,12 @@
   </bean>
 
   <bean name="revisionIndex"
-    class="de.berlios.sventon.svnsupport.RevisionIndex"
-    singleton="true">
-    <property name="startPath">
-      <value>/</value>
-    </property>
+    class="de.berlios.sventon.index.RevisionIndex"
+    singleton="true"
+    destroy-method="destroy">
+    <constructor-arg index="0">
+      <value>/</value> <!-- Indexing start path -->
+    </constructor-arg>
   </bean>
 
   <bean id="propertyConfigurer" 

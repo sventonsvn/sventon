@@ -29,6 +29,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
     logger.debug("Searching index for: " + request.getParameter("sventonSearchString"));
 
     RevisionIndex index = (RevisionIndex) getApplicationContext().getBean("revisionIndex");
+    // TODO: Should be set from app-context-xml
     index.setRepository(repository);
     entries.addAll(index.find(request.getParameter("sventonSearchString")));
     logger.debug(entries.size() + " entries found.");

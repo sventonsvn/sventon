@@ -37,6 +37,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     logger.debug("Flattening directories below: " + fromPath);
 
     RevisionIndex index = (RevisionIndex) getApplicationContext().getBean("revisionIndex");
+    // TODO: Should be set from app-context-xml
     index.setRepository(repository);
     entries.addAll(index.getDirectories(fromPath));
     logger.debug(entries.size() + " entries found.");

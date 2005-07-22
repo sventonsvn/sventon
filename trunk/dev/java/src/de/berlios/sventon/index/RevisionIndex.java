@@ -35,7 +35,20 @@ public class RevisionIndex {
    */
   public RevisionIndex() {
     logger.debug("Creating index instance.");
+    init();
+  }
+
+  public RevisionIndex(final String startPath) {
+    logger.debug("Creating index instance, start path: " + startPath);
+    init();
+    this.setStartPath(startPath);
+  }
+
+  private void init() {
+    logger.debug("Initializing index.");
     index = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
+    // TODO: Read serialized index from disk.
+    // TODO: Update the index according to what's new.
   }
 
   /**
@@ -218,4 +231,8 @@ public class RevisionIndex {
     return result;
   }
 
+  public void destroy() {
+    logger.info("Saving index to disk");
+    // TODO: Serialize index to disk
+  }
 }
