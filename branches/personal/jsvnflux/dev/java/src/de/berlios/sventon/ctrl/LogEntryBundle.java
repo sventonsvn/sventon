@@ -1,6 +1,6 @@
 package de.berlios.sventon.ctrl;
 
-import org.tmatesoft.svn.core.io.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 /**
  * @author patrikfr@users.berlios.de

@@ -1,13 +1,24 @@
 package de.berlios.sventon.ctrl;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * ShowLogController.
@@ -18,7 +29,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
+  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
     String path = svnCommand.getPath();
@@ -36,9 +47,9 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     logger.debug("Assembling logs data");
     //TODO: Safer parsing would be nice.
-    logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision, 0,
+    logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0,
         true, false);
-    nodeKind = repository.checkPath(path, revision);
+    nodeKind = repository.checkPath(path, revision.getNumber());
 
     for (SVNLogEntry logEntry : logEntries) {
       

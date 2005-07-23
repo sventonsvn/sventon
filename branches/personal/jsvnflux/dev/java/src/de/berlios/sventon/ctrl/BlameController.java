@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.io.SVNException;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * BlameController.
@@ -19,16 +20,17 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  */
 public class BlameController extends AbstractSVNTemplateController implements Controller {
 
-  private static final int FIRST_REVISION = 1;
+  private static final SVNRevision FIRST_REVISION = SVNRevision.parse("1");
 
   @Override
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
+  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
     
     logger.debug("Blaming path: " + svnCommand.getPath() + ", rev: " + FIRST_REVISION + " - " + revision);
     
     BlameHandler blameHandler = new BlameHandler();
-    repository.annotate(svnCommand.getPath(), FIRST_REVISION, revision, blameHandler);
+
+//    repository.doAnnotate(svnCommand.getPath(), FIRST_REVISION, revision, blameHandler);
     
     blameHandler.colorizeContent((Colorer) getApplicationContext().getBean("colorer"),
         svnCommand.getFileExtension(), true);

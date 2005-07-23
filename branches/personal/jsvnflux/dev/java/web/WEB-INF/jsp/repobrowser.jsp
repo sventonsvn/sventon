@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<%@ page import="org.tmatesoft.svn.core.io.*"%>
+<%@ page import="org.tmatesoft.svn.core.*"%>
 
 <html>
 <head>
@@ -27,7 +27,7 @@
 
     %>
   <c:forEach items="${svndir}" var="entry">
-    <jsp:useBean id="entry" type="org.tmatesoft.svn.core.io.SVNDirEntry" />
+    <jsp:useBean id="entry" type="org.tmatesoft.svn.core.SVNDirEntry" />
     <c:url value="repobrowser.svn" var="viewUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
