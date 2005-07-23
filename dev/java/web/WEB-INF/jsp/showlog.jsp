@@ -20,7 +20,7 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
   
-  <table class="sventonFunctionLinks" cellspacing="3">
+  <table class="sventonFunctionLinksTable">
     <tr>
       <td><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">[Show file]</a></td>
       <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>

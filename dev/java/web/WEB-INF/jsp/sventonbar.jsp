@@ -1,5 +1,5 @@
 <%@ page session="false"%>
-<table width="100%" class="sventonHeader"><tr>
+<table class="sventonHeader"><tr>
 <td>sventon subversion web client - (<a href="http://sventon.berlios.de" target="page">sventon.berlios.de</a>)</td>
 <td align="right">
 <c:choose>

@@ -39,6 +39,7 @@ a {
 .sventonHeader {
   background-color: #ccccff;
   border: 1px solid black;
+  width: 100%;
 }
 
 td {
@@ -133,4 +134,20 @@ th {
 
 .sventonLineNo {
   text-decoration: none;
+}
+
+.sventonBlameTable {
+}
+
+.sventonFunctionLinksTable {
+  border-spacing: 3px;
+}
+
+.sventonSpringErrorMessageTable {
+}
+
+.sventonRepositoryFunctionsTable {
+}
+
+.sventonAuthenticateTable {
 }
