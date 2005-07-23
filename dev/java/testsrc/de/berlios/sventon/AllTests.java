@@ -9,6 +9,7 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon");
     //$JUnit-BEGIN$
     suite.addTest(de.berlios.sventon.ctrl.AllTests.suite());
+    suite.addTest(de.berlios.sventon.index.AllTests.suite());
     suite.addTest(de.berlios.sventon.svnsupport.AllTests.suite());
     //$JUnit-END$
     return suite;
