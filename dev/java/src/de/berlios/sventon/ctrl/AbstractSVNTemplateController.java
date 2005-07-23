@@ -141,7 +141,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
     if (credentials != null) {
-      logger.debug("Credentials found, configureing repository with: " + credentials);
+      logger.debug("Credentials found, configuring repository with: " + credentials);
       ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultOptions(false);
       authManager.setDefaultAuthentication(credentials.getUid(), credentials.getPwd());
       repository.setAuthenticationManager(authManager);
@@ -223,7 +223,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
       Map<String, Object> model = new HashMap<String, Object>();
-      logger.info("'command' set to: " + svnCommand);
+      logger.debug("'command' set to: " + svnCommand);
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : null));
@@ -282,7 +282,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand,
       Credentials credentials) {
     final Map<String, Object> model = exception.getModel();
-    logger.info("'command' set to: " + svnCommand);
+    logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
     model.put("url", configuration.getUrl());
     model.put("numrevision", null);

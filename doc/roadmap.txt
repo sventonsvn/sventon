@@ -13,7 +13,7 @@ Release 1
 [<76>] Source code syntax highlighting.
 [<76>] View logs for a file/directory.
 [ ] View all changes in one revision (log entry).
-[x] Download file (any given revision).
+[<79>] Download file (any given revision).
 [<76>] Browse repository for any given revision.
 [<76>] Possibility to navigate in repository by typing path.
 [<76>] Clickable revision path info for quick navigation in browser.

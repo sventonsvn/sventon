@@ -33,10 +33,16 @@
 
     <c:choose>
       <c:when test="${empty fileContents}">
-<p>This is a binary file.</p>
+<p>
+This is a binary file.
+</p>
       </c:when>
      	<c:otherwise>
-<p><c:out value="${fileContents}" escapeXml="false"/></p>
+<p>
+<pre>
+<c:out value="${fileContents}" escapeXml="false"/>
+</pre>
+</p>
       </c:otherwise>
     </c:choose>
   </body>

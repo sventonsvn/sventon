@@ -4,6 +4,7 @@
 <head>
 <title>sventon blame - <c:out value="${url}" /></title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
+<link href="syntax.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
@@ -36,20 +37,19 @@
     <th>Line</th>
   </tr>
   <tr>
-    <td>
-      <c:forEach items="${handler.blameLines}" var="line">
-        <a href="#"><c:out value="${line.revision}"/></a><br/>
-      </c:forEach>
+    <td valign="top">
+      <pre>
+<c:forEach items="${handler.blameLines}" var="line"><a href="#"><c:out value="${line.revision}"/></a>
+</c:forEach></pre>
     </td>
-    <td>
-      <c:forEach items="${handler.blameLines}" var="line">
-        <c:out value="${line.author}"/><br/>
-      </c:forEach>
+    <td valign="top">
+      <pre>
+<c:forEach items="${handler.blameLines}" var="line"><c:out value="${line.author}"/>
+</c:forEach></pre>
     </td>
-    <td>
-      <c:forEach items="${handler.blameLines}" var="line">
-        <c:out value="${line.line}"/><br/>
-      </c:forEach>
+    <td valign="top">
+      <pre>
+<c:out value="${handler.blameContent}" escapeXml="false"/></pre>
     </td>
   </tr>
 </table>

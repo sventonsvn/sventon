@@ -30,6 +30,8 @@ public class BlameController extends AbstractSVNTemplateController implements Co
     BlameHandler blameHandler = new BlameHandler();
     repository.annotate(svnCommand.getPath(), FIRST_REVISION, revision, blameHandler);
     
+    blameHandler.colorizeContent((Colorer) getApplicationContext().getBean("colorer"),
+        svnCommand.getFileExtension(), true);
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Adding blameHandler: " + blameHandler);

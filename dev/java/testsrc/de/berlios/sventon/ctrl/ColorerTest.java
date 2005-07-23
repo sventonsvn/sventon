@@ -40,12 +40,11 @@ public class ColorerTest extends TestCase {
     Colorer colorer = new Colorer();
 
     // Should produce colorized java code with line numbers.
-    assertEquals("<pre>\n" +
-        "<span class=text>    1: </span><span class=reservedWord>public</span><span class=whitespace>\n" +
-        "<span class=text>    2: </span></span><span class=reservedWord>class</span><span class=whitespace>\n" +
-        "<span class=text>    3: </span></span><span class=identifier>HelloWorld</span><span class=whitespace>\n" +
-        "<span class=text>    4: </span></span>\n" +
-        "</pre>",
+    assertEquals(
+        "<a class=\"sventonLineNo\" name=\"1\" href=\"#1\">    1: </a><span class=reservedWord>public</span>\n" +
+        "<a class=\"sventonLineNo\" name=\"2\" href=\"#2\">    2: </a><span class=reservedWord>class</span>\n" +
+        "<a class=\"sventonLineNo\" name=\"3\" href=\"#3\">    3: </a><span class=identifier>HelloWorld</span>\n" +
+        "<a class=\"sventonLineNo\" name=\"4\" href=\"#4\">    4: </a>\n",
         (colorer.getColorizedContent("public\nclass\nHelloWorld\n", "java", true)).trim());
 
   }

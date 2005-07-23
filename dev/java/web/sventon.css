@@ -130,3 +130,7 @@ th {
 .sventonTopTable {
   width: 100%;
 }
+
+.sventonLineNo {
+  text-decoration: none;
+}

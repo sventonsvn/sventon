@@ -31,7 +31,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     logger.debug(properties);
 
     if ("application/octet-stream".equals(properties.get("svn:mime-type"))) {
-      logger.debug("Binary file detected.");
+      logger.debug("Binary file detected");
     } else {
       String fileContents = ((Colorer) getApplicationContext().getBean("colorer")).getColorizedContent(
           outStream.toString(), svnCommand.getFileExtension(), true);
