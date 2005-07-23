@@ -1,9 +1,7 @@
 package de.berlios.sventon.ctrl;
 
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
-
 import junit.framework.TestCase;
+import org.springframework.validation.BindException;
 
 public class SVNBaseCommandValidatorTest extends TestCase {
 
