@@ -30,12 +30,12 @@
 </table>
 <p/>
 
-<table>
+<table class="sventonSpringErrorMessageTable">
 <tr><td><spring:hasBindErrors name="command"><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font> </spring:hasBindErrors></td></tr>
 </table>
 
 <form name="gotoForm" method="post" action="repobrowser.svn">
-<table>
+<table class="sventonRepositoryFunctionsTable">
 <tr>
 <td><font color="#FF0000"><spring:bind path="command.revision"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
 <td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>

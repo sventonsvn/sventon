@@ -11,7 +11,7 @@
 
 <h3><fmt:message key="authenticate.heading" /></h3>
 <form name="loginForm" method="post">
-<table>
+<table class="sventonAuthenticateTable">
    <spring:hasBindErrors name="auth">
 		<tr>
 			<td>Authentication failed, please try again!<br><br></td>
