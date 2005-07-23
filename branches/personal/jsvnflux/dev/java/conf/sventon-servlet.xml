@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - Application context definition for Sventon DispatcherServlet.
+-->
+
+<beans>
+  <bean id="repoBrowserController"
+    class="de.berlios.sventon.ctrl.RepoBrowserController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
+  <bean id="svnBaseCommandValidator"
+    class="de.berlios.sventon.ctrl.SVNBaseCommandValidator" />
+
+  <bean id="showLogsController"
+    class="de.berlios.sventon.ctrl.ShowLogController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
+  <bean id="searchController"
+    class="de.berlios.sventon.ctrl.SearchController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
+  <bean id="flattenController"
+    class="de.berlios.sventon.ctrl.FlattenController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
+  <bean id="showFileController"
+    class="de.berlios.sventon.ctrl.ShowFileController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
+  <bean id="downloadController"
+    class="de.berlios.sventon.ctrl.DownloadController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+  
+  <bean id="blameController"
+	  class="de.berlios.sventon.ctrl.BlameController">
+      <property name="repositoryConfiguration">
+       <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
+  <bean id="clearSessionController"
+    class="de.berlios.sventon.ctrl.ClearCredentialsController">
+  </bean>
+
+  <bean id="credentialsValidator"
+    class="de.berlios.sventon.ctrl.CredentialsValidator" />
+
+  <bean id="credentialsController"
+    class="de.berlios.sventon.ctrl.CredentialsController">
+    <property name="sessionForm">
+      <value>false</value>
+    </property>
+    <property name="commandName">
+      <value>auth</value>
+    </property>
+    <property name="commandClass">
+      <value>de.berlios.sventon.ctrl.Credentials</value>
+    </property>
+    <property name="validator">
+      <ref bean="credentialsValidator" />
+    </property>
+    <property name="formView">
+      <value>authenticate</value>
+    </property>
+  </bean>
+
+  <bean id="repositoryConfig"
+    class="de.berlios.sventon.ctrl.RepositoryConfiguration"
+    singleton="true">
+    <constructor-arg index="0">
+      <value>@SVN_ROOT@</value>
+    </constructor-arg>
+  </bean>
+
+  <bean id="urlMapping"
+    class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+      <props>
+        <prop key="/repobrowser.svn">repoBrowserController</prop>
+        <prop key="/showlog.svn">showLogsController</prop>
+        <prop key="/showfile.svn">showFileController</prop>
+        <prop key="/authenticate.svn">credentialsController</prop>
+        <prop key="/clearsession.svn">clearSessionController</prop>
+        <prop key="/search.svn">searchController</prop>
+        <prop key="/blame.svn">blameController</prop>
+        <prop key="/flatten.svn">flattenController</prop>
+        <prop key="/download.svn">downloadController</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="messageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="basename">
+      <value>messages</value>
+    </property>
+  </bean>
+
+  <bean id="viewResolver"
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass">
+      <value>org.springframework.web.servlet.view.JstlView</value>
+    </property>
+    <property name="prefix">
+      <value>/WEB-INF/jsp/</value>
+    </property>
+    <property name="suffix">
+      <value>.jsp</value>
+    </property>
+  </bean>
+
+  <bean name="revisionIndex"
+    class="de.berlios.sventon.index.RevisionIndex"
+    singleton="true"
+    destroy-method="destroy">
+    <constructor-arg index="0">
+      <value>/</value> <!-- Indexing start path -->
+    </constructor-arg>
+  </bean>
+
+  <bean id="propertyConfigurer" 
+      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+  </bean>
+  
+  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true"/>
+
+</beans>

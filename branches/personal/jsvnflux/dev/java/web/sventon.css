@@ -1,0 +1,153 @@
+/*
+ * Style definition for Sventon user interface
+ * TODO: Complete...
+ */
+
+body {
+  font-family: Verdana;
+  font-size: 11px;
+  color: #000000;
+  font-weight: normal;
+}
+
+a {
+  font-family: Verdana;
+  font-size: 11px;
+  color: 0060CB;
+  text-decoration: underline;
+}
+
+.sventonInput, sventonSelect, sventonTextarea {
+  font-family: Verdana;
+  font-size: 11px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-color: #333333 #999999 #999999 #333333;
+  padding-right: 0px;
+}
+
+.sventonSelect {
+  vertical-align: middle;
+}
+
+.sventonSelectOption {
+  color: rgb(119, 119, 119);
+}
+
+.sventonHeader {
+  background-color: #ccccff;
+  border: 1px solid black;
+  width: 100%;
+}
+
+td {
+  white-space: nowrap;
+}
+
+th {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.sventonRevision {
+}
+
+.sventonHeadlines {
+  font-family: Verdana;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.sventonGoTo {
+  width: 30em;
+}
+
+.sventonEntriesTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  width: 750px;
+}
+
+.sventonEntry1 {
+  background-color: #ddddff;
+}
+
+.sventonEntry2 {
+  background-color: #eeeeff;
+}
+
+.sventonLogEntriesTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  width: 750px;
+}
+
+.sventonStackTraceTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  font-size: 11px;
+}
+
+.sventonErrorMessageTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  width: 250px;
+  font-size: 11px;
+}
+
+.sventonCol1 {
+  width: 10px;
+  text-align: center;
+}
+
+.sventonCol2 {
+}
+
+.sventonCol3 {
+}
+
+.sventonCol4 {
+  text-align: right;
+}
+
+.sventonCol5 {
+  text-align: right;
+}
+
+.sventonCol6 {
+}
+
+.sventonCol7 {
+}
+
+.sventonCol8 {
+}
+
+.sventonEntriesDiv {
+}
+
+.sventonTopTable {
+  width: 100%;
+}
+
+.sventonLineNo {
+  text-decoration: none;
+}
+
+.sventonBlameTable {
+}
+
+.sventonFunctionLinksTable {
+  border-spacing: 3px;
+}
+
+.sventonSpringErrorMessageTable {
+}
+
+.sventonRepositoryFunctionsTable {
+}
+
+.sventonAuthenticateTable {
+}
