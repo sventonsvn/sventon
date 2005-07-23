@@ -1,5 +1,8 @@
 package de.berlios.sventon.ctrl;
 
+
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
@@ -16,14 +19,13 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.tmatesoft.svn.core.ISVNWorkspace;
-import org.tmatesoft.svn.core.io.SVNAuthenticationException;
-import org.tmatesoft.svn.core.io.SVNException;
-import org.tmatesoft.svn.core.io.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.io.SVNSimpleCredentialsProvider;
-import org.tmatesoft.svn.core.wc.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 /**
@@ -139,22 +141,21 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
-    SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
+    SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
     if (credentials != null) {
       logger.debug("Credentials found, configuring repository with: " + credentials);
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultOptions(false);
-      authManager.setDefaultAuthentication(credentials.getUid(), credentials.getPwd());
+      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
       repository.setAuthenticationManager(authManager);
     }
 
-    long revision = revision = convertAndUpdateRevision(svnCommand);
+    SVNRevision revision = revision = convertAndUpdateRevision(svnCommand);
 
     String redirectUrl = null;
 
     try {
 
       logger.debug("Checking node kind for command: " + svnCommand);
-      SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision);
+      SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
 
       logger.debug("Node kind: " + kind);
 
@@ -208,14 +209,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
-    long revision = convertAndUpdateRevision(svnCommand);
+    SVNRevision revision = convertAndUpdateRevision(svnCommand);
 
     try {
       logger.debug("Getting SVN repository");
-      SVNRepository repository = SVNRepositoryFactory.create(configuration.getLocation());
+      SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
       if (credentials != null) {
-        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultOptions(false);
-        authManager.setDefaultAuthentication(credentials.getUid(), credentials.getPwd());
+        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
         repository.setAuthenticationManager(authManager);
         logger.debug("Setting credentials");
       }
@@ -226,7 +226,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       logger.debug("'command' set to: " + svnCommand);
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
-      model.put("numrevision", (revision == ISVNWorkspace.HEAD ? Long.toString(repository.getLatestRevision()) : null));
+      model.put("numrevision", (revision == HEAD ? Long.toString(repository.getLatestRevision()) : null));
       fillInCredentials(credentials, model);
 
       // It's ok for svnHandle to return null in cases like DownloadController.
@@ -318,13 +318,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @param svnCommand Command object.
    * @return The converted SVN revision.
    */
-  private long convertAndUpdateRevision(final SVNBaseCommand svnCommand) {
+  private SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand) {
     if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
         && !"HEAD".equals(svnCommand.getRevision())) {
-      return Long.parseLong(svnCommand.getRevision());
+      return SVNRevision.parse(svnCommand.getRevision());
     } else {
       svnCommand.setRevision("HEAD");
-      return ISVNWorkspace.HEAD;
+      return HEAD;
     }
   }
 
@@ -343,6 +343,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @return Model and view to render.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
-  protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
+  protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException;
 }

@@ -2,11 +2,11 @@ package de.berlios.sventon.ctrl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.core.io.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepositoryLocation;
-import org.tmatesoft.svn.util.DebugLog;
+import org.tmatesoft.svn.util.SVNDebugLog;
 
 import de.berlios.sventon.svnsupport.SventonSVNLogger;
 
@@ -21,7 +21,7 @@ public class RepositoryConfiguration {
   private String url = null;
 
   /** The repository location. */
-  private SVNRepositoryLocation location = null;
+  private SVNURL svnURL = null;
 
   /** The logging instance. */
   protected final Log logger = LogFactory.getLog(getClass());
@@ -51,12 +51,12 @@ public class RepositoryConfiguration {
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
     logger.debug("SVN location: " + url);
-    location = SVNRepositoryLocation.parseURL(url);
+    svnURL = SVNURL.parseURIDecoded(url);
     logger.debug("Configuration done");
   }
 
   private void configureLogging() {
-    DebugLog.setLogger(new SventonSVNLogger());
+    SVNDebugLog.setLogger(new SventonSVNLogger());
   }
 
   /**
@@ -69,7 +69,7 @@ public class RepositoryConfiguration {
   /**
    * @return Returns the location.
    */
-  public SVNRepositoryLocation getLocation() {
-    return location;
+  public SVNURL getSVNURL() {
+    return svnURL;
   }
 }

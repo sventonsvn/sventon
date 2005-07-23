@@ -2,7 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.core.io.ISVNAnnotateHandler;
+import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
 
 import java.util.ArrayList;
 import java.util.Date;

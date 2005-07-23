@@ -1,6 +1,6 @@
 package de.berlios.sventon.index;
 
-import org.tmatesoft.svn.core.io.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNDirEntry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

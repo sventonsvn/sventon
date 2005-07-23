@@ -2,8 +2,9 @@ package de.berlios.sventon.ctrl;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.io.SVNException;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class DownloadController extends AbstractSVNTemplateController implements
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, long revision,
+  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
     logger.debug("Downloading file: " + svnCommand.getPath());
@@ -32,7 +33,7 @@ public class DownloadController extends AbstractSVNTemplateController implements
     try {
       HashMap properties = new HashMap();
       output = response.getOutputStream();
-      repository.getFile(svnCommand.getPath(), revision, properties, output);
+      repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
       logger.debug(properties);
       output.flush();
       output.close();

@@ -1,19 +1,20 @@
 package de.berlios.sventon.svnsupport;
 
-import junit.framework.TestCase;
-import org.tmatesoft.svn.core.io.SVNDirEntry;
+import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.AUTHOR;
+import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.DATE;
+import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
+import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.REVISION;
+import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
+import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import static org.tmatesoft.svn.core.io.SVNNodeKind.FILE;
-import static org.tmatesoft.svn.core.io.SVNNodeKind.DIR;
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.AUTHOR;
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.DATE;
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.REVISION;
+import junit.framework.TestCase;
+
+import org.tmatesoft.svn.core.SVNDirEntry;
 
 public class SVNDirEntryComparatorTest extends TestCase {
 
