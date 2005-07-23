@@ -44,3 +44,4 @@ Not scheduled
 [ ] Integration with other tools and IDE:s
 [ ] Content search using lucene (files in HEAD)
 [ ] Graph logs
+[ ] Support for multiple repositories in one sventon instance
