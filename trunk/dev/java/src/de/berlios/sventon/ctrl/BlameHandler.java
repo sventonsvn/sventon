@@ -1,6 +1,5 @@
 package de.berlios.sventon.ctrl;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.io.ISVNAnnotateHandler;
@@ -23,13 +22,24 @@ public class BlameHandler implements ISVNAnnotateHandler {
 
   private final List<BlameLine> blameLines = new ArrayList<BlameLine>();
 
+  private StringBuilder blameContent = new StringBuilder();
+  private boolean isContentColorized = false;
+
+  /**
+   * Blame line handler.
+   * @param date The line's last changed date.
+   * @param revision The line's last changed revision.
+   * @param author The line's author.
+   * @param line The acutal line.
+   */
   public void handleLine(Date date, long revision, String author, String line) {
-    BlameLine blameLine = new BlameLine(date, revision, author, StringUtils.stripEnd(line, null));
+    BlameLine blameLine = new BlameLine(date, revision, author);
     if (logger.isDebugEnabled()) {
       logger.debug("Added blame line: " + blameLine);
     }
     blameLines.add(blameLine);
-
+    blameContent.append(line);
+    blameContent.append("\n");
   }
 
   /**
@@ -42,9 +52,35 @@ public class BlameHandler implements ISVNAnnotateHandler {
   }
 
   /**
-   * {@inheritDoc}
+   *
+   * @param colorer The <code>Colorer</code> instance to use.
+   * @param fileExtension File extension, used for choosing formatter.
+   * @param appendLineNumbers Appending line numbers if <code>true</code>.
+   * @throws IllegalStateException if content already colorized.
    */
-  @Override
+  public void colorizeContent(final Colorer colorer,
+                              final String fileExtension,
+                              final boolean appendLineNumbers) {
+    if (isContentColorized) {
+      throw new IllegalStateException("Blame content already colorized.");
+    }
+    blameContent = new StringBuilder(colorer.getColorizedContent(blameContent.toString(),
+                                                                 fileExtension,
+                                                                 appendLineNumbers));
+    isContentColorized = true;
+  }
+
+  /**
+   * Gets the blame content.
+   * If <code>colorizeContent</code> has been executed the
+   * content returned may be colorized and contain line numbers,
+   * depenting on the file format.
+   * @return The content.
+   */
+  public String getBlameContent() {
+    return blameContent.toString();
+  }
+
   public String toString() {
     return "BlameHandler[blameLines=" + blameLines + "]";
   }

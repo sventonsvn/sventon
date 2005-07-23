@@ -23,20 +23,15 @@ public class BlameLine {
   /** Author. */
   private final String author;
 
-  /** Source line. */
-  private final String line;
-
   /**
    * @param date Date when changes including this line were commited to the repository.
    * @param revision The revision the changes were commited to.
    * @param author The person who did the changes.
-   * @param line A single file line that is a part of those changes.
    */
-  public BlameLine(final Date date, final long revision, final String author, final String line) {
+  public BlameLine(final Date date, final long revision, final String author) {
     this.date = date;
     this.revision = revision;
     this.author = author;
-    this.line = line;
   }
   
   /**
@@ -51,13 +46,6 @@ public class BlameLine {
    */
   public final Date getDate() {
     return date;
-  }
-
-  /**
-   * @return The line.
-   */
-  public final String getLine() {
-    return line;
   }
 
   /**

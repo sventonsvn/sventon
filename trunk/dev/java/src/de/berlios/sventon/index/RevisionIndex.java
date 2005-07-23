@@ -45,7 +45,7 @@ public class RevisionIndex {
   }
 
   private void init() {
-    logger.debug("Initializing index.");
+    logger.debug("Initializing index");
     index = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
     // TODO: Read serialized index from disk.
     // TODO: Update the index according to what's new.
@@ -56,7 +56,7 @@ public class RevisionIndex {
    * @param repository
    */
   public void setRepository(final SVNRepository repository) {
-    logger.debug("Setting repository.");
+    logger.debug("Setting repository");
     this.repository = repository;
   }
 
@@ -86,7 +86,7 @@ public class RevisionIndex {
    */
   public void setStartPath(final String path) {
     if (path == null || path.equals("")) {
-      throw new IllegalArgumentException("Path cannot be null or empty. Path must at least be set to '/'.");
+      throw new IllegalArgumentException("Path cannot be null or empty. Path must at least be set to '/'");
     }
 
     this.startPath = path;
@@ -102,7 +102,7 @@ public class RevisionIndex {
    * @throws SVNException if a Subversion error occurs.
    */
   public void index() throws SVNException {
-    logger.info("Building index.");
+    logger.info("Building index");
     clearIndex();
     this.indexRevision = this.repository.getLatestRevision();
     populateIndex(startPath);
@@ -145,7 +145,7 @@ public class RevisionIndex {
    */
   public List find(final String searchString) throws SVNException {
     if (searchString == null || searchString.equals("")) {
-      throw new IllegalArgumentException("Search string was null or empty.");
+      throw new IllegalArgumentException("Search string was null or empty");
     }
 
     //TODO: Temp fix until index refreshing code is added.
@@ -172,7 +172,7 @@ public class RevisionIndex {
    */
   public List findPattern(final String searchPattern) throws SVNException {
     if (searchPattern == null || searchPattern.equals("")) {
-      throw new IllegalArgumentException("Search string was null or empty.");
+      throw new IllegalArgumentException("Search string was null or empty");
     }
 
     //TODO: Temp fix until index refreshing code is added.
@@ -194,7 +194,7 @@ public class RevisionIndex {
    * Clears the index.
    */
   public void clearIndex() {
-    logger.debug("Clearing index.");
+    logger.debug("Clearing index");
     index.clear();
   }
 

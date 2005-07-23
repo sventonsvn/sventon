@@ -35,25 +35,24 @@ public class RepositoryConfiguration {
   public RepositoryConfiguration(String url) throws SVNException {
 
     if (url == null) {
-      throw new SVNException("No repository URL was provided.");
+      throw new SVNException("No repository URL was provided");
     }
 
     configureLogging();
 
     // Strip last slash if any.
     if (url.endsWith("/")) {
-      logger.debug("Removing trailing slash from url.");
+      logger.debug("Removing trailing slash from url");
       url = url.substring(0, url.length() - 1);
     }
 
     this.url = url;
-    logger.debug("Configuring SVN Repository...");
+    logger.info("Configuring SVN Repository");
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
-    logger.debug("Getting SVN location");
-
+    logger.debug("SVN location: " + url);
     location = SVNRepositoryLocation.parseURL(url);
-    logger.debug("Configuration done.");
+    logger.debug("Configuration done");
   }
 
   private void configureLogging() {
