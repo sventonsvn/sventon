@@ -16,6 +16,7 @@ import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.ISVNEditor;
 import org.tmatesoft.svn.core.io.ISVNFileRevisionHandler;
 import org.tmatesoft.svn.core.io.ISVNLocationEntryHandler;
+import org.tmatesoft.svn.core.io.ISVNLockHandler;
 import org.tmatesoft.svn.core.io.ISVNReporterBaton;
 import org.tmatesoft.svn.core.io.ISVNWorkspaceMediator;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -151,5 +152,17 @@ public class SVNRepositoryStub extends SVNRepository {
       ISVNEditor editor) throws SVNException {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public void lock(Map arg0, String arg1, boolean arg2, ISVNLockHandler arg3) throws SVNException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void unlock(Map arg0, boolean arg1, ISVNLockHandler arg2) throws SVNException {
+    // TODO Auto-generated method stub
+    
   }
 }

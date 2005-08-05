@@ -18,7 +18,6 @@ public class LogEntryBundle {
    * @param pathAtRevision
    */
   public LogEntryBundle(SVNLogEntry logEntry, String pathAtRevision) {
-    // TODO Auto-generated constructor stub
     svnLogEntry = logEntry;
     this.pathAtRevision = pathAtRevision;
   }

@@ -22,9 +22,14 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * ShowLogController.
+ * 
+ * For showing logs. Note, this currently does not work for protocol http/https.
+ * 
  * @author patrikfr@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
+
+//  private static final SVNRevision FIRST_REVISION = SVNRevision.create(1);
 
   /**
    * {@inheritDoc}
@@ -33,37 +38,36 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
     String path = svnCommand.getPath();
-    
+
     if (!path.startsWith("/")) {
       path = "/" + path;
     }
-    
+
     String[] targetPaths = new String[] { path };
     String pathAtRevision = targetPaths[0];
 
-    List<SVNLogEntry> logEntries = null;
     List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
     SVNNodeKind nodeKind = null;
 
     logger.debug("Assembling logs data");
-    //TODO: Safer parsing would be nice.
-    logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0,
-        true, false);
+    // TODO: Safer parsing would be nice.
+    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0, true, false);
     nodeKind = repository.checkPath(path, revision.getNumber());
 
     for (SVNLogEntry logEntry : logEntries) {
-      
+
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
       Set<String> changedPaths = m.keySet();
       for (String entryPath : changedPaths) {
         int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
-        if (i == -1) { //Same path
+        if (i == -1) { // Same path
           SVNLogEntryPath logEntryPath = m.get(entryPath);
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath();
           }
-        } else if (entryPath.length() == i) { //Part path, can be a branch
+        } else if (entryPath.length() == i) { // Part path, can be a
+          // branch
           SVNLogEntryPath logEntryPath = m.get(entryPath);
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);

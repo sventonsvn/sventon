@@ -17,7 +17,7 @@ import java.util.List;
  * @author patrikfr@users.berlios.de
  */
 public class BlameHandler implements ISVNAnnotateHandler {
-
+  
   protected final Log logger = LogFactory.getLog(getClass());
 
   private final List<BlameLine> blameLines = new ArrayList<BlameLine>();
