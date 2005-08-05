@@ -3,6 +3,7 @@ package de.berlios.sventon.ctrl;
 
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
@@ -144,7 +145,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
     if (credentials != null) {
       logger.debug("Credentials found, configuring repository with: " + credentials);
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
+      ISVNAuthenticationManager authManager = 
+        SVNWCUtil.createDefaultAuthenticationManager(new File(configuration.getSVNConfigurationPath()), 
+            credentials.getUid(), credentials.getPwd(), false);
       repository.setAuthenticationManager(authManager);
     }
 
@@ -215,7 +218,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       logger.debug("Getting SVN repository");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
       if (credentials != null) {
-        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
+        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(
+            new File(configuration.getSVNConfigurationPath()), credentials.getUid(), credentials.getPwd(), false);
+//        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
         repository.setAuthenticationManager(authManager);
         logger.debug("Setting credentials");
       }

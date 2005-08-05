@@ -26,6 +26,8 @@ public class RepositoryConfiguration {
   /** The logging instance. */
   protected final Log logger = LogFactory.getLog(getClass());
 
+  private String SVNConfigurationPath = null;
+
   /**
    * Configures and initializes the repository.
    * 
@@ -57,6 +59,14 @@ public class RepositoryConfiguration {
 
   private void configureLogging() {
     SVNDebugLog.setLogger(new SventonSVNLogger());
+  }
+
+  public String getSVNConfigurationPath() {
+    return SVNConfigurationPath;
+  }
+
+  public void setSVNConfigurationPath(final String configurationPath) {
+    SVNConfigurationPath = configurationPath;
   }
 
   /**
