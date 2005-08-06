@@ -21,19 +21,19 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
- * ShowLogController.
- * 
- * For showing logs. Note, this currently does not work for protocol http/https.
+ * ShowLogController. For showing logs. Note, this currently does not work for
+ * protocol http/https.
  * 
  * @author patrikfr@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
-//  private static final SVNRevision FIRST_REVISION = SVNRevision.create(1);
+  // private static final SVNRevision FIRST_REVISION = SVNRevision.create(1);
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
@@ -51,7 +51,8 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
-    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0, true, false);
+    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0, true,
+        false);
     nodeKind = repository.checkPath(path, revision.getNumber());
 
     for (SVNLogEntry logEntry : logEntries) {

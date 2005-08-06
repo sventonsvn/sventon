@@ -21,6 +21,10 @@
     <c:url value="showlog.svn" var="showLogUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
+    
+    <p class="sventonHeader">
+    Show File - <c:out value="${command.target}"/>
+    </p>
 
     <table class="sventonFunctionLinksTable">
       <tr>
@@ -43,7 +47,9 @@ This is a binary file.
 <c:out value="${fileContents}" escapeXml="false"/>
 </pre>
 </p>
-      </c:otherwise>
-    </c:choose>
+</c:otherwise>
+</c:choose>
+<br>
+<%@ include file="/WEB-INF/jsp/foot.jsp"%>
   </body>
 </html>
