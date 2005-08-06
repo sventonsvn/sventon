@@ -1,11 +1,11 @@
 package de.berlios.sventon.ctrl;
 
-
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +56,6 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
  * method.
  * </ol>
- * 
  * <b>Model</b><br>
  * The following information will be added by this controller to the model
  * returned by the controller called (see flow above): <table>
@@ -76,16 +75,13 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * <td>command</td>
  * <td>{@link de.berlios.sventon.ctrl.SVNBaseCommand}-object</td>
  * </tr>
- * </table> <p/>
- * 
- * <b>Input arguments</b><br>
+ * </table> <p/> <b>Input arguments</b><br>
  * Input to this argument is wrapped in a
  * <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception
  * model will be created an control forwarded to an error view. respectively.
- * 
  * <b>Exception handling</b>
  * <dl>
  * <dt>Authentication exception
@@ -98,12 +94,10 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
  * page.
  * </dl>
- * 
  * <b>GoTo form support</b> This controller also contains support for rendering
  * the GoTo form and processing GoTo form submission.
  * 
  * @author patrikfr@users.berlios.de
- * 
  */
 public abstract class AbstractSVNTemplateController extends AbstractFormController {
 
@@ -119,11 +113,21 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     setSessionForm(false);
   }
 
+  /**
+   * Set repository configuration.
+   * 
+   * @param configuration Configuration
+   */
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
     this.configuration = configuration;
   }
 
-  public RepositoryConfiguration getRepository() {
+  /**
+   * Get current repository configuration.
+   * 
+   * @return Configuration
+   */
+  public RepositoryConfiguration getRepositoryConfiguration() {
     return configuration;
   }
 
@@ -143,13 +147,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     }
 
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-    if (credentials != null) {
-      logger.debug("Credentials found, configuring repository with: " + credentials);
-      ISVNAuthenticationManager authManager = 
-        SVNWCUtil.createDefaultAuthenticationManager(new File(configuration.getSVNConfigurationPath()), 
-            credentials.getUid(), credentials.getPwd(), false);
-      repository.setAuthenticationManager(authManager);
-    }
+    assignCredentials(credentials, repository);
 
     SVNRevision revision = revision = convertAndUpdateRevision(svnCommand);
 
@@ -176,6 +174,15 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       // will have to start over
       // after logging in. That's OK. Yes.
       return prepareAuthenticationModelAndView(request, svnCommand);
+    } catch (SVNException e) {
+      logger.error("SVN Exception", e);
+      Throwable cause = e.getCause();
+      if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
+        exception.reject("error.message.no-route-to-host");
+      } else {
+        exception.reject(null, e.getMessage());
+      }
+      return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
 
     logger.debug("Submitted command: " + svnCommand);
@@ -217,13 +224,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     try {
       logger.debug("Getting SVN repository");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-      if (credentials != null) {
-        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(
-            new File(configuration.getSVNConfigurationPath()), credentials.getUid(), credentials.getPwd(), false);
-//        ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(credentials.getUid(), credentials.getPwd());
-        repository.setAuthenticationManager(authManager);
-        logger.debug("Setting credentials");
-      }
+      assignCredentials(credentials, repository);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
@@ -284,7 +285,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *          not authenticated.
    * @return The packaged model and view.
    */
-  private ModelAndView prepareExceptionModelAndView(BindException exception, SVNBaseCommand svnCommand,
+  private ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand,
       Credentials credentials) {
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
@@ -293,6 +294,28 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     model.put("numrevision", null);
     fillInCredentials(credentials, model);
     return new ModelAndView("goto", model);
+  }
+
+  /**
+   * Assigns an <code>AuthenticationManager</code> instance to the given
+   * repository with credentials from the given credentials instance. If the
+   * credentials instance is <code>null</code>, no
+   * <code>AuthenticationManager</code> will be set.
+   * 
+   * @param credentials Credentials object, may be <code>null</code>.
+   * @param repository Repository object.
+   */
+  private void assignCredentials(final Credentials credentials, final SVNRepository repository) {
+    if (configuration.getConfiguredUID() != null) {
+      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
+          .getSVNConfigurationPath()), configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
+      repository.setAuthenticationManager(authManager);
+    } else if (credentials != null) {
+      logger.debug("Credentials found, configuring repository with: " + credentials);
+      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
+          .getSVNConfigurationPath()), credentials.getUid(), credentials.getPwd(), false);
+      repository.setAuthenticationManager(authManager);
+    }
   }
 
   /**

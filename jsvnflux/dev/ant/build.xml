@@ -68,6 +68,8 @@
 			<filterset>
 				<filter token="SVN_ROOT" value="${svn.root}" />
 				<filter token="SVN_CONFIG_PATH" value="${svn.configpath}" />
+				<filter token="SVN_CONFIG_UID" value="${svn.uid}" />
+				<filter token="SVN_CONFIG_PWD" value="${svn.pwd}" />
 			</filterset>
 		</copy>
 	</target>

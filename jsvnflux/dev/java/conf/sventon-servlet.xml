@@ -53,11 +53,11 @@
       <ref bean="repositoryConfig" />
     </property>
   </bean>
-  
+
   <bean id="blameController"
-	  class="de.berlios.sventon.ctrl.BlameController">
-      <property name="repositoryConfiguration">
-       <ref bean="repositoryConfig" />
+    class="de.berlios.sventon.ctrl.BlameController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
     </property>
   </bean>
 
@@ -94,7 +94,13 @@
       <value>@SVN_ROOT@</value>
     </constructor-arg>
     <property name="SVNConfigurationPath">
-    	<value>@SVN_CONFIG_PATH@</value>
+      <value>@SVN_CONFIG_PATH@</value>
+    </property>
+    <property name="configuredUID">
+      <value>@SVN_CONFIG_UID@</value>
+    </property>
+    <property name="configuredPWD">
+      <value>@SVN_CONFIG_PWD@</value>
     </property>
   </bean>
 
@@ -136,18 +142,18 @@
   </bean>
 
   <bean name="revisionIndex"
-    class="de.berlios.sventon.index.RevisionIndex"
-    singleton="true"
+    class="de.berlios.sventon.index.RevisionIndex" singleton="true"
     destroy-method="destroy">
     <constructor-arg index="0">
-      <value>/</value> <!-- Indexing start path -->
+      <value>/</value><!-- Indexing start path -->
     </constructor-arg>
   </bean>
 
-  <bean id="propertyConfigurer" 
-      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+  <bean id="propertyConfigurer"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
   </bean>
-  
-  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true"/>
+
+  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer"
+    singleton="true" />
 
 </beans>
