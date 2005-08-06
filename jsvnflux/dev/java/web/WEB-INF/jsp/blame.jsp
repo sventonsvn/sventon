@@ -21,6 +21,10 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
   
+  <p class="sventonHeader">
+  Blame - <c:out value="${command.target}"/>
+  </p>
+  
   <table class="sventonFunctionLinksTable">
     <tr>
       <td><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">[Show file]</a></td>
@@ -53,5 +57,7 @@
     </td>
   </tr>
 </table>
+<br>
+<%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>
 </html>

@@ -9,6 +9,10 @@
 <body>
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
+  <p class="sventonHeader">
+  Repository Browser - <c:out value="${command.target}"/>
+  </p>
+
 <div id="entriesDiv" class="sventonEntriesDiv">
 <form name="entriesForm">
 <table class="sventonEntriesTable">
@@ -17,8 +21,8 @@
     <th></th>
     <th>File</th>
     <th>Size (bytes)</th>
-    <th>Last changed rev</th>
-    <th>Last changed by</th>
+    <th>Revision</th>
+    <th>Author</th>
     <th>Date</th>
     <th colspan="2">Options</th>
   </tr>
@@ -84,5 +88,6 @@
 </form>
 </div>
 <br>
+<%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>
 </html>

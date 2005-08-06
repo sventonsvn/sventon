@@ -58,7 +58,7 @@
 	</target>
 
 	<target name="copy-config-files">
-		<copy file="../java/conf/messages.properties" todir="${build.dir}"/>
+		<copy file="../java/conf/messages.properties" todir="${build.dir}" />
 		<copy file="../java/conf/log4j.properties" todir="${build.dir}">
 			<filterset>
 				<filter token="LOG_DIR" value="${log4j.logdir}" />
@@ -101,6 +101,9 @@
 			<fileset dir="${web.dir}">
 				<include name="**/*.*" />
 			</fileset>
+			<filterset>
+				<filter token="BUILD_REVISION" value="${sventon.build.revision}" />
+			</filterset>
 		</copy>
 	</target>
 

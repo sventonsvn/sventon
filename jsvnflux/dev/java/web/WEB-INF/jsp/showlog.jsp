@@ -19,6 +19,9 @@
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
+  <p class="sventonHeader">
+  Log Messages - <c:out value="${command.target}"/>
+  </p>
   
   <table class="sventonFunctionLinksTable">
     <tr>
@@ -63,8 +66,41 @@
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
       <td><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>
+    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+    <td valign="top">Changed paths</td><td colspan="3">
+    <table>
+    <tr>
+      <th>Action</th>
+      <th>Path</th>
+      <th>Copy From Path</th>
+      <th>Revision</th>
+    </tr>
+    <c:set var="changedPaths" value="${entry.svnLogEntry.changedPaths}" />
+    <jsp:useBean id="changedPaths" type="java.util.Map" />
+    <%
+    	java.util.Set paths = changedPaths.keySet();
+    	java.util.Iterator i = paths.iterator();
+    	while (i.hasNext()) {
+    	  org.tmatesoft.svn.core.SVNLogEntryPath logEntryPath = 
+    	    (org.tmatesoft.svn.core.SVNLogEntryPath)changedPaths.get(i.next());
+    	  
+    %>
+    <tr>
+      <td><%= logEntryPath.getType() %></td>
+      <td><%= logEntryPath.getPath() %></td>
+      <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
+      <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
+    </tr>
+    <%
+    	}
+    %>
+    </table>
+    </td>
+    </tr>
     <% rowCount++; %>
   </c:forEach>
 </table>
+<br>
+<%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>
 </html>
