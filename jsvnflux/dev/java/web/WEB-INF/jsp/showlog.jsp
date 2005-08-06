@@ -79,7 +79,9 @@
     <jsp:useBean id="changedPaths" type="java.util.Map" />
     <%
     	java.util.Set paths = changedPaths.keySet();
-    	java.util.Iterator i = paths.iterator();
+    	java.util.List pathsList = new java.util.ArrayList(paths);
+    	java.util.Collections.sort(pathsList);
+    	java.util.Iterator i = pathsList.iterator();
     	while (i.hasNext()) {
     	  org.tmatesoft.svn.core.SVNLogEntryPath logEntryPath = 
     	    (org.tmatesoft.svn.core.SVNLogEntryPath)changedPaths.get(i.next());
