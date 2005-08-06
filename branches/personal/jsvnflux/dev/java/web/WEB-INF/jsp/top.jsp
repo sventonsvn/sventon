@@ -9,7 +9,7 @@
       </span>
     </td>
     <td align="right">
-      <form action="search.svn" method="get">
+      <form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
         Search:
         <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/>
         <input type="submit" name="sventonSearchButton" value="go!"/>
