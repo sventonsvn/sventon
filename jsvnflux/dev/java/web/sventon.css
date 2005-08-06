@@ -10,11 +10,11 @@ body {
   font-weight: normal;
 }
 
-a {
+a:link, a:visited, a:hover, a:active {
   font-family: Verdana;
   font-size: 11px;
-  color: 0060CB;
-  text-decoration: underline;
+  color: #0060CB;
+  text-decoration: none;
 }
 
 .sventonInput, sventonSelect, sventonTextarea {
