@@ -40,3 +40,13 @@ function doSearch(formName) {
   }
 }
 
+// function to hide/show extended revision log information
+function toggleLogInfo(theId) {
+  var object = document.getElementById(theId);
+  if (object.style.display == '') {
+    object.style.display = 'none';
+  } else {
+    object.style.display = '';
+  }
+  return;
+}
