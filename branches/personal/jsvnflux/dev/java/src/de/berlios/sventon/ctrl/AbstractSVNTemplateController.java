@@ -239,7 +239,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("numrevision", (revision == HEAD ? Long.toString(repository.getLatestRevision()) : null));
       fillInCredentials(credentials, model);
 
-      // It's ok for svnHandle to return null in cases like DownloadController.
+      // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {
         modelAndView.addAllObjects(model);
       }

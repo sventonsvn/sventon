@@ -14,7 +14,7 @@
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
 
-    <c:url value="download.svn" var="downloadUrl">
+    <c:url value="get.svn" var="downloadUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
 

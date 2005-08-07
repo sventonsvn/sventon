@@ -16,7 +16,7 @@ import java.util.HashMap;
  * Controller used when downloading single files.
  * @author jesper@users.berlios.de
  */
-public class DownloadController extends AbstractSVNTemplateController implements Controller {
+public class GetController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
