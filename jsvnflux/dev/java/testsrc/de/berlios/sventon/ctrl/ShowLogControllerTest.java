@@ -25,14 +25,12 @@ public class ShowLogControllerTest extends TestCase {
     assertEquals("msg1", logEntries.get(10).getSvnLogEntry().getMessage());
 
     List<List<LogEntryBundle>> pages = controller.pageLogEntries(logEntries);
-    assertEquals(3, pages.size());
+    assertEquals(2, pages.size());
     List<LogEntryBundle> page1 = pages.get(0);
     List<LogEntryBundle> page2 = pages.get(1);
-    List<LogEntryBundle> page3 = pages.get(2);
 
-    assertEquals(5, page1.size());
-    assertEquals(5, page2.size());
-    assertEquals(1, page3.size());
+    assertEquals(10, page1.size());
+    assertEquals(1, page2.size());
     
     logEntries = new ArrayList<LogEntryBundle>();
     

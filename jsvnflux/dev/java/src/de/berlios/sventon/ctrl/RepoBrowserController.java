@@ -20,6 +20,7 @@ import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
  */
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
 
+  @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
     
