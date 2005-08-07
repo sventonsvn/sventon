@@ -62,11 +62,11 @@
         //fn:replace(entry.svnLogEntry.message, '\\\n', '<br/>' simply refused to work... 
               //Perhaps other replacements have to be made for this to work for all types of line breaks?
       %>
-      <td><%= message.replace("\n", "<br/>\n") %></td>
+      <td><a href="#" onclick="toggleLogInfo('logInfoEntry<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
-      <td><c:out value="${entry.svnLogEntry.date}" /></td>
+      <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>
-    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+    <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
     <td valign="top">Changed paths</td><td colspan="3">
     <table>
     <tr>
