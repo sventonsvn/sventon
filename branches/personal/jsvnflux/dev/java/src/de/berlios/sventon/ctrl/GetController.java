@@ -26,8 +26,29 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
     logger.debug("Downloading file: " + svnCommand.getPath());
 
-    response.setContentType("application/octetstream");
-    response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
+    String displayType = request.getParameter("disp");
+    String contentType = "application/octetstream";
+
+    if ("inline".equals(displayType)) {
+      logger.debug("Getting file as 'inline' content.");
+      // TODO: Content type handling could be moved out of here. May be useful in more places.
+      if ("gif".equalsIgnoreCase(svnCommand.getFileExtension())) {
+        contentType = "image/gif";
+      } else if ("png".equalsIgnoreCase(svnCommand.getFileExtension())) {
+        contentType = "image/png";
+      } else if ("jpg".equalsIgnoreCase(svnCommand.getFileExtension())) {
+        contentType = "image/jpg";
+      } else if ("jpe".equalsIgnoreCase(svnCommand.getFileExtension())) {
+        contentType = "image/jpg";
+      } else if ("jpeg".equalsIgnoreCase(svnCommand.getFileExtension())) {
+        contentType = "image/jpg";
+      }
+      response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
+    } else {
+      logger.debug("Getting file as 'attachment' content.");
+      response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
+    }
+    response.setContentType(contentType);
 
     ServletOutputStream output = null;
     try {
