@@ -24,12 +24,28 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
+  <bean id="showLogPageController"
+    class="de.berlios.sventon.ctrl.ShowLogPageController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
   <bean id="searchController"
     class="de.berlios.sventon.ctrl.SearchController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
 
@@ -38,12 +54,18 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
   <bean id="showFileController"
     class="de.berlios.sventon.ctrl.ShowFileController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
 
@@ -52,12 +74,18 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
   <bean id="blameController"
     class="de.berlios.sventon.ctrl.BlameController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
 
@@ -110,6 +138,7 @@
       <props>
         <prop key="/repobrowser.svn">repoBrowserController</prop>
         <prop key="/showlog.svn">showLogsController</prop>
+        <prop key="/showlogpage.svn">showLogPageController</prop>
         <prop key="/showfile.svn">showFileController</prop>
         <prop key="/authenticate.svn">credentialsController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
