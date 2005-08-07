@@ -40,7 +40,7 @@
     <th>Date</th>
   </tr>
   <% int rowCount = 0; %>
-  <c:forEach items="${logEntries}" var="entry">
+  <c:forEach items="${logEntriesPage}" var="entry">
     <c:url value="showfile.svn" var="showUrl">
       <c:param name="path" value="${entry.pathAtRevision}" />
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
@@ -101,7 +101,32 @@
     </tr>
     <% rowCount++; %>
   </c:forEach>
+  <c:set var="count" value="${pageCount}" />
+  <c:set var="pageNum" value="${pageNumber}" />
+  <jsp:useBean id="count" type="java.lang.Integer" />
+  <jsp:useBean id="pageNum" type="java.lang.Integer" />
+  <c:url value="showlogpage.svn" var="showlogpageUrl">
+    <c:param name="path" value="${command.path}${entry.name}" />
+    <c:param name="revision" value="${command.revision}" />
+  </c:url>
+  <tr>
+  <td colspan="4" align="center">
+  <% for (int j = 1; j <= count.intValue(); j++) { 
+       if (j == pageNum.intValue()) { %>
+  	     <%= j %>&nbsp;
+  <%   } else { %>
+    <c:url value="showlogpage.svn" var="showLogPageUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+      <c:param name="revision" value="${command.revision}" />
+      <c:param name="page" value="<%= Integer.toString(j) %>" />
+    </c:url>
+  	     <a href="<c:out value="${showLogPageUrl}"/>"><%= j %></a>&nbsp;
+  <%   }
+     } %>
+  </td>
+  </tr>
 </table>
+
 <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>

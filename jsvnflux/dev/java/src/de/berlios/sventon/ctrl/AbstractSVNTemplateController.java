@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
+import org.springframework.web.servlet.mvc.BaseCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
@@ -202,6 +203,10 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       throws Exception {
     // This is for preparing the requested model and view and also rendering the
     // "Go To" form.
+    
+    //Also validate the form backing command (this is not done by Spring MVC and must be handled manually)
+    getValidator().validate(exception.getTarget(), exception);
+
     return handle(request, response, exception.getTarget(), exception);
   }
 
