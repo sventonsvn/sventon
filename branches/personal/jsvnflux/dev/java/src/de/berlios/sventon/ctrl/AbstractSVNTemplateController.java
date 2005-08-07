@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
-import org.springframework.web.servlet.mvc.BaseCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
@@ -290,6 +289,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *          not authenticated.
    * @return The packaged model and view.
    */
+  @SuppressWarnings("unchecked")
   private ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand,
       Credentials credentials) {
     final Map<String, Object> model = exception.getModel();
