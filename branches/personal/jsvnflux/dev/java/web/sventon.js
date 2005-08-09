@@ -13,8 +13,18 @@ function toggleEntryFields(formName) {
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-  // If no value is selected, no action is taken.
-  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '') return false;
+
+  // Check if any entry is checked
+  var checkedEntry = false;
+  for (i = 0; i < formName.entry.length; i++) {
+    if (formName.entry[i].checked == true) {
+      checkedEntry = true;
+      break;
+    }
+  }
+
+  // If no value is selected or no entries selected, no action is taken.
+  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '' || !checkedEntry) return false;
 
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
     alert('Thumbnail view not yet supported');
