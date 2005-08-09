@@ -13,7 +13,7 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.ctrl");
     //$JUnit-BEGIN$
     suite.addTestSuite(SVNBaseCommandValidatorTest.class);
-//    suite.addTestSuite(ColorerTest.class);
+    suite.addTestSuite(ColorerTest.class);
     suite.addTestSuite(ShowLogControllerTest.class);
     suite.addTestSuite(SVNBaseCommandTest.class);
     //$JUnit-END$

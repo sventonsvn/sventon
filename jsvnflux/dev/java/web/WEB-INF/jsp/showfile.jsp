@@ -4,7 +4,7 @@
   <head>
     <title>Show file</title>
     <%@ include file="/WEB-INF/jsp/head.jsp"%>
-    <link href="syntax.css" rel="stylesheet" type="text/css"/>
+    <link href="jhighlight.css" rel="stylesheet" type="text/css"/>
   </head>
 
   <body>

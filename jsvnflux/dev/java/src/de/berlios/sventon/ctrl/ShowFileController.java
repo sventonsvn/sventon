@@ -35,7 +35,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       logger.debug("Binary file detected");
     } else {
       String fileContents = ((Colorer) getApplicationContext().getBean("colorer")).getColorizedContent(
-          outStream.toString(), svnCommand.getFileExtension(), true);
+          outStream.toString(), svnCommand.getTarget());
       logger.debug("Create model");
       model.put("fileContents", fileContents);
     }
