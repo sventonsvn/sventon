@@ -9,7 +9,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Utility class for handling ZIP actions.
  *
- * @author jesper@berlios.de
+ * @author jesper@users.berlios.de
  */
 public class ZipUtil {
 
