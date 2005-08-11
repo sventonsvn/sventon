@@ -8,22 +8,26 @@ irregularily.
 [<rev>] = completed in revision
 
 Release 1
-[<76>] Browse WebDAV and svnserve repositories (anonymous and authorized login).
-[<76>] View file for any given revision.
-[<76>] Source code syntax highlighting.
-[<76>] View logs for a file/directory.
-[x]    View all changes in one revision (log entry).
-[<79>] Download file (any given revision).
-[<76>] Browse repository for any given revision.
-[<76>] Possibility to navigate in repository by typing path.
-[<76>] Clickable revision path info for quick navigation in browser.
-[x]    Basic look and feel
-[<97>] Support for language specific characters and white space in paths (WebDAV)
-[x]    Possibility to search for files and directories.
-[x]    Blame
-[x]    Flatten path structure view
-[x]    Full style sheet usage to enable easy customization
-[<97>] Possibility to configure a view only user + pwd to avoid end user authentication
+[<76>]  Browse WebDAV and svnserve repositories (anonymous and authorized login).
+[<76>]  View file for any given revision.
+[<76>]  Source code syntax highlighting.
+[<76>]  View logs for a file/directory.
+[x]     View all changes in one revision (log entry).
+[<79>]  Download file (any given revision).
+[<76>]  Browse repository for any given revision.
+[<76>]  Possibility to navigate in repository by typing path.
+[<76>]  Clickable revision path info for quick navigation in browser.
+[x]     Basic look and feel
+[<97>]  Support for language specific characters and white space in paths (WebDAV)
+[x]     Possibility to search for files and directories.
+[x]     Blame
+[<113>] Flatten path structure view
+[x]     Full style sheet usage to enable easy customization
+[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
+[x]     Download file(s) and directories as zip files
+[x]     View file should show a preview of images
+[x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
+[<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
 
 Not scheduled
 [ ] Serialize the RevisionIndex to disk
@@ -34,7 +38,6 @@ Not scheduled
 [ ] Diff revisions of same file
 [ ] Diff same revision of different files
 [ ] View contents of zip archives (including jar)
-[ ] Download file(s) and directories as zip files
 [ ] JSPWiki integration
 [ ] Keyword expansion when viewing files
 [ ] User bookmark support using persistent cookies
@@ -45,5 +48,3 @@ Not scheduled
 [ ] Content search using lucene (files in HEAD)
 [ ] Graph logs
 [ ] Support for multiple repositories in one sventon instance
-[ ] View file should show a preview of images
-[ ] Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
