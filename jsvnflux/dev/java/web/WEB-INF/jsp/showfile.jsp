@@ -38,7 +38,7 @@
     <c:choose>
       <c:when test="${empty fileContents}">
 <p>
-This is a binary file.
+  <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline"/>
 </p>
       </c:when>
      	<c:otherwise>

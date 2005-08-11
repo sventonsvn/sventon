@@ -24,7 +24,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
-    logger.debug("Downloading file: " + svnCommand.getPath());
+    logger.debug("Getting file: " + svnCommand.getPath());
 
     String displayType = request.getParameter("disp");
     String contentType = "application/octetstream";
