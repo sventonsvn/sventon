@@ -7,7 +7,7 @@ import org.tmatesoft.svn.util.SVNDebugLoggerAdapter;
 /**
  * Log4J sventon adapter for JavaSVN logging.
  * 
- * @author patrikfr@berlios.de
+ * @author patrikfr@users.berlios.de
  */
 public class SventonSVNLogger extends SVNDebugLoggerAdapter {
 

@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ page import="org.tmatesoft.svn.core.*"%>
+<%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 
 <html>
 <head>
@@ -26,7 +27,10 @@
       <th>Date</th>
       <th colspan="2">Options</th>
     </tr>
-    <% int rowCount = 0; %>
+    <%
+      int rowCount = 0;
+      long totalSize = 0;
+    %>
     <c:forEach items="${svndir}" var="indexentry">
     <jsp:useBean id="indexentry" type="de.berlios.sventon.index.IndexEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
@@ -43,7 +47,7 @@
       <%
       SVNDirEntry type = indexentry.getEntry();
       SVNNodeKind nodeKind = type.getKind();
-      long entrySize = type.size();
+      totalSize += type.size();
       %>
         <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${indexentry.fullEntryName}" />"/></td>
         <% if (nodeKind == SVNNodeKind.DIR) { %>
@@ -53,7 +57,7 @@
         <td class="sventonCol2"><img src="images/icon_file.gif"/></td>
         <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>"><c:out value="${indexentry.friendlyFullEntryName}"/></a></td>
         <% } %>
-        <td class="sventonCol4"><% if (nodeKind == SVNNodeKind.FILE) { %><%= entrySize %><% } %></td>
+        <td class="sventonCol4"><% if (nodeKind == SVNNodeKind.FILE) { %><%=type.size()%><% } %></td>
         <td class="sventonCol5"><c:out value="${indexentry.entry.revision}" /></td>
         <td class="sventonCol6"><c:out value="${indexentry.entry.author}" /></td>
         <td class="sventonCol7"><c:out value="${indexentry.entry.date}" /></td>
@@ -61,6 +65,16 @@
       </tr>
       <% rowCount++; %>
     </c:forEach>
+
+    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+      <td colspan="2" align="right">Total:</td>
+      <td><%=rowCount%> entries</td>
+      <td align="right" title="<%=totalSize%>&nbsp;bytes"><%=ByteFormatter.format(totalSize)%></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
 
     <tr>
       <td><input type="button" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
