@@ -3,6 +3,7 @@ package de.berlios.sventon.ctrl;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -28,12 +29,16 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     logger.debug("Assembling file contents for: " + svnCommand.getPath());
 
     HashMap properties = new HashMap();
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, outStream);
+    // Get the file's properties without requesting the content.
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
     logger.debug(properties);
 
-    if ("application/octet-stream".equals(properties.get("svn:mime-type"))) {
-      logger.debug("Binary file detected");
+    if (!SVNProperty.isTextMimeType((String)properties.get(SVNProperty.MIME_TYPE))) {
+      // It's a binary file - we don't have to read the content.
+      logger.debug("Binary file detected.");
     } else {
+      // Get the file's content. We can skip the properties in this case.
+      repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
       String fileContents = ((Colorer) getApplicationContext().getBean("colorer")).getColorizedContent(
           outStream.toString(), svnCommand.getTarget());
       logger.debug("Create model");
