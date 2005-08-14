@@ -32,8 +32,10 @@
     </tr>
   </table>
 
+<form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
 <table class="sventonLogEntriesTable">
   <tr>
+    <th>&nbsp;</th>
     <th>Revision</th>
     <th>Message</th>
     <th>Author</th>
@@ -46,6 +48,7 @@
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+      <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" /></td>
       <c:choose>
         <c:when test="${isFile}">
           <td><a href="<c:out value="${showUrl}"/>"><c:out
@@ -67,7 +70,7 @@
       <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-    <td valign="top">Changed paths</td><td colspan="3">
+    <td valign="top">Changed paths</td><td colspan="4">
     <table>
     <tr>
       <th>Action</th>
@@ -110,7 +113,7 @@
     <c:param name="revision" value="${command.revision}" />
   </c:url>
   <tr>
-  <td colspan="4" align="center">
+  <td colspan="5" align="center">
   <% for (int j = 1; j <= count.intValue(); j++) { 
        if (j == pageNum.intValue()) { %>
   	     <%= j %>&nbsp;
@@ -125,8 +128,15 @@
      } %>
   </td>
   </tr>
-</table>
 
+  <tr>
+    <td colspan="2">
+      <input type="submit" name="actionSubmitButton" value="diff"/>
+    </td>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+</table>
+</form>
 <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>

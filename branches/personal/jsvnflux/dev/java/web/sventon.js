@@ -60,3 +60,24 @@ function toggleLogInfo(theId) {
   }
   return;
 }
+
+// function to handle diff submissions
+function doDiff(formName) {
+
+  // Check if any entry is checked
+  var checkedEntry = false;
+  for (i = 0; i < formName.rev.length; i++) {
+    if (formName.rev[i].checked == true) {
+      checkedEntry = true;
+      break;
+    }
+  }
+
+  // If no entries selected, no action is taken.
+  if (!checkedEntry) {
+    return false;
+  }
+
+  //TODO - validate and make sure two boxes are checked.
+  return true;
+}
