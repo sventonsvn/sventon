@@ -4,6 +4,7 @@ import com.uwyn.jhighlight.renderer.Renderer;
 import com.uwyn.jhighlight.renderer.RendererFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ public class Colorer {
         return sb.toString();
       }
     } else {
-      return content;
+      return StringEscapeUtils.escapeXml(content);
     }
   }
 
