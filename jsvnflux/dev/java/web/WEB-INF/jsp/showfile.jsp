@@ -38,7 +38,9 @@
     <c:choose>
       <c:when test="${empty fileContents}">
 <p>
-  <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline"/>
+  <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
+    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb"/>
+  </a>
 </p>
       </c:when>
      	<c:otherwise>
