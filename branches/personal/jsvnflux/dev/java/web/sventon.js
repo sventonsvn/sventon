@@ -67,7 +67,7 @@ function doDiff(formName) {
   // Check if any entry is checked
   var checkedEntry = false;
   for (i = 0; i < formName.rev.length; i++) {
-    if (formName.rev[i].checked == true) {
+    if (formName.rev[i].type == 'checkbox' && formName.rev[i].checked == true) {
       checkedEntry = true;
       break;
     }
@@ -80,4 +80,24 @@ function doDiff(formName) {
 
   //TODO - validate and make sure two boxes are checked.
   return true;
+}
+
+// function to verify that not more than two checkboxes are checked.
+function verifyCheckBox(checkbox) {
+  var count = 0;
+  var first = null;
+  var form = checkbox.form;
+  for (i = 0 ; i < form.rev.length ; i++) {
+    if (form.rev[i].type == 'checkbox' && form.rev[i].checked) {
+      if (first == null && form.rev[i] != checkbox) {
+        first = form.rev[i];
+      }
+     count += 1;
+    }
+  }
+  
+  if (count > 2) {
+    first.checked = false;
+    count -= 1;
+  }
 }

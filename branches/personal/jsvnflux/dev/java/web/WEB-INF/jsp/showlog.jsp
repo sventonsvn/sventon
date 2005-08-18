@@ -48,7 +48,7 @@
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
-      <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" /></td>
+      <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
       <c:choose>
         <c:when test="${isFile}">
           <td><a href="<c:out value="${showUrl}"/>"><c:out
