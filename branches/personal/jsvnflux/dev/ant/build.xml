@@ -4,9 +4,6 @@
   <property file="build.properties" />
   <property file="default-build.properties" />
 
-  <property file="../java/conf/sventon.properties" />
-  <property file="../java/conf/default-sventon.properties" />
-
   <property name="src.dir" value="../java/src" />
   <property name="web.dir" value="../java/web" />
   <property name="toolslib.dir" value="../java/toolslib" />
@@ -48,30 +45,13 @@
     <echo message="" />
   </target>
 
-  <target name="build" description="Compile main source tree java files" depends="copy-config-files">
+  <target name="build" description="Compile main source tree java files">
     <mkdir dir="${build.dir}" />
     <javac destdir="${build.dir}" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
       <src path="${src.dir}" />
       <src path="${testsrc.dir}" />
       <classpath refid="master-classpath" />
     </javac>
-  </target>
-
-  <target name="copy-config-files">
-    <copy file="../java/conf/messages.properties" todir="${build.dir}" />
-    <copy file="../java/conf/log4j.properties" todir="${build.dir}">
-      <filterset>
-        <filter token="LOG_DIR" value="${log4j.logdir}" />
-      </filterset>
-    </copy>
-    <copy file="../java/conf/sventon-servlet.xml" todir="${web.dir}/WEB-INF" overwrite="true">
-      <filterset>
-        <filter token="SVN_ROOT" value="${svn.root}" />
-        <filter token="SVN_CONFIG_PATH" value="${svn.configpath}" />
-        <filter token="SVN_CONFIG_UID" value="${svn.uid}" />
-        <filter token="SVN_CONFIG_PWD" value="${svn.pwd}" />
-      </filterset>
-    </copy>
   </target>
 
   <target name="junit" depends="build" description="Run JUnit Tests">
@@ -97,7 +77,7 @@
   </target>
 
   <target name="deploy" depends="build" description="Deploy application">
-    <copy todir="${tomcat.home}/webapps/${name}" preservelastmodified="true">
+    <copy todir="${deploy.path}/${name}" preservelastmodified="true">
       <fileset dir="${web.dir}">
         <include name="**/*.*" />
       </fileset>
@@ -142,6 +122,10 @@
   </target>
 
   <target name="deploy and restart" description="deploy and restart (stop/start) Tomcat" depends="deploy, stop, start">
+    <echo level="info">Re-deploy done.</echo>
+  </target>
+
+  <target name="deploy war and restart" description="deploy WAR and restart (stop/start) Tomcat" depends="deploywar, stop, start">
     <echo level="info">Re-deploy done.</echo>
   </target>
 
