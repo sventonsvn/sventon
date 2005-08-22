@@ -6,7 +6,7 @@ Java 1.5 is required for build and deploy, thus Tomcat 5.5 may be a good
 container companion. Jakarta Ant build files are supplied for building.
 
 The JHighlight library from https://jhighlight.dev.java.net is used for
-syntax highlighting.
+syntax highlighting, slightly modified.
 Currently the library supports colorization of the following file formats:
 * HTML/XHTML
 * Java
@@ -14,9 +14,11 @@ Currently the library supports colorization of the following file formats:
 * LZX
 * RIFE (https://rife.dev.java.net)
 
+Support for more formats are planned before the first official release of sventon.
+
 Build instructions:
-1: Create file 'sventon.properties' in dir dev/java/conf and override properties
-   from 'default-sventon.properties' and 'log4j.properties' in same path as needed.
+1: Create file 'sventon.properties' in directory /dev/java/web/WEB-INF/classes/ and the
+   'default-sventon.properties' are overridden.
 
 2: Run ant/build.xml for info on building.
 
