@@ -9,9 +9,8 @@
 
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="location" value="WEB-INF/classes/sventon.properties"/>
+    <property name="location" value="WEB-INF/classes/default-sventon.properties"/>
   </bean>
-
 
   <bean id="repoBrowserController"
     class="de.berlios.sventon.ctrl.RepoBrowserController">
