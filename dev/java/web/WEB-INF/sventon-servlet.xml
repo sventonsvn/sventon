@@ -6,6 +6,13 @@
 -->
 
 <beans>
+
+  <!-- property placeholder post-processor -->
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="WEB-INF/classes/sventon.properties"/>
+  </bean>
+
+
   <bean id="repoBrowserController"
     class="de.berlios.sventon.ctrl.RepoBrowserController">
     <property name="repositoryConfiguration">
@@ -24,12 +31,28 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
+  <bean id="showLogPageController"
+    class="de.berlios.sventon.ctrl.ShowLogPageController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
   <bean id="searchController"
     class="de.berlios.sventon.ctrl.SearchController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
 
@@ -38,6 +61,9 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
   <bean id="showFileController"
@@ -45,19 +71,28 @@
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
 
-  <bean id="downloadController"
-    class="de.berlios.sventon.ctrl.DownloadController">
+  <bean id="getController"
+    class="de.berlios.sventon.ctrl.GetController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
   </bean>
-  
+
   <bean id="blameController"
-	  class="de.berlios.sventon.ctrl.BlameController">
-      <property name="repositoryConfiguration">
-       <ref bean="repositoryConfig" />
+    class="de.berlios.sventon.ctrl.BlameController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
 
@@ -91,8 +126,17 @@
     class="de.berlios.sventon.ctrl.RepositoryConfiguration"
     singleton="true">
     <constructor-arg index="0">
-      <value>@SVN_ROOT@</value>
+      <value>${svn.root}</value>
     </constructor-arg>
+    <property name="SVNConfigurationPath">
+      <value>${svn.configpath}</value>
+    </property>
+    <property name="configuredUID">
+      <value>${svn.uid}</value>
+    </property>
+    <property name="configuredPWD">
+      <value>${svn.pwd}</value>
+    </property>
   </bean>
 
   <bean id="urlMapping"
@@ -101,13 +145,14 @@
       <props>
         <prop key="/repobrowser.svn">repoBrowserController</prop>
         <prop key="/showlog.svn">showLogsController</prop>
+        <prop key="/showlogpage.svn">showLogPageController</prop>
         <prop key="/showfile.svn">showFileController</prop>
         <prop key="/authenticate.svn">credentialsController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/search.svn">searchController</prop>
         <prop key="/blame.svn">blameController</prop>
         <prop key="/flatten.svn">flattenController</prop>
-        <prop key="/download.svn">downloadController</prop>
+        <prop key="/get.svn">getController</prop>
       </props>
     </property>
   </bean>
@@ -133,18 +178,18 @@
   </bean>
 
   <bean name="revisionIndex"
-    class="de.berlios.sventon.index.RevisionIndex"
-    singleton="true"
+    class="de.berlios.sventon.index.RevisionIndex" singleton="true"
     destroy-method="destroy">
     <constructor-arg index="0">
-      <value>/</value> <!-- Indexing start path -->
+      <value>/</value><!-- Indexing start path -->
     </constructor-arg>
   </bean>
 
-  <bean id="propertyConfigurer" 
-      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+  <bean id="propertyConfigurer"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
   </bean>
-  
-  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true"/>
+
+  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer"
+    singleton="true" />
 
 </beans>

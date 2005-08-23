@@ -3,27 +3,26 @@ package de.berlios.sventon;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.core.io.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.io.SVNDirEntry;
-import org.tmatesoft.svn.core.io.SVNException;
-import org.tmatesoft.svn.core.io.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.io.SVNRepositoryLocation;
+
 
 public class CmdTool {
 
   /**
    * @param args
    */
+  @SuppressWarnings("unchecked")
   public static void main(String[] args) {
     SVNRepositoryFactoryImpl.setup();
     String URL = "svn://localhost/servletsvn/";
     try {
-      SVNRepositoryLocation location = SVNRepositoryLocation.parseURL(URL);
+      SVNURL location = SVNURL.parseURIDecoded(URL);
       SVNRepository repository = SVNRepositoryFactory.create(location);
 
       // get latest revisions
@@ -35,14 +34,7 @@ public class CmdTool {
       for (SVNDirEntry entry : dir) {
         System.out.println(entry.getName() + entry.getRevision() + entry.getKind());
       }
-
-      
-       // log messages String[] targetPaths = new String[] {""};
-//        repository.log(targetPaths, 0, latestRevision, true, true, new
-//        ISVNLogEntryHandler() { public void handleLogEntry(SVNLogEntry
-//        logEntry) { System.out.println(logEntry.getRevision() + " : " +
-//        logEntry.getMessage()); } });
-       
+ 
     } catch (SVNException e) {
       e.printStackTrace();
     }

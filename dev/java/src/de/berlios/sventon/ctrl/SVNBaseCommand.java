@@ -3,10 +3,13 @@ package de.berlios.sventon.ctrl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * SVNBaseCommand.
  * <p>
  * Command class used to bind and pass servlet parameter arguments in sventon.
+ * 
  * @author patrikfr@users.berlios.de
  */
 public class SVNBaseCommand {
@@ -44,11 +47,12 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Set revision. Any revision is legal here (but may be rejected by the validator,
-   * {@link SVNBaseCommandValidator}). 
+   * Set revision. Any revision is legal here (but may be rejected by the
+   * validator, {@link SVNBaseCommandValidator}).
    * <p>
-   * All case variations of the logical name "HEAD" will be converted to HEAD, all other
-   * revision arguments will be set as is.
+   * All case variations of the logical name "HEAD" will be converted to HEAD,
+   * all other revision arguments will be set as is.
+   * 
    * @param revision The revision to set.
    */
   public void setRevision(final String revision) {
@@ -131,6 +135,30 @@ public class SVNBaseCommand {
 
   public String toString() {
     return "SVNBaseCommand{path=" + path + ", revision=" + revision + "}";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj instanceof SVNBaseCommand) {
+      SVNBaseCommand o = (SVNBaseCommand) obj;
+      return (StringUtils.equals(o.path, path) && StringUtils.equals(o.revision, revision));
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    //TODO: Impelement!
+    return super.hashCode();
   }
 
 }

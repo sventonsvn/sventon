@@ -1,5 +1,6 @@
 <%@ page session="false"%>
 <%@ include file="/WEB-INF/jsp/sventonbar.jsp"%>
+<spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 <p/>
 <table class="sventonTopTable">
   <tr>
@@ -8,7 +9,7 @@
       </span>
     </td>
     <td align="right">
-      <form action="search.svn" method="get">
+      <form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
         Search:
         <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/>
         <input type="submit" name="sventonSearchButton" value="go!"/>
@@ -21,9 +22,17 @@
       <c:out value="${url}"/></a> /
       <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-        <a href="<c:out value="repobrowser.svn?path=${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a> /
+        <c:choose>
+          <c:when test="${hasErrors}">
+            <c:out value="${pathSegment}"/>
+          </c:when>
+          <c:otherwise>
+		    <a href="<c:out value="repobrowser.svn?path=/${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a>
+		  </c:otherwise>
+        </c:choose>
+         /
       </c:forTokens>
-        <c:out value="${command.target}"/>
+      <c:out value="${command.target}"/>
     </td>
   </tr>
  <p>

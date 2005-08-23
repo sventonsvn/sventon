@@ -10,11 +10,11 @@ body {
   font-weight: normal;
 }
 
-a {
+a:link, a:visited, a:hover, a:active {
   font-family: Verdana;
   font-size: 11px;
-  color: 0060CB;
-  text-decoration: underline;
+  color: #0060CB;
+  text-decoration: none;
 }
 
 .sventonInput, sventonSelect, sventonTextarea {
@@ -42,10 +42,6 @@ a {
   width: 100%;
 }
 
-td {
-  white-space: nowrap;
-}
-
 th {
   text-align: left;
   white-space: nowrap;
@@ -67,7 +63,7 @@ th {
 .sventonEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
-  width: 750px;
+  width: 780px;
 }
 
 .sventonEntry1 {
@@ -78,10 +74,14 @@ th {
   background-color: #eeeeff;
 }
 
+.sventonEntryLogInfo {
+  background-color: #dddddd;
+}
+
 .sventonLogEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
-  width: 750px;
+  width: 780px;
 }
 
 .sventonStackTraceTable {
@@ -100,29 +100,37 @@ th {
 .sventonCol1 {
   width: 10px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .sventonCol2 {
+  white-space: nowrap;
 }
 
 .sventonCol3 {
+  white-space: nowrap;
 }
 
 .sventonCol4 {
   text-align: right;
+  white-space: nowrap;
 }
 
 .sventonCol5 {
   text-align: right;
+  white-space: nowrap;
 }
 
 .sventonCol6 {
+  white-space: nowrap;
 }
 
 .sventonCol7 {
+  white-space: nowrap;
 }
 
 .sventonCol8 {
+  white-space: nowrap;
 }
 
 .sventonEntriesDiv {

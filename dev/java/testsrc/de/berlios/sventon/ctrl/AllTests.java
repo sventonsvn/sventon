@@ -12,9 +12,10 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.ctrl");
     //$JUnit-BEGIN$
+    suite.addTestSuite(SVNBaseCommandValidatorTest.class);
+    suite.addTestSuite(ColorerTest.class);
+    suite.addTestSuite(ShowLogControllerTest.class);
     suite.addTestSuite(SVNBaseCommandTest.class);
-    // TODO: Re-add test later.
-    //suite.addTestSuite(ColorerTest.class);
     //$JUnit-END$
     return suite;
   }

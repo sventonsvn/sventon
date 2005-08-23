@@ -1,14 +1,14 @@
 package de.berlios.sventon.svnsupport;
 
-import org.tmatesoft.svn.core.io.SVNDirEntry;
-import org.tmatesoft.svn.core.io.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.tmatesoft.svn.core.io.SVNNodeKind.DIR;
+import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 
 
 /**
