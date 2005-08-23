@@ -1,9 +1,9 @@
 package de.berlios.sventon.index;
 
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNException;
-import org.tmatesoft.svn.core.io.SVNDirEntry;
-import org.tmatesoft.svn.core.io.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -116,6 +116,7 @@ public class RevisionIndex {
    * @param path The path to add to index.
    * @throws SVNException if a Subversion error occurs.
    */
+  @SuppressWarnings("unchecked")
   private void populateIndex(final String path) throws SVNException {
     List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
@@ -132,7 +133,7 @@ public class RevisionIndex {
    * Gets the interator for index access.
    * @return The iterator.
    */
-  public Iterator getEntries() {
+  public Iterator<IndexEntry> getEntries() {
     return index.iterator();
   }
 
@@ -143,7 +144,7 @@ public class RevisionIndex {
    * @see de.berlios.sventon.index.IndexEntry
    * @throws SVNException if a Subverions error occurs.
    */
-  public List find(final String searchString) throws SVNException {
+  public List<IndexEntry> find(final String searchString) throws SVNException {
     if (searchString == null || searchString.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -211,7 +212,7 @@ public class RevisionIndex {
    * @return A list containing all subdirectory entries below <code>fromPath</code>.
    * @throws SVNException if a Subverions error occurs.
    */
-  public List getDirectories(final String fromPath) throws SVNException {
+  public List<IndexEntry> getDirectories(final String fromPath) throws SVNException {
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty.");
     }

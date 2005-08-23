@@ -1,23 +1,42 @@
 package de.berlios.sventon.svnsupport;
 
-import org.tmatesoft.svn.core.io.*;
-
-import java.util.Date;
-import java.util.Map;
-import java.util.Collection;
-import java.util.HashMap;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.tmatesoft.svn.core.ISVNDirEntryHandler;
+import org.tmatesoft.svn.core.ISVNLogEntryHandler;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.io.ISVNEditor;
+import org.tmatesoft.svn.core.io.ISVNFileRevisionHandler;
+import org.tmatesoft.svn.core.io.ISVNLocationEntryHandler;
+import org.tmatesoft.svn.core.io.ISVNLockHandler;
+import org.tmatesoft.svn.core.io.ISVNReporterBaton;
+import org.tmatesoft.svn.core.io.ISVNWorkspaceMediator;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 public class SVNRepositoryStub extends SVNRepository {
+
+  public SVNRepositoryStub(SVNURL location) {
+    super(location);
+    repositoryEntries = new HashMap<String, Collection>();
+  }
 
   private long latestRevision = 0;
 
   private HashMap<String, Collection> repositoryEntries = null;
 
-  public SVNRepositoryStub(SVNRepositoryLocation svnRepositoryLocation) {
-    super(svnRepositoryLocation);
-    repositoryEntries = new HashMap<String, Collection>();
-  }
+  //
+  // public SVNRepositoryStub(SVNRepositoryLocation svnRepositoryLocation) {
+  // super(svnRepositoryLocation);
+  // repositoryEntries = new HashMap<String, Collection>();
+  // }
 
   public void testConnection() throws SVNException {
   }
@@ -65,31 +84,23 @@ public class SVNRepositoryStub extends SVNRepository {
     return 0;
   }
 
-  public int getFileRevisions(String s, long l, long l1, ISVNFileRevisionHandler isvnFileRevisionHandler) throws SVNException {
+  public int getFileRevisions(String s, long l, long l1, ISVNFileRevisionHandler isvnFileRevisionHandler)
+      throws SVNException {
     return 0;
   }
 
-  public long log(String[] strings, long l, long l1, boolean b, boolean b1, ISVNLogEntryHandler isvnLogEntryHandler) throws SVNException {
+  public int getLocations(String s, long l, long[] longs, ISVNLocationEntryHandler isvnLocationEntryHandler)
+      throws SVNException {
     return 0;
   }
 
-  public int getLocations(String s, long l, long[] longs, ISVNLocationEntryHandler isvnLocationEntryHandler) throws SVNException {
-    return 0;
-  }
-
-  public void diff(String s, long l, String s1, boolean b, boolean b1, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
+  public void update(long l, String s, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor)
+      throws SVNException {
 
   }
 
-  public void update(long l, String s, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
-
-  }
-
-  public void status(long l, String s, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
-
-  }
-
-  public void update(String s, long l, String s1, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
+  public void status(long l, String s, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor)
+      throws SVNException {
 
   }
 
@@ -97,7 +108,8 @@ public class SVNRepositoryStub extends SVNRepository {
     return null;
   }
 
-  public ISVNEditor getCommitEditor(String s, Map map, boolean b, ISVNWorkspaceMediator isvnWorkspaceMediator) throws SVNException {
+  public ISVNEditor getCommitEditor(String s, Map map, boolean b, ISVNWorkspaceMediator isvnWorkspaceMediator)
+      throws SVNException {
     return null;
   }
 
@@ -116,12 +128,41 @@ public class SVNRepositoryStub extends SVNRepository {
   public void removeLock(String s, String s1, boolean b) throws SVNException {
   }
 
-  public long log(String[] arg0, long arg1, long arg2, boolean arg3, boolean arg4, long arg5, ISVNLogEntryHandler arg6) throws SVNException {
-     throw new UnsupportedOperationException();
+  public long log(String[] arg0, long arg1, long arg2, boolean arg3, boolean arg4, long arg5, ISVNLogEntryHandler arg6)
+      throws SVNException {
+    throw new UnsupportedOperationException();
   }
 
-  public void diff(String arg0, long arg1, long arg2, String arg3, boolean arg4, boolean arg5, ISVNReporterBaton arg6, ISVNEditor arg7) throws SVNException {
-      throw new UnsupportedOperationException();
+  @Override
+  public void diff(SVNURL url, long revision, String target, boolean ignoreAncestry, boolean recursive,
+      ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry,
+      boolean recursive, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void update(SVNURL url, long revision, String target, boolean recursive, ISVNReporterBaton reporter,
+      ISVNEditor editor) throws SVNException {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void lock(Map arg0, String arg1, boolean arg2, ISVNLockHandler arg3) throws SVNException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void unlock(Map arg0, boolean arg1, ISVNLockHandler arg2) throws SVNException {
+    // TODO Auto-generated method stub
     
   }
 }

@@ -1,7 +1,7 @@
 package de.berlios.sventon.index;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.io.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNDirEntry;
 
 import java.util.Date;
 

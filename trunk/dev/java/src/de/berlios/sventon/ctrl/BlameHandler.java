@@ -2,7 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.core.io.ISVNAnnotateHandler;
+import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author patrikfr@users.berlios.de
  */
 public class BlameHandler implements ISVNAnnotateHandler {
-
+  
   protected final Log logger = LogFactory.getLog(getClass());
 
   private final List<BlameLine> blameLines = new ArrayList<BlameLine>();
@@ -54,19 +54,16 @@ public class BlameHandler implements ISVNAnnotateHandler {
   /**
    *
    * @param colorer The <code>Colorer</code> instance to use.
-   * @param fileExtension File extension, used for choosing formatter.
-   * @param appendLineNumbers Appending line numbers if <code>true</code>.
+   * @param filename Filename, used for choosing formatter.
    * @throws IllegalStateException if content already colorized.
    */
   public void colorizeContent(final Colorer colorer,
-                              final String fileExtension,
-                              final boolean appendLineNumbers) {
+                              final String filename) {
     if (isContentColorized) {
       throw new IllegalStateException("Blame content already colorized.");
     }
     blameContent = new StringBuilder(colorer.getColorizedContent(blameContent.toString(),
-                                                                 fileExtension,
-                                                                 appendLineNumbers));
+                                                                 filename));
     isContentColorized = true;
   }
 

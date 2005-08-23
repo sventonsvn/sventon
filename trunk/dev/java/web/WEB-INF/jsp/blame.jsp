@@ -4,7 +4,7 @@
 <head>
 <title>sventon blame - <c:out value="${url}" /></title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
-<link href="syntax.css" rel="stylesheet" type="text/css"/>
+<link href="jhighlight.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
@@ -13,13 +13,17 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
   
-  <c:url value="download.svn" var="downloadUrl">
+  <c:url value="get.svn" var="downloadUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
   
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
+  
+  <p class="sventonHeader">
+  Blame - <c:out value="${command.target}"/>
+  </p>
   
   <table class="sventonFunctionLinksTable">
     <tr>
@@ -53,5 +57,7 @@
     </td>
   </tr>
 </table>
+<br>
+<%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>
 </html>
