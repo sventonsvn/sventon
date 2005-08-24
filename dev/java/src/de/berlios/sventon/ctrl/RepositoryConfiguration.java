@@ -35,11 +35,14 @@ import de.berlios.sventon.svnsupport.SventonSVNLogger;
  */
 public class RepositoryConfiguration {
 
+  /** Will be <code>true</code> if all parameters are ok. */
+  private boolean configured = true;
+
   /** The logging instance. */
   protected final Log logger = LogFactory.getLog(getClass());
 
   /** The url. */
-  private String url = null;
+  private String repositoryURL = null;
 
   /** The repository location. */
   private SVNURL svnURL = null;
@@ -60,31 +63,37 @@ public class RepositoryConfiguration {
 
   /**
    * Configures and initializes the repository.
-   * 
-   * @param url The repository url.
-   * @throws SVNException Thrown in URL-parsing fails
    */
-  public RepositoryConfiguration(String url) throws SVNException {
-
-    if (url == null) {
-      throw new SVNException("No repository URL was provided");
-    }
+  public RepositoryConfiguration() {
 
     configureLogging();
-
-    // Strip last slash if any.
-    if (url.endsWith("/")) {
-      logger.debug("Removing trailing slash from url");
-      url = url.substring(0, url.length() - 1);
-    }
-
-    this.url = url;
     logger.info("Configuring SVN Repository");
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
-    logger.debug("SVN location: " + url);
-    svnURL = SVNURL.parseURIDecoded(url);
-    logger.debug("Configuration done");
+  }
+
+  /**
+   * Sets the repository root.
+   * @param repositoryRoot The root url.
+   */
+  public void setRepositoryRoot(final String repositoryRoot) {
+    if (repositoryRoot == null) {
+      throw new IllegalArgumentException("Provided repository root url was null.");
+    }
+    // Strip last slash if any.
+    this.repositoryURL = repositoryRoot;
+    if (repositoryRoot.endsWith("/")) {
+      logger.debug("Removing trailing slash from url");
+      this.repositoryURL = repositoryRoot.substring(0, repositoryRoot.length() - 1);
+    }
+
+    logger.debug("SVN location: " + repositoryURL);
+    try {
+      svnURL = SVNURL.parseURIDecoded(repositoryURL);
+    } catch (SVNException ex) {
+      logger.warn("Unable to parse URL '" + repositoryRoot + "'. Configuration mode will be turned on.");
+      configured = false;
+    }
   }
 
   /**
@@ -148,7 +157,7 @@ public class RepositoryConfiguration {
    * @return Returns the repository url.
    */
   public String getUrl() {
-    return url;
+    return repositoryURL;
   }
 
   /**
@@ -162,4 +171,11 @@ public class RepositoryConfiguration {
     SVNDebugLog.setLogger(new SventonSVNLogger());
   }
 
+  /**
+   * Gets configuration status.
+   * @return True if repository is configured ok, false if not.
+   */
+  public boolean isConfigured() {
+    return configured;
+  }
 }
