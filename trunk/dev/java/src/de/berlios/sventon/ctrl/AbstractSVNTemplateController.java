@@ -103,7 +103,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
   protected RepositoryConfiguration configuration = null;
 
-  /** Logger for this class and subclasses */
+  /** Logger for this class and subclasses. */
   protected final Log logger = LogFactory.getLog(getClass());
 
   protected AbstractSVNTemplateController() {
@@ -142,6 +142,10 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     HttpSession session = request.getSession(true);
     Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
+    // If repository config is not ok - redirect to config.jsp
+    if (!configuration.isConfigured()) {
+      return new ModelAndView("config");
+    }
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }
@@ -219,6 +223,10 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     HttpSession session = request.getSession(true);
     Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
+    // If repository config is not ok - redirect to config.jsp
+    if (!configuration.isConfigured()) {
+      return new ModelAndView("config");
+    }
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
     }

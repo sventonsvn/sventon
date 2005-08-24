@@ -95,6 +95,13 @@
     </property>
   </bean>
 
+  <bean id="configurationController"
+    class="de.berlios.sventon.ctrl.ConfigurationController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+  </bean>
+
   <bean id="clearSessionController"
     class="de.berlios.sventon.ctrl.ClearCredentialsController">
   </bean>
@@ -124,9 +131,9 @@
   <bean id="repositoryConfig"
     class="de.berlios.sventon.ctrl.RepositoryConfiguration"
     singleton="true">
-    <constructor-arg index="0">
+    <property name="repositoryRoot">
       <value>${svn.root}</value>
-    </constructor-arg>
+    </property>
     <property name="SVNConfigurationPath">
       <value>${svn.configpath}</value>
     </property>
@@ -152,6 +159,7 @@
         <prop key="/blame.svn">blameController</prop>
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>
+        <prop key="/config.svn">configurationController</prop>
       </props>
     </property>
   </bean>
@@ -184,11 +192,6 @@
     </constructor-arg>
   </bean>
 
-  <bean id="propertyConfigurer"
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-  </bean>
-
-  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer"
-    singleton="true" />
+  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true" />
 
 </beans>
