@@ -36,7 +36,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * <p>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}</code>.
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}</code>.
  * <p>
  * Workflow for this controller:
  * <ol>
@@ -47,13 +47,13 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * exist the controller will try to set up the repository with anonymous access.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
  * method with the given {@link de.berlios.sventon.ctrl.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, long, HttpServletRequest, HttpServletResponse)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -144,7 +144,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
-      return new ModelAndView("config");
+      return new ModelAndView(new RedirectView("config.svn"));
     }
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand, credentials);
@@ -225,7 +225,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
-      return new ModelAndView("config");
+      return new ModelAndView(new RedirectView("config.svn"));
     }
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand, credentials);

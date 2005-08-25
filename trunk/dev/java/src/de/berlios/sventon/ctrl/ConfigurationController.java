@@ -49,7 +49,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, BindException e) throws Exception {
-    logger.debug("showForm started");
+    logger.debug("showForm() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
@@ -62,7 +62,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, BindException e) throws Exception {
-    logger.debug("processFormSubmission started");
+    logger.debug("processFormSubmission() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
