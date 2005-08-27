@@ -31,7 +31,7 @@ import java.util.HashMap;
  */
 public class GetController extends AbstractSVNTemplateController implements Controller {
 
-  public static final String THUMBNAIL_FORMAT = "jpeg";
+  public static final String THUMBNAIL_FORMAT = "png";
   public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
 
   /**
@@ -68,7 +68,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         Dimension thumbnailSize = ImageUtil.getThumbnailSize(orgWidth, orgHeight);
         // Resize image.
         Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-        BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_RGB);
+        BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
         response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
         // Write thumbnail to output stream.
         ImageIO.write(biRescaled, THUMBNAIL_FORMAT, output);
