@@ -1,7 +1,6 @@
 Release road map
 
-This is a rough release plan for the sventon, it will be updated and changed 
-irregularily.
+This is a rough release plan for the sventon, it will be updated and changed irregularily.
 
 [ ] = planned
 [x] = in progress
@@ -12,38 +11,39 @@ Release 1
 [<76>]  View file for any given revision.
 [<76>]  Source code syntax highlighting.
 [<76>]  View logs for a file/directory.
-[x]     View all changes in one revision (log entry).
 [<79>]  Download file (any given revision).
 [<76>]  Browse repository for any given revision.
 [<76>]  Possibility to navigate in repository by typing path.
 [<76>]  Clickable revision path info for quick navigation in browser.
-[x]     Basic look and feel
 [<97>]  Support for language specific characters and white space in paths (WebDAV)
-[x]     Possibility to search for files and directories.
-[x]     Blame
+[<113>] Possibility to search for files and directories.
 [<113>] Flatten path structure view
-[x]     Full style sheet usage to enable easy customization
+[<130>] Style sheet usage to enable easy customization
 [<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
-[x]     Download file(s) and directories as zip files
-[x]     View file should show a preview of images
-[x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
+[<130>] View file should show a preview of images
 [<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
+[<130>] Basic look and feel
+[x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
+[x]     Blame
+[x]     View all changes in one revision (log entry). HTTP still not working.
+[ ]     Serialize the RevisionIndex to disk
+[ ]     Only append repository changes if index is out-of-date instead of full reindexing
+[ ]     Diff revisions of same file
+[ ]     Diff same revision of different files
+[ ]     Keyword expansion when viewing files
+[ ]     View metadata (e.g. mime types)
+[ ]     Installation wizard
+[ ]     Subversion 1.2 feature support, notably file locking.
+[ ]     Thumbnail caching using ehcache.
 
-Not scheduled
-[ ] Serialize the RevisionIndex to disk
-[ ] Only append repository changes if index is out-of-date instead of full reindexing
+Not yet scheduled
+[ ] Multi language support using resource bundles.
+[ ] Download file(s) and directories as zip files
 [ ] Apply Observer pattern and make RevisionIndex Observable
 [ ] RSS feeds of repository changes, RevisionIndexObserver
 [ ] Commit statistics (different kinds)
-[ ] Diff revisions of same file
-[ ] Diff same revision of different files
 [ ] View contents of zip archives (including jar)
 [ ] JSPWiki integration
-[ ] Keyword expansion when viewing files
-[ ] User bookmark support using persistent cookies
-[ ] View metadata (e.g. mime types)
-[ ] Installation wizard
-[ ] Subversion 1.2 feature support, notably file locking.
 [ ] Integration with other tools and IDE:s
 [ ] Content search using lucene (files in HEAD)
 [ ] Graph logs
