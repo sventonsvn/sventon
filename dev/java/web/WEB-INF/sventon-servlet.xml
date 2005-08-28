@@ -25,6 +25,9 @@
   <bean id="svnBaseCommandValidator"
     class="de.berlios.sventon.ctrl.SVNBaseCommandValidator" />
 
+  <bean id="configCommandValidator"
+    class="de.berlios.sventon.ctrl.ConfigCommandValidator" />
+
   <bean id="showLogsController"
     class="de.berlios.sventon.ctrl.ShowLogController">
     <property name="repositoryConfiguration">
@@ -99,6 +102,9 @@
     class="de.berlios.sventon.ctrl.ConfigurationController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="configCommandValidator" />
     </property>
   </bean>
 
