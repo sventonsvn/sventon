@@ -19,7 +19,7 @@ public class RevisionIndexTest extends TestCase {
 
   public void setUp() throws Exception {
     // Set up the repository stub
-    repository = new SVNRepositoryStub(null);
+    repository = new SVNRepositoryStub(null, false);
     repository.setLatestRevision(123);
 
     List entries1 = new ArrayList();
