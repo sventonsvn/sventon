@@ -23,13 +23,13 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 public class SVNRepositoryStub extends SVNRepository {
 
-  public SVNRepositoryStub(SVNURL location) {
-    super(location);
+  public SVNRepositoryStub(SVNURL location, boolean myIsSessionMode) {
+    super(location, myIsSessionMode);
     repositoryEntries = new HashMap<String, Collection>();
   }
 
   private long latestRevision = 0;
-
+ 
   private HashMap<String, Collection> repositoryEntries = null;
 
   //
@@ -165,4 +165,16 @@ public class SVNRepositoryStub extends SVNRepository {
     // TODO Auto-generated method stub
     
   }
+
+@Override
+public Collection getDir(String arg0, long arg1) throws SVNException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public void closeSession() throws SVNException {
+	// TODO Auto-generated method stub
+	
+}
 }
