@@ -3,91 +3,85 @@
 // Distributed under the terms of the GNU Lesser General Public License, v2.1 or later
 
 .java_plain {
-				color: rgb(0,0,0);
+  color: rgb(0,0,0);
 }
-			
+      
 .java_keyword {
-				color: rgb(0,0,0);
-				font-weight: bold;
+  color: rgb(0,0,0);
+  font-weight: bold;
 }
-			
+      
 .java_type {
-				color: rgb(0,44,221);
+  color: rgb(0,44,221);
 }
-			
+      
 .java_operator {
-				color: rgb(0,124,31);
+  color: rgb(0,124,31);
 }
-			
+      
 .java_separator {
-				color: rgb(0,33,255);
+  color: rgb(0,33,255);
 }
-			
+      
 .java_literal {
-				color: rgb(188,0,0);
+  color: rgb(188,0,0);
 }
-			
+      
 .java_comment {
-				color: rgb(147,147,147);
-				background-color: rgb(247,247,247);
+  color: rgb(147,147,147);
 }
-			
+      
 .java_javadoc_comment {
-				color: rgb(147,147,147);
-				background-color: rgb(247,247,247);
-				font-style: italic;
+  color: rgb(147,147,147);
+  font-style: italic;
 }
-			
+      
 .java_javadoc_tag {
-				color: rgb(147,147,147);
-				background-color: rgb(247,247,247);
-				font-style: italic;
-				font-weight: bold;
+  color: rgb(147,147,147);
+  font-style: italic;
+  font-weight: bold;
 }
 
-			
+      
 .xml_plain {
-				color: rgb(0,0,0);
+  color: rgb(0,0,0);
 }
-			
+      
 .xml_char_data {
-				color: rgb(0,0,0);
+  color: rgb(0,0,0);
 }
-			
+      
 .xml_tag_symbols {
-				color: rgb(0,59,255);
+  color: rgb(0,59,255);
 }
-			
+      
 .xml_comment {
-				color: rgb(147,147,147);
-				background-color: rgb(247,247,247);
+  color: rgb(147,147,147);
 }
-			
+      
 .xml_attribute_value {
-				color: rgb(193,0,0);
+  color: rgb(193,0,0);
 }
-			
+      
 .xml_attribute_name {
-				color: rgb(0,0,0);
-				font-weight: bold;
+  color: rgb(0,0,0);
+  font-weight: bold;
 }
-			
+      
 .xml_processing_instruction {
-				color: rgb(0,0,0);
-				font-weight: bold;
-				font-style: italic;
+  color: rgb(0,0,0);
+  font-weight: bold;
+  font-style: italic;
 }
-			
+      
 .xml_tag_name {
-				color: rgb(0,55,255);
+  color: rgb(0,55,255);
 }
-			
+      
 .xml_rife_tag {
-				color: rgb(0,0,0);
-				background-color: rgb(228,230,160);
+  color: rgb(0,0,0);
 }
-			
+      
 .xml_rife_name {
-				color: rgb(0,0,196);
-				background-color: rgb(228,230,160);
+  color: rgb(0,0,196);
 }
