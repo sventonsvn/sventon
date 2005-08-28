@@ -12,12 +12,14 @@ public class ConfigCommand {
   private String repositoryURL;
   private String username;
   private String password;
+  private String currentDir;
+  private String configPath;
 
   public String getRepositoryURL() {
     return repositoryURL;
   }
 
-  public void setRepositoryURL(String repositoryURL) {
+  public void setRepositoryURL(final String repositoryURL) {
     this.repositoryURL = repositoryURL;
   }
 
@@ -25,7 +27,7 @@ public class ConfigCommand {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(final String username) {
     this.username = username;
   }
 
@@ -33,8 +35,23 @@ public class ConfigCommand {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(final String password) {
     this.password = password;
   }
 
+  public void setCurrentDir(final String path) {
+    this.currentDir = path;
+  }
+
+  public String getCurrentDir() {
+    return this.currentDir;
+  }
+
+  public void setConfigPath(final String path) {
+    this.configPath = path;
+  }
+
+  public String getConfigPath() {
+    return this.configPath;
+  }
 }

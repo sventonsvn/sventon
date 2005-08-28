@@ -63,7 +63,7 @@ th {
 .sventonEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
-  width: 780px;
+  width: 950px;
 }
 
 .sventonEntry1 {
@@ -81,7 +81,7 @@ th {
 .sventonLogEntriesTable {
   background-color: #eeeeff;
   border: 1px solid black;
-  width: 780px;
+  width: 950px;
 }
 
 .sventonStackTraceTable {
