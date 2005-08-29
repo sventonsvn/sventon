@@ -1,6 +1,6 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.svnsupport.SVNDirEntryComparator;
+import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNDirEntry;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-import static de.berlios.sventon.svnsupport.SVNDirEntryComparator.NAME;
+import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
 
 /**
  * RepoBrowserController.
@@ -24,14 +24,18 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
     
-    List<SVNDirEntry> dir = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
+    List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     
     String path = svnCommand.getPath();
     logger.debug("Getting directory contents for: " + path);
     HashMap properties = new HashMap();
-    dir.addAll(repository.getDir(path, revision.getNumber(), properties, (Collection) null));
+    Collection entries = repository.getDir(path, revision.getNumber(), properties, (Collection) null);
+    for (Object entry : entries) {
+      dir.add(new RepositoryEntry((SVNDirEntry) entry, path));
+    }
+
     logger.debug(properties);
-    Collections.sort(dir, new SVNDirEntryComparator(NAME, true));
+    Collections.sort(dir, new RepositoryEntryComparator(NAME, true));
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();

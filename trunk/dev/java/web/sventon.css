@@ -15,6 +15,17 @@ pre {
   background-color: #e9e9e9;
 }
 
+.codeBlock {
+  width: 90%;
+  margin: 1em 0.5cm;
+  padding: 0.5em;
+  background: rgb(240,240,240);
+  border-top: black dotted 1px;
+  border-left: black dotted 1px;
+  border-right: black solid 2px;
+  border-bottom: black solid 2px;
+}
+
 a:link, a:visited, a:hover, a:active {
   font-family: Verdana;
   font-size: 11px;

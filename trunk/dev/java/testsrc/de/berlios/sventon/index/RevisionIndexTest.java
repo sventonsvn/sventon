@@ -1,16 +1,14 @@
 package de.berlios.sventon.index;
 
+import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import junit.framework.TestCase;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import junit.framework.TestCase;
-
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
-
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 
 public class RevisionIndexTest extends TestCase {
 
