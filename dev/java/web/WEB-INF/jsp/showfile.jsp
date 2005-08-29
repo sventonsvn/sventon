@@ -45,7 +45,7 @@
       </c:when>
      	<c:otherwise>
 <p>
-<pre>
+<pre class="codeBlock">
 <c:out value="${fileContents}" escapeXml="false"/>
 </pre>
 </p>

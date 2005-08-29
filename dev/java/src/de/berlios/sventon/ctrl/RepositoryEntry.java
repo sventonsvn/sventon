@@ -1,16 +1,15 @@
-package de.berlios.sventon.index;
+package de.berlios.sventon.ctrl;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang.StringUtils;
+import org.tmatesoft.svn.core.SVNDirEntry;
 
 /**
- * Represents an entry in the revision index.
- * @see de.berlios.sventon.index.RevisionIndex
+ * Represents an entry in the repository.
  * @author jesper@users.berlios.de
  */
-public class IndexEntry {
+public class RepositoryEntry {
 
   /** The <code>SVNDirEntry</code>. */
   private SVNDirEntry entry;
@@ -21,32 +20,26 @@ public class IndexEntry {
   /**
    * Constructor.
    * @param entry The <code>SVNDirEntry</code>.
-   * @param entryPath The full path to the entry.
+   * @param entryPath The entry repository path.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
-  public IndexEntry(final SVNDirEntry entry, final String entryPath) {
-    if (entry == null || entryPath == null) {
-      throw new IllegalArgumentException("entry or entryPath cannot be null.");
+  public RepositoryEntry(final SVNDirEntry entry, final String entryPath) {
+    if (entryPath == null) {
+      throw new IllegalArgumentException("entryPath cannot be null.");
     }
-    this.entry = entry;
+    if (entry == null ) {
+      throw new IllegalArgumentException("entry cannot be null.");
+    }
     this.entryPath = entryPath;
+    this.entry = entry;
   }
 
   /**
-   * Gets the index entry.
-   * @see org.tmatesoft.svn.core.io.SVNDirEntry
+   * Gets the entry.
    * @return The <code>SVNDirEntry</code>
    */
   public SVNDirEntry getEntry() {
     return entry;
-  }
-
-  /**
-   * Gets the entry path.
-   * @return The full entry path
-   */
-  public String getEntryPath() {
-    return entryPath;
   }
 
   /**
@@ -55,6 +48,14 @@ public class IndexEntry {
    */
   public String getName() {
     return entry.getName();
+  }
+
+  /**
+   * Gets the entry path.
+   * @return The full entry path
+   */
+  public String getEntryPath() {
+    return entryPath;
   }
 
   /**

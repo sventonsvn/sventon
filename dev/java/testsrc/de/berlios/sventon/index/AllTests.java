@@ -12,7 +12,6 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
     //$JUnit-BEGIN$
-    suite.addTestSuite(IndexEntryTest.class);
     suite.addTestSuite(RevisionIndexTest.class);
     //$JUnit-END$
     return suite;

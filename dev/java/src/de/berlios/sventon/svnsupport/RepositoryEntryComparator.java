@@ -1,6 +1,6 @@
 package de.berlios.sventon.svnsupport;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
+import de.berlios.sventon.ctrl.RepositoryEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Comparator;
@@ -10,17 +10,15 @@ import java.util.Set;
 
 import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 
-
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
- * ordering of <code>org.tmatesoft.svn.core.io.SVNDirEntry</code> objects.
+ * ordering of <code>RepositoryEntry</code> objects.
  * <p>
- * The comparator can be configured during construction to tweak sorting
- * behavior.
+ * The comparator can be configured during construction to tweak sorting behavior.
  * 
  * @author patrikfr@users.berlios.de
  */
-public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
+public class RepositoryEntryComparator implements Comparator<RepositoryEntry> {
 
   /**
    * Constant for comparing on name.
@@ -55,7 +53,7 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
   }
 
   /**
-   * Create a new comparator for comparing <code>SVNDirEntry</code> objects.
+   * Create a new comparator for comparing <code>RepositoryEntry</code> objects.
    * 
    * @param sortType
    *          Entry type property to perform the comparisions on. See constants
@@ -65,7 +63,7 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
    *          of kind <code>SVNNodeKind.DIR</code> before an entries of other
    *          kinds.
    */
-  public SVNDirEntryComparator(final int sortType, final boolean groupDirs) {
+  public RepositoryEntryComparator(final int sortType, final boolean groupDirs) {
 
     if (!legalTypes.contains(sortType))
       throw new IllegalArgumentException("Not a valid sort type: " + sortType);
@@ -77,11 +75,11 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
   /**
    * {@inheritDoc}
    */
-  public int compare(SVNDirEntry entry1, SVNDirEntry entry2) {
+  public int compare(RepositoryEntry entry1, RepositoryEntry entry2) {
 
     if (groupDirs) {
-      SVNNodeKind kind1 = entry1.getKind();
-      SVNNodeKind kind2 = entry2.getKind();
+      SVNNodeKind kind1 = entry1.getEntry().getKind();
+      SVNNodeKind kind2 = entry2.getEntry().getKind();
       if (kind1 != kind2) // Not equal kinds, have to inspect.
       {
         if (kind1 == DIR) {
@@ -100,13 +98,13 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
     case NAME:
       return nullSafeCompare(entryName1, entryName2);
     case AUTHOR:
-      final String author1 = entry1.getAuthor();
-      final String author2 = entry2.getAuthor();
+      final String author1 = entry1.getEntry().getAuthor();
+      final String author2 = entry2.getEntry().getAuthor();
       final int authCompare = nullSafeCompare(author1, author2);
       return authCompare == 0 ? nullSafeCompare(entryName1, entryName2) : authCompare;
     case REVISION:
-      final long revision1 = entry1.getRevision();
-      final long revision2 = entry2.getRevision();
+      final long revision1 = entry1.getEntry().getRevision();
+      final long revision2 = entry2.getEntry().getRevision();
       final boolean revCompare = revision1 < revision2;
       if (revision1 == revision2) {
         return nullSafeCompare(entryName1, entryName2);
@@ -114,8 +112,8 @@ public class SVNDirEntryComparator implements Comparator<SVNDirEntry> {
         return revision1 < revision2 ? -1 : 1;
       }
     case DATE:
-      final Date date1 = entry1.getDate();
-      final Date date2 = entry2.getDate();
+      final Date date1 = entry1.getEntry().getDate();
+      final Date date2 = entry2.getEntry().getDate();
       final int dateCompare = nullSafeCompare(date1, date2);
       return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
     default:

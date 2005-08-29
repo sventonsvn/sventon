@@ -1,11 +1,12 @@
 package de.berlios.sventon.index;
 
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import de.berlios.sventon.ctrl.RepositoryEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.*;
 
@@ -16,7 +17,7 @@ import java.util.*;
 public class RevisionIndex {
 
   /** The index. */
-  private List<IndexEntry> index;
+  private List<RepositoryEntry> index;
 
   /** The repository instance to index. */
   private SVNRepository repository;
@@ -46,7 +47,7 @@ public class RevisionIndex {
 
   private void init() {
     logger.debug("Initializing index");
-    index = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
+    index = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     // TODO: Read serialized index from disk.
     // TODO: Update the index according to what's new.
   }
@@ -122,7 +123,7 @@ public class RevisionIndex {
 
     entriesList.addAll(repository.getDir(path, this.indexRevision, new HashMap(), (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      index.add(new IndexEntry(entry, path));
+      index.add(new RepositoryEntry(entry, path));
       if (entry.getKind() == SVNNodeKind.DIR) {
         populateIndex(path + entry.getName() + "/");
       }
@@ -133,7 +134,7 @@ public class RevisionIndex {
    * Gets the interator for index access.
    * @return The iterator.
    */
-  public Iterator<IndexEntry> getEntries() {
+  public Iterator<RepositoryEntry> getEntries() {
     return index.iterator();
   }
 
@@ -141,10 +142,10 @@ public class RevisionIndex {
    * Finds index entries by a search string.
    * @param searchString The string to search for.
    * @return The <code>List</code> of <code>IndexEntry</code> instances found.
-   * @see de.berlios.sventon.index.IndexEntry
+   * @see de.berlios.sventon.ctrl.RepositoryEntry
    * @throws SVNException if a Subverions error occurs.
    */
-  public List<IndexEntry> find(final String searchString) throws SVNException {
+  public List<RepositoryEntry> find(final String searchString) throws SVNException {
     if (searchString == null || searchString.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -154,8 +155,8 @@ public class RevisionIndex {
       index();
     }
 
-    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
-    for (IndexEntry entry : index) {
+    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    for (RepositoryEntry entry : index) {
       if (entry.getFullEntryName().indexOf(searchString) > -1) {
         result.add(entry);
       }
@@ -181,8 +182,8 @@ public class RevisionIndex {
       index();
     }
 
-    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
-    for (IndexEntry entry : index) {
+    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    for (RepositoryEntry entry : index) {
       if (entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
       }
@@ -212,7 +213,7 @@ public class RevisionIndex {
    * @return A list containing all subdirectory entries below <code>fromPath</code>.
    * @throws SVNException if a Subverions error occurs.
    */
-  public List<IndexEntry> getDirectories(final String fromPath) throws SVNException {
+  public List<RepositoryEntry> getDirectories(final String fromPath) throws SVNException {
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty.");
     }
@@ -222,8 +223,8 @@ public class RevisionIndex {
       index();
     }
 
-    List<IndexEntry> result = Collections.checkedList(new ArrayList<IndexEntry>(), IndexEntry.class);
-    for (IndexEntry entry : index) {
+    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    for (RepositoryEntry entry : index) {
       if (entry.getEntry().getKind() == SVNNodeKind.DIR && entry.getFullEntryName().startsWith(fromPath)) {
         result.add(entry);
       }
