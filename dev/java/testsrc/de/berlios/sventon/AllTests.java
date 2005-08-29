@@ -11,6 +11,7 @@ public class AllTests {
     suite.addTest(de.berlios.sventon.ctrl.AllTests.suite());
     suite.addTest(de.berlios.sventon.index.AllTests.suite());
     suite.addTest(de.berlios.sventon.svnsupport.AllTests.suite());
+    suite.addTest(de.berlios.sventon.util.AllTests.suite());
     //$JUnit-END$
     return suite;
   }
