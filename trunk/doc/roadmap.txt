@@ -23,6 +23,7 @@ Release 1
 [<130>] View file should show a preview of images
 [<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
 [<130>] Basic look and feel
+[<132>] Installation wizard
 [x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
 [x]     Blame
 [x]     View all changes in one revision (log entry). HTTP still not working.
@@ -32,7 +33,6 @@ Release 1
 [ ]     Diff same revision of different files
 [ ]     Keyword expansion when viewing files
 [ ]     View metadata (e.g. mime types)
-[ ]     Installation wizard
 [ ]     Subversion 1.2 feature support, notably file locking.
 [ ]     Thumbnail caching using ehcache.
 

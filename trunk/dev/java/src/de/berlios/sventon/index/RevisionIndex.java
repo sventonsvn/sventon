@@ -9,12 +9,13 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.*;
+import java.io.Serializable;
 
 /**
  * The revision index keeps all repository entries cached for fast repository searching.
  * @author jesper@users.berlios.de
  */
-public class RevisionIndex {
+public class RevisionIndex implements Serializable {
 
   /** The index. */
   private List<RepositoryEntry> index;

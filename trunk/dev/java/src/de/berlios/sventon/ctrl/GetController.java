@@ -33,6 +33,9 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
   public static final String THUMBNAIL_FORMAT = "png";
   public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
+  public static final String DISPLAY_REQUEST_PARAMETER = "disp";
+  public static final String DISPLAY_TYPE_THUMBNAIL = "thumb";
+  public static final String DISPLAY_TYPE_INLINE = "inline";
 
   /**
    * {@inheritDoc}
@@ -42,14 +45,14 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
     logger.debug("Getting file: " + svnCommand.getPath());
 
-    String displayType = request.getParameter("disp");
+    String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
     ServletOutputStream output = null;
     logger.debug("displayType: " + displayType);
 
     try {
       output = response.getOutputStream();
 
-      if ("thumb".equals(displayType)) {
+      if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'.");
         response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         StringBuilder urlString = new StringBuilder("http://");
@@ -58,7 +61,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         urlString.append(request.getServerPort());
         urlString.append(request.getRequestURI());
         urlString.append("?");
-        urlString.append(request.getQueryString().replaceAll("disp=thumb", "disp=inline"));
+        urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
         URL url = new URL(urlString.toString());
         logger.debug("Getting full size image from url: " + url);
         BufferedImage image = ImageIO.read(url);
@@ -75,7 +78,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         output.flush();
         output.close();
       } else {
-        if ("inline".equals(displayType)) {
+        if (DISPLAY_TYPE_INLINE.equals(displayType)) {
           logger.debug("Getting file as 'inline'.");
           response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
