@@ -12,6 +12,7 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.util");
     //$JUnit-BEGIN$
+    suite.addTestSuite(SventonCacheTest.class);
     suite.addTestSuite(ByteFormatterTest.class);
     suite.addTestSuite(ImageUtilTest.class);
     suite.addTestSuite(ZipUtilTest.class);
