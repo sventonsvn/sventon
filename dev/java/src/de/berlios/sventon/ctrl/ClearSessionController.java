@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * ClearCredentialsController.
  * @author patrikfr@users.berlios.de
  */
-public class ClearCredentialsController extends AbstractController {
+public class ClearSessionController extends AbstractController {
 
   protected ModelAndView handleRequestInternal(HttpServletRequest request, 
       HttpServletResponse response) throws Exception {

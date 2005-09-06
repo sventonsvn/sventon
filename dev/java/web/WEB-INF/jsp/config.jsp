@@ -48,7 +48,8 @@
         </tr>
         <tr>
           <td valign="top" width="50%">
-            Enter sventon config path:
+            Enter Subversion config path. This is the path to where subversion configuration files are stored. </br>
+            The web server running sventon must have read/write access to this directory):
           </td>
           <td valign="top" width="50%">
             <spring:bind path="command.configPath">
