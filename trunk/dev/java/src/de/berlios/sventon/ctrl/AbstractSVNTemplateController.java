@@ -139,19 +139,17 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
-    HttpSession session = request.getSession(true);
-    Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
-
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
       return new ModelAndView(new RedirectView("config.svn"));
     }
+    
     if (exception.hasErrors()) {
-      return prepareExceptionModelAndView(exception, svnCommand, credentials);
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
     SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-    assignCredentials(credentials, repository);
+    assignCredentials(repository);
 
     SVNRevision revision = revision = convertAndUpdateRevision(svnCommand);
 
@@ -171,13 +169,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       } else {
         // Invalid path/rev combo. Forward to error page.
         exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
-        return prepareExceptionModelAndView(exception, svnCommand, credentials);
+        return prepareExceptionModelAndView(exception, svnCommand);
       }
     } catch (SVNAuthenticationException svnae) {
       // Redirect to login page. This will lose track of the submit, the user
       // will have to start over
       // after logging in. That's OK. Yes.
-      return prepareAuthenticationModelAndView(request, svnCommand);
+      return forwardToAuthenticationFailureView(request, svnCommand);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -186,7 +184,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       } else {
         exception.reject(null, e.getMessage());
       }
-      return prepareExceptionModelAndView(exception, svnCommand, credentials);
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
     logger.debug("Submitted command: " + svnCommand);
@@ -220,15 +218,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-    HttpSession session = request.getSession(true);
-    Credentials credentials = (Credentials) session.getAttribute("sventon.credentials");
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
       return new ModelAndView(new RedirectView("config.svn"));
     }
+    
     if (exception.hasErrors()) {
-      return prepareExceptionModelAndView(exception, svnCommand, credentials);
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
     SVNRevision revision = convertAndUpdateRevision(svnCommand);
@@ -236,7 +233,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     try {
       logger.debug("Getting SVN repository");
       SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-      assignCredentials(credentials, repository);
+      assignCredentials(repository);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
@@ -245,7 +242,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == HEAD ? Long.toString(repository.getLatestRevision()) : null));
-      fillInCredentials(credentials, model);
 
       // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {
@@ -253,7 +249,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return prepareAuthenticationModelAndView(request, svnCommand);
+      return forwardToAuthenticationFailureView(request, svnCommand);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -263,7 +259,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
         exception.reject(null, e.getMessage());
       }
 
-      return prepareExceptionModelAndView(exception, svnCommand, credentials);
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
   }
@@ -279,12 +275,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView prepareAuthenticationModelAndView(HttpServletRequest request, SVNBaseCommand svnCommand) {
-    logger.debug("Authentication failed, redirecting to 'authenticate' view");
-    HttpSession session = request.getSession(true);
-    session.setAttribute("sventon.command", svnCommand);
-    session.setAttribute("sventon.url", request.getRequestURL());
-    return new ModelAndView(new RedirectView("authenticate.svn"));
+  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand) {
+    logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
+    return new ModelAndView("authenticationfailure");
   }
 
   /**
@@ -298,50 +291,29 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  private ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand,
-      Credentials credentials) {
+  private ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
     model.put("url", configuration.getUrl());
     model.put("numrevision", null);
-    fillInCredentials(credentials, model);
     return new ModelAndView("goto", model);
   }
 
   /**
    * Assigns an <code>AuthenticationManager</code> instance to the given
-   * repository with credentials from the given credentials instance. If the
-   * credentials instance is <code>null</code>, no
-   * <code>AuthenticationManager</code> will be set.
+   * repository with credentials from the given <code>configuration</code> instance. 
+   * If a user id is not configured instance (is <code>null</code>) in the 
+   * <code>configuration</code> , no <code>AuthenticationManager</code> will be set.
    * 
-   * @param credentials Credentials object, may be <code>null</code>.
    * @param repository Repository object.
    */
-  private void assignCredentials(final Credentials credentials, final SVNRepository repository) {
+  private void assignCredentials(final SVNRepository repository) {
     if (configuration.getConfiguredUID() != null) {
       ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
           .getSVNConfigurationPath()), configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
       repository.setAuthenticationManager(authManager);
-    } else if (credentials != null) {
-      logger.debug("Credentials found, configuring repository with: " + credentials);
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
-          .getSVNConfigurationPath()), credentials.getUid(), credentials.getPwd(), false);
-      repository.setAuthenticationManager(authManager);
     }
-  }
-
-  /**
-   * Convenience method for updating the model with uid from the credentials
-   * object.
-   * 
-   * @param credentials Credentials object, may be <code>null</code> if the
-   *          user was not authenticated.
-   * @param model Model instance to update.
-   */
-  protected void fillInCredentials(Credentials credentials, Map<String, Object> model) {
-    if (credentials != null)
-      model.put("uid", credentials.getUid());
   }
 
   /**

@@ -109,29 +109,7 @@
   </bean>
 
   <bean id="clearSessionController"
-    class="de.berlios.sventon.ctrl.ClearCredentialsController">
-  </bean>
-
-  <bean id="credentialsValidator"
-    class="de.berlios.sventon.ctrl.CredentialsValidator" />
-
-  <bean id="credentialsController"
-    class="de.berlios.sventon.ctrl.CredentialsController">
-    <property name="sessionForm">
-      <value>false</value>
-    </property>
-    <property name="commandName">
-      <value>auth</value>
-    </property>
-    <property name="commandClass">
-      <value>de.berlios.sventon.ctrl.Credentials</value>
-    </property>
-    <property name="validator">
-      <ref bean="credentialsValidator" />
-    </property>
-    <property name="formView">
-      <value>authenticate</value>
-    </property>
+    class="de.berlios.sventon.ctrl.ClearSessionController">
   </bean>
 
   <bean id="repositoryConfig"
@@ -159,7 +137,6 @@
         <prop key="/showlog.svn">showLogsController</prop>
         <prop key="/showlogpage.svn">showLogPageController</prop>
         <prop key="/showfile.svn">showFileController</prop>
-        <prop key="/authenticate.svn">credentialsController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/search.svn">searchController</prop>
         <prop key="/blame.svn">blameController</prop>

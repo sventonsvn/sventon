@@ -9,7 +9,7 @@
 
 <%@ include file="/WEB-INF/jsp/sventonbar.jsp" %>
 <p/>
-You have been logged out.
+The session has been cleared.
 <p/>
 <a href="repobrowser.svn">sventon</a>
 </body>

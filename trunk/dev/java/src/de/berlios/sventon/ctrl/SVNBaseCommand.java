@@ -9,13 +9,16 @@ import org.apache.commons.lang.StringUtils;
  * SVNBaseCommand.
  * <p>
  * Command class used to bind and pass servlet parameter arguments in sventon.
+ * <p>
+ * A newly created instance is initialized to have path <code>/</code> and revision
+ * <code>null</code>.
  * 
  * @author patrikfr@users.berlios.de
  */
 public class SVNBaseCommand {
 
   /** The full path. */
-  private String path = "";
+  private String path = "/";
 
   /** The revision. */
   private String revision = null;
@@ -28,13 +31,21 @@ public class SVNBaseCommand {
   }
 
   /**
-   * @param path The path to set.
+   * Set path. <code>null</code> and <code>""</code> arguments will be
+   * converted <code>/</code>
+   * 
+   * @param path
+   *          The path to set.
    */
   public void setPath(final String path) {
     if (path != null) {
-      this.path = path.trim();
+      if ("".equals(path)) {
+        this.path = "";
+      } else {
+        this.path = path.trim();
+      }
     } else {
-      this.path = "";
+      this.path = "/";
     }
 
   }
@@ -53,7 +64,8 @@ public class SVNBaseCommand {
    * All case variations of the logical name "HEAD" will be converted to HEAD,
    * all other revision arguments will be set as is.
    * 
-   * @param revision The revision to set.
+   * @param revision
+   *          The revision to set.
    */
   public void setRevision(final String revision) {
     if (revision != null && "HEAD".equalsIgnoreCase(revision)) {
@@ -67,8 +79,7 @@ public class SVNBaseCommand {
    * Get target (leaf/end) part of the <code>path</code>, it could be a file
    * or a directory.
    * <p>
-   * The returned string will have no final "/", even if it is a directory. will
-   * be returned.
+   * The returned string will have no final "/", even if it is a directory.
    * 
    * @return Target part of the path.
    */
@@ -146,7 +157,8 @@ public class SVNBaseCommand {
       return true;
     if (obj instanceof SVNBaseCommand) {
       SVNBaseCommand o = (SVNBaseCommand) obj;
-      return (StringUtils.equals(o.path, path) && StringUtils.equals(o.revision, revision));
+      return (StringUtils.equals(o.path, path) && StringUtils.equals(
+          o.revision, revision));
     } else {
       return false;
     }
@@ -157,7 +169,7 @@ public class SVNBaseCommand {
    */
   @Override
   public int hashCode() {
-    //TODO: Impelement!
+    // TODO: Impelement!
     return super.hashCode();
   }
 

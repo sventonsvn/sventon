@@ -10,12 +10,23 @@ public class SVNBaseCommandTest extends TestCase {
     junit.textui.TestRunner.run(SVNBaseCommandTest.class);
   }
   
+  public void testDefaultValues() {
+    SVNBaseCommand command = new SVNBaseCommand();
+    assertEquals("/", command.getPath());
+    assertNull(command.getRevision());
+  }
+  
+  
   public void testSetPath() {
     SVNBaseCommand command = new SVNBaseCommand();
     
-    //null is OK, will be converted to ""
+    //null is OK, will be converted to "/"
     command.setPath(null);
-    assertEquals("", command.getPath());
+    assertEquals("/", command.getPath());
+    
+    //"" (empty string) will also be converted to "/"
+    command.setPath("");
+    assertEquals("/", command.getPath());
     
     command.setPath("Drutten.java");
     assertEquals("Drutten.java", command.getPath());
