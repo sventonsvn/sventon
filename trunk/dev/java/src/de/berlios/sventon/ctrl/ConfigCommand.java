@@ -14,6 +14,7 @@ public class ConfigCommand {
   private String password;
   private String currentDir;
   private String configPath;
+  private String mountPoint;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -53,5 +54,13 @@ public class ConfigCommand {
 
   public String getConfigPath() {
     return this.configPath;
+  }
+
+  public String getMountPoint() {
+    return mountPoint;
+  }
+
+  public void setMountPoint(String mountPoint) {
+    this.mountPoint = mountPoint;
   }
 }

@@ -127,6 +127,9 @@
     <property name="configuredPWD">
       <value>${svn.pwd}</value>
     </property>
+    <property name="repositoryMountPoint">
+    		<value>${svn.mountpoint}</value>
+    </property>
   </bean>
 
   <bean id="urlMapping"

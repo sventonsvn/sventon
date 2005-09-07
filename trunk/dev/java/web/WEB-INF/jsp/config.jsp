@@ -28,6 +28,17 @@
               <input type="text" name="repositoryURL" size="30" value=""/></td>
             </spring:bind>
         </tr>
+        
+        <tr>
+          <td valign="top" width="50%">
+            Enter mount point (leave blank for browsing root):
+          </td>
+          <td valign="top" width="50%">
+            <spring:bind path="command.mountPoint">
+              <input type="text" name="mountPoint" size="30" value=""/></td>
+            </spring:bind>
+        </tr>
+        
         <tr>
           <td valign="top" width="50%">
             Enter user name (leave blank for anonymous):

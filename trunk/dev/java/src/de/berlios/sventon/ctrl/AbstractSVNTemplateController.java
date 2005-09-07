@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,11 +39,11 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * <p>
  * Workflow for this controller:
  * <ol>
- * <li>The controller inspects the user HttpSession to see if it contains a
- * {@link de.berlios.sventon.ctrl.Credentials} object named
- * <code>sventon.credentials</code>. If this object exists information
- * contained in it will be used for authorized repository access, if it does not
+ * <li>The controller inspects the repository configuration object to see if it 
+ * user id and pwd have been provided during setup. If credentials are configured
+ * they will be used for authorized repository access, if they do not
  * exist the controller will try to set up the repository with anonymous access.
+ * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
  * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
@@ -85,11 +84,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
  * <b>Exception handling</b>
  * <dl>
  * <dt>Authentication exception
- * <dd>If a SVN authentication exception occurs during the call the command
- * object and the original request URL is stored in the session (using keys
- * <code>sventon.command</code> and <code>sventon.url</code>), a redirect
- * to the authentication page is made. The authentication page will redirect
- * back to this page after credentials have been collected from the user.
+ * <dd>If a SVN authentication exception occurs during the call the request will
+ * be forwarded to the authenticationfailuare.jsp page.
  * <dt>Other SVN exceptions
  * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
  * page.
