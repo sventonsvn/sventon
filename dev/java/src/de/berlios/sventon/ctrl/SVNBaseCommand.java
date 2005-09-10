@@ -1,9 +1,9 @@
 package de.berlios.sventon.ctrl;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * SVNBaseCommand.
@@ -38,16 +38,11 @@ public class SVNBaseCommand {
    *          The path to set.
    */
   public void setPath(final String path) {
-    if (path != null) {
-      if ("".equals(path)) {
-        this.path = "";
-      } else {
-        this.path = path.trim();
-      }
-    } else {
+    if (path == null || "".equals(path)) {
       this.path = "/";
+    } else {
+      this.path = path.trim();
     }
-
   }
 
   /**

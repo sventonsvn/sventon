@@ -6,10 +6,11 @@ import org.tmatesoft.svn.core.internal.util.SVNPathUtil;
 import org.tmatesoft.svn.core.internal.util.SVNTimeUtil;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Handler class for subversion keyword substitution.
- * <p>
+ * <p/>
  * Valid keywords are:
  * <table>
  * <tr><td>Date</td></tr>
@@ -44,9 +45,9 @@ public final class KeywordHandler {
    * <code>org.tmatesoft.svn.core.internal.wc.SVNTranslator</code>.
    *
    * @param keywords The keywords to compute
-   * @param url The full url to the repository entry
-   * @param author The author of the last commit.
-   * @param date Date in full format
+   * @param url      The full url to the repository entry
+   * @param author   The author of the last commit.
+   * @param date     Date in full format
    * @param revision The revision
    * @return the populated <code>Map</code>
    */
@@ -108,6 +109,25 @@ public final class KeywordHandler {
       }
     }
     return map;
+  }
+
+  /**
+   * Substitutes keywords in content using provided keyword map.
+   *
+   * @param keywordsMap The keyword map. Usually gotten from a call to
+   *                    <code>KeywordHandler.computeKeywords()</code>.
+   * @param content     The content
+   * @return Content with substituted keywords.
+   */
+  public static String substitute(Map keywordsMap, String content) {
+    Iterator keywords = keywordsMap.keySet().iterator();
+    while (keywords.hasNext()) {
+      String keyword = (String) keywords.next();
+      Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
+      String expandedKeyword = (String) keywordsMap.get(keyword);
+      content = keywordPattern.matcher(content).replaceAll("\\$" + keyword + ": " + expandedKeyword + " \\$");
+    }
+    return content;
   }
 
 }

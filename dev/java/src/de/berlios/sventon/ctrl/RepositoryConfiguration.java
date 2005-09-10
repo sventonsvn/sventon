@@ -81,7 +81,7 @@ public class RepositoryConfiguration {
   }
 
   /**
-   * Sets the repository root.
+   * Sets the repository root. Root URL will never end with a slash.
    * 
    * @param repositoryRoot The root url.
    */
