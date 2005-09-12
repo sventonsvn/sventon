@@ -55,7 +55,7 @@
         <td class="sventonCol2"><img src="images/icon_dir.gif"/></td>
         <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>">
           <c:choose>
-            <c:when test="${search}"><c:out value="${entry.friendlyFullEntryName}" /></c:when>
+            <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}" /></c:when>
             <c:otherwise><c:out value="${entry.entry.name}" /></c:otherwise>
           </c:choose>
           </a></td>
@@ -63,7 +63,7 @@
         <td class="sventonCol2"><img src="images/icon_file.gif"/></td>
         <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">
           <c:choose>
-            <c:when test="${search}"><c:out value="${entry.friendlyFullEntryName}"/></c:when>
+            <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}"/></c:when>
             <c:otherwise><c:out value="${entry.entry.name}"/></c:otherwise>
           </c:choose>
           </a></td>
@@ -92,7 +92,7 @@
       <td colspan="2">
         <select class="sventonSelect" name="actionSelect">
           <option class="sventonSelectOption">Actions...</option>
-          <option value="zip">&nbsp;&nbsp;Download as zip</option>
+          <!--<option value="zip">&nbsp;&nbsp;Download as zip</option>-->
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
         </select>
       </td>

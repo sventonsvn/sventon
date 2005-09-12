@@ -36,12 +36,19 @@
     </table>
 
     <c:choose>
-      <c:when test="${empty fileContents}">
+      <c:when test="${isBinary}">
+        <c:choose>
+          <c:when test="${isImage}">
 <p>
   <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
     <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb"/>
   </a>
 </p>
+          </c:when>
+          <c:otherwise>
+<p>File is in binary format.</p>
+          </c:otherwise>
+        </c:choose>
       </c:when>
      	<c:otherwise>
 <p>
