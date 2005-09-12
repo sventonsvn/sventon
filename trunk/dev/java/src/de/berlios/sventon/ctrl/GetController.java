@@ -1,9 +1,12 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.util.SventonCache;
+import net.sf.ehcache.CacheException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -47,47 +51,81 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
     String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
     ServletOutputStream output = null;
+    ByteArrayOutputStream baos = null;
     logger.debug("displayType: " + displayType);
 
     try {
       output = response.getOutputStream();
 
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
-        logger.debug("Getting file as 'thumbnail'.");
+        logger.debug("Getting file as 'thumbnail'");
         response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
-        StringBuilder urlString = new StringBuilder("http://");
-        urlString.append(request.getServerName());
-        urlString.append(":");
-        urlString.append(request.getServerPort());
-        urlString.append(request.getRequestURI());
-        urlString.append("?");
-        urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
-        URL url = new URL(urlString.toString());
-        logger.debug("Getting full size image from url: " + url);
-        BufferedImage image = ImageIO.read(url);
-        int orgWidth = image.getWidth();
-        int orgHeight = image.getHeight();
-        // Get preferred thumbnail dimension.
-        Dimension thumbnailSize = ImageUtil.getThumbnailSize(orgWidth, orgHeight);
-        // Resize image.
-        Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-        BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
-        response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
-        // Write thumbnail to output stream.
-        ImageIO.write(biRescaled, THUMBNAIL_FORMAT, output);
+
+        // Check if the thumbnail exists on the cache
+        HashMap properties = new HashMap();
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
+        logger.debug(properties);
+        String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
+        logger.debug("Using cachekey: " + cacheKey);
+        byte[] thumbnailData = null;
+        try {
+          thumbnailData = (byte[]) SventonCache.INSTANCE.get(cacheKey);
+        } catch(CacheException ce) {
+          logger.warn(ce);
+        }
+        if (thumbnailData != null) {
+          // Writing cached thumbnail image to ServletOutputStream
+          output.write(thumbnailData);
+        } else {
+          // Thumbnail was not in the cache.
+          // Create the thumbnail.
+          StringBuilder urlString = new StringBuilder("http://");
+          urlString.append(request.getServerName());
+          urlString.append(":");
+          urlString.append(request.getServerPort());
+          urlString.append(request.getRequestURI());
+          urlString.append("?");
+          urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
+          URL url = new URL(urlString.toString());
+          logger.debug("Getting full size image from url: " + url);
+          BufferedImage image = ImageIO.read(url);
+          int orgWidth = image.getWidth();
+          int orgHeight = image.getHeight();
+          // Get preferred thumbnail dimension.
+          Dimension thumbnailSize = ImageUtil.getThumbnailSize(orgWidth, orgHeight);
+          // Resize image.
+          Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
+          BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+          response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
+
+          // Write thumbnail to output stream.
+          baos = new ByteArrayOutputStream();
+          ImageIO.write(biRescaled, THUMBNAIL_FORMAT, baos);
+
+          // Putting created thumbnail image into the cache.
+          logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+          try {
+            SventonCache.INSTANCE.put(cacheKey, baos.toByteArray());
+          } catch (CacheException ce) {
+            logger.warn("Unable to cache thumbnail.");
+          }
+          // Write thumbnail to ServletOutputStream.
+          output.write(baos.toByteArray());
+        }
         output.flush();
         output.close();
       } else {
         if (DISPLAY_TYPE_INLINE.equals(displayType)) {
-          logger.debug("Getting file as 'inline'.");
+          logger.debug("Getting file as 'inline'");
           response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         } else {
-          logger.debug("Getting file as 'attachment'.");
+          logger.debug("Getting file as 'attachment'");
           response.setContentType(DEFAULT_CONTENT_TYPE);
           response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
         }
         HashMap properties = new HashMap();
+        // Get the image data and write it to the outputStream.
         repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
         logger.debug(properties);
       }

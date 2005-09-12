@@ -51,26 +51,29 @@ public class SventonCache {
 
   /**
    * Puts an object into the cache.
-   * @param key The cache key - <code>toString</code> will be executed on the key.
+   * @param cacheKey The cache cacheKey - <code>toString</code> will be executed on the cacheKey.
    * @param value The object to cache.
    * @throws CacheException if unable to cache object.
+   * @throws IllegalArgumentException if cache cacheKey is null.
    */
-  public void put(final Object key, final Object value) throws CacheException {
-    String cacheKey = key.toString();
-    Element element = new Element(cacheKey, (Serializable) value);
+  public void put(final Object cacheKey, final Object value) throws CacheException {
+    if (cacheKey == null) {
+      throw new IllegalArgumentException("Cachekey cannot be null.");
+    }
+    Element element = new Element(cacheKey.toString(), (Serializable) value);
     cache.put(element);
   }
 
   /**
    * Gets an object from the cache.
    * @param key The key to the object to get.
-   * @return The cached object.
+   * @return The cached object. <code>null</code> if cache miss.
    * @throws CacheException if unable to get object from cache.
    */
   public Object get(final Object key) throws CacheException {
     String cacheKey = key.toString();
     Element element = cache.get(cacheKey);
-    return element.getValue();
+    return element != null ? element.getValue() : null;
   }
 
   /**
