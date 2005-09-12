@@ -15,12 +15,10 @@ public class SventonCacheTest extends TestCase {
     assertEquals(new Integer(20), SventonCache.INSTANCE.get("test2"));
     assertEquals(2, SventonCache.INSTANCE.getHitCount());
     try {
-      SventonCache.INSTANCE.get("test3");
-      fail("Should throw NPE.");
-    } catch (NullPointerException npe) {
-      // expected
+      assertNull(SventonCache.INSTANCE.get("test3"));
+    } catch (Exception e) {
+      fail("Should not cause exception");
     }
-
   }
 
 }
