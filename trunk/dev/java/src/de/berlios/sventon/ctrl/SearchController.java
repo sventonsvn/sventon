@@ -37,7 +37,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", entries);
-    model.put("search", true);  // Indicates that path should be shown in browser view.
+    model.put("isSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);
   }
 }
