@@ -20,7 +20,6 @@
               <b>svn://svn.berlios.de/sventon/</b><br>
               <b>svn+ssh://domain/project/</b><br>
               <b>http://domain/project/trunk/</b><br>
-
             </p>
           </td>
           <td valign="top" width="50%">

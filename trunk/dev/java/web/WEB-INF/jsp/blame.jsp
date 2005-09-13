@@ -36,7 +36,7 @@
         </table>
     </div>
 
-  </p>&nbsp;</p>
+  <p>&nbsp;</p>
   
   <table class="sventonFunctionLinksTable">
     <tr>

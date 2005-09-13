@@ -37,7 +37,7 @@
         </table>
     </div>
 
-  </p>&nbsp;</p>
+  <p>&nbsp;</p>
 
 
     <table class="sventonFunctionLinksTable">
@@ -72,11 +72,9 @@
         </c:choose>
       </c:when>
      	<c:otherwise>
-<p>
 <pre class="codeBlock">
 <c:out value="${fileContents}" escapeXml="false"/>
 </pre>
-</p>
 </c:otherwise>
 </c:choose>
 <br>

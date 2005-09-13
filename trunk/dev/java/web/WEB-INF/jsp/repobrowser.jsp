@@ -25,7 +25,7 @@
         </table>
     </div>
 
-</p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <div id="entriesDiv" class="sventonEntriesDiv">
 <form method="post" name="entriesForm" onsubmit="return doAction(entriesForm);">
@@ -65,7 +65,7 @@
       %>
         <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${entry.fullEntryName}" />"/></td>
         <% if (nodeKind == SVNNodeKind.DIR) { %>
-        <td class="sventonCol2"><img src="images/icon_dir.gif"/></td>
+        <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>">
           <c:choose>
             <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}" /></c:when>
@@ -73,7 +73,7 @@
           </c:choose>
           </a></td>
         <% } else { %>
-        <td class="sventonCol2"><img src="images/icon_file.gif"/></td>
+        <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
         <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">
           <c:choose>
             <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}"/></c:when>
