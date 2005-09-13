@@ -31,7 +31,14 @@
         <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
         <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
         <td><a href="#">[Diff with previous]</a></td>
+        <c:choose>
+       <c:when test="${empty fileContents}">
+       <td>[Blame]</td>
+       </c:when>
+       <c:otherwise>
         <td><a href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
+        </c:otherwise>
+        </c:choose>
       </tr>
     </table>
 

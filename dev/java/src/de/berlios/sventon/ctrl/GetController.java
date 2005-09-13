@@ -47,7 +47,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
-    logger.debug("Getting file: " + svnCommand.getPath());
+    logger.debug("Getting file: " + svnCommand.getCompletePath());
 
     String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
     ServletOutputStream output = null;
@@ -126,7 +126,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         }
         HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
+        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, output);
         logger.debug(properties);
       }
       output.flush();

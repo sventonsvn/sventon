@@ -53,7 +53,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     session.removeAttribute(PAGES_SESSION_KEY);
     session.removeAttribute(PAGES_COMMAND_SESSION_KEY);
 
-    String path = svnCommand.getPath();
+    String path = svnCommand.getCompletePath();
 
     if (!path.startsWith("/")) {
       path = "/" + path;

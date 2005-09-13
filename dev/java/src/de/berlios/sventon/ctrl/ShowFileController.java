@@ -30,11 +30,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     Map<String, Object> model = new HashMap<String, Object>();
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    logger.debug("Assembling file contents for: " + svnCommand.getPath());
+    logger.debug("Assembling file contents for: " + svnCommand.getCompletePath());
 
     HashMap properties = new HashMap();
     // Get the file's properties without requesting the content.
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
+    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
     logger.debug(properties);
 
     if (!SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
@@ -44,13 +44,13 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       model.put("isImage", ImageUtil.isImageFile(svnCommand.getFileExtension()));
     } else {
       // Get the file's content. We can skip the properties in this case.
-      repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
+      repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
       String fileContents = outStream.toString();
       // Check if keywords should be expanded.
       String keywords = (String) properties.get(SVNProperty.KEYWORDS);
       Map keywordsMap = null;
       if (keywords != null) {
-        String url = getRepositoryConfiguration().getUrl() + svnCommand.getPath();
+        String url = getRepositoryConfiguration().getUrl() + svnCommand.getCompletePath();
         String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
         String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
         String rev = (String) properties.get(SVNProperty.COMMITTED_REVISION);

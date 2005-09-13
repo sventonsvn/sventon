@@ -10,8 +10,8 @@ import java.util.Map;
  * <p>
  * Command class used to bind and pass servlet parameter arguments in sventon.
  * <p>
- * A newly created instance is initialized to have path <code>/</code> and revision
- * <code>null</code>.
+ * A newly created instance is initialized to have path <code>/</code> and
+ * revision <code>null</code>.
  * 
  * @author patrikfr@users.berlios.de
  */
@@ -23,9 +23,9 @@ public class SVNBaseCommand {
   /** The revision. */
   private String revision = null;
 
-  /**
-   * @return Returns the path.
-   */
+  /** Mount point. */
+  private String mountPoint;
+
   public String getPath() {
     return path;
   }
@@ -34,8 +34,7 @@ public class SVNBaseCommand {
    * Set path. <code>null</code> and <code>""</code> arguments will be
    * converted <code>/</code>
    * 
-   * @param path
-   *          The path to set.
+   * @param path The path to set.
    */
   public void setPath(final String path) {
     if (path == null || "".equals(path)) {
@@ -59,14 +58,36 @@ public class SVNBaseCommand {
    * All case variations of the logical name "HEAD" will be converted to HEAD,
    * all other revision arguments will be set as is.
    * 
-   * @param revision
-   *          The revision to set.
+   * @param revision The revision to set.
    */
   public void setRevision(final String revision) {
     if (revision != null && "HEAD".equalsIgnoreCase(revision)) {
       this.revision = "HEAD";
     } else {
       this.revision = revision;
+    }
+  }
+
+  public void setMountPoint(final String mountPoint) {
+    this.mountPoint = mountPoint;
+  }
+
+  public String getMountPoint(final boolean stripSplash) {
+    if (stripSplash) {
+      return StringUtils.removeStart(mountPoint, "/");
+    } else {
+      return mountPoint;
+    }
+  }
+
+  /**
+   * @return Returns the path including the mount point offset, if any.
+   */
+  public String getCompletePath() {
+    if (mountPoint != null) {
+      return mountPoint + path;
+    } else {
+      return path;
     }
   }
 
@@ -80,7 +101,7 @@ public class SVNBaseCommand {
    */
   public String getTarget() {
 
-    String[] splittedString = path.split("/");
+    String[] splittedString = getPath().split("/");
     int length = splittedString.length;
     if (length == 0) {
       return "";
@@ -92,7 +113,8 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the end/leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getPath()}
+   * {@link SVNBaseCommand#getCompletePath()}. Mountpoint offset will be
+   * included.
    * <p>
    * The returned string will have a final "/", if the path info is empty, ""
    * (empty string) will be returned.
@@ -100,7 +122,7 @@ public class SVNBaseCommand {
    * @return Path excluding taget (end/leaf)
    */
   public String getPathPart() {
-    String work = path;
+    String work = getPath();
     if (work.endsWith("/")) {
       work = work.substring(0, work.length() - 1);
     }
@@ -114,15 +136,22 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Return the contents of this object as a map model where properties are
-   * mapped to map values.
+   * Return the contents of this object as a map model.
+   * <p>
+   * Model data keys:
+   * <ul>
+   * <li><code>completePath</code></li>
+   * <li><code>revision</code></li>
+   * <li><code>path</code></li>
+   * </ul>
    * 
    * @return The model map.
    */
   public Map<String, Object> asModel() {
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("path", getPath());
+    m.put("completePath", getCompletePath());
     m.put("revision", getRevision());
+    m.put("path", getPath());
     return m;
   }
 
@@ -139,8 +168,12 @@ public class SVNBaseCommand {
     return fileExtension;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public String toString() {
-    return "SVNBaseCommand{path=" + path + ", revision=" + revision + "}";
+    return "SVNBaseCommand{path=" + path + ", " + "completePah=" + getCompletePath() + ", " + "revision=" + revision
+        + "}";
   }
 
   /**
@@ -152,8 +185,7 @@ public class SVNBaseCommand {
       return true;
     if (obj instanceof SVNBaseCommand) {
       SVNBaseCommand o = (SVNBaseCommand) obj;
-      return (StringUtils.equals(o.path, path) && StringUtils.equals(
-          o.revision, revision));
+      return (StringUtils.equals(o.path, path) && StringUtils.equals(o.revision, revision));
     } else {
       return false;
     }
