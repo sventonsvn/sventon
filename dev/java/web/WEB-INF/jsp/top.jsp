@@ -1,7 +1,7 @@
 <%@ page session="false"%>
 <%@ include file="/WEB-INF/jsp/sventonbar.jsp"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
-<p/>
+
 <table class="sventonTopTable">
   <tr>
     <td class="sventonHeadlines">
@@ -37,11 +37,12 @@
     </td>
   </tr>
 </table>
-<p/>
 
-<table class="sventonSpringErrorMessageTable">
-<tr><td><spring:hasBindErrors name="command"><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font> </spring:hasBindErrors></td></tr>
-</table>
+<spring:hasBindErrors name="command">
+  <table class="sventonSpringErrorMessageTable">
+    <tr><td><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font></td></tr>
+  </table>
+</spring:hasBindErrors>
 
 <form name="gotoForm" method="post" action="repobrowser.svn">
 <table class="sventonRepositoryFunctionsTable">
