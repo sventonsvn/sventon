@@ -41,6 +41,9 @@ public class RepositoryEntryTest extends TestCase {
   public void testGetFullEntryNameStripMountPoint() throws Exception {
     SVNDirEntry entry = new SVNDirEntry("test.file", null, 1, false, 1, new Date(), "A");
     RepositoryEntry repositoryEntry = new RepositoryEntry(entry, "/trunk/dir/", "/trunk");
+
+    assertEquals("/trunk/dir/test.file", repositoryEntry.getFriendlyFullEntryName());
+    assertEquals("/trunk/dir/test.file", repositoryEntry.getFullEntryName());
     assertEquals("/dir/test.file", repositoryEntry.getFullEntryNameStripMountPoint());
 
     repositoryEntry = new RepositoryEntry(entry, "/trunk/dir/");

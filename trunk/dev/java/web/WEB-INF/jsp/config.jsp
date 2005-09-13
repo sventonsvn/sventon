@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <td colspan="2">
-The file <b>sventon.log</b> will be stored in current directory, currently that is <b>${command.currentDir}</b>.
+The file <b>sventon.log</b> will be stored in current directory, currently that is <b>${command.currentDir}</b>.<br>
 Logging properties can be customized by changing properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
           </td>
         </tr>

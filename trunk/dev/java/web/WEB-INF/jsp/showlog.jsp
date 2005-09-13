@@ -21,7 +21,7 @@
   </c:url>
 
   <p class="sventonHeader">
-  Log Messages - <c:out value="${command.target}"/>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
+  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
   </p>
 
     <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
@@ -35,7 +35,7 @@
         </table>
     </div>
 
-  <p>&nbsp;</p>
+  <br/>
   
   <table class="sventonFunctionLinksTable">
     <tr>

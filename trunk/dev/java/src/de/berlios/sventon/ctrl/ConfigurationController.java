@@ -100,6 +100,8 @@ public class ConfigurationController extends AbstractFormController {
         return new ModelAndView("config", exception.getModel());
       }
 
+      //TODO: validate entered url by opening a connection.
+
       ConfigCommand confCommand = (ConfigCommand) command;
       Properties config = new Properties();
       config.put(PROPERTY_KEY_REPOSITORY_URL, confCommand.getRepositoryURL());

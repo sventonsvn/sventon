@@ -11,7 +11,7 @@
 <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
   <p class="sventonHeader">
-  Repository Browser - <c:out value="${command.target}"/>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
+  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
   </p>
 
     <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
@@ -25,7 +25,7 @@
         </table>
     </div>
 
-<p>&nbsp;</p>
+<br/>
 
 <div id="entriesDiv" class="sventonEntriesDiv">
 <form method="post" name="entriesForm" onsubmit="return doAction(entriesForm);">
