@@ -34,7 +34,7 @@ public class RepositoryEntryComparatorTest extends TestCase {
     super.tearDown();
   }
 
-  public final void testCompare() {
+  public void testCompare() {
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry("FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12)
         .getTime(), "patrikfr"), "");

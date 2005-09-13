@@ -25,14 +25,14 @@ public class LogEntryBundle {
   /**
    * @return Returns the pathAtRevision.
    */
-  public final String getPathAtRevision() {
+  public String getPathAtRevision() {
     return pathAtRevision;
   }
 
   /**
    * @return Returns the svnLogEntry.
    */
-  public final SVNLogEntry getSvnLogEntry() {
+  public SVNLogEntry getSvnLogEntry() {
     return svnLogEntry;
   }
   

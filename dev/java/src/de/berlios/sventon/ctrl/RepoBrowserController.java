@@ -40,12 +40,13 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
       dir.add(new RepositoryEntry((SVNDirEntry) entry, completePath, svnCommand.getMountPoint(false)));
     }
 
-    logger.debug(properties);
     Collections.sort(dir, new RepositoryEntryComparator(NAME, true));
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", dir);
+    logger.debug(properties);
+    model.put("properties", properties);
 
     return new ModelAndView("repobrowser", model);
   }

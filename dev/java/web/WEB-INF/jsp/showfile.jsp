@@ -23,8 +23,22 @@
     </c:url>
     
     <p class="sventonHeader">
-    Show File - <c:out value="${command.target}"/>
+    Show File - <c:out value="${command.target}"/>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
     </p>
+
+    <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
+        <table class="sventonPropertiesTable">
+          <c:forEach items="${properties}" var="property">
+            <tr>
+              <td><b><c:out value="${property.key}"/></b></td>
+              <td><c:out value="${property.value}"/></td>
+            </tr>
+          </c:forEach>
+        </table>
+    </div>
+
+  </p>&nbsp;</p>
+
 
     <table class="sventonFunctionLinksTable">
       <tr>
