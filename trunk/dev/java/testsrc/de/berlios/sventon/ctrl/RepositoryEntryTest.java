@@ -26,7 +26,8 @@ public class RepositoryEntryTest extends TestCase {
   }
 
   public void testGetFriendlyFullEntryNameLongName() throws Exception {
-    SVNDirEntry e = new SVNDirEntry("thisisafilenamewithmorethanfiftycharactersinitreallynotperfect.fil", null, 1, false, 1, new Date(), "A");
+    SVNDirEntry e = new SVNDirEntry("thisisafilenamewithmorethanfiftycharactersinitreallynotperfect.fil", null, 1,
+        false, 1, new Date(), "A");
     RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/");
     assertEquals("...morethanfiftycharactersinitreallynotperfect.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
@@ -35,6 +36,15 @@ public class RepositoryEntryTest extends TestCase {
     indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/");
     assertEquals("...eallylongfilenamejustfortestingpurposesonly.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
+  }
+
+  public void testGetFullEntryNameStripMountPoint() throws Exception {
+    SVNDirEntry entry = new SVNDirEntry("test.file", null, 1, false, 1, new Date(), "A");
+    RepositoryEntry repositoryEntry = new RepositoryEntry(entry, "/trunk/dir/", "/trunk");
+    assertEquals("/dir/test.file", repositoryEntry.getFullEntryNameStripMountPoint());
+
+    repositoryEntry = new RepositoryEntry(entry, "/trunk/dir/");
+    assertEquals("/trunk/dir/test.file", repositoryEntry.getFullEntryNameStripMountPoint());
   }
 
 }

@@ -26,7 +26,7 @@ public class BlameController extends AbstractSVNTemplateController implements Co
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
     
-    logger.debug("Blaming path: " + svnCommand.getPath() + ", rev: " + FIRST_REVISION + " - " + revision);
+    logger.debug("Blaming path: " + svnCommand.getCompletePath() + ", rev: " + FIRST_REVISION + " - " + revision);
     
     BlameHandler blameHandler = new BlameHandler();
 

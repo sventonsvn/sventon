@@ -16,6 +16,7 @@ import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
 
 /**
  * RepoBrowserController.
+ * 
  * @author patrikfr@users.berlios.de
  */
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
@@ -23,15 +24,20 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response) throws SVNException {
-    
+
     List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    
-    String path = svnCommand.getPath();
-    logger.debug("Getting directory contents for: " + path);
+
+    // Update trailing / for path
+    if (!svnCommand.getCompletePath().endsWith("/")) {
+      svnCommand.setPath(svnCommand.getPath() + "/");
+    }
+
+    String completePath = svnCommand.getCompletePath();
+    logger.debug("Getting directory contents for: " + completePath);
     HashMap properties = new HashMap();
-    Collection entries = repository.getDir(path, revision.getNumber(), properties, (Collection) null);
+    Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
     for (Object entry : entries) {
-      dir.add(new RepositoryEntry((SVNDirEntry) entry, path));
+      dir.add(new RepositoryEntry((SVNDirEntry) entry, completePath, svnCommand.getMountPoint(false)));
     }
 
     logger.debug(properties);
@@ -40,11 +46,6 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", dir);
-    
-    //Update trailing / for path
-    if (!path.endsWith("/")) {
-      svnCommand.setPath(path + "/");
-    }
 
     return new ModelAndView("repobrowser", model);
   }

@@ -44,7 +44,7 @@ public class ShowLogPageController extends AbstractSVNTemplateController {
     // Retrieve original logs command, to detect tampering of request data.
     SVNBaseCommand logsCommand = (SVNBaseCommand) session.getAttribute(PAGES_COMMAND_SESSION_KEY);
 
-    String path = svnCommand.getPath();
+    String path = svnCommand.getCompletePath();
     if (!path.startsWith("/")) {
       path = "/" + path;
     }

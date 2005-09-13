@@ -7,12 +7,12 @@ import java.util.Map;
 public class SVNBaseCommandTest extends TestCase {
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(SVNBaseCommandTest.class);
+    junit.textui.TestRunner.run(SVNBaseCommandTest.class); 
   }
   
   public void testDefaultValues() {
     SVNBaseCommand command = new SVNBaseCommand();
-    assertEquals("/", command.getPath());
+    assertEquals("/", command.getCompletePath());
     assertNull(command.getRevision());
   }
   
@@ -22,14 +22,23 @@ public class SVNBaseCommandTest extends TestCase {
     
     //null is OK, will be converted to "/"
     command.setPath(null);
-    assertEquals("/", command.getPath());
+    assertEquals("/", command.getCompletePath());
     
     //"" (empty string) will also be converted to "/"
     command.setPath("");
-    assertEquals("/", command.getPath());
+    assertEquals("/", command.getCompletePath());
     
-    command.setPath("Drutten.java");
-    assertEquals("Drutten.java", command.getPath());
+    command.setPath("Asdf.java");
+    assertEquals("Asdf.java", command.getCompletePath());
+    
+    command.setMountPoint("/trunk");
+    command.setPath("/src/Asdf.java");
+    assertEquals("/trunk/src/Asdf.java", command.getCompletePath());
+    assertEquals("/src/Asdf.java", command.getPath());
+    
+    command.setPath(""); //<- "" is converted to /
+    assertEquals("/trunk/", command.getCompletePath());
+    assertEquals("/", command.getPath()); //<- converted
     
   }
   
@@ -60,7 +69,7 @@ public class SVNBaseCommandTest extends TestCase {
   public void testGetCompletePath() {
     SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("trunk/src/File.java");
-    assertEquals("trunk/src/File.java", command.getPath());
+    assertEquals("trunk/src/File.java", command.getCompletePath());
   }
 
   public void testGetTarget() {
@@ -101,12 +110,14 @@ public class SVNBaseCommandTest extends TestCase {
   
   public void testAsMap() throws Exception {
     SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("/trunk/src/File.java");
+    command.setPath("/src/File.java");
     command.setRevision("123");
+    command.setMountPoint("/trunk");
     Map<String, Object> model = command.asModel();
     
-    assertEquals("/trunk/src/File.java", model.get("path"));
+    assertEquals("/src/File.java", model.get("path"));
     assertEquals("123", model.get("revision"));
+    assertEquals("/trunk/src/File.java", model.get("completePath"));
   }
 
   public void testGetFileExtension() throws Exception {
@@ -119,5 +130,13 @@ public class SVNBaseCommandTest extends TestCase {
 
     command.setPath("trunk/src/.htpasswd");
     assertEquals("htpasswd", command.getFileExtension());
+  }
+  
+  public void testGetMountPoint() throws Exception {
+    SVNBaseCommand command = new SVNBaseCommand();
+    command.setPath("/src/File.java");
+    command.setMountPoint("/trunk");
+    assertEquals("/trunk", command.getMountPoint(false));
+    assertEquals("trunk", command.getMountPoint(true));
   }
 }

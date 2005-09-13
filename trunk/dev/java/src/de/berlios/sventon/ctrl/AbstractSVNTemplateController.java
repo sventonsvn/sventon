@@ -134,6 +134,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
       Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
+    svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
+    
+    logger.debug("GoTo form submit with command: " + command);
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
@@ -154,7 +157,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     try {
 
       logger.debug("Checking node kind for command: " + svnCommand);
-      SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
+      SVNNodeKind kind = repository.checkPath(svnCommand.getCompletePath(), revision.getNumber());
 
       logger.debug("Node kind: " + kind);
 
@@ -214,6 +217,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
+    svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {

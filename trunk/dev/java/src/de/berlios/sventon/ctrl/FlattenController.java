@@ -27,7 +27,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
 
     // Make sure the path starts with a slash as that
     // is the path structure of the revision index.
-    String fromPath = svnCommand.getPath();
+    String fromPath = svnCommand.getCompletePath();
     if (!fromPath.startsWith("/")) {
       logger.debug("Appending initial slash.");
       fromPath = "/" + fromPath;
