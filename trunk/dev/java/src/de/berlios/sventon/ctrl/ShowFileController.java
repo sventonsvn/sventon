@@ -36,7 +36,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     // Get the file's properties without requesting the content.
     repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
     logger.debug(properties);
-
+    model.put("properties", properties);
     if (!SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       // It's a binary file - we don't have to read the content.
       logger.debug("Binary file detected.");
@@ -62,7 +62,6 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       logger.debug("Create model");
       model.put("fileContents", fileContents);
     }
-
     return new ModelAndView("showfile", model);
   }
 

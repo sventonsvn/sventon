@@ -16,6 +16,12 @@ public final class ImageUtil {
   public static final int THUMBNAIL_SIZE = 200;
 
   /**
+   * Private - not supposed to instantiate.
+   */
+  private ImageUtil() {
+  }
+
+  /**
    * Converts an <code>Image</code> instance into a <code>BufferedImage</code> instance.
    *
    * @param image The <code>Image<code> instance.

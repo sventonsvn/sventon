@@ -48,6 +48,7 @@ public class RepositoryEntry {
    * 
    * @param entry The <code>SVNDirEntry</code>.
    * @param entryPath The entry repository path.
+   * @param mountPoint The mount point in the repository.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
   public RepositoryEntry(final SVNDirEntry entry, final String entryPath, final String mountPoint) {

@@ -286,8 +286,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * 
    * @param exception Bind exception from Spring MVC validation.
    * @param svnCommand Command object.
-   * @param credentials Credentials, may be <code>null</code> if the user is
-   *          not authenticated.
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")

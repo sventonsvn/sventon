@@ -5,8 +5,7 @@
 <table class="sventonTopTable">
   <tr>
     <td class="sventonHeadlines">
-      Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if></p>
-      </span>
+      Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if>
     </td>
     <td align="right">
       <form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
@@ -37,7 +36,6 @@
       <c:out value="${command.target}"/>
     </td>
   </tr>
- <p>
 </table>
 <p/>
 

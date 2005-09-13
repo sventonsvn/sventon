@@ -156,6 +156,15 @@ th {
   width: 100%;
 }
 
+.sventonPropertiesDiv {
+}
+
+.sventonPropertiesTable {
+  background-color: #eeeeff;
+  border: 1px solid black;
+  width: 950px;
+}
+
 .sventonLineNo {
   text-decoration: none;
 }

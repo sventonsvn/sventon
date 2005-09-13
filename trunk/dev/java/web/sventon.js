@@ -50,8 +50,19 @@ function doSearch(formName) {
   }
 }
 
+// function to hide/show div layers
+function toggleDivVisibility(theId) {
+  var object = document.getElementById(theId);
+  if (object.style.visibility == 'visible') {
+    object.style.visibility = 'hidden';
+  } else {
+    object.style.visibility = 'visible';
+  }
+  return;
+}
+
 // function to hide/show extended revision log information
-function toggleLogInfo(theId) {
+function toggleElementVisibility(theId) {
   var object = document.getElementById(theId);
   if (object.style.display == '') {
     object.style.display = 'none';

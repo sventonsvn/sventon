@@ -1,15 +1,5 @@
 package de.berlios.sventon.ctrl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -20,15 +10,20 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
+
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
  * protocol http/https.
- * <p>
+ * <p/>
  * The log entries will be paged if the number of entries exceeds max page siz,
  * {@link #PAGE_SIZE}. Paged log entries are stored in the user HTTP session
  * using key <code>sventon.logEntryPages</code>. The type of this object is
  * <code>List<List<SVNLogEntry>></code>.
- * 
+ *
  * @author patrikfr@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
@@ -45,8 +40,8 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response) throws SVNException {
+      protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
+                                       HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
     // Remove any stale pagees from the session, if any
     HttpSession session = request.getSession(true);
@@ -59,11 +54,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
       path = "/" + path;
     }
 
-    String[] targetPaths = new String[] { path };
+    String[] targetPaths = new String[]{path};
     String pathAtRevision = targetPaths[0];
 
     List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
-    
+
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
@@ -114,16 +109,16 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     model.put("isFile", nodeKind == SVNNodeKind.FILE);
     model.put("pageCount", pages.size());
     model.put("pageNumber", 1);
-
+    model.put("properties", new HashMap());   //TODO: Replace with valid entry properties
     return new ModelAndView("showlog", model);
   }
 
   /**
    * Create pages of the given log entries, the pages are stored as lists of
    * <code>SVNLogEntry</code>.
-   * <p>
+   * <p/>
    * Visibility set to protected for testing purposes...
-   * 
+   *
    * @param logEntries List of <code>SVNLogEntry</code> to page.
    * @return List of pages, there will always be at least one (possibly empty)
    *         page.

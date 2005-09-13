@@ -16,6 +16,12 @@ public final class ByteFormatter {
   public static final long s1TB = 1024L * 1024L * 1024L * 1024L;
 
   /**
+   * Private - not supposed to instantiate.
+   */
+  private ByteFormatter() {
+  }
+  
+  /**
    * Formats given byte size value.
    * <br>
    * Examples:

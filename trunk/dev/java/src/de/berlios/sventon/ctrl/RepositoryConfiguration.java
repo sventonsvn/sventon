@@ -12,7 +12,7 @@ import de.berlios.sventon.svnsupport.SventonSVNLogger;
 
 /**
  * Small wrapper class to hold connection info for the repository.
- * <p>
+ * <p/>
  * The following should be configured for sventon to work propertly:
  * <ul>
  * <li>Subverison repository URL, e.g.
@@ -27,34 +27,46 @@ import de.berlios.sventon.svnsupport.SventonSVNLogger;
  * configuring a specific user and password for all sventon users to use is the
  * preferred setup.
  * </ul>
- * <p>
+ * <p/>
  * The class also performs JavaSVN initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
  * the application starts.
- * <p>
+ * <p/>
  * This class is preferably configured using Spring.
- * 
+ *
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
  */
 public class RepositoryConfiguration {
 
-  /** Will be <code>true</code> if all parameters are ok. */
+  /**
+   * Will be <code>true</code> if all parameters are ok.
+   */
   private boolean configured = true;
 
-  /** The logging instance. */
+  /**
+   * The logging instance.
+   */
   protected final Log logger = LogFactory.getLog(getClass());
 
-  /** The url. */
+  /**
+   * The url.
+   */
   private String repositoryURL = null;
 
-  /** The repository location. */
+  /**
+   * The repository location.
+   */
   private SVNURL svnURL = null;
 
-  /** Path to the Subversion configuration libraries */
+  /**
+   * Path to the Subversion configuration libraries
+   */
   private String SVNConfigurationPath = null;
 
-  /** Mount point, used to set the browser root in the repository */
+  /**
+   * Mount point, used to set the browser root in the repository
+   */
   private String repositoryMountPoint = null;
 
   /**
@@ -82,13 +94,12 @@ public class RepositoryConfiguration {
 
   /**
    * Sets the repository root. Root URL will never end with a slash.
-   * 
+   *
    * @param repositoryRoot The root url.
    */
   public void setRepositoryRoot(final String repositoryRoot) {
     if (repositoryRoot == null) {
-      throw new IllegalArgumentException(
-          "Provided repository root url was null.");
+      throw new IllegalArgumentException("Provided repository root url was null.");
     }
     // Strip last slash if any.
     this.repositoryURL = repositoryRoot;
@@ -110,7 +121,7 @@ public class RepositoryConfiguration {
 
   /**
    * Get configured Password, if any.
-   * 
+   *
    * @return Returns the configuredPWD.
    */
   public String getConfiguredPWD() {
@@ -120,7 +131,7 @@ public class RepositoryConfiguration {
   /**
    * Set a configured password. This password will be used for repository
    * access, together with configured user ID, {@see #setConfiguredUID(String)}
-   * 
+   *
    * @param configuredPWD The configuredPWD to set, may be <code>null</code>.
    */
   public void setConfiguredPWD(final String configuredPWD) {
@@ -129,7 +140,7 @@ public class RepositoryConfiguration {
 
   /**
    * Get configured user ID, if any.
-   * 
+   *
    * @return Returns the configuredUID.
    */
   public String getConfiguredUID() {
@@ -139,7 +150,7 @@ public class RepositoryConfiguration {
   /**
    * Set a configured user ID. This user ID will be used for repository access,
    * together with configured password, {@see #setConfiguredPWD(String)}
-   * 
+   *
    * @param configuredUID The configuredUID to set, may be <code>null</code>
    */
   public void setConfiguredUID(final String configuredUID) {
@@ -148,6 +159,7 @@ public class RepositoryConfiguration {
 
   /**
    * Get configured mount point. {@see #setRepositoryMountPoint(String)}
+   *
    * @return Repository mount point.
    */
   public String getRepositoryMountPoint() {
@@ -158,10 +170,10 @@ public class RepositoryConfiguration {
    * Set a mountpoint to restrict repository browsing to a specific part of the
    * website. E.g. setting the mount point to <code>/trunk/doc</code> only the
    * <code>doc</code> directory and its subdirectories will be browsable.
-   * 
+   *
    * @param repositoryMountPoint Mounting point. Must be a absolute path from
-   *          the root of the repository. If the initial <code>/</code> is
-   *          missing it will be appended.
+   *                             the root of the repository. If the initial <code>/</code> is
+   *                             missing it will be appended.
    */
   public void setRepositoryMountPoint(String repositoryMountPoint) {
     this.repositoryMountPoint = repositoryMountPoint;
@@ -171,7 +183,7 @@ public class RepositoryConfiguration {
    * Set SVN configuration path, this is a directory where Subversion
    * configuration is stored. The user running the servlet container running
    * sventon needs read and write access to this directory.
-   * 
+   *
    * @return SVN configuration path.
    */
   public String getSVNConfigurationPath() {
@@ -180,9 +192,9 @@ public class RepositoryConfiguration {
 
   /**
    * Get SVN configuration path.
-   * 
-   * @see #setSVNConfigurationPath(String)
+   *
    * @param configurationPath Configuration path.
+   * @see #setSVNConfigurationPath(String)
    */
   public void setSVNConfigurationPath(final String configurationPath) {
     SVNConfigurationPath = configurationPath;
@@ -190,7 +202,7 @@ public class RepositoryConfiguration {
 
   /**
    * Get the configured repository URL.
-   * 
+   *
    * @return Returns the repository url.
    */
   public String getUrl() {
@@ -200,7 +212,7 @@ public class RepositoryConfiguration {
   /**
    * Get the SVNURL, this is the typed version of the URL set using method
    * {@link #setRepositoryRoot(String)}
-   * 
+   *
    * @return Returns the location.
    */
   public SVNURL getSVNURL() {
@@ -213,7 +225,7 @@ public class RepositoryConfiguration {
 
   /**
    * Gets configuration status.
-   * 
+   *
    * @return True if repository is configured ok, false if not.
    */
   public boolean isConfigured() {

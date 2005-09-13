@@ -37,7 +37,7 @@ public class BlameController extends AbstractSVNTemplateController implements Co
     Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Adding blameHandler: " + blameHandler);
     model.put("handler", blameHandler);
-
+    model.put("properties", new HashMap());   //TODO: Replace with valid entry properties
     return new ModelAndView("blame", model);
   }
 }

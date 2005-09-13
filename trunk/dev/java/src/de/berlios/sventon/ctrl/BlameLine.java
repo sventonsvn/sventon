@@ -35,28 +35,31 @@ public class BlameLine {
   }
   
   /**
+   * Gets the author.
    * @return The author.
    */
-  public final String getAuthor() {
+  public String getAuthor() {
     return author;
   }
 
   /**
+   * Gets the date.
    * @return The date.
    */
-  public final Date getDate() {
+  public Date getDate() {
     return date;
   }
 
   /**
+   * Gets the revision.
    * @return The revision.
    */
-  public final long getRevision() {
+  public long getRevision() {
     return revision;
   }
 
   /**
-   * @return String representation of this object.
+   * {@inheritDoc}
    */
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);

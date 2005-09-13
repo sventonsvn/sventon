@@ -41,6 +41,12 @@ public final class KeywordHandler {
   public static final String KEYWORD_ID = "Id";
 
   /**
+   * Private - not supposed to instantiate.
+   */
+  private KeywordHandler() {
+  }
+
+  /**
    * Computes keyword variables. This method is based on the method with same name in
    * <code>org.tmatesoft.svn.core.internal.wc.SVNTranslator</code>.
    *
