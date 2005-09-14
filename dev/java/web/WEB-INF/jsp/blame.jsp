@@ -46,7 +46,12 @@
       <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
     </tr>
   </table>
-
+<p>
+<br/>
+Blame support disabled.
+<br/>
+</p>
+<!-- 
 <table class="sventonBlameTable">
   <tr>
     <th>Revision</th>
@@ -70,6 +75,7 @@
     </td>
   </tr>
 </table>
+-->
 <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>

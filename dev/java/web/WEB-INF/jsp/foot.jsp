@@ -1,1 +1,1 @@
-sventon - build revision: @BUILD_REVISION@ - <a href="http://sventon.berlios.de/">http://sventon.berlios.de</a>
+sventon build rev: @BUILD_REVISION@
