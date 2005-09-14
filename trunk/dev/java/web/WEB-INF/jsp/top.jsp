@@ -20,7 +20,7 @@
   <tr>
     <td class="sventonHeadlines">
      Repository path: <a href="repobrowser.svn">
-      <c:out value="${url}"/> / <%= command.getMountPoint(true) %></a> /
+      <c:out value="${url}"/> <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
       <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
         <c:choose>
@@ -51,7 +51,7 @@
 <td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
 </tr>
  <tr>
- <td>Go to Revision</td><td colspan="2">Go to path <% if (command.getMountPoint(false) != null) { %>(from: <%= command.getMountPoint(false) %>)<% } %></td>
+ <td>Go to Revision</td><td colspan="2">Go to path <% if (!"".equals(command.getMountPoint(false))) { %>(from: <%= command.getMountPoint(false) %>)<% } %></td>
  </tr>
 <tr>
 <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>

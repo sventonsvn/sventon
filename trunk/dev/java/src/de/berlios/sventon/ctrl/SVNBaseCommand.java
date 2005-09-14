@@ -172,8 +172,11 @@ public class SVNBaseCommand {
    * {@inheritDoc}
    */
   public String toString() {
-    return "SVNBaseCommand{path=" + path + ", " + "completePah=" + getCompletePath() + ", " + "revision=" + revision
-        + "}";
+    return "SVNBaseCommand{path='" + path + "', " + 
+    "completePah='" + getCompletePath() + "', " + 
+    "revision='" + revision + "', " +
+    "mountPoint='" + mountPoint 
+        + "'}";
   }
 
   /**
