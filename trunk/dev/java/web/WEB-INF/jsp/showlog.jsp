@@ -49,9 +49,10 @@
 <form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
 <table class="sventonLogEntriesTable">
   <tr>
-    <th>&nbsp;</th>
+    <th style="width: 55px">&nbsp;</th>
     <th>Revision</th>
     <th>Message</th>
+    <th>&nbsp;</th>
     <th>Author</th>
     <th>Date</th>
   </tr>
@@ -80,11 +81,12 @@
               //Perhaps other replacements have to be made for this to work for all types of line breaks?
       %>
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
+      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');">[+/-]</a></td>
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
       <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-    <td valign="top">Changed paths</td><td colspan="4">
+    <td valign="top">Changed paths</td><td colspan="5">
     <table>
     <tr>
       <th>Action</th>
