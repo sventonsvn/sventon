@@ -20,20 +20,7 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
 
-  <p class="sventonHeader">
-  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
-  </p>
-
-    <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
-        <table class="sventonPropertiesTable">
-          <c:forEach items="${properties}" var="property">
-            <tr>
-              <td><b><c:out value="${property.key}"/></b></td>
-              <td><c:out value="${property.value}"/></td>
-            </tr>
-          </c:forEach>
-        </table>
-    </div>
+  <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
   <br/>
   
@@ -81,7 +68,7 @@
               //Perhaps other replacements have to be made for this to work for all types of line breaks?
       %>
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
-      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');">[+/-]</a></td>
+      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');">[more/less]</a></td>
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
       <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>

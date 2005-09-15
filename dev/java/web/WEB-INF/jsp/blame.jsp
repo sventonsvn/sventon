@@ -1,11 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
 <html>
-<head>
-<title>sventon blame - <c:out value="${url}" /></title>
-<%@ include file="/WEB-INF/jsp/head.jsp"%>
-<link href="jhighlight.css" rel="stylesheet" type="text/css"/>
-</head>
+  <head>
+    <title>sventon blame - <c:out value="${url}" /></title>
+    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <link rel="stylesheet" type="text/css" href="jhighlight.css" >
+  </head>
+
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
@@ -20,22 +21,9 @@
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
+
+  <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
   
-  <p class="sventonHeader">
-  Blame - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
-  </p>
-
-    <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
-        <table class="sventonPropertiesTable">
-          <c:forEach items="${properties}" var="property">
-            <tr>
-              <td><b><c:out value="${property.key}"/></b></td>
-              <td><c:out value="${property.value}"/></td>
-            </tr>
-          </c:forEach>
-        </table>
-    </div>
-
   <br/>
   
   <table class="sventonFunctionLinksTable">
