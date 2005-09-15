@@ -16,15 +16,17 @@ Release 1
 [<76>]  Possibility to navigate in repository by typing path.
 [<76>]  Clickable revision path info for quick navigation in browser.
 [<97>]  Support for language specific characters and white space in paths (WebDAV)
+[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
 [<113>] Possibility to search for files and directories.
 [<113>] Flatten path structure view
-[<130>] Style sheet usage to enable easy customization
-[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
-[<130>] View file should show a preview of images
 [<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
+[<130>] Style sheet usage to enable easy customization
+[<130>] View file should show a preview of images
 [<130>] Basic look and feel
 [<132>] Installation wizard
 [<141>] Keyword expansion when viewing files
+[<142>] Thumbnail caching using ehcache.
+[<145>] View metadata (e.g. mime types)
 [x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
 [x]     Blame
 [x]     View all changes in one revision (log entry). HTTP still not working.
@@ -32,9 +34,7 @@ Release 1
 [ ]     Only append repository changes if index is out-of-date instead of full reindexing
 [ ]     Diff revisions of same file
 [ ]     Diff same revision of different files
-[ ]     View metadata (e.g. mime types)
 [ ]     Subversion 1.2 feature support, notably file locking.
-[ ]     Thumbnail caching using ehcache.
 
 Not yet scheduled
 [ ] Multi language support using resource bundles.
