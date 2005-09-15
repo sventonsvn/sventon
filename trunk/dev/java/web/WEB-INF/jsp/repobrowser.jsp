@@ -8,27 +8,14 @@
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
 <body>
-<%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-  <p class="sventonHeader">
-  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[properties on/off]</a>
-  </p>
-
-    <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
-        <table class="sventonPropertiesTable">
-          <c:forEach items="${properties}" var="property">
-            <tr>
-              <td><b><c:out value="${property.key}"/></b></td>
-              <td><c:out value="${property.value}"/></td>
-            </tr>
-          </c:forEach>
-        </table>
-    </div>
+  <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
 <br/>
 
 <div id="entriesDiv" class="sventonEntriesDiv">
-<form method="post" name="entriesForm" onsubmit="return doAction(entriesForm);">
+<form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
   <table class="sventonEntriesTable">
     <tr>
       <th></th>
