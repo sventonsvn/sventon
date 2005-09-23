@@ -9,6 +9,11 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 
+/**
+ * Wrapper class for cache handling.
+ *
+ * @author jesper@users.berlios.de
+ */
 public class SventonCache {
 
   /** The cache manager instance. */
