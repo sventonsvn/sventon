@@ -1,6 +1,6 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.index.RevisionIndex;
+import de.berlios.sventon.index.RevisionIndexer;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -25,14 +25,9 @@ public class SearchController extends AbstractSVNTemplateController implements C
     
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     logger.debug("Searching index for: " + request.getParameter("sventonSearchString"));
-    RevisionIndex index = (RevisionIndex) getApplicationContext().getBean("revisionIndex");
-    // TODO: Should be set from app-context-xml
-    index.setRepository(repository);
-    entries.addAll(index.find(request.getParameter("sventonSearchString")));
+    RevisionIndexer indexer = (RevisionIndexer) getApplicationContext().getBean("revisionIndexer");
+    entries.addAll(indexer.find(request.getParameter("sventonSearchString")));
     logger.debug(entries.size() + " entries found.");
-
-    //TODO: Fix sorting for IndexEntries.
-    //Collections.sort(entries, new RepositoryEntryComparator(NAME, true));
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();

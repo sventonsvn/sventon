@@ -1,18 +1,6 @@
 package de.berlios.sventon.ctrl;
 
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.NoRouteToHostException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import de.berlios.sventon.svnsupport.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -22,11 +10,19 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -130,7 +126,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * {@inheritDoc}
    */
-  @Override
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
       Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
@@ -147,8 +142,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-    SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-    assignCredentials(repository);
+    SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
     SVNRevision revision = revision = convertAndUpdateRevision(svnCommand);
 
@@ -198,7 +192,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * {@inheritDoc}
    */
-  @Override
   protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException exception)
       throws Exception {
     // This is for preparing the requested model and view and also rendering the
@@ -231,9 +224,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     SVNRevision revision = convertAndUpdateRevision(svnCommand);
 
     try {
-      logger.debug("Getting SVN repository");
-      SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-      assignCredentials(repository);
+      SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
 
@@ -296,22 +287,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     model.put("url", configuration.getUrl());
     model.put("numrevision", null);
     return new ModelAndView("goto", model);
-  }
-
-  /**
-   * Assigns an <code>AuthenticationManager</code> instance to the given
-   * repository with credentials from the given <code>configuration</code> instance. 
-   * If a user id is not configured instance (is <code>null</code>) in the 
-   * <code>configuration</code> , no <code>AuthenticationManager</code> will be set.
-   * 
-   * @param repository Repository object.
-   */
-  private void assignCredentials(final SVNRepository repository) {
-    if (configuration.getConfiguredUID() != null) {
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
-          .getSVNConfigurationPath()), configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
-      repository.setAuthenticationManager(authManager);
-    }
   }
 
   /**

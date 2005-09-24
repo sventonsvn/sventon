@@ -170,12 +170,8 @@
     </property>
   </bean>
 
-  <bean name="revisionIndex"
-    class="de.berlios.sventon.index.RevisionIndex" singleton="true"
-    destroy-method="destroy">
-    <constructor-arg index="0">
-      <value>/</value><!-- Indexing start path -->
-    </constructor-arg>
+  <bean name="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" singleton="true" destroy-method="destroy">
+    <constructor-arg><ref bean="repositoryConfig"/></constructor-arg>
   </bean>
 
   <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true" />

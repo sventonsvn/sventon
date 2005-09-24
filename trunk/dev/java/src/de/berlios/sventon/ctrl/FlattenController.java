@@ -1,6 +1,6 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.index.RevisionIndex;
+import de.berlios.sventon.index.RevisionIndexer;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -34,10 +34,8 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     }
 
     logger.debug("Flattening directories below: " + fromPath);
-    RevisionIndex index = (RevisionIndex) getApplicationContext().getBean("revisionIndex");
-    // TODO: Should be set from app-context-xml
-    index.setRepository(repository);
-    entries.addAll(index.getDirectories(fromPath));
+    RevisionIndexer indexer = (RevisionIndexer) getApplicationContext().getBean("revisionIndexer");
+    entries.addAll(indexer.getDirectories(fromPath));
     logger.debug(entries.size() + " entries found.");
 
     logger.debug("Create model");
