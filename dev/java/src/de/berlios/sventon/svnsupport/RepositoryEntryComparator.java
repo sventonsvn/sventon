@@ -1,14 +1,11 @@
 package de.berlios.sventon.svnsupport;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
@@ -78,13 +75,13 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry> {
   public int compare(RepositoryEntry entry1, RepositoryEntry entry2) {
 
     if (groupDirs) {
-      SVNNodeKind kind1 = entry1.getEntry().getKind();
-      SVNNodeKind kind2 = entry2.getEntry().getKind();
+      String kind1 = entry1.getKind();
+      String kind2 = entry2.getKind();
       if (kind1 != kind2) // Not equal kinds, have to inspect.
       {
-        if (kind1 == DIR) {
+        if ("dir".equals(kind1)) {
           return -1;
-        } else if (kind2 == DIR) {
+        } else if ("dir".equals(kind2)) {
           return 1;
         }
       }// not equal kind, but neither is DIR
@@ -98,22 +95,21 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry> {
     case NAME:
       return nullSafeCompare(entryName1, entryName2);
     case AUTHOR:
-      final String author1 = entry1.getEntry().getAuthor();
-      final String author2 = entry2.getEntry().getAuthor();
+      final String author1 = entry1.getAuthor();
+      final String author2 = entry2.getAuthor();
       final int authCompare = nullSafeCompare(author1, author2);
       return authCompare == 0 ? nullSafeCompare(entryName1, entryName2) : authCompare;
     case REVISION:
-      final long revision1 = entry1.getEntry().getRevision();
-      final long revision2 = entry2.getEntry().getRevision();
-      final boolean revCompare = revision1 < revision2;
+      final long revision1 = entry1.getRevision();
+      final long revision2 = entry2.getRevision();
       if (revision1 == revision2) {
         return nullSafeCompare(entryName1, entryName2);
       } else {
         return revision1 < revision2 ? -1 : 1;
       }
     case DATE:
-      final Date date1 = entry1.getEntry().getDate();
-      final Date date2 = entry2.getEntry().getDate();
+      final Date date1 = entry1.getDate();
+      final Date date2 = entry2.getDate();
       final int dateCompare = nullSafeCompare(date1, date2);
       return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
     default:

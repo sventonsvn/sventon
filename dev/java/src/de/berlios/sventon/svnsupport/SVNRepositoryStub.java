@@ -1,42 +1,24 @@
 package de.berlios.sventon.svnsupport;
 
+import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.io.*;
+
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.tmatesoft.svn.core.ISVNDirEntryHandler;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.ISVNEditor;
-import org.tmatesoft.svn.core.io.ISVNFileRevisionHandler;
-import org.tmatesoft.svn.core.io.ISVNLocationEntryHandler;
-import org.tmatesoft.svn.core.io.ISVNLockHandler;
-import org.tmatesoft.svn.core.io.ISVNReporterBaton;
-import org.tmatesoft.svn.core.io.ISVNWorkspaceMediator;
-import org.tmatesoft.svn.core.io.SVNRepository;
-
 public class SVNRepositoryStub extends SVNRepository {
 
   public SVNRepositoryStub(SVNURL location, boolean myIsSessionMode) {
-    super(location, myIsSessionMode);
+    super(null, false);
     repositoryEntries = new HashMap<String, Collection>();
   }
 
   private long latestRevision = 0;
- 
-  private HashMap<String, Collection> repositoryEntries = null;
 
-  //
-  // public SVNRepositoryStub(SVNRepositoryLocation svnRepositoryLocation) {
-  // super(svnRepositoryLocation);
-  // repositoryEntries = new HashMap<String, Collection>();
-  // }
+  private HashMap<String, Collection> repositoryEntries = null;
 
   public void testConnection() throws SVNException {
   }
@@ -80,6 +62,18 @@ public class SVNRepositoryStub extends SVNRepository {
     return repositoryEntries.get(path);
   }
 
+  public Collection getDir(String s, long l) throws SVNException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public void diff(SVNURL svnurl, long l, String s, boolean b, boolean b1, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public void diff(SVNURL svnurl, long l, long l1, String s, boolean b, boolean b1, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
   public long getDir(String s, long l, Map map, ISVNDirEntryHandler isvnDirEntryHandler) throws SVNException {
     return 0;
   }
@@ -104,6 +98,10 @@ public class SVNRepositoryStub extends SVNRepository {
 
   }
 
+  public void update(SVNURL svnurl, long l, String s, boolean b, ISVNReporterBaton isvnReporterBaton, ISVNEditor isvnEditor) throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
   public SVNDirEntry info(String s, long l) throws SVNException {
     return null;
   }
@@ -121,6 +119,18 @@ public class SVNRepositoryStub extends SVNRepository {
     return new SVNLock[0];
   }
 
+  public void lock(Map map, String s, boolean b, ISVNLockHandler isvnLockHandler) throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public void unlock(Map map, boolean b, ISVNLockHandler isvnLockHandler) throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public void closeSession() throws SVNException {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
   public SVNLock setLock(String s, String s1, boolean b, long l) throws SVNException {
     return null;
   }
@@ -133,48 +143,4 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException();
   }
 
-  @Override
-  public void diff(SVNURL url, long revision, String target, boolean ignoreAncestry, boolean recursive,
-      ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry,
-      boolean recursive, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void update(SVNURL url, long revision, String target, boolean recursive, ISVNReporterBaton reporter,
-      ISVNEditor editor) throws SVNException {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void lock(Map arg0, String arg1, boolean arg2, ISVNLockHandler arg3) throws SVNException {
-    // TODO Auto-generated method stub
-    
-  }
-
-  @Override
-  public void unlock(Map arg0, boolean arg1, ISVNLockHandler arg2) throws SVNException {
-    // TODO Auto-generated method stub
-    
-  }
-
-@Override
-public Collection getDir(String arg0, long arg1) throws SVNException {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-@Override
-public void closeSession() throws SVNException {
-	// TODO Auto-generated method stub
-	
-}
 }

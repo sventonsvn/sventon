@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<%@ page import="org.tmatesoft.svn.core.*"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 
 <html>
@@ -49,17 +48,15 @@
 
       <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <%
-      SVNDirEntry type = entry.getEntry();
-      SVNNodeKind nodeKind = type.getKind();
-      totalSize += type.size();
+        totalSize += entry.getSize();
       %>
         <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${entry.fullEntryName}" />"/></td>
-        <% if (nodeKind == SVNNodeKind.DIR) { %>
+        <% if ("dir".equals(entry.getKind())) { %>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>">
           <c:choose>
             <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}" /></c:when>
-            <c:otherwise><c:out value="${entry.entry.name}" /></c:otherwise>
+            <c:otherwise><c:out value="${entry.name}" /></c:otherwise>
           </c:choose>
           </a></td>
         <% } else { %>
@@ -67,14 +64,14 @@
         <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">
           <c:choose>
             <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}"/></c:when>
-            <c:otherwise><c:out value="${entry.entry.name}"/></c:otherwise>
+            <c:otherwise><c:out value="${entry.name}"/></c:otherwise>
           </c:choose>
           </a></td>
         <% } %>
-        <td class="sventonCol4"><% if (nodeKind == SVNNodeKind.FILE) { %><%=type.size()%><% } %></td>
-        <td class="sventonCol5"><c:out value="${entry.entry.revision}" /></td>
-        <td class="sventonCol6"><c:out value="${entry.entry.author}" /></td>
-        <td class="sventonCol7"><c:out value="${entry.entry.date}" /></td>
+        <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %><c:out value="${entry.size}" /><% } %></td>
+        <td class="sventonCol5"><c:out value="${entry.revision}" /></td>
+        <td class="sventonCol6"><c:out value="${entry.author}" /></td>
+        <td class="sventonCol7"><c:out value="${entry.date}" /></td>
         <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
       </tr>
       <% rowCount++; %>

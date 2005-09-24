@@ -10,10 +10,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class RevisionIndexTest extends TestCase {
+public class RevisionIndexerTest extends TestCase {
 
   private SVNRepositoryStub repository = null;
-  private RevisionIndex index = null;
+  private RevisionIndexer indexer = null;
 
   public void setUp() throws Exception {
     // Set up the repository stub
@@ -35,29 +35,27 @@ public class RevisionIndexTest extends TestCase {
     repository.addDir("/dir1/", entries2);
     repository.addDir("/dir1/dir2/", new ArrayList());
 
-    index = new RevisionIndex();
-    index.setRepository(repository);
-    index.setStartPath("/");
-    index.index();
-    assertEquals(8, index.getIndexCount());
+    indexer = new RevisionIndexer(repository);
+    indexer.index();
+    assertEquals(8, indexer.getIndexCount());
     //printIndex();
   }
 
   public void testFind() throws Exception {
-    assertEquals(2, index.find("html").size());
+    assertEquals(2, indexer.find("html").size());
   }
 
   public void testFindPattern() throws Exception {
-    assertEquals(7, index.findPattern(".*[12].*").size());
+    assertEquals(7, indexer.findPattern(".*[12].*").size());
   }
 
   public void testGetDirectories() throws Exception {
-    assertEquals(2, index.getDirectories("/").size());
-    assertEquals(1, index.getDirectories("/dir1/").size());
+    assertEquals(2, indexer.getDirectories("/").size());
+    assertEquals(1, indexer.getDirectories("/dir1/").size());
   }
 
   private void printIndex() {
-    Iterator i = index.getEntries();
+    Iterator i = indexer.getEntriesIterator();
     while (i.hasNext()) {
       System.out.println(i.next());
     }
