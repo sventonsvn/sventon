@@ -27,10 +27,10 @@ Release 1
 [<141>] Keyword expansion when viewing files
 [<142>] Thumbnail caching using ehcache.
 [<145>] View metadata (e.g. mime types)
+[<157>] Serialize the RevisionIndex to disk
 [x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
 [x]     Blame
 [x]     View all changes in one revision (log entry). HTTP still not working.
-[ ]     Serialize the RevisionIndex to disk
 [ ]     Only append repository changes if index is out-of-date instead of full reindexing
 [ ]     Diff revisions of same file
 [ ]     Diff same revision of different files
