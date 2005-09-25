@@ -16,8 +16,11 @@ import java.io.File;
  */
 public class RepositoryFactory {
 
+  
   /** Singelton instance of the factory. */
   public static final RepositoryFactory INSTANCE = new RepositoryFactory();
+  
+  private static final boolean ASSIGN_CREDENTIALS = true;
 
   /**
    * Private constructor.
@@ -27,13 +30,15 @@ public class RepositoryFactory {
 
   /**
    * Gets a repository instance configured using given <code>RepositoryConfiguration</code>.
+   * <p>
+   * This method will assign credentials as they are set in the given <code>RepositoryConfiguration</code>.
    *
    * @param configuration The configuration
    * @return The repository instance
    * @throws SVNException if unable to create repository instance.
    */
   public SVNRepository getRepository(final RepositoryConfiguration configuration) throws SVNException {
-    return RepositoryFactory.INSTANCE.getRepository(configuration, false);
+    return RepositoryFactory.INSTANCE.getRepository(configuration, ASSIGN_CREDENTIALS);
   }
 
   /**
