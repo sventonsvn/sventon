@@ -165,10 +165,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
         return prepareExceptionModelAndView(exception, svnCommand);
       }
     } catch (SVNAuthenticationException svnae) {
-      // Redirect to login page. This will lose track of the submit, the user
-      // will have to start over
-      // after logging in. That's OK. Yes.
-      return forwardToAuthenticationFailureView(request, svnCommand);
+      return forwardToAuthenticationFailureView(request, svnCommand, svnae);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -240,7 +237,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(request, svnCommand);
+      return forwardToAuthenticationFailureView(request, svnCommand, svnae);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -266,8 +263,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand) {
+  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand, SVNAuthenticationException svnae) {
     logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
+    logger.error("Authentication failed", svnae);
     return new ModelAndView("authenticationfailure");
   }
 
