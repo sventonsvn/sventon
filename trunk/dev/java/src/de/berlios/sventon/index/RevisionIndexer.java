@@ -96,12 +96,12 @@ public class RevisionIndexer {
    */
   private void initIndex() {
     logger.debug("Initializing index");
-//    index = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
   // TODO: Update the index according to what's new.
 
-    logger.info("Trying to read serialized index ("
-        + INDEX_FILENAME
-        + ") from disk, folder: " + configuration.getSVNConfigurationPath());
+    logger.info("Trying to read serialized index from disk, "
+        + configuration.getSVNConfigurationPath()
+        + INDEX_FILENAME);
     ObjectInputStream in = null;
     try {
       in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
