@@ -21,9 +21,14 @@
     <c:url value="showlog.svn" var="showLogUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
+
+    <c:url value="diff.svn" var="diffUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+    </c:url>
     
     <p class="sventonHeader">
-    Show File - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a>
+      <table><tr><td>
+    Show File - <b><c:out value="${command.target}"/></b></td><td><a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
     </p>
     <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
@@ -33,7 +38,7 @@
       <tr>
         <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
         <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
-        <td><a href="#">[Diff with previous]</a></td>
+        <td><a href="<c:out value="${diffUrl}&revision=${command.revision}"/>">[Diff with previous]</a></td>
         <c:choose>
        <c:when test="${empty fileContents}">
        <td>[Blame]</td>
