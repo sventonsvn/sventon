@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
+
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
  * protocol http/https.
@@ -62,8 +64,16 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
-    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths, null, revision.getNumber(), 0, true,
-        false);
+    
+    long revNumber = 0;
+    if (revision == HEAD)
+      revNumber = repository.getLatestRevision();
+    else
+      revNumber = revision.getNumber();
+    
+    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths, 
+        null, revNumber, 0, true, false);
+    
     SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
 
     for (SVNLogEntry logEntry : logEntries) {
