@@ -11,9 +11,11 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.DELETE_ACTION, action.getAction());
-    assertEquals(2, action.getLineIntervalStart());
-    assertEquals(3, action.getLineIntervalEnd());
-    assertEquals("DiffAction: d,2-3", action.toString());
+    assertEquals(2, action.getLeftLineIntervalStart());
+    assertEquals(3, action.getLeftLineIntervalEnd());
+    assertEquals(2, action.getRightLineIntervalStart());
+    assertEquals(2, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: d, left: 2-3, right: 2-2", action.toString());
   }
 
   public void testDiffHelperDeleteII() throws Exception {
@@ -21,9 +23,11 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.DELETE_ACTION, action.getAction());
-    assertEquals(10, action.getLineIntervalStart());
-    assertEquals(10, action.getLineIntervalEnd());
-    assertEquals("DiffAction: d,10-10", action.toString());
+    assertEquals(10, action.getLeftLineIntervalStart());
+    assertEquals(10, action.getLeftLineIntervalEnd());
+    assertEquals(10, action.getRightLineIntervalStart());
+    assertEquals(10, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: d, left: 10-10, right: 10-10", action.toString());
   }
 
   public void testDiffHelperAdd() throws Exception {
@@ -31,9 +35,11 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
-    assertEquals(10, action.getLineIntervalStart());
-    assertEquals(11, action.getLineIntervalEnd());
-    assertEquals("DiffAction: a,10-11", action.toString());
+    assertEquals(9, action.getLeftLineIntervalStart());
+    assertEquals(9, action.getLeftLineIntervalEnd());
+    assertEquals(10, action.getRightLineIntervalStart());
+    assertEquals(11, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: a, left: 9-9, right: 10-11", action.toString());
   }
 
   public void testDiffHelperChange() throws Exception {
@@ -41,9 +47,11 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
-    assertEquals(2, action.getLineIntervalStart());
-    assertEquals(2, action.getLineIntervalEnd());
-    assertEquals("DiffAction: c,2-2", action.toString());
+    assertEquals(2, action.getLeftLineIntervalStart());
+    assertEquals(2, action.getLeftLineIntervalEnd());
+    assertEquals(2, action.getRightLineIntervalStart());
+    assertEquals(2, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: c, left: 2-2, right: 2-2", action.toString());
   }
 
   public void testDiffHelperChangeII() throws Exception {
@@ -55,9 +63,12 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
-    assertEquals(10, action.getLineIntervalStart());
-    assertEquals(12, action.getLineIntervalEnd());
-    assertEquals("DiffAction: c,10-12", action.toString());
+    assertEquals(10, action.getLeftLineIntervalStart());
+    assertEquals(12, action.getLeftLineIntervalEnd());
+    assertEquals(3, action.getRightLineIntervalStart());
+    assertEquals(4, action.getRightLineIntervalEnd());
+
+    assertEquals("DiffAction: c, left: 10-12, right: 3-4", action.toString());
   }
 
   public void testDiffHelperAddAndChange() throws Exception {
@@ -65,14 +76,18 @@ public class DiffResultParserTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
-    assertEquals(8, action.getLineIntervalStart());
-    assertEquals(9, action.getLineIntervalEnd());
-    assertEquals("DiffAction: a,8-9", action.toString());
+    assertEquals(8, action.getLeftLineIntervalStart());
+    assertEquals(8, action.getLeftLineIntervalEnd());
+    assertEquals(8, action.getRightLineIntervalStart());
+    assertEquals(9, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: a, left: 8-8, right: 8-9", action.toString());
     action = actions.next();
     assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
-    assertEquals(2, action.getLineIntervalStart());
-    assertEquals(2, action.getLineIntervalEnd());
-    assertEquals("DiffAction: c,2-2", action.toString());
+    assertEquals(2, action.getLeftLineIntervalStart());
+    assertEquals(2, action.getLeftLineIntervalEnd());
+    assertEquals(2, action.getRightLineIntervalStart());
+    assertEquals(2, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: c, left: 2-2, right: 2-2", action.toString());
   }
 
 }
