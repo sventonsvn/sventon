@@ -22,11 +22,9 @@ import de.berlios.sventon.svnsupport.SventonSVNLogger;
  * read and write access to this directory.
  * <li>Configured Subversion user and password for repository browsing. If
  * these properties are not configured and the repository requires user/pwd for
- * browsing, the web application user will be promted for this information
- * individually. Since this latter approach gives several security issues,
- * configuring a specific user and password for all sventon users to use is the
- * preferred setup.
+ * browsing, the web application will display an error message.
  * </ul>
+ * All other configurations are optional.
  * <p/>
  * The class also performs JavaSVN initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
