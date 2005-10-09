@@ -7,11 +7,15 @@ package de.berlios.sventon.svnsupport;
  */
 public class DiffAction {
 
+  public static final String DELETE_ACTION = "d";
+  public static final String CHANGE_ACTION = "c";
+  public static final String ADD_ACTION = "a";
+
   /**
    * The diff action.
-   * Can be {@link de.berlios.sventon.svnsupport.DiffHelper.ADD_ACTION},
-   * {@link de.berlios.sventon.svnsupport.DiffHelper.CHANGE_ACTION} or
-   * {@link de.berlios.sventon.svnsupport.DiffHelper.DELETE_ACTION}.
+   * Can be {@link de.berlios.sventon.svnsupport.DiffAction.ADD_ACTION},
+   * {@link de.berlios.sventon.svnsupport.DiffAction.CHANGE_ACTION} or
+   * {@link de.berlios.sventon.svnsupport.DiffAction.DELETE_ACTION}.
    */
   private String action;
 
