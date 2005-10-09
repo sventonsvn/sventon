@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * DiffHandler class for doing normal or unified diffing operations.
+ * DiffProducer class for producing normal or unified diff results.
  *
  * @author jesper@users.berlios.de
  */
-public class DiffHandler {
+public class DiffProducer {
 
   /**
    * Left (old) input.
@@ -35,7 +35,7 @@ public class DiffHandler {
    * @param right The right (new) InputStream.
    * @param encoding Encoding to use. If <code>null</code>, UTF-8 will be used.
    */
-  public DiffHandler(final InputStream left, final InputStream right, final String encoding) {
+  public DiffProducer(final InputStream left, final InputStream right, final String encoding) {
     this.left = left;
     this.right = right;
     if (encoding != null) {
