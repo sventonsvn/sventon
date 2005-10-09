@@ -21,6 +21,7 @@ public class DiffResultParser {
    * 2d2,3
    * 8a8,9
    * 8,9a8
+   * 10,12c3,4
    * </pre>
    */
   public static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)\\s*");
@@ -41,20 +42,21 @@ public class DiffResultParser {
   public static List<DiffAction> parseNormalDiffResult(final String normalDiffResult) {
     List<DiffAction> diffActions = new ArrayList<DiffAction>();
     String[] resultLines = normalDiffResult.split("\n");
+    int leftStart;
+    int leftEnd;
+    int rightStart;
+    int rightEnd;
     for (int i = 0; i < resultLines.length; i++) {
       Matcher matcher = DIFF_PATTERN.matcher(resultLines[i]);
       if (matcher.matches()) {
-        if ("".equals(matcher.group(2)) && "".equals(matcher.group(5))) {
-          diffActions.add(0, new DiffAction(matcher.group(3),
-              Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(4))));
-        } else {
-          diffActions.add(0,
-              new DiffAction(matcher.group(3),
-                  !"".equals(matcher.group(2))
-              ? Integer.parseInt(matcher.group(1)) : Integer.parseInt(matcher.group(4)),
-                  !"".equals(matcher.group(5))
-              ? Integer.parseInt(matcher.group(5)) : Integer.parseInt(matcher.group(2))));
-        }
+        leftStart = Integer.parseInt(matcher.group(1));
+        leftEnd = "".equals(matcher.group(2))
+            ? Integer.parseInt(matcher.group(1)) : Integer.parseInt(matcher.group(2));
+        rightStart = Integer.parseInt(matcher.group(4));
+        rightEnd = "".equals(matcher.group(5))
+            ? Integer.parseInt(matcher.group(4)) : Integer.parseInt(matcher.group(5));
+        diffActions.add(0, new DiffAction(matcher.group(3),
+            leftStart, leftEnd, rightStart, rightEnd));
       }
     }
     return diffActions;
