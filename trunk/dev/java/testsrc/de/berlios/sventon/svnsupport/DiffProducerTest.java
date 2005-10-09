@@ -49,7 +49,7 @@ public class DiffProducerTest extends TestCase {
     diffProducer.doNormalDiff(output);
     assertEquals(result, output.toString());
 
-    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result);
+    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
     assertEquals(8, action.getLineIntervalStart());
@@ -128,7 +128,7 @@ public class DiffProducerTest extends TestCase {
     diffProducer.doNormalDiff(output);
     assertEquals(result, output.toString());
 
-    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result);
+    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
     assertEquals(2, action.getLineIntervalStart());
