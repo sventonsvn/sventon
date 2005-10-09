@@ -3,8 +3,9 @@ package de.berlios.sventon.svnsupport;
 import junit.framework.TestCase;
 
 import java.io.*;
+import java.util.Iterator;
 
-public class DiffHandlerTest extends TestCase {
+public class DiffProducerTest extends TestCase {
 
   public void testDoNormalDiff() throws Exception {
     String leftString =
@@ -43,10 +44,22 @@ public class DiffHandlerTest extends TestCase {
     InputStream left = new ByteArrayInputStream(leftString.getBytes());
     InputStream right = new ByteArrayInputStream(rightString.getBytes());
 
-    DiffHandler diffHandler = new DiffHandler(left, right, null);
+    DiffProducer diffProducer = new DiffProducer(left, right, null);
     OutputStream output = new ByteArrayOutputStream();
-    diffHandler.doNormalDiff(output);
+    diffProducer.doNormalDiff(output);
     assertEquals(result, output.toString());
+
+    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result);
+    DiffAction action = actions.next();
+    assertEquals(DiffAction.ADD_ACTION, action.getAction());
+    assertEquals(8, action.getLineIntervalStart());
+    assertEquals(12, action.getLineIntervalEnd());
+    assertEquals("DiffAction: a,8-12", action.toString());
+    action = actions.next();
+    assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
+    assertEquals(2, action.getLineIntervalStart());
+    assertEquals(2, action.getLineIntervalEnd());
+    assertEquals("DiffAction: c,2-2", action.toString());
   }
 
   public void testDoNormalDiffII() throws Exception {
@@ -110,11 +123,25 @@ public class DiffHandlerTest extends TestCase {
     InputStream left = new ByteArrayInputStream(leftString.getBytes());
     InputStream right = new ByteArrayInputStream(rightString.getBytes());
 
-    DiffHandler diffHandler = new DiffHandler(left, right, null);
+    DiffProducer diffProducer = new DiffProducer(left, right, null);
     OutputStream output = new ByteArrayOutputStream();
-    diffHandler.doNormalDiff(output);
+    diffProducer.doNormalDiff(output);
     assertEquals(result, output.toString());
+
+    Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result);
+    DiffAction action = actions.next();
+    assertEquals(DiffAction.ADD_ACTION, action.getAction());
+    assertEquals(2, action.getLineIntervalStart());
+    assertEquals(8, action.getLineIntervalEnd());
+    assertEquals("DiffAction: a,2-8", action.toString());
+    action = actions.next();
+    assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
+    assertEquals(2, action.getLineIntervalStart());
+    assertEquals(2, action.getLineIntervalEnd());
+    assertEquals("DiffAction: c,2-2", action.toString());
+    assertEquals(DiffAction.ADD_ACTION, action.getAction());
+    assertEquals(18, action.getLineIntervalStart());
+    assertEquals(22, action.getLineIntervalEnd());
+    assertEquals("DiffAction: a,18-22", action.toString());
   }
-
-
 }
