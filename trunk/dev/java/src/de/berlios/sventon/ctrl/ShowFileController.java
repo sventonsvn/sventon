@@ -30,7 +30,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     Map<String, Object> model = new HashMap<String, Object>();
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    logger.debug("Assembling file contents for: " + svnCommand.getCompletePath());
+    logger.debug("Assembling file contents for: " + svnCommand);
 
     HashMap properties = new HashMap();
     // Get the file's properties without requesting the content.
@@ -45,7 +45,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     } else {
       // Get the file's content. We can skip the properties in this case.
       repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
-      String fileContents = outStream.toString();
+
+      String fileContents;
       // Check if keywords should be expanded.
       String keywords = (String) properties.get(SVNProperty.KEYWORDS);
       Map keywordsMap = null;
@@ -56,7 +57,9 @@ public class ShowFileController extends AbstractSVNTemplateController implements
         String rev = (String) properties.get(SVNProperty.COMMITTED_REVISION);
         keywordsMap = KeywordHandler.computeKeywords(keywords, url, author, date, rev);
         logger.debug("Substituting keywords: " + keywordsMap);
-        fileContents = KeywordHandler.substitute(keywordsMap, fileContents);
+        fileContents = KeywordHandler.substitute(keywordsMap, outStream.toString());
+      } else {
+        fileContents = outStream.toString();
       }
       fileContents = ((Colorer) getApplicationContext().getBean("colorer")).getColorizedContent(fileContents, svnCommand.getTarget());
       logger.debug("Create model");

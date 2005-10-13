@@ -40,7 +40,7 @@
         <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
         <td><a href="<c:out value="${diffUrl}&revision=${command.revision}"/>">[Diff with previous]</a></td>
         <c:choose>
-       <c:when test="${empty fileContents}">
+       <c:when test="${isBinary}">
        <td>[Blame]</td>
        </c:when>
        <c:otherwise>
