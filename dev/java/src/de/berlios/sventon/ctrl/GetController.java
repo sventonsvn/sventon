@@ -63,7 +63,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
         // Check if the thumbnail exists on the cache
         HashMap properties = new HashMap();
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
+        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
         logger.debug(properties);
         String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
         logger.debug("Using cachekey: " + cacheKey);
