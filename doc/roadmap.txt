@@ -29,11 +29,11 @@ Release 1
 [<145>] View metadata (e.g. mime types)
 [<157>] Serialize the RevisionIndex to disk
 [<171>] View all changes in one revision (log entry).
+[<174>] Diff revisions of same file
 [x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
 [x]     Blame
 [ ]     Only append repository changes if index is out-of-date instead of full reindexing
-[ ]     Diff revisions of same file
-[ ]     Diff same revision of different files
+[ ]     Diff same revision of different files (?)
 [ ]     Subversion 1.2 feature support, notably file locking.
 
 Not yet scheduled
