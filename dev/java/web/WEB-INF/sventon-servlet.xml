@@ -78,6 +78,16 @@
     </property>
   </bean>
 
+  <bean id="diffController"
+    class="de.berlios.sventon.ctrl.DiffController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
   <bean id="getController"
     class="de.berlios.sventon.ctrl.GetController">
     <property name="repositoryConfiguration">
@@ -146,6 +156,7 @@
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>
         <prop key="/config.svn">configurationController</prop>
+        <prop key="/diff.svn">diffController</prop>
       </props>
     </property>
   </bean>

@@ -38,6 +38,10 @@
   </table>
 
 <form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
+<!-- TODO: Fix this hack.. -->
+<input type="hidden" name="path" value="${command.path}${entry.name}"/>
+<input type="hidden" name="revision" value="${command.revision}"/>
+
 <table class="sventonLogEntriesTable">
   <tr>
     <th style="width: 55px">&nbsp;</th>
