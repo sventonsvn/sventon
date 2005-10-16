@@ -51,19 +51,19 @@ public class DiffProducerTest extends TestCase {
 
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
-    assertEquals(DiffAction.ADD_ACTION, action.getAction());
-    assertEquals(8, action.getLeftLineIntervalStart());
-    assertEquals(8, action.getLeftLineIntervalEnd());
-    assertEquals(8, action.getRightLineIntervalStart());
-    assertEquals(12, action.getRightLineIntervalEnd());
-    assertEquals("DiffAction: a, left: 8-8, right: 8-12", action.toString());
-    action = actions.next();
     assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
     assertEquals(2, action.getLeftLineIntervalStart());
     assertEquals(2, action.getLeftLineIntervalEnd());
     assertEquals(2, action.getRightLineIntervalStart());
     assertEquals(2, action.getRightLineIntervalEnd());
     assertEquals("DiffAction: c, left: 2-2, right: 2-2", action.toString());
+    action = actions.next();
+    assertEquals(DiffAction.ADD_ACTION, action.getAction());
+    assertEquals(8, action.getLeftLineIntervalStart());
+    assertEquals(8, action.getLeftLineIntervalEnd());
+    assertEquals(8, action.getRightLineIntervalStart());
+    assertEquals(12, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: a, left: 8-8, right: 8-12", action.toString());
   }
 
   public void testDoNormalDiffII() throws Exception {
@@ -135,11 +135,11 @@ public class DiffProducerTest extends TestCase {
     Iterator<DiffAction> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffAction action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
-    assertEquals(10, action.getLeftLineIntervalStart());
-    assertEquals(10, action.getLeftLineIntervalEnd());
-    assertEquals(18, action.getRightLineIntervalStart());
-    assertEquals(22, action.getRightLineIntervalEnd());
-    assertEquals("DiffAction: a, left: 10-10, right: 18-22", action.toString());
+    assertEquals(2, action.getLeftLineIntervalStart());
+    assertEquals(2, action.getLeftLineIntervalEnd());
+    assertEquals(2, action.getRightLineIntervalStart());
+    assertEquals(8, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: a, left: 2-2, right: 2-8", action.toString());
     action = actions.next();
     assertEquals(DiffAction.CHANGE_ACTION, action.getAction());
     assertEquals(10, action.getLeftLineIntervalStart());
@@ -149,10 +149,10 @@ public class DiffProducerTest extends TestCase {
     assertEquals("DiffAction: c, left: 10-12, right: 3-4", action.toString());
     action = actions.next();
     assertEquals(DiffAction.ADD_ACTION, action.getAction());
-    assertEquals(2, action.getLeftLineIntervalStart());
-    assertEquals(2, action.getLeftLineIntervalEnd());
-    assertEquals(2, action.getRightLineIntervalStart());
-    assertEquals(8, action.getRightLineIntervalEnd());
-    assertEquals("DiffAction: a, left: 2-2, right: 2-8", action.toString());
+    assertEquals(10, action.getLeftLineIntervalStart());
+    assertEquals(10, action.getLeftLineIntervalEnd());
+    assertEquals(18, action.getRightLineIntervalStart());
+    assertEquals(22, action.getRightLineIntervalEnd());
+    assertEquals("DiffAction: a, left: 10-10, right: 18-22", action.toString());
   }
 }

@@ -183,3 +183,31 @@ th {
 
 .sventonAuthenticateTable {
 }
+
+.src {
+  background-color: #eeeeff;
+  font-family: Verdana;
+  font-size: 7pt;
+  white-space: pre;
+}
+
+.srcChg {
+  background-color: #ffbebe;
+  font-family: Verdana;
+  font-size: 7pt;
+  white-space: pre;
+}
+
+.srcAdd {
+  background-color: #beffbe;
+  font-family: Verdana;
+  font-size: 7pt;
+  white-space: pre;
+}
+
+.srcDel {
+  background-color: #bebeff;
+  font-family: Verdana;
+  font-size: 7pt;
+  white-space: pre;
+}

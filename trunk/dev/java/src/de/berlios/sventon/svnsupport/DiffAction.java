@@ -67,7 +67,7 @@ public class DiffAction {
    * @return The action
    */
   public String getAction() {
-    return this.action;
+    return action;
   }
 
   /**
@@ -76,7 +76,7 @@ public class DiffAction {
    * @return The start line
    */
   public int getLeftLineIntervalStart() {
-    return this.leftLineIntervalStart;
+    return leftLineIntervalStart;
   }
 
   /**
@@ -85,7 +85,7 @@ public class DiffAction {
    * @return The end line
    */
   public int getLeftLineIntervalEnd() {
-    return this.leftLineIntervalEnd;
+    return leftLineIntervalEnd;
   }
 
   /**
@@ -94,7 +94,7 @@ public class DiffAction {
    * @return The start line
    */
   public int getRightLineIntervalStart() {
-    return this.rightLineIntervalStart;
+    return rightLineIntervalStart;
   }
 
   /**
@@ -103,8 +103,9 @@ public class DiffAction {
    * @return The end line
    */
   public int getRightLineIntervalEnd() {
-    return this.rightLineIntervalEnd;
+    return rightLineIntervalEnd;
   }
+
   /**
    * {@inheritDoc}
    */

@@ -11,11 +11,11 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
-    //$JUnit-BEGIN$
-    suite.addTestSuite(DiffHelperTest.class);
+    suite.addTestSuite(DiffTest.class);
+    suite.addTestSuite(DiffProducerTest.class);
+    suite.addTestSuite(DiffResultParserTest.class);
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     suite.addTestSuite(KeywordHandlerTest.class);
-    //$JUnit-END$
     return suite;
   }
 
