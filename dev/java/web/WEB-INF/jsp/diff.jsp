@@ -70,11 +70,11 @@
     else if ("C".equals(line.getAction()))
       css = "srcChg";
 %>
-    <td class="<%=css%>"><%=line.getLine()%></td>
+    <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
 <%
     line = (SourceLine) rightLines.get(i);
 %>
-    <td class="<%=css%>"><%=line.getLine()%></td>
+    <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
   </tr>
 <%
   }
