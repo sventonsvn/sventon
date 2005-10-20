@@ -22,10 +22,10 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
 
-  <p class="sventonHeader">
-    <table>
+  <p>
+    <table class="sventonHeader">
       <tr><td>
-  Blame - <b><c:out value="${command.target}"/></b></td><td><a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
+  Blame - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
   </p>
   <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
   

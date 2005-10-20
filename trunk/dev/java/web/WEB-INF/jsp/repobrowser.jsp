@@ -9,9 +9,9 @@
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-  <p class="sventonHeader">
-    <table><tr><td>
-  Repository Browser - <b><c:out value="${command.target}"/></b></td><td><a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
+  <p>
+    <table class="sventonHeader"><tr><td>
+  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
   </p>
   <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
