@@ -127,8 +127,8 @@ public class RevisionIndexer {
    * @throws SVNException if a Subversion error occurs.
    */
   public boolean isDirty() throws SVNException {
-    boolean dirty = index.getIndexRevision() != this.repository.getLatestRevision();
-    return dirty && index.getUrl().equals(this.repository.getLocation().toString());
+    boolean dirty = index.getIndexRevision() != repository.getLatestRevision();
+    return dirty || !index.getUrl().equals(configuration.getUrl());
   }
 
   /**
@@ -140,9 +140,9 @@ public class RevisionIndexer {
   public void index() throws SVNException {
     logger.info("Building index");
     index.clearIndex();
-    index.setIndexRevision(this.repository.getLatestRevision());
+    index.setIndexRevision(repository.getLatestRevision());
     logger.debug("Revision: " + index.getIndexRevision());
-    index.setUrl(this.repository.getLocation().toString());
+    index.setUrl(configuration.getUrl());
     logger.debug("Index url: " + index.getUrl());
     populateIndex("/");   // TODO: Use mount point here!
     logger.info("Number of indexed entries: " + getIndexCount());
