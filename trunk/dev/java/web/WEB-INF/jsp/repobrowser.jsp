@@ -11,7 +11,11 @@
 
   <p>
     <table class="sventonHeader"><tr><td>
-  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
+  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;
+  <c:if test = "${!empty properties}">
+    <a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a>
+  </c:if>
+    </td></tr></table>
   </p>
   <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
@@ -54,18 +58,26 @@
         <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${entry.fullEntryName}" />"/></td>
         <% if ("dir".equals(entry.getKind())) { %>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
-        <td class="sventonCol3"><a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>">
+        <td class="sventonCol3">
           <c:choose>
-            <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}" /></c:when>
-            <c:otherwise><c:out value="${entry.name}" /></c:otherwise>
+            <c:when test="${isSearch}">
+              <a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
+                <c:out value="${entry.friendlyFullEntryName}" />
+            </c:when>
+            <c:otherwise>
+              <a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>"><c:out value="${entry.name}" /></c:otherwise>
           </c:choose>
           </a></td>
         <% } else { %>
         <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
-        <td class="sventonCol3"><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">
+        <td class="sventonCol3">
           <c:choose>
-            <c:when test="${isSearch}"><c:out value="${entry.friendlyFullEntryName}"/></c:when>
-            <c:otherwise><c:out value="${entry.name}"/></c:otherwise>
+            <c:when test="${isSearch}">
+              <a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
+                <c:out value="${entry.friendlyFullEntryName}"/>
+            </c:when>
+            <c:otherwise>
+              <a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>"><c:out value="${entry.name}"/></c:otherwise>
           </c:choose>
           </a></td>
         <% } %>
@@ -103,6 +115,7 @@
 </form>
 </div>
 <br>
+<script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
 </body>
 </html>
