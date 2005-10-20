@@ -22,7 +22,7 @@
 
   <p>
     <table class="sventonHeader"><tr><td>
-  Log Messages - <b><c:out value="${command.target}"/></b></td><td><a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
+  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
   </p>
   <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
