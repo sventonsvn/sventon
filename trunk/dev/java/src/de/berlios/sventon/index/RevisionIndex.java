@@ -29,7 +29,7 @@ public class RevisionIndex implements Serializable {
   /**
    * Indexed URL.
    */
-  private String url = null;
+  private String url = "";
 
   /**
    * Constructor.
