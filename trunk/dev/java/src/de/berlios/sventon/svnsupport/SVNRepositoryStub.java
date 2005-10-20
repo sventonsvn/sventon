@@ -12,7 +12,7 @@ import java.util.Map;
 public class SVNRepositoryStub extends SVNRepository {
 
   public SVNRepositoryStub(SVNURL location, boolean myIsSessionMode) {
-    super(null, false);
+    super(location, false);
     repositoryEntries = new HashMap<String, Collection>();
   }
 

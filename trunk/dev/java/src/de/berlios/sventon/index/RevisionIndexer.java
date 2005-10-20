@@ -53,7 +53,6 @@ public class RevisionIndexer {
     logger.debug("Creating index instance using given repository");
     this.repository = repository;
     index = new RevisionIndex();
-    //initIndex();
   }
 
   /**
@@ -99,7 +98,7 @@ public class RevisionIndexer {
 
   // TODO: Update the index according to what's new.
 
-    logger.info("Trying to read serialized index from disk, "
+    logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
         + INDEX_FILENAME);
     ObjectInputStream in = null;
@@ -120,13 +119,16 @@ public class RevisionIndexer {
   }
 
   /**
-   * Checks if index is up to date.
+   * Checks if index is dirty or up to date by comparing
+   * revision and making sure repository has not changed since
+   * last index update.
    *
-   * @return <code>True</code> if index revision is same as HEAD, i.e. latest revision.
+   * @return <code>True</code> if index is concidered dirty and should be reindexed.
    * @throws SVNException if a Subversion error occurs.
    */
-  public boolean isLatestRevision() throws SVNException {
-    return this.repository.getLatestRevision() == index.getIndexRevision();
+  public boolean isDirty() throws SVNException {
+    boolean dirty = index.getIndexRevision() != this.repository.getLatestRevision();
+    return dirty && index.getUrl().equals(this.repository.getLocation().toString());
   }
 
   /**
@@ -139,6 +141,9 @@ public class RevisionIndexer {
     logger.info("Building index");
     index.clearIndex();
     index.setIndexRevision(this.repository.getLatestRevision());
+    logger.debug("Revision: " + index.getIndexRevision());
+    index.setUrl(this.repository.getLocation().toString());
+    logger.debug("Index url: " + index.getUrl());
     populateIndex("/");   // TODO: Use mount point here!
     logger.info("Number of indexed entries: " + getIndexCount());
   }
@@ -178,13 +183,13 @@ public class RevisionIndexer {
     }
 
     //TODO: Temp fix until index refreshing code is added.
-    if (!isLatestRevision()) {
+    if (isDirty()) {
       index();
     }
 
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
-      if (entry.getFullEntryName().indexOf(searchString) > -1) {
+      if (entry.getFullEntryName().toLowerCase().indexOf(searchString.toLowerCase()) > -1) {
         result.add(entry);
       }
     }
@@ -206,7 +211,7 @@ public class RevisionIndexer {
     }
 
     //TODO: Temp fix until index refreshing code is added.
-    if (!isLatestRevision()) {
+    if (isDirty()) {
       index();
     }
 
@@ -233,7 +238,7 @@ public class RevisionIndexer {
     }
 
     //TODO: Temp fix until index refreshing code is added.
-    if (!isLatestRevision()) {
+    if (isDirty()) {
       index();
     }
 
@@ -247,6 +252,9 @@ public class RevisionIndexer {
     return result;
   }
 
+  /**
+   * This method serializes the index to disk.
+   */
   public void destroy() {
     logger.info("Saving index to disk, " + configuration.getSVNConfigurationPath() + INDEX_FILENAME);
     ObjectOutputStream out = null;

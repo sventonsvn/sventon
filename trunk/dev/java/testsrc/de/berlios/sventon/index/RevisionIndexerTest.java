@@ -4,6 +4,7 @@ import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +18,7 @@ public class RevisionIndexerTest extends TestCase {
 
   public void setUp() throws Exception {
     // Set up the repository stub
-    repository = new SVNRepositoryStub(null, false);
+    repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), false);
     repository.setLatestRevision(123);
 
     List entries1 = new ArrayList();
@@ -45,6 +46,10 @@ public class RevisionIndexerTest extends TestCase {
     assertEquals(2, indexer.find("html").size());
   }
 
+  public void testFindMixedCase() throws Exception {
+    assertEquals(2, indexer.find("hTmL").size());
+  }
+
   public void testFindPattern() throws Exception {
     assertEquals(7, indexer.findPattern(".*[12].*").size());
   }
@@ -52,6 +57,11 @@ public class RevisionIndexerTest extends TestCase {
   public void testGetDirectories() throws Exception {
     assertEquals(2, indexer.getDirectories("/").size());
     assertEquals(1, indexer.getDirectories("/dir1/").size());
+  }
+
+  public void testGetDirectoriesMixedCase() throws Exception {
+    assertEquals(2, indexer.getDirectories("/").size());
+    assertEquals(0, indexer.getDirectories("/DIR1/").size()); //TODO: Should we allow mixed case?
   }
 
   private void printIndex() {
