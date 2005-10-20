@@ -27,9 +27,7 @@ public class RepositoryEntry implements Serializable {
   private long entryFirstRevision;
   private Date entryCreatedDate;
   private String entryLastAuthor;
-  private String theentryPath; //TODO - maybe not needed?
   private String entryCommitMessage;
-
 
   /**
    * Mount point offset. If this is set method
@@ -82,7 +80,6 @@ public class RepositoryEntry implements Serializable {
     this.entryCreatedDate = entry.getDate();
     this.entryKind = entry.getKind().toString();
     this.entryName = entry.getName();
-//    this.entryPath = entry.getPath();
     this.entryFirstRevision = entry.getRevision();
     this.entrySize = entry.size();
     this.entryHasProperties = entry.hasProperties();
@@ -174,7 +171,7 @@ public class RepositoryEntry implements Serializable {
    * Retrieves the entry node kind - whether it's a directory or file, for instance.
    *
    * @return the node kind of this entry. Can be <code>none</code>, <code>unknown</code>,
-   * <code>file</code> or <code>dir</code>.
+   *         <code>file</code> or <code>dir</code>.
    */
   public String getKind() {
     return entryKind;

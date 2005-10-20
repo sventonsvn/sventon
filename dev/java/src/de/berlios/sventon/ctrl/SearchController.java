@@ -27,7 +27,6 @@ public class SearchController extends AbstractSVNTemplateController implements C
     logger.debug("Searching index for: " + request.getParameter("sventonSearchString"));
     RevisionIndexer indexer = (RevisionIndexer) getApplicationContext().getBean("revisionIndexer");
     entries.addAll(indexer.find(request.getParameter("sventonSearchString")));
-    logger.debug(entries.size() + " entries found.");
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
