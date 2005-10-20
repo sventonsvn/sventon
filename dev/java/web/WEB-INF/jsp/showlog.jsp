@@ -20,8 +20,8 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
 
-  <p class="sventonHeader">
-    <table><tr><td>
+  <p>
+    <table class="sventonHeader"><tr><td>
   Log Messages - <b><c:out value="${command.target}"/></b></td><td><a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
   </p>
   <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
@@ -75,14 +75,14 @@
         //fn:replace(entry.svnLogEntry.message, '\\\n', '<br/>' simply refused to work... 
               //Perhaps other replacements have to be made for this to work for all types of line breaks?
       %>
-      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
-      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>');">[more/less]</a></td>
+      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
+      <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">[<span id="hdr<%=rowCount%>">more</span>]</a></td>
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
       <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-    <td valign="top">Changed paths</td><td colspan="5">
-    <table>
+    <td valign="top">Changed<br>paths</td><td colspan="5">
+    <table width="100%">
     <tr>
       <th>Action</th>
       <th>Path</th>
