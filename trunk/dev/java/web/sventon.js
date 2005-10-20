@@ -27,10 +27,8 @@ function doAction(formName) {
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '' || !checkedEntry) return false;
 
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
-    alert('Thumbnail view not yet supported');
-    //TODO:Change action to url for the showFileController and return true
-    //formName.action = 'zip'
-    return false;
+    formName.action = 'showthumbs.svn'
+    return true;
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip' ) {
     //TODO:Change action to url for the zipController and return true
     //formName.action = 'zip'
@@ -69,8 +67,22 @@ function toggleElementVisibility(theId) {
   } else {
     object.style.display = '';
   }
+
   return;
 }
+
+// function to change link text between 'more' and 'less'
+function changeLessMoreDisplay(theId) {
+  var object = document.getElementById(theId);
+  if (object.innerHTML == 'more') {
+    object.innerHTML = 'less';
+  } else {
+    object.innerHTML = 'more';
+  }
+
+  return
+}
+
 
 // function to handle diff submissions
 function doDiff(formName) {
