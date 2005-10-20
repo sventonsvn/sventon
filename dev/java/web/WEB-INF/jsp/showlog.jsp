@@ -8,10 +8,6 @@
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-  <c:url value="blame.svn" var="blameUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-  
   <c:url value="get.svn" var="downloadUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
@@ -32,8 +28,6 @@
     <tr>
       <td><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">[Show file]</a></td>
       <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
-      <td><a href="#">[Diff with previous]</a></td>
-      <td><a href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
     </tr>
   </table>
 

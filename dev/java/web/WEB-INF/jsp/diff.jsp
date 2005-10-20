@@ -11,22 +11,6 @@
   <body>
     <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-    <c:url value="blame.svn" var="blameUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
-    <c:url value="get.svn" var="downloadUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
-    <c:url value="showlog.svn" var="showLogUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
-    <c:url value="diff.svn" var="diffUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-    
     <p>
       <table class="sventonHeader"><tr><td>
     Show File - <b><c:out value="${command.target}"/></b></td></tr></table>
@@ -36,10 +20,6 @@
 
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
-        <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
-        <td>[Diff with previous]</td>
-        <td>[Blame]</td>
       </tr>
     </table>
 

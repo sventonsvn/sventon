@@ -10,10 +10,6 @@
   <body>
     <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
-    <c:url value="blame.svn" var="blameUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
     <c:url value="get.svn" var="downloadUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
@@ -22,10 +18,6 @@
       <c:param name="path" value="${command.path}${entry.name}" />
     </c:url>
 
-    <c:url value="diff.svn" var="diffUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-    
     <p>
       <table class="sventonHeader"><tr><td>
     Show File - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
@@ -38,15 +30,6 @@
       <tr>
         <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
         <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
-        <td><a href="<c:out value="${diffUrl}&revision=${command.revision}"/>">[Diff with previous]</a></td>
-        <c:choose>
-       <c:when test="${isBinary}">
-       <td>[Blame]</td>
-       </c:when>
-       <c:otherwise>
-        <td><a href="<c:out value="${blameUrl}&revision=${command.revision}"/>">[Blame]</a></td>
-        </c:otherwise>
-        </c:choose>
       </tr>
     </table>
 
