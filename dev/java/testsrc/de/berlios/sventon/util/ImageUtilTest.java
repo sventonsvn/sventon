@@ -24,5 +24,14 @@ public class ImageUtilTest extends TestCase {
   public void testGetContentType() throws Exception {
     assertNull(ImageUtil.getContentType("abc"));
     assertEquals("image/jpg", ImageUtil.getContentType("jpg"));
+    assertEquals("image/jpg", ImageUtil.getContentType("jpe"));
+    assertEquals("image/jpg", ImageUtil.getContentType("jpeg"));
+    assertEquals("image/gif", ImageUtil.getContentType("gif"));
+    assertEquals("image/png", ImageUtil.getContentType("png"));
+  }
+
+  public void testIsImageFile() throws Exception {
+    assertTrue(ImageUtil.isImageFile("jpg"));
+    assertFalse(ImageUtil.isImageFile("filenamejpg"));
   }
 }
