@@ -31,12 +31,14 @@ Release 1
 [<171>] View all changes in one revision (log entry).
 [<174>] Diff revisions of same file
 [x]     Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
-[x]     Blame
 [ ]     Only append repository changes if index is out-of-date instead of full reindexing
-[ ]     Diff same revision of different files (?)
-[ ]     Subversion 1.2 feature support, notably file locking.
+
 
 Not yet scheduled
+[ ] "Diff previous" shortcut when looking at a file (today this can be done via the "logs" view).
+[ ] Allow dates instead of revisions when browsing the repository.
+[ ] Subversion 1.2 feature support, notably show locked file (and by which user).
+[ ] Blame
 [ ] Multi language support using resource bundles.
 [ ] Download file(s) and directories as zip files
 [ ] Apply Observer pattern and make RevisionIndex Observable
