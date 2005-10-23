@@ -10,7 +10,7 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.index");
     //$JUnit-BEGIN$
     suite.addTestSuite(RevisionIndexerTest.class);
     //$JUnit-END$

@@ -202,8 +202,8 @@ public class DiffTest extends TestCase {
 
 */
     Diff diff = new Diff(leftString, rightString);
-    System.out.println("diff.getLeft() = " + diff.getLeft());
-    System.out.println("diff.getRight() = " + diff.getRight());
+//    System.out.println("diff.getLeft() = " + diff.getLeft());
+//    System.out.println("diff.getRight() = " + diff.getRight());
 
     assertEquals(diff.getLeft().size(), diff.getRight().size());
   }
@@ -289,7 +289,7 @@ public class DiffTest extends TestCase {
 */
     Diff diff = new Diff(leftString, rightString);
 
-    System.out.println("diff.getDiffResultString() = " + diff.getDiffResultString());
+//    System.out.println("diff.getDiffResultString() = " + diff.getDiffResultString());
 
     assertEquals(diff.getLeft().size(), diff.getRight().size());
 
