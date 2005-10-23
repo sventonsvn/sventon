@@ -36,6 +36,11 @@ public class RevisionIndexer {
   private RepositoryConfiguration configuration;
 
   /**
+   * The index url.
+   */
+  private String indexedUrl;
+
+  /**
    * The logging instance.
    */
   private final Log logger = LogFactory.getLog(getClass());
@@ -52,7 +57,8 @@ public class RevisionIndexer {
   public RevisionIndexer(final SVNRepository repository) throws SVNException {
     logger.debug("Creating index instance using given repository");
     this.repository = repository;
-    index = new RevisionIndex();
+    indexedUrl = repository.getLocation().toString();
+    index = new RevisionIndex(indexedUrl);
   }
 
   /**
@@ -63,6 +69,7 @@ public class RevisionIndexer {
   public RevisionIndexer(final RepositoryConfiguration configuration) throws SVNException {
     logger.debug("Creating index instance using given configuration");
     this.configuration = configuration;
+    indexedUrl = configuration.getUrl();
     logger.debug("Creating the repository instance");
     repository = RepositoryFactory.INSTANCE.getRepository(configuration, true);
     if (repository == null) {
@@ -113,7 +120,7 @@ public class RevisionIndexer {
 
     // No serialized index excisted - initialize an empty one.
     if (index == null) {
-      index = new RevisionIndex();
+      index = new RevisionIndex(configuration.getUrl());
     }
 
   }
@@ -128,7 +135,7 @@ public class RevisionIndexer {
    */
   public boolean isDirty() throws SVNException {
     boolean dirty = index.getIndexRevision() != repository.getLatestRevision();
-    return dirty || !index.getUrl().equals(configuration.getUrl());
+    return dirty || !index.getUrl().equals(indexedUrl);
   }
 
   /**
@@ -139,11 +146,10 @@ public class RevisionIndexer {
    */
   public void index() throws SVNException {
     logger.info("Building index");
-    index.clearIndex();
+    index = new RevisionIndex(indexedUrl);
+    logger.debug("Index url: " + index.getUrl());
     index.setIndexRevision(repository.getLatestRevision());
     logger.debug("Revision: " + index.getIndexRevision());
-    index.setUrl(configuration.getUrl());
-    logger.debug("Index url: " + index.getUrl());
     populateIndex("/");   // TODO: Use mount point here!
     logger.info("Number of indexed entries: " + getIndexCount());
   }

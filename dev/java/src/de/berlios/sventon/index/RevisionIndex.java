@@ -33,9 +33,12 @@ public class RevisionIndex implements Serializable {
 
   /**
    * Constructor.
+   * 
+   * @param url The url to index.
    */
-  public RevisionIndex() {
+  public RevisionIndex(final String url) {
     index = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    this.url = url;
   }
 
   /**
@@ -79,15 +82,6 @@ public class RevisionIndex implements Serializable {
    */
   public void add(final RepositoryEntry entry) {
     index.add(entry);
-  }
-
-  /**
-   * Sets the indexed url.
-   *
-   * @param url The indexed url
-   */
-  public void setUrl(final String url) {
-    this.url = url;
   }
 
   /**

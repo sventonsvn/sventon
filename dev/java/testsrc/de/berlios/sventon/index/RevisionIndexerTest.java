@@ -18,7 +18,7 @@ public class RevisionIndexerTest extends TestCase {
 
   public void setUp() throws Exception {
     // Set up the repository stub
-    repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), false);
+    repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), null);
     repository.setLatestRevision(123);
 
     List entries1 = new ArrayList();

@@ -77,7 +77,7 @@ public final class KeywordHandler {
         " \t\n\b\r\f"); tokens.hasMoreTokens();) {
       String token = tokens.nextToken();
       if (KEYWORD_LAST_CHANGED_DATE.equals(token) || KEYWORD_DATE.equals(token)) {
-        computedDate = expand && computedDate == null ? SVNFormatUtil.formatDate(jDate) : computedDate;
+        computedDate = expand && computedDate == null ? SVNFormatUtil.formatDate(jDate, false) : computedDate;
         map.put(KEYWORD_LAST_CHANGED_DATE, computedDate);
         map.put(KEYWORD_DATE, computedDate);
       } else if (KEYWORD_LAST_CHANGED_REVISION.equals(token)
@@ -98,7 +98,7 @@ public final class KeywordHandler {
       } else if (KEYWORD_ID.equals(token)) {
         if (expand && computedId == null) {
           computedRevision = computedRevision == null ? revision : computedRevision;
-          computedDate = computedDate == null ? SVNFormatUtil.formatDate(jDate) : computedDate;
+          computedDate = computedDate == null ? SVNFormatUtil.formatDate(jDate, false) : computedDate;
           computedName = computedName == null ? SVNEncodingUtil.uriDecode(SVNPathUtil.tail(url)) : computedName;
           computedAuthor = computedAuthor == null ? (author == null ? "" : author) : computedAuthor;
           StringBuffer sb = new StringBuffer();
