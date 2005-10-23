@@ -5,6 +5,9 @@ import junit.framework.TestCase;
 public class ByteFormatterTest extends TestCase {
 
   public void testFormat() throws Exception {
+    
+    //TODO: This test is plattform/locale dependent, fix this when i18n is handled.
+    
     assertEquals("1000", ByteFormatter.format(1000L));
     assertEquals("1 kB", ByteFormatter.format(1200L));
     assertEquals("1 kB", ByteFormatter.format(2047L));

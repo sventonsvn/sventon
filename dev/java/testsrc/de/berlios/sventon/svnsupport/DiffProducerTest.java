@@ -7,40 +7,42 @@ import java.util.Iterator;
 
 public class DiffProducerTest extends TestCase {
 
+  public static final String LINE_BREAK = System.getProperty("line.separator");
+  
   public void testDoNormalDiff() throws Exception {
     String leftString =
-        "[.ShellClassInfo]\n" +
-        "IconIndex=-238\n" +
-        "[DeleteOnCopy]\n" +
-        "Owner=Jesper\n" +
-        "Owner=Patrik&Jesper\n" +
-        "Personalized=14\n" +
-        "PersonalizedName=Mina videoklipp\n";
+        "[.ShellClassInfo]" + LINE_BREAK +
+        "IconIndex=-238" + LINE_BREAK +
+        "[DeleteOnCopy]" + LINE_BREAK +
+        "Owner=Jesper" + LINE_BREAK +
+        "Owner=Patrik&Jesper" +  LINE_BREAK +
+        "Personalized=14" +  LINE_BREAK +
+        "PersonalizedName=Mina videoklipp" + LINE_BREAK;
 
     String rightString =
-        "[.ShellClassInfo]\n" +
-        "IconIndex=-2388\n" +
-        "[DeleteOnCopy]\n" +
-        "Owner=Jesper\n" +
-        "Owner=Patrik&Jesper\n" +
-        "Personalized=14\n" +
-        "PersonalizedName=Mina videoklipp\n" +
-        "OneMore=true\n" +
-        "OneMore=1\n" +
-        "OneMore=2\n" +
-        "OneMore=3\n\n";
+        "[.ShellClassInfo]" + LINE_BREAK +
+        "IconIndex=-2388" + LINE_BREAK +
+        "[DeleteOnCopy]" + LINE_BREAK +
+        "Owner=Jesper" + LINE_BREAK +
+        "Owner=Patrik&Jesper" + LINE_BREAK +
+        "Personalized=14" + LINE_BREAK +
+        "PersonalizedName=Mina videoklipp" + LINE_BREAK +
+        "OneMore=true" + LINE_BREAK +
+        "OneMore=1" + LINE_BREAK +
+        "OneMore=2" + LINE_BREAK +
+        "OneMore=3" + LINE_BREAK + LINE_BREAK;
 
     String result =
-        "2c2\r\n" +
-        "<IconIndex=-2388\n" +
-        "---\r\n" +
-        ">IconIndex=-238\n" +
-        "8a8,12\r\n" +
-        ">OneMore=true\n" +
-        ">OneMore=1\n" +
-        ">OneMore=2\n" +
-        ">OneMore=3\n" +
-        ">\n";
+        "2c2" + LINE_BREAK +
+        "<IconIndex=-2388" +  LINE_BREAK +
+        "---" + LINE_BREAK +
+        ">IconIndex=-238" + LINE_BREAK +
+        "8a8,12" +  LINE_BREAK +
+        ">OneMore=true" + LINE_BREAK +
+        ">OneMore=1" + LINE_BREAK +
+        ">OneMore=2" + LINE_BREAK +
+        ">OneMore=3" + LINE_BREAK +
+        ">" + LINE_BREAK;
     InputStream left = new ByteArrayInputStream(leftString.getBytes());
     InputStream right = new ByteArrayInputStream(rightString.getBytes());
 
@@ -68,62 +70,62 @@ public class DiffProducerTest extends TestCase {
 
   public void testDoNormalDiffII() throws Exception {
     String leftString =
-        "/**\n" +
-        " * $Author$\n" +
-        " * $Revision$\n" +
-        " * $Date:$\n" +
-        " */\n" +
-        "Test1\n" +
-        "Another test!\n" +
-        "More!\n" +
-        "Even more!\n";
+        "/**" + LINE_BREAK + 
+        " * $Author$" +LINE_BREAK + 
+        " * $Revision$" +LINE_BREAK + 
+        " * $Date:$" +LINE_BREAK + 
+        " */" +LINE_BREAK + 
+        "Test1" +LINE_BREAK + 
+        "Another test!" +LINE_BREAK + 
+        "More!" + LINE_BREAK + 
+        "Even more!" + LINE_BREAK;
 
     String rightString =
-        "/**\n" +
-        " * $Id$\n" +
-        " * $LastChangedDate$\n" +
-        " * $Date$\n" +
-        " * $LastChangedRevision$\n" +
-        " * $Revision$\n" +
-        " * $Rev$\n" +
-        " * $LastChangedBy$\n" +
-        " * $Author$\n" +
-        " * $HeadURL$\n" +
-        " * $URL$\n" +
-        " * $Id$\n" +
-        " */\n" +
-        "Test1\n" +
-        "Another test!\n" +
-        "More!\n" +
-        "Even more!\n" +
-        "\n" +
-        "public String getRev {\n" +
-        " return \"$Rev$\";\n" +
-        "\n" +
-        "}\n";
+        "/**" + LINE_BREAK + 
+        " * $Id$" + LINE_BREAK + 
+        " * $LastChangedDate$" + LINE_BREAK + 
+        " * $Date$" + LINE_BREAK + 
+        " * $LastChangedRevision$" + LINE_BREAK + 
+        " * $Revision$" + LINE_BREAK + 
+        " * $Rev$" + LINE_BREAK + 
+        " * $LastChangedBy$" + LINE_BREAK + 
+        " * $Author$" + LINE_BREAK + 
+        " * $HeadURL$" + LINE_BREAK + 
+        " * $URL$" + LINE_BREAK + 
+        " * $Id$" + LINE_BREAK + 
+        " */" + LINE_BREAK + 
+        "Test1" + LINE_BREAK + 
+        "Another test!" + LINE_BREAK + 
+        "More!" + LINE_BREAK + 
+        "Even more!" + LINE_BREAK + 
+        LINE_BREAK + 
+        "public String getRev {" + LINE_BREAK + 
+        " return \"$Rev$\";" + LINE_BREAK + 
+        LINE_BREAK + 
+        "}" + LINE_BREAK;
 
     String result =
-        "2a2,8\r\n" +
-        "> * $Id$\n" +
-        "> * $LastChangedDate$\n" +
-        "> * $Date$\n" +
-        "> * $LastChangedRevision$\n" +
-        "> * $Revision$\n" +
-        "> * $Rev$\n" +
-        "> * $LastChangedBy$\n" +
-        "10,12c3,4\r\n" +
-        "< * $HeadURL$\n" +
-        "< * $URL$\n" +
-        "< * $Id$\n" +
-        "---\r\n" +
-        "> * $Revision$\n" +
-        "> * $Date:$\n" +
-        "10a18,22\r\n" +
-        ">\n" +
-        ">public String getRev {\n" +
-        "> return \"$Rev$\";\n" +
-        ">\n" +
-        ">}\n";
+        "2a2,8" + LINE_BREAK + 
+        "> * $Id$" + LINE_BREAK + 
+        "> * $LastChangedDate$" + LINE_BREAK + 
+        "> * $Date$" + LINE_BREAK + 
+        "> * $LastChangedRevision$" + LINE_BREAK + 
+        "> * $Revision$" + LINE_BREAK + 
+        "> * $Rev$" + LINE_BREAK + 
+        "> * $LastChangedBy$" + LINE_BREAK + 
+        "10,12c3,4" + LINE_BREAK + 
+        "< * $HeadURL$" + LINE_BREAK + 
+        "< * $URL$" + LINE_BREAK + 
+        "< * $Id$" + LINE_BREAK + 
+        "---" + LINE_BREAK + 
+        "> * $Revision$" + LINE_BREAK + 
+        "> * $Date:$" + LINE_BREAK + 
+        "10a18,22" + LINE_BREAK + 
+        ">" + LINE_BREAK + 
+        ">public String getRev {" + LINE_BREAK + 
+        "> return \"$Rev$\";" + LINE_BREAK + 
+        ">" + LINE_BREAK + 
+        ">}" + LINE_BREAK;
     InputStream left = new ByteArrayInputStream(leftString.getBytes());
     InputStream right = new ByteArrayInputStream(rightString.getBytes());
 
