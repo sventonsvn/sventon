@@ -19,6 +19,15 @@ public class SventonCacheTest extends TestCase {
     } catch (Exception e) {
       fail("Should not cause exception");
     }
+
   }
 
+  public void testPutNull() throws Exception {
+    try {
+      SventonCache.INSTANCE.put(null, null);
+      fail("Should cause IllegalArgumentException");
+    } catch (IllegalArgumentException npe) {
+      // expected
+    }
+  }
 }
