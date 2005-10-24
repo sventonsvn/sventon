@@ -2,6 +2,8 @@ package de.berlios.sventon.util;
 
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Formatter for byte size values.
@@ -52,12 +54,17 @@ public final class ByteFormatter {
    *   </tr>
    * </table>
    * @param size Byte size to format
+   * @param locale TODO
+   * @param locale Locale to use for formatting
    * @return The formatted string.
    */
-  public static String format(long size)
+  public static String format(final long size, Locale locale)
   {
     StringBuffer buffer = new StringBuffer(16);
-    DecimalFormat byteFormat = new DecimalFormat("0.00");
+//    DecimalFormat byteFormat = new DecimalFormat("0.00",);
+    NumberFormat byteFormat = NumberFormat.getNumberInstance(locale);
+    byteFormat.setMaximumFractionDigits(2);
+    byteFormat.setMinimumFractionDigits(2);
 
     if (size < s1kB) {
       buffer.append(size);

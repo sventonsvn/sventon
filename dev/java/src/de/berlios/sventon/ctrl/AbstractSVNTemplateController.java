@@ -205,7 +205,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
       BindException exception) throws ServletException, IOException {
-
+    
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 

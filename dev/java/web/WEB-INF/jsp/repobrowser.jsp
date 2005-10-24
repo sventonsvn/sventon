@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
-<%@ page import="de.berlios.sventon.util.ByteFormatter"%>
+<%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
 
 <html>
 <head>
@@ -93,7 +93,7 @@
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <td colspan="2" align="right">Total:</td>
       <td><%=rowCount%> entries</td>
-      <td align="right" title="<%=totalSize%>&nbsp;bytes"><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize));%></td>
+      <td align="right" title="<%=totalSize%>&nbsp;bytes"><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></td>
       <td></td>
       <td></td>
       <td></td>
