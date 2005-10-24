@@ -12,6 +12,11 @@
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
   
+  <c:url value="repobrowser.svn" var="showDirUrl">
+    <c:param name="path" value="${command.path}" />
+    <c:param name="revision" value="${command.revision}" />
+  </c:url>
+  
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
   </c:url>
@@ -26,7 +31,14 @@
   
   <table class="sventonFunctionLinksTable">
     <tr>
+    <c:choose>
+    <c:when test="${isFile}">
       <td><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">[Show file]</a></td>
+      </c:when>
+      <c:otherwise>
+      <td><a href="<c:out value="${showDirUrl}"/>">[Show directory]</a></td>
+      </c:otherwise>
+      </c:choose>
       <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
     </tr>
   </table>
@@ -38,7 +50,11 @@
 
 <table class="sventonLogEntriesTable">
   <tr>
+    <c:choose>
+    <c:when test="${isFile}">
     <th style="width: 55px">&nbsp;</th>
+    </c:when>
+    </c:choose>
     <th>Revision</th>
     <th>Message</th>
     <th>&nbsp;</th>
@@ -52,9 +68,9 @@
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
-      <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
       <c:choose>
         <c:when test="${isFile}">
+        <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
           <td><a href="<c:out value="${showUrl}"/>"><c:out
             value="${entry.svnLogEntry.revision}" /></a></td>
         </c:when>
@@ -136,7 +152,11 @@
 
   <tr>
     <td colspan="2">
+    <c:choose>
+    <c:when test="${isFile}">
       <input type="submit" name="actionSubmitButton" value="diff"/>
+    </c:when>
+    </c:choose>
     </td>
     <td colspan="3">&nbsp;</td>
   </tr>

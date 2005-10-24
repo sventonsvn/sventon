@@ -16,6 +16,11 @@ import java.util.Date;
 public class RepositoryEntry implements Serializable {
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 3617229449081593805L;
+
+  /**
    * Full path to <code>SVNDirEntry</code>.
    */
   private String entryPath;

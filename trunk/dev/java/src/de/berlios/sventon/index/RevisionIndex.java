@@ -17,6 +17,11 @@ import java.util.ArrayList;
 public class RevisionIndex implements Serializable {
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = -6606585955661688509L;
+
+  /**
    * The index.
    */
   private List<RepositoryEntry> index;
