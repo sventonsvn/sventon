@@ -54,14 +54,12 @@ public final class ByteFormatter {
    *   </tr>
    * </table>
    * @param size Byte size to format
-   * @param locale TODO
    * @param locale Locale to use for formatting
    * @return The formatted string.
    */
   public static String format(final long size, Locale locale)
   {
     StringBuffer buffer = new StringBuffer(16);
-//    DecimalFormat byteFormat = new DecimalFormat("0.00",);
     NumberFormat byteFormat = NumberFormat.getNumberInstance(locale);
     byteFormat.setMaximumFractionDigits(2);
     byteFormat.setMinimumFractionDigits(2);
