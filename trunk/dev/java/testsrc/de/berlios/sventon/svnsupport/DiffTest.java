@@ -71,51 +71,51 @@ public class DiffTest extends TestCase {
 
     String leftResult =
         "/**\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
         " * $Author$\n" +
-        "C * $Revision$\n" +
-        "C * $Date:$\n" +
-        "C\n" +
+        "c * $Revision$\n" +
+        "c * $Date:$\n" +
+        "c\n" +
         " */\n" +
         "Test1\n" +
         "Another test!\n" +
         "More!\n" +
         "Even more!\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n";
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n";
 
     String rightResult =
         "/**\n" +
-        "A * $Id$\n" +
-        "A * $LastChangedDate$\n" +
-        "A * $Date$\n" +
-        "A * $LastChangedRevision$\n" +
-        "A * $Revision$\n" +
-        "A * $Rev$\n" +
-        "A * $LastChangedBy$\n" +
+        "a * $Id$\n" +
+        "a * $LastChangedDate$\n" +
+        "a * $Date$\n" +
+        "a * $LastChangedRevision$\n" +
+        "a * $Revision$\n" +
+        "a * $Rev$\n" +
+        "a * $LastChangedBy$\n" +
         " * $Author$\n" +
-        "C * $HeadURL$\n" +
-        "C * $URL$\n" +
-        "C * $Id$\n" +
+        "c * $HeadURL$\n" +
+        "c * $URL$\n" +
+        "c * $Id$\n" +
         " */\n" +
         "Test1\n" +
         "Another test!\n" +
         "More!\n" +
         "Even more!\n" +
-        "A\n" +
-        "Apublic String getRev {\n" +
-        "A return \"$Rev$\";\n" +
-        "A\n" +
-        "A}\n";
+        "a\n" +
+        "apublic String getRev {\n" +
+        "a return \"$Rev$\";\n" +
+        "a\n" +
+        "a}\n";
 
 /*
 
@@ -237,35 +237,35 @@ public class DiffTest extends TestCase {
 
     String leftResult =
         "[.ShellClassInfo]\n" +
-        "CInfoTip=@Shell32.dll,-12690\n" +
-        "CIconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
-        "CIconIndex=-238\n" +
+        "cInfoTip=@Shell32.dll,-12690\n" +
+        "cIconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
+        "cIconIndex=-238\n" +
         "[DeleteOnCopy]\n" +
         "Owner=Jesper\n" +
-        "A\n" +
+        "a\n" +
         "Personalized=14\n" +
         "PersonalizedName=Mina videoklipp\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n" +
-        "A\n";
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n" +
+        "a\n";
 
     String rightResult =
         "[.ShellClassInfo]\n" +
-        "CIconIndex=-2388\n" +
-        "C\n" +
-        "C\n" +
+        "cIconIndex=-2388\n" +
+        "c\n" +
+        "c\n" +
         "[DeleteOnCopy]\n" +
         "Owner=Jesper\n" +
-        "AOwner=Patrik&Jesper\n" +
+        "aOwner=Patrik&Jesper\n" +
         "Personalized=14\n" +
         "PersonalizedName=Mina videoklipp\n" +
-        "AOneMore=true\n" +
-        "AOneMore=4\n" +
-        "AOneMore=5\n" +
-        "AOneMore=6\n" +
-        "AOneMore=9\n";
+        "aOneMore=true\n" +
+        "aOneMore=4\n" +
+        "aOneMore=5\n" +
+        "aOneMore=6\n" +
+        "aOneMore=9\n";
 
 
 // Diff result
@@ -306,5 +306,23 @@ public class DiffTest extends TestCase {
       sb.append("\n");
     }
     assertEquals(rightResult, sb.toString());
+  }
+
+  public void testDiffNoDiff() throws Exception {
+
+    String leftString =
+        "[.ShellClassInfo]\n";
+
+    String rightString =
+        "[.ShellClassInfo]\n";
+
+    Diff diff;
+    try {
+      diff = new Diff(leftString, rightString);
+      fail("Should raise DiffException");
+    } catch (DiffException de) {
+      // expected
+    }
+
   }
 }

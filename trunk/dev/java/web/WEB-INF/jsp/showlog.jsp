@@ -44,7 +44,8 @@
   </table>
 
 <form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
-<!-- TODO: Fix this hack.. -->
+
+<!-- Needed by ASVNTC -->
 <input type="hidden" name="path" value="${command.path}${entry.name}"/>
 <input type="hidden" name="revision" value="${command.revision}"/>
 
@@ -70,7 +71,7 @@
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <c:choose>
         <c:when test="${isFile}">
-        <td><input type="checkbox" name="rev" value="${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
+        <td><input type="checkbox" name="rev" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
           <td><a href="<c:out value="${showUrl}"/>"><c:out
             value="${entry.svnLogEntry.revision}" /></a></td>
         </c:when>
