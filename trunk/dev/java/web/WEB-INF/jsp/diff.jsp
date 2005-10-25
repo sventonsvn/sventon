@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ page import="de.berlios.sventon.svnsupport.SourceLine"%>
-<%@ page import="de.berlios.sventon.svnsupport.DiffAction"%>
+<%@ page import="de.berlios.sventon.diff.DiffAction"%>
 
 <html>
   <head>

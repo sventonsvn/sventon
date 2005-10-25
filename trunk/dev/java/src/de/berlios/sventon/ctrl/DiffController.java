@@ -1,7 +1,7 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.svnsupport.Diff;
-import de.berlios.sventon.svnsupport.DiffException;
+import de.berlios.sventon.diff.Diff;
+import de.berlios.sventon.diff.DiffException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;

@@ -1,5 +1,6 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
 
+import de.berlios.sventon.svnsupport.SourceLine;
 import junit.framework.TestCase;
 
 public class DiffTest extends TestCase {
@@ -138,14 +139,16 @@ public class DiffTest extends TestCase {
 
     StringBuffer sb = new StringBuffer();
     for (SourceLine tempStr : diff.getLeft()) {
-      sb.append(tempStr);
+      sb.append(tempStr.getAction());
+      sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(leftResult, sb.toString());
 
     sb = new StringBuffer();
     for (SourceLine tempStr : diff.getRight()) {
-      sb.append(tempStr);
+      sb.append(tempStr.getAction());
+      sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(rightResult, sb.toString());
@@ -295,14 +298,16 @@ public class DiffTest extends TestCase {
 
     StringBuffer sb = new StringBuffer();
     for (SourceLine tempStr : diff.getLeft()) {
-      sb.append(tempStr);
+      sb.append(tempStr.getAction());
+      sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(leftResult, sb.toString());
 
     sb = new StringBuffer();
     for (SourceLine tempStr : diff.getRight()) {
-      sb.append(tempStr);
+      sb.append(tempStr.getAction());
+      sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(rightResult, sb.toString());

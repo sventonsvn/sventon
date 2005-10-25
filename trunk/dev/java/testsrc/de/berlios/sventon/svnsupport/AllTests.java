@@ -2,6 +2,9 @@ package de.berlios.sventon.svnsupport;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import de.berlios.sventon.diff.DiffProducerTest;
+import de.berlios.sventon.diff.DiffResultParserTest;
+import de.berlios.sventon.diff.DiffTest;
 
 public class AllTests {
 

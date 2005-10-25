@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
 
 import de.regnis.q.sequence.line.diff.*;
 
