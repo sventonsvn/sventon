@@ -157,4 +157,22 @@ public class DiffProducerTest extends TestCase {
     assertEquals(22, action.getRightLineIntervalEnd());
     assertEquals("DiffAction: a, left: 10-10, right: 18-22", action.toString());
   }
+
+  public void testDoNormalDiffNoDiff() throws Exception {
+    String leftString =
+        "More!" + LINE_BREAK +
+        "Even more!" + LINE_BREAK;
+
+    String rightString =
+        "More!" + LINE_BREAK +
+        "Even more!" + LINE_BREAK;
+
+    InputStream left = new ByteArrayInputStream(leftString.getBytes());
+    InputStream right = new ByteArrayInputStream(rightString.getBytes());
+
+    DiffProducer diffProducer = new DiffProducer(left, right, null);
+    OutputStream output = new ByteArrayOutputStream();
+    diffProducer.doNormalDiff(output);
+    assertEquals("", output.toString());
+  }
 }

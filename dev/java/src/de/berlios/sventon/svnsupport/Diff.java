@@ -25,9 +25,9 @@ public class Diff {
    *
    * @param leftContent  Left (old) string content to diff.
    * @param rightContent Right (new) string content to diff.
-   * @throws IOException if IO error occurs.
+   * @throws DiffException if IO error occurs.
    */
-  public Diff(final String leftContent, final String rightContent) throws IOException {
+  public Diff(final String leftContent, final String rightContent) throws DiffException {
     String tempLine;
     BufferedReader reader;
 
@@ -37,18 +37,26 @@ public class Diff {
     this.leftStream = new ByteArrayInputStream(leftContent.getBytes());
     this.rightStream = new ByteArrayInputStream(rightContent.getBytes());
 
-    ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-    DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, Diff.ENCODING);
-    diffProducer.doNormalDiff(diffResult);
-    diffResultString = diffResult.toString();
+    try {
+      ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, Diff.ENCODING);
+      diffProducer.doNormalDiff(diffResult);
+      diffResultString = diffResult.toString();
 
-    reader = new BufferedReader(new StringReader(leftContent));
-    while ((tempLine = reader.readLine()) != null) {
-      leftSourceLines.add(tempLine);
-    }
-    reader = new BufferedReader(new StringReader(rightContent));
-    while ((tempLine = reader.readLine()) != null) {
-      rightSourceLines.add(tempLine);
+      if ("".equals(diffResultString)) {
+        throw new DiffException("Files are identical.");
+      }
+
+      reader = new BufferedReader(new StringReader(leftContent));
+      while ((tempLine = reader.readLine()) != null) {
+        leftSourceLines.add(tempLine);
+      }
+      reader = new BufferedReader(new StringReader(rightContent));
+      while ((tempLine = reader.readLine()) != null) {
+        rightSourceLines.add(tempLine);
+      }
+    } catch (IOException ioex) {
+      throw new DiffException("Unable to produce diff.");
     }
 
     List<DiffAction> diffActions = DiffResultParser.parseNormalDiffResult(diffResultString);
@@ -84,25 +92,25 @@ public class Diff {
         int addedLines = 0;
         int startLine = diffAction.getLeftLineIntervalStart() + offset;
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.add(startLine++ - 1, new SourceLine("A", ""));
+          resultLines.add(startLine++ - 1, new SourceLine("a", ""));
           addedLines++;
         }
         offset += addedLines;
       } else if (DiffAction.DELETE_ACTION.equals(diffAction.getAction())) {
         // Apply diff action DELETE
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.update(i - 1, new SourceLine("D", resultLines.get(i - 1).getLine()));
+          resultLines.update(i - 1, new SourceLine("d", resultLines.get(i - 1).getLine()));
         }
       } else if (DiffAction.CHANGE_ACTION.equals(diffAction.getAction())) {
         // Apply diff action CHANGE
         int changedLines = 0;
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("C", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine("c", resultLines.get(i - 1 + offset).getLine()));
           changedLines++;
         }
         int addedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart() + changedLines; i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.add(diffAction.getRightLineIntervalEnd() + offset, new SourceLine("C", ""));
+          resultLines.add(diffAction.getRightLineIntervalEnd() + offset, new SourceLine("c", ""));
           changedLines++;
           addedLines++;
         }
@@ -124,13 +132,13 @@ public class Diff {
       if (DiffAction.ADD_ACTION.equals(diffAction.getAction())) {
         // Apply diff action ADD
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("A", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine("a", resultLines.get(i - 1 + offset).getLine()));
         }
       } else if (DiffAction.DELETE_ACTION.equals(diffAction.getAction())) {
         // Apply diff action DELETE
         int deletedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.add(i - 1, new SourceLine("D", ""));
+          resultLines.add(i - 1, new SourceLine("d", ""));
           deletedLines++;
         }
         offset += deletedLines;
@@ -138,12 +146,12 @@ public class Diff {
         // Apply diff action CHANGE
         int changedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("C", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine("c", resultLines.get(i - 1 + offset).getLine()));
           changedLines++;
         }
         int addedLines = 0;
         for (int i = diffAction.getRightLineIntervalStart() + changedLines; i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.add(diffAction.getLeftLineIntervalEnd() + offset, new SourceLine("C", ""));
+          resultLines.add(diffAction.getLeftLineIntervalEnd() + offset, new SourceLine("c", ""));
           addedLines++;
         }
         offset += addedLines;
