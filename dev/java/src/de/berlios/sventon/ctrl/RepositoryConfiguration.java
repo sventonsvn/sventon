@@ -96,6 +96,7 @@ public class RepositoryConfiguration {
    * @param repositoryRoot The root url.
    */
   public void setRepositoryRoot(final String repositoryRoot) {
+    configured = false;
     if (repositoryRoot == null) {
       throw new IllegalArgumentException("Provided repository root url was null.");
     }
@@ -108,13 +109,15 @@ public class RepositoryConfiguration {
     }
 
     logger.debug("SVN location: " + repositoryURL);
+    
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
+      configured = true;
     } catch (SVNException ex) {
       logger.warn("Unable to parse URL '" + repositoryRoot
           + "'. Configuration mode will be turned on.");
-      configured = false;
     }
+    logger.debug("Configured status is: " + configured);
   }
 
   /**

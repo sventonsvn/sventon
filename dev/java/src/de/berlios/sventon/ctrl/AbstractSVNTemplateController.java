@@ -26,8 +26,7 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
- * plumbing functionalit such as authorization and basic repository
- * configuration.
+ * plumbing functionality such as authorization and basic repository configuration.
  * <p>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
@@ -35,9 +34,9 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
  * <p>
  * Workflow for this controller:
  * <ol>
- * <li>The controller inspects the repository configuration object to see if it 
- * user id and pwd have been provided during setup. If credentials are configured
- * they will be used for authorized repository access, if they do not
+ * <li>The controller inspects the repository configuration object to see if it
+ * user id and pwd have been provided during setup. If credentials are
+ * configured they will be used for authorized repository access, if they do not
  * exist the controller will try to set up the repository with anonymous access.
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
@@ -80,8 +79,8 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
  * <b>Exception handling</b>
  * <dl>
  * <dt>Authentication exception
- * <dd>If a SVN authentication exception occurs during the call the request will
- * be forwarded to the authenticationfailuare.jsp page.
+ * <dd>If a SVN authentication exception occurs during the call the request
+ * will be forwarded to the authenticationfailuare.jsp page.
  * <dt>Other SVN exceptions
  * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
  * page.
@@ -124,27 +123,29 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
+   * Handler for GoTo submit
+   * <p/>
    * {@inheritDoc}
    */
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
       Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
-    
+
     logger.debug("GoTo form submit with command: " + command);
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
       return new ModelAndView(new RedirectView("config.svn"));
     }
-    
+
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
     SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-    SVNRevision revision = revision = convertAndUpdateRevision(svnCommand);
+    SVNRevision revision = convertAndUpdateRevision(svnCommand);
 
     String redirectUrl = null;
 
@@ -191,10 +192,12 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException exception)
       throws Exception {
+    
     // This is for preparing the requested model and view and also rendering the
     // "Go To" form.
-    
-    //Also validate the form backing command (this is not done by Spring MVC and must be handled manually)
+
+    // Also validate the form backing command (this is not done by Spring MVC
+    // and must be handled manually)
     getValidator().validate(exception.getTarget(), exception);
 
     return handle(request, response, exception.getTarget(), exception);
@@ -205,15 +208,16 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
       BindException exception) throws ServletException, IOException {
-    
+
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
+      logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
-    
+
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand);
     }
@@ -263,7 +267,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand, SVNAuthenticationException svnae) {
+  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand,
+      SVNAuthenticationException svnae) {
     logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
     logger.error("Authentication failed", svnae);
     return new ModelAndView("authenticationfailure");
