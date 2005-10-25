@@ -71,7 +71,7 @@ public class RevisionIndexer {
     this.configuration = configuration;
     indexedUrl = configuration.getUrl();
     logger.debug("Creating the repository instance");
-    repository = RepositoryFactory.INSTANCE.getRepository(configuration, true);
+    repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
       logger.warn("Repository not configured - unable to create index");
       return;

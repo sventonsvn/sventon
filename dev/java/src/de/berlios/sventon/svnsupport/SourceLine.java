@@ -14,7 +14,7 @@ public class SourceLine {
    * Constructor.
    *
    * @param action The <tt>action</tt> code.
-   * @param line The source line.
+   * @param line   The source line.
    */
   public SourceLine(final String action, final String line) {
     this.action = action;
@@ -43,7 +43,7 @@ public class SourceLine {
    * {@inheritDoc}
    */
   public String toString() {
-    return action + line;
+    return "SourceLine{action='" + action + "', " + "line='" + line + "'}";
   }
 
 }

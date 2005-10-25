@@ -1,4 +1,6 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
+
+import de.berlios.sventon.diff.DiffAction;
 
 import java.util.ArrayList;
 import java.util.List;

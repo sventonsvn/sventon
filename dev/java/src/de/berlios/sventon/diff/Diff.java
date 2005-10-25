@@ -1,4 +1,6 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
+
+import de.berlios.sventon.svnsupport.*;
 
 import java.io.*;
 import java.util.List;
@@ -25,7 +27,7 @@ public class Diff {
    *
    * @param leftContent  Left (old) string content to diff.
    * @param rightContent Right (new) string content to diff.
-   * @throws DiffException if IO error occurs.
+   * @throws de.berlios.sventon.diff.DiffException if IO error occurs.
    */
   public Diff(final String leftContent, final String rightContent) throws DiffException {
     String tempLine;

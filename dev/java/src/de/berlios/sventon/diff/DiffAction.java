@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
 
 /**
  * Diff action bean.
@@ -13,9 +13,9 @@ public class DiffAction {
 
   /**
    * The diff action.
-   * Can be {@link de.berlios.sventon.svnsupport.DiffAction.ADD_ACTION},
-   * {@link de.berlios.sventon.svnsupport.DiffAction.CHANGE_ACTION} or
-   * {@link de.berlios.sventon.svnsupport.DiffAction.DELETE_ACTION}.
+   * Can be {@link de.berlios.sventon.diff.DiffAction.ADD_ACTION},
+   * {@link de.berlios.sventon.diff.DiffAction.CHANGE_ACTION} or
+   * {@link de.berlios.sventon.diff.DiffAction.DELETE_ACTION}.
    */
   private String action;
 

@@ -72,7 +72,7 @@ public final class KeywordHandler {
 
     Date jDate = date == null ? null : SVNTimeUtil.parseDate(date);
 
-    Map map = new HashMap();
+    Map<String, String> map = new HashMap<String, String>();
     for (StringTokenizer tokens = new StringTokenizer(keywords,
         " \t\n\b\r\f"); tokens.hasMoreTokens();) {
       String token = tokens.nextToken();
@@ -126,9 +126,8 @@ public final class KeywordHandler {
    * @return Content with substituted keywords.
    */
   public static String substitute(Map keywordsMap, String content) {
-    Iterator keywords = keywordsMap.keySet().iterator();
-    while (keywords.hasNext()) {
-      String keyword = (String) keywords.next();
+    for (Object o : keywordsMap.keySet()) {
+      String keyword = (String) o;
       Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
       String expandedKeyword = (String) keywordsMap.get(keyword);
       content = keywordPattern.matcher(content).replaceAll("\\$" + keyword + ": " + expandedKeyword + " \\$");

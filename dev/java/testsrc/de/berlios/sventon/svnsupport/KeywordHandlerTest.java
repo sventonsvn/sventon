@@ -3,12 +3,12 @@ package de.berlios.sventon.svnsupport;
 import junit.framework.TestCase;
 
 import java.util.Map;
+import java.util.Collections;
 
 public class KeywordHandlerTest extends TestCase {
-  KeywordHandler keywordHandler;
 
   public void testSubstitute() throws Exception {
-    Map keywordsMap = null;
+    Map keywordsMap;
     String keywords = "Author Date Revision URL";
     String url = "http://server/file.dat";
     String author = null;
@@ -32,6 +32,10 @@ public class KeywordHandlerTest extends TestCase {
     String result = KeywordHandler.substitute(keywordsMap, sb.toString());
     assertTrue(result.indexOf("file.dat") > -1);
     assertTrue(result.indexOf("$Rev: 33 $") > -1);
-
   }
+
+  public void testComputeKeywordsNull() throws Exception {
+    assertEquals(Collections.EMPTY_MAP, KeywordHandler.computeKeywords(null, null, null, null, null));
+  }
+
 }

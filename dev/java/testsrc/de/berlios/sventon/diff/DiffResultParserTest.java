@@ -1,8 +1,11 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
 
 import junit.framework.TestCase;
 
 import java.util.Iterator;
+
+import de.berlios.sventon.diff.DiffAction;
+import de.berlios.sventon.diff.DiffResultParser;
 
 public class DiffResultParserTest extends TestCase {
 

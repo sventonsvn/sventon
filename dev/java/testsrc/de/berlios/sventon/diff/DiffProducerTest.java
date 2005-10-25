@@ -1,14 +1,17 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.diff;
 
 import junit.framework.TestCase;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 
 public class DiffProducerTest extends TestCase {
 
   public static final String LINE_BREAK = System.getProperty("line.separator");
-  
+
   public void testDoNormalDiff() throws Exception {
     String leftString =
         "[.ShellClassInfo]" + LINE_BREAK +
@@ -70,61 +73,61 @@ public class DiffProducerTest extends TestCase {
 
   public void testDoNormalDiffII() throws Exception {
     String leftString =
-        "/**" + LINE_BREAK + 
-        " * $Author$" +LINE_BREAK + 
-        " * $Revision$" +LINE_BREAK + 
-        " * $Date:$" +LINE_BREAK + 
-        " */" +LINE_BREAK + 
-        "Test1" +LINE_BREAK + 
-        "Another test!" +LINE_BREAK + 
-        "More!" + LINE_BREAK + 
+        "/**" + LINE_BREAK +
+        " * $Author$" +LINE_BREAK +
+        " * $Revision$" +LINE_BREAK +
+        " * $Date:$" +LINE_BREAK +
+        " */" +LINE_BREAK +
+        "Test1" +LINE_BREAK +
+        "Another test!" +LINE_BREAK +
+        "More!" + LINE_BREAK +
         "Even more!" + LINE_BREAK;
 
     String rightString =
-        "/**" + LINE_BREAK + 
-        " * $Id$" + LINE_BREAK + 
-        " * $LastChangedDate$" + LINE_BREAK + 
-        " * $Date$" + LINE_BREAK + 
-        " * $LastChangedRevision$" + LINE_BREAK + 
-        " * $Revision$" + LINE_BREAK + 
-        " * $Rev$" + LINE_BREAK + 
-        " * $LastChangedBy$" + LINE_BREAK + 
-        " * $Author$" + LINE_BREAK + 
-        " * $HeadURL$" + LINE_BREAK + 
-        " * $URL$" + LINE_BREAK + 
-        " * $Id$" + LINE_BREAK + 
-        " */" + LINE_BREAK + 
-        "Test1" + LINE_BREAK + 
-        "Another test!" + LINE_BREAK + 
-        "More!" + LINE_BREAK + 
-        "Even more!" + LINE_BREAK + 
-        LINE_BREAK + 
-        "public String getRev {" + LINE_BREAK + 
-        " return \"$Rev$\";" + LINE_BREAK + 
-        LINE_BREAK + 
+        "/**" + LINE_BREAK +
+        " * $Id$" + LINE_BREAK +
+        " * $LastChangedDate$" + LINE_BREAK +
+        " * $Date$" + LINE_BREAK +
+        " * $LastChangedRevision$" + LINE_BREAK +
+        " * $Revision$" + LINE_BREAK +
+        " * $Rev$" + LINE_BREAK +
+        " * $LastChangedBy$" + LINE_BREAK +
+        " * $Author$" + LINE_BREAK +
+        " * $HeadURL$" + LINE_BREAK +
+        " * $URL$" + LINE_BREAK +
+        " * $Id$" + LINE_BREAK +
+        " */" + LINE_BREAK +
+        "Test1" + LINE_BREAK +
+        "Another test!" + LINE_BREAK +
+        "More!" + LINE_BREAK +
+        "Even more!" + LINE_BREAK +
+        LINE_BREAK +
+        "public String getRev {" + LINE_BREAK +
+        " return \"$Rev$\";" + LINE_BREAK +
+        LINE_BREAK +
         "}" + LINE_BREAK;
 
     String result =
-        "2a2,8" + LINE_BREAK + 
-        "> * $Id$" + LINE_BREAK + 
-        "> * $LastChangedDate$" + LINE_BREAK + 
-        "> * $Date$" + LINE_BREAK + 
-        "> * $LastChangedRevision$" + LINE_BREAK + 
-        "> * $Revision$" + LINE_BREAK + 
-        "> * $Rev$" + LINE_BREAK + 
-        "> * $LastChangedBy$" + LINE_BREAK + 
-        "10,12c3,4" + LINE_BREAK + 
-        "< * $HeadURL$" + LINE_BREAK + 
-        "< * $URL$" + LINE_BREAK + 
-        "< * $Id$" + LINE_BREAK + 
-        "---" + LINE_BREAK + 
-        "> * $Revision$" + LINE_BREAK + 
-        "> * $Date:$" + LINE_BREAK + 
-        "10a18,22" + LINE_BREAK + 
-        ">" + LINE_BREAK + 
-        ">public String getRev {" + LINE_BREAK + 
-        "> return \"$Rev$\";" + LINE_BREAK + 
-        ">" + LINE_BREAK + 
+        "2a2,8" + LINE_BREAK +
+        "> * $Id$" + LINE_BREAK +
+        "> * $LastChangedDate$" + LINE_BREAK +
+        "> * $Date$" + LINE_BREAK +
+        "> * $LastChangedRevision$" + LINE_BREAK +
+        "> * $Revision$" + LINE_BREAK +
+        "> * $Rev$" + LINE_BREAK +
+        "> * $LastChangedBy$" + LINE_BREAK +
+        "10,12c3,4" + LINE_BREAK +
+        "< * $HeadURL$" + LINE_BREAK +
+        "< * $URL$" + LINE_BREAK +
+        "< * $Id$" + LINE_BREAK +
+        "---" + LINE_BREAK +
+        "> * $Revision$" + LINE_BREAK +
+        "> * $Date:$" + LINE_BREAK +
+        "10a18,22" + LINE_BREAK +
+        ">" + LINE_BREAK +
+        ">public String getRev {" + LINE_BREAK +
+        "> return \"$Rev$\";" + LINE_BREAK +
+        ">" + LINE_BREAK +
         ">}" + LINE_BREAK;
     InputStream left = new ByteArrayInputStream(leftString.getBytes());
     InputStream right = new ByteArrayInputStream(rightString.getBytes());
