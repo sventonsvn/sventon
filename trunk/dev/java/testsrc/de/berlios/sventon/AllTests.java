@@ -7,12 +7,14 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon");
-    //$JUnit-BEGIN$
+    suite.addTest(de.berlios.sventon.blame.AllTests.suite());
+    suite.addTest(de.berlios.sventon.colorer.AllTests.suite());
+    suite.addTest(de.berlios.sventon.command.AllTests.suite());
     suite.addTest(de.berlios.sventon.ctrl.AllTests.suite());
+    suite.addTest(de.berlios.sventon.diff.AllTests.suite());
     suite.addTest(de.berlios.sventon.index.AllTests.suite());
     suite.addTest(de.berlios.sventon.svnsupport.AllTests.suite());
     suite.addTest(de.berlios.sventon.util.AllTests.suite());
-    //$JUnit-END$
     return suite;
   }
 

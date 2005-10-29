@@ -1,7 +1,9 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import de.berlios.sventon.command.ConfigCommand;
+import de.berlios.sventon.command.ConfigCommandValidator;
 
 public class ConfigCommandValidatorTest extends TestCase {
 
@@ -35,7 +37,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setConfigPath(null);
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     command.setRepositoryURL("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());

@@ -1,4 +1,4 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.colorer;
 
 import com.uwyn.jhighlight.renderer.Renderer;
 import com.uwyn.jhighlight.renderer.RendererFactory;
@@ -14,21 +14,18 @@ import java.io.IOException;
  * @link http://jhighlight.dev.java.net
  * @author jesper@users.berlios.de
  */
-public class Colorer {
+public class JHighlightColorer implements Colorer {
 
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Constructor.
    */
-  public Colorer() {
+  public JHighlightColorer() {
   }
 
   /**
-   * Converts the file contents into colorized HTML code.
-   * @param content The file contents.
-   * @param filename The filename, used to determine formatter.
-   * @return The colorized string.
+   * {@inheritDoc}
    */
   public String getColorizedContent(final String content, final String filename) {
     logger.debug("Colorizing content, filename: " + filename);

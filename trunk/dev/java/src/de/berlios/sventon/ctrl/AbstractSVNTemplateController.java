@@ -1,6 +1,7 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.command.SVNBaseCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -42,7 +43,7 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
  * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
- * method with the given {@link de.berlios.sventon.ctrl.SVNBaseCommand}
+ * method with the given {@link de.berlios.sventon.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
@@ -67,11 +68,11 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
  * </tr>
  * <tr>
  * <td>command</td>
- * <td>{@link de.berlios.sventon.ctrl.SVNBaseCommand}-object</td>
+ * <td>{@link de.berlios.sventon.command.SVNBaseCommand}-object</td>
  * </tr>
  * </table> <p/> <b>Input arguments</b><br>
  * Input to this argument is wrapped in a
- * <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object by the
+ * <code>{@link de.berlios.sventon.command.SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception

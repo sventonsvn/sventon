@@ -2,9 +2,6 @@ package de.berlios.sventon.svnsupport;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import de.berlios.sventon.diff.DiffProducerTest;
-import de.berlios.sventon.diff.DiffResultParserTest;
-import de.berlios.sventon.diff.DiffTest;
 
 public class AllTests {
 
@@ -14,9 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
-    suite.addTestSuite(DiffTest.class);
-    suite.addTestSuite(DiffProducerTest.class);
-    suite.addTestSuite(DiffResultParserTest.class);
+    suite.addTestSuite(CustomArrayListTest.class);
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     suite.addTestSuite(KeywordHandlerTest.class);
     return suite;

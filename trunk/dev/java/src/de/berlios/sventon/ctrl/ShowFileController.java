@@ -2,6 +2,8 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.svnsupport.KeywordHandler;
 import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.colorer.Colorer;
+import de.berlios.sventon.command.SVNBaseCommand;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -21,6 +23,26 @@ import java.util.Map;
  * @author patrikfr@users.berlios.de
  */
 public class ShowFileController extends AbstractSVNTemplateController implements Controller {
+
+  private Colorer colorer;
+
+  /**
+   * Sets the <tt>Colorer</tt> instance.
+   *
+   * @param colorer The instance.
+   */
+  public void setColorer(Colorer colorer) {
+    this.colorer = colorer;
+  }
+
+  /**
+   * Gets <tt>Colorer</tt> instance.
+   *
+   * @return The instance.
+   */
+  public Colorer getColorer() {
+    return colorer;
+  }
 
   /**
    * {@inheritDoc}
@@ -61,7 +83,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       } else {
         fileContents = outStream.toString();
       }
-      fileContents = ((Colorer) getApplicationContext().getBean("colorer")).getColorizedContent(fileContents, svnCommand.getTarget());
+      fileContents = getColorer().getColorizedContent(fileContents, svnCommand.getTarget());
       logger.debug("Create model");
       model.put("fileContents", fileContents);
     }

@@ -2,6 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import static de.berlios.sventon.ctrl.ShowLogController.PAGES_COMMAND_SESSION_KEY;
 import static de.berlios.sventon.ctrl.ShowLogController.PAGES_SESSION_KEY;
+import de.berlios.sventon.command.SVNBaseCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  * This controller expects to find paged logs in the HTTP session as a
  * <code>List&lt;List&lt;LogEntryBundle&gt;&gt;</code> object, store using key
  * <code>{@link ShowLogController#PAGES_SESSION_KEY}</code>. Also the
- * original <code>{@link de.berlios.sventon.ctrl.SVNBaseCommand}</code> object
+ * original <code>{@link de.berlios.sventon.command.SVNBaseCommand}</code> object
  * must be stored in the session using using key
  * <code>{@link ShowLogController#PAGES_COMMAND_SESSION_KEY}</code>. The latter object is used to check if the user
  * has been tampering with parameter data. 

@@ -1,4 +1,4 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.command;
 
 import org.apache.commons.lang.StringUtils;
 

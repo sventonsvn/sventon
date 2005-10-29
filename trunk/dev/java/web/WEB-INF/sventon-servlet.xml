@@ -23,10 +23,10 @@
   </bean>
 
   <bean id="svnBaseCommandValidator"
-    class="de.berlios.sventon.ctrl.SVNBaseCommandValidator" />
+    class="de.berlios.sventon.command.SVNBaseCommandValidator" />
 
   <bean id="configCommandValidator"
-    class="de.berlios.sventon.ctrl.ConfigCommandValidator" />
+    class="de.berlios.sventon.command.ConfigCommandValidator" />
 
   <bean id="showLogsController"
     class="de.berlios.sventon.ctrl.ShowLogController">
@@ -50,6 +50,9 @@
 
   <bean id="searchController"
     class="de.berlios.sventon.ctrl.SearchController">
+    <property name="revisionIndexer">
+      <ref bean="revisionIndexer" />
+    </property>
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -60,6 +63,9 @@
 
   <bean id="flattenController"
     class="de.berlios.sventon.ctrl.FlattenController">
+    <property name="revisionIndexer">
+      <ref bean="revisionIndexer" />
+    </property>
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -70,6 +76,19 @@
 
   <bean id="showFileController"
     class="de.berlios.sventon.ctrl.ShowFileController">
+    <property name="colorer">
+      <ref bean="colorer" />
+    </property>
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
+  <bean id="showThumbnailController"
+    class="de.berlios.sventon.ctrl.ShowThumbnailController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -100,6 +119,9 @@
 
   <bean id="blameController"
     class="de.berlios.sventon.ctrl.BlameController">
+    <property name="colorer">
+      <ref bean="colorer" />
+    </property>
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -156,6 +178,7 @@
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>
         <prop key="/config.svn">configurationController</prop>
+        <prop key="/showthumbs.svn">showThumbnailController</prop>
         <prop key="/diff.svn">diffController</prop>
       </props>
     </property>
@@ -182,9 +205,11 @@
   </bean>
 
   <bean name="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" singleton="true" destroy-method="destroy">
-    <constructor-arg><ref bean="repositoryConfig"/></constructor-arg>
+    <constructor-arg>
+      <ref bean="repositoryConfig"/>
+    </constructor-arg>
   </bean>
 
-  <bean id="colorer" class="de.berlios.sventon.ctrl.Colorer" singleton="true" />
+  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true" />
 
 </beans>

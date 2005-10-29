@@ -8,7 +8,7 @@ import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
 
-import de.berlios.sventon.svnsupport.SventonSVNLogger;
+import de.berlios.sventon.svnsupport.SVNLog4JAdapter;
 
 /**
  * Small wrapper class to hold connection info for the repository.
@@ -109,7 +109,7 @@ public class RepositoryConfiguration {
     }
 
     logger.debug("SVN location: " + repositoryURL);
-    
+
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
       configured = true;
@@ -221,7 +221,7 @@ public class RepositoryConfiguration {
   }
 
   private void configureLogging() {
-    SVNDebugLog.setLogger(new SventonSVNLogger());
+    SVNDebugLog.setLogger(new SVNLog4JAdapter("sventon.javasvn"));
   }
 
   /**

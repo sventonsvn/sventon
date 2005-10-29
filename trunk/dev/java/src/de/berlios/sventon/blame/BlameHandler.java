@@ -1,5 +1,6 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.blame;
 
+import de.berlios.sventon.colorer.Colorer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
