@@ -2,6 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.SventonCache;
+import de.berlios.sventon.command.SVNBaseCommand;
 import net.sf.ehcache.CacheException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;

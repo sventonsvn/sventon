@@ -1,8 +1,8 @@
 package de.berlios.sventon.ctrl;
 
+import de.berlios.sventon.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
@@ -68,7 +68,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-      BindException e) throws Exception {
+                                  BindException e) throws Exception {
     logger.debug("showForm() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
@@ -89,7 +89,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest,
-      HttpServletResponse httpServletResponse, Object command, BindException exception) throws Exception {
+                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws Exception {
     logger.debug("processFormSubmission() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
@@ -115,13 +115,13 @@ public class ConfigurationController extends AbstractFormController {
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
 
       config.store(new FileOutputStream(propFile), createPropertyFileComment());
-      
+
       //TODO: Find a way to refresh the app context, the lines below fails for some reason
       //(also, are not threadsafe) 
 //      AbstractApplicationContext abstractApplicationContext = ((AbstractApplicationContext) getWebApplicationContext());
 //      logger.debug("Refreshing application context");
 //      abstractApplicationContext.refresh();
-      
+
       return new ModelAndView("restart");
     }
   }

@@ -1,7 +1,9 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.command.SVNBaseCommandValidator;
 
 public class SVNBaseCommandValidatorTest extends TestCase {
 
@@ -35,7 +37,7 @@ public class SVNBaseCommandValidatorTest extends TestCase {
 
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     //Both HEAD and head (and HeAd) are valid revisions. These are not really
     //accepted by the validator in any other form than HEAD, but other case variations
     //are automatically converted when set using the setRevision method on SVNBaseCommand
@@ -43,17 +45,17 @@ public class SVNBaseCommandValidatorTest extends TestCase {
 
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     command.setRevision("head");
- 
+
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     command.setRevision("HEad");
 
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     //Other non numerical revisions are however not allowed
     command.setRevision("TEST");
 

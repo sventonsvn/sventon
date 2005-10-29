@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
+import de.berlios.sventon.command.SVNBaseCommand;
 
 /**
  * RepoBrowserController.
@@ -23,7 +24,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
 
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response) throws SVNException {
 
     List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 

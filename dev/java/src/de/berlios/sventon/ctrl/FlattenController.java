@@ -1,5 +1,6 @@
 package de.berlios.sventon.ctrl;
 
+import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -16,6 +17,26 @@ import java.util.*;
  * @author jesper@users.berlios.de
  */
 public class FlattenController extends AbstractSVNTemplateController implements Controller {
+
+  private RevisionIndexer revisionIndexer;
+
+  /**
+   * Sets the revision indexer instance.
+   *
+   * @param revisionIndexer The instance.
+   */
+  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
+    this.revisionIndexer = revisionIndexer;
+  }
+
+  /**
+   * Gets the revision indexer instance.
+   *
+   * @return The instance.
+   */
+  public RevisionIndexer getRevisionIndexer() {
+    return revisionIndexer;
+  }
 
   /**
    * {@inheritDoc}
@@ -34,8 +55,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     }
 
     logger.debug("Flattening directories below: " + fromPath);
-    RevisionIndexer indexer = (RevisionIndexer) getApplicationContext().getBean("revisionIndexer");
-    entries.addAll(indexer.getDirectories(fromPath));
+    entries.addAll(getRevisionIndexer().getDirectories(fromPath));
     logger.debug(entries.size() + " entries found.");
 
     logger.debug("Create model");

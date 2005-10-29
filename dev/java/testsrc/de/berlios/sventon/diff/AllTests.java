@@ -1,4 +1,4 @@
-package de.berlios.sventon.index;
+package de.berlios.sventon.diff;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -10,8 +10,10 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.index");
-    suite.addTestSuite(RevisionIndexerTest.class);
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.diff");
+    suite.addTestSuite(DiffTest.class);
+    suite.addTestSuite(DiffProducerTest.class);
+    suite.addTestSuite(DiffResultParserTest.class);
     return suite;
   }
 

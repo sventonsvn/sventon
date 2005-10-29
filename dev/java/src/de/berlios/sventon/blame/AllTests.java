@@ -1,4 +1,4 @@
-package de.berlios.sventon.index;
+package de.berlios.sventon.blame;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -10,8 +10,7 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.index");
-    suite.addTestSuite(RevisionIndexerTest.class);
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.blame");
     return suite;
   }
 

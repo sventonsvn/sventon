@@ -1,4 +1,4 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.blame;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

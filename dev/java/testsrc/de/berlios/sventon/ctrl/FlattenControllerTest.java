@@ -1,23 +1,26 @@
-package de.berlios.sventon.index;
+package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
+import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
-public class RevisionIndexerTest extends TestCase {
+public class FlattenControllerTest extends TestCase {
 
-  private RevisionIndexer indexer = null;
+  SVNRepositoryStub repository;
 
   public void setUp() throws Exception {
     // Set up the repository stub
-    SVNRepositoryStub repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), null);
+    repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), null);
     repository.setLatestRevision(123);
 
     List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
@@ -35,38 +38,18 @@ public class RevisionIndexerTest extends TestCase {
     repository.addDir("/dir1/", entries2);
     repository.addDir("/dir1/dir2/", new ArrayList());
 
-    indexer = new RevisionIndexer(repository);
-    indexer.index();
-    assertEquals(8, indexer.getIndexCount());
-    //printIndex();
   }
 
-  public void testFind() throws Exception {
-    assertEquals(2, indexer.find("html").size());
-  }
-
-  public void testFindMixedCase() throws Exception {
-    assertEquals(2, indexer.find("hTmL").size());
-  }
-
-  public void testFindPattern() throws Exception {
-    assertEquals(7, indexer.findPattern(".*[12].*").size());
-  }
-
-  public void testGetDirectories() throws Exception {
-    assertEquals(2, indexer.getDirectories("/").size());
-    assertEquals(1, indexer.getDirectories("/dir1/").size());
-  }
-
-  public void testGetDirectoriesMixedCase() throws Exception {
-    assertEquals(2, indexer.getDirectories("/").size());
-    assertEquals(0, indexer.getDirectories("/DIR1/").size()); //TODO: Should we allow mixed case?
-  }
-
-  private void printIndex() {
-    Iterator i = indexer.getEntriesIterator();
-    while (i.hasNext()) {
-      System.out.println(i.next());
+  public void testSvnHandle() throws Exception {
+    SVNBaseCommand command = new SVNBaseCommand();
+    FlattenController controller = new FlattenController();
+    ModelAndView model;
+    try {
+      model = controller.svnHandle(repository, command, SVNRevision.HEAD, null, null);
+    } catch (SVNException ex) {
+      throw new Exception(ex);
     }
+
   }
+
 }

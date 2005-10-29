@@ -9,10 +9,19 @@ import org.tmatesoft.svn.util.SVNDebugLoggerAdapter;
  * 
  * @author patrikfr@users.berlios.de
  */
-public class SventonSVNLogger extends SVNDebugLoggerAdapter {
+public class SVNLog4JAdapter extends SVNDebugLoggerAdapter {
 
-  //TODO: Rename this class to SVNLog4JAdapter, make it possible to set name space in constructor.
-  private final Log logger = LogFactory.getLog("sventon.javasvn");
+  /** The <tt>Log</tt> instance. */
+  private final Log logger;
+
+  /**
+   * Constructor.
+   *
+   * @param namespace Logging name space to use.
+   */
+  public SVNLog4JAdapter(final String namespace) {
+    logger = LogFactory.getLog(namespace);
+  }
 
   /**
    * {@inheritDoc}

@@ -1,6 +1,5 @@
 package de.berlios.sventon.diff;
 
-import de.berlios.sventon.svnsupport.SourceLine;
 import junit.framework.TestCase;
 
 public class DiffTest extends TestCase {

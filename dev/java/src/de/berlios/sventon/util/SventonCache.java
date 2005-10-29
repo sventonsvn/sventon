@@ -16,9 +16,6 @@ import java.io.Serializable;
  */
 public class SventonCache {
 
-  /** The cache manager instance. */
-  private CacheManager cacheManager = null;
-
   /** The cache instance. */
   private Cache cache = null;
 
@@ -50,7 +47,7 @@ public class SventonCache {
    * @throws CacheException if cache initialization error occur.
    */
   private synchronized void init() throws CacheException {
-    cacheManager = CacheManager.getInstance();
+    CacheManager cacheManager = CacheManager.getInstance();
     cache = cacheManager.getCache(CACHE_NAME);
   }
 

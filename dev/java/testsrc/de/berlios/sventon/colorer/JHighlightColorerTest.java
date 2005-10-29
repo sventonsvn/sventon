@@ -1,11 +1,11 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.colorer;
 
 import junit.framework.TestCase;
 
-public class ColorerTest extends TestCase {
+public class JHighlightColorerTest extends TestCase {
 
   public void testGetColorizedContent() throws Exception {
-    Colorer colorer = new Colorer();
+    Colorer colorer = new JHighlightColorer();
 
     // Should produce colorized java code
     assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\"> </span><span class=\"java_keyword\">class</span><span class=\"java_plain\"> </span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\">\n</span>",

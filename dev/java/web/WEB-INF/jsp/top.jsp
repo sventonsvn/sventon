@@ -16,7 +16,7 @@
     </td>
   </tr>
   <c:set var="command" value="${command}"/> 
-  <jsp:useBean id="command" type="de.berlios.sventon.ctrl.SVNBaseCommand" />
+  <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
   <tr>
     <td class="sventonHeadlines">
      Repository path: <a href="repobrowser.svn">
