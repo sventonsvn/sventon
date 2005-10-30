@@ -1,5 +1,6 @@
 package de.berlios.sventon.ctrl;
 
+import de.berlios.sventon.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -9,14 +10,12 @@ import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
-
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
-import de.berlios.sventon.command.SVNBaseCommand;
 
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
@@ -95,8 +94,6 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
           }
-        } else {
-          continue;
         }
       }
     }
@@ -142,9 +139,8 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     List<List<LogEntryBundle>> pages = new ArrayList<List<LogEntryBundle>>();
     for (int i = 0; i < logEntries.size(); i = i + PAGE_SIZE) {
-      int start = i;
       int end = ((i + PAGE_SIZE) < logEntries.size()) ? i + PAGE_SIZE : logEntries.size();
-      pages.add(new ArrayList<LogEntryBundle>(logEntries.subList(start, end)));
+      pages.add(new ArrayList<LogEntryBundle>(logEntries.subList(i, end)));
     }
 
     if (pages.size() == 0) {

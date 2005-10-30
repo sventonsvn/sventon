@@ -13,9 +13,6 @@ import java.util.ArrayList;
  */
 public class Diff {
 
-  private InputStream leftStream;
-  private InputStream rightStream;
-
   private CustomArrayList<SourceLine> leftLinesList;
   private CustomArrayList<SourceLine> rightLinesList;
 
@@ -36,8 +33,8 @@ public class Diff {
     List<String> leftSourceLines = new ArrayList<String>();
     List<String> rightSourceLines = new ArrayList<String>();
 
-    this.leftStream = new ByteArrayInputStream(leftContent.getBytes());
-    this.rightStream = new ByteArrayInputStream(rightContent.getBytes());
+    InputStream leftStream = new ByteArrayInputStream(leftContent.getBytes());
+    InputStream rightStream = new ByteArrayInputStream(rightContent.getBytes());
 
     try {
       ByteArrayOutputStream diffResult = new ByteArrayOutputStream();

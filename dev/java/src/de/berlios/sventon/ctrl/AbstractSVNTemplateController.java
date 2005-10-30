@@ -1,7 +1,7 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.svnsupport.RepositoryFactory;
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.svnsupport.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -13,6 +13,7 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,6 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -167,7 +166,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
         return prepareExceptionModelAndView(exception, svnCommand);
       }
     } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(request, svnCommand, svnae);
+      return forwardToAuthenticationFailureView(svnae);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -242,7 +241,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(request, svnCommand, svnae);
+      return forwardToAuthenticationFailureView(svnae);
     } catch (SVNException e) {
       logger.error("SVN Exception", e);
       Throwable cause = e.getCause();
@@ -260,16 +259,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
-   * 
-   * @param request Servlet request, original command and url info will be
-   *          stored here during authentication.
-   * @param svnCommand Command object.
+   *
+   * @param svnae The SVNAuthenticationException.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(HttpServletRequest request, SVNBaseCommand svnCommand,
-      SVNAuthenticationException svnae) {
+  private ModelAndView forwardToAuthenticationFailureView(SVNAuthenticationException svnae) {
     logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
     logger.error("Authentication failed", svnae);
     return new ModelAndView("authenticationfailure");

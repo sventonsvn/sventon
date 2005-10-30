@@ -6,7 +6,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
-import de.berlios.sventon.command.ConfigCommand;
 
 /**
  * ConfigCommandValidator.

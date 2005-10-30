@@ -54,7 +54,7 @@ public class RevisionIndexer {
    *
    * @param repository The repository instance
    */
-  public RevisionIndexer(final SVNRepository repository) throws SVNException {
+  public RevisionIndexer(final SVNRepository repository) {
     logger.debug("Creating index instance using given repository");
     this.repository = repository;
     indexedUrl = repository.getLocation().toString();
