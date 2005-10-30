@@ -10,24 +10,35 @@
   <body>
     <%@ include file="/WEB-INF/jsp/top.jsp"%>
 
+    <c:url value="get.svn" var="downloadUrl" />
+
+    <c:url value="repobrowser.svn" var="showDirUrl">
+      <c:param name="path" value="${command.path}" />
+      <c:param name="revision" value="${command.revision}" />
+    </c:url>
+
+    <p>
+      <table class="sventonHeader"><tr><td>
+    Diff view - <b><c:out value="${command.target}"/></b></td></tr></table>
+    </p>
     <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
-  <br/>
+    <br/>
 
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td>[Show log]</td>
-        <td>[Download]</td>
+        <td><a href="<c:out value="${showDirUrl}"/>">[Show directory]</a></td>
       </tr>
     </table>
-<p>
-<%
-//  <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
-//    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb"/>
-//  </a>
-%>
 
-</p>
+    <c:forEach items="${thumbnailentries}" var="entry">
+      <p>
+        <a href="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=inline">
+          <img src="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=thumb"/>
+        </a>
+      </p>
+    </c:forEach>
+
 <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
   </body>
