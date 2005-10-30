@@ -31,7 +31,23 @@ public class ImageUtilTest extends TestCase {
   }
 
   public void testIsImageFile() throws Exception {
-    assertTrue(ImageUtil.isImageFile("jpg"));
-    assertFalse(ImageUtil.isImageFile("filenamejpg"));
+    assertTrue(ImageUtil.isImageFileExtension("jpg"));
+    assertFalse(ImageUtil.isImageFileExtension("filenamejpg"));
+    assertFalse(ImageUtil.isImageFileExtension(null));
+    assertFalse(ImageUtil.isImageFileExtension(""));
   }
+
+  public void testIsImageFilename() throws Exception {
+    assertTrue(ImageUtil.isImageFilename("filename.gif"));
+    assertFalse(ImageUtil.isImageFilename("filenamejpg"));
+    assertTrue(ImageUtil.isImageFilename("/dir/file.gif"));
+    assertFalse(ImageUtil.isImageFilename(""));
+    try {
+      assertFalse(ImageUtil.isImageFilename(null));
+      fail("Should cause IllegalArgumentException");
+    } catch (IllegalArgumentException ex) {
+      // expected
+    }
+  }
+
 }

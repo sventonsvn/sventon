@@ -80,13 +80,34 @@ public final class ImageUtil {
   }
 
   /**
-   * Checks if the file extension indicates a know, browser displayable, image file.
+   * Checks if the file extension indicates a known, browser displayable, image file.
    *
    * @param fileExtension The file extension.
    * @return True if image file, false if not.
    */
-  public static boolean isImageFile(String fileExtension) {
+  public static boolean isImageFileExtension(final String fileExtension) {
     //TODO: Better handling of file and content types.
+    return ImageUtil.getContentType(fileExtension) != null;
+  }
+
+  /**
+   * Checks if the extension of the file name indicates a known, browser
+   * displayable, image file.
+   *
+   * @param filename The file name.
+   * @return True if image file, false if not.
+   */
+  public static boolean isImageFilename(final String filename) {
+    //TODO: Better handling of file and content types.
+    String fileExtension = "";
+
+    if (filename == null) {
+      throw new IllegalArgumentException("null is not a valid filename");
+    }
+
+    if (filename.lastIndexOf(".") > -1) {
+      fileExtension = filename.substring(filename.lastIndexOf(".") + 1);
+    }
     return ImageUtil.getContentType(fileExtension) != null;
   }
 

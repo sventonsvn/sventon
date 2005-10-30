@@ -60,6 +60,11 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'");
+        if (!ImageUtil.isImageFileExtension(svnCommand.getFileExtension())) {
+          logger.error("File '" + svnCommand.getTarget() + "' is not a image file.");
+          return null;
+        }
+
         response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
 
         // Check if the thumbnail exists on the cache
@@ -113,10 +118,8 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           // Write thumbnail to ServletOutputStream.
           output.write(baos.toByteArray());
         }
-        output.flush();
-        output.close();
       } else {
-        if (DISPLAY_TYPE_INLINE.equals(displayType)) {
+        if (DISPLAY_TYPE_INLINE.equals(displayType) && ImageUtil.isImageFileExtension(svnCommand.getFileExtension())) {
           logger.debug("Getting file as 'inline'");
           response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
