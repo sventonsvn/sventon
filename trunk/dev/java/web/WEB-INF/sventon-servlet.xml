@@ -12,8 +12,7 @@
     <property name="location" value="WEB-INF/classes/default-sventon.properties"/>
   </bean>
 
-  <bean id="repoBrowserController"
-    class="de.berlios.sventon.ctrl.RepoBrowserController">
+  <bean id="repoBrowserController" class="de.berlios.sventon.ctrl.RepoBrowserController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -22,14 +21,11 @@
     </property>
   </bean>
 
-  <bean id="svnBaseCommandValidator"
-    class="de.berlios.sventon.command.SVNBaseCommandValidator" />
+  <bean id="svnBaseCommandValidator" class="de.berlios.sventon.command.SVNBaseCommandValidator" />
 
-  <bean id="configCommandValidator"
-    class="de.berlios.sventon.command.ConfigCommandValidator" />
+  <bean id="configCommandValidator" class="de.berlios.sventon.command.ConfigCommandValidator" />
 
-  <bean id="showLogsController"
-    class="de.berlios.sventon.ctrl.ShowLogController">
+  <bean id="showLogsController" class="de.berlios.sventon.ctrl.ShowLogController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -38,8 +34,7 @@
     </property>
   </bean>
 
-  <bean id="showLogPageController"
-    class="de.berlios.sventon.ctrl.ShowLogPageController">
+  <bean id="showLogPageController" class="de.berlios.sventon.ctrl.ShowLogPageController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -48,8 +43,7 @@
     </property>
   </bean>
 
-  <bean id="searchController"
-    class="de.berlios.sventon.ctrl.SearchController">
+  <bean id="searchController" class="de.berlios.sventon.ctrl.SearchController">
     <property name="revisionIndexer">
       <ref bean="revisionIndexer" />
     </property>
@@ -61,8 +55,7 @@
     </property>
   </bean>
 
-  <bean id="flattenController"
-    class="de.berlios.sventon.ctrl.FlattenController">
+  <bean id="flattenController" class="de.berlios.sventon.ctrl.FlattenController">
     <property name="revisionIndexer">
       <ref bean="revisionIndexer" />
     </property>
@@ -74,8 +67,7 @@
     </property>
   </bean>
 
-  <bean id="showFileController"
-    class="de.berlios.sventon.ctrl.ShowFileController">
+  <bean id="showFileController" class="de.berlios.sventon.ctrl.ShowFileController">
     <property name="colorer">
       <ref bean="colorer" />
     </property>
@@ -87,8 +79,7 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController"
-    class="de.berlios.sventon.ctrl.ShowThumbnailController">
+  <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -97,8 +88,7 @@
     </property>
   </bean>
 
-  <bean id="diffController"
-    class="de.berlios.sventon.ctrl.DiffController">
+  <bean id="diffController" class="de.berlios.sventon.ctrl.DiffController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -107,8 +97,7 @@
     </property>
   </bean>
 
-  <bean id="getController"
-    class="de.berlios.sventon.ctrl.GetController">
+  <bean id="getController" class="de.berlios.sventon.ctrl.GetController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -117,8 +106,7 @@
     </property>
   </bean>
 
-  <bean id="blameController"
-    class="de.berlios.sventon.ctrl.BlameController">
+  <bean id="blameController" class="de.berlios.sventon.ctrl.BlameController">
     <property name="colorer">
       <ref bean="colorer" />
     </property>
@@ -130,8 +118,7 @@
     </property>
   </bean>
 
-  <bean id="configurationController"
-    class="de.berlios.sventon.ctrl.ConfigurationController">
+  <bean id="configurationController" class="de.berlios.sventon.ctrl.ConfigurationController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -140,13 +127,9 @@
     </property>
   </bean>
 
-  <bean id="clearSessionController"
-    class="de.berlios.sventon.ctrl.ClearSessionController">
-  </bean>
+  <bean id="clearSessionController" class="de.berlios.sventon.ctrl.ClearSessionController" />
 
-  <bean id="repositoryConfig"
-    class="de.berlios.sventon.ctrl.RepositoryConfiguration"
-    singleton="true">
+  <bean id="repositoryConfig" class="de.berlios.sventon.ctrl.RepositoryConfiguration" singleton="true">
     <property name="repositoryRoot">
       <value>${svn.root}</value>
     </property>
@@ -164,8 +147,7 @@
     </property>
   </bean>
 
-  <bean id="urlMapping"
-    class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
         <prop key="/repobrowser.svn">repoBrowserController</prop>
@@ -184,15 +166,13 @@
     </property>
   </bean>
 
-  <bean id="messageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource">
+  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
     <property name="basename">
       <value>messages</value>
     </property>
   </bean>
 
-  <bean id="viewResolver"
-    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass">
       <value>org.springframework.web.servlet.view.JstlView</value>
     </property>
