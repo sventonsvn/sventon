@@ -33,6 +33,7 @@
 
     <c:forEach items="${thumbnailentries}" var="entry">
       <p>
+        <b><c:out value="${entry}"/></b><br/>
         <a href="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=inline">
           <img src="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=thumb"/>
         </a>
