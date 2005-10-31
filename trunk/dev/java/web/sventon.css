@@ -64,6 +64,12 @@ th {
   font-weight: bold;
 }
 
+td {
+  text-align: left;
+  font-family: Verdana;
+  font-size: 11px;
+}
+
 .sventonRevision {
 }
 
