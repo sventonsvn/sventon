@@ -1,6 +1,5 @@
 /*
  * Style definition for Sventon user interface
- * TODO: Complete...
  */
 
 body {
@@ -60,6 +59,9 @@ a:link, a:visited, a:hover, a:active {
 th {
   text-align: left;
   white-space: nowrap;
+  font-family: Verdana;
+  font-size: 11px;
+  font-weight: bold;
 }
 
 .sventonRevision {
@@ -187,27 +189,27 @@ th {
 .src {
   background-color: #eeeeff;
   font-family: Verdana;
-  font-size: 7pt;
+  font-size: 9px;
   white-space: pre;
 }
 
 .srcChg {
   background-color: #ffbebe;
   font-family: Verdana;
-  font-size: 7pt;
+  font-size: 9px;
   white-space: pre;
 }
 
 .srcAdd {
   background-color: #beffbe;
   font-family: Verdana;
-  font-size: 7pt;
+  font-size: 9px;
   white-space: pre;
 }
 
 .srcDel {
   background-color: #bebeff;
   font-family: Verdana;
-  font-size: 7pt;
+  font-size: 9px;
   white-space: pre;
 }
