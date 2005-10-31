@@ -124,3 +124,15 @@ function verifyCheckBox(checkbox) {
     count -= 1;
   }
 }
+
+// function to display warning in case user tries to flatten on
+// root directory level.
+function flatteningWarning() {
+  return confirm("Flattening on this directory level is not recommended.\nThe result will potentially be very large\nDo you want to continue anyway?");
+}
+
+// function to display warning in case search string is too short.
+function searchWarning() {
+  return confirm("Given search string is short. The result will potentially be very large\nDo you want to continue anyway?");
+}
+
