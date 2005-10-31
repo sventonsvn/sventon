@@ -18,8 +18,8 @@
   <c:set var="command" value="${command}"/> 
   <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
   <tr>
-    <td class="sventonHeadlines">
-     Repository path: <a href="repobrowser.svn">
+    <td class="sventonHeadlines" colspan="2">
+     Repository path: <a href="<c:out value="repobrowser.svn?path=/&revision=${command.revision}"/>">
       <c:out value="${url}"/> <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
       <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
