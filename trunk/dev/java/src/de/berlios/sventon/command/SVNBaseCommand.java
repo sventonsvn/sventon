@@ -1,5 +1,6 @@
 package de.berlios.sventon.command;
 
+import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
@@ -68,10 +69,21 @@ public class SVNBaseCommand {
     }
   }
 
+  /**
+   * Sets the mountpoint.
+   *
+   * @param mountPoint The mountpoint
+   */
   public void setMountPoint(final String mountPoint) {
     this.mountPoint = mountPoint;
   }
 
+  /**
+   * Gets the mountpoint.
+   *
+   * @param stripSplash
+   * @return The mountpoint
+   */
   public String getMountPoint(final boolean stripSplash) {
     if (stripSplash) {
       return StringUtils.removeStart(mountPoint, "/");
@@ -96,19 +108,11 @@ public class SVNBaseCommand {
    * or a directory.
    * <p>
    * The returned string will have no final "/", even if it is a directory.
-   * 
+   *
    * @return Target part of the path.
    */
   public String getTarget() {
-
-    String[] splittedString = getPath().split("/");
-    int length = splittedString.length;
-    if (length == 0) {
-      return "";
-    } else {
-      return splittedString[splittedString.length - 1];
-    }
-
+    return PathUtil.getTarget(getPath());
   }
 
   /**
@@ -116,24 +120,16 @@ public class SVNBaseCommand {
    * {@link SVNBaseCommand#getCompletePath()}. Mountpoint offset will be
    * included.
    * <p>
-   * The returned string will have a final "/", if the path info is empty, ""
+   * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
-   * 
+   *
    * @return Path excluding taget (end/leaf)
    */
   public String getPathPart() {
-    String work = getPath();
-    if (work.endsWith("/")) {
-      work = work.substring(0, work.length() - 1);
-    }
-
-    int lastIndex = work.lastIndexOf('/');
-    if (lastIndex == -1) {
-      return "";
-    } else {
-      return work.substring(0, lastIndex) + "/";
-    }
+    return PathUtil.getPathPart(getPath());
   }
+
+  /**
 
   /**
    * Return the contents of this object as a map model.
@@ -156,26 +152,13 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Gets the file extension.
-   * 
-   * @return The file extension if any. Empty string otherwise.
-   */
-  public String getFileExtension() {
-    String fileExtension = "";
-    if (getTarget().lastIndexOf(".") > -1) {
-      fileExtension = getTarget().substring(getTarget().lastIndexOf(".") + 1);
-    }
-    return fileExtension;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String toString() {
-    return "SVNBaseCommand{path='" + path + "', " + 
-    "completePah='" + getCompletePath() + "', " + 
+    return "SVNBaseCommand{path='" + path + "', " +
+    "completePah='" + getCompletePath() + "', " +
     "revision='" + revision + "', " +
-    "mountPoint='" + mountPoint 
+    "mountPoint='" + mountPoint
         + "'}";
   }
 

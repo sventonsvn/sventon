@@ -2,6 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.svnsupport.KeywordHandler;
 import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
 import org.springframework.web.servlet.ModelAndView;
@@ -63,7 +64,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       // It's a binary file - we don't have to read the content.
       logger.debug("Binary file detected.");
       model.put("isBinary", true);  // Indicates that the file is in binary format.
-      model.put("isImage", ImageUtil.isImageFileExtension(svnCommand.getFileExtension()));
+      model.put("isImage", ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
     } else {
       // Get the file's content. We can skip the properties in this case.
       repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);

@@ -1,20 +1,16 @@
 package de.berlios.sventon.svnsupport;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
+import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.*;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
+import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.AUTHOR;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.DATE;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.REVISION;
-import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
-import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
 public class RepositoryEntryComparatorTest extends TestCase {
 
@@ -37,11 +33,11 @@ public class RepositoryEntryComparatorTest extends TestCase {
   public void testCompare() {
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry("FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12)
-        .getTime(), "patrikfr"), "");
+        .getTime(), "patrikfr"), "", "");
     RepositoryEntry e2 = new RepositoryEntry(new SVNDirEntry("SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13)
-        .getTime(), "jesper"), "");
+        .getTime(), "jesper"), "", "");
     RepositoryEntry e3 = new RepositoryEntry(new SVNDirEntry("ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14)
-        .getTime(), "patrikfr"), "");
+        .getTime(), "patrikfr"), "", "");
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);
@@ -98,11 +94,11 @@ public class RepositoryEntryComparatorTest extends TestCase {
     // Test handling of null properties in SVNDirEntry
     entries = new ArrayList<RepositoryEntry>();
     e1 = new RepositoryEntry(new SVNDirEntry("FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12).getTime(),
-        "patrikfr"), "");
+        "patrikfr"), "", "");
     e2 = new RepositoryEntry(new SVNDirEntry(null, FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
-        "jesper"), "");
+        "jesper"), "", "");
     e3 = new RepositoryEntry(new SVNDirEntry("ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14).getTime(),
-        "patrikfr"), "");
+        "patrikfr"), "", "");
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);

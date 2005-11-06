@@ -15,6 +15,8 @@ public class SVNRepositoryStub extends SVNRepository {
 
   private long latestRevision = 0;
 
+  private SVNDirEntry infoEntry;
+
   private HashMap<String, Collection> repositoryEntries = null;
 
   public void testConnection() throws SVNException {
@@ -181,6 +183,78 @@ public class SVNRepositoryStub extends SVNRepository {
     return 0;
   }
 
+  /**
+   * Traverses revisions history. In other words, collects per revision
+   * information that includes the revision number, author, datestamp,
+   * log message and maybe a list of changed paths (optional). For each
+   * revision this information is represented by an <b>SVNLogEntry</b>
+   * object. Such objects are passed to the provided <code>handler</code>.
+   * <p/>
+   * <p/>
+   * This method invokes <code>handler</code> on each log entry from
+   * <code>startRevision</code> to <code>endRevision</code>.
+   * <code>startRevision</code> may be greater or less than
+   * <code>endRevision</code>; this just controls whether the log messages are
+   * processed in descending or ascending revision number order.
+   * <p/>
+   * <p/>
+   * If <code>startRevision</code> or <code>endRevision</code> is invalid, it
+   * defaults to the youngest.
+   * <p/>
+   * <p/>
+   * If <code>targetPaths</code> has one or more elements, then
+   * only those revisions are processed in which at least one of <code>targetPaths</code> was
+   * changed (i.e., if a file text or properties changed; if dir properties
+   * changed or an entry was added or deleted). Each path is relative
+   * to the repository location that this object is set to.
+   * <p/>
+   * <p/>
+   * If <code>changedPath</code> is <span class="javakeyword">true</span>, then each
+   * <b>SVNLogEntry</b> passed to the handler will contain info about all
+   * paths changed in that revision it represents. To get them call
+   * {@link org.tmatesoft.svn.core.SVNLogEntry#getChangedPaths()} that returns a map,
+   * which keys are the changed paths and the values are <b>SVNLogEntryPath</b> objects.
+   * If <code>changedPath</code> is <span class="javakeyword">false</span>, changed paths
+   * info will not be provided.
+   * <p/>
+   * <p/>
+   * If <code>strictNode</code> is <span class="javakeyword">true</span>, copy history will
+   * not be traversed (if any exists) when harvesting the revision logs for each path.
+   * <p/>
+   * <p/>
+   * If <code>limit</code> is > 0 then only the first <code>limit</code> log entries
+   * will be handled. Otherwise this number is ignored.
+   * <p/>
+   * <p/>
+   * <b>NOTE:</b> you may not invoke methods of this <b>SVNRepository</b>
+   * object from within the provided <code>handler</code>.
+   *
+   * @param targetPaths   paths that mean only those revisions at which they were
+   *                      changed
+   * @param startRevision a revision to start from
+   * @param endRevision   a revision to end at
+   * @param changedPath   if <span class="javakeyword">true</span> then
+   *                      revision information will also include all changed paths per
+   *                      revision, otherwise not
+   * @param strictNode    if <span class="javakeyword">true</span> then copy history (if any) is not
+   *                      to be traversed
+   * @param limit         the maximum number of log entries to process
+   * @param handler       a caller's handler that will be dispatched log entry objects
+   * @return the number of revisions traversed
+   * @throws org.tmatesoft.svn.core.SVNException
+   *          if a failure occured while connecting to a repository
+   *          or the user's authentication failed (see
+   *          {@link org.tmatesoft.svn.core.SVNAuthenticationException})
+   * @see #log(String[], java.util.Collection, long, long, boolean, boolean)
+   * @see #log(String[], long, long, boolean, boolean, long, org.tmatesoft.svn.core.ISVNLogEntryHandler)
+   * @see org.tmatesoft.svn.core.ISVNLogEntryHandler
+   * @see org.tmatesoft.svn.core.SVNLogEntry
+   * @see org.tmatesoft.svn.core.SVNLogEntryPath
+   */
+  public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, long limit, ISVNLogEntryHandler handler) throws SVNException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
   public int getLocations(String s, long l, long[] longs, ISVNLocationEntryHandler isvnLocationEntryHandler)
       throws SVNException {
     return 0;
@@ -201,7 +275,7 @@ public class SVNRepositoryStub extends SVNRepository {
   }
 
   public SVNDirEntry info(String s, long l) throws SVNException {
-    return null;
+    return infoEntry;
   }
 
   public ISVNEditor getCommitEditor(String s, Map map, boolean b, ISVNWorkspaceMediator isvnWorkspaceMediator)
@@ -236,9 +310,73 @@ public class SVNRepositoryStub extends SVNRepository {
   public void removeLock(String s, String s1, boolean b) throws SVNException {
   }
 
-  public long log(String[] arg0, long arg1, long arg2, boolean arg3, boolean arg4, long arg5, ISVNLogEntryHandler arg6)
-      throws SVNException {
-    throw new UnsupportedOperationException();
+  /**
+   * Traverses revisions history and returns a collection of log entries. In
+   * other words, collects per revision information that includes the revision number,
+   * author, datestamp, log message and maybe a list of changed paths (optional). For each
+   * revision this information is represented by an <b>SVNLogEntry</b>.
+   * object.
+   * <p/>
+   * <p/>
+   * <code>startRevision</code> may be greater or less than
+   * <code>endRevision</code>; this just controls whether the log messages are
+   * processed in descending or ascending revision number order.
+   * <p/>
+   * <p/>
+   * If <code>startRevision</code> or <code>endRevision</code> is invalid, it
+   * defaults to the youngest.
+   * <p/>
+   * <p/>
+   * If <code>targetPaths</code> has one or more elements, then
+   * only those revisions are processed in which at least one of <code>targetPaths</code> was
+   * changed (i.e., if a file text or properties changed; if dir properties
+   * changed or an entry was added or deleted). Each path is relative
+   * to the repository location that this object is set to.
+   * <p/>
+   * <p/>
+   * If <code>changedPath</code> is <span class="javakeyword">true</span>, then each
+   * <b>SVNLogEntry</b> object is supplied with info about all
+   * paths changed in that revision it represents. To get them call
+   * {@link org.tmatesoft.svn.core.SVNLogEntry#getChangedPaths()} that returns a map,
+   * which keys are the changed paths and the mappings are <b>SVNLogEntryPath</b> objects.
+   * If <code>changedPath</code> is <span class="javakeyword">false</span>, changed paths
+   * info will not be provided.
+   * <p/>
+   * <p/>
+   * If <code>strictNode</code> is <span class="javakeyword">true</span>, copy history will
+   * not be traversed (if any exists) when harvesting the revision logs for each path.
+   *
+   * @param targetPaths   paths that mean only those revisions at which they were
+   *                      changed
+   * @param entries       if not <span class="javakeyword">null</span> then this collection
+   *                      will receive log entries
+   * @param startRevision a revision to start from
+   * @param endRevision   a revision to end at
+   * @param changedPath   if <span class="javakeyword">true</span> then
+   *                      revision information will also include all changed paths per
+   *                      revision, otherwise not
+   * @param strictNode    if <span class="javakeyword">true</span> then copy history (if any) is not
+   *                      to be traversed
+   * @return a collection with log entries
+   * @throws org.tmatesoft.svn.core.SVNException
+   *          if a failure occured while connecting to a repository
+   *          or the user's authentication failed (see
+   *          {@link org.tmatesoft.svn.core.SVNAuthenticationException})
+   * @see #log(String[], long, long, boolean, boolean, org.tmatesoft.svn.core.ISVNLogEntryHandler)
+   * @see #log(String[], long, long, boolean, boolean, long, org.tmatesoft.svn.core.ISVNLogEntryHandler)
+   * @see org.tmatesoft.svn.core.ISVNLogEntryHandler
+   * @see org.tmatesoft.svn.core.SVNLogEntry
+   * @see org.tmatesoft.svn.core.SVNLogEntryPath
+   */
+  public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
+    List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
+    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', "", 1));
+    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', "", 1));
+    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', "", 1));
+    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', "", 1));
+    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Commit message."));
+    return logEntries;
   }
 
   public static SVNRepositoryStub getInstance() throws Exception {
@@ -260,6 +398,7 @@ public class SVNRepositoryStub extends SVNRepository {
     repository.addDir("/", entries1);
     repository.addDir("/dir1/", entries2);
     repository.addDir("/dir1/dir2/", new ArrayList());
+    repository.infoEntry = new SVNDirEntry("file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
     return repository;
   }
 }

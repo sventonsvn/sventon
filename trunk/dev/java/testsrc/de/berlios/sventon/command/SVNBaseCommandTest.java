@@ -1,10 +1,8 @@
 package de.berlios.sventon.command;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 import java.util.Map;
-
-import de.berlios.sventon.command.SVNBaseCommand;
 
 public class SVNBaseCommandTest extends TestCase {
 
@@ -17,7 +15,6 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("/", command.getCompletePath());
     assertNull(command.getRevision());
   }
-
 
   public void testSetPath() {
     SVNBaseCommand command = new SVNBaseCommand();
@@ -74,42 +71,6 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("trunk/src/File.java", command.getCompletePath());
   }
 
-  public void testGetTarget() {
-    SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("trunk/src/File.java");
-    assertEquals("File.java", command.getTarget());
-
-    command.setPath("trunk/src/");
-    assertEquals("src", command.getTarget());
-
-    command.setPath("");
-    assertEquals("", command.getTarget());
-
-    command.setPath("/");
-    assertEquals("", command.getTarget());
-
-    command.setPath(null);
-    assertEquals("", command.getTarget());
-  }
-
-  public void testGetPath() {
-    SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("trunk/src/File.java");
-    assertEquals("trunk/src/", command.getPathPart());
-
-    command.setPath("trunk/src/");
-    assertEquals("trunk/", command.getPathPart());
-
-    command.setPath("");
-    assertEquals("", command.getPathPart());
-
-    command.setPath("/");
-    assertEquals("", command.getPathPart());
-
-    command.setPath(null);
-    assertEquals("", command.getPathPart());
-  }
-
   public void testAsMap() throws Exception {
     SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/src/File.java");
@@ -120,18 +81,6 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("/src/File.java", model.get("path"));
     assertEquals("123", model.get("revision"));
     assertEquals("/trunk/src/File.java", model.get("completePath"));
-  }
-
-  public void testGetFileExtension() throws Exception {
-    SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("trunk/src/File.java");
-    assertEquals("java", command.getFileExtension());
-
-    command.setPath("trunk/src/File");
-    assertEquals("", command.getFileExtension());
-
-    command.setPath("trunk/src/.htpasswd");
-    assertEquals("htpasswd", command.getFileExtension());
   }
 
   public void testGetMountPoint() throws Exception {

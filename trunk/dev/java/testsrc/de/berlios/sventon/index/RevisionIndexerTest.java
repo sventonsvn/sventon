@@ -2,7 +2,6 @@ package de.berlios.sventon.index;
 
 import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
-import java.util.Iterator;
 
 public class RevisionIndexerTest extends TestCase {
 
@@ -10,9 +9,15 @@ public class RevisionIndexerTest extends TestCase {
 
   public void setUp() throws Exception {
     indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
-    indexer.index();
+    indexer.populateIndex();
     assertEquals(8, indexer.getIndexCount());
-    //printIndex();
+    //indexer.dumpIndex();
+  }
+
+  public void testUpdate() throws Exception {
+    assertEquals(8, indexer.getIndexCount());
+    indexer.updateIndex();
+    assertEquals(7, indexer.getIndexCount());
   }
 
   public void testFind() throws Exception {
@@ -37,10 +42,4 @@ public class RevisionIndexerTest extends TestCase {
     assertEquals(0, indexer.getDirectories("/DIR1/").size()); //TODO: Should we allow mixed case?
   }
 
-  private void printIndex() {
-    Iterator i = indexer.getEntriesIterator();
-    while (i.hasNext()) {
-      System.out.println(i.next());
-    }
-  }
 }
