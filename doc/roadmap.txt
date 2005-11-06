@@ -31,7 +31,7 @@ Release 1
 [<171>] View all changes in one revision (log entry).
 [<174>] Diff revisions of same file
 [<198>] Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
-[ ]     Only append repository changes if index is out-of-date instead of full reindexing
+[<206>] Only append repository changes if index is out-of-date instead of full reindexing
 
 
 Not yet scheduled

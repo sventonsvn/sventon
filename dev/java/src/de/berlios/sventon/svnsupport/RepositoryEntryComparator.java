@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
@@ -15,7 +16,9 @@ import java.util.Set;
  * 
  * @author patrikfr@users.berlios.de
  */
-public class RepositoryEntryComparator implements Comparator<RepositoryEntry> {
+public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
+
+  private static final long serialVersionUID = -823291078109887289L;
 
   /**
    * Constant for comparing on name.

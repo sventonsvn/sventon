@@ -21,7 +21,6 @@ public class RepositoryEntry implements Serializable {
    * Full path to <code>SVNDirEntry</code>.
    */
   private String entryPath;
-
   private String entryName;
   private String entryKind;
   private long entrySize;
@@ -37,24 +36,6 @@ public class RepositoryEntry implements Serializable {
    * entry with the {@link #mountPoint} removed.
    */
   private String mountPoint;
-
-  /**
-   * Constructor.
-   *
-   * @param entry     The <code>SVNDirEntry</code>.
-   * @param entryPath The entry repository path.
-   * @throws IllegalArgumentException if any of the parameters are null.
-   */
-  public RepositoryEntry(final SVNDirEntry entry, final String entryPath) {
-    if (entryPath == null) {
-      throw new IllegalArgumentException("entryPath cannot be null.");
-    }
-    if (entry == null) {
-      throw new IllegalArgumentException("entry cannot be null.");
-    }
-    this.entryPath = entryPath;
-    copyEntry(entry);
-  }
 
   /**
    * Constructor.
@@ -136,13 +117,6 @@ public class RepositoryEntry implements Serializable {
   }
 
   /**
-   * @return String representation of this object.
-   */
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-  }
-
-  /**
    * Gets the path.
    *
    * @return the path for this entry
@@ -215,6 +189,13 @@ public class RepositoryEntry implements Serializable {
    */
   public String getCommitMessage() {
     return entryCommitMessage;
+  }
+
+  /**
+   * @return String representation of this object.
+   */
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }
 
 }

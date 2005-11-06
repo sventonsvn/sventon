@@ -2,6 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.SventonCache;
+import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.command.SVNBaseCommand;
 import net.sf.ehcache.CacheException;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,7 +61,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'");
-        if (!ImageUtil.isImageFileExtension(svnCommand.getFileExtension())) {
+        if (!ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.error("File '" + svnCommand.getTarget() + "' is not a image file.");
           return null;
         }
@@ -102,7 +103,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           // Resize image.
           Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
           BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
-          response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
+          response.setContentType(ImageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
 
           // Write thumbnail to output stream.
           baos = new ByteArrayOutputStream();
@@ -119,9 +120,10 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           output.write(baos.toByteArray());
         }
       } else {
-        if (DISPLAY_TYPE_INLINE.equals(displayType) && ImageUtil.isImageFileExtension(svnCommand.getFileExtension())) {
+        if (DISPLAY_TYPE_INLINE.equals(displayType)
+            && ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.debug("Getting file as 'inline'");
-          response.setContentType(ImageUtil.getContentType(svnCommand.getFileExtension()));
+          response.setContentType(ImageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         } else {
           logger.debug("Getting file as 'attachment'");

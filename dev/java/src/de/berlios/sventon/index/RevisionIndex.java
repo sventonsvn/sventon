@@ -1,11 +1,10 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
-
+import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
+import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * The revision index keeps all repository entries cached for fast repository searching.
@@ -16,15 +15,12 @@ import java.util.ArrayList;
  */
 public class RevisionIndex implements Serializable {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = -6606585955661688509L;
 
   /**
    * The index.
    */
-  private List<RepositoryEntry> index;
+  private Set<RepositoryEntry> index;
 
   /**
    * Current indexed revision.
@@ -42,7 +38,7 @@ public class RevisionIndex implements Serializable {
    * @param url The url to index.
    */
   public RevisionIndex(final String url) {
-    index = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    index = Collections.checkedSet(new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(NAME, false)), RepositoryEntry.class);
     this.url = url;
   }
 
@@ -76,7 +72,7 @@ public class RevisionIndex implements Serializable {
    *
    * @return The index entries.
    */
-  public List<RepositoryEntry> getEntries() {
+  public Set<RepositoryEntry> getEntries() {
     return index;
   }
 
@@ -96,6 +92,22 @@ public class RevisionIndex implements Serializable {
    */
   public String getUrl() {
     return this.url;
+  }
+
+  /**
+   * Removes an entry from the index.
+   * The index will be scanned for the given
+   * path and remove the entry if found.
+   *
+   * @param path The full path to the entry to remove.
+   */
+  public void remove(String path) {
+    for (RepositoryEntry entry : index) {
+      if (entry.getFullEntryName().equals(path)) {
+        index.remove(entry);
+        return;
+      }
+    }
   }
 
 }
