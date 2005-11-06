@@ -4,21 +4,25 @@ import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
 
-public class FlattenControllerTest extends TestCase {
+public class SearchControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
     SVNBaseCommand command = new SVNBaseCommand();
-    FlattenController controller = new FlattenController();
+    SearchController ctrl = new SearchController();
     ModelAndView modelAndView;
 
-    controller.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
-    modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, null, null);
+    MockHttpServletRequest req = new MockHttpServletRequest();
+    req.addParameter("sventonSearchString", "file1");
+
+    ctrl.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
+    modelAndView = ctrl.svnHandle(null, command, SVNRevision.HEAD, req, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
@@ -26,11 +30,6 @@ public class FlattenControllerTest extends TestCase {
     assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
     assertEquals(2, entries.size());
 
-    assertEquals("dir", ((RepositoryEntry) entries.get(0)).getKind());
-    assertEquals("dir1", ((RepositoryEntry) entries.get(0)).getName());
-
-    assertEquals("dir", ((RepositoryEntry) entries.get(1)).getKind());
-    assertEquals("dir2", ((RepositoryEntry) entries.get(1)).getName());
+    assertEquals("file", ((RepositoryEntry) entries.get(0)).getKind());
   }
-
 }
