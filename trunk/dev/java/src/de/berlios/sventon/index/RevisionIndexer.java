@@ -262,7 +262,7 @@ public class RevisionIndexer {
   private void populateIndex(final String path) throws SVNException {
     List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
-    entriesList.addAll(repository.getDir(path, index.getIndexRevision(), new HashMap(), (Collection) null));
+    entriesList.addAll(repository.getDir(path, index.getIndexRevision(), null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
       index.add(new RepositoryEntry(entry, path, mountPoint));
       if (entry.getKind() == SVNNodeKind.DIR) {
