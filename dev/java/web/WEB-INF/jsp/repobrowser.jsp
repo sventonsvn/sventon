@@ -95,9 +95,9 @@
     </c:forEach>
 
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
-      <td colspan="2" align="right">Total:</td>
-      <td><%=rowCount%> entries</td>
-      <td align="right" title="<%=totalSize%>&nbsp;bytes"><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></td>
+      <td colspan="2" align="right"><b>Total:</b></td>
+      <td><b><%=rowCount%> entries</b></td>
+      <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
       <td></td>
       <td></td>
       <td></td>
