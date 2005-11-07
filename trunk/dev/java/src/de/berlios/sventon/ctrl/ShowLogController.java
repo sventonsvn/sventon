@@ -2,6 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -43,7 +44,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
    */
   @SuppressWarnings("unchecked")
       protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                       HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                       HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
     // Remove any stale pagees from the session, if any
     HttpSession session = request.getSession(true);

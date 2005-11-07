@@ -18,7 +18,7 @@ public class FlattenControllerTest extends TestCase {
     ModelAndView modelAndView;
 
     controller.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
-    modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, null, null);
+    modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, null, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");

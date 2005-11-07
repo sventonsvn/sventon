@@ -227,7 +227,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     try {
       SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response);
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response, exception);
 
       Map<String, Object> model = new HashMap<String, Object>();
       logger.debug("'command' set to: " + svnCommand);
@@ -280,7 +280,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  private ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
+  protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -326,9 +326,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @param revision SVN type revision.
    * @param request Servlet request.
    * @param response Servlet response.
+   * @param exception BindException, could be used by the subclass to add error 
+   * messages to the exception.
    * @return Model and view to render.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
-  protected abstract ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response) throws SVNException;
+  protected abstract ModelAndView svnHandle(SVNRepository repository, 
+      SVNBaseCommand svnCommand, SVNRevision revision,
+      HttpServletRequest request, HttpServletResponse response,
+      BindException exception) throws SVNException;
 }

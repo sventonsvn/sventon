@@ -113,8 +113,16 @@
     	  
     %>
     <tr>
+    <c:url value="goto.svn" var="goToUrl">
+      <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+      <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+    </c:url>
       <td><%= logEntryPath.getType() %></td>
+      <% if ('D' != logEntryPath.getType()) { %>
+      <td><a href="${goToUrl}"><%= logEntryPath.getPath() %></a></td>
+      <% } else { %>
       <td><%= logEntryPath.getPath() %></td>
+      <% } %>
       <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
       <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
     </tr>

@@ -22,7 +22,7 @@ public class SearchControllerTest extends TestCase {
     req.addParameter("sventonSearchString", "file1");
 
     ctrl.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
-    modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null);
+    modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
@@ -34,7 +34,7 @@ public class SearchControllerTest extends TestCase {
 
     req = new MockHttpServletRequest();
     try {
-      modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null);
+      modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException ex) {
       // expected
