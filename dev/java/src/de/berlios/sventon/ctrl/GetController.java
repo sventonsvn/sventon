@@ -5,6 +5,8 @@ import de.berlios.sventon.util.SventonCache;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.command.SVNBaseCommand;
 import net.sf.ehcache.CacheException;
+
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -47,7 +49,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
     logger.debug("Getting file: " + svnCommand.getCompletePath());
 

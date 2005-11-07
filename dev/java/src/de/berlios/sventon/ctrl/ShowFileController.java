@@ -5,6 +5,8 @@ import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
+
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -49,7 +51,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
     Map<String, Object> model = new HashMap<String, Object>();
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();

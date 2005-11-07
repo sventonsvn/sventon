@@ -2,6 +2,8 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.util.ImageUtil;
+
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -23,7 +25,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
     final String[] entryParameters = request.getParameterValues("entry");
 
     logger.debug("Create model");

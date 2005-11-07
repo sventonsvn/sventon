@@ -3,6 +3,8 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.diff.Diff;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.command.SVNBaseCommand;
+
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -26,7 +28,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
     final long fromRevision;
     final long toRevision;

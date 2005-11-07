@@ -20,6 +20,15 @@
       <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
+  
+  <bean id="goToController" class="de.berlios.sventon.ctrl.GoToController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.command.SVNBaseCommandValidator" />
 
@@ -162,6 +171,7 @@
         <prop key="/config.svn">configurationController</prop>
         <prop key="/showthumbs.svn">showThumbnailController</prop>
         <prop key="/diff.svn">diffController</prop>
+        <prop key="/goto.svn">goToController</prop>
       </props>
     </property>
   </bean>
