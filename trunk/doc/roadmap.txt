@@ -36,6 +36,7 @@ Release 1
 
 
 Not yet scheduled
+[ ] Full text search of files in HEAD (currently search is possible by file name)
 [ ] "Diff previous" shortcut when looking at a file (today this can be done via the "logs" view).
 [ ] Allow dates instead of revisions when browsing the repository.
 [ ] Subversion 1.2 feature support, notably show locked file (and by which user).

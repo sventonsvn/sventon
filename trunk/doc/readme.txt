@@ -17,10 +17,7 @@ Currently the library supports colorization of the following file formats:
 Support for more formats are planned before the first official release of sventon.
 
 Build instructions:
-1: Create file 'sventon.properties' in directory /dev/java/web/WEB-INF/classes/ and the
-   'default-sventon.properties' are overridden.
-
-2: Run ant/build.xml for info on building.
+1: Run ant/build.xml for info on building.
 
 Contact sventon developers using the sventon dev mailing list: 
 http://developer.berlios.de/projects/sventon
