@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.AbstractFormController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -27,11 +28,11 @@ import java.util.Map;
 /**
  * Abstract base class for use by controllers whishing to make use of basic
  * plumbing functionality such as authorization and basic repository configuration.
- * <p>
+ * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}</code>.
- * <p>
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}</code>.
+ * <p/>
  * Workflow for this controller:
  * <ol>
  * <li>The controller inspects the repository configuration object to see if it
@@ -41,13 +42,13 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
  * method with the given {@link de.berlios.sventon.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -87,15 +88,27 @@ import java.util.Map;
  * </dl>
  * <b>GoTo form support</b> This controller also contains support for rendering
  * the GoTo form and processing GoTo form submission.
- * 
+ *
  * @author patrikfr@users.berlios.de
  */
 public abstract class AbstractSVNTemplateController extends AbstractFormController {
 
   protected RepositoryConfiguration configuration = null;
 
-  /** Logger for this class and subclasses. */
+  /**
+   * Logger for this class and subclasses.
+   */
   protected final Log logger = LogFactory.getLog(getClass());
+
+  /**
+   * Cached most recent log entry.
+   */
+  private static SVNLogEntry cachedLogs;
+
+  /**
+   * Cached revision number (HEAD).
+   */
+  private static long cachedRevision = 1;
 
   protected AbstractSVNTemplateController() {
     // TODO: Move to XML-file?
@@ -106,7 +119,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
   /**
    * Set repository configuration.
-   * 
+   *
    * @param configuration Configuration
    */
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
@@ -115,7 +128,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
   /**
    * Get current repository configuration.
-   * 
+   *
    * @return Configuration
    */
   public RepositoryConfiguration getRepositoryConfiguration() {
@@ -128,7 +141,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * {@inheritDoc}
    */
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
-      Object command, BindException exception) throws Exception {
+                                               Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 
@@ -192,7 +205,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException exception)
       throws Exception {
-    
+
     // This is for preparing the requested model and view and also rendering the
     // "Go To" form.
 
@@ -207,7 +220,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * {@inheritDoc}
    */
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
-      BindException exception) throws ServletException, IOException {
+                             BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
@@ -229,11 +242,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response, exception);
 
+      long latestRevision = repository.getLatestRevision();
       Map<String, Object> model = new HashMap<String, Object>();
       logger.debug("'command' set to: " + svnCommand);
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
-      model.put("numrevision", (revision == HEAD ? Long.toString(repository.getLatestRevision()) : null));
+      model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
+      model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
 
       // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {
@@ -257,6 +272,24 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
+   * Gets the latest commit log.
+   *
+   * @param repository     The repository
+   * @param latestRevision The latest revision
+   * @return The latest <tt>SVNLogEntry</tt>
+   * @throws SVNException if subversion error.
+   */
+  private SVNLogEntry getLatestCommitInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
+    if (latestRevision != cachedRevision) {
+      String[] targetPaths = new String[]{"/"}; // the path to show logs for
+      cachedLogs = (SVNLogEntry) repository.log(
+          targetPaths, null, latestRevision, latestRevision, true, false).iterator().next();
+      cachedRevision = latestRevision;
+    }
+    return cachedLogs;
+  }
+
+  /**
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
@@ -265,7 +298,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(SVNAuthenticationException svnae) {
+  private ModelAndView forwardToAuthenticationFailureView(final SVNAuthenticationException svnae) {
     logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
     logger.error("Authentication failed", svnae);
     return new ModelAndView("authenticationfailure");
@@ -274,8 +307,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * Prepare the exception model. This sets up a model and view with all stuff
    * needed to for displaying a useful error mesage.
-   * 
-   * @param exception Bind exception from Spring MVC validation.
+   *
+   * @param exception  Bind exception from Spring MVC validation.
    * @param svnCommand Command object.
    * @return The packaged model and view.
    */
@@ -293,14 +326,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * Converts the revision <code>String</code> to a format suitable for SVN,
    * also handles special logical revision HEAD. <code>null</code> and empty
    * string revision are converted to the HEAD revision.
-   * <p>
+   * <p/>
    * The given <code>SVNBaseCommand</code> instance will be updated with key
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
-   * <p>
+   * <p/>
    * TODO: This (could perhaps) be a suitable place to also handle conversion of
    * date to revision to expand possilbe user input to handle calendar
    * intervalls.
-   * 
+   *
    * @param svnCommand Command object.
    * @return The converted SVN revision.
    */
@@ -318,7 +351,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * Abstract method to be implemented by the controller subclassing this
    * controller. This is where the actual work takes place. See class
    * documentation for info on workflow and on how all this works together.
-   * 
+   *
    * @param repository Reference to the repository, prepared with authentication
    *          if applicable.
    * @param svnCommand Command (basically request parameters submitted in user
@@ -326,13 +359,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @param revision SVN type revision.
    * @param request Servlet request.
    * @param response Servlet response.
-   * @param exception BindException, could be used by the subclass to add error 
+   * @param exception BindException, could be used by the subclass to add error
    * messages to the exception.
    * @return Model and view to render.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
-  protected abstract ModelAndView svnHandle(SVNRepository repository, 
-      SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response,
-      BindException exception) throws SVNException;
+  protected abstract ModelAndView svnHandle(final SVNRepository repository,
+                                            SVNBaseCommand svnCommand, SVNRevision revision,
+                                            HttpServletRequest request, HttpServletResponse response,
+                                            BindException exception) throws SVNException;
 }

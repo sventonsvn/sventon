@@ -13,7 +13,7 @@
     <table class="sventonHeader"><tr><td>
   Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;
   <c:if test = "${!empty properties}">
-    <a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a>
+    <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
   </p>
