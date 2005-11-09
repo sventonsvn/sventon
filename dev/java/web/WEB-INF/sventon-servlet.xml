@@ -77,6 +77,9 @@
   </bean>
 
   <bean id="showFileController" class="de.berlios.sventon.ctrl.ShowFileController">
+    <property name="archiveFileExtensionPattern">
+      <value>(jar|zip|war|ear)</value>
+    </property>
     <property name="colorer">
       <ref bean="colorer" />
     </property>

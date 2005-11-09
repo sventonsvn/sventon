@@ -32,6 +32,7 @@ Release 1
 [<174>] Diff revisions of same file
 [<198>] Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
 [<206>] Only append repository changes if index is out-of-date instead of full reindexing
+[<212>] View contents of zip archives (including jar)
 
 
 Not yet scheduled
@@ -44,7 +45,6 @@ Not yet scheduled
 [ ] Apply Observer pattern and make RevisionIndex Observable
 [ ] RSS feeds of repository changes, RevisionIndexObserver
 [ ] Commit statistics (different kinds)
-[ ] View contents of zip archives (including jar)
 [ ] JSPWiki integration
 [ ] Integration with other tools and IDE:s
 [ ] Content search using lucene (files in HEAD)

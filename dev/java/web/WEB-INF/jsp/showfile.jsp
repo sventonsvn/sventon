@@ -39,12 +39,19 @@
           <c:when test="${isImage}">
 <p>
   <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
-    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb"/>
+    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail"/>
   </a>
 </p>
           </c:when>
           <c:otherwise>
+            <c:choose>
+              <c:when test="${isArchive}">
+                <%@ include file="/WEB-INF/jsp/showarchive.jsp"%>
+              </c:when>
+              <c:otherwise>
 <p>File is in binary format.</p>
+              </c:otherwise>
+            </c:choose>
           </c:otherwise>
         </c:choose>
       </c:when>
@@ -52,8 +59,9 @@
 <pre class="codeBlock">
 <c:out value="${fileContents}" escapeXml="false"/>
 </pre>
-</c:otherwise>
-</c:choose>
+
+      </c:otherwise>
+    </c:choose>
 <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
   </body>
