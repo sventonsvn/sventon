@@ -3,20 +3,23 @@
  */
 
 body {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   color: #000000;
+  background-color: #ffffff;
   font-weight: normal;
 }
 
 pre {
   width: 100%;
+  color: #000000;
   background-color: #e9e9e9;
 }
 
 .codeBlock {
   width: 97%;
   padding: 0.5em;
+  color: #000000;
   background: rgb(240,240,240);
   border-top: black dotted 1px;
   border-left: black dotted 1px;
@@ -25,14 +28,15 @@ pre {
 }
 
 a:link, a:visited, a:hover, a:active {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   color: #0060CB;
+  background-color: inherit;
   text-decoration: none;
 }
 
 .sventonInput, sventonSelect, sventonTextarea {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   border-top-width: 1px;
   border-right-width: 1px;
@@ -48,9 +52,11 @@ a:link, a:visited, a:hover, a:active {
 
 .sventonSelectOption {
   color: rgb(119, 119, 119);
+  background-color: inherit;
 }
 
 .sventonHeader {
+  color: #000000;
   background-color: #ccccff;
   border: 1px solid black;
   width: 100%;
@@ -59,7 +65,7 @@ a:link, a:visited, a:hover, a:active {
 th {
   text-align: left;
   white-space: nowrap;
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   font-weight: bold;
 }
@@ -68,7 +74,7 @@ th {
 }
 
 .sventonHeadlines {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   font-weight: bold;
 }
@@ -78,36 +84,43 @@ th {
 }
 
 .sventonEntriesTable {
+  color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
 }
 
 .sventonEntry1 {
+  color: #000000;
   background-color: #ddddff;
 }
 
 .sventonEntry2 {
+  color: #000000;
   background-color: #eeeeff;
 }
 
 .sventonEntryLogInfo {
+  color: #000000;
   background-color: #dddddd;
 }
 
 .sventonLogEntriesTable {
+  color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
 }
 
 .sventonStackTraceTable {
+  color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   font-size: 11px;
 }
 
 .sventonErrorMessageTable {
+  color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   width: 250px;
@@ -170,6 +183,7 @@ th {
 }
 
 .sventonPropertiesTable {
+  color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
@@ -196,29 +210,33 @@ th {
 }
 
 .src {
+  color: #000000;
   background-color: #eeeeff;
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 9px;
   white-space: pre;
 }
 
 .srcChg {
+  color: #000000;
   background-color: #ffbebe;
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 9px;
   white-space: pre;
 }
 
 .srcAdd {
+  color: #000000;
   background-color: #beffbe;
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 9px;
   white-space: pre;
 }
 
 .srcDel {
+  color: #000000;
   background-color: #bebeff;
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 9px;
   white-space: pre;
 }
