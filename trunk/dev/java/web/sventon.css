@@ -114,6 +114,15 @@ th {
   font-size: 11px;
 }
 
+.sventonColNoWrap {
+  white-space: nowrap;
+}
+
+.sventonColRightAlign {
+  text-align: right;
+  white-space: nowrap;
+}
+
 .sventonCol1 {
   width: 10px;
   text-align: center;
