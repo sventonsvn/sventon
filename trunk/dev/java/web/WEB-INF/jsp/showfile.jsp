@@ -20,7 +20,7 @@
 
     <p>
       <table class="sventonHeader"><tr><td>
-    Show File - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv');">[show/hide properties]</a></td></tr></table>
+    Show File - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
     </p>
     <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 

@@ -182,6 +182,12 @@ th {
 .sventonPropertiesDiv {
 }
 
+.sventonLatestCommitInfoTable {
+  color: #000000;
+  background-color: #eeeeff;
+  border: 1px solid black;
+}
+
 .sventonPropertiesTable {
   color: #000000;
   background-color: #eeeeff;

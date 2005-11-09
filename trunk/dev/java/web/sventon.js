@@ -71,7 +71,7 @@ function toggleElementVisibility(theId) {
   return;
 }
 
-// function to change link text between 'more' and 'less'
+// function to change link text between 'more' and 'less' on log entry rows
 function changeLessMoreDisplay(theId) {
   var object = document.getElementById(theId);
   if (object.innerHTML == 'more') {
@@ -79,7 +79,17 @@ function changeLessMoreDisplay(theId) {
   } else {
     object.innerHTML = 'more';
   }
+  return
+}
 
+// function to change link text between 'show' and 'hide'
+function changeHideShowDisplay(theId) {
+  var object = document.getElementById(theId);
+  if (object.innerHTML == 'show') {
+    object.innerHTML = 'hide';
+  } else {
+    object.innerHTML = 'show';
+  }
   return
 }
 
