@@ -1,4 +1,6 @@
 <%@ page import="java.util.Date"%>
+<%@ page import="de.berlios.sventon.util.ByteFormatter"%>
+
 <table class="sventonEntriesTable">
   <tr>
     <th></th>
@@ -10,10 +12,17 @@
   </tr>
   <%
     int rowCount = 0;
-    long totalSize = 0;
+    long totalOrigSize = 0;
+    long totalCompSize = 0;
     %>
   <c:forEach items="${entries}" var="zipEntry">
+    <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
+
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+      <%
+        totalOrigSize += zipEntry.getSize();
+        totalCompSize += zipEntry.getCompressedSize();
+      %>
       <c:choose>
         <c:when test="${zipEntry.directory}">
           <td><img src="images/icon_dir.gif" alt="dir"/></td>
@@ -25,11 +34,18 @@
       <td>${zipEntry.name}</td>
       <td class="sventonColRightAlign">${zipEntry.size}</td>
       <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
-      <c:set var="date" value="${zipEntry.time}" />
-      <jsp:useBean id="date" type="java.lang.Long" />
-      <td class="sventonColNoWrap"><%=new Date(date.longValue())%></td>
+      <td class="sventonColNoWrap"><%=new Date(zipEntry.getTime())%></td>
       <td>${zipEntry.crc}</td>
     </tr>
     <% rowCount++; %>
   </c:forEach>
+
+  <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+    <td align="right"><b>Total:</b></td>
+    <td><b><%=rowCount%> entries</b></td>
+    <td align="right" title="<%=totalOrigSize%>&nbsp;bytes"><b><%if (totalOrigSize != 0) out.print(ByteFormatter.format(totalOrigSize, request.getLocale()));%></b></td>
+    <td align="right" title="<%=totalCompSize%>&nbsp;bytes"><b><%if (totalCompSize != 0) out.print(ByteFormatter.format(totalCompSize, request.getLocale()));%></b></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
 </table>
