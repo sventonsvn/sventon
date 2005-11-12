@@ -74,9 +74,14 @@ public class RepositoryEntryComparatorTest extends TestCase {
     assertSame(e2, entries.get(1));
     assertSame(e3, entries.get(2));
 
+    Collections.sort(entries, new RepositoryEntryComparator(FULL_NAME, false));
+    assertSame(e1, entries.get(0));
+    assertSame(e2, entries.get(1));
+    assertSame(e3, entries.get(2));
+
     // Tricking the constructor with an illegal type should fail fast
     try {
-      new RepositoryEntryComparator(4, false);
+      new RepositoryEntryComparator(5, false);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException iae) {
       // Expected

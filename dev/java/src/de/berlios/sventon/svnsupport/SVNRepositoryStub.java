@@ -8,16 +8,19 @@ import java.util.*;
 
 public class SVNRepositoryStub extends SVNRepository {
 
-  public SVNRepositoryStub(SVNURL location, ISVNSession options) {
-    super(location, options);
-    repositoryEntries = new HashMap<String, Collection>();
-  }
-
   private long latestRevision = 0;
 
   private SVNDirEntry infoEntry;
 
   private HashMap<String, Collection> repositoryEntries = null;
+
+  private List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+
+
+  public SVNRepositoryStub(SVNURL location, ISVNSession options) {
+    super(location, options);
+    repositoryEntries = new HashMap<String, Collection>();
+  }
 
   public void testConnection() throws SVNException {
   }
@@ -369,6 +372,19 @@ public class SVNRepositoryStub extends SVNRepository {
    * @see org.tmatesoft.svn.core.SVNLogEntryPath
    */
   public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
+    return logEntries;
+  }
+
+  public void setLogResult(final List<SVNLogEntry> entries) {
+    logEntries = entries;
+  }
+
+  public static SVNRepositoryStub getInstance() throws Exception {
+    // Set up the repository stub
+    SVNRepositoryStub repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), null);
+
+    repository.setLatestRevision(123);
+
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
     changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', "", 1));
@@ -376,13 +392,7 @@ public class SVNRepositoryStub extends SVNRepository {
     changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', "", 1));
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', "", 1));
     logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Commit message."));
-    return logEntries;
-  }
-
-  public static SVNRepositoryStub getInstance() throws Exception {
-    // Set up the repository stub
-    SVNRepositoryStub repository = new SVNRepositoryStub(SVNURL.parseURIDecoded("http://localhost"), null);
-    repository.setLatestRevision(123);
+    repository.setLogResult(logEntries);
 
     List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
     entries1.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
@@ -391,7 +401,7 @@ public class SVNRepositoryStub extends SVNRepository {
     entries1.add(new SVNDirEntry("file3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
     List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
     entries2.add(new SVNDirEntry("dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("dirfile1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
     entries2.add(new SVNDirEntry("dirfile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
     entries2.add(new SVNDirEntry("dirfile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
 
@@ -399,6 +409,7 @@ public class SVNRepositoryStub extends SVNRepository {
     repository.addDir("/dir1/", entries2);
     repository.addDir("/dir1/dir2/", new ArrayList());
     repository.infoEntry = new SVNDirEntry("file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
+
     return repository;
   }
 }

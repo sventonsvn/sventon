@@ -2,7 +2,7 @@ package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
 import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
+import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.FULL_NAME;
 import java.io.Serializable;
 import java.util.*;
 
@@ -38,7 +38,7 @@ public class RevisionIndex implements Serializable {
    * @param url The url to index.
    */
   public RevisionIndex(final String url) {
-    index = Collections.checkedSet(new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(NAME, false)), RepositoryEntry.class);
+    index = Collections.checkedSet(new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(FULL_NAME, false)), RepositoryEntry.class);
     this.url = url;
   }
 
@@ -80,9 +80,10 @@ public class RevisionIndex implements Serializable {
    * Adds an entry to the index.
    *
    * @param entry Entry to add
+   * @return True if object added ok, false if not.
    */
-  public void add(final RepositoryEntry entry) {
-    index.add(entry);
+  public boolean add(final RepositoryEntry entry) {
+    return index.add(entry);
   }
 
   /**

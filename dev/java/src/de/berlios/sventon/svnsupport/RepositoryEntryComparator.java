@@ -40,6 +40,11 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
    */
   public static final int DATE = 3;
 
+  /**
+   * Constant for comparing on full name including path.
+   */
+  public static final int FULL_NAME = 4;
+
   private boolean groupDirs = false;
 
   private int sortType = 0;
@@ -50,6 +55,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
     legalTypes.add(AUTHOR);
     legalTypes.add(REVISION);
     legalTypes.add(DATE);
+    legalTypes.add(FULL_NAME);
   }
 
   /**
@@ -115,6 +121,8 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
       final Date date2 = entry2.getDate();
       final int dateCompare = nullSafeCompare(date1, date2);
       return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
+    case FULL_NAME:
+      return nullSafeCompare(entry1.getFullEntryName(), entry2.getFullEntryName()); 
     default:
       throw new IllegalStateException("Illegal sort type: " + sortType);
     }
