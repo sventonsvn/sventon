@@ -88,7 +88,7 @@
         <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %><c:out value="${entry.size}" /><% } %></td>
         <td class="sventonCol5"><c:out value="${entry.revision}" /></td>
         <td class="sventonCol6"><c:out value="${entry.author}" /></td>
-        <td class="sventonCol7"><c:out value="${entry.date}" /></td>
+        <td class="sventonCol7"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
         <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
       </tr>
       <% rowCount++; %>

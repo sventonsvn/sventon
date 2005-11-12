@@ -3,6 +3,7 @@ package de.berlios.sventon.index;
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import de.berlios.sventon.ctrl.RepositoryEntry;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.svnsupport.LogEntryActionType;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -182,8 +183,8 @@ public class RevisionIndexer {
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       for (String entryPath : map.keySet()) {
         SVNLogEntryPath logEntryPath = map.get(entryPath);
-        switch (logEntryPath.getType()) {
-          case 'A' :
+        switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
+          case A :
             logger.debug("Adding entry to index: " + logEntryPath.getPath());
             index.add(new RepositoryEntry(
                 repository.info(logEntryPath.getPath(), latestRevision),
@@ -191,12 +192,12 @@ public class RevisionIndexer {
                 mountPoint));
             break;
 
-          case 'D' :
+          case D :
             logger.debug("Removing entry from index: " + logEntryPath.getPath());
             index.remove(logEntryPath.getPath());
             break;
 
-          case 'R' :
+          case R :
             logger.debug("Updating entry in index: " + logEntryPath.getPath());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
@@ -205,7 +206,7 @@ public class RevisionIndexer {
                 mountPoint));
             break;
 
-          case 'M' :
+          case M :
             logger.debug("Updating entry in index: " + logEntryPath.getPath());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
