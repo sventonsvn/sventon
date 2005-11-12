@@ -98,21 +98,19 @@ function changeHideShowDisplay(theId) {
 function doDiff(formName) {
 
   // Check if any entry is checked
-  var checkedEntry = false;
+  var checkedEntry = 0;
   for (i = 0; i < formName.rev.length; i++) {
     if (formName.rev[i].type == 'checkbox' && formName.rev[i].checked == true) {
-      checkedEntry = true;
-      break;
+      checkedEntry++;
     }
   }
 
-  // If no entries selected, no action is taken.
-  if (!checkedEntry) {
+  // Two boxes must be checked else no action is taken.
+  if (checkedEntry != '2') {
     return false;
+  } else {
+    return true
   }
-
-  //TODO - validate and make sure two boxes are checked.
-  return true;
 }
 
 // function to verify that not more than two checkboxes are checked.
