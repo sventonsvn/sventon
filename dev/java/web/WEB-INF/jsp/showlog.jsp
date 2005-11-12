@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
 
 <html>
 <head>
@@ -89,7 +90,7 @@
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">[<span id="hdr<%=rowCount%>">more</span>]</a></td>
       <td><c:out value="${entry.svnLogEntry.author}" /></td>
-      <td nowrap><c:out value="${entry.svnLogEntry.date}" /></td>
+      <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
     <td valign="top">Changed<br>paths</td><td colspan="5">
@@ -110,15 +111,15 @@
     	while (i.hasNext()) {
     	  org.tmatesoft.svn.core.SVNLogEntryPath logEntryPath = 
     	    (org.tmatesoft.svn.core.SVNLogEntryPath)changedPaths.get(i.next());
-    	  
+    	  LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
     %>
     <tr>
     <c:url value="goto.svn" var="goToUrl">
       <c:param name="path" value="<%= logEntryPath.getPath() %>" />
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
-      <td><%= logEntryPath.getType() %></td>
-      <% if ('D' != logEntryPath.getType()) { %>
+      <td><i><%= actionType.getDescription() %></i></td>
+      <% if (LogEntryActionType.D != actionType) { %>
       <td><a href="${goToUrl}"><%= logEntryPath.getPath() %></a></td>
       <% } else { %>
       <td><%= logEntryPath.getPath() %></td>

@@ -17,9 +17,11 @@
     %>
   <c:forEach items="${entries}" var="zipEntry">
     <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
+    <jsp:useBean id="entryDate" class="java.util.Date" />
 
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <%
+        entryDate = new Date(zipEntry.getTime());
         totalOrigSize += zipEntry.getSize();
         totalCompSize += zipEntry.getCompressedSize();
       %>
@@ -34,7 +36,7 @@
       <td>${zipEntry.name}</td>
       <td class="sventonColRightAlign">${zipEntry.size}</td>
       <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
-      <td class="sventonColNoWrap"><%=new Date(zipEntry.getTime())%></td>
+      <td class="sventonColNoWrap"><fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/></td>
       <td>${zipEntry.crc}</td>
     </tr>
     <% rowCount++; %>

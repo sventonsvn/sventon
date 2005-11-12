@@ -1,3 +1,4 @@
+<%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntry"%>
 <%@ page import="java.util.*"%>
@@ -23,7 +24,7 @@
         <div id="latestCommitInfoDiv" style="display:none">
           <table class="sventonLatestCommitInfoTable">
             <tr><td><b>User:</b></td><td>${latestCommitInfo.author}</td></tr>
-            <tr><td><b>Date:</b></td><td>${latestCommitInfo.date}</td></tr>
+            <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${latestCommitInfo.date}" dateStyle="short" timeStyle="short"/></td></tr>
             <tr><td><b>Message:</b></td><td>${latestCommitInfo.message}</td></tr>
             <tr><td><b>Revision:</b></td><td>${latestCommitInfo.revision}</td></tr>
             <tr><td colspan="2" valign="top"><b>Changed paths:</b></td></tr>
@@ -43,14 +44,15 @@
                   Iterator latestLogIterator = latestPathsList.iterator();
                   while (latestLogIterator.hasNext()) {
                     SVNLogEntryPath logEntryPath = (SVNLogEntryPath) latestChangedPaths.get(latestLogIterator.next());
+                    LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
                 %>
                 <tr>
                 <c:url value="goto.svn" var="goToUrl">
                   <c:param name="path" value="<%= logEntryPath.getPath() %>" />
                   <c:param name="revision" value="${entry.svnLogEntry.revision}" />
                 </c:url>
-                  <td><%= logEntryPath.getType() %></td>
-                  <% if ('D' != logEntryPath.getType()) { %>
+                  <td><i><%= actionType.getDescription() %></i></td>
+                  <% if (LogEntryActionType.D != actionType) { %>
                   <td><a href="${goToUrl}"><%= logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>

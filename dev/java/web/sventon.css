@@ -50,6 +50,10 @@ a:link, a:visited, a:hover, a:active {
   vertical-align: middle;
 }
 
+.sventonSearchField {
+  padding: 0px
+}
+
 .sventonSelectOption {
   color: rgb(119, 119, 119);
   background-color: inherit;
@@ -88,6 +92,10 @@ th {
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
+}
+
+.sventonEntriesTable * TD {
+  padding: 0px;
 }
 
 .sventonEntry1 {
@@ -188,11 +196,19 @@ th {
   border: 1px solid black;
 }
 
+.sventonLatestCommitInfoTable * TD {
+  padding: 0px;
+}
+
 .sventonPropertiesTable {
   color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
+}
+
+.sventonPropertiesTable * TD {
+  padding: 0px;
 }
 
 .sventonLineNo {

@@ -14,6 +14,7 @@ public class AllTests {
     suite.addTestSuite(CustomArrayListTest.class);
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     suite.addTestSuite(KeywordHandlerTest.class);
+    suite.addTestSuite(LogEntryActionTypeTest.class);
     return suite;
   }
 
