@@ -11,20 +11,29 @@ body {
 }
 
 pre {
-  width: 100%;
   color: #000000;
   background-color: #e9e9e9;
 }
 
 .codeBlock {
-  width: 97%;
   padding: 0.5em;
   color: #000000;
-  background: rgb(240,240,240);
+  background-color: #f0f0f0;
   border-top: black dotted 1px;
   border-left: black dotted 1px;
   border-right: black solid 2px;
   border-bottom: black solid 2px;
+}
+
+.sventonDiffTable {
+  color: #000000;
+  background-color: #f0f0f0;
+  border-top: black dotted 1px;
+  border-left: black dotted 1px;
+  border-right: black solid 2px;
+  border-bottom: black solid 2px;
+  padding: 0px;
+  spacing: 0px;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -55,13 +64,13 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .sventonSelectOption {
-  color: rgb(119, 119, 119);
+  color: #777777;
   background-color: inherit;
 }
 
 .sventonHeader {
   color: #000000;
-  background-color: #dddde8;
+  background-color: #ccccff;
   border: 1px solid black;
   width: 100%;
 }

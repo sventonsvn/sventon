@@ -37,7 +37,7 @@
         <jsp:useBean id="leftLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
         <jsp:useBean id="rightLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
 
-        <table class="codeBlock" cellspacing="0" cellpadding="1">
+        <table class="sventonDiffTable" cellspacing="0">
           <tr>
             <th>&nbsp;</th>
             <th width="50%">Revision <c:out value="${fromRevision}"/></th>

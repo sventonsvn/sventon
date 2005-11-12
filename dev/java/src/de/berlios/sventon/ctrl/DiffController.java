@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +64,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       // Get content of oldest file (left).
       logger.debug("Getting file contents for (from) revision " + fromRevision + ", path: " + fromPath);
       repository.getFile(fromPath, fromRevision, new HashMap(), outStream);
-      leftLines = outStream.toString();
+      leftLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
       // Re-initialize stream
       outStream = new ByteArrayOutputStream();
@@ -71,7 +72,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       // Get content of newest file (right).
       logger.debug("Getting file contents for (to) revision " + toRevision + ", path: " + toPath);
       repository.getFile(toPath, toRevision, new HashMap(), outStream);
-      rightLines = outStream.toString();
+      rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
       Diff differ = new Diff(leftLines.toString(), rightLines.toString());
 /*

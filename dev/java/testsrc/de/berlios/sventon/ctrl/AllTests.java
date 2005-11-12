@@ -15,6 +15,7 @@ public class AllTests {
     suite.addTestSuite(RepositoryEntryTest.class);
     suite.addTestSuite(ShowLogControllerTest.class);
     suite.addTestSuite(SearchControllerTest.class);
+    suite.addTestSuite(GetControllerTest.class);
     return suite;
   }
 
