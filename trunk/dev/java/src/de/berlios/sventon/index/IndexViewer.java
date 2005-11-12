@@ -34,7 +34,7 @@ public class IndexViewer {
     System.out.println("--------------------------------------------------------");
 
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>(index.getEntries());
-    Collections.sort(entries, new RepositoryEntryComparator(RepositoryEntryComparator.NAME, false));
+    Collections.sort(entries, new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false));
 
     for (RepositoryEntry entry : entries) {
       System.out.println(entry);

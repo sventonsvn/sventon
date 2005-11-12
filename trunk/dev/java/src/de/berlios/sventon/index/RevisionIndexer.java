@@ -265,7 +265,9 @@ public class RevisionIndexer {
 
     entriesList.addAll(repository.getDir(path, index.getIndexRevision(), null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      index.add(new RepositoryEntry(entry, path, mountPoint));
+      if (!index.add(new RepositoryEntry(entry, path, mountPoint))) {
+        throw new RuntimeException("Unable to add entry to index: " + path + entry + " (" + mountPoint + ")");
+      }
       if (entry.getKind() == SVNNodeKind.DIR) {
         populateIndex(path + entry.getName() + "/");
       }
