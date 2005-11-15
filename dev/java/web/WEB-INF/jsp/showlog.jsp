@@ -24,10 +24,8 @@
 
   <p>
     <table class="sventonHeader"><tr><td>
-  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
+  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;</td></tr></table>
   </p>
-  <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
-
   <br/>
   
   <table class="sventonFunctionLinksTable">
