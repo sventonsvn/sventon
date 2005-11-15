@@ -12,11 +12,6 @@
 
     <c:url value="get.svn" var="downloadUrl" />
 
-    <c:url value="repobrowser.svn" var="showDirUrl">
-      <c:param name="path" value="${command.path}" />
-      <c:param name="revision" value="${command.revision}" />
-    </c:url>
-
     <p>
       <table class="sventonHeader"><tr><td>
     Diff view - <b><c:out value="${command.target}"/></b></td></tr></table>
@@ -24,12 +19,6 @@
     <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
     <br/>
-
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><a href="<c:out value="${showDirUrl}"/>">[Show directory]</a></td>
-      </tr>
-    </table>
 
     <c:forEach items="${thumbnailentries}" var="entry">
       <p>
