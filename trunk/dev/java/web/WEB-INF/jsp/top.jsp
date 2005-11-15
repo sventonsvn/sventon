@@ -49,7 +49,7 @@
                 <tr>
                 <c:url value="goto.svn" var="goToUrl">
                   <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-                  <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                  <c:param name="revision" value="${latestCommitInfo.revision}" />
                 </c:url>
                   <td><i><%= actionType.getDescription() %></i></td>
                   <% if (LogEntryActionType.D != actionType) { %>
