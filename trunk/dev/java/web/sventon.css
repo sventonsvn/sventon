@@ -10,11 +10,6 @@ body {
   font-weight: normal;
 }
 
-pre {
-  color: #000000;
-  background-color: #e9e9e9;
-}
-
 .codeBlock {
   padding: 0.5em;
   color: #000000;
@@ -199,6 +194,12 @@ th {
 .sventonPropertiesDiv {
 }
 
+.sventonPropertiesTable {
+  color: #000000;
+  background-color: #eeeeff;
+  border: 1px solid black;
+}
+
 .sventonLatestCommitInfoTable {
   color: #000000;
   background-color: #eeeeff;
@@ -207,13 +208,6 @@ th {
 
 .sventonLatestCommitInfoTable * TD {
   padding: 0px;
-}
-
-.sventonPropertiesTable {
-  color: #000000;
-  background-color: #eeeeff;
-  border: 1px solid black;
-  width: 950px;
 }
 
 .sventonPropertiesTable * TD {

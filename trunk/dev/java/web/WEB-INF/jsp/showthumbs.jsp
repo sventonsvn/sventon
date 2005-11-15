@@ -14,8 +14,8 @@
 
     <p>
       <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
+      <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
     </p>
-    <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
     <br/>
 
