@@ -13,8 +13,7 @@
     <c:url value="get.svn" var="downloadUrl" />
 
     <p>
-      <table class="sventonHeader"><tr><td>
-    Diff view - <b><c:out value="${command.target}"/></b></td></tr></table>
+      <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
     </p>
     <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
 
@@ -24,7 +23,7 @@
       <p>
         <b><c:out value="${entry}"/></b><br/>
         <a href="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=inline">
-          <img src="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=thumb"/>
+          <img src="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail" border="0"/>
         </a>
       </p>
     </c:forEach>
