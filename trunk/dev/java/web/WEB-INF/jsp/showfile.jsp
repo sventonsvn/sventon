@@ -39,7 +39,7 @@
           <c:when test="${isImage}">
 <p>
   <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
-    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail"/>
+    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail" border="0"/>
   </a>
 </p>
           </c:when>
