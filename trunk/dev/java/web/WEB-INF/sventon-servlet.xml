@@ -5,7 +5,7 @@
   - Application context definition for Sventon DispatcherServlet.
 -->
 
-<beans>
+<beans default-lazy-init="true">
 
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -41,17 +41,12 @@
     <property name="validator">
       <ref bean="svnBaseCommandValidator" />
     </property>
-  </bean>
-
-  <bean id="showLogPageController" class="de.berlios.sventon.ctrl.ShowLogPageController">
-    <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
-    </property>
-    <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+    <!-- Number of log entries / page in logs view -->
+    <property name="pageSize">
+     <value>50</value>
     </property>
   </bean>
-
+  
   <bean id="searchController" class="de.berlios.sventon.ctrl.SearchController">
     <property name="revisionIndexer">
       <ref bean="revisionIndexer" />
@@ -164,7 +159,6 @@
       <props>
         <prop key="/repobrowser.svn">repoBrowserController</prop>
         <prop key="/showlog.svn">showLogsController</prop>
-        <prop key="/showlogpage.svn">showLogPageController</prop>
         <prop key="/showfile.svn">showFileController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/search.svn">searchController</prop>

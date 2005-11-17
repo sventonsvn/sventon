@@ -62,11 +62,16 @@
     <th>Date</th>
   </tr>
   <% int rowCount = 0; %>
+  <c:set var="nextPath" value=""/>
+  <c:set var="nextRev" value=""/>
+  
   <c:forEach items="${logEntriesPage}" var="entry">
     <c:url value="showfile.svn" var="showUrl">
       <c:param name="path" value="${entry.pathAtRevision}" />
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
+    <c:set var="nextPath" value="${entry.pathAtRevision}"/>
+    <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <c:choose>
         <c:when test="${isFile}">
@@ -133,31 +138,22 @@
     </tr>
     <% rowCount++; %>
   </c:forEach>
-  <c:set var="count" value="${pageCount}" />
-  <c:set var="pageNum" value="${pageNumber}" />
-  <jsp:useBean id="count" type="java.lang.Integer" />
-  <jsp:useBean id="pageNum" type="java.lang.Integer" />
-  <c:url value="showlogpage.svn" var="showlogpageUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-    <c:param name="revision" value="${command.revision}" />
+  <c:url value="showlog.svn" var="showNextLogUrl">
+    <c:param name="nextPath" value="${nextPath}" />
+    <c:param name="nextRevision" value="${nextRev}" />
+    <c:param name="path" value="${command.completePath}"/>
+    <c:param name="rev" value="${command.revision}"/>
   </c:url>
-  <tr>
-  <td colspan="5" align="center">
-  <% for (int j = 1; j <= count.intValue(); j++) { 
-       if (j == pageNum.intValue()) { %>
-  	     <%= j %>&nbsp;
-  <%   } else { %>
-    <c:url value="showlogpage.svn" var="showLogPageUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-      <c:param name="revision" value="${command.revision}" />
-      <c:param name="page" value="<%= Integer.toString(j) %>" />
-    </c:url>
-  	     <a href="<c:out value="${showLogPageUrl}"/>"><%= j %></a>&nbsp;
-  <%   }
-     } %>
-  </td>
-  </tr>
 
+  <c:choose>
+    <c:when test="${morePages}">
+  <tr>
+    <td colspan="5" align="center">
+  	     <a href="<c:out value="${showNextLogUrl}"/>">Next <c:out value="${pageSize}"/></a>&nbsp;
+    </td>
+  </tr>
+  </c:when>
+  </c:choose>
   <tr>
     <td colspan="2">
     <c:choose>
