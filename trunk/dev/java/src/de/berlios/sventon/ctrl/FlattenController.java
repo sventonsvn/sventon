@@ -63,7 +63,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", entries);
-    model.put("isSearch", true);  // Indicates that path should be shown in browser view.
+    model.put("isFlatten", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);
   }
 }

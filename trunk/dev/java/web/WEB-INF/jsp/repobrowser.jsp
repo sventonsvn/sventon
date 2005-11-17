@@ -11,8 +11,24 @@
 
   <p>
     <table class="sventonHeader"><tr><td>
-  Repository Browser - <b><c:out value="${command.target}"/></b>&nbsp;
-  <c:if test = "${!empty properties}">
+
+  <c:choose>
+    <c:when test="${isSearch}">
+      Search result for - <b><c:out value="${searchString}"/></b>
+    </c:when>
+    <c:otherwise>
+      <c:choose>
+        <c:when test="${isFlatten}">
+          Flattened structure - <b><c:out value="${command.target}"/></b>
+        </c:when>
+        <c:otherwise>
+          Repository Browser - <b><c:out value="${command.target}"/></b>
+        </c:otherwise>
+      </c:choose>
+    </c:otherwise>
+  </c:choose>
+
+  <c:if test="${!empty properties}">
     <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
@@ -64,7 +80,7 @@
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3">
           <c:choose>
-            <c:when test="${isSearch}">
+            <c:when test="${isSearch || isFlatten}">
               <a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
                 <c:out value="${entry.friendlyFullEntryName}" />
             </c:when>
@@ -76,7 +92,7 @@
         <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
         <td class="sventonCol3">
           <c:choose>
-            <c:when test="${isSearch}">
+            <c:when test="${isSearch || isFlatten}">
               <a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
                 <c:out value="${entry.friendlyFullEntryName}"/>
             </c:when>
