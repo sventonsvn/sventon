@@ -3,6 +3,7 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.KeywordHandler;
+import de.berlios.sventon.svnsupport.LineNumberAppender;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import org.springframework.validation.BindException;
@@ -140,7 +141,17 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     } else {
       fileContents = outStream.toString();
     }
-    fileContents = getColorer().getColorizedContent(fileContents, svnCommand.getTarget());
+
+    LineNumberAppender appender = new LineNumberAppender();
+    appender.setEmbedStart("<span class=\"sventonLineNo\">");
+    appender.setEmbedEnd("</span>");
+
+    try {
+      fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
+    } catch (IOException ioex) {
+      throw new SVNException(ioex);
+    }
+
     logger.debug("Create model");
     model.put("fileContents", fileContents);
     return model;

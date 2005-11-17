@@ -15,6 +15,7 @@ public class AllTests {
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     suite.addTestSuite(KeywordHandlerTest.class);
     suite.addTestSuite(LogEntryActionTypeTest.class);
+    suite.addTestSuite(LineNumberAppenderTest.class);
     return suite;
   }
 
