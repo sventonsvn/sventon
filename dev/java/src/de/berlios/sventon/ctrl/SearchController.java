@@ -47,11 +47,13 @@ public class SearchController extends AbstractSVNTemplateController implements C
       HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
     
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    logger.debug("Searching index for: " + request.getParameter("sventonSearchString"));
-    entries.addAll(getRevisionIndexer().find(request.getParameter("sventonSearchString")));
+    String searchString = request.getParameter("sventonSearchString");
+    logger.debug("Searching index for: " + searchString);
+    entries.addAll(getRevisionIndexer().find(searchString));
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
+    model.put("searchString", searchString);
     model.put("svndir", entries);
     model.put("isSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);
