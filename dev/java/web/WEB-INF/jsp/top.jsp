@@ -28,8 +28,11 @@
             <tr><td><b>Message:</b></td><td>${latestCommitInfo.message}</td></tr>
             <tr><td><b>Revision:</b></td><td>${latestCommitInfo.revision}</td></tr>
             <tr><td colspan="2" valign="top"><b>Changed paths:</b></td></tr>
-              <c:set var="latestChangedPaths" value="${latestCommitInfo.changedPaths}" />
-              <jsp:useBean id="latestChangedPaths" type="java.util.Map" />
+            <c:set var="latestChangedPaths" value="${latestCommitInfo.changedPaths}" />
+            <jsp:useBean id="latestChangedPaths" type="java.util.Map" />
+            <c:set var="latestCommitInfo" value="${latestCommitInfo}" />
+            <jsp:useBean id="latestCommitInfo" type="SVNLogEntry" />
+
             <tr><td colspan="2">
                 <table border="0">
                   <tr>
@@ -47,13 +50,21 @@
                     LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
                 %>
                 <tr>
-                <c:url value="goto.svn" var="goToUrl">
-                  <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-                  <c:param name="revision" value="${latestCommitInfo.revision}" />
-                </c:url>
+                  <c:url value="goto.svn" var="goToUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${latestCommitInfo.revision}" />
+                  </c:url>
+
+                  <c:url value="diff.svn" var="diffUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${latestCommitInfo.revision}" />
+                  </c:url>
+
                   <td><i><%= actionType.getDescription() %></i></td>
-                  <% if (LogEntryActionType.D != actionType) { %>
-                  <td><a href="${goToUrl}"><%= logEntryPath.getPath() %></a></td>
+                  <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
+                  <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
+                  <% } else if (LogEntryActionType.M == actionType) { %>
+                  <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;<%= latestCommitInfo.getRevision() %>&rev=<%= logEntryPath.getPath() %>;;<%= latestCommitInfo.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
                   <% } %>
@@ -107,7 +118,7 @@
 <td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
 </tr>
  <tr>
- <td>Go to Revision</td><td colspan="2">Go to path <% if (!"".equals(command.getMountPoint(false))) { %>(from: <%= command.getMountPoint(false) %>)<% } %></td>
+ <td>Go to revision</td><td colspan="2">Go to path <% if (!"".equals(command.getMountPoint(false))) { %>(from: <%= command.getMountPoint(false) %>)<% } %></td>
  </tr>
 <tr>
 <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
