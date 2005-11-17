@@ -123,7 +123,7 @@
     </c:url>
       <td><i><%= actionType.getDescription() %></i></td>
       <% if (LogEntryActionType.D != actionType) { %>
-      <td><a href="${goToUrl}"><%= logEntryPath.getPath() %></a></td>
+      <td><a href="${goToUrl}"><%= command.getPath().equals(logEntryPath.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
       <% } else { %>
       <td><%= logEntryPath.getPath() %></td>
       <% } %>
