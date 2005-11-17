@@ -1,79 +1,112 @@
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import de.berlios.sventon.command.SVNBaseCommand;
 
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
- * protocol http/https.
- * <p/>
- * The log entries will be paged if the number of entries exceeds max page siz,
- * {@link #PAGE_SIZE}. Paged log entries are stored in the user HTTP session
- * using key <code>sventon.logEntryPages</code>. The type of this object is
- * <code>List<List<SVNLogEntry>></code>.
- *
+ * protocol http/https. <p/> The log entries will be paged if the number of
+ * entries exceeds max page siz, {@link #pageSize}. Paged log entries are
+ * stored in the user HTTP session using key <code>sventon.logEntryPages</code>.
+ * The type of this object is <code>List<List<SVNLogEntry>></code>.
+ * 
  * @author patrikfr@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
-  // Page size, this is the max number of log entires shown at a time
-  public static final int PAGE_SIZE = 10;
-
-  public static final String PAGES_SESSION_KEY = "sventon.logEntryPages";
-  public static final String PAGES_COMMAND_SESSION_KEY = "sventon.logEntryPagesCommand";
-
-  // private static final SVNRevision FIRST_REVISION = SVNRevision.create(1);
+  //Max entries / page
+  private int pageSize = 50;
+  
+  /**
+   * Set page size, this is the max number of log entires shown at a time
+   * @param pageSize Page size.
+   */
+  public void setPageSize(final int pageSize) {
+    this.pageSize = pageSize;
+  }
+ 
 
   /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-      protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                       HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
-
-    // Remove any stale pagees from the session, if any
-    HttpSession session = request.getSession(true);
-    session.removeAttribute(PAGES_SESSION_KEY);
-    session.removeAttribute(PAGES_COMMAND_SESSION_KEY);
+  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
     String path = svnCommand.getCompletePath();
+
+    String nextPathParam = request.getParameter("nextPath");
+    String nextRevParam = request.getParameter("nextRevision");
+
+    String[] targetPaths;
+    long revNumber = 0;
 
     if (!path.startsWith("/")) {
       path = "/" + path;
     }
 
-    String[] targetPaths = new String[]{path};
+    if (nextPathParam == null || nextRevParam == null) {
+      targetPaths = new String[] { path };
+      long revNumber1;
+      if (revision == HEAD)
+        revNumber1 = repository.getLatestRevision();
+      else
+        revNumber1 = revision.getNumber();
+      revNumber = revNumber1;
+    } else {
+
+      targetPaths = new String[] { nextPathParam };
+
+      if ("HEAD".equals(nextRevParam)) {
+        revNumber = repository.getLatestRevision();
+      } else {
+        try {
+          revNumber = Long.parseLong(nextRevParam);
+        } catch (NumberFormatException nfe) {
+          exception.reject("log.command.invalidpath", "Invalid revision/path combination for logs");
+          return prepareExceptionModelAndView(exception, svnCommand);
+        }
+      }
+    }
+
     String pathAtRevision = targetPaths[0];
 
     List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
 
-
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
 
-    long revNumber = 0;
-    if (revision == HEAD)
-      revNumber = repository.getLatestRevision();
-    else
-      revNumber = revision.getNumber();
+    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
-    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
-        null, revNumber, 0, true, false);
+    repository.log(targetPaths, revNumber, 0, true, false, pageSize, new ISVNLogEntryHandler() {
+
+      public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
+        logEntries.add(logEntry);
+      }
+
+    });
 
     SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
 
@@ -89,8 +122,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath();
           }
-        } else if (entryPath.length() == i) { // Part path, can be a
-          // branch
+        } else if (entryPath.length() == i) { // Part path, can be a branch
           SVNLogEntryPath logEntryPath = m.get(entryPath);
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
@@ -102,52 +134,12 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
 
-    List<List<LogEntryBundle>> pages = null;
-
-    pages = pageLogEntries(logEntryBundles);
-
-    if (pages.size() > 1) {
-      // TODO: SVNLogEntry objects are not Serializable and should not really be
-      // stored in the session, but it will have to do for now. In the future:
-      // create own wrapper objects for SVNLogEntry
-      session.setAttribute(PAGES_SESSION_KEY, pages);
-      session.setAttribute(PAGES_COMMAND_SESSION_KEY, svnCommand);
-    }
-
-    model.put("logEntriesPage", pages.get(0));
+    model.put("logEntriesPage", logEntryBundles);
+    model.put("pageSize", pageSize);
     model.put("isFile", nodeKind == SVNNodeKind.FILE);
-    model.put("pageCount", pages.size());
-    model.put("pageNumber", 1);
-    model.put("properties", new HashMap());   //TODO: Replace with valid entry properties
+    model.put("morePages", logEntryBundles.size() == pageSize);
+    model.put("properties", new HashMap()); // TODO: Replace with valid entry
+    // properties
     return new ModelAndView("showlog", model);
-  }
-
-  /**
-   * Create pages of the given log entries, the pages are stored as lists of
-   * <code>SVNLogEntry</code>.
-   * <p/>
-   * Visibility set to protected for testing purposes...
-   *
-   * @param logEntries List of <code>SVNLogEntry</code> to page.
-   * @return List of pages, there will always be at least one (possibly empty)
-   *         page.
-   */
-  protected List<List<LogEntryBundle>> pageLogEntries(final List<LogEntryBundle> logEntries) {
-
-    if (logEntries == null) {
-      throw new NullPointerException("Parameter 'logEntries' must not be null");
-    }
-
-    List<List<LogEntryBundle>> pages = new ArrayList<List<LogEntryBundle>>();
-    for (int i = 0; i < logEntries.size(); i = i + PAGE_SIZE) {
-      int end = ((i + PAGE_SIZE) < logEntries.size()) ? i + PAGE_SIZE : logEntries.size();
-      pages.add(new ArrayList<LogEntryBundle>(logEntries.subList(i, end)));
-    }
-
-    if (pages.size() == 0) {
-      pages.add(new ArrayList<LogEntryBundle>());
-    }
-
-    return pages;
   }
 }
