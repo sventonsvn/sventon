@@ -194,10 +194,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     logger.debug("Submitted command: " + svnCommand);
     logger.debug("Redirecting to: " + redirectUrl);
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("path", svnCommand.getPath());
-    m.put("revision", svnCommand.getRevision());
-    return new ModelAndView(new RedirectView(redirectUrl), m);
+    long latestRevision = repository.getLatestRevision();
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("path", svnCommand.getPath());
+    model.put("revision", svnCommand.getRevision());
+    model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
+    model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
+
+    return new ModelAndView(new RedirectView(redirectUrl), model);
   }
 
   /**
