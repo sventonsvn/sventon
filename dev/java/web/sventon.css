@@ -216,6 +216,8 @@ th {
 
 .sventonLineNo {
   text-decoration: none;
+  font-style: italic;
+  font-weight: bold;
 }
 
 .sventonBlameTable {

@@ -46,11 +46,15 @@ public class Diff {
         throw new DiffException("Files are identical.");
       }
 
-      reader = new BufferedReader(new StringReader(leftContent));
+      LineNumberAppender appender = new LineNumberAppender();
+      appender.setEmbedStart("<span class=\"sventonLineNo\">");
+      appender.setEmbedEnd("</span>");
+
+      reader = new BufferedReader(new StringReader(appender.appendTo(leftContent)));
       while ((tempLine = reader.readLine()) != null) {
         leftSourceLines.add(tempLine);
       }
-      reader = new BufferedReader(new StringReader(rightContent));
+      reader = new BufferedReader(new StringReader(appender.appendTo(rightContent)));
       while ((tempLine = reader.readLine()) != null) {
         rightSourceLines.add(tempLine);
       }
