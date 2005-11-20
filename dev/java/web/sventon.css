@@ -215,6 +215,8 @@ th {
 }
 
 .sventonLineNo {
+  color: #000000;
+  background-color: inherit;
   text-decoration: none;
   font-style: italic;
   font-weight: bold;
