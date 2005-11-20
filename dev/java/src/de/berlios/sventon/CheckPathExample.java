@@ -36,17 +36,17 @@ public class CheckPathExample {
       long latestRevision = svnRepository.getLatestRevision();
 
       SVNNodeKind kind = davRepository.checkPath(correctPath, latestRevision);
-      System.out.println("Kind is FILE? " + (kind == FILE));
+      System.out.println("DAV: (" + correctPath + ") Kind is FILE? " + (kind == FILE));
 
       kind = davRepository.checkPath(incorrectPath, latestRevision);
-      System.out.println("Kind is NONE? " + (kind == NONE));
+      System.out.println("DAV: (" + incorrectPath + ") Kind is NONE? " + (kind == NONE));
 
       kind = svnRepository.checkPath(correctPath, latestRevision);
-      System.out.println("Kind is FILE? " + (kind == FILE));
+      System.out.println("SVN: (" + correctPath + ") Kind is FILE? " + (kind == FILE));
 
       //THIS FAILS WITH EXCEPTION
       kind = svnRepository.checkPath(incorrectPath, latestRevision);
-      System.out.println("Kind is NONE? " + (kind == NONE));
+      System.out.println("SVN: (" + incorrectPath + ") Kind is NONE? " + (kind == NONE));
 
     } catch (SVNException e) {
       e.printStackTrace();
