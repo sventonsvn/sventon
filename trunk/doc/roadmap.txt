@@ -6,7 +6,7 @@ This is a rough release plan for the sventon, it will be updated and changed irr
 [x] = in progress
 [<rev>] = completed in revision
 
-Release 1
+Release 1 (not yet released)
 [<76>]  Browse WebDAV and svnserve repositories (anonymous and authorized login).
 [<76>]  View file for any given revision.
 [<76>]  Source code syntax highlighting.
