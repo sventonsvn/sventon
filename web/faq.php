@@ -14,7 +14,9 @@
   <li><a href="#q13">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
   <li><a href="#q14">What license do you use?</a></li>
   <li><a href="#q15">Why did you start this project?</a></li>
+  <li><a href="#q17">Is there a publicly running version of Sventon that I can try?</li>
   <li><a href="#q16">How can I use Glorbosoft XYZ to maximize team productivity?</a><li>
+ 
 </ul>
 
 <p>
@@ -98,7 +100,7 @@
 <b>Q:</b> Will sventon in any way jeopardize my Subversion repository?
 </a>
 <br/>
-<b>A:</b> No. Sventon will only perform <i>read</i> operations.
+<b>A:</b> No. Unless something really scary is going on, Sventon will only perform <i>read</i> operations.
 </p>
 
 <p>
@@ -153,7 +155,7 @@
 <b>Q:</b> What license do you use?
 </a>
 <br/>
-<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, why you're at it, also read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">
+<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, why you're at it, also read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>
 </p>
 
 <p>
@@ -164,6 +166,13 @@
 <b>A:</b> Well, we kind of needed the functionality but we couldn't find what we were looking for, so we went ahead and started this project.
 </p>
 
+<p>
+<a name="q17">
+<b>Q:</b>Is there a publicly running version of Sventon that I can try?
+</a>
+<br/>
+<b>A:</b> Unfortunately no, not that we know of. Please have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running Sventon installation could look like.
+</p>
 
 <p>
 <a name="q16">
@@ -171,6 +180,7 @@
 </a>
 <br/>
 <b>A:</b> Many of our customers want to know how they can maximize productivity through our patented office groupware innovations. The answer is simple: first, click on the “File” menu, scroll down to “Increase Productivity”, then…
-
+<br/><br/>
 Well, no, not really. But this is such a great FAQ question we couldn't resist stealing it from: <a href="http://svnbook.red-bean.com/en/1.1/svn-book.html#svn-foreword">Version Control with Subversion</a>
 </p>
+
