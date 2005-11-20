@@ -23,7 +23,7 @@ public class FlattenControllerTest extends TestCase {
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
 
-    assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
+    assertTrue(new Boolean(model.get("isFlatten").toString()).booleanValue());
     assertEquals(2, entries.size());
 
     assertEquals("dir", ((RepositoryEntry) entries.get(0)).getKind());

@@ -178,6 +178,7 @@ public class RevisionIndexer {
     List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
         null, latestRevision, index.getIndexRevision() + 1, true, false);
 
+    Collections.reverse(logEntries);
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
