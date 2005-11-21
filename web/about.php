@@ -13,7 +13,7 @@ The main goal of the Sventon project is to create a Java web application written
     <li>Java, and just Java. If you have Java 5 and a web container, you're all set.
     <li>Neat features such as file search, directory flattening, possiblity to browse archive files (such as JAR and ZIP files), thumbnail views of image files, RSS feeds, nice graphs over repository statistics, and more. And the usual stuff, such as logs view, diff and more.
   </ul>
-  Much of this is now implemented in sventon, for the current feature set, have a look at <a href="index.php?page=features">features</a>.
+  Much of this is now implemented in sventon, for the current feature set, have a look at the <a href="index.php?page=features">features</a>.
 </p>
 
 <p>

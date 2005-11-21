@@ -60,11 +60,11 @@
   <tr>
     <th>OS</th>
     <th>Subversion</th>
-    <th>Servlet container</th>
+    <th>Container</th>
     <th>Protocols</th>
     <th>Java version</th>
-    <th>Tested by</th>
-    <th>Tested sventon rev</th>
+    <th>Tester</th>
+    <th>Revision</th>
   </tr>
   <tr>
     <td>Win2k</td>
@@ -73,7 +73,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td></td>
+    <td>249</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>

@@ -240,7 +240,7 @@ th {
 
 .src {
   color: #000000;
-  background-color: #eeeeff;
+  background-color: inherit;
   font-family: verdana, sans-serif;
   font-size: 9px;
   white-space: pre;
