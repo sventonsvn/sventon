@@ -63,20 +63,26 @@
     <th>Servlet container</th>
     <th>Protocols</th>
     <th>Java version</th>
+    <th>Tested by</th>
+    <th>Tested sventon rev</th>
   </tr>
   <tr>
     <td>Win2k</td>
-    <td>1.2.0 (Release Candidate 2)</td>
+    <td>1.2.0 (RC 2)</td>
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
     <td>1.5.0_04</td>
+    <td>sventon committer</td>
+    <td></td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
     <td>1.2.1</td>
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
-    <td>1.5.0_04</td>
+    <td>1.5.0_05</td>
+    <td>sventon committer</td>
+    <td>249</td>
   </tr>
 </table>
 </p>
@@ -86,7 +92,7 @@
 <b>Q:</b> How do I install and configure sventon?
 </a>
 <br/>
-<b>A:</b> <a href="index.php?page=downloads">Download</a> the latest version and drop the <code>WAR</code> file in your servlet container's <code>webapps</code> directory. Point your web browser to http://yourmachinename/svn/ and you should see the initial configuration page. If not, make sure your container is running (on the correct port). Submit the fields on the configuration page and restart your servlet container when you are ask to so. Point your web browser again to http://yourmachinename/svn/ and you're done!
+<b>A:</b> <a href="index.php?page=downloads">Download</a> the latest version and drop the <code>WAR</code> file in your servlet container's <code>webapps</code> directory. Point your web browser to http://yourmachinename/svn/ and you should see the initial configuration page. If not, make sure your container is running (on the correct port). Submit the fields on the configuration page and restart your servlet container when you are ask to do so. Point your web browser again to http://yourmachinename/svn/ and you're done!
 </p>
 
 <p>
@@ -157,7 +163,7 @@
 <b>Q:</b> What license do you use?
 </a>
 <br/>
-<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, why you're at it, also read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>
+<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>
 </p>
 
 <p>
