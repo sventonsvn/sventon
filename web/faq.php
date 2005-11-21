@@ -14,9 +14,8 @@
   <li><a href="#q13">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
   <li><a href="#q14">What license do you use?</a></li>
   <li><a href="#q15">Why did you start this project?</a></li>
-  <li><a href="#q17">Is there a publicly running version of Sventon that I can try?</li>
-  <li><a href="#q16">How can I use Glorbosoft XYZ to maximize team productivity?</a><li>
- 
+  <li><a href="#q17">Is there a publicly running version of Sventon that I can try?</a></li>
+  <li><a href="#q16">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -63,18 +62,21 @@
     <th>Subversion</th>
     <th>Servlet container</th>
     <th>Protocols</th>
+    <th>Java version</th>
   </tr>
   <tr>
     <td>Win2k</td>
     <td>1.2.0 (Release Candidate 2)</td>
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
+    <td>1.5.0_04</td>
   </tr>
   <tr>
-    <td>Mac OSX</td>
-    <td>--</td>
-    <td>--</td>
+    <td>Mac OS X 10.4.3</td>
+    <td>1.2.1</td>
+    <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
+    <td>1.5.0_04</td>
   </tr>
 </table>
 </p>
@@ -160,7 +162,7 @@
 
 <p>
 <a name="q15">
-<b>Q:</b>Why did you start this project?
+<b>Q:</b> Why did you start this project?
 </a>
 <br/>
 <b>A:</b> Well, we kind of needed the functionality but we couldn't find what we were looking for, so we went ahead and started this project.
@@ -168,7 +170,7 @@
 
 <p>
 <a name="q17">
-<b>Q:</b>Is there a publicly running version of Sventon that I can try?
+<b>Q:</b> Is there a publicly running version of Sventon that I can try?
 </a>
 <br/>
 <b>A:</b> Unfortunately no, not that we know of. Please have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running Sventon installation could look like.
@@ -176,7 +178,7 @@
 
 <p>
 <a name="q16">
-<b>Q:</b>How can I use Glorbosoft XYZ to maximize team productivity?
+<b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
 <b>A:</b> Many of our customers want to know how they can maximize productivity through our patented office groupware innovations. The answer is simple: first, click on the "File" menu, scroll down to "Increase Productivity", then...
