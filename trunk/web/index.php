@@ -122,7 +122,7 @@
           </table>
         </td>
         <td>&nbsp;</td>
-        <td><?php require($includepage); ?></td>
+        <td valign="top"><?php require($includepage); ?></td>
         <td style="background-color: #dddddd; border-right: black solid 1px;">&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
