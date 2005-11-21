@@ -34,7 +34,7 @@
     Diff view - <b><c:out value="${command.target}"/></b></td></tr></table>
     </p>
 
-  <br/>
+    <br/>
 
     <table class="sventonFunctionLinksTable">
       <tr>
@@ -43,25 +43,29 @@
     </table>
 
     <c:choose>
-      <c:when test="${empty diffException}">
+      <c:when test="${!empty diffException}">
+        <p><b><c:out value="${diffException}"/></b></p>
+      </c:when>
+      <c:otherwise>
+        <c:choose>
+          <c:when test="${!isBinary}">
+            <c:set var="leftLines" value="${leftFileContents}" />
+            <c:set var="rightLines" value="${rightFileContents}" />
+            <jsp:useBean id="leftLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
+            <jsp:useBean id="rightLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
 
-        <c:set var="leftLines" value="${leftFileContents}" />
-        <c:set var="rightLines" value="${rightFileContents}" />
-        <jsp:useBean id="leftLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
-        <jsp:useBean id="rightLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
-
-        <table class="sventonDiffTable" cellspacing="0">
-          <tr>
-            <th>&nbsp;</th>
-            <th width="50%">Revision <c:out value="${fromRevision}"/></th>
-            <th>&nbsp;</th>
-            <th width="50%">Revision <c:out value="${toRevision}"/></th>
-          </tr>
+            <table class="sventonDiffTable" cellspacing="0">
+              <tr>
+                <th>&nbsp;</th>
+                <th width="50%">Revision <c:out value="${fromRevision}"/></th>
+                <th>&nbsp;</th>
+                <th width="50%">Revision <c:out value="${toRevision}"/></th>
+              </tr>
           <%
             SourceLine line;
             for (int i = 0; i < leftLines.size(); i++) {
           %>
-          <tr>
+              <tr>
             <%
                 line = (SourceLine) leftLines.get(i);
                 final String css;
@@ -80,21 +84,23 @@
                   sign = "&nbsp;";
                 }
             %>
-            <td><b><%=sign%></b></td>
-            <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
+                <td><b><%=sign%></b></td>
+                <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
             <% line = (SourceLine) rightLines.get(i); %>
-            <td><b><%=sign%></b></td>
-            <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
-          </tr>
+                <td><b><%=sign%></b></td>
+                <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
+              </tr>
         <%
           }
         %>
-        </table>
-      </c:when>
-      <c:otherwise>
-        <p><b><c:out value="${diffException}"/></b></p>
+            </table>
+          </c:when>
+          <c:otherwise>
+            <p><b>One or both files selected for diff is in binary format.</b></p>
+          </c:otherwise>
+        </c:choose>
       </c:otherwise>
-    </c:choose>
+    </c:choose>      
     <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
   </body>

@@ -80,6 +80,9 @@
     <war destfile="${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
+        <exclude name="**/*Test*"/>
+        <exclude name="**/*Mock*"/>
+        <exclude name="**/*Stub*"/>
       </fileset>
     </war>
   </target>
@@ -88,6 +91,9 @@
     <war destfile="${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
+        <exclude name="**/*Test*"/>
+        <exclude name="**/*Mock*"/>
+        <exclude name="**/*Stub*"/>
       </fileset>
     </war>
     <copy todir="${deploy.path}" preservelastmodified="true">

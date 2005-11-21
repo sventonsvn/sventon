@@ -19,6 +19,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -70,31 +71,34 @@ public class DiffController extends AbstractSVNTemplateController implements Con
 
     String leftLines = null;
     String rightLines = null;
-
     try {
-      // Get content of oldest file (left).
-      logger.debug("Getting file contents for (from) revision " + fromRevision + ", path: " + fromPath);
-      repository.getFile(fromPath, fromRevision, new HashMap(), outStream);
-      leftLines = StringEscapeUtils.escapeHtml(outStream.toString());
+      HashMap properties = new HashMap();
+      // Get the file's properties without requesting the content.
+      // Make sure files are not in binary format.
+      repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+      boolean isTextType = SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
+      repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+      if (isTextType && SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
+        model.put("isBinary", false);
+        // Get content of oldest file (left).
+        logger.debug("Getting file contents for (from) revision " + fromRevision + ", path: " + fromPath);
+        repository.getFile(fromPath, fromRevision, null, outStream);
+        leftLines = StringEscapeUtils.escapeHtml(outStream.toString());
+        // Re-initialize stream
+        outStream = new ByteArrayOutputStream();
+         // Get content of newest file (right).
+        logger.debug("Getting file contents for (to) revision " + toRevision + ", path: " + toPath);
+        repository.getFile(toPath, toRevision, null, outStream);
+        rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
-      // Re-initialize stream
-      outStream = new ByteArrayOutputStream();
-
-      // Get content of newest file (right).
-      logger.debug("Getting file contents for (to) revision " + toRevision + ", path: " + toPath);
-      repository.getFile(toPath, toRevision, new HashMap(), outStream);
-      rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
-
-      Diff differ = new Diff(leftLines.toString(), rightLines.toString());
-/*
-    model.put("leftFileContents", ((Colorer) getApplicationContext()
-        .getBean("colorer")).getColorizedContent(leftLines.toString(), svnCommand.getTarget()));
-    model.put("rightFileContents", ((Colorer) getApplicationContext()
-        .getBean("colorer")).getColorizedContent(rightLines.toString(), svnCommand.getTarget()));
-*/
-      model.put("leftFileContents", differ.getLeft());
-      model.put("rightFileContents", differ.getRight());
-
+        Diff differ = new Diff(leftLines, rightLines);
+        model.put("leftFileContents", differ.getLeft());
+        model.put("rightFileContents", differ.getRight());
+      } else {
+        model.put("isBinary", true);  // Indicates that the file is in binary format.
+        logger.info("One or both files selected for diff is in binary format. "
+            + "Diff will not be performed.");
+      }
     } catch (DiffException dex) {
       model.put("diffException", dex.getMessage());
     }
