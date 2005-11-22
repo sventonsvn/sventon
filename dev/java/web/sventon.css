@@ -10,6 +10,27 @@ body {
   font-weight: normal;
 }
 
+th {
+  text-align: left;
+  white-space: nowrap;
+  font-family: verdana, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+td {
+  font-family: verdana, sans-serif;
+  font-size: 11px;
+}
+
+a:link, a:visited, a:hover, a:active {
+  font-family: verdana, sans-serif;
+  font-size: 11px;
+  color: #0060CB;
+  background-color: inherit;
+  text-decoration: none;
+}
+
 .codeBlock {
   padding: 0.5em;
   color: #000000;
@@ -29,14 +50,6 @@ body {
   border-bottom: black solid 2px;
   padding: 0px;
   spacing: 0px;
-}
-
-a:link, a:visited, a:hover, a:active {
-  font-family: verdana, sans-serif;
-  font-size: 11px;
-  color: #0060CB;
-  background-color: inherit;
-  text-decoration: none;
 }
 
 .sventonInput, sventonSelect, sventonTextarea {
@@ -68,14 +81,6 @@ a:link, a:visited, a:hover, a:active {
   background-color: #ccccff;
   border: 1px solid black;
   width: 100%;
-}
-
-th {
-  text-align: left;
-  white-space: nowrap;
-  font-family: verdana, sans-serif;
-  font-size: 11px;
-  font-weight: bold;
 }
 
 .sventonRevision {

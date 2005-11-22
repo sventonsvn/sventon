@@ -74,7 +74,7 @@
                       <c:param name="revision" value="${latestCommitInfo.revision}" />
                     </c:url>
   
-                    <td><i><%= actionType.getDescription() %></i></td>
+                    <td><i><%= actionType %></i></td>
                     <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
                     <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
                     <% } else if (LogEntryActionType.M == actionType) { %>

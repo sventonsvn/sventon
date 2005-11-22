@@ -18,16 +18,16 @@ package de.berlios.sventon.diff;
  */
 public class SourceLine {
 
-  private String action;
+  private DiffAction action;
   private String line;
 
   /**
    * Constructor.
    *
-   * @param action The <tt>action</tt> code.
+   * @param action The <tt>DiffAction</tt> code.
    * @param line   The source line.
    */
-  public SourceLine(final String action, final String line) {
+  public SourceLine(final DiffAction action, final String line) {
     this.action = action;
     this.line = line;
   }
@@ -37,7 +37,7 @@ public class SourceLine {
    *
    * @return Code
    */
-  public String getAction() {
+  public DiffAction getAction() {
     return action;
   }
 

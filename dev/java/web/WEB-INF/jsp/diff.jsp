@@ -56,44 +56,38 @@
 
             <table class="sventonDiffTable" cellspacing="0">
               <tr>
+                <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
                 <th>&nbsp;</th>
                 <th width="50%">Revision <c:out value="${fromRevision}"/></th>
                 <th>&nbsp;</th>
                 <th width="50%">Revision <c:out value="${toRevision}"/></th>
               </tr>
           <%
-            SourceLine line;
+            int diffCount = 0;
             for (int i = 0; i < leftLines.size(); i++) {
           %>
               <tr>
             <%
-                line = (SourceLine) leftLines.get(i);
-                final String css;
-                final String sign;
-                if (DiffAction.ADD_ACTION.equals(line.getAction())) {
-                  css = "srcAdd";
-                  sign = "+";
-                } else if (DiffAction.DELETE_ACTION.equals(line.getAction())) {
-                  css = "srcDel";
-                  sign = "-";
-                } else if (DiffAction.CHANGE_ACTION.equals(line.getAction())) {
-                  css = "srcChg";
-                  sign = "+";
-                } else {
-                  css = "src";
-                  sign = "&nbsp;";
-                }
+                SourceLine line = (SourceLine) leftLines.get(i);
             %>
-                <td><b><%=sign%></b></td>
-                <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
-            <% line = (SourceLine) rightLines.get(i); %>
-                <td><b><%=sign%></b></td>
-                <td class="<%=css%>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></td>
+                <td>
+                  <% if (DiffAction.u != line.getAction()) { %>
+                    <a name="diff<%=diffCount%>"/><a href="#diff<%=++diffCount%>">
+                      <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
+                    </a>
+                  <%}%>
+                </td>
+                <td><b><%= line.getAction().getSymbol() %></b></td>
+                <td class="<%= line.getAction().getCSSClass() %>"><span title="<%= line.getAction().getDescription() %>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></span></td>
+                <% line = (SourceLine) rightLines.get(i); %>
+                <td><b><%= line.getAction().getSymbol() %></b></td>
+                <td class="<%= line.getAction().getCSSClass() %>"><span title="<%= line.getAction().getDescription() %>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></span></td>
               </tr>
         <%
           }
         %>
             </table>
+            <a name="diff<%=diffCount%>"/>
           </c:when>
           <c:otherwise>
             <p><b>One or both files selected for diff is in binary format.</b></p>

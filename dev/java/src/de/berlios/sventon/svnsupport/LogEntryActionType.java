@@ -23,26 +23,24 @@ public enum LogEntryActionType {
   R("Replaced");
 
   /**
-   * The log entry type's description.
+   * The log entry type's action.
    */
-  private final String description;
+  private final String action;
 
   /**
    * Private constructor.
    *
-   * @param description The description
+   * @param action The action
    */
-  private LogEntryActionType(final String description) {
-    this.description = description;
+  private LogEntryActionType(final String action) {
+    this.action = action;
   }
 
   /**
-   * Gets the type's description.
-   *
-   * @return The description
+   * {@inheritDoc}
    */
-  public String getDescription() {
-    return description;
+  public String toString() {
+    return action;
   }
 
 }

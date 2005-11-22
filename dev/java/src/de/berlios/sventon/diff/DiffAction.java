@@ -1,128 +1,66 @@
-/*
- * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
- *
- * This software is licensed as described in the file LICENSE, which
- * you should have received as part of this distribution. The terms
- * are also available at http://sventon.berlios.de.
- * If newer versions of this license are posted there, you may use a
- * newer version instead, at your option.
- * ====================================================================
- */
 package de.berlios.sventon.diff;
 
 /**
- * Diff action bean.
+ * Type enum for diff segment actions.
  *
  * @author jesper@users.berlios.de
  */
-public class DiffAction {
-
-  public static final String DELETE_ACTION = "d";
-  public static final String CHANGE_ACTION = "c";
-  public static final String ADD_ACTION = "a";
+public enum DiffAction {
+  d("Deleted", "-", "srcDel"),
+  c("Changed", "&#8800;", "srcChg"),
+  a("Added", "+", "srcAdd"),
+  u("Unchanged", "&nbsp;", "src");
 
   /**
-   * The diff action.
-   * Can be {@link de.berlios.sventon.diff.DiffAction.ADD_ACTION},
-   * {@link de.berlios.sventon.diff.DiffAction.CHANGE_ACTION} or
-   * {@link de.berlios.sventon.diff.DiffAction.DELETE_ACTION}.
+   * The diff segment action description.
    */
-  private String action;
+  private final String description;
 
   /**
-   * Left interval line start.
+   * The diff segment action symbol.
    */
-  private int leftLineIntervalStart;
+  private final String symbol;
 
   /**
-   * Left interval line end.
+   * CSS (Cascading style sheet) class name.
    */
-  private int leftLineIntervalEnd;
-
+  private final String cssClass;
   /**
-   * Right interval line start.
-   */
-  private int rightLineIntervalStart;
-
-  /**
-   * Right interval line end.
-   */
-  private int rightLineIntervalEnd;
-  
-  
-  /**
-   * Constructor.
+   * Private constructor.
    *
-   * @param action The diff action
-   * @param leftLineIntervalStart Left interval start line
-   * @param leftLineIntervalEnd Left interval end line
-   * @param rightLineIntervalStart Right interval start line
-   * @param rightLineIntervalEnd Right interval end line
+   * @param description The description
    */
-  public DiffAction(final String action,
-                    final int leftLineIntervalStart,
-                    final int leftLineIntervalEnd,
-                    final int rightLineIntervalStart,
-                    final int rightLineIntervalEnd) {
-    this.action = action;
-    this.leftLineIntervalStart = leftLineIntervalStart;
-    this.leftLineIntervalEnd = leftLineIntervalEnd;
-    this.rightLineIntervalStart = rightLineIntervalStart;
-    this.rightLineIntervalEnd = rightLineIntervalEnd;
+  private DiffAction(final String description, final String symbol, final String cssClass) {
+    this.description = description;
+    this.symbol = symbol;
+    this.cssClass = cssClass;
   }
 
   /**
-   * Gets the action.
+   * Gets the action's associated symbol.
    *
-   * @return The action
+   * @return The symbol.
    */
-  public String getAction() {
-    return action;
+  public String getSymbol() {
+    return symbol;
   }
 
   /**
-   * Gets diff interval start line.
+   * Gets the description.
    *
-   * @return The start line
+   * @return The description
    */
-  public int getLeftLineIntervalStart() {
-    return leftLineIntervalStart;
+  public String getDescription() {
+    return description;
   }
 
   /**
-   * Gets diff interval end line.
+   * Gets the associated CSS class name.
    *
-   * @return The end line
+   * @return The CSS class name.
    */
-  public int getLeftLineIntervalEnd() {
-    return leftLineIntervalEnd;
+  public String getCSSClass() {
+    return cssClass;
   }
 
-  /**
-   * Gets diff interval start line.
-   *
-   * @return The start line
-   */
-  public int getRightLineIntervalStart() {
-    return rightLineIntervalStart;
-  }
-
-  /**
-   * Gets diff interval end line.
-   *
-   * @return The end line
-   */
-  public int getRightLineIntervalEnd() {
-    return rightLineIntervalEnd;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String toString() {
-    return "DiffAction: " + action
-        + ", left: " + leftLineIntervalStart + "-" + leftLineIntervalEnd
-        + ", right: " + rightLineIntervalStart + "-" + rightLineIntervalEnd;
-  }
 }
