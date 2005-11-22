@@ -62,14 +62,14 @@
                 <th>&nbsp;</th>
                 <th width="50%">Revision <c:out value="${toRevision}"/></th>
               </tr>
-          <%
-            int diffCount = 0;
-            for (int i = 0; i < leftLines.size(); i++) {
-          %>
+              <%
+                int diffCount = 0;
+                for (int i = 0; i < leftLines.size(); i++) {
+              %>
               <tr>
-            <%
-                SourceLine line = (SourceLine) leftLines.get(i);
-            %>
+                <%
+                    SourceLine line = (SourceLine) leftLines.get(i);
+                %>
                 <td>
                   <% if (DiffAction.u != line.getAction()) { %>
                     <a name="diff<%=diffCount%>"/><a href="#diff<%=++diffCount%>">
@@ -83,9 +83,9 @@
                 <td><b><%= line.getAction().getSymbol() %></b></td>
                 <td class="<%= line.getAction().getCSSClass() %>"><span title="<%= line.getAction().getDescription() %>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></span></td>
               </tr>
-        <%
-          }
-        %>
+              <%
+                }
+              %>
             </table>
             <a name="diff<%=diffCount%>"/>
           </c:when>
@@ -94,7 +94,7 @@
           </c:otherwise>
         </c:choose>
       </c:otherwise>
-    </c:choose>      
+    </c:choose>
     <br>
 <%@ include file="/WEB-INF/jsp/foot.jsp"%>
   </body>
