@@ -134,7 +134,7 @@
       <c:param name="path" value="<%= logEntryPath.getPath() %>" />
       <c:param name="revision" value="${entry.svnLogEntry.revision}" />
     </c:url>
-      <td><i><%= actionType.getDescription() %></i></td>
+      <td><i><%= actionType %></i></td>
       <% if (LogEntryActionType.D != actionType) { %>
       <td><a href="${goToUrl}"><%= command.getPath().equals(logEntryPath.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
       <% } else { %>

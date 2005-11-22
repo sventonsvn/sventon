@@ -73,7 +73,7 @@ public class Diff {
       throw new DiffException("Unable to produce diff.");
     }
 
-    List<DiffAction> diffActions = DiffResultParser.parseNormalDiffResult(diffResultString);
+    List<DiffSegment> diffActions = DiffResultParser.parseNormalDiffResult(diffResultString);
 
     leftLinesList = processLeft(leftSourceLines, diffActions);
     rightLinesList = processRight(rightSourceLines, diffActions);
@@ -92,39 +92,39 @@ public class Diff {
     }
   }
 
-  private CustomArrayList<SourceLine> processLeft(final List<String> sourceLines, final List<DiffAction> diffActions) {
+  private CustomArrayList<SourceLine> processLeft(final List<String> sourceLines, final List<DiffSegment> diffActions) {
     CustomArrayList<SourceLine> resultLines = new CustomArrayList<SourceLine>();
     for (String tempLine : sourceLines) {
-      resultLines.add(new SourceLine("", tempLine));
+      resultLines.add(new SourceLine(DiffAction.u, tempLine));
     }
 
     int offset = 0;
 
-    for (DiffAction diffAction : diffActions) {
-      if (DiffAction.ADD_ACTION.equals(diffAction.getAction())) {
+    for (DiffSegment diffAction : diffActions) {
+      if (DiffAction.a == diffAction.getAction()) {
         // Apply diff action ADD
         int addedLines = 0;
         int startLine = diffAction.getLeftLineIntervalStart() + offset;
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.add(startLine++ - 1, new SourceLine("a", ""));
+          resultLines.add(startLine++ - 1, new SourceLine(DiffAction.a, ""));
           addedLines++;
         }
         offset += addedLines;
-      } else if (DiffAction.DELETE_ACTION.equals(diffAction.getAction())) {
+      } else if (DiffAction.d == diffAction.getAction()) {
         // Apply diff action DELETE
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.update(i - 1, new SourceLine("d", resultLines.get(i - 1).getLine()));
+          resultLines.update(i - 1, new SourceLine(DiffAction.d, resultLines.get(i - 1).getLine()));
         }
-      } else if (DiffAction.CHANGE_ACTION.equals(diffAction.getAction())) {
+      } else if (DiffAction.c == diffAction.getAction()) {
         // Apply diff action CHANGE
         int changedLines = 0;
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("c", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine(DiffAction.c, resultLines.get(i - 1 + offset).getLine()));
           changedLines++;
         }
         int addedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart() + changedLines; i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.add(diffAction.getRightLineIntervalEnd() + offset, new SourceLine("c", ""));
+          resultLines.add(diffAction.getRightLineIntervalEnd() + offset, new SourceLine(DiffAction.c, ""));
           changedLines++;
           addedLines++;
         }
@@ -134,38 +134,38 @@ public class Diff {
     return resultLines;
   }
 
-  private CustomArrayList<SourceLine> processRight(final List<String> sourceLines, final List<DiffAction> diffActions) {
+  private CustomArrayList<SourceLine> processRight(final List<String> sourceLines, final List<DiffSegment> diffActions) {
     CustomArrayList<SourceLine> resultLines = new CustomArrayList<SourceLine>();
     for (String tempLine : sourceLines) {
-      resultLines.add(new SourceLine("", tempLine));
+      resultLines.add(new SourceLine(DiffAction.u, tempLine));
     }
 
     int offset = 0;
 
-    for (DiffAction diffAction : diffActions) {
-      if (DiffAction.ADD_ACTION.equals(diffAction.getAction())) {
+    for (DiffSegment diffAction : diffActions) {
+      if (DiffAction.a == diffAction.getAction()) {
         // Apply diff action ADD
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("a", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine(DiffAction.a, resultLines.get(i - 1 + offset).getLine()));
         }
-      } else if (DiffAction.DELETE_ACTION.equals(diffAction.getAction())) {
+      } else if (DiffAction.d == diffAction.getAction()) {
         // Apply diff action DELETE
         int deletedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.add(i - 1, new SourceLine("d", ""));
+          resultLines.add(i - 1, new SourceLine(DiffAction.d, ""));
           deletedLines++;
         }
         offset += deletedLines;
-      } else if (DiffAction.CHANGE_ACTION.equals(diffAction.getAction())) {
+      } else if (DiffAction.c == diffAction.getAction()) {
         // Apply diff action CHANGE
         int changedLines = 0;
         for (int i = diffAction.getLeftLineIntervalStart(); i <= diffAction.getLeftLineIntervalEnd(); i++) {
-          resultLines.update(i - 1 + offset, new SourceLine("c", resultLines.get(i - 1 + offset).getLine()));
+          resultLines.update(i - 1 + offset, new SourceLine(DiffAction.c, resultLines.get(i - 1 + offset).getLine()));
           changedLines++;
         }
         int addedLines = 0;
         for (int i = diffAction.getRightLineIntervalStart() + changedLines; i <= diffAction.getRightLineIntervalEnd(); i++) {
-          resultLines.add(diffAction.getLeftLineIntervalEnd() + offset, new SourceLine("c", ""));
+          resultLines.add(diffAction.getLeftLineIntervalEnd() + offset, new SourceLine(DiffAction.c, ""));
           addedLines++;
         }
         offset += addedLines;

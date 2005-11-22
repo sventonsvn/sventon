@@ -5,15 +5,16 @@ import junit.framework.TestCase;
 public class LogEntryActionTypeTest extends TestCase {
 
   public void testLogEntryAction() throws Exception {
-    assertEquals("Added", LogEntryActionType.A.getDescription());
-    assertEquals("Modified", LogEntryActionType.M.getDescription());
-    assertEquals("Replaced", LogEntryActionType.R.getDescription());
-    assertEquals("Deleted", LogEntryActionType.D.getDescription());
+    // Yes - really stupid tests, I know.. :-)
+    assertEquals("Added", LogEntryActionType.A.toString());
+    assertEquals("Modified", LogEntryActionType.M.toString());
+    assertEquals("Replaced", LogEntryActionType.R.toString());
+    assertEquals("Deleted", LogEntryActionType.D.toString());
   }
 
   public void testLogEntryActionValueOf() throws Exception {
     assertEquals(LogEntryActionType.D, LogEntryActionType.valueOf("D"));
-    assertEquals("Deleted", LogEntryActionType.valueOf("D").getDescription());
+    assertEquals("Deleted", LogEntryActionType.valueOf("D").toString());
   }
 
   public void testLogEntryActionSwitch() throws Exception {
