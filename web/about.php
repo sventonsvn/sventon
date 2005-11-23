@@ -7,7 +7,7 @@ The main goal of the Sventon project is to create a Java web application written
 </p>
 
 <p>
-  Some of the features we felt we were missing from existing Subversion web applications and that we hope to see in Sventon includes:
+  Some of the features we felt we were missing from existing Subversion web applications and that we hope to see in Sventon:
   <ul>
     <li>Insanely easy to install (we're almost there: drop the war file in the application server, enter a few configuration entries on a webpage, restart the application, and your done!).
     <li>Java, and just Java. If you have Java 5 and a web container, you're all set.
