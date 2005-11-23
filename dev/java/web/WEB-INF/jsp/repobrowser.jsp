@@ -27,7 +27,7 @@
 
   <c:choose>
     <c:when test="${isSearch}">
-      Search result for - <b><c:out value="${searchString}"/></b>
+      Search result for - <b><c:out value="${searchString}"/></b> (directory '<c:out value="${startDir}"/>' and below)
     </c:when>
     <c:otherwise>
       <c:choose>

@@ -25,15 +25,13 @@
       <td class="sventonHeadlines">
         Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if>
       </td>
-      <td align="right">Search:<input type="text" name="sventonSearchString" class="sventonSearchField" value=""/>
-        <input type="submit" name="sventonSearchButton" value="go!"/>
-      </td>
+      <td align="right" style="white-space: nowrap;">Search current directory and below:<input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="<c:out value="${command.path}"/>"/></td>
     </tr>
     <tr>
       <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink">show</span> latest commit info]</a></td>
     </tr>
     <tr>
-      <td>
+      <td style="white-space: nowrap;">
         <c:if test="${!empty latestCommitInfo}">
           <div id="latestCommitInfoDiv" style="display:none">
             <table class="sventonLatestCommitInfoTable">
@@ -100,7 +98,7 @@
     <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
     <tr>
       <td class="sventonHeadlines" colspan="2">
-       Repository path: <a href="<c:out value="repobrowser.svn?path=/&revision=${command.revision}"/>">
+       Repository path:<br/><a href="<c:out value="repobrowser.svn?path=/&revision=${command.revision}"/>">
         <c:out value="${url}"/> <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
         <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
           <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
