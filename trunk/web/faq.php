@@ -47,7 +47,7 @@
 <b>Q:</b> What platforms are supported?
 </a>
 <br/>
-<b>A:</b> Any platform capable of running a servlet container with <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a>.
+<b>A:</b> Any platform capable of running a servlet container with <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a> should do.
 </p>
 
 <p>
@@ -108,7 +108,7 @@
 <b>Q:</b> Will sventon in any way jeopardize my Subversion repository?
 </a>
 <br/>
-<b>A:</b> No. Unless something really scary is going on, Sventon will only perform <i>read</i> operations.
+<b>A:</b> No. Unless something really scary is going on, sventon will only perform <i>read</i> operations.
 </p>
 
 <p>
@@ -121,7 +121,7 @@
 
 <p>
 <a name="q10">
-<b>Q:</b> On which servlet containers has sventon been tested?
+<b>Q:</b> On which servlet containers have sventon been tested?
 </a>
 <br/>
 <b>A:</b> Currently only on Tomcat 5.5.
@@ -132,7 +132,7 @@
 <b>Q:</b> Why is not file type [XYZ] colorized when displayed in sventon?
 </a>
 <br/>
-<b>A:</b> Sventon uses the <a href="https://jhighlight.dev.java.net">JHighlight</a> library to colorize files. Currently supported formats are:
+<b>A:</b> sventon uses the <a href="https://jhighlight.dev.java.net">JHighlight</a> library to colorize files. Currently supported formats are:
 </p>
 <ul>
   <li>HTML&#47;XHTML</li>
@@ -147,7 +147,7 @@
 <b>Q:</b> Can I send suggestions for new functions?
 </a>
 <br/>
-<b>A:</b> Yes, of course but we cannot guarantee when or if your suggestion will be implemented
+<b>A:</b> Yes, please do! But we cannot guarantee when or if your suggestion will be implemented
 </p>
 
 <p>
@@ -163,7 +163,7 @@
 <b>Q:</b> What license do you use?
 </a>
 <br/>
-<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>
+<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>. 
 </p>
 
 <p>
@@ -176,10 +176,10 @@
 
 <p>
 <a name="q17">
-<b>Q:</b> Is there a publicly running version of Sventon that I can try?
+<b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
-<b>A:</b> Unfortunately no, not that we know of. Please have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running Sventon installation could look like.
+<b>A:</b> Unfortunately no, not that we know of. Please have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
 
 <p>
