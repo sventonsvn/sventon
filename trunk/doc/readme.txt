@@ -13,11 +13,10 @@ Currently the library supports colorization of the following file formats:
 * XML
 * LZX
 * RIFE (https://rife.dev.java.net)
-
 Support for more formats are planned before the first official release of sventon.
 
 Build instructions:
-1: Run ant/build.xml for info on building.
+* Run ant/build.xml to create a distribution WAR file, dist/svn.war.
 
 Contact sventon developers using the sventon dev mailing list: 
 http://developer.berlios.de/projects/sventon
@@ -25,3 +24,4 @@ http://developer.berlios.de/projects/sventon
 Many thanks to the developers of the libraries that sventon depends on!
 
 Enjoy!
+sventon project - http://sventon.berlios.de
