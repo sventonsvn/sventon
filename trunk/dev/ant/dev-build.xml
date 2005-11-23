@@ -4,6 +4,7 @@
   <property file="build.properties"/>
   <property file="default-build.properties"/>
 
+  <property name="dist.dir" value="../dist"/>
   <property name="src.dir" value="../java/src"/>
   <property name="web.dir" value="../java/web"/>
   <property name="toolslib.dir" value="../java/toolslib"/>
@@ -48,14 +49,19 @@
     <echo message=""/>
     <echo message="Available targets are:"/>
     <echo message=""/>
-    <echo message="build     --> Build the application"/>
-    <echo message="deploy    --> Deploy application as directory"/>
-    <echo message="deploywar --> Deploy application as a WAR file"/>
-    <echo message="install   --> Install application in Tomcat"/>
-    <echo message="reload    --> Reload application in Tomcat"/>
-    <echo message="start     --> Start Tomcat application"/>
-    <echo message="stop      --> Stop Tomcat application"/>
-    <echo message="list      --> List Tomcat applications"/>
+    <echo message="build               --> Build the application"/>
+    <echo message="createWar           --> Create distribution WAR file"/>
+    <echo message="deploy              --> Deploy application as directory"/>
+    <echo message="deployAndRestart    --> Deploy application as directory and restart Tomcat"/>
+    <echo message="deployWar           --> Deploy application as a WAR file"/>
+    <echo message="deployWarAndRestart --> Deploy application as a WAR file and restart Tomcat"/>
+    <echo message="install             --> Install application in Tomcat"/>
+    <echo message="list                --> List Tomcat applications"/>
+    <echo message="reload              --> Reload application in Tomcat"/>
+    <echo message="runtest             --> Run the tests and create coverage report"/>
+    <echo message="start               --> Start Tomcat application"/>
+    <echo message="stop                --> Stop Tomcat application"/>
+    <echo message="undeploy            --> Undeploy application from Tomcat"/>
     <echo message=""/>
   </target>
 
@@ -72,12 +78,15 @@
     <copy todir="${deploy.path}/${name}" preservelastmodified="true">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
+        <exclude name="**/*Test*"/>
+        <exclude name="**/*Mock*"/>
+        <exclude name="**/*Stub*"/>
       </fileset>
     </copy>
   </target>
 
-  <target name="create war" depends="build" description="Create WAR file">
-    <war destfile="${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
+  <target name="createWar" depends="build" description="Create distribution WAR file">
+    <war destfile="${dist.dir}/${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
         <exclude name="**/*Test*"/>
@@ -87,8 +96,8 @@
     </war>
   </target>
 
-  <target name="deploywar" depends="build" description="Deploy application as a WAR file">
-    <war destfile="${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
+  <target name="deployWar" depends="build" description="Create and deploy application as a WAR file">
+    <war destfile="${dist.dir}/${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
         <exclude name="**/*Test*"/>
@@ -125,11 +134,11 @@
     </delete>
   </target>
 
-  <target name="deploy and restart" description="deploy and restart (stop/start) Tomcat" depends="deploy, stop, start">
+  <target name="deployAndRestart" description="Deploy and restart (stop/start) Tomcat" depends="deploy, stop, start">
     <echo level="info">Re-deploy done.</echo>
   </target>
 
-  <target name="deploy war and restart" description="deploy WAR and restart (stop/start) Tomcat" depends="deploywar, stop, start">
+  <target name="deployWarAndRestart" description="Deploy WAR and restart (stop/start) Tomcat" depends="deployWar, stop, start">
     <echo level="info">Re-deploy done.</echo>
   </target>
 
@@ -182,7 +191,6 @@
       </fileset>
       <report format="frames" todir="${reports.html.dir}"/>
     </junitreport>
-
 
   </target>
 
