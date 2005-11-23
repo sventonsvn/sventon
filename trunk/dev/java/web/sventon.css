@@ -4,7 +4,7 @@
 
 body {
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   color: #000000;
   background-color: #ffffff;
   font-weight: normal;
@@ -14,24 +14,30 @@ th {
   text-align: left;
   white-space: nowrap;
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
 }
 
 td {
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 a:link, a:visited, a:hover, a:active {
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   color: #0060CB;
   background-color: inherit;
   text-decoration: none;
 }
 
+input {
+  font-family: verdana, sans-serif;
+  font-size: 10px;
+}
+
 .codeBlock {
+  font-size: 11px;
   padding: 0.5em;
   color: #000000;
   background-color: #f0f0f0;
@@ -52,9 +58,9 @@ a:link, a:visited, a:hover, a:active {
   spacing: 0px;
 }
 
-.sventonInput, sventonSelect, sventonTextarea {
+.sventonSelect {
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   border-top-width: 1px;
   border-right-width: 1px;
   border-bottom-width: 1px;
@@ -88,8 +94,9 @@ a:link, a:visited, a:hover, a:active {
 
 .sventonHeadlines {
   font-family: verdana, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
+  vertical-align: top;
 }
 
 .sventonGoTo {
@@ -133,7 +140,7 @@ a:link, a:visited, a:hover, a:active {
   color: #000000;
   background-color: #eeeeff;
   border: 1px solid black;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .sventonErrorMessageTable {
@@ -141,7 +148,7 @@ a:link, a:visited, a:hover, a:active {
   background-color: #eeeeff;
   border: 1px solid black;
   width: 250px;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .sventonColNoWrap {

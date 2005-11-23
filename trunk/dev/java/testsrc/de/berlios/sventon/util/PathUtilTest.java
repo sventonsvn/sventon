@@ -13,6 +13,7 @@ public class PathUtilTest extends TestCase {
   }
 
   public void testGetPartPath() {
+    assertEquals("/trunk/src/", PathUtil.getPathPart("/trunk/src/File.java"));
     assertEquals("trunk/src/", PathUtil.getPathPart("trunk/src/File.java"));
     assertEquals("trunk/", PathUtil.getPathPart("trunk/src/"));
     assertEquals("", PathUtil.getPathPart(""));
