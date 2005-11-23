@@ -3,7 +3,7 @@
  */
 
 body {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   color: #000000;
   font-weight: normal;
@@ -15,7 +15,7 @@ pre {
 }
 
 a:link, a:visited {
-  font-family: Verdana;
+  font-family: verdana, sans-serif;
   font-size: 11px;
   color: #0060CB;
   text-decoration: none;
@@ -24,4 +24,9 @@ a:link, a:visited {
 th {
   text-align: left;
   white-space: nowrap;
+}
+
+td {
+  font-family: verdana, sans-serif;
+  font-size: 11px;
 }
