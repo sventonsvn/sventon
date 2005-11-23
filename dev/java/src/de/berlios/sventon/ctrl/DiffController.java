@@ -14,6 +14,7 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.diff.Diff;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.command.DiffCommand;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,52 +44,48 @@ public class DiffController extends AbstractSVNTemplateController implements Con
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
-    final long fromRevision;
-    final long toRevision;
-    final String fromPath;
-    final String toPath;
-
     logger.debug("Diffing file contents for: " + svnCommand);
-    final String[] revisionParameters = request.getParameterValues("rev");
-    String[] pathAndRevision;
     Map<String, Object> model = new HashMap<String, Object>();
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-
-    try {
-      pathAndRevision = revisionParameters[0].split(";;");
-      toPath = pathAndRevision[0];
-      toRevision = Long.parseLong(pathAndRevision[1]);
-      pathAndRevision = revisionParameters[1].split(";;");
-      fromPath = pathAndRevision[0];
-      fromRevision = Long.parseLong(pathAndRevision[1]);
-      model.put("toRevision", toRevision);
-      model.put("toPath", toPath);
-      model.put("fromRevision", fromRevision);
-      model.put("fromPath", fromPath);
-    } catch (Exception ex) {
-      throw new SVNException("Unable to diff. Unable to parse revision and path", ex);
-    }
 
     String leftLines = null;
     String rightLines = null;
     try {
+      DiffCommand diffCommand = new DiffCommand(request.getParameterValues("rev"));
+
+      model.put("fromRevision", diffCommand.getFromRevision());
+      model.put("fromPath", diffCommand.getFromPath());
+      model.put("toRevision", diffCommand.getToRevision());
+      model.put("toPath", diffCommand.getToPath());
+
       HashMap properties = new HashMap();
+
       // Get the file's properties without requesting the content.
       // Make sure files are not in binary format.
       repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
       boolean isTextType = SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
       repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+
       if (isTextType && SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
         model.put("isBinary", false);
+
         // Get content of oldest file (left).
-        logger.debug("Getting file contents for (from) revision " + fromRevision + ", path: " + fromPath);
-        repository.getFile(fromPath, fromRevision, null, outStream);
+        logger.debug("Getting file contents for (from) revision "
+            + diffCommand.getFromRevision()
+            + ", path: "
+            + diffCommand.getFromPath());
+        repository.getFile(diffCommand.getFromPath(), diffCommand.getFromRevision(), null, outStream);
         leftLines = StringEscapeUtils.escapeHtml(outStream.toString());
+
         // Re-initialize stream
         outStream = new ByteArrayOutputStream();
+
          // Get content of newest file (right).
-        logger.debug("Getting file contents for (to) revision " + toRevision + ", path: " + toPath);
-        repository.getFile(toPath, toRevision, null, outStream);
+        logger.debug("Getting file contents for (to) revision "
+            + diffCommand.getToRevision()
+            + ", path: "
+            + diffCommand.getToPath());
+        repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), null, outStream);
         rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
         Diff differ = new Diff(leftLines, rightLines);

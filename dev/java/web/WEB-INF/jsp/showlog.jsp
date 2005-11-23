@@ -171,7 +171,7 @@
     <td colspan="2">
     <c:choose>
     <c:when test="${isFile}">
-      <input type="submit" name="actionSubmitButton" value="diff"/>
+      <input type="submit" value="diff"/>
     </c:when>
     </c:choose>
     </td>

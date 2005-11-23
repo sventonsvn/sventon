@@ -116,7 +116,7 @@ Logging properties can be customized by changing properties in the file <b>svn/W
         </tr>
       </table>
     <p>
-      <input type="submit" name="submit" value="submit configuration">
+      <input type="submit" value="submit configuration">
     </p>
   </form>
   <%@ include file="/WEB-INF/jsp/foot.jsp"%>

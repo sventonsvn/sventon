@@ -142,7 +142,7 @@
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
         </select>
       </td>
-      <td colspan="6"><input type="submit" name="actionSubmitButton" value="go!"/></td>
+      <td colspan="6"><input type="submit" value="go!"/></td>
     </tr>
   </table>
 </form>
