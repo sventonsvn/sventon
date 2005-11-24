@@ -34,9 +34,9 @@
 
     <c:forEach items="${thumbnailentries}" var="entry">
       <p>
-        <b><c:out value="${entry}"/></b><br/>
-        <a href="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=inline">
-          <img src="<c:out value="${downloadUrl}?path=${entry}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail" border="0"/>
+        <b>${entry}</b><br/>
+        <a href="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=inline">
+          <img src="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
         </a>
       </p>
     </c:forEach>

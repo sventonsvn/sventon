@@ -23,9 +23,9 @@
   <form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
     <tr>
       <td class="sventonHeadlines">
-        Revision: <c:out value="${command.revision}" /> <c:if test="${!empty numrevision}">(<c:out value="${numrevision}"/>)</c:if>
+        Revision: ${command.revision} <c:if test="${!empty numrevision}">(${numrevision})</c:if>
       </td>
-      <td align="right" style="white-space: nowrap;">Search current directory and below:<input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="<c:out value="${command.path}"/>"/></td>
+      <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.path}"/></td>
     </tr>
     <tr>
       <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink">show</span> latest commit info]</a></td>
@@ -98,23 +98,26 @@
     <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
     <tr>
       <td class="sventonHeadlines" colspan="2">
-       Repository path:<br/><a href="<c:out value="repobrowser.svn?path=/&revision=${command.revision}"/>">
-        <c:out value="${url}"/> <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
+       Repository path:<br/><a href="repobrowser.svn?path=/&revision=${command.revision}">
+        ${url} <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
         <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
           <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
           <c:choose>
             <c:when test="${hasErrors}">
-              <c:out value="${pathSegment}"/>
+              ${pathSegment}
             </c:when>
             <c:otherwise>
-          <a href="<c:out value="repobrowser.svn?path=/${accuPath}&revision=${command.revision}"/>"><c:out value="${pathSegment}"/></a>
+          <a href="repobrowser.svn?path=/${accuPath}&revision=${command.revision}">${pathSegment}</a>
         </c:otherwise>
           </c:choose>
            /
         </c:forTokens>
-        <c:out value="${command.target}"/>
+        ${command.target}
       </td>
     </tr>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="path" value="${command.path}${entry.name}"/>
+    <input type="hidden" name="revision" value="${command.revision}"/>
   </form>
 </table>
 
@@ -127,17 +130,17 @@
 <form name="gotoForm" method="post" action="repobrowser.svn">
 <table class="sventonRepositoryFunctionsTable">
 <tr>
-<td><font color="#FF0000"><spring:bind path="command.revision"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
-<td><font color="#FF0000"><spring:bind path="command.path"><c:out value="${status.errorMessage}" /></spring:bind></font></td>
+<td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
+<td><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
 </tr>
  <tr>
  <td>Go to revision</td><td colspan="2">Go to path <% if (!"".equals(command.getMountPoint(false))) { %>(from: <%= command.getMountPoint(false) %>)<% } %></td>
  </tr>
 <tr>
-<td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="<c:out value="${status.value}"/>"/></spring:bind></td>
-<td><spring:bind path="command.path"><input class="sventonGoTo" type="text" name="path" value="<c:out value="${status.value}"/>" /></spring:bind></td>
+<td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
+<td><spring:bind path="command.path"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
 <td><input class="sventonGoToSubmit" type="submit" value="go to"/></td>
-<td><input class="sventonFlattenSubmit" type="button" value="flatten dirs" onclick="javascript:location.href='flatten.svn?path=${command.path}';"/></td>
+<td><input class="sventonFlattenSubmit" type="button" value="flatten dirs" onclick="javascript: return doFlatten();"/></td>
 
 </tr>
 </table>

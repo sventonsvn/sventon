@@ -37,7 +37,7 @@
 
   <p>
     <table class="sventonHeader"><tr><td>
-  Log Messages - <b><c:out value="${command.target}"/></b>&nbsp;</td></tr></table>
+  Log Messages - <b>${command.target}</b>&nbsp;</td></tr></table>
   </p>
   <br/>
   
@@ -45,13 +45,13 @@
     <tr>
     <c:choose>
     <c:when test="${isFile}">
-      <td><a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>">[Show file]</a></td>
+      <td><a href="${showFileUrl}&revision=${command.revision}">[Show file]</a></td>
       </c:when>
       <c:otherwise>
-      <td><a href="<c:out value="${showDirUrl}"/>">[Show directory]</a></td>
+      <td><a href="${showDirUrl}">[Show directory]</a></td>
       </c:otherwise>
       </c:choose>
-      <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
+      <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
     </tr>
   </table>
 
@@ -89,12 +89,10 @@
       <c:choose>
         <c:when test="${isFile}">
         <td><input type="checkbox" name="rev" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
-          <td><a href="<c:out value="${showUrl}"/>"><c:out
-            value="${entry.svnLogEntry.revision}" /></a></td>
+          <td><a href="${showUrl}">${entry.svnLogEntry.revision}</a></td>
         </c:when>
         <c:otherwise>
-          <td><c:out
-            value="${entry.svnLogEntry.revision}" /></td>
+          <td>${entry.svnLogEntry.revision}</td>
         </c:otherwise>
       </c:choose>
       <c:set var="message" value="${entry.svnLogEntry.message}" />
@@ -105,7 +103,7 @@
       %>
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
       <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">[<span id="hdr<%=rowCount%>">more</span>]</a></td>
-      <td><c:out value="${entry.svnLogEntry.author}" /></td>
+      <td>${entry.svnLogEntry.author}</td>
       <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
@@ -162,7 +160,7 @@
     <c:when test="${morePages}">
   <tr>
     <td colspan="5" align="center">
-  	     <a href="<c:out value="${showNextLogUrl}"/>">Next <c:out value="${pageSize}"/></a>&nbsp;
+  	     <a href="${showNextLogUrl}">Next ${pageSize}</a>&nbsp;
     </td>
   </tr>
   </c:when>

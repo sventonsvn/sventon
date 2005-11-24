@@ -31,20 +31,20 @@
 
     <p>
       <table class="sventonHeader"><tr><td>
-    Diff view - <b><c:out value="${command.target}"/></b></td></tr></table>
+    Diff view - <b>${command.target}</b></td></tr></table>
     </p>
 
     <br/>
 
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
+        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
       </tr>
     </table>
 
     <c:choose>
       <c:when test="${!empty diffException}">
-        <p><b><c:out value="${diffException}"/></b></p>
+        <p><b>${diffException}</b></p>
       </c:when>
       <c:otherwise>
         <c:choose>
@@ -58,9 +58,9 @@
               <tr>
                 <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision <c:out value="${fromRevision}"/></th>
+                <th width="50%">Revision ${fromRevision}</th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision <c:out value="${toRevision}"/></th>
+                <th width="50%">Revision ${toRevision}</th>
               </tr>
               <%
                 int diffCount = 0;

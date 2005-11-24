@@ -16,7 +16,7 @@
 
 <html>
 <head>
-<title>sventon repository browser - <c:out value="${url}" /></title>
+<title>sventon repository browser - ${url}</title>
 <%@ include file="/WEB-INF/jsp/head.jsp"%>
 </head>
 <body>
@@ -27,15 +27,15 @@
 
   <c:choose>
     <c:when test="${isSearch}">
-      Search result for - <b><c:out value="${searchString}"/></b> (directory '<c:out value="${startDir}"/>' and below)
+      Search result for - <b>${searchString}</b> (directory '${startDir}' and below)
     </c:when>
     <c:otherwise>
       <c:choose>
         <c:when test="${isFlatten}">
-          Flattened structure - <b><c:out value="${command.target}"/></b>
+          Flattened structure - <b>${command.target}</b>
         </c:when>
         <c:otherwise>
-          Repository Browser - <b><c:out value="${command.target}"/></b>
+          Repository Browser - <b>${command.target}</b>
         </c:otherwise>
       </c:choose>
     </c:otherwise>
@@ -88,17 +88,17 @@
       <%
         totalSize += entry.getSize();
       %>
-        <td class="sventonCol1"><input type="checkbox" name="entry" value="<c:out value="${entry.fullEntryName}" />"/></td>
+        <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
         <% if ("dir".equals(entry.getKind())) { %>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3">
           <c:choose>
             <c:when test="${isSearch || isFlatten}">
-              <a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
-                <c:out value="${entry.friendlyFullEntryName}" />
+              <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
+                ${entry.friendlyFullEntryName}
             </c:when>
             <c:otherwise>
-              <a href="<c:out value="${viewUrl}/&revision=${command.revision}"/>"><c:out value="${entry.name}" /></c:otherwise>
+              <a href="${viewUrl}/&revision=${command.revision}">${entry.name}</c:otherwise>
           </c:choose>
           </a></td>
         <% } else { %>
@@ -106,19 +106,19 @@
         <td class="sventonCol3">
           <c:choose>
             <c:when test="${isSearch || isFlatten}">
-              <a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>" onmouseover="this.T_WIDTH=1;return escape('<c:out value="${entry.fullEntryName}" />')">
-                <c:out value="${entry.friendlyFullEntryName}"/>
+              <a href="${showFileUrl}&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
+                ${entry.friendlyFullEntryName}
             </c:when>
             <c:otherwise>
-              <a href="<c:out value="${showFileUrl}&revision=${command.revision}"/>"><c:out value="${entry.name}"/></c:otherwise>
+              <a href="${showFileUrl}&revision=${command.revision}">${entry.name}</c:otherwise>
           </c:choose>
           </a></td>
         <% } %>
-        <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %><c:out value="${entry.size}" /><% } %></td>
-        <td class="sventonCol5"><c:out value="${entry.revision}" /></td>
-        <td class="sventonCol6"><c:out value="${entry.author}" /></td>
+        <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %>${entry.size}<% } %></td>
+        <td class="sventonCol5">${entry.revision}</td>
+        <td class="sventonCol6">${entry.author}</td>
         <td class="sventonCol7"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
-        <td class="sventonCol8"><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
+        <td class="sventonCol8"><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
       </tr>
       <% rowCount++; %>
     </c:forEach>
