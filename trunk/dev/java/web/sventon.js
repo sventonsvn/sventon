@@ -43,8 +43,25 @@ function doSearch(formName) {
   // If no search string is entered, no action is taken.
   if (formName.sventonSearchString.value == '') {
     return false;
+  } else if (formName.sventonSearchString.value.length < 3) {
+    return searchWarning();
   } else {
     return true;
+  }
+}
+
+// function to handle flatten submissions
+function doFlatten() {
+  var flattenURL = 'flatten.svn?path='
+  var targetPath = document.getElementById('goToPath').value;
+  var result = true;
+  if (targetPath == '/') {
+    result = flatteningWarning();
+  }
+  if (result) {
+    location.href = flattenURL + targetPath;
+  } else {
+    return false;
   }
 }
 
@@ -136,11 +153,10 @@ function verifyCheckBox(checkbox) {
 // function to display warning in case user tries to flatten on
 // root directory level.
 function flatteningWarning() {
-  return confirm("Flattening on this directory level is not recommended.\nThe result will potentially be very large\nDo you want to continue anyway?");
+  return confirm("Flattening on root level is not recommended.\nThe result will potentially be very large\nDo you want to continue anyway?");
 }
 
 // function to display warning in case search string is too short.
 function searchWarning() {
   return confirm("Given search string is short. The result will potentially be very large\nDo you want to continue anyway?");
 }
-

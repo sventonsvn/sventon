@@ -33,7 +33,7 @@
 
     <p>
       <table class="sventonHeader"><tr><td>
-    Show File - <b><c:out value="${command.target}"/></b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
+    Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
       <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
     </p>
 
@@ -41,8 +41,8 @@
 
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="<c:out value="${showLogUrl}&revision=${command.revision}"/>">[Show log]</a></td>
-        <td><a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>">[Download]</a></td>
+        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
+        <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
       </tr>
     </table>
 
@@ -51,8 +51,8 @@
         <c:choose>
           <c:when test="${isImage}">
 <p>
-  <a href="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=inline">
-    <img src="<c:out value="${downloadUrl}&revision=${command.revision}"/>&disp=thumb" alt="Thumbnail" border="0"/>
+  <a href="${downloadUrl}&revision=${command.revision}&disp=inline">
+    <img src="${downloadUrl}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
   </a>
 </p>
           </c:when>
