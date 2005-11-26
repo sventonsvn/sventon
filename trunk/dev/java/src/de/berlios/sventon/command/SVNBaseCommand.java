@@ -167,7 +167,8 @@ public class SVNBaseCommand {
    */
   public String toString() {
     return "SVNBaseCommand{path='" + path + "', " +
-    "completePah='" + getCompletePath() + "', " +
+    "completePath='" + getCompletePath() + "', " +
+    "pathPart='" + getPathPart() + "', " +
     "revision='" + revision + "', " +
     "mountPoint='" + mountPoint
         + "'}";

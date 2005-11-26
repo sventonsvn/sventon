@@ -34,6 +34,7 @@ a:link, a:visited, a:hover, a:active {
 input {
   font-family: verdana, sans-serif;
   font-size: 10px;
+  vertical-align: middle;
 }
 
 .codeBlock {
@@ -67,9 +68,6 @@ input {
   border-left-width: 1px;
   border-color: #333333 #999999 #999999 #333333;
   padding-right: 0px;
-}
-
-.sventonSelect {
   vertical-align: middle;
 }
 
@@ -162,12 +160,12 @@ input {
 
 .sventonCol1 {
   width: 10px;
-  text-align: center;
-  white-space: nowrap;
+  text-align: right;
 }
 
 .sventonCol2 {
-  white-space: nowrap;
+  width: 10px;
+  text-align: right;
 }
 
 .sventonCol3 {
