@@ -22,9 +22,19 @@
 <table class="sventonTopTable" border="0">
   <form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
     <tr>
-      <td class="sventonHeadlines">
-        Revision: ${command.revision} <c:if test="${!empty numrevision}">(${numrevision})</c:if>
-      </td>
+      <c:choose>
+        <c:when test="${!empty numrevision}">
+          <td class="sventonHeadlines">
+            Revision: ${command.revision} (${numrevision})
+          </td>
+        </c:when>
+        <c:otherwise>
+          <td class="sventonHeadlines" style="color: #ff0000">
+            Revision: ${command.revision}
+          </td>
+        </c:otherwise>
+      </c:choose>
+
       <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.path}"/></td>
     </tr>
     <tr>
