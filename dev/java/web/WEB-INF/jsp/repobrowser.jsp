@@ -32,7 +32,7 @@
     <c:otherwise>
       <c:choose>
         <c:when test="${isFlatten}">
-          Flattened structure - <b>${command.target}</b>
+          Flattened structure - <b>${command.target}</b> (and below)
         </c:when>
         <c:otherwise>
           Repository Browser - <b>${command.target}</b>
@@ -72,6 +72,26 @@
       long totalSize = 0;
     %>
 
+    <c:if test="${!empty command.pathPart}">
+      <c:url value="repobrowser.svn" var="backUrl">
+        <c:param name="path" value="${command.pathPart}" />
+      </c:url>
+
+      <tr class="sventonEntry1">
+        <td class="sventonCol1"></td>
+        <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
+        <td class="sventonCol3">
+          <a href="${backUrl}">..</a>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <% rowCount++; %>
+    </c:if>
+
     <c:forEach items="${svndir}" var="entry">
     <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.RepositoryEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
@@ -94,13 +114,13 @@
         <td class="sventonCol3">
           <c:choose>
             <c:when test="${isSearch || isFlatten}">
-              <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
-                ${entry.friendlyFullEntryName}
+              <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">${entry.friendlyFullEntryName}</a>
             </c:when>
             <c:otherwise>
-              <a href="${viewUrl}/&revision=${command.revision}">${entry.name}</c:otherwise>
+              <a href="${viewUrl}/&revision=${command.revision}">${entry.name}</a>
+            </c:otherwise>
           </c:choose>
-          </a></td>
+        </td>
         <% } else { %>
         <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
         <td class="sventonCol3">
@@ -108,11 +128,13 @@
             <c:when test="${isSearch || isFlatten}">
               <a href="${showFileUrl}&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
                 ${entry.friendlyFullEntryName}
+              </a>
             </c:when>
             <c:otherwise>
-              <a href="${showFileUrl}&revision=${command.revision}">${entry.name}</c:otherwise>
+              <a href="${showFileUrl}&revision=${command.revision}">${entry.name}</a>
+            </c:otherwise>
           </c:choose>
-          </a></td>
+          </td>
         <% } %>
         <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %>${entry.size}<% } %></td>
         <td class="sventonCol5">${entry.revision}</td>
@@ -134,15 +156,14 @@
     </tr>
 
     <tr>
-      <td><input type="button" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
-      <td colspan="2">
+      <td colspan="2"><input type="button" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
+      <td>
         <select class="sventonSelect" name="actionSelect">
           <option class="sventonSelectOption">Actions...</option>
-          <!--<option value="zip">&nbsp;&nbsp;Download as zip</option>-->
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
-        </select>
+        </select><input type="submit" value="go!"/>
       </td>
-      <td colspan="6"><input type="submit" value="go!"/></td>
+      <td colspan="5"></td>
     </tr>
   </table>
 </form>
