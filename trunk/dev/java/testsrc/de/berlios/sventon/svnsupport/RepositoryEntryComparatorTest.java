@@ -14,10 +14,6 @@ import java.util.List;
 
 public class RepositoryEntryComparatorTest extends TestCase {
 
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(RepositoryEntryComparatorTest.class);
-  }
-
   public RepositoryEntryComparatorTest(String arg0) {
     super(arg0);
   }

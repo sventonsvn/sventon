@@ -28,18 +28,19 @@ public class RepositoryEntry implements Serializable {
 
   private static final long serialVersionUID = 3617229449081593805L;
 
-  /**
-   * Full path to <code>SVNDirEntry</code>.
-   */
+  public enum Kind {dir, file, none, unknown;}
+
   private String entryPath;
   private String entryName;
-  private String entryKind;
+  private Kind entryKind;
   private long entrySize;
   private boolean entryHasProperties;
   private long entryFirstRevision;
   private Date entryCreatedDate;
   private String entryLastAuthor;
   private String entryCommitMessage;
+
+
 
   /**
    * Mount point offset. If this is set method
@@ -72,7 +73,7 @@ public class RepositoryEntry implements Serializable {
     this.entryLastAuthor = entry.getAuthor();
     this.entryCommitMessage = entry.getCommitMessage();
     this.entryCreatedDate = entry.getDate();
-    this.entryKind = entry.getKind().toString();
+    this.entryKind = Kind.valueOf(entry.getKind().toString());
     this.entryName = entry.getName();
     this.entryFirstRevision = entry.getRevision();
     this.entrySize = entry.size();
@@ -160,7 +161,7 @@ public class RepositoryEntry implements Serializable {
    * @return the node kind of this entry. Can be <code>none</code>, <code>unknown</code>,
    *         <code>file</code> or <code>dir</code>.
    */
-  public String getKind() {
+  public Kind getKind() {
     return entryKind;
   }
 
