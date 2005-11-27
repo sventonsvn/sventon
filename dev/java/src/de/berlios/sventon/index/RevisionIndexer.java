@@ -379,7 +379,7 @@ public class RevisionIndexer {
     update();
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
-      if ("dir".equals(entry.getKind()) && entry.getFullEntryName().startsWith(fromPath)) {
+      if (RepositoryEntry.Kind.dir == entry.getKind() && entry.getFullEntryName().startsWith(fromPath)) {
         result.add(entry);
       }
     }

@@ -95,13 +95,13 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
   public int compare(RepositoryEntry entry1, RepositoryEntry entry2) {
 
     if (groupDirs) {
-      String kind1 = entry1.getKind();
-      String kind2 = entry2.getKind();
+      RepositoryEntry.Kind kind1 = entry1.getKind();
+      RepositoryEntry.Kind kind2 = entry2.getKind();
       if (kind1 != kind2) // Not equal kinds, have to inspect.
       {
-        if ("dir".equals(kind1)) {
+        if (RepositoryEntry.Kind.dir == kind1) {
           return -1;
-        } else if ("dir".equals(kind2)) {
+        } else if (RepositoryEntry.Kind.dir == kind2) {
           return 1;
         }
       }// not equal kind, but neither is DIR

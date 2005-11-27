@@ -26,10 +26,10 @@ public class FlattenControllerTest extends TestCase {
     assertTrue(new Boolean(model.get("isFlatten").toString()).booleanValue());
     assertEquals(2, entries.size());
 
-    assertEquals("dir", ((RepositoryEntry) entries.get(0)).getKind());
+    assertEquals(RepositoryEntry.Kind.dir, ((RepositoryEntry) entries.get(0)).getKind());
     assertEquals("dir1", ((RepositoryEntry) entries.get(0)).getName());
 
-    assertEquals("dir", ((RepositoryEntry) entries.get(1)).getKind());
+    assertEquals(RepositoryEntry.Kind.dir, ((RepositoryEntry) entries.get(1)).getKind());
     assertEquals("dir2", ((RepositoryEntry) entries.get(1)).getName());
   }
 

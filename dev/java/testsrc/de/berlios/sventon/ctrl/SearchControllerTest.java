@@ -31,7 +31,7 @@ public class SearchControllerTest extends TestCase {
     assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
     assertEquals(2, entries.size());
 
-    assertEquals("file", ((RepositoryEntry) entries.get(0)).getKind());
+    assertEquals(RepositoryEntry.Kind.file, ((RepositoryEntry) entries.get(0)).getKind());
 
     req = new MockHttpServletRequest();
     try {
@@ -60,7 +60,7 @@ public class SearchControllerTest extends TestCase {
     assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
     assertEquals(1, entries.size());
 
-    assertEquals("file", ((RepositoryEntry) entries.get(0)).getKind());
+    assertEquals(RepositoryEntry.Kind.file, ((RepositoryEntry) entries.get(0)).getKind());
 
     req = new MockHttpServletRequest();
     try {

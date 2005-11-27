@@ -13,6 +13,7 @@
 %>
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
+<%@ page import="de.berlios.sventon.ctrl.RepositoryEntry"%>
 
 <html>
 <head>
@@ -109,7 +110,7 @@
         totalSize += entry.getSize();
       %>
         <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
-        <% if ("dir".equals(entry.getKind())) { %>
+        <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3">
           <c:choose>
@@ -136,7 +137,7 @@
           </c:choose>
           </td>
         <% } %>
-        <td class="sventonCol4"><% if ("file".equals(entry.getKind())) { %>${entry.size}<% } %></td>
+        <td class="sventonCol4"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
         <td class="sventonCol5">${entry.revision}</td>
         <td class="sventonCol6">${entry.author}</td>
         <td class="sventonCol7"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>

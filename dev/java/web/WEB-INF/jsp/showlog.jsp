@@ -85,6 +85,9 @@
     </c:url>
     <c:set var="nextPath" value="${entry.pathAtRevision}"/>
     <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
+
+    <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.LogEntryBundle" />
+
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <c:choose>
         <c:when test="${isFile}">
@@ -107,45 +110,55 @@
       <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
     </tr>
     <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-    <td valign="top">Changed<br>paths</td><td colspan="5">
-    <table width="100%">
-    <tr>
-      <th>Action</th>
-      <th>Path</th>
-      <th>Copy From Path</th>
-      <th>Revision</th>
-    </tr>
-    <c:set var="changedPaths" value="${entry.svnLogEntry.changedPaths}" />
-    <jsp:useBean id="changedPaths" type="java.util.Map" />
-    <%
-    	java.util.Set paths = changedPaths.keySet();
-    	java.util.List pathsList = new java.util.ArrayList(paths);
-    	java.util.Collections.sort(pathsList);
-    	java.util.Iterator i = pathsList.iterator();
-    	while (i.hasNext()) {
-    	  org.tmatesoft.svn.core.SVNLogEntryPath logEntryPath = 
-    	    (org.tmatesoft.svn.core.SVNLogEntryPath)changedPaths.get(i.next());
-    	  LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
-    %>
-    <tr>
-    <c:url value="goto.svn" var="goToUrl">
-      <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-      <c:param name="revision" value="${entry.svnLogEntry.revision}" />
-    </c:url>
-      <td><i><%= actionType %></i></td>
-      <% if (LogEntryActionType.D != actionType) { %>
-      <td><a href="${goToUrl}"><%= command.getPath().equals(logEntryPath.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
-      <% } else { %>
-      <td><%= logEntryPath.getPath() %></td>
-      <% } %>
-      <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
-      <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
-    </tr>
-    <%
-    	}
-    %>
-    </table>
-    </td>
+      <td valign="top">Changed<br>paths</td><td colspan="5">
+        <table width="100%">
+        <tr>
+          <th>Action</th>
+          <th>Path</th>
+          <th>Copy From Path</th>
+          <th>Revision</th>
+        </tr>
+        <c:set var="changedPaths" value="${entry.svnLogEntry.changedPaths}" />
+
+        <jsp:useBean id="changedPaths" type="java.util.Map" />
+        <%
+          Set paths = changedPaths.keySet();
+          List pathsList = new java.util.ArrayList(paths);
+          Collections.sort(pathsList);
+          Iterator i = pathsList.iterator();
+          while (i.hasNext()) {
+            SVNLogEntryPath logEntryPath =
+              (SVNLogEntryPath)changedPaths.get(i.next());
+            LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
+        %>
+        <tr>
+
+        <c:url value="goto.svn" var="goToUrl">
+          <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+          <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+        </c:url>
+
+        <c:url value="diff.svn" var="diffUrl">
+          <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+          <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+        </c:url>
+
+          <td><i><%= actionType %></i></td>
+          <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
+          <td><a href="${goToUrl}" title="Show file"><%= command.getPath().equals(logEntryPath.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+          <% } else if (LogEntryActionType.M == actionType) { %>
+          <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&rev=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><i><%= logEntryPath.getPath() %></i></a></td>
+          <% } else { %>
+          <td><%= logEntryPath.getPath() %></td>
+          <% } %>
+          <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
+          <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
+        </tr>
+        <%
+          }
+        %>
+        </table>
+      </td>
     </tr>
     <% rowCount++; %>
   </c:forEach>
