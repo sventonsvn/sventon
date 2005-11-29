@@ -20,13 +20,19 @@
 </head>
 
 <body>
-<h1>sventon repository browser configuration</h1>
-
-<p>
-  Configuration done!
-  <br>
-  Please restart the servlet container to startup sventon.
-</p>
-<%@ include file="/WEB-INF/jsp/foot.jsp" %>
+  <p>
+    <table class="sventonHeader">
+      <tr>
+        <td>sventon repository browser configuration</td>
+      </tr>
+    </table>
+  </p>
+  <p><b>Configuration done!</b></p>
+  <p>
+    Please restart the servlet container to startup the sventon application.<br/>
+    Note that directly after restart sventon will index the <i>entire</i> subversion repository.<br/>
+    <b>This can take a couple of minutes depending on the number of repository entries. Please be patient...</b> 
+  </p>
+  <%@ include file="/WEB-INF/jsp/foot.jsp" %>
 </body>
 </html>

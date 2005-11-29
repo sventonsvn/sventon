@@ -125,7 +125,10 @@ public class ConfigurationController extends AbstractFormController {
       File propFile = new File(System.getProperty("sventon.root") + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
 
-      config.store(new FileOutputStream(propFile), createPropertyFileComment());
+      FileOutputStream fos = new FileOutputStream(propFile);
+      config.store(fos, createPropertyFileComment());
+      fos.flush();
+      fos.close();
 
       //TODO: Find a way to refresh the app context, the lines below fails for some reason
       //(also, are not threadsafe) 
@@ -175,8 +178,11 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# Key: svn.configpath                                                          #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Description:                                                                 #\n");
-    comments.append("# Path to the the SVN configuration directory, the user running the sventon    #\n");
-    comments.append("# web container must have read/write access to this directory.                 #\n");
+    comments.append("# Path where the index will be stored. The user running the sventon web        #\n");
+    comments.append("# container must have read/write access to this directory.                     #\n");
+    comments.append("#                                                                              #\n");
+    comments.append("# Example:                                                                     #\n");
+    comments.append("#   svn.configpath=c:/temp                                                     #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.uid                                                                 #\n");

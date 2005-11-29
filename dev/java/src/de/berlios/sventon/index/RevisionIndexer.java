@@ -93,7 +93,7 @@ public class RevisionIndexer {
     logger.debug("Creating the repository instance");
     repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
-      logger.warn("Repository not configured - unable to create index");
+      logger.warn("Repository not configured yet. Waiting with index creation");
       return;
     }
     initIndex();
@@ -119,12 +119,11 @@ public class RevisionIndexer {
    * Initializes the index.
    * If a serialized index is stored on disk it will be read into memory.
    * Otherwise a complete repository indexing will be executed.
+   *
+   * @throws SVNException if subversion error occurs.
    */
-  private void initIndex() {
+  private void initIndex() throws SVNException {
     logger.debug("Initializing index");
-
-    // TODO: Update the index according to what's new.
-
     logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
         + INDEX_FILENAME);
@@ -143,6 +142,7 @@ public class RevisionIndexer {
       index = new RevisionIndex(configuration.getUrl());
     }
 
+    update();
   }
 
   /**
