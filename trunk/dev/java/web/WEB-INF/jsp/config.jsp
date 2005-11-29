@@ -32,10 +32,10 @@
     <p>
       <table width="650">
         <tr>
-          <td valign="top" width="50%">
+          <td valign="top" align="right" style="white-space: nowrap;">
             Enter subversion repository root url:
           </td>
-          <td valign="top" width="50%">
+          <td valign="top">
             <spring:bind path="command.repositoryURL">
               <input type="text" name="repositoryURL" size="30" value=""/></td>
             </spring:bind>
@@ -51,24 +51,24 @@
         </tr>
         
         <tr>
-          <td valign="top" width="50%">
+          <td valign="top" align="right" style="white-space: nowrap;">
             Enter mount point:
           </td>
-          <td valign="top" width="50%">
+          <td valign="top">
             <spring:bind path="command.mountPoint">
               <input type="text" name="mountPoint" size="30" value=""/>
             </spring:bind>
           </td>
           <td valign="top">
-            (leave blank for browsing root)
+            (leave blank to allow browsing of entire repository)
           </td>
         </tr>
         
         <tr>
-          <td valign="top" width="50%">
+          <td valign="top" align="right" style="white-space: nowrap;">
             Enter user name:
           </td>
-          <td valign="top" width="50%">
+          <td valign="top">
             <spring:bind path="command.username">
               <input type="text" name="username" size="30" value=""/>
             </spring:bind>
@@ -78,12 +78,12 @@
           </td>
         </tr>
         <tr>
-          <td valign="top" width="50%">
+          <td valign="top" align="right" style="white-space: nowrap;">
             Enter user password:
           </td>
-          <td valign="top" width="50%">
+          <td valign="top">
             <spring:bind path="command.password">
-              <input type="text" name="password" size="30" value=""/>
+              <input type="password" name="password" size="30" value=""/>
             </spring:bind>
           </td>
           <td valign="top">
@@ -91,24 +91,24 @@
           </td>
         </tr>
         <tr>
-          <td valign="top" width="50%">
+          <td valign="top" align="right" style="white-space: nowrap;">
             Enter Subversion config path:
           </td>
-          <td valign="top" width="50%">
+          <td valign="top">
             <spring:bind path="command.configPath">
               <input type="text" name="configPath" size="30" value=""/>
             </spring:bind>
           </td>
           <td valign="top">
-            This is the path to where subversion configuration files and the index are stored. </br>
-            The web server running sventon must have read/write access to this directory
+            This is the path where the index is stored. <br/>
+            The web server running sventon must have read/write access to this directory.
           </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
           <td colspan="2">
-The file <b>sventon.log</b> will be stored in current directory, currently that is <b>${command.currentDir}</b>.<br>
-Logging properties can be customized by changing properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
+By default the <b>sventon.log</b> file will be stored in the java container's current directory. Currently that is <b>${command.currentDir}</b>.<br>
+Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
           </td>
         </tr>
         <tr>
