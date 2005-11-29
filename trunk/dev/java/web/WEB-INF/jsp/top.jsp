@@ -74,12 +74,12 @@
                   <tr>
                     <c:url value="goto.svn" var="goToUrl">
                       <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-                      <c:param name="revision" value="${latestCommitInfo.revision}" />
+                      <c:param name="revision" value="head" />
                     </c:url>
   
                     <c:url value="diff.svn" var="diffUrl">
                       <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-                      <c:param name="revision" value="${latestCommitInfo.revision}" />
+                      <c:param name="revision" value="head" />
                     </c:url>
   
                     <td><i><%= actionType %></i></td>
