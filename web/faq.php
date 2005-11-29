@@ -5,17 +5,18 @@
   <li><a href="#q4">What platforms are supported?</a></li>
   <li><a href="#q5">What configurations have been tested?</a></li>
   <li><a href="#q6">How do I install and configure sventon?</a></li>
-  <li><a href="#q7">How do I uninstall sventon?</a></li>
-  <li><a href="#q8">Will sventon in any way jeopardize my Subversion repository?</a></li>
-  <li><a href="#q9">Will sventon write any information to my Windows registry?</a></li>
-  <li><a href="#q10">On which servlet containers has sventon been tested?</a></li>
-  <li><a href="#q11">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
-  <li><a href="#q12">Can I send suggestions for new functions?</a></li>
-  <li><a href="#q13">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
-  <li><a href="#q14">What license do you use?</a></li>
-  <li><a href="#q15">Why did you start this project?</a></li>
+  <li><a href="#q7">I have followed the installation instructions and restarted the web server but nothing happens when I point my browser to <code>http://yourmachinename/svn/</code>. Why?</a></li>
+  <li><a href="#q8">How do I uninstall sventon?</a></li>
+  <li><a href="#q9">Will sventon in any way jeopardize my Subversion repository?</a></li>
+  <li><a href="#q10">Will sventon write any information to my Windows registry?</a></li>
+  <li><a href="#q11">On which servlet containers has sventon been tested?</a></li>
+  <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
+  <li><a href="#q13">Can I send suggestions for new functions?</a></li>
+  <li><a href="#q14">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
+  <li><a href="#q15">What license do you use?</a></li>
+  <li><a href="#q16">Why did you start this project?</a></li>
   <li><a href="#q17">Is there a publicly running version of Sventon that I can try?</a></li>
-  <li><a href="#q16">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q18">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -92,19 +93,27 @@
 <b>Q:</b> How do I install and configure sventon?
 </a>
 <br/>
-<b>A:</b> <a href="index.php?page=downloads">Download</a> the latest version and drop the <code>WAR</code> file in your servlet container's <code>webapps</code> directory. Point your web browser to http://yourmachinename/svn/ and you should see the initial configuration page. If not, make sure your container is running (on the correct port). Submit the fields on the configuration page and restart your servlet container when you are ask to do so. Point your web browser again to http://yourmachinename/svn/ and you're done!
+<b>A:</b> <a href="index.php?page=downloads">Download</a> the latest version and drop the <code>WAR</code> file in your servlet container's <code>webapps</code> directory. Point your web browser to <code>http://yourmachinename/svn/</code> and you should see the initial configuration page. If not, make sure your container is running (on the correct port). Submit the fields on the configuration page and restart your servlet container when you are ask to do so. Point your web browser again to <code>http://yourmachinename/svn/</code> and you're done!
 </p>
 
 <p>
 <a name="q7">
-<b>Q:</b> How do I uninstall sventon?
+<b>Q:</b> I have followed the installation instructions and restarted the web server but nothing happens when I point my browser to <code>http://yourmachinename/svn/</code>. Why?
 </a>
 <br/>
-<b>A:</b> Just remove the <code>WAR</code> file form the <code>webapps</code> directory and the subdirectory <code>svn</code>.
+<b>A:</b> First time sventon is started the index will be built up. This can take a couple of seconds or even minutes, all depending on network speed and the number of repository entries. Just be patient...
 </p>
 
 <p>
 <a name="q8">
+<b>Q:</b> How do I uninstall sventon?
+</a>
+<br/>
+<b>A:</b> Remove the <code>WAR</code> file from the <code>webapps</code> directory and the subdirectory <code>svn</code>. The index file, <code>sventon.idx</code>, will be kept in a directory specified during the initial configuration. Find it and delete it.
+</p>
+
+<p>
+<a name="q9">
 <b>Q:</b> Will sventon in any way jeopardize my Subversion repository?
 </a>
 <br/>
@@ -112,7 +121,7 @@
 </p>
 
 <p>
-<a name="q9">
+<a name="q10">
 <b>Q:</b> Will sventon write any information to my Windows registry?
 </a>
 <br/>
@@ -120,7 +129,7 @@
 </p>
 
 <p>
-<a name="q10">
+<a name="q11">
 <b>Q:</b> On which servlet containers have sventon been tested?
 </a>
 <br/>
@@ -128,7 +137,7 @@
 </p>
 
 <p>
-<a name="q11">
+<a name="q12">
 <b>Q:</b> Why is not file type [XYZ] colorized when displayed in sventon?
 </a>
 <br/>
@@ -143,7 +152,7 @@
 </ul>
 
 <p>
-<a name="q12">
+<a name="q13">
 <b>Q:</b> Can I send suggestions for new functions?
 </a>
 <br/>
@@ -151,7 +160,7 @@
 </p>
 
 <p>
-<a name="q13">
+<a name="q14">
 <b>Q:</b> Will sventon be avaliable for CVS (or any other version control system) in the future?
 </a>
 <br/>
@@ -159,7 +168,7 @@
 </p>
 
 <p>
-<a name="q14">
+<a name="q15">
 <b>Q:</b> What license do you use?
 </a>
 <br/>
@@ -167,7 +176,7 @@
 </p>
 
 <p>
-<a name="q15">
+<a name="q16">
 <b>Q:</b> Why did you start this project?
 </a>
 <br/>
@@ -183,7 +192,7 @@
 </p>
 
 <p>
-<a name="q16">
+<a name="q18">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
