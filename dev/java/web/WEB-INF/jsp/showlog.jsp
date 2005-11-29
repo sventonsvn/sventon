@@ -145,9 +145,9 @@
 
           <td><i><%= actionType %></i></td>
           <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
-          <td><a href="${goToUrl}" title="Show file"><%= command.getPath().equals(logEntryPath.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+          <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
           <% } else if (LogEntryActionType.M == actionType) { %>
-          <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&rev=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><i><%= logEntryPath.getPath() %></i></a></td>
+          <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&rev=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
           <% } else { %>
           <td><%= logEntryPath.getPath() %></td>
           <% } %>
