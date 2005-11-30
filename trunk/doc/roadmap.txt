@@ -1,38 +1,38 @@
-Release road map
+sventon release road map
 
-This is a rough release plan for the sventon, it will be updated and changed irregularily.
+This is a rough release plan for sventon. It will be updated and changed irregularily.
 
 [ ] = planned
 [x] = in progress
 [<rev>] = completed in revision
 
 Release 1 (not yet released)
-[<76>]  Browse WebDAV and svnserve repositories (anonymous and authorized login).
-[<76>]  View file for any given revision.
-[<76>]  Source code syntax highlighting.
-[<76>]  View logs for a file/directory.
-[<79>]  Download file (any given revision).
-[<76>]  Browse repository for any given revision.
-[<76>]  Possibility to navigate in repository by typing path.
-[<76>]  Clickable revision path info for quick navigation in browser.
-[<97>]  Support for language specific characters and white space in paths (WebDAV)
-[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
-[<113>] Possibility to search for files and directories.
-[<113>] Flatten path structure view
-[<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
-[<130>] Style sheet usage to enable easy customization
-[<130>] View file should show a preview of images
-[<130>] Basic look and feel
-[<132>] Installation wizard
-[<141>] Keyword expansion when viewing files
-[<142>] Thumbnail caching using ehcache.
-[<145>] View metadata (e.g. mime types)
-[<157>] Serialize the RevisionIndex to disk
-[<171>] View all changes in one revision (log entry).
-[<174>] Diff revisions of same file
-[<198>] Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
-[<206>] Only append repository changes if index is out-of-date instead of full reindexing
 [<212>] View contents of zip archives (including jar)
+[<206>] Only append repository changes if index is out-of-date instead of full reindexing
+[<198>] Show selected (image) files as thumbnails, use repobrowserview's Action drop-down
+[<174>] Diff revisions of same file
+[<171>] View all changes in one revision (log entry).
+[<157>] Serialize the RevisionIndex to disk
+[<145>] View metadata (e.g. mime types)
+[<142>] Thumbnail caching using ehcache.
+[<141>] Keyword expansion when viewing files
+[<132>] Installation wizard
+[<130>] Basic look and feel
+[<130>] View file should show a preview of images
+[<130>] Style sheet usage to enable easy customization
+[<113>] Add total line at the bottom of repobrowserview/searchresultview for entries and size
+[<113>] Flatten path structure view
+[<113>] Possibility to search for files and directories.
+[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication
+[<97>]  Support for language specific characters and white space in paths (WebDAV)
+[<79>]  Download file (any given revision).
+[<76>]  Clickable revision path info for quick navigation in browser.
+[<76>]  Possibility to navigate in repository by typing path.
+[<76>]  Browse repository for any given revision.
+[<76>]  View logs for a file/directory.
+[<76>]  Source code syntax highlighting.
+[<76>]  View file for any given revision.
+[<76>]  Browse WebDAV and svnserve repositories (anonymous and authorized login).
 
 
 Not yet scheduled (in no particular order)
