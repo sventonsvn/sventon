@@ -35,7 +35,7 @@
         </c:otherwise>
       </c:choose>
 
-      <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.path}"/></td>
+      <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.pathPart}"/></td>
     </tr>
     <tr>
       <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink">show</span> latest commit info]</a></td>
@@ -110,7 +110,7 @@
       <td class="sventonHeadlines" colspan="2">
        Repository path:<br/><a href="repobrowser.svn?path=/&revision=${command.revision}">
         ${url} <% if (!"".equals(command.getMountPoint(false))) { %>/ <%= command.getMountPoint(true) %><% } %></a> /
-        <c:forTokens items="${command.pathPart}" delims="/" var="pathSegment">
+        <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
           <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
           <c:choose>
             <c:when test="${hasErrors}">
@@ -148,7 +148,7 @@
  </tr>
 <tr>
 <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
-<td><spring:bind path="command.path"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
+<td><spring:bind path="command.pathPart"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
 <td><input class="sventonGoToSubmit" type="submit" value="go to"/></td>
 <td><input class="sventonFlattenSubmit" type="button" value="flatten dirs" onclick="javascript: return doFlatten();"/></td>
 

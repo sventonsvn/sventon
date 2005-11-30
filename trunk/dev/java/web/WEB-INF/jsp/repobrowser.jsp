@@ -73,16 +73,16 @@
       long totalSize = 0;
     %>
 
-    <c:if test="${!empty command.pathPart}">
+    <c:if test="${!empty command.pathNoLeaf && !isSearch && !isFlatten}">
       <c:url value="repobrowser.svn" var="backUrl">
-        <c:param name="path" value="${command.pathPart}" />
+        <c:param name="path" value="${command.pathNoLeaf}" />
       </c:url>
 
       <tr class="sventonEntry1">
         <td class="sventonCol1"></td>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3">
-          <a href="${backUrl}">..</a>
+          <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
         </td>
         <td></td>
         <td></td>
