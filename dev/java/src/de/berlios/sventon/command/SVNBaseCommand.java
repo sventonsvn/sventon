@@ -38,6 +38,12 @@ public class SVNBaseCommand {
   /** Mount point. */
   private String mountPoint;
 
+
+  /**
+   * Gets the path.
+   *
+   * @return The path.
+   */
   public String getPath() {
     return path;
   }
@@ -136,6 +142,21 @@ public class SVNBaseCommand {
    *
    * @return Path excluding taget (end/leaf)
    */
+  public String getPathNoLeaf() {
+    return PathUtil.getPathNoLeaf(getPath());
+  }
+
+
+  /**
+   * Get path, excluding the leaf. For complete path including target,see
+   * {@link SVNBaseCommand#getCompletePath()}. Mountpoint offset will be
+   * included.
+   * <p>
+   * The returned string will have a final "/". If the path info is empty, ""
+   * (empty string) will be returned.
+   *
+   * @return Path excluding taget (end/leaf)
+   */
   public String getPathPart() {
     return PathUtil.getPathPart(getPath());
   }
@@ -167,8 +188,6 @@ public class SVNBaseCommand {
    */
   public String toString() {
     return "SVNBaseCommand{path='" + path + "', " +
-    "completePath='" + getCompletePath() + "', " +
-    "pathPart='" + getPathPart() + "', " +
     "revision='" + revision + "', " +
     "mountPoint='" + mountPoint
         + "'}";
