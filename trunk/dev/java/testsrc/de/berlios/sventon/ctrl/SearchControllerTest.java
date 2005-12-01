@@ -36,8 +36,8 @@ public class SearchControllerTest extends TestCase {
     req = new MockHttpServletRequest();
     try {
       modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
-      fail("Should throw IllegalArgumentException");
-    } catch (IllegalArgumentException ex) {
+      fail("Should throw NPE");
+    } catch (NullPointerException ex) {
       // expected
     }
   }
@@ -65,8 +65,8 @@ public class SearchControllerTest extends TestCase {
     req = new MockHttpServletRequest();
     try {
       modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
-      fail("Should throw IllegalArgumentException");
-    } catch (IllegalArgumentException ex) {
+      fail("Should throw NPE");
+    } catch (NullPointerException ex) {
       // expected
     }
   }

@@ -290,32 +290,8 @@ public class RevisionIndexer {
    * Finds index entries by a search string.
    *
    * @param searchString The string to search for.
-   * @return The <code>List</code> of <code>IndexEntry</code> instances found.
-   * @throws SVNException if a Subverions error occurs.
-   * @see de.berlios.sventon.ctrl.RepositoryEntry
-   */
-  public List<RepositoryEntry> find(final String searchString) throws SVNException {
-    if (searchString == null || searchString.equals("")) {
-      throw new IllegalArgumentException("Search string was null or empty");
-    }
-
-    update();
-    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    for (RepositoryEntry entry : index.getEntries()) {
-      if (entry.getFullEntryName().toLowerCase().indexOf(searchString.toLowerCase()) > -1) {
-        result.add(entry);
-      }
-    }
-    logger.debug("Found " + result.size() + " entries matching search: " + searchString);
-    return result;
-  }
-
-  /**
-   * Finds index entries by a search string.
-   *
-   * @param searchString The string to search for.
    * @param startDir     The directory where to start search from.
-   * @return The <code>List</code> of <code>IndexEntry</code> instances found.
+   * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws SVNException if a Subverions error occurs.
    * @see de.berlios.sventon.ctrl.RepositoryEntry
    */
@@ -344,23 +320,27 @@ public class RevisionIndexer {
    * Finds index entries by a search string.
    *
    * @param searchPattern The regex pattern to search for.
-   * @return The <code>List</code> of entries found.
+   * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws SVNException if a Subverions error occurs.
    * @see java.util.regex.Pattern
    */
-  public List findPattern(final String searchPattern) throws SVNException {
+  public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws SVNException {
     if (searchPattern == null || searchPattern.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
+    }
+
+    if (startDir == null) {
+      throw new IllegalArgumentException("startDir was null");
     }
 
     update();
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
-      if (entry.getFullEntryName().matches(searchPattern)) {
+      if (entry.getFullEntryName().startsWith(startDir) && entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
       }
     }
-    logger.debug("Found " + result.size() + " entries matching search: " + searchPattern);
+    logger.debug("Found " + result.size() + " entries matching search pattern: " + searchPattern);
     return result;
   }
 

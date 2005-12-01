@@ -21,15 +21,19 @@ public class RevisionIndexerTest extends TestCase {
   }
 
   public void testFind() throws Exception {
-    assertEquals(2, indexer.find("html").size());
+    assertEquals(2, indexer.find("html", "/").size());
   }
 
   public void testFindMixedCase() throws Exception {
-    assertEquals(2, indexer.find("hTmL").size());
+    assertEquals(2, indexer.find("hTmL", "/").size());
   }
 
   public void testFindPattern() throws Exception {
-    assertEquals(7, indexer.findPattern(".*[12].*").size());
+    assertEquals(7, indexer.findPattern(".*[12].*", "/").size());
+  }
+
+  public void testFindPatternCamelCase() throws Exception {
+    assertEquals(2, indexer.findPattern(".*/[D][a-z0-9]+[F][a-z0-9]+.*", "/").size());
   }
 
   public void testGetDirectories() throws Exception {
@@ -39,7 +43,7 @@ public class RevisionIndexerTest extends TestCase {
 
   public void testGetDirectoriesMixedCase() throws Exception {
     assertEquals(2, indexer.getDirectories("/").size());
-    assertEquals(0, indexer.getDirectories("/DIR1/").size()); //TODO: Should we allow mixed case?
+    assertEquals(0, indexer.getDirectories("/DIR1/").size());
   }
 
 }

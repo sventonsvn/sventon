@@ -409,12 +409,12 @@ public class SVNRepositoryStub extends SVNRepository {
     entries1.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
     entries1.add(new SVNDirEntry("file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
     entries1.add(new SVNDirEntry("dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-    entries1.add(new SVNDirEntry("file3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
+    entries1.add(new SVNDirEntry("File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
     List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
     entries2.add(new SVNDirEntry("dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
     entries2.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("dirfile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("dirfile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry("DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry("DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
 
     repository.addDir("/", entries1);
     repository.addDir("/dir1/", entries2);

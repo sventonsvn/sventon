@@ -7,7 +7,8 @@ This is a rough release plan for sventon. It will be updated and changed irregul
 [<rev>] = completed in revision
 
 Release 1 (not yet released)
-[<212>] View contents of zip archives (including jar)
+[<276>] Possibility to do CamelCase searches.
+[<212>] View contents of zip archives (including jar).
 [<206>] Improve index update strategy.
 [<198>] Show selected (image) files as thumbnails.
 [<174>] Diff revisions of same file.
