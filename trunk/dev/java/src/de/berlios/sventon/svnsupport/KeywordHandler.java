@@ -15,6 +15,9 @@ import org.tmatesoft.svn.core.internal.util.SVNEncodingUtil;
 import org.tmatesoft.svn.core.internal.util.SVNFormatUtil;
 import org.tmatesoft.svn.core.internal.util.SVNPathUtil;
 import org.tmatesoft.svn.core.internal.util.SVNTimeUtil;
+import org.tmatesoft.svn.core.SVNProperty;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -51,28 +54,33 @@ public final class KeywordHandler {
   public static final String KEYWORD_URL = "URL";
   public static final String KEYWORD_ID = "Id";
 
-  /**
-   * Private - not supposed to instantiate.
-   */
-  private KeywordHandler() {
-  }
+  private final Map<String, String> keywordsMap;
 
   /**
-   * Computes keyword variables. This method is based on the method with same name in
+   * The logging instance.
+   */
+  private final Log logger = LogFactory.getLog(getClass());
+
+  /**
+   * Constructs the instance and computes keyword variables.
+   * This method is based on the method <tt>computeKeywords</tt> in
    * <code>org.tmatesoft.svn.core.internal.wc.SVNTranslator</code>.
    *
-   * @param keywords The keywords to compute
    * @param url      The full url to the repository entry
-   * @param author   The author of the last commit.
-   * @param date     Date in full format
-   * @param revision The revision
-   * @return the populated <code>Map</code>
    */
-  public static Map computeKeywords(final String keywords, final String url,
-                                    final String author, final String date, final String revision) {
+  @SuppressWarnings({"unchecked"})
+  public KeywordHandler(final Map properties, final String url) {
+
+    String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
+    String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
+    String revision = (String) properties.get(SVNProperty.COMMITTED_REVISION);
+    String keywords = (String) properties.get(SVNProperty.KEYWORDS);
+
     if (keywords == null) {
-      return Collections.EMPTY_MAP;
+      keywordsMap = Collections.EMPTY_MAP;
+      return;
     }
+
     boolean expand = url != null;
     String computedDate = null;
     String computedUrl = null;
@@ -83,29 +91,29 @@ public final class KeywordHandler {
 
     Date jDate = date == null ? null : SVNTimeUtil.parseDate(date);
 
-    Map<String, String> map = new HashMap<String, String>();
+    keywordsMap = new HashMap<String, String>();
     for (StringTokenizer tokens = new StringTokenizer(keywords,
         " \t\n\b\r\f"); tokens.hasMoreTokens();) {
       String token = tokens.nextToken();
       if (KEYWORD_LAST_CHANGED_DATE.equals(token) || KEYWORD_DATE.equals(token)) {
         computedDate = expand && computedDate == null ? SVNFormatUtil.formatDate(jDate, false) : computedDate;
-        map.put(KEYWORD_LAST_CHANGED_DATE, computedDate);
-        map.put(KEYWORD_DATE, computedDate);
+        keywordsMap.put(KEYWORD_LAST_CHANGED_DATE, computedDate);
+        keywordsMap.put(KEYWORD_DATE, computedDate);
       } else if (KEYWORD_LAST_CHANGED_REVISION.equals(token)
           || KEYWORD_REVISION.equals(token) || KEYWORD_REV.equals(token)) {
         computedRevision = expand && computedRevision == null ? revision : computedRevision;
-        map.put(KEYWORD_LAST_CHANGED_REVISION, computedRevision);
-        map.put(KEYWORD_REVISION, computedRevision);
-        map.put(KEYWORD_REV, computedRevision);
+        keywordsMap.put(KEYWORD_LAST_CHANGED_REVISION, computedRevision);
+        keywordsMap.put(KEYWORD_REVISION, computedRevision);
+        keywordsMap.put(KEYWORD_REV, computedRevision);
       } else if (KEYWORD_LAST_CHANGED_BY.equals(token)
           || KEYWORD_AUTHOR.equals(token)) {
         computedAuthor = expand && computedAuthor == null ? (author == null ? "" : author) : computedAuthor;
-        map.put(KEYWORD_LAST_CHANGED_BY, computedAuthor);
-        map.put(KEYWORD_AUTHOR, computedAuthor);
+        keywordsMap.put(KEYWORD_LAST_CHANGED_BY, computedAuthor);
+        keywordsMap.put(KEYWORD_AUTHOR, computedAuthor);
       } else if (KEYWORD_HEAD_URL.equals(token) || KEYWORD_URL.equals(token)) {
         computedUrl = expand && computedUrl == null ? SVNEncodingUtil.uriDecode(url) : computedUrl;
-        map.put(KEYWORD_HEAD_URL, computedUrl);
-        map.put(KEYWORD_URL, computedUrl);
+        keywordsMap.put(KEYWORD_HEAD_URL, computedUrl);
+        keywordsMap.put(KEYWORD_URL, computedUrl);
       } else if (KEYWORD_ID.equals(token)) {
         if (expand && computedId == null) {
           computedRevision = computedRevision == null ? revision : computedRevision;
@@ -122,21 +130,19 @@ public final class KeywordHandler {
           sb.append(computedAuthor);
           computedId = sb.toString();
         }
-        map.put(KEYWORD_ID, expand ? computedId : null);
+        keywordsMap.put(KEYWORD_ID, expand ? computedId : null);
       }
     }
-    return map;
   }
 
   /**
-   * Substitutes keywords in content using provided keyword map.
+   * Substitutes keywords in content.
    *
-   * @param keywordsMap The keyword map. Usually gotten from a call to
-   *                    <code>KeywordHandler.computeKeywords()</code>.
    * @param content     The content
    * @return Content with substituted keywords.
    */
-  public static String substitute(Map keywordsMap, String content) {
+  public String substitute(String content) {
+    logger.debug("Substituting keywords: " + keywordsMap);
     for (Object o : keywordsMap.keySet()) {
       String keyword = (String) o;
       Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");

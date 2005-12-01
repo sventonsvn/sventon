@@ -137,21 +137,10 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
 
-    String fileContents;
-    // Check if keywords should be expanded.
-    String keywords = (String) properties.get(SVNProperty.KEYWORDS);
-    Map keywordsMap;
-    if (keywords != null) {
-      String url = getRepositoryConfiguration().getUrl() + svnCommand.getCompletePath();
-      String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
-      String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
-      String rev = (String) properties.get(SVNProperty.COMMITTED_REVISION);
-      keywordsMap = KeywordHandler.computeKeywords(keywords, url, author, date, rev);
-      logger.debug("Substituting keywords: " + keywordsMap);
-      fileContents = KeywordHandler.substitute(keywordsMap, outStream.toString());
-    } else {
-      fileContents = outStream.toString();
-    }
+    // Expand keywords, if any.
+    KeywordHandler keywordHandler = new KeywordHandler(properties,
+        getRepositoryConfiguration().getUrl() + svnCommand.getCompletePath());
+    String fileContents = keywordHandler.substitute(outStream.toString());
 
     LineNumberAppender appender = new LineNumberAppender();
     appender.setEmbedStart("<span class=\"sventonLineNo\">");

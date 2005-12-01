@@ -28,7 +28,7 @@ public class DiffTest extends TestCase {
         "OneMore=2\n" +
         "OneMore=3\n";
 
-    Diff diff = new Diff(leftString, rightString);
+    Diff diff = new Diff(leftString, null, rightString, null);
     assertEquals(diff.getLeft().size(), diff.getRight().size());
   }
 
@@ -133,7 +133,7 @@ public class DiffTest extends TestCase {
 < * $Id$
 
 */
-    Diff diff = new Diff(leftString, rightString);
+    Diff diff = new Diff(leftString, null, rightString, null);
     assertEquals(diff.getLeft().size(), diff.getRight().size());
 
     StringBuffer sb = new StringBuffer();
@@ -203,7 +203,7 @@ public class DiffTest extends TestCase {
 <OneMore=8
 
 */
-    Diff diff = new Diff(leftString, rightString);
+    Diff diff = new Diff(leftString, null, rightString, null);
 //    System.out.println("diff.getLeft() = " + diff.getLeft());
 //    System.out.println("diff.getRight() = " + diff.getRight());
 
@@ -289,7 +289,7 @@ public class DiffTest extends TestCase {
 >OneMore=9
 
 */
-    Diff diff = new Diff(leftString, rightString);
+    Diff diff = new Diff(leftString, null, rightString, null);
 
 //    System.out.println("diff.getDiffResultString() = " + diff.getDiffResultString());
 
@@ -320,9 +320,8 @@ public class DiffTest extends TestCase {
     String rightString =
         "[.ShellClassInfo]\n";
 
-    Diff diff;
     try {
-      diff = new Diff(leftString, rightString);
+      new Diff(leftString, null, rightString, null);
       fail("Should raise DiffException");
     } catch (DiffException de) {
       // expected
