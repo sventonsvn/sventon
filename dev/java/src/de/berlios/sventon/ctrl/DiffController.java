@@ -15,6 +15,7 @@ import de.berlios.sventon.diff.Diff;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.command.DiffCommand;
+import de.berlios.sventon.svnsupport.KeywordHandler;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,15 +59,16 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       model.put("toRevision", diffCommand.getToRevision());
       model.put("toPath", diffCommand.getToPath());
 
-      HashMap properties = new HashMap();
+      HashMap fromFileProperties = new HashMap();
+      HashMap toFileProperties = new HashMap();
 
       // Get the file's properties without requesting the content.
       // Make sure files are not in binary format.
-      repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
-      boolean isTextType = SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
-      repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+      repository.getFile(diffCommand.getFromPath(), diffCommand.getFromRevision(), fromFileProperties, null);
+      boolean isTextType = SVNProperty.isTextMimeType((String) fromFileProperties.get(SVNProperty.MIME_TYPE));
+      repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), toFileProperties, null);
 
-      if (isTextType && SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
+      if (isTextType && SVNProperty.isTextMimeType((String) toFileProperties.get(SVNProperty.MIME_TYPE))) {
         model.put("isBinary", false);
 
         // Get content of oldest file (left).
@@ -88,7 +90,11 @@ public class DiffController extends AbstractSVNTemplateController implements Con
         repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), null, outStream);
         rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
-        Diff differ = new Diff(leftLines, rightLines);
+        KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
+            getRepositoryConfiguration().getUrl() + diffCommand.getFromPath());
+        KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
+            getRepositoryConfiguration().getUrl() + diffCommand.getToPath());
+        Diff differ = new Diff(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
         model.put("leftFileContents", differ.getLeft());
         model.put("rightFileContents", differ.getRight());
       } else {

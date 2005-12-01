@@ -11,11 +11,13 @@
  */
 package de.berlios.sventon.diff;
 
-import de.berlios.sventon.svnsupport.*;
+import de.berlios.sventon.svnsupport.CustomArrayList;
+import de.berlios.sventon.svnsupport.KeywordHandler;
+import de.berlios.sventon.svnsupport.LineNumberAppender;
 
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * String differ.
@@ -33,11 +35,16 @@ public class Diff {
   /**
    * Constructor.
    *
-   * @param leftContent  Left (old) string content to diff.
-   * @param rightContent Right (new) string content to diff.
-   * @throws de.berlios.sventon.diff.DiffException if IO error occurs.
+   * @param leftContent         Left (old/from) string content to diff.
+   * @param leftKeywordHandler  Left file's keyword handler.
+   * @param rightContent        Right (new/to) string content to diff.
+   * @param rightKeywordHandler Right file's keyword handler.
+   * @throws DiffException if IO error occurs.
    */
-  public Diff(final String leftContent, final String rightContent) throws DiffException {
+  public Diff(final String leftContent, final KeywordHandler leftKeywordHandler,
+              final String rightContent, final KeywordHandler rightKeywordHandler)
+      throws DiffException {
+
     String tempLine;
     BufferedReader reader;
 
@@ -57,15 +64,30 @@ public class Diff {
         throw new DiffException("Files are identical.");
       }
 
+      String leftString;
+      String rightString;
+      // Append keywords, if any.
+      if (leftKeywordHandler != null) {
+        leftString = leftKeywordHandler.substitute(leftContent);
+      } else {
+        leftString = leftContent;
+      }
+      if (rightKeywordHandler != null) {
+        rightString = rightKeywordHandler.substitute(rightContent);
+      } else {
+        rightString = rightContent;
+      }
+
+      // Append line numbers
       LineNumberAppender appender = new LineNumberAppender();
       appender.setEmbedStart("<span class=\"sventonLineNo\">");
       appender.setEmbedEnd("</span>");
 
-      reader = new BufferedReader(new StringReader(appender.appendTo(leftContent)));
+      reader = new BufferedReader(new StringReader(appender.appendTo(leftString)));
       while ((tempLine = reader.readLine()) != null) {
         leftSourceLines.add(tempLine);
       }
-      reader = new BufferedReader(new StringReader(appender.appendTo(rightContent)));
+      reader = new BufferedReader(new StringReader(appender.appendTo(rightString)));
       while ((tempLine = reader.readLine()) != null) {
         rightSourceLines.add(tempLine);
       }
@@ -176,6 +198,7 @@ public class Diff {
 
   /**
    * Gets the diff result string.
+   *
    * @return The result string
    */
   public String getDiffResultString() {
@@ -184,6 +207,7 @@ public class Diff {
 
   /**
    * Gets the left lines.
+   *
    * @return The list containing the left lines
    */
   public List<SourceLine> getLeft() {
@@ -192,6 +216,7 @@ public class Diff {
 
   /**
    * Gets the right lines.
+   *
    * @return The list containing the right lines
    */
   public List<SourceLine> getRight() {
