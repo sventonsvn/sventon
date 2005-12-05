@@ -12,8 +12,8 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
     <li>Easy installation
 	<li>Browse, download, view logs and diff your repository files, and their properties
 	<li>Easily keep track of changes using the 'latest commit' feature
-	<li>Lightning fast search for instantly files, including camelCaseSearch
-	<li>Flattening of directory structures for instantly finding the directory you're looking for
+	<li>Lightning fast search for instantly finding files, including camelCaseSearch
+	<li>Flattening of directory structures for quickly finding the directory you're looking for
 	<li>Browse inside archive files
 	<li>View thumbnails of image files stored in the repository
     <li>... and more!
@@ -24,7 +24,7 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
 <p>
   <b>Acknowledgments</b>
   <br/>
-  Sventon uses several open source projects created by contributions from many individuals and organizations. Many thanks!
+  sventon uses several open source projects created by contributions from many individuals and organizations. Many thanks!
 </p>
 
 <p>
