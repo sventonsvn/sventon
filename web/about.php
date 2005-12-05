@@ -1,25 +1,30 @@
 <p>
-Welcome to the Sventon project!
+Welcome to the sventon project!
 </p>
 
 <p>
-The main goal of the Sventon project is to create a Java web application written for browsing <a href="http://subversion.tigris.org">Subversion</a> repositories.
+sventon is a Java web application written for browsing <a href="http://subversion.tigris.org">Subversion</a> repositories.
 </p>
 
 <p>
-  Some of the features we felt we were missing from existing Subversion web applications and that we hope to see in Sventon:
+sventon is really easy to install, all you need is a <a href="http://java.sun.com/j2se/1.5.0/">J2SE 5.0 runtime</a> and a Servlet 2.4/JSP 2.0 compliant webserver, such as <a href="http://tomcat.apache.org/">Tomcat 5.5</a>. It features most basic functionality you'd expect from a tool like this, and a few more, including:
   <ul>
-    <li>Insanely easy to install (we're almost there: drop the war file in the application server, enter a few configuration entries on a webpage, restart the application, and your done!).
-    <li>Java, and just Java. If you have Java 5 and a web container, you're all set.
-    <li>Neat features such as file search, directory flattening, possiblity to browse archive files (such as JAR and ZIP files), thumbnail views of image files, RSS feeds, nice graphs over repository statistics, and more. And the usual stuff, such as logs view, diff and more.
+    <li>Easy installation
+	<li>Browse, download, view logs and diff your repository files, and their properties
+	<li>Easily keep track of changes using the 'latest commit' feature
+	<li>Lightning fast search for instantly files, including camelCaseSearch
+	<li>Flattening of directory structures for instantly finding the directory you're looking for
+	<li>Browse inside archive files
+	<li>View thumbnails of image files stored in the repository
+    <li>... and more!
   </ul>
-  Much of this is now implemented in sventon, for the current feature set, have a look at the <a href="index.php?page=features">features</a>.
+  Have a look at the <a href="index.php?page=features">feature page</a> for the current feature set.
 </p>
 
 <p>
   <b>Acknowledgments</b>
   <br/>
-  Sventon uses several open source projects created by contributions from  many individuals and organizations. Many thanks!
+  Sventon uses several open source projects created by contributions from many individuals and organizations. Many thanks!
 </p>
 
 <p>
