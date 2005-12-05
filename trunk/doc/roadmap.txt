@@ -6,7 +6,7 @@ This is a rough release plan for sventon. It will be updated and changed irregul
 [x] = in progress
 [<rev>] = completed in revision
 
-Release 1 (not yet released)
+Release 0.8
 [<276>] Possibility to do CamelCase searches.
 [<212>] View contents of zip archives (including jar).
 [<206>] Improve index update strategy.
