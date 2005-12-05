@@ -1,0 +1,50 @@
+sventon release road map
+
+This is a rough release plan for sventon. It will be updated and changed irregularily.
+
+[ ] = planned
+[x] = in progress
+[<rev>] = completed in revision
+
+Release 0.9.0
+[<276>] Possibility to do CamelCase searches.
+[<212>] View contents of zip archives (including jar).
+[<206>] Improve index update strategy.
+[<198>] Show selected (image) files as thumbnails.
+[<174>] Diff revisions of same file.
+[<171>] View all changes in one revision (log entry).
+[<157>] Serialize index to disk.
+[<145>] View metadata (e.g. mime types).
+[<142>] Thumbnail caching using ehcache.
+[<141>] Keyword expansion when viewing files.
+[<132>] Simple installation wizard.
+[<130>] "Show file" should display thumbnail preview of image files.
+[<130>] Style sheet usage to enable easy customization.
+[<113>] Possibility to flatten directory structure view.
+[<113>] Possibility to search for files and directories.
+[<97>]  Possibility to configure a view only user + pwd to avoid end user authentication.
+[<97>]  Support for language specific characters and white space in paths (WebDAV).
+[<79>]  Download file at any given revision.
+[<76>]  Clickable revision path info for quick navigation in browser.
+[<76>]  Possibility to navigate in repository by typing path.
+[<76>]  Browse repository for any given revision.
+[<76>]  View logs for a file/directory.
+[<76>]  Basic source code syntax highlighting.
+[<76>]  View file for any given revision.
+[<76>]  Browse WebDAV and svnserve repositories (anonymous and authorized login).
+
+
+Not yet scheduled (in no particular order)
+[ ] "Diff previous" shortcut when looking at a file (today this can be done via the "logs" view).
+[ ] Allow dates instead of revisions when browsing the repository.
+[ ] Subversion 1.2 feature support, notably show locked file (and by which user).
+[ ] Blame.
+[ ] Multi language support using resource bundles.
+[ ] Download file(s) and directories as zip files.
+[ ] RSS feeds of repository changes.
+[ ] Commit statistics (different kinds).
+[ ] JSPWiki integration.
+[ ] Integration with other tools and IDE:s.
+[ ] Content search using lucene (files in HEAD).
+[ ] Graph logs.
+[ ] Support for multiple repositories in one sventon instance.
