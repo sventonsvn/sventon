@@ -127,7 +127,7 @@ public class RevisionIndexer {
     logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
         + INDEX_FILENAME);
-    ObjectInputStream in = null;
+    ObjectInputStream in;
     try {
       in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
       index = (RevisionIndex) in.readObject();
@@ -213,7 +213,7 @@ public class RevisionIndexer {
             logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), latestRevision),
+                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
                 PathUtil.getPathPart(logEntryPath.getPath()),
                 mountPoint));
             break;
@@ -222,7 +222,7 @@ public class RevisionIndexer {
             logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), latestRevision),
+                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
                 PathUtil.getPathPart(logEntryPath.getPath()),
                 mountPoint));
             break;
@@ -382,7 +382,7 @@ public class RevisionIndexer {
    */
   public void destroy() {
     logger.info("Saving index to disk, " + configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-    ObjectOutputStream out = null;
+    ObjectOutputStream out;
     try {
       out = new ObjectOutputStream(new FileOutputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
       out.writeObject(index);
