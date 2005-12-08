@@ -3,7 +3,7 @@ Welcome to the sventon project!
 </p>
 
 <p>
-sventon is a Java web application written for browsing <a href="http://subversion.tigris.org">Subversion</a> repositories.
+sventon is a Java web application written for browsing <a href="http://subversion.tigris.org">Subversion</a> repositories using an ordinary web browser.
 </p>
 
 <p>
