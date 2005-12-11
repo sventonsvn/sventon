@@ -11,4 +11,4 @@
  * ====================================================================
  */
 %>
-sventon build rev: @BUILD_REVISION@
+sventon @VERSION@ build rev @REVISION@

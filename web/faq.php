@@ -7,9 +7,9 @@
   <li><a href="#q6">How do I install and configure sventon?</a></li>
   <li><a href="#q7">I have followed the installation instructions and restarted the web server but nothing happens when I point my browser to <code>http://yourmachinename/svn/</code>. Why?</a></li>
   <li><a href="#q8">How do I uninstall sventon?</a></li>
-  <li><a href="#q9">Will sventon in any way jeopardize my Subversion repository?</a></li>
-  <li><a href="#q10">Will sventon write any information to my Windows registry?</a></li>
-  <li><a href="#q11">On which servlet containers has sventon been tested?</a></li>
+  <li><a href="#q9">How do I upgrade sventon to a newer version?</a></li>
+  <li><a href="#q10">Will sventon in any way jeopardize my Subversion repository?</a></li>
+  <li><a href="#q11">Will sventon write any information to my Windows registry?</a></li>
   <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
   <li><a href="#q13">Can I send suggestions for new functions?</a></li>
   <li><a href="#q14">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
@@ -57,6 +57,7 @@
 </a>
 <br/>
 <b>A:</b> Test matrix:
+</p>
 <table style="border-style: solid; border-width: 1px">
   <tr>
     <th>OS</th>
@@ -86,7 +87,6 @@
     <td>249</td>
   </tr>
 </table>
-</p>
 
 <p>
 <a name="q6">
@@ -114,6 +114,14 @@
 
 <p>
 <a name="q9">
+<b>Q:</b> How do I upgrade sventon to a newer version?
+</a>
+<br/>
+<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screens again. As long as the same repository url and configuration path is used, the index will be preserved. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/default-sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>default-sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
+</p>
+
+<p>
+<a name="q10">
 <b>Q:</b> Will sventon in any way jeopardize my Subversion repository?
 </a>
 <br/>
@@ -121,19 +129,11 @@
 </p>
 
 <p>
-<a name="q10">
+<a name="q11">
 <b>Q:</b> Will sventon write any information to my Windows registry?
 </a>
 <br/>
 <b>A:</b> No.
-</p>
-
-<p>
-<a name="q11">
-<b>Q:</b> On which servlet containers have sventon been tested?
-</a>
-<br/>
-<b>A:</b> Currently only on Tomcat 5.5.
 </p>
 
 <p>

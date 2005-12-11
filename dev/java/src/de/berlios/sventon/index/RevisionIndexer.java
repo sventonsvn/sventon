@@ -127,7 +127,7 @@ public class RevisionIndexer {
     logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
         + INDEX_FILENAME);
-    ObjectInputStream in = null;
+    ObjectInputStream in;
     try {
       in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
       index = (RevisionIndex) in.readObject();
@@ -187,48 +187,48 @@ public class RevisionIndexer {
         + latestRevision);
 
     List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
-        null, latestRevision, index.getIndexRevision() + 1, true, false);
+        null, index.getIndexRevision() + 1, latestRevision, true, false);
 
-    Collections.reverse(logEntries);
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
+      logger.debug("Applying changes from revision " + logEntry.getRevision() + " to index.");
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       for (String entryPath : map.keySet()) {
         SVNLogEntryPath logEntryPath = map.get(entryPath);
         switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
           case A :
-            logger.debug("Adding entry to index: " + logEntryPath.getPath());
+            logger.debug("Adding entry to index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), latestRevision),
+                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
                 PathUtil.getPathPart(logEntryPath.getPath()),
                 mountPoint));
             break;
 
           case D :
-            logger.debug("Removing entry from index: " + logEntryPath.getPath());
+            logger.debug("Removing entry from index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.remove(logEntryPath.getPath());
             break;
 
           case R :
-            logger.debug("Updating entry in index: " + logEntryPath.getPath());
+            logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), latestRevision),
+                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
                 PathUtil.getPathPart(logEntryPath.getPath()),
                 mountPoint));
             break;
 
           case M :
-            logger.debug("Updating entry in index: " + logEntryPath.getPath());
+            logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
             index.remove(logEntryPath.getPath());
             index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), latestRevision),
+                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
                 PathUtil.getPathPart(logEntryPath.getPath()),
                 mountPoint));
             break;
 
           default :
-            throw new SVNException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + latestRevision);
+            throw new SVNException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
     }
@@ -382,7 +382,7 @@ public class RevisionIndexer {
    */
   public void destroy() {
     logger.info("Saving index to disk, " + configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-    ObjectOutputStream out = null;
+    ObjectOutputStream out;
     try {
       out = new ObjectOutputStream(new FileOutputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
       out.writeObject(index);
