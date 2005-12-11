@@ -61,6 +61,11 @@
 <input type="hidden" name="path" value="${command.path}${entry.name}"/>
 <input type="hidden" name="revision" value="${command.revision}"/>
 
+<c:url value="diff.svn" var="diffUrl">
+  <c:param name="path" value="${command.path}" />
+  <c:param name="revision" value="${command.revision}" />
+</c:url>
+
 <table class="sventonLogEntriesTable">
   <tr>
     <c:choose>
@@ -134,11 +139,6 @@
         <tr>
 
         <c:url value="goto.svn" var="goToUrl">
-          <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-          <c:param name="revision" value="${entry.svnLogEntry.revision}" />
-        </c:url>
-
-        <c:url value="diff.svn" var="diffUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
           <c:param name="revision" value="${entry.svnLogEntry.revision}" />
         </c:url>

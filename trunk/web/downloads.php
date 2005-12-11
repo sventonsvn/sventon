@@ -1,8 +1,3 @@
 <p>
-Currently there are no pre-built downloads, but if you want to build a release yourself, have a look at: <a href="https://developer.berlios.de/svn/?group_id=3670">https://developer.berlios.de/svn/?group_id=3670</a>
+Version 0.9.0 is now available for <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670">download</a>!
 </p>
-
-<p>
-Pre-built downloads should be available real soon now
-</p>
-

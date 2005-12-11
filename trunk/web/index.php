@@ -133,6 +133,7 @@
           <a href="http://developer.berlios.de" title="BerliOS Developer">
             <img src="http://developer.berlios.de/bslogo.php?group_id=3670" width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
           </a>
+          <br/>
         </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

@@ -1,3 +1,5 @@
+-sventon release 0.9.1-
+
 sventon is a Subversion web client for Java Servlet containers.
 
 A J2SE 5.0 runtime and a servlet 2.4/JSP 2.0 compliant container is
