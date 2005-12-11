@@ -9,7 +9,23 @@
 
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="location" value="WEB-INF/classes/default-sventon.properties"/>
+    <property name="ignoreResourceNotFound" value="true"/>
+    <!-- set default values to empty to trigger the installation mode -->
+    <property name="properties">
+      <props>
+        <prop key="svn.root"></prop>
+        <prop key="svn.configpath"></prop>
+        <prop key="svn.uid"></prop>
+        <prop key="svn.pwd"></prop>
+        <prop key="svn.mountpoint"></prop>
+        <prop key="log4j.logdir"></prop>
+      </props>
+    </property>
+    <property name="locations">
+      <list>
+        <value>classpath:default-sventon.properties</value>
+      </list>
+    </property>
   </bean>
 
   <bean id="repoBrowserController" class="de.berlios.sventon.ctrl.RepoBrowserController">
