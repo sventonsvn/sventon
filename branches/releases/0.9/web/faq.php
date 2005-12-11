@@ -7,15 +7,16 @@
   <li><a href="#q6">How do I install and configure sventon?</a></li>
   <li><a href="#q7">I have followed the installation instructions and restarted the web server but nothing happens when I point my browser to <code>http://yourmachinename/svn/</code>. Why?</a></li>
   <li><a href="#q8">How do I uninstall sventon?</a></li>
-  <li><a href="#q9">Will sventon in any way jeopardize my Subversion repository?</a></li>
-  <li><a href="#q10">Will sventon write any information to my Windows registry?</a></li>
-  <li><a href="#q11">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
-  <li><a href="#q12">Can I send suggestions for new functions?</a></li>
-  <li><a href="#q13">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
-  <li><a href="#q14">What license do you use?</a></li>
-  <li><a href="#q15">Why did you start this project?</a></li>
-  <li><a href="#q16">Is there a publicly running version of Sventon that I can try?</a></li>
-  <li><a href="#q17">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q9">How do I upgrade sventon to a newer version?</a></li>
+  <li><a href="#q10">Will sventon in any way jeopardize my Subversion repository?</a></li>
+  <li><a href="#q11">Will sventon write any information to my Windows registry?</a></li>
+  <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
+  <li><a href="#q13">Can I send suggestions for new functions?</a></li>
+  <li><a href="#q14">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
+  <li><a href="#q15">What license do you use?</a></li>
+  <li><a href="#q16">Why did you start this project?</a></li>
+  <li><a href="#q17">Is there a publicly running version of Sventon that I can try?</a></li>
+  <li><a href="#q18">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -113,6 +114,14 @@
 
 <p>
 <a name="q9">
+<b>Q:</b> How do I upgrade sventon to a newer version?
+</a>
+<br/>
+<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screens again. As long as the same repository url and configuration path is used, the index will be preserved. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/default-sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>default-sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
+</p>
+
+<p>
+<a name="q10">
 <b>Q:</b> Will sventon in any way jeopardize my Subversion repository?
 </a>
 <br/>
@@ -120,7 +129,7 @@
 </p>
 
 <p>
-<a name="q10">
+<a name="q11">
 <b>Q:</b> Will sventon write any information to my Windows registry?
 </a>
 <br/>
@@ -128,7 +137,7 @@
 </p>
 
 <p>
-<a name="q11">
+<a name="q12">
 <b>Q:</b> Why is not file type [XYZ] colorized when displayed in sventon?
 </a>
 <br/>
@@ -143,7 +152,7 @@
 </ul>
 
 <p>
-<a name="q12">
+<a name="q13">
 <b>Q:</b> Can I send suggestions for new functions?
 </a>
 <br/>
@@ -151,7 +160,7 @@
 </p>
 
 <p>
-<a name="q13">
+<a name="q14">
 <b>Q:</b> Will sventon be avaliable for CVS (or any other version control system) in the future?
 </a>
 <br/>
@@ -159,7 +168,7 @@
 </p>
 
 <p>
-<a name="q14">
+<a name="q15">
 <b>Q:</b> What license do you use?
 </a>
 <br/>
@@ -167,7 +176,7 @@
 </p>
 
 <p>
-<a name="q15">
+<a name="q16">
 <b>Q:</b> Why did you start this project?
 </a>
 <br/>
@@ -175,7 +184,7 @@
 </p>
 
 <p>
-<a name="q16">
+<a name="q17">
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
@@ -183,7 +192,7 @@
 </p>
 
 <p>
-<a name="q17">
+<a name="q18">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
