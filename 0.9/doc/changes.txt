@@ -1,7 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[313] Fixed: Bug #5847 - Index update fails when files are removed
+[318] Added: Default property values to get rid of empty default-sventon.properties.
+[313] Fixed: Bug #5847 - Index update fails when files are removed.
 [311] Fixed: User ended up in the wrong revision if following a link from the log details view.
 
 [309] Release 0.9.0 (2005-12-05)
