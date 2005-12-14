@@ -10,6 +10,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 public class SearchControllerTest extends TestCase {
 
@@ -22,13 +23,17 @@ public class SearchControllerTest extends TestCase {
     req.addParameter("sventonSearchString", "file1");
     req.addParameter("startDir", "");
 
-    ctrl.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
+    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
+    indexer.setRepositoryConfiguration(config);
+    ctrl.setRevisionIndexer(indexer);
     modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
 
-    assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
+    assertTrue(Boolean.valueOf(model.get("isSearch").toString()));
     assertEquals(2, entries.size());
 
     assertEquals(RepositoryEntry.Kind.file, ((RepositoryEntry) entries.get(0)).getKind());
@@ -51,13 +56,17 @@ public class SearchControllerTest extends TestCase {
     req.addParameter("sventonSearchString", "file1");
     req.addParameter("startDir", "/dir1");
 
-    ctrl.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
+    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
+    indexer.setRepositoryConfiguration(config);
+    ctrl.setRevisionIndexer(indexer);
     modelAndView = ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
 
-    assertTrue(new Boolean(model.get("isSearch").toString()).booleanValue());
+    assertTrue(Boolean.valueOf(model.get("isSearch").toString()));
     assertEquals(1, entries.size());
 
     assertEquals(RepositoryEntry.Kind.file, ((RepositoryEntry) entries.get(0)).getKind());
@@ -70,5 +79,13 @@ public class SearchControllerTest extends TestCase {
       // expected
     }
   }
+
+  protected void tearDown() throws Exception {
+    File tempIndex = new File(System.getProperty("java.io.tmpdir") + "/" + RevisionIndexer.INDEX_FILENAME);
+    if (tempIndex.exists()) {
+      tempIndex.delete();
+    }
+  }
+
 
 }

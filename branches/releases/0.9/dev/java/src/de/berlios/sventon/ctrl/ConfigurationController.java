@@ -182,7 +182,7 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# container must have read/write access to this directory.                     #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.configpath=c:/temp                                                     #\n");
+    comments.append("#   svn.configpath=c:/temp/                                                    #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.uid                                                                 #\n");
