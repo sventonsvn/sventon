@@ -27,7 +27,6 @@ public class SVNRepositoryStub extends SVNRepository {
 
   private List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
-
   public SVNRepositoryStub(SVNURL location, ISVNSession options) {
     super(location, options);
     repositoryEntries = new HashMap<String, Collection>();
@@ -398,10 +397,10 @@ public class SVNRepositoryStub extends SVNRepository {
 
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', "", 1));
-    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', "", 1));
-    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', "", 1));
-    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', "", 1));
+    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
+    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
+    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
     logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Commit message."));
     repository.setLogResult(logEntries);
 
