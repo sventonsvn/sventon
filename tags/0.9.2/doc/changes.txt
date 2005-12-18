@@ -1,0 +1,38 @@
+sventon change history
+-----------------------------------------------------------------------------------------
+
+[328] Fixed: Bug #5884 - Index update fails when adding or removing directories.
+[328] Added: Index is now written to disk directly after update.
+
+[324] Release 0.9.1 (2005-12-11)
+[318] Added: Default property values to get rid of empty default-sventon.properties.
+[313] Fixed: Bug #5847 - Index update fails when files are removed.
+[311] Fixed: User ended up in the wrong revision if following a link from the log details view.
+
+[309] Release 0.9.0 (2005-12-05)
+[276] Added: Possibility to do CamelCase searches.
+[212] Added: View contents of zip archives (including jar).
+[206] Added: Improve index update strategy.
+[198] Added: Show selected (image) files as thumbnails.
+[174] Added: Diff revisions of same file.
+[171] Added: View all changes in one revision (log entry).
+[157] Added: Serialize index to disk.
+[145] Added: View metadata (e.g. mime types).
+[142] Added: Thumbnail caching using ehcache.
+[141] Added: Keyword expansion when viewing files.
+[132] Added: Simple installation wizard.
+[130] Added: "Show file" should display thumbnail preview of image files.
+[130] Added: Style sheet usage to enable easy customization.
+[113] Added: Possibility to flatten directory structure view.
+[113] Added: Possibility to search for files and directories.
+ [97] Added: Possibility to configure a view only user + pwd to avoid end user authentication.
+ [97] Added: Support for language specific characters and white space in paths (WebDAV).
+ [79] Added: Download file at any given revision.
+ [76] Added: Clickable revision path info for quick navigation in browser.
+ [76] Added: Possibility to navigate in repository by typing path.
+ [76] Added: Browse repository for any given revision.
+ [76] Added: View logs for a file/directory.
+ [76] Added: Basic source code syntax highlighting.
+ [76] Added: View file for any given revision.
+ [76] Added: Browse WebDAV and svnserve repositories (anonymous and authorized login).
+
