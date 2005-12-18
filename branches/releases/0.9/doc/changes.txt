@@ -1,6 +1,10 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[328] Fixed: Bug #5884 - Index update fails when adding or removing directories.
+[328] Added: Index is now written to disk directly after update.
+
+[324] Release 0.9.1 (2005-12-11)
 [318] Added: Default property values to get rid of empty default-sventon.properties.
 [313] Fixed: Bug #5847 - Index update fails when files are removed.
 [311] Fixed: User ended up in the wrong revision if following a link from the log details view.
