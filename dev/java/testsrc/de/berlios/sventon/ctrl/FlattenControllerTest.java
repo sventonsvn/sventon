@@ -9,6 +9,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 public class FlattenControllerTest extends TestCase {
 
@@ -17,13 +18,17 @@ public class FlattenControllerTest extends TestCase {
     FlattenController controller = new FlattenController();
     ModelAndView modelAndView;
 
-    controller.setRevisionIndexer(new RevisionIndexer(SVNRepositoryStub.getInstance()));
+    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
+    indexer.setRepositoryConfiguration(config);
+    controller.setRevisionIndexer(indexer);
     modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, null, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("svndir");
 
-    assertTrue(new Boolean(model.get("isFlatten").toString()).booleanValue());
+    assertTrue(Boolean.valueOf(model.get("isFlatten").toString()));
     assertEquals(2, entries.size());
 
     assertEquals(RepositoryEntry.Kind.dir, ((RepositoryEntry) entries.get(0)).getKind());
@@ -33,4 +38,10 @@ public class FlattenControllerTest extends TestCase {
     assertEquals("dir2", ((RepositoryEntry) entries.get(1)).getName());
   }
 
+  protected void tearDown() throws Exception {
+    File tempIndex = new File(System.getProperty("java.io.tmpdir") + "/" + RevisionIndexer.INDEX_FILENAME);
+    if (tempIndex.exists()) {
+      tempIndex.delete();
+    }
+  }
 }
