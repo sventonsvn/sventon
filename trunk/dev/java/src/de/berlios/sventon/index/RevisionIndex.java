@@ -112,14 +112,24 @@ public class RevisionIndex implements Serializable {
    * path and remove the entry if found.
    *
    * @param path The full path to the entry to remove.
+   * @param recursive Acts recursively if <code>true</code>
    */
-  public void remove(String path) {
+  public void remove(final String path, final boolean recursive) {
+    List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
+
     for (RepositoryEntry entry : index) {
-      if (entry.getFullEntryName().equals(path)) {
-        index.remove(entry);
-        return;
+      if (recursive) {
+        if (entry.getFullEntryName().startsWith(path)) {
+          toBeRemoved.add(entry);
+        }
+      } else {
+        if (entry.getFullEntryName().equals(path)) {
+          index.remove(entry);
+          return;
+        }
       }
     }
+    index.removeAll(toBeRemoved);
   }
 
 }

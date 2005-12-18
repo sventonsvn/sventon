@@ -1,14 +1,21 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import junit.framework.TestCase;
+
+import java.io.File;
+import java.util.List;
 
 public class RevisionIndexerTest extends TestCase {
 
   private RevisionIndexer indexer = null;
 
   public void setUp() throws Exception {
+    RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    indexer.setRepositoryConfiguration(config);
     indexer.populateIndex();
     assertEquals(8, indexer.getIndexCount());
     //indexer.dumpIndex();
@@ -21,7 +28,10 @@ public class RevisionIndexerTest extends TestCase {
   }
 
   public void testFind() throws Exception {
-    assertEquals(2, indexer.find("html", "/").size());
+    List list = indexer.find("html", "/");
+    System.out.println("list = " + list);
+    indexer.dumpIndex();
+    assertEquals(2, list.size());
   }
 
   public void testFindMixedCase() throws Exception {
@@ -44,6 +54,13 @@ public class RevisionIndexerTest extends TestCase {
   public void testGetDirectoriesMixedCase() throws Exception {
     assertEquals(2, indexer.getDirectories("/").size());
     assertEquals(0, indexer.getDirectories("/DIR1/").size());
+  }
+
+  protected void tearDown() throws Exception {
+    File tempIndex = new File(System.getProperty("java.io.tmpdir") + "/" + RevisionIndexer.INDEX_FILENAME);
+    if (tempIndex.exists()) {
+      tempIndex.delete();
+    }
   }
 
 }
