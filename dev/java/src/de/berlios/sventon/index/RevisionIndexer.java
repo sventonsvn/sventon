@@ -235,11 +235,10 @@ public class RevisionIndexer {
             SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), logEntry.getRevision() - 1);
             if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
               // Directory node deleted
-              logger.debug("Deleted entry was a directory. Doing a recursive delete");
+              logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
               index.remove(logEntryPath.getPath(), true);
             } else {
               // Single entry delete
-              logger.debug("Deleted entry was a file.");
               index.remove(logEntryPath.getPath(), false);
             }
             break;
@@ -291,12 +290,12 @@ public class RevisionIndexer {
       // or the repository revision is LOWER than the index revision
       // do a full repository indexing
       populateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
+      storeIndex(configuration.getSVNConfigurationPath() + System.getProperty("file.separator") + INDEX_FILENAME);
     } else if (index.getIndexRevision() < repository.getLatestRevision()) {
       // index is out-of-date
       // update it to reflect HEAD revision
       updateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
+      storeIndex(configuration.getSVNConfigurationPath() + System.getProperty("file.separator") + INDEX_FILENAME);
     }
   }
 
@@ -444,7 +443,7 @@ public class RevisionIndexer {
    */
   public void destroy() {
     try {
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
+      storeIndex(configuration.getSVNConfigurationPath() + System.getProperty("file.separator") + INDEX_FILENAME);
     } catch (RuntimeException re) {
       logger.warn(re);
     }
