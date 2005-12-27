@@ -11,23 +11,23 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
   <head>
     <title>Show thumbnails</title>
-    <%@ include file="/WEB-INF/jspf/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jsp"%>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <c:url value="get.svn" var="downloadUrl" />
 
     <p>
       <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
-      <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
     <br/>
@@ -42,6 +42,6 @@
     </c:forEach>
 
 <br>
-<%@ include file="/WEB-INF/jspf/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

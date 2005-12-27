@@ -11,11 +11,11 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
 <head>
   <title><fmt:message key="${errorHeadingKey}"/></title>
-  <%@ include file="/WEB-INF/jspf/head.jsp" %>
+  <%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
 <h3><fmt:message key="${errorHeadingKey}"/></h3>

@@ -11,12 +11,12 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 
 <html>
 <head>
   <title>sventon repository browser</title>
-  <%@ include file="/WEB-INF/jspf/head.jsp" %>
+  <%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
 <body>
@@ -33,6 +33,6 @@
     Note that directly after restart sventon will index the <i>entire</i> subversion repository.<br/>
     <b>This can take a couple of minutes depending on the number of repository entries. Please be patient...</b> 
   </p>
-  <%@ include file="/WEB-INF/jspf/foot.jsp" %>
+  <%@ include file="/WEB-INF/jspf/foot.jspf" %>
 </body>
 </html>

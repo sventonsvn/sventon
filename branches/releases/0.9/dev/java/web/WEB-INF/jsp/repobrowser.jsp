@@ -11,17 +11,17 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
 <%@ page import="de.berlios.sventon.ctrl.RepositoryEntry"%>
 
 <html>
 <head>
 <title>sventon repository browser - ${url}</title>
-<%@ include file="/WEB-INF/jspf/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/jspf/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
   <p>
     <table class="sventonHeader"><tr><td>
@@ -46,7 +46,7 @@
     <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
-    <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+    <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
   </p>
 
 <br/>
@@ -171,6 +171,6 @@
 </div>
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
-<%@ include file="/WEB-INF/jspf/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>

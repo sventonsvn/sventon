@@ -16,7 +16,7 @@
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntry"%>
 <%@ page import="java.util.*"%>
 <%@ page session="false"%>
-<%@ include file="/WEB-INF/jspf/sventonbar.jsp"%>
+<%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
 <table class="sventonTopTable" border="0">
@@ -42,7 +42,7 @@
     </tr>
     <tr>
       <td style="white-space: nowrap;">
-        <%@ include file="/WEB-INF/jspf/latestcommit.jsp"%>
+        <%@ include file="/WEB-INF/jspf/latestcommit.jspf"%>
       </td>
     </tr>
     <c:set var="command" value="${command}"/>

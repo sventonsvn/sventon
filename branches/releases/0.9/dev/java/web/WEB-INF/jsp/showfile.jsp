@@ -11,17 +11,17 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
   <head>
     <title>Show file</title>
-    <%@ include file="/WEB-INF/jspf/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jsp"%>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <c:url value="get.svn" var="downloadUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
@@ -34,7 +34,7 @@
     <p>
       <table class="sventonHeader"><tr><td>
     Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
-      <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
   <br/>
@@ -59,7 +59,7 @@
           <c:otherwise>
             <c:choose>
               <c:when test="${isArchive}">
-                <%@ include file="/WEB-INF/jspf/showarchive.jsp"%>
+                <%@ include file="/WEB-INF/jspf/showarchive.jspf"%>
               </c:when>
               <c:otherwise>
 <p>File is in binary format.</p>
@@ -76,6 +76,6 @@
       </c:otherwise>
     </c:choose>
 <br>
-<%@ include file="/WEB-INF/jspf/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>
