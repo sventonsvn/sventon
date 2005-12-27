@@ -21,7 +21,7 @@
 <%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jsp"%>
 
   <p>
     <table class="sventonHeader"><tr><td>

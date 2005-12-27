@@ -21,7 +21,7 @@
   </head>
 
 <body>
-  <%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jsp"%>
 
   <c:url value="showlog.svn" var="showLogUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
