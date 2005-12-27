@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 
 <html>
 <head>
   <title>sventon repository browser</title>
-  <%@ include file="/WEB-INF/jsp/head.jsp"%>
+  <%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
   <p>
@@ -37,7 +37,7 @@
           </td>
           <td valign="top">
             <spring:bind path="command.repositoryURL">
-              <input type="text" name="repositoryURL" size="30" value=""/></td>
+              <input type="text" name="repositoryURL" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
             </spring:bind>
           <td valign="top">
             Example:
@@ -56,7 +56,7 @@
           </td>
           <td valign="top">
             <spring:bind path="command.mountPoint">
-              <input type="text" name="mountPoint" size="30" value=""/>
+              <input type="text" name="mountPoint" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
             </spring:bind>
           </td>
           <td valign="top">
@@ -70,7 +70,7 @@
           </td>
           <td valign="top">
             <spring:bind path="command.username">
-              <input type="text" name="username" size="30" value=""/>
+              <input type="text" name="username" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
             </spring:bind>
           </td>
           <td valign="top">
@@ -83,7 +83,7 @@
           </td>
           <td valign="top">
             <spring:bind path="command.password">
-              <input type="password" name="password" size="30" value=""/>
+              <input type="password" name="password" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
             </spring:bind>
           </td>
           <td valign="top">
@@ -92,11 +92,11 @@
         </tr>
         <tr>
           <td valign="top" align="right" style="white-space: nowrap;">
-            Enter Subversion config path:
+            Enter sventon config/temp path:
           </td>
           <td valign="top">
             <spring:bind path="command.configPath">
-              <input type="text" name="configPath" size="30" value=""/>
+              <input type="text" name="configPath" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
             </spring:bind>
           </td>
           <td valign="top">
@@ -112,13 +112,21 @@ Logging properties and log file location can be changed by customizing the prope
           </td>
         </tr>
         <tr>
-          <td colspan="2"><spring:hasBindErrors name="command"><font color="#FF0000">Illegal repository URL!</font></spring:hasBindErrors></td>          
+          <td colspan="2">
+            <spring:hasBindErrors name="command">
+              <font color="#ff0000">
+                <c:forEach var="errMsgObj" items="${errors.allErrors}">
+                  *&nbsp;<spring:message code="${errMsgObj.code}" text="${errMsgObj.defaultMessage}"/><br/>
+                </c:forEach>
+              </font>
+            </spring:hasBindErrors>
+          </td>
         </tr>
       </table>
     <p>
       <input type="submit" value="submit configuration">
     </p>
   </form>
-  <%@ include file="/WEB-INF/jsp/foot.jsp"%>
+  <%@ include file="/WEB-INF/jspf/foot.jsp"%>
 </body>
 </html>

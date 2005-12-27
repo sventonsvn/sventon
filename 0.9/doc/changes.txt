@@ -1,6 +1,11 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[338] Added: More validation during configuration.
+[336] Fixed: Revision changes are now sorted before applied to index.
+[336] Fixed: Index is not stored to disk if empty.
+
+[334] Release 0.9.2 (2005-12-18)
 [328] Fixed: Bug #5884 - Index update fails when adding or removing directories.
 [328] Added: Index is now written to disk directly after update.
 

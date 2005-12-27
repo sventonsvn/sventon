@@ -11,13 +11,13 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 <%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
 
 <html>
 <head>
 <title>Logs view</title>
-<%@ include file="/WEB-INF/jsp/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
@@ -191,6 +191,6 @@
 </table>
 </form>
 <br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
 </body>
 </html>

@@ -89,11 +89,12 @@ public class ConfigurationController extends AbstractFormController {
     } else {
       Map<String, Object> model = new HashMap<String, Object>();
       ConfigCommand configCommand = new ConfigCommand();
-      File currentDir = new File(".");
-      logger.debug("currentDir is: " + currentDir.getCanonicalPath());
-      configCommand.setCurrentDir(currentDir.getCanonicalPath());
+      String currentDir = new File(".").getCanonicalPath();
+      logger.debug("currentDir is: " + currentDir);
+      configCommand.setCurrentDir(currentDir);
+      configCommand.setConfigPath(currentDir);
       logger.debug("'command' set to: " + configCommand);
-      model.put("command", configCommand); // This is for the form to work
+      model.put("command", configCommand);
       logger.debug("Displaying the config page.");
       return new ModelAndView("config", model);
     }
@@ -102,25 +103,33 @@ public class ConfigurationController extends AbstractFormController {
   protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest,
                                                HttpServletResponse httpServletResponse, Object command, BindException exception) throws Exception {
     logger.debug("processFormSubmission() started");
-    logger.info("sventon configuration ok: " + configuration.isConfigured());
+    logger.info("sventon configuration OK: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view.");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
+      ConfigCommand confCommand = (ConfigCommand) command;
+
       if (exception.hasErrors()) {
-        return new ModelAndView("config", exception.getModel());
+        Map<String, Object> model = exception.getModel();
+        confCommand.setCurrentDir(new File(".").getCanonicalPath());
+        model.put("command", command);
+        return new ModelAndView("config", model);
       }
 
-      //TODO: validate entered url by opening a connection.
-
-      ConfigCommand confCommand = (ConfigCommand) command;
       Properties config = new Properties();
       config.put(PROPERTY_KEY_REPOSITORY_URL, confCommand.getRepositoryURL());
       config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
-      config.put(PROPERTY_KEY_CONFIGPATH, confCommand.getConfigPath());
       config.put(PROPERTY_KEY_MOUNTPOINT, confCommand.getMountPoint());
+
+      // Make sure the configPath ends with a (back)slash
+      String confPath = confCommand.getConfigPath();
+      if (!confPath.endsWith(System.getProperty("file.separator"))) {
+        confPath += System.getProperty("file.separator");
+      }
+      config.put(PROPERTY_KEY_CONFIGPATH, confPath);
       logger.debug(config.toString());
       File propFile = new File(System.getProperty("sventon.root") + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
@@ -182,7 +191,7 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# container must have read/write access to this directory.                     #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.configpath=c:/temp/                                                    #\n");
+    comments.append("#   svn.configpath=c:/temp                                                     #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.uid                                                                 #\n");

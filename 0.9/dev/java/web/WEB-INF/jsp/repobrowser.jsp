@@ -11,14 +11,14 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
 <%@ page import="de.berlios.sventon.ctrl.RepositoryEntry"%>
 
 <html>
 <head>
 <title>sventon repository browser - ${url}</title>
-<%@ include file="/WEB-INF/jsp/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/top.jsp"%>
@@ -171,6 +171,6 @@
 </div>
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
 </body>
 </html>
