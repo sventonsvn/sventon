@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 
 <html>
   <head>
     <title>Show thumbnails</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jsp"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
@@ -42,6 +42,6 @@
     </c:forEach>
 
 <br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
   </body>
 </html>

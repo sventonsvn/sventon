@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 
 <html>
   <head>
     <title>Show file</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jsp"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
@@ -59,7 +59,7 @@
           <c:otherwise>
             <c:choose>
               <c:when test="${isArchive}">
-                <%@ include file="/WEB-INF/jsp/showarchive.jsp"%>
+                <%@ include file="/WEB-INF/jspf/showarchive.jsp"%>
               </c:when>
               <c:otherwise>
 <p>File is in binary format.</p>
@@ -76,6 +76,6 @@
       </c:otherwise>
     </c:choose>
 <br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
   </body>
 </html>

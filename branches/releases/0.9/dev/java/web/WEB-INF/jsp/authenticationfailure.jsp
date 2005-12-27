@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 
 <html>
 <head>
 <title>sventon repository browser</title>
-<%@ include file="/WEB-INF/jsp/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
   <p class="sventonHeader">
@@ -30,6 +30,6 @@
   Peruse sventon log for further information.
   </p>
 
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
 </body>
 </html>

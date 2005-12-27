@@ -11,14 +11,14 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jsp"%>
 <%@ page import="de.berlios.sventon.diff.DiffAction"%>
 <%@ page import="de.berlios.sventon.diff.SourceLine"%>
 
 <html>
   <head>
     <title>Diff view</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jsp"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
@@ -96,6 +96,6 @@
       </c:otherwise>
     </c:choose>
     <br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jsp"%>
   </body>
 </html>

@@ -203,7 +203,10 @@ public class RevisionIndexer {
     for (SVNLogEntry logEntry : logEntries) {
       logger.debug("Applying changes from revision " + logEntry.getRevision() + " to index");
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-      for (String entryPath : map.keySet()) {
+      List<String> latestPathsList = new ArrayList<String>(map.keySet());
+      // Sort the entries to apply changes in right order
+      Collections.sort(latestPathsList);
+      for (String entryPath : latestPathsList) {
         SVNLogEntryPath logEntryPath = map.get(entryPath);
         switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
           case A :
@@ -232,11 +235,10 @@ public class RevisionIndexer {
             SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), logEntry.getRevision() - 1);
             if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
               // Directory node deleted
-              logger.debug("Deleted entry was a directory. Doing a recursive delete");
+              logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
               index.remove(logEntryPath.getPath(), true);
             } else {
               // Single entry delete
-              logger.debug("Deleted entry was a file.");
               index.remove(logEntryPath.getPath(), false);
             }
             break;
@@ -288,12 +290,12 @@ public class RevisionIndexer {
       // or the repository revision is LOWER than the index revision
       // do a full repository indexing
       populateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
+      storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
     } else if (index.getIndexRevision() < repository.getLatestRevision()) {
       // index is out-of-date
       // update it to reflect HEAD revision
       updateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
+      storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
     }
   }
 
@@ -311,8 +313,9 @@ public class RevisionIndexer {
 
     entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      if (!index.add(new RepositoryEntry(entry, path, mountPoint))) {
-        throw new RuntimeException("Unable to add entry to index: " + path + entry + " (" + mountPoint + ")");
+      RepositoryEntry newEntry = new RepositoryEntry(entry, path, mountPoint);
+      if (!index.add(newEntry)) {
+        logger.warn("Unable to add already existing entry to index: " + newEntry.toString());
       }
       if (entry.getKind() == SVNNodeKind.DIR) {
         populateIndex(path + entry.getName() + "/", revision);
@@ -413,19 +416,25 @@ public class RevisionIndexer {
 
   /**
    * Stores the current index to disk using given path and file name.
+   * The index will not be stored if it does not contain any entries.
    *
    * @param storagePathAndName Full path and name where to store index file.
    * @throws RuntimeException if IO error occurs.
    */
   public void storeIndex(final String storagePathAndName) throws RuntimeException {
-    ObjectOutputStream out;
-    try {
-      out = new ObjectOutputStream(new FileOutputStream(storagePathAndName));
-      out.writeObject(index);
-      out.flush();
-      out.close();
-    } catch (IOException ioex) {
-      throw new RuntimeException("Unable to store index to disk", ioex);
+    if (index != null && index.getEntries().size() > 0) {
+      logger.info("Saving index to disk, " + storagePathAndName);
+      ObjectOutputStream out;
+      try {
+        out = new ObjectOutputStream(new FileOutputStream(storagePathAndName));
+        out.writeObject(index);
+        out.flush();
+        out.close();
+      } catch (IOException ioex) {
+        throw new RuntimeException("Unable to store index to disk", ioex);
+      }
+    } else {
+      logger.info("Index does not contain any entries and will not be stored on disk.");
     }
   }
 
@@ -433,11 +442,12 @@ public class RevisionIndexer {
    * This method serializes the index to disk.
    */
   public void destroy() {
-    logger.info("Saving index to disk, " + configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-    try {
-      storeIndex(configuration.getSVNConfigurationPath() + "/" + INDEX_FILENAME);
-    } catch (RuntimeException re) {
-      logger.warn(re);
+    if (configuration != null) {
+      try {
+        storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+      } catch (RuntimeException re) {
+        logger.warn(re);
+      }
     }
   }
 
