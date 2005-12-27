@@ -11,19 +11,19 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.diff.DiffAction"%>
 <%@ page import="de.berlios.sventon.diff.SourceLine"%>
 
 <html>
   <head>
     <title>Diff view</title>
-    <%@ include file="/WEB-INF/jspf/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jsp"%>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <c:url value="showlog.svn" var="showLogUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
@@ -96,6 +96,6 @@
       </c:otherwise>
     </c:choose>
     <br>
-<%@ include file="/WEB-INF/jspf/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

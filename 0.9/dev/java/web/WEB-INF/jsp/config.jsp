@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
 <head>
   <title>sventon repository browser</title>
-  <%@ include file="/WEB-INF/jspf/head.jsp"%>
+  <%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
   <p>
@@ -127,6 +127,6 @@ Logging properties and log file location can be changed by customizing the prope
       <input type="submit" value="submit configuration">
     </p>
   </form>
-  <%@ include file="/WEB-INF/jspf/foot.jsp"%>
+  <%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>

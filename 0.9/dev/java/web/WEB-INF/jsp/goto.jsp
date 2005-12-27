@@ -11,15 +11,15 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 
 <html>
 <head>
   <title>sventon - error</title>
-  <%@ include file="/WEB-INF/jspf/head.jsp" %>
+  <%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
 <body>
-<%@ include file="/WEB-INF/jspf/top.jsp" %>
+<%@ include file="/WEB-INF/jspf/top.jspf" %>
 </body>
 </html>

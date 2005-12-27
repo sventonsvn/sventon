@@ -11,11 +11,11 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
 <head>
   <title>Unhandled error</title>
-  <%@ include file="/WEB-INF/jspf/head.jsp" %>
+  <%@ include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
 <h3>An unhandled error has occured. Sorry. </h3>

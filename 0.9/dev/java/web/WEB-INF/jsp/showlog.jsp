@@ -11,16 +11,16 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
 
 <html>
 <head>
 <title>Logs view</title>
-<%@ include file="/WEB-INF/jspf/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/jspf/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
   <c:url value="get.svn" var="downloadUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
@@ -191,6 +191,6 @@
 </table>
 </form>
 <br>
-<%@ include file="/WEB-INF/jspf/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>
