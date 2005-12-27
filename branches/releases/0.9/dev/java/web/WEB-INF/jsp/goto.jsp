@@ -20,6 +20,6 @@
 </head>
 
 <body>
-<%@ include file="/WEB-INF/jsp/top.jsp" %>
+<%@ include file="/WEB-INF/jspf/top.jsp" %>
 </body>
 </html>

@@ -20,7 +20,7 @@
 <%@ include file="/WEB-INF/jspf/head.jsp"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jsp"%>
 
   <c:url value="get.svn" var="downloadUrl">
     <c:param name="path" value="${command.path}${entry.name}" />
