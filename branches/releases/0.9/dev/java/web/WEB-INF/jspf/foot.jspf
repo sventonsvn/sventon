@@ -11,4 +11,5 @@
  * ====================================================================
  */
 %>
+<a href="rss.svn"><img src="images/rss20.gif" border="0"/></a><br/>
 sventon @VERSION@ build rev @REVISION@
