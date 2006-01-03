@@ -36,6 +36,21 @@
       <ref bean="svnBaseCommandValidator" />
     </property>
   </bean>
+
+  <bean id="rssController" class="de.berlios.sventon.ctrl.RSSController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="feedType">
+     <value>rss_2.0</value>
+    </property>
+    <property name="feedMimeType">
+     <value>application/xml; charset=UTF-8</value>
+    </property>
+    <property name="feedItemCount">
+     <value>20</value>
+    </property>
+  </bean>
   
   <bean id="goToController" class="de.berlios.sventon.ctrl.GoToController">
     <property name="repositoryConfiguration">
@@ -185,6 +200,7 @@
         <prop key="/showthumbs.svn">showThumbnailController</prop>
         <prop key="/diff.svn">diffController</prop>
         <prop key="/goto.svn">goToController</prop>
+        <prop key="/rss.svn">rssController</prop>
       </props>
     </property>
   </bean>
