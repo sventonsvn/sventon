@@ -12,6 +12,7 @@ public class AllTests {
     suite.addTest(de.berlios.sventon.command.AllTests.suite());
     suite.addTest(de.berlios.sventon.ctrl.AllTests.suite());
     suite.addTest(de.berlios.sventon.diff.AllTests.suite());
+    suite.addTest(de.berlios.sventon.rss.AllTests.suite());
     suite.addTest(de.berlios.sventon.index.AllTests.suite());
     suite.addTest(de.berlios.sventon.svnsupport.AllTests.suite());
     suite.addTest(de.berlios.sventon.util.AllTests.suite());
