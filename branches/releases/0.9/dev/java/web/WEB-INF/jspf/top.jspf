@@ -11,11 +11,8 @@
  * ====================================================================
  */
 %>
-<%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
-<%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
-<%@ page import="org.tmatesoft.svn.core.SVNLogEntry"%>
-<%@ page import="java.util.*"%>
 <%@ page session="false"%>
+<%@ page import="java.util.*"%> 
 <%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
@@ -42,7 +39,11 @@
     </tr>
     <tr>
       <td style="white-space: nowrap;">
-        <%@ include file="/WEB-INF/jspf/latestcommit.jspf"%>
+        <c:if test="${!empty latestCommitInfo}">
+          <div id="latestCommitInfoDiv" style="display:none">
+            <ui:revisionInfo details="${latestCommitInfo}"/>
+          </div>
+        </c:if>
       </td>
     </tr>
     <c:set var="command" value="${command}"/>

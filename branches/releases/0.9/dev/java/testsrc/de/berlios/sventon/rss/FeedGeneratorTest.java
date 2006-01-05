@@ -48,4 +48,12 @@ public class FeedGeneratorTest extends TestCase {
 
   }
 
+  public void testGetAbbreviatedCommitMessage() throws Exception {
+    FeedGenerator f = new FeedGenerator();
+    assertEquals("this is...", f.getAbbreviatedCommitMessage("this is a message", 10));
+    assertEquals("this is a mes...", f.getAbbreviatedCommitMessage("this is a message", 16));
+    assertEquals("this is a message", f.getAbbreviatedCommitMessage("this is a message", 17));
+    assertEquals(null, f.getAbbreviatedCommitMessage(null, 10));
+    assertEquals("", f.getAbbreviatedCommitMessage("", 10));
+  }
 }

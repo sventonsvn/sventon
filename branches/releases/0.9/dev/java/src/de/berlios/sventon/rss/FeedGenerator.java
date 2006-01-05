@@ -4,6 +4,7 @@ import com.sun.syndication.feed.synd.*;
 import de.berlios.sventon.svnsupport.LogEntryActionType;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,11 @@ import java.util.Map;
  * @author jesper@users.berlios.de
  */
 public class FeedGenerator {
+
+  /**
+   * Number of characters in the abbreviated commit message, default set to 40.
+   */
+  private static final int SHORT_COMMIT_MESSAGE_LENGTH = 40;
 
   /**
    * Gets a feed for given log entries.
@@ -40,9 +46,10 @@ public class FeedGenerator {
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
-      entry.setTitle("Revision " + logEntry.getRevision());
+      entry.setTitle("Revision " + logEntry.getRevision() + " - "
+          + getAbbreviatedCommitMessage(logEntry.getMessage(), SHORT_COMMIT_MESSAGE_LENGTH));
       entry.setAuthor(logEntry.getAuthor());
-      entry.setLink(baseURL + "repobrowser.svn?path=/&revision=" + logEntry.getRevision());
+      entry.setLink(baseURL + "revinfo.svn?path=/&revision=head&rev=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
 
       description = new SyndContentImpl();
@@ -51,71 +58,88 @@ public class FeedGenerator {
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       List<String> latestPathsList = new ArrayList<String>(map.keySet());
 
+      int added = 0;
+      int modified = 0;
+      int relocated = 0;
+      int deleted = 0;
+
+      for (String entryPath : latestPathsList) {
+        LogEntryActionType type =
+            LogEntryActionType.valueOf(String.valueOf(map.get(entryPath).getType()));
+        switch (type) {
+          case A:
+            added++;
+            break;
+          case M:
+            modified++;
+            break;
+          case R:
+            relocated++;
+            break;
+          case D:
+            deleted++;
+            break;
+        }
+      }
+
       StringBuffer sb = new StringBuffer();
       sb.append("<table border=\"0\">");
-      sb.append("<tr colspan=\"4\">");
+      sb.append("<tr colspan=\"2\">");
       sb.append("<td>");
       sb.append(logEntry.getMessage());
       sb.append("</td>");
       sb.append("</tr>");
       sb.append("<tr>");
-      sb.append("<th>Action</th>");
-      sb.append("<th>Path</th>");
-      sb.append("<th>Copy From Path</th>");
-      sb.append("<th>Revision</th>");
-      sb.append("</tr>");
+      sb.append("<td><b>Action</b></td>");
+      sb.append("<td><b>Count</b></td>");
 
-      for (String entryPath : latestPathsList) {
-        SVNLogEntryPath logEntryPath = map.get(entryPath);
-        sb.append("<tr><td><i>");
-        sb.append(LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType())));
-        sb.append("</i></td><td>");
-        sb.append(logEntryPath.getPath());
-        sb.append("</td><td>");
-        sb.append(logEntryPath.getCopyPath() == null ? "&nbsp;" : logEntryPath.getCopyPath());
-        sb.append("</td><td>");
-        sb.append(logEntryPath.getCopyPath() == null ? "&nbsp;" : Long.toString(logEntryPath.getCopyRevision()));
-        sb.append("</td></tr>");
-      }
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.A);
+      sb.append("</td><td>");
+      sb.append(added);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.M);
+      sb.append("</td><td>");
+      sb.append(modified);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.R);
+      sb.append("</td><td>");
+      sb.append(relocated);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.D);
+      sb.append("</td><td>");
+      sb.append(deleted);
+      sb.append("</td></tr>");
 
       sb.append("</table>");
+
       description.setValue(sb.toString());
       entry.setDescription(description);
       entries.add(entry);
     }
-
-/*
-
-        <tr>
-          <c:url value="goto.svn" var="goToUrl">
-            <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-            <c:param name="revision" value="head" />
-          </c:url>
-
-          <c:url value="diff.svn" var="diffUrl">
-            <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-            <c:param name="revision" value="head" />
-          </c:url>
-
-          <td><i><%= actionType %></i></td>
-          <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
-          <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
-          <% } else if (LogEntryActionType.M == actionType) { %>
-          <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;<%= latestCommitInfo.getRevision() %>&rev=<%= logEntryPath.getPath() %>;;<%= latestCommitInfo.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
-          <% } else { %>
-          <td><%= logEntryPath.getPath() %></td>
-          <% } %>
-          <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
-          <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
-        </tr>
-        <%
-          }
-        %>
-        </table>
-*/
-
     feed.setEntries(entries);
     return feed;
   }
 
+  /**
+   * Gets the abbreviated version of given commit message.
+   *
+   * @param message The original commit message
+   * @param length Length, shortened string length
+   * @return The abbreviated commit message
+   */
+  protected String getAbbreviatedCommitMessage(final String message, final int length) {
+    if (message != null && message.length() <= length) {
+      return message;
+    } else {
+      return StringUtils.abbreviate(message, length);
+    }
+
+  }
 }

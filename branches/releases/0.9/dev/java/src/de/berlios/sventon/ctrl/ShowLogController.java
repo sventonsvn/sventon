@@ -11,30 +11,19 @@
  */
 package de.berlios.sventon.ctrl;
 
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import de.berlios.sventon.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
@@ -149,8 +138,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     model.put("pageSize", pageSize);
     model.put("isFile", nodeKind == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
-    model.put("properties", new HashMap()); // TODO: Replace with valid entry
-    // properties
+    model.put("properties", new HashMap()); // TODO: Replace with valid entry properties
     return new ModelAndView("showlog", model);
   }
 }
