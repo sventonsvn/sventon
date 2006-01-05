@@ -13,6 +13,7 @@
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.svnsupport.LogEntryActionType"%>
+<%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 
 <html>
 <head>

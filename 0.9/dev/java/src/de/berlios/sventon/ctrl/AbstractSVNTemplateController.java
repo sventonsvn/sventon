@@ -210,7 +210,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     model.put("path", svnCommand.getPath());
     model.put("revision", svnCommand.getRevision());
     model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-    model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
+    model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
 
     return new ModelAndView(new RedirectView(redirectUrl), model);
   }
@@ -227,7 +227,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     // Also validate the form backing command (this is not done by Spring MVC
     // and must be handled manually)
     getValidator().validate(exception.getTarget(), exception);
-
     return handle(request, response, exception.getTarget(), exception);
   }
 
@@ -263,7 +262,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-      model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
+      model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
 
       // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {
@@ -291,15 +290,31 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *
    * @param repository     The repository
    * @param latestRevision The latest revision
-   * @return The latest <tt>SVNLogEntry</tt>
+   * @return The <tt>SVNLogEntry</tt> for the latest revision
    * @throws SVNException if subversion error.
    */
-  private SVNLogEntry getLatestCommitInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
+  private SVNLogEntry getLatestRevisionInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
     if (latestRevision != cachedRevision) {
+      cachedLogs = getRevisionInfo(repository, latestRevision);
+      cachedRevision = latestRevision;
+    }
+    return cachedLogs;
+  }
+
+  /**
+   * Gets the latest commit log.
+   *
+   * @param repository The repository
+   * @param revision   The revision
+   * @return The <tt>SVNLogEntry</tt> for given revision
+   * @throws SVNException if subversion error.
+   */
+  protected SVNLogEntry getRevisionInfo(final SVNRepository repository, final long revision) throws SVNException {
+    if (revision != cachedRevision) {
       String[] targetPaths = new String[]{"/"}; // the path to show logs for
       cachedLogs = (SVNLogEntry) repository.log(
-          targetPaths, null, latestRevision, latestRevision, true, false).iterator().next();
-      cachedRevision = latestRevision;
+          targetPaths, null, revision, revision, true, false).iterator().next();
+      cachedRevision = revision;
     }
     return cachedLogs;
   }
@@ -368,14 +383,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * documentation for info on workflow and on how all this works together.
    *
    * @param repository Reference to the repository, prepared with authentication
-   *          if applicable.
+   *                   if applicable.
    * @param svnCommand Command (basically request parameters submitted in user
-   *          request)
-   * @param revision SVN type revision.
-   * @param request Servlet request.
-   * @param response Servlet response.
-   * @param exception BindException, could be used by the subclass to add error
-   * messages to the exception.
+   *                   request)
+   * @param revision   SVN type revision.
+   * @param request    Servlet request.
+   * @param response   Servlet response.
+   * @param exception  BindException, could be used by the subclass to add error
+   *                   messages to the exception.
    * @return Model and view to render.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
