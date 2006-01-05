@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[346] Fixed: RSS item layout.
 [344] Added: Repository changes now published as an RSS feed.
 [341] Added: Upgraded to JavaSVN 1.0.1
 [338] Added: More validation during configuration.
