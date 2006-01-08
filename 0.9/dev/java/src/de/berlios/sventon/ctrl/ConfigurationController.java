@@ -51,8 +51,6 @@ public class ConfigurationController extends AbstractFormController {
 
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
 
-  public static final String PROPERTY_KEY_MOUNTPOINT = "svn.mountpoint";
-
   protected ConfigurationController() {
     // TODO: Move to XML-file?
     setCommandClass(ConfigCommand.class);
@@ -122,7 +120,6 @@ public class ConfigurationController extends AbstractFormController {
       config.put(PROPERTY_KEY_REPOSITORY_URL, confCommand.getRepositoryURL());
       config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
-      config.put(PROPERTY_KEY_MOUNTPOINT, confCommand.getMountPoint());
 
       // Make sure the configPath ends with a (back)slash
       String confPath = confCommand.getConfigPath();
@@ -170,18 +167,6 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("#   svn.root=svn://svn.berlios.de/sventon/                                     #\n");
     comments.append("#   svn.root=http://domain.com/project/                                        #\n");
     comments.append("#   svn.root=svn+ssh://domain.com/project/                                     #\n");
-    comments.append("################################################################################\n\n");
-    comments.append("################################################################################\n");
-    comments.append("# Key: svn.mountpoint                                                          #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Description:                                                                 #\n");
-    comments.append("# Optionally set a mount point to restrict repository browsing to a specific   #\n");
-    comments.append("# part of the repository. E.g. by setting the mount point to '/trunk/doc' only #\n");
-    comments.append("# the 'doc' directory and its subdirectories will be browsable. This must be   #\n");
-    comments.append("# an absolute path from the repository root.                                   #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.mountpoint=/trunk/doc                                                  #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.configpath                                                          #\n");

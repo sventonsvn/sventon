@@ -62,7 +62,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
-    logger.debug("Getting file: " + svnCommand.getCompletePath());
+    logger.debug("Getting file: " + svnCommand.getPath());
 
     String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
     ServletOutputStream output = null;
@@ -83,7 +83,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
         // Check if the thumbnail exists on the cache
         HashMap properties = new HashMap();
-        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
         logger.debug(properties);
         String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
         logger.debug("Using cachekey: " + cacheKey);
@@ -141,7 +141,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         }
         HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
-        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, output);
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
         logger.debug(properties);
       }
       output.flush();

@@ -17,7 +17,6 @@
         <prop key="svn.configpath"></prop>
         <prop key="svn.uid"></prop>
         <prop key="svn.pwd"></prop>
-        <prop key="svn.mountpoint"></prop>
         <prop key="log4j.logdir"></prop>
       </props>
     </property>
@@ -188,9 +187,6 @@
     </property>
     <property name="configuredPWD">
       <value>${svn.pwd}</value>
-    </property>
-    <property name="repositoryMountPoint">
-    		<value>${svn.mountpoint}</value>
     </property>
   </bean>
 

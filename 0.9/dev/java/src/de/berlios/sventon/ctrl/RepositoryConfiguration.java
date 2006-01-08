@@ -74,11 +74,6 @@ public class RepositoryConfiguration {
   private String SVNConfigurationPath = null;
 
   /**
-   * Mount point, used to set the browser root in the repository
-   */
-  private String repositoryMountPoint = null;
-
-  /**
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
@@ -168,28 +163,6 @@ public class RepositoryConfiguration {
    */
   public void setConfiguredUID(final String configuredUID) {
     this.configuredUID = configuredUID;
-  }
-
-  /**
-   * Get configured mount point. {@see #setRepositoryMountPoint(String)}
-   *
-   * @return Repository mount point.
-   */
-  public String getRepositoryMountPoint() {
-    return repositoryMountPoint;
-  }
-
-  /**
-   * Set a mountpoint to restrict repository browsing to a specific part of the
-   * website. E.g. setting the mount point to <code>/trunk/doc</code> only the
-   * <code>doc</code> directory and its subdirectories will be browsable.
-   *
-   * @param repositoryMountPoint Mounting point. Must be a absolute path from
-   *                             the root of the repository. If the initial <code>/</code> is
-   *                             missing it will be appended.
-   */
-  public void setRepositoryMountPoint(String repositoryMountPoint) {
-    this.repositoryMountPoint = repositoryMountPoint;
   }
 
   /**

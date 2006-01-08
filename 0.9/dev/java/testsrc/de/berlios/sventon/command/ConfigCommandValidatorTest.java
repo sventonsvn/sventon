@@ -58,6 +58,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setUsername("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
+    
 
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");

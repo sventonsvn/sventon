@@ -30,6 +30,7 @@
   <c:set var="latestChangedPaths" value="${details.changedPaths}" />
   <jsp:useBean id="latestChangedPaths" type="java.util.Map" />
   <c:set var="details" value="${details}" />
+  <c:set var="keepVisible" value="${keepVisible}" />
   <jsp:useBean id="details" type="SVNLogEntry" />
 
   <tr><td colspan="2">

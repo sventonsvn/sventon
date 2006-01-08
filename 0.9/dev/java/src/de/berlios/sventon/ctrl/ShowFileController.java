@@ -95,7 +95,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     HashMap properties = new HashMap();
     // Get the file's properties without requesting the content.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
     logger.debug(properties);
     model.put("properties", properties);
 
@@ -135,11 +135,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
     // Get the file's content. We can skip the properties in this case.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
     // Expand keywords, if any.
     KeywordHandler keywordHandler = new KeywordHandler(properties,
-        getRepositoryConfiguration().getUrl() + svnCommand.getCompletePath());
+        getRepositoryConfiguration().getUrl() + svnCommand.getPath());
     String fileContents = keywordHandler.substitute(outStream.toString());
 
     LineNumberAppender appender = new LineNumberAppender();
@@ -175,7 +175,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     model.put("isArchive", true); // Indicates that the file is an archive (zip or jar)
 
     // Get the file's content. We can skip the properties in this case.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
     ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
     List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
