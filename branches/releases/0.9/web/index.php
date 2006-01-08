@@ -111,7 +111,12 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="http://developer.berlios.de/mail/?group_id=3670">[mailinglists]</a>
+                <a href="http://developer.berlios.de/mail/?group_id=3670">[mailinglist]</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <a href="http://developer.berlios.de/forum/?group_id=3670">[forum]</a>
               </td>
             </tr>
             <tr>
