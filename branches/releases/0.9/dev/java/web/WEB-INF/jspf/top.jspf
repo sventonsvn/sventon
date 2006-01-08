@@ -35,13 +35,13 @@
       <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.pathPart}"/></td>
     </tr>
     <tr>
-      <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink">show</span> latest commit info]</a></td>
+      <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     </tr>
     <tr>
       <td style="white-space: nowrap;">
         <c:if test="${!empty latestCommitInfo}">
-          <div id="latestCommitInfoDiv" style="display:none">
-            <ui:revisionInfo details="${latestCommitInfo}"/>
+          <div id="latestCommitInfoDiv" <c:if test="${param.showlatestinfo == null || param.showlatestinfo == 'false'}" >style="display:none")</c:if> >
+            <ui:revisionInfo details="${latestCommitInfo}" keepVisible="true"/>
           </div>
         </c:if>
       </td>
