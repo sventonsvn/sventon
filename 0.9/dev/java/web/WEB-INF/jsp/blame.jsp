@@ -23,18 +23,6 @@
 <body>
   <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <c:url value="showlog.svn" var="showLogUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-  
-  <c:url value="get.svn" var="downloadUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-  
-  <c:url value="showfile.svn" var="showFileUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-
   <p>
     <table class="sventonHeader">
       <tr><td>
@@ -43,15 +31,9 @@
   </p>
   
   <br/>
+
+  <ui:functionLinks pageName="showBlame"/>
   
-  <table class="sventonFunctionLinksTable">
-    <tr>
-      <td><a href="${showFileUrl}&revision=${command.revision}">[Show file]</a></td>
-      <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
-      <td><a href="#">[Diff with previous]</a></td>
-      <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-    </tr>
-  </table>
 <p>
 <br/>
 Blame support disabled.
