@@ -8,6 +8,7 @@
 <%@ tag import="de.berlios.sventon.svnsupport.LogEntryActionType" %>
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
+<%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 
 <table class="sventonLatestCommitInfoTable">
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
@@ -40,11 +41,17 @@
         <c:url value="goto.svn" var="goToUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
           <c:param name="revision" value="${details.revision}" />
+          <c:if test="${keepVisible}">
+            <c:param name="showlatestinfo" value="true" />
+          </c:if>
         </c:url>
 
         <c:url value="diff.svn" var="diffUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
           <c:param name="revision" value="head" />
+          <c:if test="${keepVisible}">
+            <c:param name="showlatestinfo" value="true" />
+          </c:if>
         </c:url>
 
         <td><i><%= actionType %></i></td>

@@ -37,7 +37,7 @@
     </tr>
   </table>
 
-<ui:revisionInfo details="${revisionInfo}"/>
+<ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
 
 <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
