@@ -25,10 +25,6 @@
   <body>
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-    <c:url value="showlog.svn" var="showLogUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
     <p>
       <table class="sventonHeader"><tr><td>
     Diff view - <b>${command.target}</b></td></tr></table>
@@ -36,11 +32,7 @@
 
     <br/>
 
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-      </tr>
-    </table>
+    <ui:functionLinks pageName="showDiff"/>
 
     <c:choose>
       <c:when test="${!empty diffException}">

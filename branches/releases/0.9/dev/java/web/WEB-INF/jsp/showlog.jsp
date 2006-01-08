@@ -23,38 +23,13 @@
 <body>
   <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <c:url value="get.svn" var="downloadUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-  
-  <c:url value="repobrowser.svn" var="showDirUrl">
-    <c:param name="path" value="${command.path}" />
-    <c:param name="revision" value="${command.revision}" />
-  </c:url>
-  
-  <c:url value="showfile.svn" var="showFileUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
-
   <p>
     <table class="sventonHeader"><tr><td>
   Log Messages - <b>${command.target}</b>&nbsp;</td></tr></table>
   </p>
   <br/>
   
-  <table class="sventonFunctionLinksTable">
-    <tr>
-    <c:choose>
-    <c:when test="${isFile}">
-      <td><a href="${showFileUrl}&revision=${command.revision}">[Show file]</a></td>
-      </c:when>
-      <c:otherwise>
-      <td><a href="${showDirUrl}">[Show directory]</a></td>
-      </c:otherwise>
-      </c:choose>
-      <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
-    </tr>
-  </table>
+  <ui:functionLinks pageName="showLog"/>
 
 <form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
 

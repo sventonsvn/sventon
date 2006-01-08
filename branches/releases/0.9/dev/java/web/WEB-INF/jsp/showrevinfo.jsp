@@ -21,23 +21,14 @@
 <body>
   <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <c:url value="repobrowser.svn" var="showDirUrl">
-    <c:param name="path" value="${command.path}" />
-    <c:param name="revision" value="${command.revision}" />
-  </c:url>
-  
   <p>
     <table class="sventonHeader"><tr><td>Revision information</td></tr></table>
   </p>
   <br/>
   
-  <table class="sventonFunctionLinksTable">
-    <tr>
-      <td><a href="${showDirUrl}">[Show directory]</a></td>
-    </tr>
-  </table>
+  <ui:functionLinks pageName="showRevInfo"/>
 
-<ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
+  <ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
 
 <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>

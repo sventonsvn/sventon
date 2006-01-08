@@ -23,14 +23,6 @@
   <body>
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-    <c:url value="get.svn" var="downloadUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
-    <c:url value="showlog.svn" var="showLogUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
     <p>
       <table class="sventonHeader"><tr><td>
     Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
@@ -39,20 +31,20 @@
 
   <br/>
 
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-        <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
-      </tr>
-    </table>
+    <ui:functionLinks pageName="showFile"/>
+
+    <c:url value="get.svn" var="showUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+      <c:param name="revision" value="${command.revision}" />
+    </c:url>
 
     <c:choose>
       <c:when test="${isBinary}">
         <c:choose>
           <c:when test="${isImage}">
 <p>
-  <a href="${downloadUrl}&revision=${command.revision}&disp=inline">
-    <img src="${downloadUrl}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
+  <a href="${showUrl}&disp=inline">
+    <img src="${showUrl}&disp=thumb" alt="Thumbnail" border="0"/>
   </a>
 </p>
           </c:when>
