@@ -18,6 +18,7 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
   <li>Flattening of directory structures for quickly finding the directory you're looking for</li>
   <li>Browse inside archive files</li>
   <li>View thumbnails of image files stored in the repository</li>
+  <li>RSS feed support</li>
   <li>... and more!</li>
 </ul>
 <p>
@@ -33,7 +34,7 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
 <p>
   <b>Contact</b>
   <br/>
-  If you have any questions regarding sventon usage or development, use the <a href="http://developer.berlios.de/mail/?group_id=3670">mailing lists</a>. Please do not write the developers directly in these matters (but <i>do</i> write to the mailing list, we'll try to answer).
+  If you have any questions regarding sventon usage or development, use the <a href="http://developer.berlios.de/mail/?group_id=3670">mailing list</a> or <a href="http://developer.berlios.de/forum/?group_id=3670">forum</a>. Please do not write the developers directly in these matters (but <i>do</i> post in the forum, we'll try to answer).
 </p>
 
 <p>
