@@ -40,24 +40,14 @@ public class RepositoryEntry implements Serializable {
   private String entryLastAuthor;
   private String entryCommitMessage;
 
-
-
-  /**
-   * Mount point offset. If this is set method
-   * {@link #getFullEntryNameStripMountPoint} can be used to get the path to the
-   * entry with the {@link #mountPoint} removed.
-   */
-  private String mountPoint;
-
   /**
    * Constructor.
    *
    * @param entry      The <code>SVNDirEntry</code>.
    * @param entryPath  The entry repository path.
-   * @param mountPoint The mount point in the repository.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
-  public RepositoryEntry(final SVNDirEntry entry, final String entryPath, final String mountPoint) {
+  public RepositoryEntry(final SVNDirEntry entry, final String entryPath) {
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
     }
@@ -65,7 +55,6 @@ public class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
     this.entryPath = entryPath;
-    this.mountPoint = mountPoint;
     copyEntry(entry);
   }
 
@@ -105,17 +94,6 @@ public class RepositoryEntry implements Serializable {
    */
   public String getFullEntryName() {
     return entryPath + getName();
-  }
-
-  /**
-   * Gets the entry name including full path but with initial mount point
-   * removed. If mount point is not set thie method gives the same result at
-   * {@link #getFullEntryName()}
-   *
-   * @return The name and full path.
-   */
-  public String getFullEntryNameStripMountPoint() {
-    return StringUtils.removeStart(getFullEntryName(), mountPoint);
   }
 
   /**

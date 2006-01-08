@@ -141,7 +141,7 @@
   <c:url value="showlog.svn" var="showNextLogUrl">
     <c:param name="nextPath" value="${nextPath}" />
     <c:param name="nextRevision" value="${nextRev}" />
-    <c:param name="path" value="${command.completePath}"/>
+    <c:param name="path" value="${command.path}"/>
     <c:param name="rev" value="${command.revision}"/>
   </c:url>
 

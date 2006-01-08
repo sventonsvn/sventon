@@ -44,16 +44,16 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Update trailing / for path
-    if (!svnCommand.getCompletePath().endsWith("/")) {
+    if (!svnCommand.getPath().endsWith("/")) {
       svnCommand.setPath(svnCommand.getPath() + "/");
     }
 
-    String completePath = svnCommand.getCompletePath();
+    String completePath = svnCommand.getPath();
     logger.debug("Getting directory contents for: " + completePath);
     HashMap properties = new HashMap();
     Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
     for (Object entry : entries) {
-      dir.add(new RepositoryEntry((SVNDirEntry) entry, completePath, svnCommand.getMountPoint(false)));
+      dir.add(new RepositoryEntry((SVNDirEntry) entry, completePath));
     }
 
     Collections.sort(dir, new RepositoryEntryComparator(NAME, true));

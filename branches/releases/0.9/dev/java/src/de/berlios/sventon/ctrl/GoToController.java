@@ -53,7 +53,7 @@ public class GoToController extends AbstractSVNTemplateController implements Con
     String redirectUrl = null;
 
     logger.debug("Checking node kind for command: " + svnCommand);
-    SVNNodeKind kind = repository.checkPath(svnCommand.getCompletePath(), revision.getNumber());
+    SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
 
     logger.debug("Node kind: " + kind);
 

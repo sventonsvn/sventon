@@ -55,7 +55,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
 
-    String path = svnCommand.getCompletePath();
+    String path = svnCommand.getPath();
 
     String nextPathParam = request.getParameter("nextPath");
     String nextRevParam = request.getParameter("nextRevision");
@@ -109,9 +109,9 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     });
 
     SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
-
+    
     for (SVNLogEntry logEntry : logEntries) {
-
+      
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
       Set<String> changedPaths = m.keySet();

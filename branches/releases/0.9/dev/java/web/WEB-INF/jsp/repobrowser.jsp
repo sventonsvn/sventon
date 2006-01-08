@@ -96,13 +96,13 @@
     <c:forEach items="${svndir}" var="entry">
     <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.RepositoryEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
       <c:url value="showlog.svn" var="showLogUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
       <c:url value="showfile.svn" var="showFileUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
 
       <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">

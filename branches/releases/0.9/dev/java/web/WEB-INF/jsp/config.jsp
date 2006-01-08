@@ -52,20 +52,6 @@
         
         <tr>
           <td valign="top" align="right" style="white-space: nowrap;">
-            Enter mount point:
-          </td>
-          <td valign="top">
-            <spring:bind path="command.mountPoint">
-              <input type="text" name="mountPoint" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
-            </spring:bind>
-          </td>
-          <td valign="top">
-            (leave blank to allow browsing of entire repository)
-          </td>
-        </tr>
-        
-        <tr>
-          <td valign="top" align="right" style="white-space: nowrap;">
             Enter user name:
           </td>
           <td valign="top">

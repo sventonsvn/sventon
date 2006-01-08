@@ -52,11 +52,6 @@ public class RevisionIndexer {
   private String indexedUrl;
 
   /**
-   * The indexed repository's mount point.
-   */
-  private String mountPoint = "";
-
-  /**
    * The logging instance.
    */
   private final Log logger = LogFactory.getLog(getClass());
@@ -89,7 +84,6 @@ public class RevisionIndexer {
     logger.debug("Creating index instance using given configuration");
     setRepositoryConfiguration(configuration);
     indexedUrl = configuration.getUrl();
-    mountPoint = configuration.getRepositoryMountPoint();
     logger.debug("Creating the repository instance");
     repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
@@ -166,7 +160,7 @@ public class RevisionIndexer {
     logger.debug("Index url: " + index.getUrl());
     long head = repository.getLatestRevision();
     logger.debug("Revision (head): " + head);
-    populateIndex("".equals(mountPoint) ? "/" : mountPoint, head);
+    populateIndex("/", head);
     index.setIndexRevision(head);
     logger.info("Number of indexed entries: " + getIndexCount());
   }
@@ -189,8 +183,7 @@ public class RevisionIndexer {
    */
   @SuppressWarnings("unchecked")
   protected synchronized void updateIndex() throws SVNException {
-    String[] targetPaths =
-        new String[]{"".equals(mountPoint) ? "/" : mountPoint}; // the path to log
+    String[] targetPaths = new String[]{"/"}; // the path to log
     long latestRevision = repository.getLatestRevision();
 
     logger.info("Updating index from revision " + index.getIndexRevision() + " to "
@@ -216,16 +209,14 @@ public class RevisionIndexer {
               // Add directory
               index.add(new RepositoryEntry(
                   repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath()),
-                  mountPoint));
+                  PathUtil.getPathPart(logEntryPath.getPath())));
               // Add directory contents
               populateIndex(logEntryPath.getPath() + "/", logEntry.getRevision());
             } else {
               // Single entry added
               index.add(new RepositoryEntry(
                   repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath()),
-                  mountPoint));
+                  PathUtil.getPathPart(logEntryPath.getPath())));
             }
             break;
 
@@ -248,8 +239,7 @@ public class RevisionIndexer {
             index.remove(logEntryPath.getPath(), false);
             index.add(new RepositoryEntry(
                 repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath()),
-                mountPoint));
+                PathUtil.getPathPart(logEntryPath.getPath())));
             break;
 
           case M :
@@ -257,8 +247,7 @@ public class RevisionIndexer {
             index.remove(logEntryPath.getPath(), false);
             index.add(new RepositoryEntry(
                 repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath()),
-                mountPoint));
+                PathUtil.getPathPart(logEntryPath.getPath())));
             break;
 
           default :
@@ -313,7 +302,7 @@ public class RevisionIndexer {
 
     entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      RepositoryEntry newEntry = new RepositoryEntry(entry, path, mountPoint);
+      RepositoryEntry newEntry = new RepositoryEntry(entry, path);
       if (!index.add(newEntry)) {
         logger.warn("Unable to add already existing entry to index: " + newEntry.toString());
       }
