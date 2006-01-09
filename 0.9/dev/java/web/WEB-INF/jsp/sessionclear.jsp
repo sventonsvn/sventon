@@ -14,17 +14,17 @@
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
 
 <html>
-<head>
-  <title>Logged out</title>
-  <%@ include file="/WEB-INF/jspf/head.jspf" %>
-</head>
+  <head>
+    <title>Logged out</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+  </head>
 
-<body>
+  <body>
 
-<%@ include file="/WEB-INF/jspf/sventonbar.jspf" %>
-<p/>
+    <%@ include file="/WEB-INF/jspf/sventonbar.jspf" %>
+    <p>
 The session has been cleared.
-<p/>
-<a href="repobrowser.svn">sventon</a>
-</body>
+    </p>
+    <a href="repobrowser.svn">sventon</a>
+  </body>
 </html>

@@ -23,7 +23,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-    <c:url value="get.svn" var="downloadUrl" />
+    <c:url value="get.svn" var="downloadUrl">
+      <c:param name="path" value="${entry}" />
+      <c:param name="revision" value="${command.revision}" />
+    </c:url>
 
     <p>
       <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
@@ -35,13 +38,13 @@
     <c:forEach items="${thumbnailentries}" var="entry">
       <p>
         <b>${entry}</b><br/>
-        <a href="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=inline">
-          <img src="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
+        <a href="${downloadUrl}&disp=inline">
+          <img src="${downloadUrl}&disp=thumb" alt="Thumbnail" border="0"/>
         </a>
       </p>
     </c:forEach>
 
-<br>
+    <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>
