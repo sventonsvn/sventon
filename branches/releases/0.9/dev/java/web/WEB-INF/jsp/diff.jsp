@@ -26,12 +26,14 @@
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <p>
-      <table class="sventonHeader"><tr><td>
-    Diff view - <b>${command.target}</b></td></tr></table>
+      <table class="sventonHeader">
+        <tr>
+          <td>Diff view - <b>${command.target}</b></td>
+        </tr>
+      </table>
     </p>
 
     <br/>
-
     <ui:functionLinks pageName="showDiff"/>
 
     <c:choose>

@@ -13,21 +13,21 @@
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
-<head>
-  <title>Unhandled error</title>
-  <%@ include file="/WEB-INF/jspf/head.jspf" %>
-</head>
+  <head>
+    <title>Unhandled error</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+  </head>
 
-<h3>An unhandled error has occured. Sorry. </h3>
+  <body>
+    <h3>An unhandled error has occured. Sorry. </h3>
 
-<p/>
-<table class="sventonStackTraceTable">
-  <tr>
-    <td>
-      <pre>
-        ${throwable}
-      </pre>
-    </td>
-  </tr>
-</table>
+    <p/>
+    <table class="sventonStackTraceTable">
+      <tr>
+        <td>
+<pre>${throwable}</pre>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

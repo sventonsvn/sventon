@@ -13,19 +13,21 @@
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
-<head>
-  <title><fmt:message key="${errorHeadingKey}"/></title>
-  <%@ include file="/WEB-INF/jspf/head.jspf" %>
-</head>
+  <head>
+    <title><fmt:message key="${errorHeadingKey}"/></title>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+  </head>
 
-<h3><fmt:message key="${errorHeadingKey}"/></h3>
+  <body>
+    <h3><fmt:message key="${errorHeadingKey}"/></h3>
 
-<p/>
-<table class="sventonErrorMessageTable">
-  <tr>
-    <td>
-      <fmt:message key="${errorMessageKey}"/>
-    </td>
-  </tr>
-</table>
+    <p/>
+    <table class="sventonErrorMessageTable">
+      <tr>
+        <td>
+          <fmt:message key="${errorMessageKey}"/>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

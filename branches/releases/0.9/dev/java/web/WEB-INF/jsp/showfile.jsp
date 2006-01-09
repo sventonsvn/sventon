@@ -24,13 +24,15 @@
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <p>
-      <table class="sventonHeader"><tr><td>
-    Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
+      <table class="sventonHeader">
+        <tr>
+          <td>Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
+        </tr>
+      </table>
       <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
-  <br/>
-
+    <br/>
     <ui:functionLinks pageName="showFile"/>
 
     <c:url value="get.svn" var="showUrl">
@@ -61,13 +63,10 @@
         </c:choose>
       </c:when>
      	<c:otherwise>
-<pre class="codeBlock">
-<c:out value="${fileContents}" escapeXml="false"/>
-</pre>
-
+<pre class="codeBlock"><c:out value="${fileContents}" escapeXml="false"/></pre>
       </c:otherwise>
     </c:choose>
-<br>
+    <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

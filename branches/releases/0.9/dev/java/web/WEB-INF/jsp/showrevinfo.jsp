@@ -14,23 +14,23 @@
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
-<head>
-<title>Revision information details</title>
-<%@ include file="/WEB-INF/jspf/head.jspf"%>
-</head>
-<body>
-  <%@ include file="/WEB-INF/jspf/top.jspf"%>
+  <head>
+    <title>Revision information details</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+  </head>
 
-  <p>
-    <table class="sventonHeader"><tr><td>Revision information</td></tr></table>
-  </p>
-  <br/>
-  
-  <ui:functionLinks pageName="showRevInfo"/>
+  <body>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
+    <p>
+      <table class="sventonHeader"><tr><td>Revision information</td></tr></table>
+    </p>
 
-<br>
+    <br/>
+    <ui:functionLinks pageName="showRevInfo"/>
+
+    <ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
+    <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
-</body>
+  </body>
 </html>

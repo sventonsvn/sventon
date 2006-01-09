@@ -20,26 +20,28 @@
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
-<body>
-  <%@ include file="/WEB-INF/jspf/top.jspf"%>
+  <body>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <p>
-    <table class="sventonHeader">
-      <tr><td>
-  Blame - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
-    <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
-  </p>
+    <p>
+      <table class="sventonHeader">
+        <tr>
+          <td>Blame - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
+        </tr>
+      </table>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
+    </p>
   
-  <br/>
+    <br/>
+    <ui:functionLinks pageName="showBlame"/>
+  
+    <p>
+      <br/>
+        Blame support disabled.
+      <br/>
+    </p>
 
-  <ui:functionLinks pageName="showBlame"/>
-  
-<p>
-<br/>
-Blame support disabled.
-<br/>
-</p>
-<!-- 
+<!--
 <table class="sventonBlameTable">
   <tr>
     <th>Revision</th>
@@ -64,7 +66,7 @@ Blame support disabled.
   </tr>
 </table>
 -->
-<br>
+    <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
-</body>
+  </body>
 </html>
