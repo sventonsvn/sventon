@@ -1,5 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+
+[356] Added: File lock display in browser view.
 [350] Fixed: Removed mount point feature (too much pain, not enough gain)
 [348] Added: Latest commit info stays visible when following a link from it.
 [346] Fixed: RSS item layout.

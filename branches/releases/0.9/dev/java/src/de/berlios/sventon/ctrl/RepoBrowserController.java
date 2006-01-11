@@ -11,23 +11,21 @@
  */
 package de.berlios.sventon.ctrl;
 
+import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
-
+import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.*;
-
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
-import de.berlios.sventon.command.SVNBaseCommand;
 
 /**
  * RepoBrowserController.
@@ -49,11 +47,23 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     }
 
     String completePath = svnCommand.getPath();
+    logger.debug("Getting lock info for: " + completePath);
+
+    SVNLock[] locksArray = repository.getLocks(completePath);
+    Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
+    logger.debug("Locks found: " + Arrays.asList(locksArray));
+    for (SVNLock lock : locksArray) {
+      locks.put(lock.getPath(), lock);
+    }
+
     logger.debug("Getting directory contents for: " + completePath);
     HashMap properties = new HashMap();
     Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
-    for (Object entry : entries) {
-      dir.add(new RepositoryEntry((SVNDirEntry) entry, completePath));
+    for (Object ent : entries) {
+      SVNDirEntry entry = (SVNDirEntry) ent;
+      dir.add(new RepositoryEntry(entry,
+          completePath,
+          locks.get(completePath + entry.getName())));
     }
 
     Collections.sort(dir, new RepositoryEntryComparator(NAME, true));

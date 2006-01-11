@@ -62,6 +62,7 @@
       <th></th>
       <th></th>
       <th>File</th>
+      <th></th>
       <th>Size (bytes)</th>
       <th>Revision</th>
       <th>Author</th>
@@ -84,6 +85,7 @@
         <td class="sventonCol3">
           <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
         </td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -137,6 +139,11 @@
           </c:choose>
           </td>
         <% } %>
+        <td class="sventonColLock">
+          <c:if test="${!empty entry.lock}">
+            <a href="#" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${entry.lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${entry.lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')">*</a>
+          </c:if>
+        </td>
         <td class="sventonCol4"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
         <td class="sventonCol5">${entry.revision}</td>
         <td class="sventonCol6">${entry.author}</td>
@@ -149,6 +156,7 @@
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <td colspan="2" align="right"><b>Total:</b></td>
       <td><b><%=rowCount%> entries</b></td>
+      <td></td>
       <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
       <td></td>
       <td></td>
@@ -164,7 +172,7 @@
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
         </select><input type="submit" value="go!"/>
       </td>
-      <td colspan="5"></td>
+      <td colspan="6"></td>
     </tr>
   </table>
 </form>
