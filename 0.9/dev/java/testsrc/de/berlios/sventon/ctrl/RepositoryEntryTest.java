@@ -10,31 +10,31 @@ public class RepositoryEntryTest extends TestCase {
 
   public void testGetFriendlyFullEntryNameLongFullName() throws Exception {
     SVNDirEntry e = new SVNDirEntry("test.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaaaaaaaaaaaaaaaaaaaaaaaaa/");
+    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaaaaaaaaaaaaaaaaaaaaaaaaa/", null);
     assertEquals(".../bla/blu/saaaaaaaaaaaaaaaaaaaaaaaaaaaa/test.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
 
     e = new SVNDirEntry("reallylongfilenamejustfortestingpurposes.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/");
+    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
     assertEquals("...aa/reallylongfilenamejustfortestingpurposes.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
   }
 
   public void testGetFriendlyFullEntryNameShortName() throws Exception {
     SVNDirEntry e = new SVNDirEntry("test.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/");
+    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
     assertEquals("/source/com/bli/bla/blu/test.fil", indexEntry.getFriendlyFullEntryName());
   }
 
   public void testGetFriendlyFullEntryNameLongName() throws Exception {
     SVNDirEntry e = new SVNDirEntry("thisisafilenamewithmorethanfiftycharactersinitreallynotperfect.fil", SVNNodeKind.FILE, 1,
         false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/");
+    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
     assertEquals("...morethanfiftycharactersinitreallynotperfect.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
 
     e = new SVNDirEntry("reallylongfilenamejustfortestingpurposesonly.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/");
+    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
     assertEquals("...eallylongfilenamejustfortestingpurposesonly.fil", indexEntry.getFriendlyFullEntryName());
     assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
   }

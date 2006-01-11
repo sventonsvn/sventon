@@ -209,14 +209,14 @@ public class RevisionIndexer {
               // Add directory
               index.add(new RepositoryEntry(
                   repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath())));
+                  PathUtil.getPathPart(logEntryPath.getPath()), null));
               // Add directory contents
               populateIndex(logEntryPath.getPath() + "/", logEntry.getRevision());
             } else {
               // Single entry added
               index.add(new RepositoryEntry(
                   repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath())));
+                  PathUtil.getPathPart(logEntryPath.getPath()), null));
             }
             break;
 
@@ -239,7 +239,7 @@ public class RevisionIndexer {
             index.remove(logEntryPath.getPath(), false);
             index.add(new RepositoryEntry(
                 repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath())));
+                PathUtil.getPathPart(logEntryPath.getPath()), null));
             break;
 
           case M :
@@ -247,7 +247,7 @@ public class RevisionIndexer {
             index.remove(logEntryPath.getPath(), false);
             index.add(new RepositoryEntry(
                 repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath())));
+                PathUtil.getPathPart(logEntryPath.getPath()), null));
             break;
 
           default :
@@ -302,7 +302,7 @@ public class RevisionIndexer {
 
     entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      RepositoryEntry newEntry = new RepositoryEntry(entry, path);
+      RepositoryEntry newEntry = new RepositoryEntry(entry, path, null);
       if (!index.add(newEntry)) {
         logger.warn("Unable to add already existing entry to index: " + newEntry.toString());
       }
