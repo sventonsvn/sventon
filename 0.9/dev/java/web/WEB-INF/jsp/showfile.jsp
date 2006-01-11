@@ -15,7 +15,7 @@
 
 <html>
   <head>
-    <title>Show file</title>
+    <title>Show file - ${command.target}</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>

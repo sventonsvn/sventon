@@ -17,7 +17,7 @@
 
 <html>
   <head>
-    <title>Logs view</title>
+    <title>Logs view - ${command.target}</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
   </head>
 

@@ -15,7 +15,7 @@
 
 <html>
   <head>
-    <title>sventon blame - ${url}</title>
+    <title>Blame - ${command.target}</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
