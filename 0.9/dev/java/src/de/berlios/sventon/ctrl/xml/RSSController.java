@@ -9,13 +9,14 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.ctrl.xml;
 
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;

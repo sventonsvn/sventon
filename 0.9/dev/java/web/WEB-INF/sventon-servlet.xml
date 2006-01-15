@@ -36,7 +36,7 @@
     </property>
   </bean>
 
-  <bean id="rssController" class="de.berlios.sventon.ctrl.RSSController">
+  <bean id="rssController" class="de.berlios.sventon.ctrl.xml.RSSController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
     </property>
@@ -85,7 +85,22 @@
      <value>10</value>
     </property>
   </bean>
-  
+
+  <bean id="completionController" class="de.berlios.sventon.ctrl.xml.CompletionController">
+    <property name="revisionIndexer">
+      <ref bean="revisionIndexer" />
+    </property>
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+    <property name="xmlEncoding">
+     <value>ISO-8859-1</value>
+    </property>
+  </bean>
+
   <bean id="searchController" class="de.berlios.sventon.ctrl.SearchController">
     <property name="revisionIndexer">
       <ref bean="revisionIndexer" />
@@ -193,6 +208,7 @@
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
+        <!-- url mappings -->
         <prop key="/repobrowser.svn">repoBrowserController</prop>
         <prop key="/showlog.svn">showLogsController</prop>
         <prop key="/showfile.svn">showFileController</prop>
@@ -205,8 +221,10 @@
         <prop key="/showthumbs.svn">showThumbnailController</prop>
         <prop key="/diff.svn">diffController</prop>
         <prop key="/goto.svn">goToController</prop>
-        <prop key="/rss.svn">rssController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
+        <!-- url mappings for xml producers -->
+        <prop key="/rss.xml">rssController</prop>
+        <prop key="/compl.xml">completionController</prop>
       </props>
     </property>
   </bean>
