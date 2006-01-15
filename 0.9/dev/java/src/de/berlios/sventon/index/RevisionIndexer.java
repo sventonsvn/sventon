@@ -384,7 +384,7 @@ public class RevisionIndexer {
     for (RepositoryEntry entry : index.getEntries()) {
       if (entry.getFullEntryName().startsWith(startDir) && entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
-        if (++count == limit) {
+        if (limit != null && ++count == limit) {
           break;
         }
       }
