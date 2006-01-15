@@ -19,10 +19,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -35,6 +32,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -281,6 +279,24 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
+  }
+
+  /**
+   * Gets the repository locks.
+   *
+   * @param repository The repository
+   * @return Lock info
+   * @throws SVNException if subversion error.
+   */
+  protected Map<String, SVNLock> getLocks(final SVNRepository repository) throws SVNException {
+    logger.debug("Getting lock info");
+    SVNLock[] locksArray = repository.getLocks("/");
+    Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
+    logger.debug("Locks found: " + Arrays.asList(locksArray));
+    for (SVNLock lock : locksArray) {
+      locks.put(lock.getPath(), lock);
+    }
+    return locks;
   }
 
   /**

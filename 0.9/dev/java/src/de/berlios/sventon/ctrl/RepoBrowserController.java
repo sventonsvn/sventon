@@ -47,14 +47,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     }
 
     String completePath = svnCommand.getPath();
-    logger.debug("Getting lock info for: " + completePath);
-
-    SVNLock[] locksArray = repository.getLocks(completePath);
-    Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
-    logger.debug("Locks found: " + Arrays.asList(locksArray));
-    for (SVNLock lock : locksArray) {
-      locks.put(lock.getPath(), lock);
-    }
+    Map<String, SVNLock> locks = getLocks(repository);
 
     logger.debug("Getting directory contents for: " + completePath);
     HashMap properties = new HashMap();
