@@ -346,11 +346,29 @@ public class RevisionIndexer {
    * Finds index entries by a search string.
    *
    * @param searchPattern The regex pattern to search for.
+   * @param startDir The start in directory. Search will be performed in this directory and below.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws SVNException if a Subverions error occurs.
    * @see java.util.regex.Pattern
    */
   public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws SVNException {
+    return findPattern(searchPattern, startDir, null);
+  }
+
+
+  /**
+   * Finds index entries by a search string.
+   *
+   * @param searchPattern The regex pattern to search for.
+   * @param startDir The start in directory. Search will be performed in this directory and below.
+   * @param limit The limit, maximum number of rows returned, <code>null</code> if no limit wanted.
+   * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
+   * @throws SVNException if a Subverions error occurs.
+   * @see java.util.regex.Pattern
+   */
+  public List<RepositoryEntry> findPattern(final String searchPattern,
+                                           final String startDir,
+                                           final Integer limit) throws SVNException {
     if (searchPattern == null || searchPattern.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -360,10 +378,15 @@ public class RevisionIndexer {
     }
 
     update();
+
+    int count = 0;
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
       if (entry.getFullEntryName().startsWith(startDir) && entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
+        if (++count == limit) {
+          break;
+        }
       }
     }
     logger.debug("Found " + result.size() + " entries matching search pattern: " + searchPattern);
