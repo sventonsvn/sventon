@@ -74,7 +74,6 @@ public final class LineNumberAppender {
     while ((tempLine = reader.readLine()) != null) {
       sb.append(embedStart);
       sb.append(++lineCount);
-      sb.append(": ");
       sb.append(embedEnd);
       sb.append(tempLine);
       sb.append(System.getProperty("line.separator"));

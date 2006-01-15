@@ -144,7 +144,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     LineNumberAppender appender = new LineNumberAppender();
     appender.setEmbedStart("<span class=\"sventonLineNo\">");
-    appender.setEmbedEnd("</span>");
+    appender.setEmbedEnd(":&nbsp;</span>");
 
     try {
       fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
