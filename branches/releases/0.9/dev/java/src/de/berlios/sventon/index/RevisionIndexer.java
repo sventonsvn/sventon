@@ -194,7 +194,8 @@ public class RevisionIndexer {
 
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
-      logger.debug("Applying changes from revision " + logEntry.getRevision() + " to index");
+      long revision = logEntry.getRevision();
+      logger.debug("Applying changes from revision " + revision + " to index");
       Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       List<String> latestPathsList = new ArrayList<String>(map.keySet());
       // Sort the entries to apply changes in right order
@@ -204,52 +205,20 @@ public class RevisionIndexer {
         switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
           case A :
             logger.debug("Adding entry to index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            if (logEntryPath.getCopyPath() != null) {
-              // Directory node added
-              // Add directory
-              index.add(new RepositoryEntry(
-                  repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath()), null));
-              // Add directory contents
-              populateIndex(logEntryPath.getPath() + "/", logEntry.getRevision());
-            } else {
-              // Single entry added
-              index.add(new RepositoryEntry(
-                  repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                  PathUtil.getPathPart(logEntryPath.getPath()), null));
-            }
+            doIndexAdd(logEntryPath, revision);
             break;
-
           case D :
-            logger.debug("Removing entry from index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            // Have to find out if deleted entry was a file or directory
-            SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), logEntry.getRevision() - 1);
-            if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
-              // Directory node deleted
-              logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
-              index.remove(logEntryPath.getPath(), true);
-            } else {
-              // Single entry delete
-              index.remove(logEntryPath.getPath(), false);
-            }
+            logger.debug("Removing deleted entry from index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+            doIndexDelete(logEntryPath, revision);
             break;
-
           case R :
-            logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            index.remove(logEntryPath.getPath(), false);
-            index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath()), null));
+            logger.debug("Replacing entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+            doIndexReplace(logEntryPath, revision);
             break;
-
           case M :
-            logger.debug("Updating entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            index.remove(logEntryPath.getPath(), false);
-            index.add(new RepositoryEntry(
-                repository.info(logEntryPath.getPath(), logEntry.getRevision()),
-                PathUtil.getPathPart(logEntryPath.getPath()), null));
+            logger.debug("Updating modified entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+            doIndexModify(logEntryPath, revision);
             break;
-
           default :
             throw new SVNException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
@@ -259,7 +228,74 @@ public class RevisionIndexer {
   }
 
   /**
-   * Updated the index.
+   * Modifies an entry (file or directory) in the index.
+   *
+   * @param logEntryPath The log entry path
+   * @param revision The log revision
+   * @throws SVNException if subversion error occur.
+   */
+  private void doIndexModify(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+    index.remove(logEntryPath.getPath(), false);
+    index.add(new RepositoryEntry(
+        repository.info(logEntryPath.getPath(), revision),
+        PathUtil.getPathPart(logEntryPath.getPath()), null));
+  }
+
+  /**
+   * Replaces an entry (file or directory) in the index.
+   *
+   * @param logEntryPath The log entry path
+   * @param revision The log revision
+   * @throws SVNException if subversion error occur.
+   */
+  private void doIndexReplace(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+    doIndexModify(logEntryPath, revision);
+  }
+
+  /**
+   * Deletes an entry (file or directory) from the index.
+   *
+   * @param logEntryPath The log entry path
+   * @param revision The log revision
+   * @throws SVNException if subversion error occur.
+   */
+  private void doIndexDelete(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+    // Have to find out if deleted entry was a file or directory
+    SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), revision - 1);
+    if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
+      // Directory node deleted
+      logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
+      index.remove(logEntryPath.getPath(), true);
+    } else {
+      // Single entry delete
+      index.remove(logEntryPath.getPath(), false);
+    }
+  }
+
+  /**
+   * Adds an entry (file or directory) to the index.
+   *
+   * @param logEntryPath The log entry path
+   * @param revision The log revision
+   * @throws SVNException if subversion error occur.
+   */
+  private void doIndexAdd(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+    // Have to find out if added entry was a file or directory
+    SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
+    if (RepositoryEntry.Kind.valueOf(addedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
+      // Directory node added
+      logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
+      index.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+      // Add directory contents
+      populateIndex(logEntryPath.getPath() + "/", revision);
+    } else {
+      // Single entry added
+      index.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+    }
+  }
+
+  /**
+   * Updates the index.
    * <p/>
    * If the repository URL has changed in the configuration properties
    * or the index does not contain any entries or if the repository revision
@@ -334,7 +370,7 @@ public class RevisionIndexer {
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
       String name = entry.getFullEntryName().toLowerCase();
-      if (name.startsWith(startDir) && name.indexOf(searchString.toLowerCase()) > -1) {
+      if (name.startsWith(startDir) && name.contains(searchString.toLowerCase())) {
         result.add(entry);
       }
     }
