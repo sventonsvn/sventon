@@ -80,7 +80,7 @@ public class RevisionIndexer {
    *
    * @param configuration The repository configuration
    */
-  public RevisionIndexer(final RepositoryConfiguration configuration) throws SVNException {
+  public RevisionIndexer(final RepositoryConfiguration configuration) throws Exception {
     logger.debug("Creating index instance using given configuration");
     setRepositoryConfiguration(configuration);
     indexedUrl = configuration.getUrl();
@@ -125,7 +125,7 @@ public class RevisionIndexer {
    *
    * @throws SVNException if subversion error occurs.
    */
-  private void initIndex() throws SVNException {
+  private void initIndex() throws Exception {
     logger.debug("Initializing index");
     logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
@@ -182,7 +182,7 @@ public class RevisionIndexer {
    * @throws SVNException if Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
-  protected synchronized void updateIndex() throws SVNException {
+  protected synchronized void updateIndex() throws Exception {
     String[] targetPaths = new String[]{"/"}; // the path to log
     long latestRevision = repository.getLatestRevision();
 
@@ -220,7 +220,7 @@ public class RevisionIndexer {
             doIndexModify(logEntryPath, revision);
             break;
           default :
-            throw new SVNException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+            throw new Exception("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
     }
@@ -282,7 +282,13 @@ public class RevisionIndexer {
   private void doIndexAdd(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     // Have to find out if added entry was a file or directory
     SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
-    if (RepositoryEntry.Kind.valueOf(addedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
+
+    // If the entry is a directory and a copyPath exists the entry is
+    // a moved or copied directory (branch). In that case we have to recursively
+    // add the entry. If entry is a directory but does not have a copyPath
+    // the contents will be added one by one as single entries.
+    if (RepositoryEntry.Kind.valueOf(addedEntry.getKind().toString()) == RepositoryEntry.Kind.dir
+        && logEntryPath.getCopyPath() != null) {
       // Directory node added
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       index.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
@@ -307,7 +313,7 @@ public class RevisionIndexer {
    *
    * @throws SVNException if Subversion error occurs.
    */
-  public synchronized void update() throws SVNException {
+  public synchronized void update() throws Exception {
     if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
         index.getIndexRevision() > repository.getLatestRevision()) {
       // index is just created and does not contain any entries
@@ -357,7 +363,7 @@ public class RevisionIndexer {
    * @throws SVNException if a Subverions error occurs.
    * @see de.berlios.sventon.ctrl.RepositoryEntry
    */
-  public List<RepositoryEntry> find(final String searchString, final String startDir) throws SVNException {
+  public List<RepositoryEntry> find(final String searchString, final String startDir) throws Exception {
     if (searchString == null || searchString.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -387,7 +393,7 @@ public class RevisionIndexer {
    * @throws SVNException if a Subverions error occurs.
    * @see java.util.regex.Pattern
    */
-  public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws SVNException {
+  public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws Exception {
     return findPattern(searchPattern, startDir, null);
   }
 
@@ -404,7 +410,7 @@ public class RevisionIndexer {
    */
   public List<RepositoryEntry> findPattern(final String searchPattern,
                                            final String startDir,
-                                           final Integer limit) throws SVNException {
+                                           final Integer limit) throws Exception {
     if (searchPattern == null || searchPattern.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -436,7 +442,7 @@ public class RevisionIndexer {
    * @return A list containing all subdirectory entries below <code>fromPath</code>.
    * @throws SVNException if a Subverions error occurs.
    */
-  public List<RepositoryEntry> getDirectories(final String fromPath) throws SVNException {
+  public List<RepositoryEntry> getDirectories(final String fromPath) throws Exception {
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty");
     }
