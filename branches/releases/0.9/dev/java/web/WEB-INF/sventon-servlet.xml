@@ -51,6 +51,15 @@
     </property>
   </bean>
 
+  <bean id="latestInfoController" class="de.berlios.sventon.ctrl.xml.ShowLatestCommitInfoController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="xmlEncoding">
+      <value>ISO-8859-1</value>
+    </property>
+  </bean>
+
   <bean id="revInfoController" class="de.berlios.sventon.ctrl.ShowRevisionInfoController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
@@ -97,7 +106,7 @@
       <ref bean="svnBaseCommandValidator" />
     </property>
     <property name="xmlEncoding">
-     <value>ISO-8859-1</value>
+      <value>ISO-8859-1</value>
     </property>
   </bean>
 
@@ -138,6 +147,9 @@
     <property name="validator">
       <ref bean="svnBaseCommandValidator" />
     </property>
+    <property name="imageUtil">
+      <ref bean="imageUtil" />
+    </property>
   </bean>
 
   <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController">
@@ -146,6 +158,9 @@
     </property>
     <property name="validator">
       <ref bean="svnBaseCommandValidator" />
+    </property>
+    <property name="imageUtil">
+      <ref bean="imageUtil" />
     </property>
   </bean>
 
@@ -164,6 +179,24 @@
     </property>
     <property name="validator">
       <ref bean="svnBaseCommandValidator" />
+    </property>
+    <property name="imageUtil">
+      <ref bean="imageUtil" />
+    </property>
+  </bean>
+
+  <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
+    <property name="maxThumbnailSize">
+      <value>200</value>
+    </property>
+    <property name="mimeMappings">
+      <props>
+        <prop key="gif">image/gif</prop>
+        <prop key="png">image/png</prop>
+        <prop key="jpg">image/jpg</prop>
+        <prop key="jpe">image/jpg</prop>
+        <prop key="jpeg">image/jpg</prop>
+      </props>
     </property>
   </bean>
 
@@ -225,6 +258,7 @@
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
         <prop key="/compl.xml">completionController</prop>
+        <prop key="/latest.xml">latestInfoController</prop>
       </props>
     </property>
   </bean>

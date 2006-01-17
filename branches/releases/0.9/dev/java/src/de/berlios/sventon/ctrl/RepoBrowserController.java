@@ -18,7 +18,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -37,7 +36,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response,
-                                   BindException exception) throws SVNException {
+                                   BindException exception) throws Exception {
 
     List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 

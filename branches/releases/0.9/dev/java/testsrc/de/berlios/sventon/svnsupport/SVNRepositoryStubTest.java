@@ -1,11 +1,4 @@
 package de.berlios.sventon.svnsupport;
-/**
- * Created by IntelliJ IDEA.
- * User: Jesper
- * Date: 2005-nov-01
- * Time: 21:31:22
- * To change this template use File | Settings | File Templates.
- */
 
 import de.berlios.sventon.ctrl.LogEntryBundle;
 import junit.framework.TestCase;

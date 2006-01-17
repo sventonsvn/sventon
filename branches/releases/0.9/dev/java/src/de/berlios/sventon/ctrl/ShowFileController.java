@@ -46,6 +46,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
   private Colorer colorer;
 
+  private ImageUtil imageUtil;
+
   private String archiveFileExtensionPattern;
 
   /**
@@ -88,7 +90,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
 
     logger.debug("Assembling file contents for: " + svnCommand);
     Map<String, Object> model = new HashMap<String, Object>();
@@ -105,7 +107,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       // It's a binary file
       logger.debug("Binary file detected");
       model.put("isBinary", true);  // Indicates that the file is in binary format.
-      model.put("isImage", ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
+      model.put("isImage", getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
 
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
           matches(getArchiveFileExtensionPattern())) {
@@ -130,7 +132,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @throws SVNException if Subversion error.
    */
   private Map<String, Object> handleTextFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision, final Map properties) throws SVNException {
+                                             final SVNRevision revision, final Map properties) throws Exception {
 
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
@@ -149,7 +151,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     try {
       fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
     } catch (IOException ioex) {
-      throw new SVNException(ioex);
+      throw new Exception(ioex);
     }
 
     logger.debug("Create model");
@@ -168,7 +170,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @throws SVNException if Subversion error.
    */
   private Map<String, Object> handleArchiveFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision) throws SVNException {
+                                             final SVNRevision revision) throws Exception {
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
 
@@ -184,10 +186,30 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       while ((zipEntry = zip.getNextEntry()) != null)
         archiveEntries.add(zipEntry);
     } catch (IOException ioex) {
-      throw new SVNException("Unable to show contents of archive file", ioex);
+      throw new Exception("Unable to show contents of archive file", ioex);
     }
     model.put("entries", archiveEntries);
     return model;
+  }
+
+  /**
+   * Gets the <code>ImageUtil</code> helper instance.
+   *
+   * @return The <code>ImageUtil</code>
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public ImageUtil getImageUtil() {
+    return imageUtil;
+  }
+
+  /**
+   * Sets the <code>ImageUtil</code> helper instance.
+   *
+   * @param imageUtil The instance
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public void setImageUtil(ImageUtil imageUtil) {
+    this.imageUtil = imageUtil;
   }
 
 }

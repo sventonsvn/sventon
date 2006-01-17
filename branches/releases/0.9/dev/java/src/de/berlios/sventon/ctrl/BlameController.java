@@ -14,11 +14,9 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.blame.BlameHandler;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
-
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -59,7 +57,7 @@ public class BlameController extends AbstractSVNTemplateController implements Co
 
   @Override
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
 
     logger.debug("Blaming path: " + svnCommand.getPath() + ", rev: " + FIRST_REVISION + " - " + revision);
 

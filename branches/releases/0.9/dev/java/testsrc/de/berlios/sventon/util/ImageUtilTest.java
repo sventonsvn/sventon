@@ -3,47 +3,78 @@ package de.berlios.sventon.util;
 import junit.framework.TestCase;
 
 import java.awt.*;
+import java.util.Properties;
 
 public class ImageUtilTest extends TestCase {
 
   public void testGetThumbnailSize() throws Exception {
-    assertEquals(new Dimension(100, 100), ImageUtil.getThumbnailSize(100, 100));
-    assertEquals(new Dimension(200, 150), ImageUtil.getThumbnailSize(1024, 768));
-    assertEquals(new Dimension(200, 150), ImageUtil.getThumbnailSize(1600, 1200));
-    assertEquals(new Dimension(200, 100), ImageUtil.getThumbnailSize(1600, 800));
-    assertEquals(new Dimension(200, 19), ImageUtil.getThumbnailSize(505, 48));
-    assertEquals(new Dimension(179, 39), ImageUtil.getThumbnailSize(179, 39));
-    assertEquals(new Dimension(200, 56), ImageUtil.getThumbnailSize(214, 60));
-    assertEquals(new Dimension(200, 99), ImageUtil.getThumbnailSize(399, 199));
-    assertEquals(new Dimension(99, 200), ImageUtil.getThumbnailSize(199, 399));
-    assertEquals(new Dimension(66, 200), ImageUtil.getThumbnailSize(600, 1800));
-    assertEquals(new Dimension(4, 200), ImageUtil.getThumbnailSize(60, 2800));
-    assertEquals(new Dimension(0, 200), ImageUtil.getThumbnailSize(10, 4000));
+    ImageUtil imageUtil = new ImageUtil();
+    imageUtil.setMaxThumbnailSize(200);
+
+    assertEquals(new Dimension(100, 100), imageUtil.getThumbnailSize(100, 100));
+    assertEquals(new Dimension(200, 150), imageUtil.getThumbnailSize(1024, 768));
+    assertEquals(new Dimension(200, 150), imageUtil.getThumbnailSize(1600, 1200));
+    assertEquals(new Dimension(200, 100), imageUtil.getThumbnailSize(1600, 800));
+    assertEquals(new Dimension(200, 19), imageUtil.getThumbnailSize(505, 48));
+    assertEquals(new Dimension(179, 39), imageUtil.getThumbnailSize(179, 39));
+    assertEquals(new Dimension(200, 56), imageUtil.getThumbnailSize(214, 60));
+    assertEquals(new Dimension(200, 99), imageUtil.getThumbnailSize(399, 199));
+    assertEquals(new Dimension(99, 200), imageUtil.getThumbnailSize(199, 399));
+    assertEquals(new Dimension(66, 200), imageUtil.getThumbnailSize(600, 1800));
+    assertEquals(new Dimension(4, 200), imageUtil.getThumbnailSize(60, 2800));
+    assertEquals(new Dimension(0, 200), imageUtil.getThumbnailSize(10, 4000));
   }
 
   public void testGetContentType() throws Exception {
-    assertNull(ImageUtil.getContentType("abc"));
-    assertEquals("image/jpg", ImageUtil.getContentType("jpg"));
-    assertEquals("image/jpg", ImageUtil.getContentType("jpe"));
-    assertEquals("image/jpg", ImageUtil.getContentType("jpeg"));
-    assertEquals("image/gif", ImageUtil.getContentType("gif"));
-    assertEquals("image/png", ImageUtil.getContentType("png"));
+    ImageUtil imageUtil = new ImageUtil();
+    Properties prop = new Properties();
+    prop.setProperty("jpg", "image/jpg");
+    prop.setProperty("jpe", "image/jpg");
+    prop.setProperty("jpeg", "image/jpg");
+    prop.setProperty("gif", "image/gif");
+    prop.setProperty("png", "image/png");
+    imageUtil.setMimeMappings(prop);
+
+    assertNull(imageUtil.getContentType("abc"));
+    assertEquals("image/jpg", imageUtil.getContentType("jpg"));
+    assertEquals("image/jpg", imageUtil.getContentType("jpe"));
+    assertEquals("image/jpg", imageUtil.getContentType("jpeg"));
+    assertEquals("image/gif", imageUtil.getContentType("gif"));
+    assertEquals("image/png", imageUtil.getContentType("png"));
   }
 
   public void testIsImageFile() throws Exception {
-    assertTrue(ImageUtil.isImageFileExtension("jpg"));
-    assertFalse(ImageUtil.isImageFileExtension("filenamejpg"));
-    assertFalse(ImageUtil.isImageFileExtension(null));
-    assertFalse(ImageUtil.isImageFileExtension(""));
+    ImageUtil imageUtil = new ImageUtil();
+    Properties prop = new Properties();
+    prop.setProperty("jpg", "image/jpg");
+    prop.setProperty("jpe", "image/jpg");
+    prop.setProperty("jpeg", "image/jpg");
+    prop.setProperty("gif", "image/gif");
+    prop.setProperty("png", "image/png");
+    imageUtil.setMimeMappings(prop);
+
+    assertTrue(imageUtil.isImageFileExtension("jpg"));
+    assertFalse(imageUtil.isImageFileExtension("filenamejpg"));
+    assertFalse(imageUtil.isImageFileExtension(null));
+    assertFalse(imageUtil.isImageFileExtension(""));
   }
 
   public void testIsImageFilename() throws Exception {
-    assertTrue(ImageUtil.isImageFilename("filename.gif"));
-    assertFalse(ImageUtil.isImageFilename("filenamejpg"));
-    assertTrue(ImageUtil.isImageFilename("/dir/file.gif"));
-    assertFalse(ImageUtil.isImageFilename(""));
+    ImageUtil imageUtil = new ImageUtil();
+    Properties prop = new Properties();
+    prop.setProperty("jpg", "image/jpg");
+    prop.setProperty("jpe", "image/jpg");
+    prop.setProperty("jpeg", "image/jpg");
+    prop.setProperty("gif", "image/gif");
+    prop.setProperty("png", "image/png");
+    imageUtil.setMimeMappings(prop);
+
+    assertTrue(imageUtil.isImageFilename("filename.gif"));
+    assertFalse(imageUtil.isImageFilename("filenamejpg"));
+    assertTrue(imageUtil.isImageFilename("/dir/file.gif"));
+    assertFalse(imageUtil.isImageFilename(""));
     try {
-      assertFalse(ImageUtil.isImageFilename(null));
+      assertFalse(imageUtil.isImageFilename(null));
       fail("Should cause IllegalArgumentException");
     } catch (IllegalArgumentException ex) {
       // expected

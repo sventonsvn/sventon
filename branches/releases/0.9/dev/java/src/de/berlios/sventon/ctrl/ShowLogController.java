@@ -53,7 +53,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
 
     String path = svnCommand.getPath();
 

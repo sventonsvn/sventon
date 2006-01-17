@@ -12,24 +12,25 @@
 package de.berlios.sventon.ctrl.xml;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.ctrl.AbstractSVNTemplateController;
 import de.berlios.sventon.ctrl.RepositoryEntry;
+import de.berlios.sventon.index.RevisionIndexer;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.jdom.Element;
-import org.jdom.Document;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller used for AJAX driven search completion.
@@ -54,10 +55,10 @@ public class CompletionController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
 
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    final String searchString = request.getParameter("sventonSearchString");
+    final String searchString = request.getParameter("complete");
     final String startDir = request.getParameter("startDir");
     logger.debug("Searching index for: " + searchString);
 
