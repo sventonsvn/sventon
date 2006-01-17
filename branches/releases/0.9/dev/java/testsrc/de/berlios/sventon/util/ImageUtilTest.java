@@ -8,8 +8,7 @@ import java.util.Properties;
 public class ImageUtilTest extends TestCase {
 
   public void testGetThumbnailSize() throws Exception {
-    ImageUtil imageUtil = new ImageUtil();
-    imageUtil.setMaxThumbnailSize(200);
+    ImageUtil imageUtil = getImageUtil();
 
     assertEquals(new Dimension(100, 100), imageUtil.getThumbnailSize(100, 100));
     assertEquals(new Dimension(200, 150), imageUtil.getThumbnailSize(1024, 768));
@@ -26,14 +25,7 @@ public class ImageUtilTest extends TestCase {
   }
 
   public void testGetContentType() throws Exception {
-    ImageUtil imageUtil = new ImageUtil();
-    Properties prop = new Properties();
-    prop.setProperty("jpg", "image/jpg");
-    prop.setProperty("jpe", "image/jpg");
-    prop.setProperty("jpeg", "image/jpg");
-    prop.setProperty("gif", "image/gif");
-    prop.setProperty("png", "image/png");
-    imageUtil.setMimeMappings(prop);
+    ImageUtil imageUtil = getImageUtil();
 
     assertNull(imageUtil.getContentType("abc"));
     assertEquals("image/jpg", imageUtil.getContentType("jpg"));
@@ -44,14 +36,7 @@ public class ImageUtilTest extends TestCase {
   }
 
   public void testIsImageFile() throws Exception {
-    ImageUtil imageUtil = new ImageUtil();
-    Properties prop = new Properties();
-    prop.setProperty("jpg", "image/jpg");
-    prop.setProperty("jpe", "image/jpg");
-    prop.setProperty("jpeg", "image/jpg");
-    prop.setProperty("gif", "image/gif");
-    prop.setProperty("png", "image/png");
-    imageUtil.setMimeMappings(prop);
+    ImageUtil imageUtil = getImageUtil();
 
     assertTrue(imageUtil.isImageFileExtension("jpg"));
     assertFalse(imageUtil.isImageFileExtension("filenamejpg"));
@@ -60,14 +45,7 @@ public class ImageUtilTest extends TestCase {
   }
 
   public void testIsImageFilename() throws Exception {
-    ImageUtil imageUtil = new ImageUtil();
-    Properties prop = new Properties();
-    prop.setProperty("jpg", "image/jpg");
-    prop.setProperty("jpe", "image/jpg");
-    prop.setProperty("jpeg", "image/jpg");
-    prop.setProperty("gif", "image/gif");
-    prop.setProperty("png", "image/png");
-    imageUtil.setMimeMappings(prop);
+    ImageUtil imageUtil = getImageUtil();
 
     assertTrue(imageUtil.isImageFilename("filename.gif"));
     assertFalse(imageUtil.isImageFilename("filenamejpg"));
@@ -81,4 +59,16 @@ public class ImageUtilTest extends TestCase {
     }
   }
 
+  private ImageUtil getImageUtil() {
+    ImageUtil imageUtil = new ImageUtil();
+    Properties prop = new Properties();
+    prop.setProperty("jpg", "image/jpg");
+    prop.setProperty("jpe", "image/jpg");
+    prop.setProperty("jpeg", "image/jpg");
+    prop.setProperty("gif", "image/gif");
+    prop.setProperty("png", "image/png");
+    imageUtil.setMimeMappings(prop);
+    imageUtil.setMaxThumbnailSize(200);
+    return imageUtil;
+  }
 }

@@ -4,6 +4,7 @@ import de.berlios.sventon.ctrl.RepositoryEntry;
 import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.*;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNURL;
 import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
@@ -26,11 +27,11 @@ public class RepositoryEntryComparatorTest extends TestCase {
     super.tearDown();
   }
 
-  public void testCompare() {
+  public void testCompare() throws Exception {
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry(null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12)
         .getTime(), "patrikfr"), "", null);
-    RepositoryEntry e2 = new RepositoryEntry(new SVNDirEntry(null, "SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13)
+    RepositoryEntry e2 = new RepositoryEntry(new SVNDirEntry(SVNURL.parseURIEncoded("http://test"), "SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13)
         .getTime(), "jesper"), "", null);
     RepositoryEntry e3 = new RepositoryEntry(new SVNDirEntry(null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14)
         .getTime(), "patrikfr"), "", null);
@@ -75,9 +76,14 @@ public class RepositoryEntryComparatorTest extends TestCase {
     assertSame(e2, entries.get(1));
     assertSame(e3, entries.get(2));
 
+    Collections.sort(entries, new RepositoryEntryComparator(URL, false));
+    assertSame(e1, entries.get(0));
+    assertSame(e2, entries.get(2));
+    assertSame(e3, entries.get(1));
+
     // Tricking the constructor with an illegal type should fail fast
     try {
-      new RepositoryEntryComparator(5, false);
+      new RepositoryEntryComparator(6, false);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException iae) {
       // Expected
