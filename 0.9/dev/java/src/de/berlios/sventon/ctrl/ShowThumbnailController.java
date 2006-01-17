@@ -13,17 +13,18 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.util.ImageUtil;
-
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for showing selected repository entries as thumbnails.
@@ -32,11 +33,13 @@ import java.util.*;
  */
 public class ShowThumbnailController extends AbstractSVNTemplateController implements Controller {
 
+  private ImageUtil imageUtil;
+
   /**
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
     final String[] entryParameters = request.getParameterValues("entry");
 
     logger.debug("Create model");
@@ -47,7 +50,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
     // Check what entries are image files - and add them to the list of thumbnails.
     for(String entry : entryParameters) {
       logger.debug("entry: " + entry);
-      if (ImageUtil.isImageFilename(entry)) {
+      if (getImageUtil().isImageFilename(entry)) {
         entries.add(entry);
       }
     }
@@ -58,4 +61,25 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
     return new ModelAndView("showthumbs", model);
 
   }
+
+  /**
+   * Gets the <code>ImageUtil</code> helper instance.
+   *
+   * @return The <code>ImageUtil</code>
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public ImageUtil getImageUtil() {
+    return imageUtil;
+  }
+
+  /**
+   * Sets the <code>ImageUtil</code> helper instance.
+   *
+   * @param imageUtil The instance
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public void setImageUtil(ImageUtil imageUtil) {
+    this.imageUtil = imageUtil;
+  }
+
 }

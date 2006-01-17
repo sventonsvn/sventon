@@ -9,7 +9,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -25,7 +24,7 @@ public class CompletionControllerTest extends TestCase {
     CompletionController ctrl = new CompletionController();
 
     MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter("sventonSearchString", "file");
+    req.addParameter("complete", "file");
     req.addParameter("startDir", "");
 
     MockHttpServletResponse res = new MockHttpServletResponse();

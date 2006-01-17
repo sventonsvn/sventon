@@ -13,6 +13,7 @@ package de.berlios.sventon.util;
 
 import java.awt.image.BufferedImage;
 import java.awt.*;
+import java.util.Properties;
 
 /**
  * Image related utility methods.
@@ -22,14 +23,16 @@ import java.awt.*;
 public final class ImageUtil {
 
   /**
-   * Preferred thumbnail max size (width and height).
+   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image.
    */
-  public static final int THUMBNAIL_SIZE = 200;
+  private int maxThumbnailSize = 200;
+
+  private Properties mimeMappings;
 
   /**
    * Private - not supposed to instantiate.
    */
-  private ImageUtil() {
+  public ImageUtil() {
   }
 
   /**
@@ -39,7 +42,7 @@ public final class ImageUtil {
    * @param type
    * @return The buffered image
    */
-  public static BufferedImage toBufferedImage(final Image image, final int type) {
+  public BufferedImage toBufferedImage(final Image image, final int type) {
     int width = image.getWidth(null);
     int height = image.getHeight(null);
     BufferedImage result = new BufferedImage(width, height, type);
@@ -57,13 +60,13 @@ public final class ImageUtil {
    * @param height The height.
    * @return The thumbnail dimension.
    */
-  public static Dimension getThumbnailSize(final int width, final int height) {
+  public Dimension getThumbnailSize(final int width, final int height) {
     int max = (width >= height) ? width : height;
-    if (max <= THUMBNAIL_SIZE) {
-      // Image is smaller than 200px - no need for a resize.
+    if (max <= getMaxThumbnailSize()) {
+      // Image is smaller than maximum size - no need for a resize
       return new Dimension(width, height);
     } else {
-      double scaleFactor = (double) max / THUMBNAIL_SIZE;
+      double scaleFactor = (double) max / getMaxThumbnailSize();
       return new Dimension(((int) (width / scaleFactor)), ((int) (height / scaleFactor)));
     }
   }
@@ -74,20 +77,11 @@ public final class ImageUtil {
    * @param fileExtension The file extension
    * @return The content type. Null if unrecognized content type.
    */
-  public static String getContentType(final String fileExtension) {
-    String contentType = null;
-    if ("gif".equalsIgnoreCase(fileExtension)) {
-      contentType = "image/gif";
-    } else if ("png".equalsIgnoreCase(fileExtension)) {
-      contentType = "image/png";
-    } else if ("jpg".equalsIgnoreCase(fileExtension)) {
-      contentType = "image/jpg";
-    } else if ("jpe".equalsIgnoreCase(fileExtension)) {
-      contentType = "image/jpg";
-    } else if ("jpeg".equalsIgnoreCase(fileExtension)) {
-      contentType = "image/jpg";
+  public String getContentType(final String fileExtension) {
+    if (fileExtension == null) {
+      return null;
     }
-    return contentType;
+    return mimeMappings.getProperty(fileExtension.toLowerCase());
   }
 
   /**
@@ -96,9 +90,8 @@ public final class ImageUtil {
    * @param fileExtension The file extension.
    * @return True if image file, false if not.
    */
-  public static boolean isImageFileExtension(final String fileExtension) {
-    //TODO: Better handling of file and content types.
-    return ImageUtil.getContentType(fileExtension) != null;
+  public boolean isImageFileExtension(final String fileExtension) {
+    return getContentType(fileExtension) != null;
   }
 
   /**
@@ -108,8 +101,7 @@ public final class ImageUtil {
    * @param filename The file name.
    * @return True if image file, false if not.
    */
-  public static boolean isImageFilename(final String filename) {
-    //TODO: Better handling of file and content types.
+  public boolean isImageFilename(final String filename) {
     String fileExtension = "";
 
     if (filename == null) {
@@ -119,7 +111,43 @@ public final class ImageUtil {
     if (filename.lastIndexOf(".") > -1) {
       fileExtension = filename.substring(filename.lastIndexOf(".") + 1);
     }
-    return ImageUtil.getContentType(fileExtension) != null;
+    return getContentType(fileExtension) != null;
+  }
+
+  /**
+   * Gets the maximum thumbnail size in pixels.
+   *
+   * @return The size
+   */
+  public int getMaxThumbnailSize() {
+    return maxThumbnailSize;
+  }
+
+  /**
+   * Sets the maximum thumbnail size in pixels.
+   *
+   * @param maxThumbnailSize The size
+   */
+  public void setMaxThumbnailSize(int maxThumbnailSize) {
+    this.maxThumbnailSize = maxThumbnailSize;
+  }
+
+  /**
+   * Gets the mime-type / file type mappings.
+   *
+   * @return The mappings
+   */
+  public Properties getMimeMappings() {
+    return mimeMappings;
+  }
+
+  /**
+   * Sets the mime-type / file type mappings.
+   *
+   * @param mimeMappings The mappings
+   */
+  public void setMimeMappings(Properties mimeMappings) {
+    this.mimeMappings = mimeMappings;
   }
 
 }

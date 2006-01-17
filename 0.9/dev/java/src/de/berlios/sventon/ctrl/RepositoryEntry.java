@@ -38,6 +38,7 @@ public class RepositoryEntry implements Serializable {
   private Date entryCreatedDate;
   private String entryLastAuthor;
   private String entryCommitMessage;
+  private String url;
 
   public enum Kind {dir, file, none, unknown;}
 
@@ -71,8 +72,9 @@ public class RepositoryEntry implements Serializable {
     this.entryKind = Kind.valueOf(entry.getKind().toString());
     this.entryName = entry.getName();
     this.entryFirstRevision = entry.getRevision();
-    this.entrySize = entry.size();
+    this.entrySize = entry.getSize();
     this.entryHasProperties = entry.hasProperties();
+    this.url = entry.getURL() == null ? null : entry.getURL().toString();
   }
 
   /**
@@ -91,6 +93,15 @@ public class RepositoryEntry implements Serializable {
    */
   public String getEntryPath() {
     return entryPath;
+  }
+
+  /**
+   * Gets the entry url.
+   *
+   * @return The entry url
+   */
+  public String getUrl() {
+    return url;
   }
 
   /**

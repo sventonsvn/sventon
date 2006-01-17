@@ -267,8 +267,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return forwardToAuthenticationFailureView(svnae);
-    } catch (SVNException e) {
-      logger.error("SVN Exception", e);
+    } catch (Exception e) {
+      logger.error("Exception", e);
       Throwable cause = e.getCause();
       if (cause instanceof java.net.NoRouteToHostException || cause instanceof ConnectException) {
         exception.reject("error.message.no-route-to-host");
@@ -300,7 +300,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Gets the latest commit log.
+   * Gets the latest commit log and puts the result into the cache.
+   * If cache already contains the latest info it will be returned
+   * directly.
    *
    * @param repository     The repository
    * @param latestRevision The latest revision
@@ -324,13 +326,9 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @throws SVNException if subversion error.
    */
   protected SVNLogEntry getRevisionInfo(final SVNRepository repository, final long revision) throws SVNException {
-    if (revision != cachedRevision) {
-      String[] targetPaths = new String[]{"/"}; // the path to show logs for
-      cachedLogs = (SVNLogEntry) repository.log(
-          targetPaths, null, revision, revision, true, false).iterator().next();
-      cachedRevision = revision;
-    }
-    return cachedLogs;
+    String[] targetPaths = new String[]{"/"}; // the path to show logs for
+    return (SVNLogEntry) repository.log(
+        targetPaths, null, revision, revision, true, false).iterator().next();
   }
 
   /**
@@ -411,5 +409,5 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
                                             SVNBaseCommand svnCommand, SVNRevision revision,
                                             HttpServletRequest request, HttpServletResponse response,
-                                            BindException exception) throws SVNException;
+                                            BindException exception) throws Exception;
 }
