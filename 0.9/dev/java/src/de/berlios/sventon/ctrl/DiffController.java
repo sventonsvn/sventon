@@ -16,11 +16,13 @@ import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.diff.Diff;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.svnsupport.KeywordHandler;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNProperty;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -41,7 +43,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     logger.debug("Diffing file contents for: " + svnCommand);
     Map<String, Object> model = new HashMap<String, Object>();

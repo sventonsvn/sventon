@@ -12,10 +12,12 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -35,7 +37,7 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     logger.debug("Fetching revision details");
     long revNumber = 0;

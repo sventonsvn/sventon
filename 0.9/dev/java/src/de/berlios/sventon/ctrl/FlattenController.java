@@ -13,11 +13,13 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.SVNException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +55,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
     
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 

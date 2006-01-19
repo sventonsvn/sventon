@@ -15,6 +15,7 @@ import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.ctrl.AbstractSVNTemplateController;
 import de.berlios.sventon.ctrl.RepositoryEntry;
 import de.berlios.sventon.index.RevisionIndexer;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
@@ -55,7 +56,7 @@ public class CompletionController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException {
 
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     final String searchString = request.getParameter("complete");

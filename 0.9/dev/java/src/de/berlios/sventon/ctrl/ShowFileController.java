@@ -15,6 +15,7 @@ import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.KeywordHandler;
 import de.berlios.sventon.svnsupport.LineNumberAppender;
+import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import org.springframework.validation.BindException;
@@ -90,7 +91,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws Exception {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     logger.debug("Assembling file contents for: " + svnCommand);
     Map<String, Object> model = new HashMap<String, Object>();
@@ -130,9 +131,10 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @param properties The file's properties
    * @return Populated model.
    * @throws SVNException if Subversion error.
+   * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleTextFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision, final Map properties) throws Exception {
+                                             final SVNRevision revision, final Map properties) throws SventonException, SVNException {
 
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
@@ -151,7 +153,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     try {
       fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
     } catch (IOException ioex) {
-      throw new Exception(ioex);
+      throw new SventonException(ioex);
     }
 
     logger.debug("Create model");
@@ -168,9 +170,10 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @param revision The revision
    * @return Populated model.
    * @throws SVNException if Subversion error.
+   * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleArchiveFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision) throws Exception {
+                                             final SVNRevision revision) throws SventonException, SVNException {
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
 
@@ -186,7 +189,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       while ((zipEntry = zip.getNextEntry()) != null)
         archiveEntries.add(zipEntry);
     } catch (IOException ioex) {
-      throw new Exception("Unable to show contents of archive file", ioex);
+      throw new SventonException("Unable to show contents of archive file", ioex);
     }
     model.put("entries", archiveEntries);
     return model;

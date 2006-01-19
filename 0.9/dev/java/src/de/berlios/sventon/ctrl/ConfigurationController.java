@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -77,7 +78,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                  BindException e) throws Exception {
+                                  BindException e) throws IOException {
     logger.debug("showForm() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
@@ -99,7 +100,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest,
-                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws Exception {
+                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws IOException {
     logger.debug("processFormSubmission() started");
     logger.info("sventon configuration OK: " + configuration.isConfigured());
     if (configuration.isConfigured()) {

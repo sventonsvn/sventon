@@ -13,6 +13,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -30,9 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Arrays;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -404,10 +405,11 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @param exception  BindException, could be used by the subclass to add error
    *                   messages to the exception.
    * @return Model and view to render.
+   * @throws SventonException Thrown if a sventon error occurs.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
                                             SVNBaseCommand svnCommand, SVNRevision revision,
                                             HttpServletRequest request, HttpServletResponse response,
-                                            BindException exception) throws Exception;
+                                            BindException exception) throws SventonException, SVNException;
 }

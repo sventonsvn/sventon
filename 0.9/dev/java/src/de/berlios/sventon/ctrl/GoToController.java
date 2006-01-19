@@ -11,12 +11,8 @@
  */
 package de.berlios.sventon.ctrl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -26,19 +22,22 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * GoToController.
- * <p>
+ * <p/>
  * Controller to inspect the given path/revision combo and forward to appropriate
  * controller.
- * <p>
- * This controller performs pretty much the same thing as the post handler in 
- * {@link de.berlios.sventon.ctrl.AbstractSVNTemplateController}, but can be 
- * called as a GET request. This gives a somewhat ugly redundancy that probably 
+ * <p/>
+ * This controller performs pretty much the same thing as the post handler in
+ * {@link AbstractSVNTemplateController}, but can be
+ * called as a GET request. This gives a somewhat ugly redundancy that probably
  * should be rmoved.
- * 
+ *
  * @author patrikfr@users.berlios.de
  */
 public class GoToController extends AbstractSVNTemplateController implements Controller {
@@ -46,9 +45,9 @@ public class GoToController extends AbstractSVNTemplateController implements Con
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, 
-      SVNBaseCommand svnCommand, SVNRevision revision, HttpServletRequest request, 
-      HttpServletResponse response, BindException exception) throws SVNException {
+  protected ModelAndView svnHandle(SVNRepository repository,
+                                   SVNBaseCommand svnCommand, SVNRevision revision, HttpServletRequest request,
+                                   HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     String redirectUrl = null;
 
