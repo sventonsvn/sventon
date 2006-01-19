@@ -13,8 +13,8 @@ package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import de.berlios.sventon.svnsupport.RepositoryFactory;
 import de.berlios.sventon.svnsupport.LogEntryActionType;
+import de.berlios.sventon.svnsupport.RepositoryFactory;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -80,17 +80,21 @@ public class RevisionIndexer {
    *
    * @param configuration The repository configuration
    */
-  public RevisionIndexer(final RepositoryConfiguration configuration) throws Exception {
+  public RevisionIndexer(final RepositoryConfiguration configuration) throws RevisionIndexException {
     logger.debug("Creating index instance using given configuration");
     setRepositoryConfiguration(configuration);
     indexedUrl = configuration.getUrl();
     logger.debug("Creating the repository instance");
-    repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-    if (repository == null) {
-      logger.warn("Repository not configured yet. Waiting with index creation");
-      return;
+    try {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      if (repository == null) {
+        logger.warn("Repository not configured yet. Waiting with index creation");
+        return;
+      }
+      initIndex();
+    } catch (SVNException svnex) {
+      throw new RevisionIndexException("Error during instance creation", svnex);
     }
-    initIndex();
   }
 
   /**
@@ -124,8 +128,9 @@ public class RevisionIndexer {
    * Otherwise a complete repository indexing will be executed.
    *
    * @throws SVNException if subversion error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    */
-  private void initIndex() throws Exception {
+  private void initIndex() throws RevisionIndexException, SVNException {
     logger.debug("Initializing index");
     logger.info("Reading serialized index from disk, "
         + configuration.getSVNConfigurationPath()
@@ -182,7 +187,7 @@ public class RevisionIndexer {
    * @throws SVNException if Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
-  protected synchronized void updateIndex() throws Exception {
+  protected synchronized void updateIndex() throws SVNException {
     String[] targetPaths = new String[]{"/"}; // the path to log
     long latestRevision = repository.getLatestRevision();
 
@@ -220,7 +225,7 @@ public class RevisionIndexer {
             doIndexModify(logEntryPath, revision);
             break;
           default :
-            throw new Exception("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+            throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
     }
@@ -312,8 +317,9 @@ public class RevisionIndexer {
    * index, the index will be updated to reflect HEAD revision.
    *
    * @throws SVNException if Subversion error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    */
-  public synchronized void update() throws Exception {
+  public synchronized void update() throws RevisionIndexException, SVNException {
     if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
         index.getIndexRevision() > repository.getLatestRevision()) {
       // index is just created and does not contain any entries
@@ -360,10 +366,10 @@ public class RevisionIndexer {
    * @param searchString The string to search for.
    * @param startDir     The directory where to start search from.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
-   * @throws SVNException if a Subverions error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    * @see de.berlios.sventon.ctrl.RepositoryEntry
    */
-  public List<RepositoryEntry> find(final String searchString, final String startDir) throws Exception {
+  public List<RepositoryEntry> find(final String searchString, final String startDir) throws RevisionIndexException {
     if (searchString == null || searchString.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -372,7 +378,12 @@ public class RevisionIndexer {
       throw new IllegalArgumentException("startDir was null");
     }
 
-    update();
+    try {
+      update();
+    } catch (SVNException svnex) {
+      throw new RevisionIndexException("Error during index update", svnex);
+    }
+
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
       String name = entry.getFullEntryName().toLowerCase();
@@ -390,10 +401,10 @@ public class RevisionIndexer {
    * @param searchPattern The regex pattern to search for.
    * @param startDir The start in directory. Search will be performed in this directory and below.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
-   * @throws SVNException if a Subverions error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    * @see java.util.regex.Pattern
    */
-  public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws Exception {
+  public List<RepositoryEntry> findPattern(final String searchPattern, final String startDir) throws RevisionIndexException {
     return findPattern(searchPattern, startDir, null);
   }
 
@@ -405,12 +416,12 @@ public class RevisionIndexer {
    * @param startDir The start in directory. Search will be performed in this directory and below.
    * @param limit The limit, maximum number of rows returned, <code>null</code> if no limit wanted.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
-   * @throws SVNException if a Subverions error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    * @see java.util.regex.Pattern
    */
   public List<RepositoryEntry> findPattern(final String searchPattern,
                                            final String startDir,
-                                           final Integer limit) throws Exception {
+                                           final Integer limit) throws RevisionIndexException {
     if (searchPattern == null || searchPattern.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -419,7 +430,11 @@ public class RevisionIndexer {
       throw new IllegalArgumentException("startDir was null");
     }
 
-    update();
+    try {
+      update();
+    } catch (SVNException svnex) {
+      throw new RevisionIndexException("Error during index update", svnex);
+    }
 
     int count = 0;
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
@@ -440,14 +455,19 @@ public class RevisionIndexer {
    *
    * @param fromPath The base path to start from.
    * @return A list containing all subdirectory entries below <code>fromPath</code>.
-   * @throws SVNException if a Subverions error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    */
-  public List<RepositoryEntry> getDirectories(final String fromPath) throws Exception {
+  public List<RepositoryEntry> getDirectories(final String fromPath) throws RevisionIndexException {
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty");
     }
 
-    update();
+    try {
+      update();
+    } catch (SVNException svnex) {
+      throw new RevisionIndexException("Error during index update", svnex);
+    }
+
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
       if (RepositoryEntry.Kind.dir == entry.getKind() && entry.getFullEntryName().startsWith(fromPath)) {
@@ -473,9 +493,9 @@ public class RevisionIndexer {
    * The index will not be stored if it does not contain any entries.
    *
    * @param storagePathAndName Full path and name where to store index file.
-   * @throws RuntimeException if IO error occurs.
+   * @throws RevisionIndexException if an index error occurs.
    */
-  public void storeIndex(final String storagePathAndName) throws RuntimeException {
+  public void storeIndex(final String storagePathAndName) throws RevisionIndexException {
     if (index != null && index.getEntries().size() > 0) {
       logger.info("Saving index to disk, " + storagePathAndName);
       ObjectOutputStream out;
@@ -485,7 +505,7 @@ public class RevisionIndexer {
         out.flush();
         out.close();
       } catch (IOException ioex) {
-        throw new RuntimeException("Unable to store index to disk", ioex);
+        throw new RevisionIndexException("Unable to store index to disk", ioex);
       }
     } else {
       logger.info("Index does not contain any entries and will not be stored on disk.");
@@ -499,7 +519,7 @@ public class RevisionIndexer {
     if (configuration != null) {
       try {
         storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-      } catch (RuntimeException re) {
+      } catch (RevisionIndexException re) {
         logger.warn(re);
       }
     }
