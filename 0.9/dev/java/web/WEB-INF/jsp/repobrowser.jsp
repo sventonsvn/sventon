@@ -49,7 +49,8 @@
     <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
   </p>
 
-<br/>
+  <br/>
+  <ui:functionLinks pageName="repobrowse"/> 
 
 <div id="entriesDiv" class="sventonEntriesDiv">
 <form method="get" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
@@ -67,7 +68,6 @@
       <th>Revision</th>
       <th>Author</th>
       <th>Date</th>
-      <th colspan="2">Options</th>
     </tr>
     <%
       int rowCount = 0;
@@ -85,7 +85,6 @@
         <td class="sventonCol3">
           <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
         </td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -139,16 +138,15 @@
           </c:choose>
           </td>
         <% } %>
-        <td class="sventonColLock">
+        <td class="sventonCol4">
           <c:if test="${!empty entry.lock}">
             <a href="#" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${entry.lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${entry.lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')">*</a>
           </c:if>
         </td>
-        <td class="sventonCol4"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
-        <td class="sventonCol5">${entry.revision}</td>
-        <td class="sventonCol6">${entry.author}</td>
-        <td class="sventonCol7"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
-        <td class="sventonCol8"><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
+        <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
+        <td class="sventonCol6">${entry.revision}</td>
+        <td class="sventonCol7">${entry.author}</td>
+        <td class="sventonCol8"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
       </tr>
       <% rowCount++; %>
     </c:forEach>
@@ -161,18 +159,17 @@
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
     </tr>
 
     <tr>
-      <td colspan="2"><input type="button" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
+      <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
       <td>
         <select class="sventonSelect" name="actionSelect">
           <option class="sventonSelectOption">Actions...</option>
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
-        </select><input type="submit" value="go!"/>
+        </select><input type="submit" class="btn" value="go!"/>
       </td>
-      <td colspan="6"></td>
+      <td colspan="5"></td>
     </tr>
   </table>
 </form>

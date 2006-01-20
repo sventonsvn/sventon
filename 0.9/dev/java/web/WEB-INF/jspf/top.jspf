@@ -32,7 +32,7 @@
         </c:otherwise>
       </c:choose>
 
-      <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!"/><input type="hidden" name="startDir" value="${command.pathPart}"/></td>
+      <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!" class="btn"/><input type="hidden" name="startDir" value="${command.pathPart}"/></td>
     </tr>
     <tr>
       <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
@@ -80,22 +80,20 @@
 </spring:hasBindErrors>
 
 <form name="gotoForm" method="post" action="repobrowser.svn">
-<table class="sventonRepositoryFunctionsTable">
-<tr>
-<td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
-<td><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
-</tr>
- <tr>
- <td>Go to revision</td><td colspan="2">Go to path</td>
- </tr>
-<tr>
-<td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
-<td><spring:bind path="command.pathPart"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
-<td><input class="sventonGoToSubmit" type="submit" value="go to"/></td>
-<td><input class="sventonFlattenSubmit" type="button" value="flatten dirs" onclick="javascript: return doFlatten();"/></td>
-
-</tr>
-</table>
+  <table class="sventonRepositoryFunctionsTable">
+    <tr>
+      <td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
+      <td><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
+    </tr>
+    <tr>
+      <td>Go to revision</td><td colspan="2">Go to path</td>
+    </tr>
+    <tr>
+      <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
+      <td><spring:bind path="command.pathPart"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
+      <td><input type="submit" class="btn" value="go to"/></td>
+    </tr>
+  </table>
 </form>
 
 

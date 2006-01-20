@@ -51,15 +51,14 @@ function doSearch(formName) {
 }
 
 // function to handle flatten submissions
-function doFlatten() {
+function doFlatten(url) {
   var flattenURL = 'flatten.svn?path='
-  var targetPath = document.getElementById('goToPath').value;
   var result = true;
-  if (targetPath == '/') {
+  if (url == '/') {
     result = flatteningWarning();
   }
   if (result) {
-    location.href = flattenURL + targetPath;
+    location.href = flattenURL + url;
   } else {
     return false;
   }

@@ -11,7 +11,6 @@ body {
 }
 
 th {
-  text-align: left;
   white-space: nowrap;
   font-family: verdana, sans-serif;
   font-size: 10px;
@@ -37,6 +36,14 @@ input {
   vertical-align: middle;
 }
 
+input.btn{
+  border:1px solid;
+  font-family: verdana, sans-serif;
+  font-size: 10px;
+  font-weight:bold;
+  vertical-align: middle;
+}
+
 .codeBlock {
   font-size: 11px;
   padding: 0.5em;
@@ -56,7 +63,6 @@ input {
   border-right: black solid 2px;
   border-bottom: black solid 2px;
   padding: 0px;
-  spacing: 0px;
 }
 
 .sventonSelect {
@@ -106,10 +112,12 @@ input {
   background-color: #eeeeff;
   border: 1px solid black;
   width: 950px;
+  border-spacing: 1px;
 }
 
 .sventonEntriesTable * TD {
   padding: 0px;
+  border: 0px;
 }
 
 .sventonEntry1 {
@@ -173,7 +181,6 @@ input {
 }
 
 .sventonCol4 {
-  text-align: right;
   white-space: nowrap;
 }
 
@@ -183,11 +190,13 @@ input {
 }
 
 .sventonCol6 {
+  text-align: right;
   white-space: nowrap;
 }
 
 .sventonCol7 {
   white-space: nowrap;
+  text-align: center;
 }
 
 .sventonCol8 {

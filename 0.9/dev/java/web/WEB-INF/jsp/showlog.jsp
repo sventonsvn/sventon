@@ -160,7 +160,7 @@
         </c:choose>
         <tr>
           <td colspan="2">
-            <c:if test="${isFile}"><input type="submit" value="diff"/></c:if>
+            <c:if test="${isFile}"><input type="submit" class="btn" value="diff"/></c:if>
           </td>
           <td colspan="3">&nbsp;</td>
         </tr>

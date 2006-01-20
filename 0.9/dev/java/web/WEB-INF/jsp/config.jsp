@@ -107,7 +107,7 @@
         </table>
       </p>
       <p>
-        <input type="submit" value="submit configuration">
+        <input type="submit" value="submit configuration" class="btn">
       </p>
     </form>
   <%@ include file="/WEB-INF/jspf/foot.jspf"%>
