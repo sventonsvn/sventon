@@ -38,8 +38,17 @@
   <c:when test="${pageName == 'showFile'}">
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="${showLogLinkUrl}">[Show log]</a></td>
-        <td><a href="${downloadLinkUrl}">[Download]</a></td>
+        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
+        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
+      </tr>
+    </table>
+  </c:when>
+
+  <c:when test="${pageName == 'repobrowse'}">
+    <table class="sventonFunctionLinksTable">
+      <tr>
+        <td><input type="button" class="btn" value="Flatten dir" onclick="javascript:return doFlatten('${command.path}');"/></td>
+        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
       </tr>
     </table>
   </c:when>
@@ -49,13 +58,13 @@
       <tr>
       <c:choose>
       <c:when test="${isFile}">
-        <td><a href="${showFileLinkUrl}">[Show file]</a></td>
+        <td><input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/></td>
         </c:when>
         <c:otherwise>
-        <td><a href="${showDirLinkUrl}">[Show directory]</a></td>
+        <td><input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/></td>
         </c:otherwise>
         </c:choose>
-        <td><a href="${downloadLinkUrl}">[Download]</a></td>
+        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
       </tr>
     </table>
   </c:when>
@@ -63,7 +72,7 @@
   <c:when test="${pageName == 'showRevInfo'}">
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="${showDirLinkUrl}">[Show directory]</a></td>
+        <td><input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/></td>
       </tr>
     </table>
   </c:when>
@@ -71,7 +80,7 @@
   <c:when test="${pageName == 'showDiff'}">
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="${showLogLinkUrl}">[Show log]</a></td>
+        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
       </tr>
     </table>
   </c:when>
@@ -79,9 +88,9 @@
   <c:when test="${pageName == 'showBlame'}">
     <table class="sventonFunctionLinksTable">
       <tr>
-        <td><a href="${showFileLinkUrl}">[Show file]</a></td>
-        <td><a href="${downloadLinkUrl}">[Download]</a></td>
-        <td><a href="${showLogLinkUrl}">[Show log]</a></td>
+        <td><input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/></td>
+        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
+        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
       </tr>
     </table>
   </c:when>
