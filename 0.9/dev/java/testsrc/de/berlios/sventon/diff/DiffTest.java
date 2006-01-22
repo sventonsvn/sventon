@@ -70,7 +70,7 @@ public class DiffTest extends TestCase {
         "}\n";
 
     String leftResult =
-        "u<span class=\"sventonLineNo\">1:&nbsp;</span>/**\n" +
+        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>/**\n" +
         "a\n" +
         "a\n" +
         "a\n" +
@@ -78,15 +78,15 @@ public class DiffTest extends TestCase {
         "a\n" +
         "a\n" +
         "a\n" +
-        "u<span class=\"sventonLineNo\">2:&nbsp;</span> * $Author$\n" +
-        "c<span class=\"sventonLineNo\">3:&nbsp;</span> * $Revision$\n" +
-        "c<span class=\"sventonLineNo\">4:&nbsp;</span> * $Date:$\n" +
+        "u<span class=\"sventonLineNo\">    2:&nbsp;</span> * $Author$\n" +
+        "c<span class=\"sventonLineNo\">    3:&nbsp;</span> * $Revision$\n" +
+        "c<span class=\"sventonLineNo\">    4:&nbsp;</span> * $Date:$\n" +
         "c\n" +
-        "u<span class=\"sventonLineNo\">5:&nbsp;</span> */\n" +
-        "u<span class=\"sventonLineNo\">6:&nbsp;</span>Test1\n" +
-        "u<span class=\"sventonLineNo\">7:&nbsp;</span>Another test!\n" +
-        "u<span class=\"sventonLineNo\">8:&nbsp;</span>More!\n" +
-        "u<span class=\"sventonLineNo\">9:&nbsp;</span>Even more!\n" +
+        "u<span class=\"sventonLineNo\">    5:&nbsp;</span> */\n" +
+        "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Test1\n" +
+        "u<span class=\"sventonLineNo\">    7:&nbsp;</span>Another test!\n" +
+        "u<span class=\"sventonLineNo\">    8:&nbsp;</span>More!\n" +
+        "u<span class=\"sventonLineNo\">    9:&nbsp;</span>Even more!\n" +
         "a\n" +
         "a\n" +
         "a\n" +
@@ -94,28 +94,28 @@ public class DiffTest extends TestCase {
         "a\n";
 
     String rightResult =
-        "u<span class=\"sventonLineNo\">1:&nbsp;</span>/**\n" +
-        "a<span class=\"sventonLineNo\">2:&nbsp;</span> * $Id$\n" +
-        "a<span class=\"sventonLineNo\">3:&nbsp;</span> * $LastChangedDate$\n" +
-        "a<span class=\"sventonLineNo\">4:&nbsp;</span> * $Date$\n" +
-        "a<span class=\"sventonLineNo\">5:&nbsp;</span> * $LastChangedRevision$\n" +
-        "a<span class=\"sventonLineNo\">6:&nbsp;</span> * $Revision$\n" +
-        "a<span class=\"sventonLineNo\">7:&nbsp;</span> * $Rev$\n" +
-        "a<span class=\"sventonLineNo\">8:&nbsp;</span> * $LastChangedBy$\n" +
-        "u<span class=\"sventonLineNo\">9:&nbsp;</span> * $Author$\n" +
-        "c<span class=\"sventonLineNo\">10:&nbsp;</span> * $HeadURL$\n" +
-        "c<span class=\"sventonLineNo\">11:&nbsp;</span> * $URL$\n" +
-        "c<span class=\"sventonLineNo\">12:&nbsp;</span> * $Id$\n" +
-        "u<span class=\"sventonLineNo\">13:&nbsp;</span> */\n" +
-        "u<span class=\"sventonLineNo\">14:&nbsp;</span>Test1\n" +
-        "u<span class=\"sventonLineNo\">15:&nbsp;</span>Another test!\n" +
-        "u<span class=\"sventonLineNo\">16:&nbsp;</span>More!\n" +
-        "u<span class=\"sventonLineNo\">17:&nbsp;</span>Even more!\n" +
-        "a<span class=\"sventonLineNo\">18:&nbsp;</span>\n" +
-        "a<span class=\"sventonLineNo\">19:&nbsp;</span>public String getRev {\n" +
-        "a<span class=\"sventonLineNo\">20:&nbsp;</span> return \"$Rev$\";\n" +
-        "a<span class=\"sventonLineNo\">21:&nbsp;</span>\n" +
-        "a<span class=\"sventonLineNo\">22:&nbsp;</span>}\n";
+        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>/**\n" +
+        "a<span class=\"sventonLineNo\">    2:&nbsp;</span> * $Id$\n" +
+        "a<span class=\"sventonLineNo\">    3:&nbsp;</span> * $LastChangedDate$\n" +
+        "a<span class=\"sventonLineNo\">    4:&nbsp;</span> * $Date$\n" +
+        "a<span class=\"sventonLineNo\">    5:&nbsp;</span> * $LastChangedRevision$\n" +
+        "a<span class=\"sventonLineNo\">    6:&nbsp;</span> * $Revision$\n" +
+        "a<span class=\"sventonLineNo\">    7:&nbsp;</span> * $Rev$\n" +
+        "a<span class=\"sventonLineNo\">    8:&nbsp;</span> * $LastChangedBy$\n" +
+        "u<span class=\"sventonLineNo\">    9:&nbsp;</span> * $Author$\n" +
+        "c<span class=\"sventonLineNo\">   10:&nbsp;</span> * $HeadURL$\n" +
+        "c<span class=\"sventonLineNo\">   11:&nbsp;</span> * $URL$\n" +
+        "c<span class=\"sventonLineNo\">   12:&nbsp;</span> * $Id$\n" +
+        "u<span class=\"sventonLineNo\">   13:&nbsp;</span> */\n" +
+        "u<span class=\"sventonLineNo\">   14:&nbsp;</span>Test1\n" +
+        "u<span class=\"sventonLineNo\">   15:&nbsp;</span>Another test!\n" +
+        "u<span class=\"sventonLineNo\">   16:&nbsp;</span>More!\n" +
+        "u<span class=\"sventonLineNo\">   17:&nbsp;</span>Even more!\n" +
+        "a<span class=\"sventonLineNo\">   18:&nbsp;</span>\n" +
+        "a<span class=\"sventonLineNo\">   19:&nbsp;</span>public String getRev {\n" +
+        "a<span class=\"sventonLineNo\">   20:&nbsp;</span> return \"$Rev$\";\n" +
+        "a<span class=\"sventonLineNo\">   21:&nbsp;</span>\n" +
+        "a<span class=\"sventonLineNo\">   22:&nbsp;</span>}\n";
 
 /*
 
@@ -238,15 +238,15 @@ public class DiffTest extends TestCase {
         "OneMore=9\n";
 
     String leftResult =
-        "u<span class=\"sventonLineNo\">1:&nbsp;</span>[.ShellClassInfo]\n" +
-        "c<span class=\"sventonLineNo\">2:&nbsp;</span>InfoTip=@Shell32.dll,-12690\n" +
-        "c<span class=\"sventonLineNo\">3:&nbsp;</span>IconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
-        "c<span class=\"sventonLineNo\">4:&nbsp;</span>IconIndex=-238\n" +
-        "u<span class=\"sventonLineNo\">5:&nbsp;</span>[DeleteOnCopy]\n" +
-        "u<span class=\"sventonLineNo\">6:&nbsp;</span>Owner=Jesper\n" +
+        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>[.ShellClassInfo]\n" +
+        "c<span class=\"sventonLineNo\">    2:&nbsp;</span>InfoTip=@Shell32.dll,-12690\n" +
+        "c<span class=\"sventonLineNo\">    3:&nbsp;</span>IconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
+        "c<span class=\"sventonLineNo\">    4:&nbsp;</span>IconIndex=-238\n" +
+        "u<span class=\"sventonLineNo\">    5:&nbsp;</span>[DeleteOnCopy]\n" +
+        "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Owner=Jesper\n" +
         "a\n" +
-        "u<span class=\"sventonLineNo\">7:&nbsp;</span>Personalized=14\n" +
-        "u<span class=\"sventonLineNo\">8:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
+        "u<span class=\"sventonLineNo\">    7:&nbsp;</span>Personalized=14\n" +
+        "u<span class=\"sventonLineNo\">    8:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
         "a\n" +
         "a\n" +
         "a\n" +
@@ -254,20 +254,20 @@ public class DiffTest extends TestCase {
         "a\n";
 
     String rightResult =
-        "u<span class=\"sventonLineNo\">1:&nbsp;</span>[.ShellClassInfo]\n" +
-        "c<span class=\"sventonLineNo\">2:&nbsp;</span>IconIndex=-2388\n" +
+        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>[.ShellClassInfo]\n" +
+        "c<span class=\"sventonLineNo\">    2:&nbsp;</span>IconIndex=-2388\n" +
         "c\n" +
         "c\n" +
-        "u<span class=\"sventonLineNo\">3:&nbsp;</span>[DeleteOnCopy]\n" +
-        "u<span class=\"sventonLineNo\">4:&nbsp;</span>Owner=Jesper\n" +
-        "a<span class=\"sventonLineNo\">5:&nbsp;</span>Owner=Patrik&Jesper\n" +
-        "u<span class=\"sventonLineNo\">6:&nbsp;</span>Personalized=14\n" +
-        "u<span class=\"sventonLineNo\">7:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
-        "a<span class=\"sventonLineNo\">8:&nbsp;</span>OneMore=true\n" +
-        "a<span class=\"sventonLineNo\">9:&nbsp;</span>OneMore=4\n" +
-        "a<span class=\"sventonLineNo\">10:&nbsp;</span>OneMore=5\n" +
-        "a<span class=\"sventonLineNo\">11:&nbsp;</span>OneMore=6\n" +
-        "a<span class=\"sventonLineNo\">12:&nbsp;</span>OneMore=9\n";
+        "u<span class=\"sventonLineNo\">    3:&nbsp;</span>[DeleteOnCopy]\n" +
+        "u<span class=\"sventonLineNo\">    4:&nbsp;</span>Owner=Jesper\n" +
+        "a<span class=\"sventonLineNo\">    5:&nbsp;</span>Owner=Patrik&Jesper\n" +
+        "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Personalized=14\n" +
+        "u<span class=\"sventonLineNo\">    7:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
+        "a<span class=\"sventonLineNo\">    8:&nbsp;</span>OneMore=true\n" +
+        "a<span class=\"sventonLineNo\">    9:&nbsp;</span>OneMore=4\n" +
+        "a<span class=\"sventonLineNo\">   10:&nbsp;</span>OneMore=5\n" +
+        "a<span class=\"sventonLineNo\">   11:&nbsp;</span>OneMore=6\n" +
+        "a<span class=\"sventonLineNo\">   12:&nbsp;</span>OneMore=9\n";
 
 
 // Diff result
