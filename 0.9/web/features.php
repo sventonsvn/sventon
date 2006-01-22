@@ -16,4 +16,6 @@
   <li>Image thumbnail preview.</li>
   <li>Diff files between revisions.</li>
   <li>Keyword expansion when viewing or diffing files.</li>
+  <li>Revision details as RSS feeds.</li>
+  <li>Display of file lock information.</li>
 </ul>

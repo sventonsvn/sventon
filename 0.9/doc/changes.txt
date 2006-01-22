@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[373] Added: Display of all current locks, recursively.
 [365] Added: Upgraded to JavaSVN 1.0.2.
 [356] Added: File lock display in browser view.
 [350] Fixed: Removed mount point feature (too much pain, not enough gain).
