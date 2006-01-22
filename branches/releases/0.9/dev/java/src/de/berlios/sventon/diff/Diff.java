@@ -81,6 +81,7 @@ public class Diff {
       LineNumberAppender appender = new LineNumberAppender();
       appender.setEmbedStart("<span class=\"sventonLineNo\">");
       appender.setEmbedEnd(":&nbsp;</span>");
+      appender.setPadding(5);
 
       reader = new BufferedReader(new StringReader(appender.appendTo(leftString)));
       while ((tempLine = reader.readLine()) != null) {

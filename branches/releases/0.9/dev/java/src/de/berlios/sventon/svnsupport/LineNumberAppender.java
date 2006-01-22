@@ -11,9 +11,11 @@
  */
 package de.berlios.sventon.svnsupport;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
-import java.io.StringReader;
 import java.io.IOException;
+import java.io.StringReader;
 
 /**
  * Appends line numbers to strings.
@@ -25,6 +27,8 @@ public final class LineNumberAppender {
   private String embedStart = "";
   private String embedEnd = "";
   private int offset;
+  private int paddingLength = 0;
+  private char paddingCharacter = ' ';
 
   /**
    * Constructor.
@@ -61,6 +65,25 @@ public final class LineNumberAppender {
   }
 
   /**
+   * Sets the length, including the actual line number, used for padding.
+   * Default padding length is <tt>zero</tt>.
+   *
+   * @param length The padding length
+   */
+  public void setPadding(final int length) {
+    this.paddingLength = length;
+  }
+
+  /**
+   * Sets the character used for line number padding.
+   * Defatul character is <tt>space</tt>.
+   * @param character Padding character
+   */
+  public void setPaddingCharacter(final char character) {
+    this.paddingCharacter = character;
+  }
+
+  /**
    * Adds line numbers to previously given input string.
    *
    * @return The string with appended line numbers.
@@ -73,12 +96,13 @@ public final class LineNumberAppender {
     int lineCount = 0 + offset;
     while ((tempLine = reader.readLine()) != null) {
       sb.append(embedStart);
-      sb.append(++lineCount);
+      sb.append(StringUtils.leftPad(String.valueOf(++lineCount),
+          paddingLength, paddingCharacter));
       sb.append(embedEnd);
       sb.append(tempLine);
       sb.append(System.getProperty("line.separator"));
     }
-    return sb.toString().trim();
+    return StringUtils.chomp(sb.toString());
   }
 
   /**
