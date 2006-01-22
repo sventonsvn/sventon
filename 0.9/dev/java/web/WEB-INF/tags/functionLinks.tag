@@ -34,65 +34,46 @@
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
+<form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
+<table class="sventonFunctionLinksTable" border="0">
+  <tr><td>
+
 <c:choose>
   <c:when test="${pageName == 'showFile'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
-        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
-      </tr>
-    </table>
+    <input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'repobrowse'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><input type="button" class="btn" value="Flatten dir" onclick="javascript:return doFlatten('${command.path}');"/></td>
-        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
-      </tr>
-    </table>
+    <input type="button" class="btn" value="Flatten dir" onclick="javascript:return doFlatten('${command.path}');"/>
+    <input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showLog'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-      <c:choose>
+    <c:choose>
       <c:when test="${isFile}">
-        <td><input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/></td>
-        </c:when>
-        <c:otherwise>
-        <td><input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/></td>
-        </c:otherwise>
-        </c:choose>
-        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
-      </tr>
-    </table>
+        <input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+      </c:when>
+      <c:otherwise>
+        <input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+      </c:otherwise>
+    </c:choose>
+    <input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showRevInfo'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/></td>
-      </tr>
-    </table>
+    <input type="button" class="btn" value="Show directory" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showDiff'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
-      </tr>
-    </table>
+    <input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showBlame'}">
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/></td>
-        <td><input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/></td>
-        <td><input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/></td>
-      </tr>
-    </table>
+    <input type="button" class="btn" value="Show file" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+    <input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
   </c:when>
 
   <c:otherwise>
@@ -100,4 +81,11 @@ No function link style for pagename ${pagename}
   </c:otherwise>
 </c:choose>
 
-
+    </td>
+    <td align="right" style="white-space: nowrap;">Search current directory and below <input type="text" name="sventonSearchString" class="sventonSearchField" value=""/><input type="submit" value="go!" class="btn"/><input type="hidden" name="startDir" value="${command.pathPart}"/></td>
+  </tr>
+</table>
+  <!-- Needed by ASVNTC -->
+  <input type="hidden" name="path" value="${command.path}${entry.name}"/>
+  <input type="hidden" name="revision" value="${command.revision}"/>
+</form>
