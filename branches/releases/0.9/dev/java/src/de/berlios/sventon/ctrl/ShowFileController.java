@@ -141,16 +141,17 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
-    // Expand keywords, if any.
-    KeywordHandler keywordHandler = new KeywordHandler(properties,
-        getRepositoryConfiguration().getUrl() + svnCommand.getPath());
-    String fileContents = keywordHandler.substitute(outStream.toString());
-
-    LineNumberAppender appender = new LineNumberAppender();
-    appender.setEmbedStart("<span class=\"sventonLineNo\">");
-    appender.setEmbedEnd(":&nbsp;</span>");
-
+    String fileContents;
     try {
+      // Expand keywords, if any.
+      KeywordHandler keywordHandler = new KeywordHandler(properties,
+          getRepositoryConfiguration().getUrl() + svnCommand.getPath());
+      fileContents = keywordHandler.substitute(outStream.toString());
+
+      LineNumberAppender appender = new LineNumberAppender();
+      appender.setEmbedStart("<span class=\"sventonLineNo\">");
+      appender.setEmbedEnd(":&nbsp;</span>");
+
       fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
     } catch (IOException ioex) {
       throw new SventonException(ioex);
