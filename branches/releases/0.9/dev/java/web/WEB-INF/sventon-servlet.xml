@@ -36,6 +36,15 @@
     </property>
   </bean>
 
+  <bean id="showLockController" class="de.berlios.sventon.ctrl.ShowLockController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
   <bean id="rssController" class="de.berlios.sventon.ctrl.xml.RSSController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
@@ -255,6 +264,7 @@
         <prop key="/diff.svn">diffController</prop>
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
+        <prop key="/showlock.svn">showLockController</prop>
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
         <prop key="/compl.xml">completionController</prop>

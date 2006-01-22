@@ -97,7 +97,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the end/leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getCompletePath()}.
+   * {@link SVNBaseCommand#getPath()}.
    * <p>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
@@ -111,7 +111,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getCompletePath()}. 
+   * {@link SVNBaseCommand#getPath()}.
    * <p>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.

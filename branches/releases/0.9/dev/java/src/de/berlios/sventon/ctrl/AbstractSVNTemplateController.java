@@ -286,12 +286,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * Gets the repository locks.
    *
    * @param repository The repository
+   * @param startPath The start path. If <code>null</code> locks will be gotten from root.
    * @return Lock info
    * @throws SVNException if subversion error.
    */
-  protected Map<String, SVNLock> getLocks(final SVNRepository repository) throws SVNException {
-    logger.debug("Getting lock info");
-    SVNLock[] locksArray = repository.getLocks("/");
+  protected Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException {
+    String path = startPath == null ? "/" : startPath;
+    logger.debug("Getting lock info for path [" + path + "] and below");
+    SVNLock[] locksArray = repository.getLocks(path);
     Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
     logger.debug("Locks found: " + Arrays.asList(locksArray));
     for (SVNLock lock : locksArray) {
