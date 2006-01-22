@@ -94,17 +94,18 @@ input.btn{
 }
 
 .sventonRevision {
+  width: 100px;
 }
 
 .sventonHeadlines {
   font-family: verdana, sans-serif;
   font-size: 10px;
   font-weight: bold;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .sventonGoTo {
-  width: 30em;
+  width: 200px;
 }
 
 .sventonEntriesTable {
@@ -245,6 +246,7 @@ input.btn{
 }
 
 .sventonFunctionLinksTable {
+  width: 100%;
   border-spacing: 3px;
 }
 
