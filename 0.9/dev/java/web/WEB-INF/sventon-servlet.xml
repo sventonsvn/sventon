@@ -297,6 +297,20 @@
     </constructor-arg>
   </bean>
 
-  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true" />
+  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true">
+    <property name="rendererMappings">
+      <props>
+        <prop key="java"><ref bean="javaXhtmlRenderer"/></prop>
+        <prop key="html"><ref bean="xmlXhtmlRenderer"/></prop>
+        <prop key="htm"><ref bean="xmlXhtmlRenderer"/></prop>
+        <prop key="xml"><ref bean="xmlXhtmlRenderer"/></prop>
+        <prop key="xhtml"><ref bean="xmlXhtmlRenderer"/></prop>
+        <prop key="lzx"><ref bean="xmlXhtmlRenderer"/></prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true">
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true">
 
 </beans>
