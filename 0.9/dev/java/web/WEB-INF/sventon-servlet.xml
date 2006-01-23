@@ -299,18 +299,18 @@
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true">
     <property name="rendererMappings">
-      <props>
-        <prop key="java"><ref bean="javaXhtmlRenderer"/></prop>
-        <prop key="html"><ref bean="xmlXhtmlRenderer"/></prop>
-        <prop key="htm"><ref bean="xmlXhtmlRenderer"/></prop>
-        <prop key="xml"><ref bean="xmlXhtmlRenderer"/></prop>
-        <prop key="xhtml"><ref bean="xmlXhtmlRenderer"/></prop>
-        <prop key="lzx"><ref bean="xmlXhtmlRenderer"/></prop>
-      </props>
+      <map>
+        <entry key="java" value-ref="javaXhtmlRenderer"/>
+        <entry key="html" value-ref="xmlXhtmlRenderer"/>
+        <entry key="htm" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xhtml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="lzx" value-ref="xmlXhtmlRenderer"/>
+      </map>
     </property>
   </bean>
 
-  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true">
-  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true">
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true" />
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true" />
 
 </beans>
