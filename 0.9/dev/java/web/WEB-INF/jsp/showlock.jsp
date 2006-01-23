@@ -65,7 +65,7 @@
 
       <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
         <td>&nbsp;</td>
-        <td>&nbsp;</td>
+        <td><b>Total: <%=rowCount%> entries</b></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
