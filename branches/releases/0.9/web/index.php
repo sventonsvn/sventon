@@ -4,12 +4,16 @@
     <title>sventon - subversion repository browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css" href="sventon.css">
+    <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml" />
   </head>
 
   <body bgcolor="#FFFFFF">
     <p>&nbsp;</p>
 
 <?php
+  require 'magpierss/rss_utils.inc'; 
+  require_once('magpierss/rss_fetch.inc'); 
+
   // get the value of the request parameter
   $pageparameter=$_GET['page'];
 
@@ -35,8 +39,11 @@
     case "screenshots":
       $includepage="screenshots.php";
       break;
+    case "news":
+      $includepage="news.php";
+      break;
     default:
-      $includepage="about.php";
+      $includepage="main.php";
       break;
   }
 ?>
@@ -71,7 +78,12 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="index.php?page=about">[about]</a>
+                <a href="index.php?page=main">[main]</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <a href="index.php?page=news">[news]</a>
               </td>
             </tr>
             <tr>
