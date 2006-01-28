@@ -26,6 +26,25 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
 </p>
 
 <p>
+  <b>Latest news</b>
+  <br/><b>
+
+<?php
+  $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml'); 
+  $item = $rss->items[0];
+  $modified = parse_w3cdtf($item['modified']);
+  $title = $item['title'];
+  $content = $item['atom_content'];
+  echo date("Y-m-d", $modified);
+  echo " - $title</b>\r";
+  echo "$content\r";
+?>
+
+  <br/>
+  <a href="index.php?page=news">More news...</a>
+</p>
+
+<p>
   <b>Acknowledgments</b>
   <br/>
   sventon uses several open source projects created by contributions from many individuals and organizations. Many thanks!

@@ -1,4 +1,4 @@
 <p>
-Currently, the <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/doc/roadmap.txt">roadmap</a> document contains the latest changes and some ideas about upcoming features.
+See the <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/doc/changes.txt">change history</a> document for version details.
 </p>
 
