@@ -208,6 +208,6 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> Many of our customers want to know how they can maximize productivity through our patented office groupware innovations. The answer is simple: first, click on the "File" menu, scroll down to "Increase Productivity", then...
 <br/><br/>
-Well, no, not really. But this is such a great FAQ question we couldn't resist stealing it from: <a href="http://svnbook.red-bean.com/en/1.1/svn-book.html#svn-foreword">Version Control with Subversion</a>
+Further reading: <a href="http://svnbook.red-bean.com/en/1.1/svn-book.html#svn-foreword">Version Control with Subversion</a>
 </p>
 
