@@ -78,7 +78,7 @@
     <td>249</td>
   </tr>
   <tr>
-    <td>Win2k</td>
+    <td>WinXP</td>
     <td>1.3.0</td>
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
