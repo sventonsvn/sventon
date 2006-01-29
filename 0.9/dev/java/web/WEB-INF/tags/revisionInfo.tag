@@ -13,6 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="java.util.*" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntryPath" %>
