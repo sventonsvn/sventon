@@ -53,10 +53,10 @@
     <td class="sventonHeadlines" colspan="2">
     <c:choose>
       <c:when test="${!empty numrevision}">
-          ${command.revision} (${numrevision})
+          Rev: ${command.revision} (${numrevision})
       </c:when>
       <c:otherwise>
-          <font color="#ff0000">${command.revision}</font>
+          Rev: <font color="#ff0000">${command.revision}</font>
       </c:otherwise>
     </c:choose>
      - <a href="repobrowser.svn?path=/&revision=${command.revision}">
