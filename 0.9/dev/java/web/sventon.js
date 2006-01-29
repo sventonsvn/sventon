@@ -13,16 +13,22 @@ function toggleEntryFields(formName) {
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-
-  // Check if any entry is checked
+  var undefined;
   var checkedEntry = false;
-  for (i = 0; i < formName.entry.length; i++) {
-    if (formName.entry[i].checked == true) {
-      checkedEntry = true;
-      break;
+
+  // Check if only one entry exists - and wether it's checked
+  if (formName.entry.length == undefined) {
+    checkedEntry = formName.entry.checked;
+  } else {
+    // More than one entry exists - Check if any are checked
+    for (i = 0; i < formName.entry.length; i++) {
+      if (formName.entry[i].checked == true) {
+        checkedEntry = true;
+        break;
+      }
     }
   }
-
+  
   // If no value is selected or no entries selected, no action is taken.
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '' || !checkedEntry) return false;
 
