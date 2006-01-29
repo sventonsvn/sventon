@@ -18,39 +18,25 @@
 
 <table class="sventonTopTable" border="0">
   <tr>
-    <c:choose>
-      <c:when test="${!empty numrevision}">
-        <td class="sventonHeadlines">
-          Revision: ${command.revision} (${numrevision})
-        </td>
-      </c:when>
-      <c:otherwise>
-        <td class="sventonHeadlines" style="color: #ff0000">
-          Revision: ${command.revision}
-        </td>
-      </c:otherwise>
-    </c:choose>
-    <td align="right" rowspan="2">
-      <form name="gotoForm" method="post" action="repobrowser.svn">
+    <td valign="bottom" colspan="1"><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
+    <td align="right">
+    <form name="gotoForm" method="post" action="repobrowser.svn">
         <table class="sventonRepositoryFunctionsTable" border="0">
+        <tr>
+            <td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
+            <td colspan="2"><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
+          </tr>
           <tr>
             <td>Go to revision</td><td colspan="2">Go to path</td>
           </tr>
           <tr>
             <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
-            <td><spring:bind path="command.pathPart"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
+            <td><spring:bind path="command.path"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
             <td><input type="submit" class="btn" value="go!"/></td>
-          </tr>
-          <tr>
-            <td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
-            <td colspan="2"><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
           </tr>
         </table>
       </form>
     </td>
-  </tr>
-  <tr>
-    <td><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
   </tr>
   <tr>
     <td style="white-space: nowrap;" colspan="2">
@@ -65,7 +51,15 @@
   <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
   <tr>
     <td class="sventonHeadlines" colspan="2">
-     Repository path:<br/><a href="repobrowser.svn?path=/&revision=${command.revision}">
+    <c:choose>
+      <c:when test="${!empty numrevision}">
+          ${command.revision} (${numrevision})
+      </c:when>
+      <c:otherwise>
+          <font color="#ff0000">${command.revision}</font>
+      </c:otherwise>
+    </c:choose>
+     - <a href="repobrowser.svn?path=/&revision=${command.revision}">
       ${url} </a> /
       <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
