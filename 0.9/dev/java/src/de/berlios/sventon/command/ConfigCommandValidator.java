@@ -62,16 +62,21 @@ public class ConfigCommandValidator implements Validator {
 
     // Validate the 'configPath'
     String configPath = command.getConfigPath();
+    logger.info("configpath is: " + configPath);
     if (configPath != null) {
       if (configPath.equals("")) {
+        logger.info("Setting configPath to: " + System.getProperty("file.separator"));
         configPath += System.getProperty("file.separator");
       }
       File configDir = new File(configPath);
       if (!configDir.isDirectory()) {
+        logger.warn("configPath is not a directory");
         errors.rejectValue("configPath", "config.error.illegal-path", "'" + configPath + "' is not a directory.");
       } else {
         if (!configDir.canWrite()) {
-          errors.rejectValue("configPath", "config.error.no-write-permission", "No write permission to path '" + configPath + "'.");
+          String msg = "No write permission to path '" + configPath + "'.";
+          logger.warn(msg);
+          errors.rejectValue("configPath", "config.error.no-write-permission", msg);
         }
       }
     }
@@ -84,18 +89,22 @@ public class ConfigCommandValidator implements Validator {
       try {
         url = SVNURL.parseURIDecoded(repositoryURL);
       } catch (SVNException ex) {
-        errors.rejectValue("repositoryURL", "config.error.illegal-url", "Invalid repository URL.");
+        String msg = "Invalid repository URL: " + repositoryURL;
+        logger.warn(msg);
+        errors.rejectValue("repositoryURL", "config.error.illegal-url", msg);
       }
       if (url != null && testConnection) {
+        logger.info("Testing repository connection");
         RepositoryConfiguration config = new RepositoryConfiguration();
         config.setRepositoryRoot(repositoryURL);
         config.setConfiguredUID(command.getUsername());
-        config.setConfiguredUID(command.getPassword());
+        config.setConfiguredPWD(command.getPassword());
         config.setSVNConfigurationPath(command.getConfigPath());
         try {
           SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(config);
           repos.testConnection();
         } catch (SVNException e) {
+          logger.warn("Unable to connect to repository", e);
           errors.rejectValue("repositoryURL", "config.error.connection-error", "Unable to connect to repository. Check URL, user name and password.");
         }
       }

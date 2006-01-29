@@ -1,4 +1,4 @@
 <p>
-Currently, the <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/doc/roadmap.txt">roadmap</a> document contains the latest changes and some ideas about upcoming features.
+Currently, the <a href="http://developer.berlios.de/feature/?group_id=3670">feature request</a> page contains the some ideas about upcoming features.
 </p>
 

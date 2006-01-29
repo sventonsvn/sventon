@@ -42,7 +42,7 @@ public class ConfigurationController extends AbstractFormController {
   /** Logger for this class and subclasses. */
   private final Log logger = LogFactory.getLog(getClass());
 
-  public static final String SVENTON_PROPERTIES = "WEB-INF/classes/default-sventon.properties";
+  public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/default-sventon.properties";
 
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
 
@@ -111,6 +111,7 @@ public class ConfigurationController extends AbstractFormController {
       ConfigCommand confCommand = (ConfigCommand) command;
 
       if (exception.hasErrors()) {
+        //noinspection unchecked
         Map<String, Object> model = exception.getModel();
         confCommand.setCurrentDir(new File(".").getCanonicalPath());
         model.put("command", command);
@@ -177,7 +178,7 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# container must have read/write access to this directory.                     #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.configpath=c:/temp                                                     #\n");
+    comments.append("#   svn.configpath=c:/temp/                                                    #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.uid                                                                 #\n");
