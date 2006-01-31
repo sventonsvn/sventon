@@ -376,7 +376,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
    * <p/>
    * TODO: This (could perhaps) be a suitable place to also handle conversion of
-   * date to revision to expand possilbe user input to handle calendar
+   * date to revision to expand possible user input to handle calendar
    * intervalls.
    *
    * @param svnCommand Command object.

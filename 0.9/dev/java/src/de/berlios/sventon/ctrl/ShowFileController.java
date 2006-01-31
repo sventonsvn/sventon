@@ -101,6 +101,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
     logger.debug(properties);
     model.put("properties", properties);
+    model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       model.putAll(handleTextFile(repository, svnCommand, revision, properties));

@@ -46,6 +46,15 @@
   <c:when test="${pageName == 'showFile'}">
     <input type="button" class="btn" value="Show log" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="Download" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+
+    <c:if test="${!empty committedRevision && !isBinary}">
+      <c:url value="diffprev.svn" var="diffPreviousUrl">
+        <c:param name="path" value="${command.path}${entry.name}" />
+        <c:param name="revision" value="${command.revision}" />
+        <c:param name="commitrev" value="${committedRevision}" />
+      </c:url>
+      <input type="button" class="btn" value="Diff to previous" title="Diff this file revision (${committedRevision}) to previous" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
+    </c:if>
   </c:when>
 
   <c:when test="${pageName == 'repobrowse'}">

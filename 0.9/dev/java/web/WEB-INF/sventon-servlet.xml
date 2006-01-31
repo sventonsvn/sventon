@@ -182,6 +182,15 @@
     </property>
   </bean>
 
+  <bean id="diffPreviousController" class="de.berlios.sventon.ctrl.DiffPreviousController">
+    <property name="repositoryConfiguration">
+      <ref bean="repositoryConfig" />
+    </property>
+    <property name="validator">
+      <ref bean="svnBaseCommandValidator" />
+    </property>
+  </bean>
+
   <bean id="getController" class="de.berlios.sventon.ctrl.GetController">
     <property name="repositoryConfiguration">
       <ref bean="repositoryConfig" />
@@ -262,6 +271,7 @@
         <prop key="/config.svn">configurationController</prop>
         <prop key="/showthumbs.svn">showThumbnailController</prop>
         <prop key="/diff.svn">diffController</prop>
+        <prop key="/diffprev.svn">diffPreviousController</prop>
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
         <prop key="/showlock.svn">showLockController</prop>
