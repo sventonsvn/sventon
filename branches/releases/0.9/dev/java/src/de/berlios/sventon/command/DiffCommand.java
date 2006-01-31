@@ -1,11 +1,14 @@
 package de.berlios.sventon.command;
 
 import de.berlios.sventon.diff.DiffException;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
+
+import java.util.*;
 
 /**
  * DiffCommand.
  * <p/>
- * Command class used to parse and bundle request parameters for diffing.
+ * Command class used to parse and bundle diffing from/to details.
  *
  * @author jesper@users.berlios.de
  */
@@ -18,6 +21,7 @@ public class DiffCommand {
 
   /**
    * Constructor.
+   * Used when diffing two given entries with given path and revision details.
    *
    * @param parameters The string array containing exactly two entries in the format,
    *                   <i>pathAndFilename;;revision</i>.
@@ -42,6 +46,34 @@ public class DiffCommand {
     } catch (Throwable ex) {
       throw new DiffException("Unable to diff. Unable to parse revision and path", ex);
     }
+  }
+
+  /**
+   * Constructor.
+   * Used when diffing an entry to its previous entry in history.
+   *
+   * @param revisions The list containing at least two <code>SVNFileRevision</code> objects.
+   * @throws DiffException            if given list does not contain at least two entries.
+   * @throws IllegalArgumentException if argument is null or array does not contain
+   *                                  exactly two entries.
+   */
+  public DiffCommand(final List<SVNFileRevision> revisions) throws DiffException {
+
+    if (revisions == null || revisions.size() < 2) {
+      throw new DiffException("The entry does not have a history.");
+    }
+
+    // Reverse to get latest first
+    Collections.reverse(revisions);
+    Iterator revisionIterator = revisions.iterator();
+    // Grab the latest..
+    SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();
+    this.toPath = toRevision.getPath();
+    this.toRevision = toRevision.getRevision();
+    // ..and the previous one...
+    SVNFileRevision fromRevision = (SVNFileRevision) revisionIterator.next();
+    this.fromPath = fromRevision.getPath();
+    this.fromRevision = fromRevision.getRevision();
   }
 
   /**
@@ -80,4 +112,15 @@ public class DiffCommand {
     return toRevision;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public String toString() {
+    return "DiffCommand{" +
+        "fromRevision=" + fromRevision +
+        ", toRevision=" + toRevision +
+        ", fromPath='" + fromPath + '\'' +
+        ", toPath='" + toPath + '\'' +
+        '}';
+  }
 }
