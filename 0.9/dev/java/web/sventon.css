@@ -119,6 +119,7 @@ input.btn{
 
 .sventonEntriesTable * TD {
   padding: 0px;
+  padding-right: 5px;
   border: 0px;
 }
 
