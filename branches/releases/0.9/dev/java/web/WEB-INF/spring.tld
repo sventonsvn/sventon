@@ -3,7 +3,7 @@
 
 <taglib>
 
-	<tlib-version>1.1.1</tlib-version>
+	<tlib-version>1.1.2</tlib-version>
 
 	<jsp-version>1.2</jsp-version>
 
@@ -72,6 +72,12 @@
 			The HTML escaping flag participates in a page-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
+
+		<attribute>
+			<name>message</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 
 		<attribute>
 			<name>code</name>
