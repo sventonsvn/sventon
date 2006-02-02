@@ -5,7 +5,7 @@
   - Application context definition for Sventon DispatcherServlet.
 -->
 
-<beans default-lazy-init="true">
+<beans default-lazy-init="false">
 
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -29,40 +29,40 @@
 
   <bean id="repoBrowserController" class="de.berlios.sventon.ctrl.RepoBrowserController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="showLockController" class="de.berlios.sventon.ctrl.ShowLockController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.ctrl.xml.RSSController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="feedType">
-     <value>rss_2.0</value>
+      <value>rss_2.0</value>
     </property>
     <property name="feedMimeType">
-     <value>application/xml; charset=UTF-8</value>
+      <value>application/xml; charset=UTF-8</value>
     </property>
     <property name="feedItemCount">
-     <value>20</value>
+      <value>20</value>
     </property>
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.ctrl.xml.ShowLatestCommitInfoController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="xmlEncoding">
       <value>ISO-8859-1</value>
@@ -71,48 +71,48 @@
 
   <bean id="revInfoController" class="de.berlios.sventon.ctrl.ShowRevisionInfoController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
-  
+
   <bean id="goToController" class="de.berlios.sventon.ctrl.GoToController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="svnBaseCommandValidator" class="de.berlios.sventon.command.SVNBaseCommandValidator" />
+  <bean id="svnBaseCommandValidator" class="de.berlios.sventon.command.SVNBaseCommandValidator"/>
 
-  <bean id="configCommandValidator" class="de.berlios.sventon.command.ConfigCommandValidator" />
+  <bean id="configCommandValidator" class="de.berlios.sventon.command.ConfigCommandValidator"/>
 
   <bean id="showLogsController" class="de.berlios.sventon.ctrl.ShowLogController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
     <!-- Number of log entries / page in logs view -->
     <property name="pageSize">
-     <value>10</value>
+      <value>10</value>
     </property>
   </bean>
 
   <bean id="completionController" class="de.berlios.sventon.ctrl.xml.CompletionController">
     <property name="revisionIndexer">
-      <ref bean="revisionIndexer" />
+      <ref local="revisionIndexer"/>
     </property>
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="xmlEncoding">
       <value>ISO-8859-1</value>
@@ -121,25 +121,25 @@
 
   <bean id="searchController" class="de.berlios.sventon.ctrl.SearchController">
     <property name="revisionIndexer">
-      <ref bean="revisionIndexer" />
+      <ref local="revisionIndexer"/>
     </property>
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="flattenController" class="de.berlios.sventon.ctrl.FlattenController">
     <property name="revisionIndexer">
-      <ref bean="revisionIndexer" />
+      <ref local="revisionIndexer"/>
     </property>
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
@@ -148,58 +148,58 @@
       <value>(jar|zip|war|ear)</value>
     </property>
     <property name="colorer">
-      <ref bean="colorer" />
+      <ref local="colorer"/>
     </property>
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="imageUtil">
-      <ref bean="imageUtil" />
+      <ref local="imageUtil"/>
     </property>
   </bean>
 
   <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="imageUtil">
-      <ref bean="imageUtil" />
+      <ref local="imageUtil"/>
     </property>
   </bean>
 
   <bean id="diffController" class="de.berlios.sventon.ctrl.DiffController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="diffPreviousController" class="de.berlios.sventon.ctrl.DiffPreviousController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="getController" class="de.berlios.sventon.ctrl.GetController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="imageUtil">
-      <ref bean="imageUtil" />
+      <ref local="imageUtil"/>
     </property>
   </bean>
 
@@ -220,26 +220,26 @@
 
   <bean id="blameController" class="de.berlios.sventon.ctrl.BlameController">
     <property name="colorer">
-      <ref bean="colorer" />
+      <ref local="colorer"/>
     </property>
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="svnBaseCommandValidator" />
+      <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
   <bean id="configurationController" class="de.berlios.sventon.ctrl.ConfigurationController">
     <property name="repositoryConfiguration">
-      <ref bean="repositoryConfig" />
+      <ref local="repositoryConfig"/>
     </property>
     <property name="validator">
-      <ref bean="configCommandValidator" />
+      <ref local="configCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="clearSessionController" class="de.berlios.sventon.ctrl.ClearSessionController" />
+  <bean id="clearSessionController" class="de.berlios.sventon.ctrl.ClearSessionController"/>
 
   <bean id="repositoryConfig" class="de.berlios.sventon.ctrl.RepositoryConfiguration" singleton="true">
     <property name="repositoryRoot">
@@ -301,7 +301,7 @@
     </property>
   </bean>
 
-  <bean name="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" singleton="true" destroy-method="destroy">
+  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" singleton="true" destroy-method="destroy">
     <constructor-arg>
       <ref bean="repositoryConfig"/>
     </constructor-arg>
@@ -320,7 +320,33 @@
     </property>
   </bean>
 
-  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true" />
-  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true" />
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true"/>
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true"/>
+
+  <!-- Quartz Scheduler, with pre-registered triggers -->
+  <!-- Will automatically start scheduling on context startup -->
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    <property name="triggers">
+      <list>
+        <ref local="indexUpdateTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Registered by the 'scheduler' bean -->
+  <bean id="indexUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail">
+      <ref local="indexUpdateJobDetail"/>
+    </property>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="120000"/>
+  </bean>
+
+  <!-- Convenient way of invoking existing business logic instead of writing a job -->
+  <bean id="indexUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="revisionIndexer"/>
+    <property name="targetMethod" value="update"/>
+  </bean>
 
 </beans>
