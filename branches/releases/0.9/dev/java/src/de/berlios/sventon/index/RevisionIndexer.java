@@ -77,6 +77,8 @@ public class RevisionIndexer {
 
   /**
    * Constructs the index instance using a given repository configuration.
+   * If a serialized index is stored on disk it will be read into memory.
+   * Otherwise a complete repository indexing will be executed.
    *
    * @param configuration The repository configuration
    */
@@ -84,14 +86,31 @@ public class RevisionIndexer {
     logger.debug("Creating index instance using given configuration");
     setRepositoryConfiguration(configuration);
     indexedUrl = configuration.getUrl();
-    logger.debug("Creating the repository instance");
+    logger.debug("Establishing the repository connection");
     try {
       repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       if (repository == null) {
         logger.warn("Repository not configured yet. Waiting with index creation");
         return;
       }
-      initIndex();
+      logger.debug("Initializing index");
+      logger.info("Reading serialized index from disk, "
+          + configuration.getSVNConfigurationPath()
+          + INDEX_FILENAME);
+      ObjectInputStream in;
+      try {
+        in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
+        index = (RevisionIndex) in.readObject();
+      } catch (ClassNotFoundException e) {
+        logger.warn(e);
+      } catch (IOException e) {
+        logger.warn(e);
+      }
+
+      // No serialized index exsisted - initialize an empty one.
+      if (index == null) {
+        index = new RevisionIndex(configuration.getUrl());
+      }
     } catch (SVNException svnex) {
       throw new RevisionIndexException("Error during instance creation", svnex);
     }
@@ -120,37 +139,6 @@ public class RevisionIndexer {
    */
   public Iterator<RepositoryEntry> getEntriesIterator() {
     return index.getEntries().iterator();
-  }
-
-  /**
-   * Initializes the index.
-   * If a serialized index is stored on disk it will be read into memory.
-   * Otherwise a complete repository indexing will be executed.
-   *
-   * @throws SVNException if subversion error occurs.
-   * @throws RevisionIndexException if an index error occurs.
-   */
-  private void initIndex() throws RevisionIndexException, SVNException {
-    logger.debug("Initializing index");
-    logger.info("Reading serialized index from disk, "
-        + configuration.getSVNConfigurationPath()
-        + INDEX_FILENAME);
-    ObjectInputStream in;
-    try {
-      in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
-      index = (RevisionIndex) in.readObject();
-    } catch (ClassNotFoundException e) {
-      logger.warn(e);
-    } catch (IOException e) {
-      logger.warn(e);
-    }
-
-    // No serialized index exsisted - initialize an empty one.
-    if (index == null) {
-      index = new RevisionIndex(configuration.getUrl());
-    }
-
-    update();
   }
 
   /**
@@ -306,20 +294,30 @@ public class RevisionIndexer {
   }
 
   /**
-   * Updates the index.
+   * Updates the index to current HEAD revision.
    * <p/>
    * If the repository URL has changed in the configuration properties
-   * or the index does not contain any entries or if the repository revision
+   * or the index does not contain any entries or if the repository HEAD revision
    * is <i>lower</i> than the indexed revision, a complete indexing
    * will be performed.
    * <p/>
    * If the repository revision is greater than the revision of the
    * index, the index will be updated to reflect HEAD revision.
+   * <p/>
+   * If sventon has entered configuration mode, i.e. the repository
+   * connection cannot be established yet, the method will return without
+   * any action performed.
    *
    * @throws SVNException if Subversion error occurs.
    * @throws RevisionIndexException if an index error occurs.
    */
   public synchronized void update() throws RevisionIndexException, SVNException {
+
+    if (repository == null) {
+      logger.debug("Repository connection not established. User are probably in the configuration phase");
+      return;
+    }
+
     if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
         index.getIndexRevision() > repository.getLatestRevision()) {
       // index is just created and does not contain any entries
