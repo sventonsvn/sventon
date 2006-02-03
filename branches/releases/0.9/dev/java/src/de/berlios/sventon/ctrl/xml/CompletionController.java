@@ -41,11 +41,6 @@ import java.util.List;
 public class CompletionController extends AbstractSVNTemplateController implements Controller {
 
   /**
-   * The indexer instance.
-   */
-  private RevisionIndexer revisionIndexer;
-
-  /**
    * The xml encoding, default set to <code>ISO-8859-1</code>.
    *
    * TODO: Use UTF-8 as default instead?
@@ -106,24 +101,6 @@ public class CompletionController extends AbstractSVNTemplateController implemen
    */
   public String getXmlEncoding() {
     return xmlEncoding;
-  }
-
-  /**
-   * Sets the revision indexer instance.
-   *
-   * @param revisionIndexer The instance.
-   */
-  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
-    this.revisionIndexer = revisionIndexer;
-  }
-
-  /**
-   * Gets the revision indexer instance.
-   *
-   * @return The instance.
-   */
-  public RevisionIndexer getRevisionIndexer() {
-    return revisionIndexer;
   }
 
 }
