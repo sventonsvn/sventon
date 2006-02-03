@@ -14,6 +14,7 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
 import de.berlios.sventon.svnsupport.SventonException;
+import de.berlios.sventon.index.RevisionIndexer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -105,6 +106,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
   protected RepositoryConfiguration configuration = null;
 
+  private RevisionIndexer revisionIndexer;
+
   /**
    * Logger for this class and subclasses.
    */
@@ -118,7 +121,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * Cached revision number (HEAD).
    */
-  private static long cachedRevision = 1;
+  private static long cachedRevision;
 
   protected AbstractSVNTemplateController() {
     // TODO: Move to XML-file?
@@ -414,4 +417,23 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
                                             SVNBaseCommand svnCommand, SVNRevision revision,
                                             HttpServletRequest request, HttpServletResponse response,
                                             BindException exception) throws SventonException, SVNException;
+
+  /**
+   * Sets the revision indexer instance.
+   *
+   * @param revisionIndexer The instance.
+   */
+  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
+    this.revisionIndexer = revisionIndexer;
+  }
+
+  /**
+   * Gets the revision indexer instance.
+   *
+   * @return The instance.
+   */
+  public RevisionIndexer getRevisionIndexer() {
+    return revisionIndexer;
+  }
+
 }

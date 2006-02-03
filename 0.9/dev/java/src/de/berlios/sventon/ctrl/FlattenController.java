@@ -31,26 +31,6 @@ import java.util.*;
  */
 public class FlattenController extends AbstractSVNTemplateController implements Controller {
 
-  private RevisionIndexer revisionIndexer;
-
-  /**
-   * Sets the revision indexer instance.
-   *
-   * @param revisionIndexer The instance.
-   */
-  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
-    this.revisionIndexer = revisionIndexer;
-  }
-
-  /**
-   * Gets the revision indexer instance.
-   *
-   * @return The instance.
-   */
-  public RevisionIndexer getRevisionIndexer() {
-    return revisionIndexer;
-  }
-
   /**
    * {@inheritDoc}
    */

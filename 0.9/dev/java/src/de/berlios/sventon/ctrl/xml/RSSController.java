@@ -108,7 +108,7 @@ public class RSSController extends AbstractController {
       }
     });
 
-    SyndFeed feed = null;
+    SyndFeed feed;
 
     try {
       feed = new FeedGenerator().generateFeed(logEntries, getRequestURL(request));
