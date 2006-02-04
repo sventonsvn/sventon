@@ -56,6 +56,8 @@ public class RevisionIndexer {
    */
   private final Log logger = LogFactory.getLog(getClass());
 
+  private boolean isIndexing = false;
+
   /**
    * The index file name, <tt>sventon.idx</tt>.
    */
@@ -318,20 +320,35 @@ public class RevisionIndexer {
       return;
     }
 
-    if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
-        index.getIndexRevision() > repository.getLatestRevision()) {
-      // index is just created and does not contain any entries
-      // or the repository URL has changed in the config properties
-      // or the repository revision is LOWER than the index revision
-      // do a full repository indexing
-      populateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-    } else if (index.getIndexRevision() < repository.getLatestRevision()) {
-      // index is out-of-date
-      // update it to reflect HEAD revision
-      updateIndex();
-      storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+    isIndexing = true;
+    try {
+      if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
+          index.getIndexRevision() > repository.getLatestRevision()) {
+        // index is just created and does not contain any entries
+        // or the repository URL has changed in the config properties
+        // or the repository revision is LOWER than the index revision
+        // do a full repository indexing
+        populateIndex();
+        storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+      } else if (index.getIndexRevision() < repository.getLatestRevision()) {
+        // index is out-of-date
+        // update it to reflect HEAD revision
+        updateIndex();
+        storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+      }
+    } finally {
+      isIndexing = false;
     }
+  }
+
+  /**
+   * Checks if the index is being updated.
+   *
+   * @return <code>True</code> is index is being updated, <code>false</code> if not.
+   */
+  public boolean isIndexing() {
+    logger.debug("isIndexing: " + isIndexing);
+    return isIndexing;
   }
 
   /**
