@@ -12,6 +12,6 @@
  */
 %>
 <p>
-  <a href="rss.xml"><img src="images/rss20.gif" border="0"/></a>
+  <a href="rss.xml" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" border="0"/></a>
 </p>
 sventon @VERSION@ build rev @REVISION@
