@@ -212,7 +212,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     model.put("revision", svnCommand.getRevision());
     model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
     model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
-
+    model.put("isIndexing", getRevisionIndexer().isIndexing());
     return new ModelAndView(new RedirectView(redirectUrl), model);
   }
 
@@ -263,6 +263,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
       model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+      model.put("isIndexing", getRevisionIndexer().isIndexing());
 
       // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {

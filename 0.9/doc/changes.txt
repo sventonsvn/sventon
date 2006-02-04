@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[397] Added: Feature #1685 - Background index population.
 [394] Added: Upgraded to Spring 1.2.6
 [373] Added: Display of all current locks, recursively.
 [365] Added: Upgraded to JavaSVN 1.0.2.
