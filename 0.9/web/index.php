@@ -147,6 +147,11 @@
         <td align="right" valign="bottom">
           <br/>
           <br/>
+          <a href="http://sventonblog.blogspot.com/atom.xml" title="Sventon Atom news feed">
+          	<img src="img/feed-icon-32x32.png" alt="feed icon">
+          	</a>
+          <br/>
+          <br/>
           <a href="http://developer.berlios.de" title="BerliOS Developer">
             <img src="http://developer.berlios.de/bslogo.php?group_id=3670" width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
           </a>
