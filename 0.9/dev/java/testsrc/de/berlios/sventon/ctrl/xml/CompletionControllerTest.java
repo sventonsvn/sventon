@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -29,8 +30,10 @@ public class CompletionControllerTest extends TestCase {
 
     MockHttpServletResponse res = new MockHttpServletResponse();
 
-    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    SVNRepository repos = SVNRepositoryStub.getInstance();
+    RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     indexer.setRepositoryConfiguration(config);
     ctrl.setRevisionIndexer(indexer);

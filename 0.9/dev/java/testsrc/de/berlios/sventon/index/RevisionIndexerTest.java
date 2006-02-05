@@ -1,8 +1,9 @@
 package de.berlios.sventon.index;
 
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
+import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.io.File;
 import java.util.List;
@@ -12,9 +13,11 @@ public class RevisionIndexerTest extends TestCase {
   private RevisionIndexer indexer = null;
 
   public void setUp() throws Exception {
+    SVNRepository repos = SVNRepositoryStub.getInstance();
     RepositoryConfiguration config = new RepositoryConfiguration();
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
-    indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    config.setRepositoryRoot(repos.getLocation().toString());
+    indexer = new RevisionIndexer(repos);
     indexer.setRepositoryConfiguration(config);
     indexer.populateIndex();
     assertEquals(8, indexer.getIndexCount());

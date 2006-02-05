@@ -47,11 +47,6 @@ public class RevisionIndexer {
   private RepositoryConfiguration configuration;
 
   /**
-   * The index url.
-   */
-  private String indexedUrl;
-
-  /**
    * The logging instance.
    */
   private final Log logger = LogFactory.getLog(getClass());
@@ -73,8 +68,6 @@ public class RevisionIndexer {
   public RevisionIndexer(final SVNRepository repository) {
     logger.debug("Creating index instance using given repository");
     this.repository = repository;
-    indexedUrl = repository.getLocation().toString();
-    index = new RevisionIndex(indexedUrl);
   }
 
   /**
@@ -84,38 +77,9 @@ public class RevisionIndexer {
    *
    * @param configuration The repository configuration
    */
-  public RevisionIndexer(final RepositoryConfiguration configuration) throws RevisionIndexException {
+  public RevisionIndexer(final RepositoryConfiguration configuration) {
     logger.debug("Creating index instance using given configuration");
     setRepositoryConfiguration(configuration);
-    indexedUrl = configuration.getUrl();
-    logger.debug("Establishing the repository connection");
-    try {
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-      if (repository == null) {
-        logger.warn("Repository not configured yet. Waiting with index creation");
-        return;
-      }
-      logger.debug("Initializing index");
-      logger.info("Reading serialized index from disk, "
-          + configuration.getSVNConfigurationPath()
-          + INDEX_FILENAME);
-      ObjectInputStream in;
-      try {
-        in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
-        index = (RevisionIndex) in.readObject();
-      } catch (ClassNotFoundException e) {
-        logger.warn(e);
-      } catch (IOException e) {
-        logger.warn(e);
-      }
-
-      // No serialized index exsisted - initialize an empty one.
-      if (index == null) {
-        index = new RevisionIndex(configuration.getUrl());
-      }
-    } catch (SVNException svnex) {
-      throw new RevisionIndexException("Error during instance creation", svnex);
-    }
   }
 
   /**
@@ -144,14 +108,13 @@ public class RevisionIndexer {
   }
 
   /**
-   * Indexes the files and directories, starting at the path
-   * specified by calling <code>setStartPath()</code>.
+   * Indexes the files and directories.
    *
    * @throws SVNException if a Subversion error occurs.
    */
   protected synchronized void populateIndex() throws SVNException {
     logger.info("Populating index");
-    index = new RevisionIndex(indexedUrl);
+    index = new RevisionIndex(configuration.getUrl());
     logger.debug("Index url: " + index.getUrl());
     long head = repository.getLatestRevision();
     logger.debug("Revision (head): " + head);
@@ -226,7 +189,7 @@ public class RevisionIndexer {
    * Modifies an entry (file or directory) in the index.
    *
    * @param logEntryPath The log entry path
-   * @param revision The log revision
+   * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
   private void doIndexModify(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
@@ -240,7 +203,7 @@ public class RevisionIndexer {
    * Replaces an entry (file or directory) in the index.
    *
    * @param logEntryPath The log entry path
-   * @param revision The log revision
+   * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
   private void doIndexReplace(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
@@ -251,7 +214,7 @@ public class RevisionIndexer {
    * Deletes an entry (file or directory) from the index.
    *
    * @param logEntryPath The log entry path
-   * @param revision The log revision
+   * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
   private void doIndexDelete(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
@@ -271,7 +234,7 @@ public class RevisionIndexer {
    * Adds an entry (file or directory) to the index.
    *
    * @param logEntryPath The log entry path
-   * @param revision The log revision
+   * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
   private void doIndexAdd(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
@@ -310,19 +273,20 @@ public class RevisionIndexer {
    * connection cannot be established yet, the method will return without
    * any action performed.
    *
-   * @throws SVNException if Subversion error occurs.
+   * @throws SVNException           if Subversion error occurs.
    * @throws RevisionIndexException if an index error occurs.
    */
   public synchronized void update() throws RevisionIndexException, SVNException {
 
-    if (repository == null) {
-      logger.debug("Repository connection not established. User are probably in the configuration phase");
+    if (!isConnectionEstablished()) {
       return;
     }
 
+    assertIndexIsInitialized();
+
     isIndexing = true;
     try {
-      if (getIndexCount() == 0 || !index.getUrl().equals(indexedUrl) ||
+      if (getIndexCount() == 0 || !index.getUrl().equals(configuration.getUrl()) ||
           index.getIndexRevision() > repository.getLatestRevision()) {
         // index is just created and does not contain any entries
         // or the repository URL has changed in the config properties
@@ -338,6 +302,52 @@ public class RevisionIndexer {
       }
     } finally {
       isIndexing = false;
+    }
+  }
+
+  /**
+   * Checks if the repository connection is properly initialized.
+   * If not, a connection will be created.
+   *
+   * @throws SVNException If an error occur during the repository connection creation.
+   */
+  private boolean isConnectionEstablished() throws SVNException {
+    if (repository == null) {
+      logger.debug("Trying to establish the repository connection");
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      if (repository == null) {
+        logger.warn("Repository not configured yet. Waiting with index creation");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Checks if the index is properly initialized.
+   * If not, the index will be loaded from disk.
+   * If no index exists an empty one will be created.
+   */
+  private void assertIndexIsInitialized() {
+    if (index == null) {
+      logger.debug("Initializing index");
+      logger.info("Reading serialized index from disk, "
+          + configuration.getSVNConfigurationPath()
+          + INDEX_FILENAME);
+      ObjectInputStream in;
+      try {
+        in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
+        index = (RevisionIndex) in.readObject();
+      } catch (ClassNotFoundException e) {
+        logger.warn(e);
+      } catch (IOException e) {
+        logger.warn(e);
+      }
+
+      // No serialized index exsisted - initialize an empty one.
+      if (index == null) {
+        index = new RevisionIndex(configuration.getUrl());
+      }
     }
   }
 
@@ -414,7 +424,7 @@ public class RevisionIndexer {
    * Finds index entries by a search string.
    *
    * @param searchPattern The regex pattern to search for.
-   * @param startDir The start in directory. Search will be performed in this directory and below.
+   * @param startDir      The start in directory. Search will be performed in this directory and below.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws RevisionIndexException if an index error occurs.
    * @see java.util.regex.Pattern
@@ -428,8 +438,8 @@ public class RevisionIndexer {
    * Finds index entries by a search string.
    *
    * @param searchPattern The regex pattern to search for.
-   * @param startDir The start in directory. Search will be performed in this directory and below.
-   * @param limit The limit, maximum number of rows returned, <code>null</code> if no limit wanted.
+   * @param startDir      The start in directory. Search will be performed in this directory and below.
+   * @param limit         The limit, maximum number of rows returned, <code>null</code> if no limit wanted.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws RevisionIndexException if an index error occurs.
    * @see java.util.regex.Pattern
