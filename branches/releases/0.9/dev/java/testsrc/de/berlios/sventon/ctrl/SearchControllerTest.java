@@ -20,7 +20,7 @@ public class SearchControllerTest extends TestCase {
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter("sventonSearchString", "file1");
+    req.addParameter("searchString", "file1");
     req.addParameter("startDir", "");
 
     RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
@@ -53,7 +53,7 @@ public class SearchControllerTest extends TestCase {
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter("sventonSearchString", "file1");
+    req.addParameter("searchString", "file1");
     req.addParameter("startDir", "/dir1");
 
     RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());

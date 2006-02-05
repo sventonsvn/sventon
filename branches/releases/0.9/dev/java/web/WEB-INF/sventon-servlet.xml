@@ -241,10 +241,11 @@
     </property>
   </bean>
 
-  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename">
-      <value>messages</value>
-    </property>
+  <!-- temporarily use the reloadable version (makes developing easier) -->
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="/WEB-INF/classes/messages" />
+    <property name="useCodeAsDefaultMessage"><value>true</value></property>
+    <property name="cacheSeconds" value="0" />
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
