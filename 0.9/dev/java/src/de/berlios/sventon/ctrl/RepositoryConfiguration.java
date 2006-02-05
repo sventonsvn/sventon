@@ -121,7 +121,7 @@ public class RepositoryConfiguration {
       configured = true;
     } catch (SVNException ex) {
       logger.warn("Unable to parse URL '" + repositoryRoot
-          + "'. This is normal for if sventon has not yet been configured. "
+          + "'. This is normal if sventon has not yet been configured. "
           + "Configuration mode will now be turned on");
     }
     logger.debug("sventon is configured: " + configured);

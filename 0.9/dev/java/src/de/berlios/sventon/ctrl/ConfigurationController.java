@@ -138,13 +138,12 @@ public class ConfigurationController extends AbstractFormController {
       fos.flush();
       fos.close();
 
-      //TODO: Find a way to refresh the app context, the lines below fails for some reason
-      //(also, are not threadsafe) 
-//      AbstractApplicationContext abstractApplicationContext = ((AbstractApplicationContext) getWebApplicationContext());
-//      logger.debug("Refreshing application context");
-//      abstractApplicationContext.refresh();
+      configuration.setConfiguredUID(confCommand.getUsername());
+      configuration.setConfiguredPWD(confCommand.getPassword());
+      configuration.setSVNConfigurationPath(confCommand.getConfigPath());
+      configuration.setRepositoryRoot(confCommand.getRepositoryURL());
 
-      return new ModelAndView("restart");
+      return new ModelAndView(new RedirectView("repobrowser.svn"));
     }
   }
 
