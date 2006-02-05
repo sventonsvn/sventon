@@ -47,9 +47,9 @@ function doAction(formName) {
 // function to handle search submission
 function doSearch(formName) {
   // If no search string is entered, no action is taken.
-  if (formName.sventonSearchString.value == '') {
+  if (formName.searchString.value == '') {
     return false;
-  } else if (formName.sventonSearchString.value.length < 3) {
+  } else if (formName.searchString.value.length < 3) {
     return searchWarning();
   } else {
     return true;
