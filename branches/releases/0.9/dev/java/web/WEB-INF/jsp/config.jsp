@@ -43,9 +43,9 @@
             <td valign="top">
               Example:
               <p>
-                <b>svn://svn.berlios.de/sventon/</b><br>
+                <b>svn://domain/project/</b><br>
                 <b>svn+ssh://domain/project/</b><br>
-                <b>http://domain/project/trunk/</b><br>
+                <b>http://domain/project/</b><br>
               </p>
             </td>
           </tr>
