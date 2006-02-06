@@ -18,6 +18,7 @@ import de.berlios.sventon.svnsupport.SventonException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -47,6 +48,11 @@ public class DiffPreviousController extends DiffController {
 
     try {
       long commitRev = Long.parseLong(request.getParameter("commitrev"));
+      logger.debug("committed-rev: " + commitRev);
+      //TODO: Solve this issue in a better way?
+      if (SVNNodeKind.NONE == repository.checkPath(svnCommand.getPath(), commitRev)) {
+        throw new DiffException("Entry has no history in current branch");
+      }
       //noinspection unchecked
       List<SVNFileRevision> revisions = (List) repository.getFileRevisions(svnCommand.getPath(), null, 0, commitRev);
       DiffCommand diffCommand = new DiffCommand(revisions);
