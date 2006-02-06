@@ -23,7 +23,6 @@ public class ConfigCommand {
   private String repositoryURL;
   private String username;
   private String password;
-  private String currentDir;
   private String configPath;
 
   public String getRepositoryURL() {
@@ -48,14 +47,6 @@ public class ConfigCommand {
 
   public void setPassword(final String password) {
     this.password = password;
-  }
-
-  public void setCurrentDir(final String path) {
-    this.currentDir = path;
-  }
-
-  public String getCurrentDir() {
-    return this.currentDir;
   }
 
   public void setConfigPath(final String path) {

@@ -22,7 +22,7 @@
     </property>
     <property name="locations">
       <list>
-        <value>classpath:default-sventon.properties</value>
+        <value>classpath:sventon.properties</value>
       </list>
     </property>
   </bean>

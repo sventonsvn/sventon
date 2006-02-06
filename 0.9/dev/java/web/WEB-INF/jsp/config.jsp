@@ -89,7 +89,7 @@
           <tr><td>&nbsp;</td></tr>
           <tr>
             <td colspan="2">
-  By default the <b>sventon.log</b> file will be stored in the java container's current directory. Currently that is <b>${command.currentDir}</b>.<br>
+  By default the <b>sventon.log</b> file will be stored in the temporary directory, <b><%=System.getProperty("java.io.tmpdir")%></b>.<br>
   Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
             </td>
           </tr>

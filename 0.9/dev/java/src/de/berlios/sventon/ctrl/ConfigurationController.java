@@ -42,7 +42,7 @@ public class ConfigurationController extends AbstractFormController {
   /** Logger for this class and subclasses. */
   private final Log logger = LogFactory.getLog(getClass());
 
-  public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/default-sventon.properties";
+  public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/sventon.properties";
 
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
 
@@ -88,10 +88,9 @@ public class ConfigurationController extends AbstractFormController {
     } else {
       Map<String, Object> model = new HashMap<String, Object>();
       ConfigCommand configCommand = new ConfigCommand();
-      String currentDir = new File(".").getCanonicalPath();
-      logger.debug("currentDir is: " + currentDir);
-      configCommand.setCurrentDir(currentDir);
-      configCommand.setConfigPath(currentDir);
+      String tempDir = System.getProperty("java.io.tmpdir");
+      logger.debug("tempDir is: " + tempDir);
+      configCommand.setConfigPath(tempDir);
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
       logger.debug("Displaying the config page.");
@@ -113,7 +112,6 @@ public class ConfigurationController extends AbstractFormController {
       if (exception.hasErrors()) {
         //noinspection unchecked
         Map<String, Object> model = exception.getModel();
-        confCommand.setCurrentDir(new File(".").getCanonicalPath());
         model.put("command", command);
         return new ModelAndView("config", model);
       }
