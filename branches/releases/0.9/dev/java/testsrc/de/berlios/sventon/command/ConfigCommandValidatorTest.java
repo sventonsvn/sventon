@@ -27,7 +27,6 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setConfigPath("");
-    command.setCurrentDir("/tempdir");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -53,7 +52,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setConfigPath("");
-    command.setCurrentDir("/tempdir");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -63,7 +61,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setConfigPath("\\");
-    command.setCurrentDir("/tempdir");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -73,7 +70,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setConfigPath(tempFile.getAbsolutePath());
-    command.setCurrentDir("/tempdir");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);

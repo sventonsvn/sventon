@@ -1,20 +1,19 @@
 Upgrading sventon to a newer version
 
 The sventon configuration settings are stored in the file
-svn/WEB-INF/classes/default-sventon.properties.
+svn/WEB-INF/classes/sventon.properties.
 The property key svn.configpath specifies where the repository
 index (sventon.idx) is stored.
 
 The easiest way to upgrade sventon is to replace the old svn.war
-file and walk through the configuration screens again. As long
+file and walk through the configuration screen again. As long
 as the same repository url and configuration path is used, the
 index will be preserved.
 
 Another way is to make a backup copy of the configuration file
-svn/WEB-INF/classes/default-sventon.properties, replace the old
+svn/WEB-INF/classes/sventon.properties, replace the old
 svn.war with the new one to trigger a redeploy, and then add the
-backed up default-sventon.properties to the svn/WEB-INF/classes
-directory again.
+backed up sventon.properties to the svn/WEB-INF/classes directory again.
 
 It's recommended to backup the configuration file and the index
 before upgrading.

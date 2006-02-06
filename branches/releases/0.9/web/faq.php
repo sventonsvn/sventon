@@ -127,7 +127,7 @@
 <b>Q:</b> How do I upgrade sventon to a newer version?
 </a>
 <br/>
-<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screens again. As long as the same repository url and configuration path is used, the index will be preserved. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/default-sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>default-sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
+<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screen again. As long as the same repository url and configuration path is used, the index will be preserved. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
 </p>
 
 <p>
