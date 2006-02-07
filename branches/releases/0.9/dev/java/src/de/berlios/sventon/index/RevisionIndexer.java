@@ -316,7 +316,7 @@ public class RevisionIndexer {
       logger.debug("Trying to establish the repository connection");
       repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       if (repository == null) {
-        logger.warn("Repository not configured yet. Waiting with index creation");
+        logger.info("Repository not configured yet. Waiting with index creation");
         return false;
       }
     }
@@ -327,25 +327,27 @@ public class RevisionIndexer {
    * Checks if the index is properly initialized.
    * If not, the index will be loaded from disk.
    * If no index exists an empty one will be created.
+   *
+   * @throws RevisionIndexException if unable to load index.
    */
-  private void assertIndexIsInitialized() {
+  private void assertIndexIsInitialized() throws RevisionIndexException {
     if (index == null) {
       logger.debug("Initializing index");
       logger.info("Reading serialized index from disk, "
           + configuration.getSVNConfigurationPath()
           + INDEX_FILENAME);
-      ObjectInputStream in;
-      try {
-        in = new ObjectInputStream(new FileInputStream(configuration.getSVNConfigurationPath() + INDEX_FILENAME));
-        index = (RevisionIndex) in.readObject();
-      } catch (ClassNotFoundException e) {
-        logger.warn(e);
-      } catch (IOException e) {
-        logger.warn(e);
-      }
 
-      // No serialized index exsisted - initialize an empty one.
-      if (index == null) {
+      File indexFile = new File(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+      ObjectInputStream in;
+      if (indexFile.exists()) {
+        try {
+          in = new ObjectInputStream(new FileInputStream(indexFile));
+          index = (RevisionIndex) in.readObject();
+        } catch (Exception ex) {
+          throw new RevisionIndexException("Unable to read index file", ex);
+        }
+      } else {
+        // No serialized index exsisted - initialize an empty one.
         index = new RevisionIndex(configuration.getUrl());
       }
     }
@@ -533,7 +535,7 @@ public class RevisionIndexer {
         throw new RevisionIndexException("Unable to store index to disk", ioex);
       }
     } else {
-      logger.info("Index does not contain any entries and will not be stored on disk.");
+      logger.info("Index does not contain any entries and will not be stored on disk");
     }
   }
 
