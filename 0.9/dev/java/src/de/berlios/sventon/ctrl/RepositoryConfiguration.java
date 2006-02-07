@@ -13,6 +13,7 @@ package de.berlios.sventon.ctrl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringUtils;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -20,6 +21,8 @@ import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
 
 import de.berlios.sventon.svnsupport.SVNLog4JAdapter;
+
+import java.io.File;
 
 /**
  * Small wrapper class to hold connection info for the repository.
@@ -51,7 +54,7 @@ public class RepositoryConfiguration {
   /**
    * Will be <code>true</code> if all parameters are ok.
    */
-  private boolean configured = true;
+  private boolean configured = false;
 
   /**
    * The logging instance.
@@ -99,13 +102,20 @@ public class RepositoryConfiguration {
   /**
    * Sets the repository root. Root URL will never end with a slash.
    *
-   * @param repositoryRoot The root url.
+   * @param repositoryRoot The root url. <code>Null</code> or
+   *                       empty value will be ignored, as it indicates sventon has
+   *                       not been configured yet. A well formed URL is needed for
+   *                       the method {@link #isConfigured()} to return <code>true</code>.
    */
   public void setRepositoryRoot(final String repositoryRoot) {
-    configured = false;
-    if (repositoryRoot == null) {
-      throw new IllegalArgumentException("Provided repository root url was null.");
+
+    if (StringUtils.isEmpty(repositoryRoot)) {
+      logger.debug("Ignoring empty repository root url");
+      return;
     }
+
+    logger.debug("Repository URL: " + repositoryURL);
+
     // Strip last slash if any.
     this.repositoryURL = repositoryRoot;
     if (repositoryRoot.endsWith("/")) {
@@ -114,15 +124,11 @@ public class RepositoryConfiguration {
           repositoryRoot.length() - 1);
     }
 
-    logger.debug("SVN location: " + repositoryURL);
-
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
       configured = true;
     } catch (SVNException ex) {
-      logger.warn("Unable to parse URL '" + repositoryRoot
-          + "'. This is normal if sventon has not yet been configured. "
-          + "Configuration mode will now be turned on");
+      logger.warn("Unable to parse URL [" + repositoryRoot + "]");
     }
     logger.debug("sventon is configured: " + configured);
   }
@@ -180,9 +186,17 @@ public class RepositoryConfiguration {
    * Get SVN configuration path.
    *
    * @param configurationPath Configuration path.
-   * @see #setSVNConfigurationPath(String)
+   * @throws IllegalArgumentException if argument is not a directory.
+   *                                  <code>Null</code> or empty will be ignored.
    */
   public void setSVNConfigurationPath(final String configurationPath) {
+    if (StringUtils.isEmpty(configurationPath)) {
+      return;
+    }
+
+    if (!new File(configurationPath).isDirectory()) {
+      throw new IllegalArgumentException("Given path, [" + configurationPath + "] is not a directory");
+    }
     SVNConfigurationPath = configurationPath;
   }
 
