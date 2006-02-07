@@ -43,7 +43,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
     logger.debug("Searching index for: " + searchString);
 
     if (searchString.toUpperCase().equals(searchString)) {
-      logger.debug("Search string was in upper case only - performing CamelCase index search.");
+      logger.debug("Search string was in upper case only - performing CamelCase index search");
       String ccPattern = preparePattern(searchString);
       entries.addAll(getRevisionIndexer().findPattern(ccPattern, startDir));
     } else {

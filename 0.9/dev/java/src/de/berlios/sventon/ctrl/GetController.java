@@ -77,7 +77,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'");
         if (!getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
-          logger.error("File '" + svnCommand.getTarget() + "' is not a image file.");
+          logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
           return null;
         }
 
@@ -126,7 +126,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           try {
             SventonCache.INSTANCE.put(cacheKey, baos.toByteArray());
           } catch (CacheException ce) {
-            logger.warn("Unable to cache thumbnail.");
+            logger.warn("Unable to cache thumbnail");
           }
           // Write thumbnail to ServletOutputStream.
           output.write(baos.toByteArray());

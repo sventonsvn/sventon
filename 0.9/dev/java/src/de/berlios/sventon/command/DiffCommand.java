@@ -33,7 +33,7 @@ public class DiffCommand {
     String[] pathAndRevision;
 
     if (parameters == null || parameters.length != 2) {
-      throw new IllegalArgumentException("Parameter list must contain exactly two entries.");
+      throw new IllegalArgumentException("Parameter list must contain exactly two entries");
     }
 
     try {
