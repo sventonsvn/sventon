@@ -1,6 +1,19 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[408] Fixed: Renamed 'default-sventon.properties' to 'sventon.properties.
+[398] Fixed: Bug #5662 - Uncaught exceptions causes stack trace on screen
+[397] Added: Feature #1685 - Background index population.
+[394] Added: Upgraded to Spring 1.2.6
+[373] Added: Display of all current locks, recursively.
+[365] Added: Upgraded to JavaSVN 1.0.2.
+[356] Added: File lock display in browser view.
+[350] Fixed: Removed mount point feature (too much pain, not enough gain).
+[348] Added: Latest commit info stays visible when following a link from it.
+[346] Fixed: RSS item layout.
+[344] Added: Repository changes now published as an RSS feed.
+[341] Added: Upgraded to JavaSVN 1.0.1.
+[338] Added: More validation during configuration.
 [336] Fixed: Revision changes are now sorted before applied to index.
 [336] Fixed: Index is not stored to disk if empty.
 

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNLock;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,9 +28,7 @@ import java.util.Date;
 public class RepositoryEntry implements Serializable {
 
   private static final long serialVersionUID = 3617229449081593805L;
-
-  public enum Kind {dir, file, none, unknown;}
-
+  private transient SVNLock lock;
   private String entryPath;
   private String entryName;
   private Kind entryKind;
@@ -39,25 +38,22 @@ public class RepositoryEntry implements Serializable {
   private Date entryCreatedDate;
   private String entryLastAuthor;
   private String entryCommitMessage;
+  private String url;
 
-
-
-  /**
-   * Mount point offset. If this is set method
-   * {@link #getFullEntryNameStripMountPoint} can be used to get the path to the
-   * entry with the {@link #mountPoint} removed.
-   */
-  private String mountPoint;
+  public enum Kind {dir, file, none, unknown;}
 
   /**
    * Constructor.
    *
    * @param entry      The <code>SVNDirEntry</code>.
    * @param entryPath  The entry repository path.
-   * @param mountPoint The mount point in the repository.
+   * @param lock       The lock, null if n/a.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
-  public RepositoryEntry(final SVNDirEntry entry, final String entryPath, final String mountPoint) {
+  public RepositoryEntry(final SVNDirEntry entry,
+                         final String entryPath,
+                         final SVNLock lock) {
+
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
     }
@@ -65,7 +61,7 @@ public class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
     this.entryPath = entryPath;
-    this.mountPoint = mountPoint;
+    this.lock = lock;
     copyEntry(entry);
   }
 
@@ -76,8 +72,9 @@ public class RepositoryEntry implements Serializable {
     this.entryKind = Kind.valueOf(entry.getKind().toString());
     this.entryName = entry.getName();
     this.entryFirstRevision = entry.getRevision();
-    this.entrySize = entry.size();
+    this.entrySize = entry.getSize();
     this.entryHasProperties = entry.hasProperties();
+    this.url = entry.getURL() == null ? null : entry.getURL().toString();
   }
 
   /**
@@ -99,23 +96,21 @@ public class RepositoryEntry implements Serializable {
   }
 
   /**
+   * Gets the entry url.
+   *
+   * @return The entry url
+   */
+  public String getUrl() {
+    return url;
+  }
+
+  /**
    * Gets the entry name including full path.
    *
    * @return The name and full path.
    */
   public String getFullEntryName() {
     return entryPath + getName();
-  }
-
-  /**
-   * Gets the entry name including full path but with initial mount point
-   * removed. If mount point is not set thie method gives the same result at
-   * {@link #getFullEntryName()}
-   *
-   * @return The name and full path.
-   */
-  public String getFullEntryNameStripMountPoint() {
-    return StringUtils.removeStart(getFullEntryName(), mountPoint);
   }
 
   /**
@@ -201,6 +196,15 @@ public class RepositoryEntry implements Serializable {
    */
   public String getCommitMessage() {
     return entryCommitMessage;
+  }
+
+  /**
+   * Gets the lock for the entry.
+   *
+   * @return The lock, null if entry hasn't got any.
+   */
+  public SVNLock getLock() {
+    return lock;
   }
 
   /**

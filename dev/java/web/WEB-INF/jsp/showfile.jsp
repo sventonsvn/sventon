@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,55 +11,49 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
   <head>
-    <title>Show file</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <title>Show file - ${command.target}</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jsp/top.jsp"%>
-
-    <c:url value="get.svn" var="downloadUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
-
-    <c:url value="showlog.svn" var="showLogUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <p>
-      <table class="sventonHeader"><tr><td>
-    Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
-      <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+      <table class="sventonHeader">
+        <tr>
+          <td>Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
+        </tr>
+      </table>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
-  <br/>
+    <br/>
+    <ui:functionLinks pageName="showFile"/>
 
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-        <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
-      </tr>
-    </table>
+    <c:url value="get.svn" var="showUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+      <c:param name="revision" value="${command.revision}" />
+    </c:url>
 
     <c:choose>
       <c:when test="${isBinary}">
         <c:choose>
           <c:when test="${isImage}">
 <p>
-  <a href="${downloadUrl}&revision=${command.revision}&disp=inline">
-    <img src="${downloadUrl}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
+  <a href="${showUrl}&disp=inline">
+    <img src="${showUrl}&disp=thumb" alt="Thumbnail" border="0"/>
   </a>
 </p>
           </c:when>
           <c:otherwise>
             <c:choose>
               <c:when test="${isArchive}">
-                <%@ include file="/WEB-INF/jsp/showarchive.jsp"%>
+                <%@ include file="/WEB-INF/jspf/showarchive.jspf"%>
               </c:when>
               <c:otherwise>
 <p>File is in binary format.</p>
@@ -69,13 +63,10 @@
         </c:choose>
       </c:when>
      	<c:otherwise>
-<pre class="codeBlock">
-<c:out value="${fileContents}" escapeXml="false"/>
-</pre>
-
+<pre class="codeBlock"><c:out value="${fileContents}" escapeXml="false"/></pre>
       </c:otherwise>
     </c:choose>
-<br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+    <br>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

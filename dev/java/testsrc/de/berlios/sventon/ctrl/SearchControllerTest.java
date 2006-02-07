@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +21,13 @@ public class SearchControllerTest extends TestCase {
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter("sventonSearchString", "file1");
+    req.addParameter("searchString", "file1");
     req.addParameter("startDir", "");
 
-    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    SVNRepository repos = SVNRepositoryStub.getInstance();
+    RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     indexer.setRepositoryConfiguration(config);
     ctrl.setRevisionIndexer(indexer);
@@ -53,11 +56,13 @@ public class SearchControllerTest extends TestCase {
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter("sventonSearchString", "file1");
+    req.addParameter("searchString", "file1");
     req.addParameter("startDir", "/dir1");
 
-    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    SVNRepository repos = SVNRepositoryStub.getInstance();
+    RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     indexer.setRepositoryConfiguration(config);
     ctrl.setRevisionIndexer(indexer);

@@ -8,7 +8,7 @@ public class DiffCommandTest extends TestCase {
   public void testDiffCommandNull() throws Exception {
     DiffCommand diffCommand;
     try {
-      diffCommand = new DiffCommand(null);
+      diffCommand = new DiffCommand((String[]) null);
       fail("Should have thrown an IAE");
     }
     catch (IllegalArgumentException ex) {
@@ -49,7 +49,7 @@ public class DiffCommandTest extends TestCase {
     DiffCommand diffCommand;
     try {
       diffCommand = new DiffCommand(params);
-      fail("Should have thrown an IllegalArgumentException");
+      fail("Should throw IllegalArgumentException");
     }
     catch (IllegalArgumentException ex) {
       // expected
@@ -64,7 +64,7 @@ public class DiffCommandTest extends TestCase {
     DiffCommand diffCommand;
     try {
       diffCommand = new DiffCommand(params);
-      fail("Should have thrown an DiffException");
+      fail("Should throw DiffException");
     }
     catch (DiffException ex) {
       // expected

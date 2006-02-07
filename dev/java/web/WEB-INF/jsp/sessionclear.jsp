@@ -1,7 +1,7 @@
 <%
   /*
   * ====================================================================
-  * Copyright (c) 2005 Sventon Project. All rights reserved.
+  * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
   *
   * This software is licensed as described in the file LICENSE, which
   * you should have received as part of this distribution. The terms
@@ -11,20 +11,20 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 
 <html>
-<head>
-  <title>Logged out</title>
-  <%@ include file="/WEB-INF/jsp/head.jsp" %>
-</head>
+  <head>
+    <title>Logged out</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+  </head>
 
-<body>
+  <body>
 
-<%@ include file="/WEB-INF/jsp/sventonbar.jsp" %>
-<p/>
+    <%@ include file="/WEB-INF/jspf/sventonbar.jspf" %>
+    <p>
 The session has been cleared.
-<p/>
-<a href="repobrowser.svn">sventon</a>
-</body>
+    </p>
+    <a href="repobrowser.svn">sventon</a>
+  </body>
 </html>

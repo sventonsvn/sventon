@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,7 +11,7 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
+<%@ include file="/WEB-INF/jspf/include.jspf" %>
 
 <%-- Redirected because we can't set the welcome page to a virtual URL. --%>
 <c:redirect url="/repobrowser.svn"/>

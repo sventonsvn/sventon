@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,17 +11,17 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
 <%@ page import="de.berlios.sventon.ctrl.RepositoryEntry"%>
 
 <html>
 <head>
 <title>sventon repository browser - ${url}</title>
-<%@ include file="/WEB-INF/jsp/head.jsp"%>
+<%@ include file="/WEB-INF/jspf/head.jspf"%>
 </head>
 <body>
-  <%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
   <p>
     <table class="sventonHeader"><tr><td>
@@ -46,10 +46,11 @@
     <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
-    <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+    <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
   </p>
 
-<br/>
+  <br/>
+  <ui:functionLinks pageName="repobrowse"/> 
 
 <div id="entriesDiv" class="sventonEntriesDiv">
 <form method="get" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
@@ -62,11 +63,11 @@
       <th></th>
       <th></th>
       <th>File</th>
+      <th></th>
       <th>Size (bytes)</th>
       <th>Revision</th>
       <th>Author</th>
       <th>Date</th>
-      <th colspan="2">Options</th>
     </tr>
     <%
       int rowCount = 0;
@@ -96,13 +97,13 @@
     <c:forEach items="${svndir}" var="entry">
     <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.RepositoryEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
       <c:url value="showlog.svn" var="showLogUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
       <c:url value="showfile.svn" var="showFileUrl">
-        <c:param name="path" value="${entry.fullEntryNameStripMountPoint}" />
+        <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
 
       <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
@@ -137,11 +138,15 @@
           </c:choose>
           </td>
         <% } %>
-        <td class="sventonCol4"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
-        <td class="sventonCol5">${entry.revision}</td>
-        <td class="sventonCol6">${entry.author}</td>
-        <td class="sventonCol7"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
-        <td class="sventonCol8"><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
+        <td class="sventonCol4" align="center">
+          <c:if test="${!empty entry.lock}">
+            <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${entry.lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${entry.lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img border="0" src="images/lock.gif"></span>
+          </c:if>
+        </td>
+        <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
+        <td class="sventonCol6">${entry.revision}</td>
+        <td class="sventonCol7">${entry.author}</td>
+        <td class="sventonCol8"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
       </tr>
       <% rowCount++; %>
     </c:forEach>
@@ -149,20 +154,20 @@
     <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <td colspan="2" align="right"><b>Total:</b></td>
       <td><b><%=rowCount%> entries</b></td>
-      <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
       <td></td>
+      <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
 
     <tr>
-      <td colspan="2"><input type="button" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
+      <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
       <td>
         <select class="sventonSelect" name="actionSelect">
           <option class="sventonSelectOption">Actions...</option>
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
-        </select><input type="submit" value="go!"/>
+        </select><input type="submit" class="btn" value="go!"/>
       </td>
       <td colspan="5"></td>
     </tr>
@@ -171,6 +176,6 @@
 </div>
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>

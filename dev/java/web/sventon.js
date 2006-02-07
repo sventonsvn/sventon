@@ -13,16 +13,22 @@ function toggleEntryFields(formName) {
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-
-  // Check if any entry is checked
+  var undefined;
   var checkedEntry = false;
-  for (i = 0; i < formName.entry.length; i++) {
-    if (formName.entry[i].checked == true) {
-      checkedEntry = true;
-      break;
+
+  // Check if only one entry exists - and wether it's checked
+  if (formName.entry.length == undefined) {
+    checkedEntry = formName.entry.checked;
+  } else {
+    // More than one entry exists - Check if any are checked
+    for (i = 0; i < formName.entry.length; i++) {
+      if (formName.entry[i].checked == true) {
+        checkedEntry = true;
+        break;
+      }
     }
   }
-
+  
   // If no value is selected or no entries selected, no action is taken.
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '' || !checkedEntry) return false;
 
@@ -41,9 +47,9 @@ function doAction(formName) {
 // function to handle search submission
 function doSearch(formName) {
   // If no search string is entered, no action is taken.
-  if (formName.sventonSearchString.value == '') {
+  if (formName.searchString.value == '') {
     return false;
-  } else if (formName.sventonSearchString.value.length < 3) {
+  } else if (formName.searchString.value.length < 3) {
     return searchWarning();
   } else {
     return true;
@@ -51,15 +57,14 @@ function doSearch(formName) {
 }
 
 // function to handle flatten submissions
-function doFlatten() {
+function doFlatten(url) {
   var flattenURL = 'flatten.svn?path='
-  var targetPath = document.getElementById('goToPath').value;
   var result = true;
-  if (targetPath == '/') {
+  if (url == '/') {
     result = flatteningWarning();
   }
   if (result) {
-    location.href = flattenURL + targetPath;
+    location.href = flattenURL + url;
   } else {
     return false;
   }

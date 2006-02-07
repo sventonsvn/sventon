@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,9 +11,12 @@
  */
 package de.berlios.sventon.command;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * ConfigCommand.
- * <p>
+ * <p/>
  * Command class used to bind and pass servlet parameter arguments for sventon configuration.
  *
  * @author jesper@users.berlios.de
@@ -23,9 +26,7 @@ public class ConfigCommand {
   private String repositoryURL;
   private String username;
   private String password;
-  private String currentDir;
   private String configPath;
-  private String mountPoint;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -51,14 +52,6 @@ public class ConfigCommand {
     this.password = password;
   }
 
-  public void setCurrentDir(final String path) {
-    this.currentDir = path;
-  }
-
-  public String getCurrentDir() {
-    return this.currentDir;
-  }
-
   public void setConfigPath(final String path) {
     this.configPath = path;
   }
@@ -67,11 +60,10 @@ public class ConfigCommand {
     return this.configPath;
   }
 
-  public String getMountPoint() {
-    return mountPoint;
-  }
-
-  public void setMountPoint(String mountPoint) {
-    this.mountPoint = mountPoint;
+  /**
+   * {@inheritDoc}
+   */
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }
 }

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -15,6 +15,7 @@ import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.KeywordHandler;
 import de.berlios.sventon.svnsupport.LineNumberAppender;
+import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import org.springframework.validation.BindException;
@@ -45,6 +46,8 @@ import java.util.zip.ZipInputStream;
 public class ShowFileController extends AbstractSVNTemplateController implements Controller {
 
   private Colorer colorer;
+
+  private ImageUtil imageUtil;
 
   private String archiveFileExtensionPattern;
 
@@ -88,16 +91,17 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     logger.debug("Assembling file contents for: " + svnCommand);
     Map<String, Object> model = new HashMap<String, Object>();
 
     HashMap properties = new HashMap();
     // Get the file's properties without requesting the content.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
     logger.debug(properties);
     model.put("properties", properties);
+    model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       model.putAll(handleTextFile(repository, svnCommand, revision, properties));
@@ -105,7 +109,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       // It's a binary file
       logger.debug("Binary file detected");
       model.put("isBinary", true);  // Indicates that the file is in binary format.
-      model.put("isImage", ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
+      model.put("isImage", getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
 
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
           matches(getArchiveFileExtensionPattern())) {
@@ -128,28 +132,30 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @param properties The file's properties
    * @return Populated model.
    * @throws SVNException if Subversion error.
+   * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleTextFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision, final Map properties) throws SVNException {
+                                             final SVNRevision revision, final Map properties) throws SventonException, SVNException {
 
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
     // Get the file's content. We can skip the properties in this case.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
-    // Expand keywords, if any.
-    KeywordHandler keywordHandler = new KeywordHandler(properties,
-        getRepositoryConfiguration().getUrl() + svnCommand.getCompletePath());
-    String fileContents = keywordHandler.substitute(outStream.toString());
-
-    LineNumberAppender appender = new LineNumberAppender();
-    appender.setEmbedStart("<span class=\"sventonLineNo\">");
-    appender.setEmbedEnd("</span>");
-
+    String fileContents;
     try {
+      // Expand keywords, if any.
+      KeywordHandler keywordHandler = new KeywordHandler(properties,
+          getRepositoryConfiguration().getUrl() + svnCommand.getPath());
+      fileContents = keywordHandler.substitute(outStream.toString());
+
+      LineNumberAppender appender = new LineNumberAppender();
+      appender.setEmbedStart("<span class=\"sventonLineNo\">");
+      appender.setEmbedEnd(":&nbsp;</span>");
+      appender.setPadding(5);
       fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
     } catch (IOException ioex) {
-      throw new SVNException(ioex);
+      throw new SventonException(ioex);
     }
 
     logger.debug("Create model");
@@ -166,16 +172,17 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    * @param revision The revision
    * @return Populated model.
    * @throws SVNException if Subversion error.
+   * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleArchiveFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision) throws SVNException {
+                                             final SVNRevision revision) throws SventonException, SVNException {
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
 
     model.put("isArchive", true); // Indicates that the file is an archive (zip or jar)
 
     // Get the file's content. We can skip the properties in this case.
-    repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), null, outStream);
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
     ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
     List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
@@ -184,10 +191,30 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       while ((zipEntry = zip.getNextEntry()) != null)
         archiveEntries.add(zipEntry);
     } catch (IOException ioex) {
-      throw new SVNException("Unable to show contents of archive file", ioex);
+      throw new SventonException("Unable to show contents of archive file", ioex);
     }
     model.put("entries", archiveEntries);
     return model;
+  }
+
+  /**
+   * Gets the <code>ImageUtil</code> helper instance.
+   *
+   * @return The <code>ImageUtil</code>
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public ImageUtil getImageUtil() {
+    return imageUtil;
+  }
+
+  /**
+   * Sets the <code>ImageUtil</code> helper instance.
+   *
+   * @param imageUtil The instance
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public void setImageUtil(ImageUtil imageUtil) {
+    this.imageUtil = imageUtil;
   }
 
 }

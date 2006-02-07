@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,36 +11,30 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.diff.DiffAction"%>
 <%@ page import="de.berlios.sventon.diff.SourceLine"%>
 
 <html>
   <head>
     <title>Diff view</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jsp/top.jsp"%>
-
-    <c:url value="showlog.svn" var="showLogUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-    </c:url>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
     <p>
-      <table class="sventonHeader"><tr><td>
-    Diff view - <b>${command.target}</b></td></tr></table>
+      <table class="sventonHeader">
+        <tr>
+          <td>Diff view - <b>${command.target}</b></td>
+        </tr>
+      </table>
     </p>
 
     <br/>
-
-    <table class="sventonFunctionLinksTable">
-      <tr>
-        <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-      </tr>
-    </table>
+    <ui:functionLinks pageName="showDiff"/>
 
     <c:choose>
       <c:when test="${!empty diffException}">
@@ -51,16 +45,16 @@
           <c:when test="${!isBinary}">
             <c:set var="leftLines" value="${leftFileContents}" />
             <c:set var="rightLines" value="${rightFileContents}" />
-            <jsp:useBean id="leftLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
-            <jsp:useBean id="rightLines" type="de.berlios.sventon.svnsupport.CustomArrayList" />
+            <jsp:useBean id="leftLines" type="java.util.ArrayList" />
+            <jsp:useBean id="rightLines" type="java.util.ArrayList" />
 
             <table class="sventonDiffTable" cellspacing="0">
               <tr>
                 <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision ${fromRevision}</th>
+                <th width="50%">Revision ${diffCommand.fromRevision}</th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision ${toRevision}</th>
+                <th width="50%">Revision ${diffCommand.toRevision}</th>
               </tr>
               <%
                 int diffCount = 0;
@@ -96,6 +90,6 @@
       </c:otherwise>
     </c:choose>
     <br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

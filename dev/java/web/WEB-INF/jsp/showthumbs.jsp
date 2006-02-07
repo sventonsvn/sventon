@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,23 +11,24 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
   <head>
     <title>Show thumbnails</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jsp/top.jsp"%>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-    <c:url value="get.svn" var="downloadUrl" />
-
+    <c:url value="get.svn" var="downloadUrl" >
+      <c:param name="revision" value="${command.revision}" />
+    </c:url>
     <p>
       <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
-      <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
     <br/>
@@ -35,13 +36,13 @@
     <c:forEach items="${thumbnailentries}" var="entry">
       <p>
         <b>${entry}</b><br/>
-        <a href="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=inline">
-          <img src="${downloadUrl}?path=${entry}&revision=${command.revision}&disp=thumb" alt="Thumbnail" border="0"/>
+        <a href="${downloadUrl}&path=${entry}&disp=inline">
+          <img src="${downloadUrl}&path=${entry}&disp=thumb" alt="Thumbnail" border="0"/>
         </a>
       </p>
     </c:forEach>
 
-<br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
+    <br>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

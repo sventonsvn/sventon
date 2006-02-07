@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -34,9 +34,6 @@ public class SVNBaseCommand {
 
   /** The revision. */
   private String revision = null;
-
-  /** Mount point. */
-  private String mountPoint;
 
 
   /**
@@ -87,40 +84,6 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Sets the mountpoint.
-   *
-   * @param mountPoint The mountpoint
-   */
-  public void setMountPoint(final String mountPoint) {
-    this.mountPoint = mountPoint;
-  }
-
-  /**
-   * Gets the mountpoint.
-   *
-   * @param stripSplash
-   * @return The mountpoint
-   */
-  public String getMountPoint(final boolean stripSplash) {
-    if (stripSplash) {
-      return StringUtils.removeStart(mountPoint, "/");
-    } else {
-      return mountPoint;
-    }
-  }
-
-  /**
-   * @return Returns the path including the mount point offset, if any.
-   */
-  public String getCompletePath() {
-    if (mountPoint != null) {
-      return mountPoint + path;
-    } else {
-      return path;
-    }
-  }
-
-  /**
    * Get target (leaf/end) part of the <code>path</code>, it could be a file
    * or a directory.
    * <p>
@@ -134,8 +97,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the end/leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getCompletePath()}. Mountpoint offset will be
-   * included.
+   * {@link SVNBaseCommand#getPath()}.
    * <p>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
@@ -149,8 +111,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getCompletePath()}. Mountpoint offset will be
-   * included.
+   * {@link SVNBaseCommand#getPath()}.
    * <p>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
@@ -177,7 +138,6 @@ public class SVNBaseCommand {
    */
   public Map<String, Object> asModel() {
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("completePath", getCompletePath());
     m.put("revision", getRevision());
     m.put("path", getPath());
     return m;
@@ -188,9 +148,7 @@ public class SVNBaseCommand {
    */
   public String toString() {
     return "SVNBaseCommand{path='" + path + "', " +
-    "revision='" + revision + "', " +
-    "mountPoint='" + mountPoint
-        + "'}";
+    "revision='" + revision + "'}";
   }
 
   /**
