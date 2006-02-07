@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,53 +11,37 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jspf/include.jspf"%>
 
 <html>
   <head>
-    <title>sventon blame - ${url}</title>
-    <%@ include file="/WEB-INF/jsp/head.jsp"%>
+    <title>Blame - ${command.target}</title>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
-<body>
-  <%@ include file="/WEB-INF/jsp/top.jsp"%>
+  <body>
+    <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
-  <c:url value="showlog.svn" var="showLogUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
+    <p>
+      <table class="sventonHeader">
+        <tr>
+          <td>Blame - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
+        </tr>
+      </table>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
+    </p>
   
-  <c:url value="get.svn" var="downloadUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
+    <br/>
+    <ui:functionLinks pageName="showBlame"/>
   
-  <c:url value="showfile.svn" var="showFileUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
-  </c:url>
+    <p>
+      <br/>
+        Blame support disabled.
+      <br/>
+    </p>
 
-  <p>
-    <table class="sventonHeader">
-      <tr><td>
-  Blame - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td></tr></table>
-    <%@ include file="/WEB-INF/jsp/sventonheader.jsp"%>
-  </p>
-  
-  <br/>
-  
-  <table class="sventonFunctionLinksTable">
-    <tr>
-      <td><a href="${showFileUrl}&revision=${command.revision}">[Show file]</a></td>
-      <td><a href="${downloadUrl}&revision=${command.revision}">[Download]</a></td>
-      <td><a href="#">[Diff with previous]</a></td>
-      <td><a href="${showLogUrl}&revision=${command.revision}">[Show log]</a></td>
-    </tr>
-  </table>
-<p>
-<br/>
-Blame support disabled.
-<br/>
-</p>
-<!-- 
+<!--
 <table class="sventonBlameTable">
   <tr>
     <th>Revision</th>
@@ -82,7 +66,7 @@ Blame support disabled.
   </tr>
 </table>
 -->
-<br>
-<%@ include file="/WEB-INF/jsp/foot.jsp"%>
-</body>
+    <br>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+  </body>
 </html>

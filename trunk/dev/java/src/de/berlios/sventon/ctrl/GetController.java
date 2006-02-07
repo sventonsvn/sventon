@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,17 +11,17 @@
  */
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.SventonCache;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.util.SventonCache;
+import de.berlios.sventon.svnsupport.SventonException;
 import net.sf.ehcache.CacheException;
-
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperty;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -50,6 +50,8 @@ import java.util.HashMap;
  */
 public class GetController extends AbstractSVNTemplateController implements Controller {
 
+  private ImageUtil imageUtil;
+
   public static final String THUMBNAIL_FORMAT = "png";
   public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
   public static final String DISPLAY_REQUEST_PARAMETER = "disp";
@@ -60,9 +62,9 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
-    logger.debug("Getting file: " + svnCommand.getCompletePath());
+    logger.debug("Getting file: " + svnCommand.getPath());
 
     String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
     ServletOutputStream output = null;
@@ -74,8 +76,8 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'");
-        if (!ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
-          logger.error("File '" + svnCommand.getTarget() + "' is not a image file.");
+        if (!getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+          logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
           return null;
         }
 
@@ -83,7 +85,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
         // Check if the thumbnail exists on the cache
         HashMap properties = new HashMap();
-        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, null);
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
         logger.debug(properties);
         String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
         logger.debug("Using cachekey: " + cacheKey);
@@ -99,11 +101,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         } else {
           // Thumbnail was not in the cache.
           // Create the thumbnail.
-          StringBuilder urlString = new StringBuilder("http://");
-          urlString.append(request.getServerName());
-          urlString.append(":");
-          urlString.append(request.getServerPort());
-          urlString.append(request.getRequestURI());
+          StringBuffer urlString = request.getRequestURL();
           urlString.append("?");
           urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
           URL url = new URL(urlString.toString());
@@ -112,11 +110,12 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           int orgWidth = image.getWidth();
           int orgHeight = image.getHeight();
           // Get preferred thumbnail dimension.
-          Dimension thumbnailSize = ImageUtil.getThumbnailSize(orgWidth, orgHeight);
+          Dimension thumbnailSize = getImageUtil().getThumbnailSize(orgWidth, orgHeight);
+          logger.debug("Thumbnail size: " + thumbnailSize.toString());
           // Resize image.
           Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-          BufferedImage biRescaled = ImageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
-          response.setContentType(ImageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+          BufferedImage biRescaled = getImageUtil().toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+          response.setContentType(getImageUtil().getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
 
           // Write thumbnail to output stream.
           baos = new ByteArrayOutputStream();
@@ -127,16 +126,16 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           try {
             SventonCache.INSTANCE.put(cacheKey, baos.toByteArray());
           } catch (CacheException ce) {
-            logger.warn("Unable to cache thumbnail.");
+            logger.warn("Unable to cache thumbnail");
           }
           // Write thumbnail to ServletOutputStream.
           output.write(baos.toByteArray());
         }
       } else {
         if (DISPLAY_TYPE_INLINE.equals(displayType)
-            && ImageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+            && getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.debug("Getting file as 'inline'");
-          response.setContentType(ImageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+          response.setContentType(getImageUtil().getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         } else {
           logger.debug("Getting file as 'attachment'");
@@ -145,7 +144,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         }
         HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
-        repository.getFile(svnCommand.getCompletePath(), revision.getNumber(), properties, output);
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
         logger.debug(properties);
       }
       output.flush();
@@ -154,6 +153,26 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       ioex.printStackTrace();
     }
     return null;
+  }
+
+  /**
+   * Gets the <code>ImageUtil</code> helper instance.
+   *
+   * @return The <code>ImageUtil</code>
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public ImageUtil getImageUtil() {
+    return imageUtil;
+  }
+
+  /**
+   * Sets the <code>ImageUtil</code> helper instance.
+   *
+   * @param imageUtil The instance
+   * @see de.berlios.sventon.util.ImageUtil
+   */
+  public void setImageUtil(ImageUtil imageUtil) {
+    this.imageUtil = imageUtil;
   }
 
 }

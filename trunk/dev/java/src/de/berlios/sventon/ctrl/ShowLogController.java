@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,30 +11,20 @@
  */
 package de.berlios.sventon.ctrl;
 
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.svnsupport.SventonException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * ShowLogController. For showing logs. Note, this currently does not work for
@@ -64,9 +54,9 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
-    String path = svnCommand.getCompletePath();
+    String path = svnCommand.getPath();
 
     String nextPathParam = request.getParameter("nextPath");
     String nextRevParam = request.getParameter("nextRevision");
@@ -120,9 +110,9 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     });
 
     SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
-
+    
     for (SVNLogEntry logEntry : logEntries) {
-
+      
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
       Set<String> changedPaths = m.keySet();
@@ -149,8 +139,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     model.put("pageSize", pageSize);
     model.put("isFile", nodeKind == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
-    model.put("properties", new HashMap()); // TODO: Replace with valid entry
-    // properties
+    model.put("properties", new HashMap()); // TODO: Replace with valid entry properties
     return new ModelAndView("showlog", model);
   }
 }

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -13,16 +13,15 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.svnsupport.SventonException;
+import de.berlios.sventon.index.RevisionIndexer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -33,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,6 +106,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
   protected RepositoryConfiguration configuration = null;
 
+  private RevisionIndexer revisionIndexer;
+
   /**
    * Logger for this class and subclasses.
    */
@@ -119,7 +121,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   /**
    * Cached revision number (HEAD).
    */
-  private static long cachedRevision = 1;
+  private static long cachedRevision;
 
   protected AbstractSVNTemplateController() {
     // TODO: Move to XML-file?
@@ -154,7 +156,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
                                                Object command, BindException exception) throws Exception {
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-    svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 
     logger.debug("GoTo form submit with command: " + command);
 
@@ -176,7 +177,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     try {
 
       logger.debug("Checking node kind for command: " + svnCommand);
-      SVNNodeKind kind = repository.checkPath(svnCommand.getCompletePath(), revision.getNumber());
+      SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
 
       logger.debug("Node kind: " + kind);
 
@@ -210,8 +211,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     model.put("path", svnCommand.getPath());
     model.put("revision", svnCommand.getRevision());
     model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-    model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
-
+    model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+    model.put("isIndexing", getRevisionIndexer().isIndexing());
     return new ModelAndView(new RedirectView(redirectUrl), model);
   }
 
@@ -227,7 +228,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
     // Also validate the form backing command (this is not done by Spring MVC
     // and must be handled manually)
     getValidator().validate(exception.getTarget(), exception);
-
     return handle(request, response, exception.getTarget(), exception);
   }
 
@@ -238,7 +238,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
                              BindException exception) throws ServletException, IOException {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-    svnCommand.setMountPoint(getRepositoryConfiguration().getRepositoryMountPoint());
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
@@ -263,7 +262,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       model.put("command", svnCommand); // This is for the form to work
       model.put("url", configuration.getUrl());
       model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-      model.put("latestCommitInfo", getLatestCommitInfo(repository, latestRevision));
+      model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+      model.put("isIndexing", getRevisionIndexer().isIndexing());
 
       // It's ok for svnHandle to return null in cases like GetController.
       if (modelAndView != null) {
@@ -272,8 +272,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return forwardToAuthenticationFailureView(svnae);
-    } catch (SVNException e) {
-      logger.error("SVN Exception", e);
+    } catch (Exception e) {
+      logger.error("Exception", e);
       Throwable cause = e.getCause();
       if (cause instanceof java.net.NoRouteToHostException || cause instanceof ConnectException) {
         exception.reject("error.message.no-route-to-host");
@@ -287,21 +287,55 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Gets the latest commit log.
+   * Gets the repository locks.
+   *
+   * @param repository The repository
+   * @param startPath The start path. If <code>null</code> locks will be gotten from root.
+   * @return Lock info
+   * @throws SVNException if subversion error.
+   */
+  protected Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException {
+    String path = startPath == null ? "/" : startPath;
+    logger.debug("Getting lock info for path [" + path + "] and below");
+    SVNLock[] locksArray = repository.getLocks(path);
+    Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
+    logger.debug("Locks found: " + Arrays.asList(locksArray));
+    for (SVNLock lock : locksArray) {
+      locks.put(lock.getPath(), lock);
+    }
+    return locks;
+  }
+
+  /**
+   * Gets the latest commit log and puts the result into the cache.
+   * If cache already contains the latest info it will be returned
+   * directly.
    *
    * @param repository     The repository
    * @param latestRevision The latest revision
-   * @return The latest <tt>SVNLogEntry</tt>
+   * @return The <tt>SVNLogEntry</tt> for the latest revision
    * @throws SVNException if subversion error.
    */
-  private SVNLogEntry getLatestCommitInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
+  private SVNLogEntry getLatestRevisionInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
     if (latestRevision != cachedRevision) {
-      String[] targetPaths = new String[]{"/"}; // the path to show logs for
-      cachedLogs = (SVNLogEntry) repository.log(
-          targetPaths, null, latestRevision, latestRevision, true, false).iterator().next();
+      cachedLogs = getRevisionInfo(repository, latestRevision);
       cachedRevision = latestRevision;
     }
     return cachedLogs;
+  }
+
+  /**
+   * Gets the latest commit log.
+   *
+   * @param repository The repository
+   * @param revision   The revision
+   * @return The <tt>SVNLogEntry</tt> for given revision
+   * @throws SVNException if subversion error.
+   */
+  protected SVNLogEntry getRevisionInfo(final SVNRepository repository, final long revision) throws SVNException {
+    String[] targetPaths = new String[]{"/"}; // the path to show logs for
+    return (SVNLogEntry) repository.log(
+        targetPaths, null, revision, revision, true, false).iterator().next();
   }
 
   /**
@@ -346,7 +380,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
    * <p/>
    * TODO: This (could perhaps) be a suitable place to also handle conversion of
-   * date to revision to expand possilbe user input to handle calendar
+   * date to revision to expand possible user input to handle calendar
    * intervalls.
    *
    * @param svnCommand Command object.
@@ -368,19 +402,39 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * documentation for info on workflow and on how all this works together.
    *
    * @param repository Reference to the repository, prepared with authentication
-   *          if applicable.
+   *                   if applicable.
    * @param svnCommand Command (basically request parameters submitted in user
-   *          request)
-   * @param revision SVN type revision.
-   * @param request Servlet request.
-   * @param response Servlet response.
-   * @param exception BindException, could be used by the subclass to add error
-   * messages to the exception.
+   *                   request)
+   * @param revision   SVN type revision.
+   * @param request    Servlet request.
+   * @param response   Servlet response.
+   * @param exception  BindException, could be used by the subclass to add error
+   *                   messages to the exception.
    * @return Model and view to render.
+   * @throws SventonException Thrown if a sventon error occurs.
    * @throws SVNException Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
                                             SVNBaseCommand svnCommand, SVNRevision revision,
                                             HttpServletRequest request, HttpServletResponse response,
-                                            BindException exception) throws SVNException;
+                                            BindException exception) throws SventonException, SVNException;
+
+  /**
+   * Sets the revision indexer instance.
+   *
+   * @param revisionIndexer The instance.
+   */
+  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
+    this.revisionIndexer = revisionIndexer;
+  }
+
+  /**
+   * Gets the revision indexer instance.
+   *
+   * @return The instance.
+   */
+  public RevisionIndexer getRevisionIndexer() {
+    return revisionIndexer;
+  }
+
 }

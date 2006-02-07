@@ -4,12 +4,16 @@
     <title>sventon - subversion repository browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css" href="sventon.css">
+    <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml" />
   </head>
 
   <body bgcolor="#FFFFFF">
     <p>&nbsp;</p>
 
 <?php
+  require 'magpierss/rss_utils.inc'; 
+  require_once('magpierss/rss_fetch.inc'); 
+
   // get the value of the request parameter
   $pageparameter=$_GET['page'];
 
@@ -35,8 +39,11 @@
     case "screenshots":
       $includepage="screenshots.php";
       break;
+    case "news":
+      $includepage="news.php";
+      break;
     default:
-      $includepage="about.php";
+      $includepage="main.php";
       break;
   }
 ?>
@@ -71,7 +78,12 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="index.php?page=about">[about]</a>
+                <a href="index.php?page=main">[main]</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <a href="index.php?page=news">[news]</a>
               </td>
             </tr>
             <tr>
@@ -111,7 +123,12 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="http://developer.berlios.de/mail/?group_id=3670">[mailinglists]</a>
+                <a href="http://developer.berlios.de/mail/?group_id=3670">[mailinglist]</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <a href="http://developer.berlios.de/forum/?group_id=3670">[forum]</a>
               </td>
             </tr>
             <tr>
@@ -130,6 +147,11 @@
         <td align="right" valign="bottom">
           <br/>
           <br/>
+          <a href="http://sventonblog.blogspot.com/atom.xml" title="Sventon Atom news feed">
+          	<img src="img/feed-icon-32x32.png" alt="feed icon">
+          	</a>
+          <br/>
+          <br/>
           <a href="http://developer.berlios.de" title="BerliOS Developer">
             <img src="http://developer.berlios.de/bslogo.php?group_id=3670" width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
           </a>
@@ -141,7 +163,11 @@
         <td>&nbsp;</td>
       </tr>
     </table>
-
-
-  </body>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-206174-2";
+urchinTracker();
+</script>
+</body>
 </html>

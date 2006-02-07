@@ -6,6 +6,7 @@ import de.berlios.sventon.svnsupport.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,10 @@ public class FlattenControllerTest extends TestCase {
     FlattenController controller = new FlattenController();
     ModelAndView modelAndView;
 
-    RevisionIndexer indexer = new RevisionIndexer(SVNRepositoryStub.getInstance());
+    SVNRepository repos = SVNRepositoryStub.getInstance();
+    RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     indexer.setRepositoryConfiguration(config);
     controller.setRevisionIndexer(indexer);

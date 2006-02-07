@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -13,13 +13,13 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
-
+import de.berlios.sventon.svnsupport.SventonException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.SVNException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,45 +31,25 @@ import java.util.*;
  */
 public class FlattenController extends AbstractSVNTemplateController implements Controller {
 
-  private RevisionIndexer revisionIndexer;
-
-  /**
-   * Sets the revision indexer instance.
-   *
-   * @param revisionIndexer The instance.
-   */
-  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
-    this.revisionIndexer = revisionIndexer;
-  }
-
-  /**
-   * Gets the revision indexer instance.
-   *
-   * @return The instance.
-   */
-  public RevisionIndexer getRevisionIndexer() {
-    return revisionIndexer;
-  }
-
   /**
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SVNException {
+      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
     
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Make sure the path starts with a slash as that
     // is the path structure of the revision index.
-    String fromPath = svnCommand.getCompletePath();
+    String fromPath = svnCommand.getPath();
     if (!fromPath.startsWith("/")) {
-      logger.debug("Appending initial slash.");
+      logger.debug("Appending initial slash");
       fromPath = "/" + fromPath;
     }
 
     logger.debug("Flattening directories below: " + fromPath);
     entries.addAll(getRevisionIndexer().getDirectories(fromPath));
-    logger.debug(entries.size() + " entries found.");
+    logger.debug(entries.size() + " entries found");
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();

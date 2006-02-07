@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -13,6 +13,7 @@ package de.berlios.sventon.ctrl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringUtils;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -20,6 +21,8 @@ import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
 
 import de.berlios.sventon.svnsupport.SVNLog4JAdapter;
+
+import java.io.File;
 
 /**
  * Small wrapper class to hold connection info for the repository.
@@ -51,7 +54,7 @@ public class RepositoryConfiguration {
   /**
    * Will be <code>true</code> if all parameters are ok.
    */
-  private boolean configured = true;
+  private boolean configured = false;
 
   /**
    * The logging instance.
@@ -72,11 +75,6 @@ public class RepositoryConfiguration {
    * Path to the Subversion configuration libraries
    */
   private String SVNConfigurationPath = null;
-
-  /**
-   * Mount point, used to set the browser root in the repository
-   */
-  private String repositoryMountPoint = null;
 
   /**
    * If a global user is configured for repository browsing, this property
@@ -104,13 +102,20 @@ public class RepositoryConfiguration {
   /**
    * Sets the repository root. Root URL will never end with a slash.
    *
-   * @param repositoryRoot The root url.
+   * @param repositoryRoot The root url. <code>Null</code> or
+   *                       empty value will be ignored, as it indicates sventon has
+   *                       not been configured yet. A well formed URL is needed for
+   *                       the method {@link #isConfigured()} to return <code>true</code>.
    */
   public void setRepositoryRoot(final String repositoryRoot) {
-    configured = false;
-    if (repositoryRoot == null) {
-      throw new IllegalArgumentException("Provided repository root url was null.");
+
+    if (StringUtils.isEmpty(repositoryRoot)) {
+      logger.debug("Ignoring empty repository root url");
+      return;
     }
+
+    logger.debug("Repository URL: " + repositoryURL);
+
     // Strip last slash if any.
     this.repositoryURL = repositoryRoot;
     if (repositoryRoot.endsWith("/")) {
@@ -119,15 +124,11 @@ public class RepositoryConfiguration {
           repositoryRoot.length() - 1);
     }
 
-    logger.debug("SVN location: " + repositoryURL);
-
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
       configured = true;
     } catch (SVNException ex) {
-      logger.warn("Unable to parse URL '" + repositoryRoot
-          + "'. This is normal for if sventon has not yet been configured. "
-          + "Configuration mode will now be turned on.");
+      logger.warn("Unable to parse URL [" + repositoryRoot + "]");
     }
     logger.debug("sventon is configured: " + configured);
   }
@@ -171,28 +172,6 @@ public class RepositoryConfiguration {
   }
 
   /**
-   * Get configured mount point. {@see #setRepositoryMountPoint(String)}
-   *
-   * @return Repository mount point.
-   */
-  public String getRepositoryMountPoint() {
-    return repositoryMountPoint;
-  }
-
-  /**
-   * Set a mountpoint to restrict repository browsing to a specific part of the
-   * website. E.g. setting the mount point to <code>/trunk/doc</code> only the
-   * <code>doc</code> directory and its subdirectories will be browsable.
-   *
-   * @param repositoryMountPoint Mounting point. Must be a absolute path from
-   *                             the root of the repository. If the initial <code>/</code> is
-   *                             missing it will be appended.
-   */
-  public void setRepositoryMountPoint(String repositoryMountPoint) {
-    this.repositoryMountPoint = repositoryMountPoint;
-  }
-
-  /**
    * Set SVN configuration path, this is a directory where Subversion
    * configuration is stored. The user running the servlet container running
    * sventon needs read and write access to this directory.
@@ -207,9 +186,17 @@ public class RepositoryConfiguration {
    * Get SVN configuration path.
    *
    * @param configurationPath Configuration path.
-   * @see #setSVNConfigurationPath(String)
+   * @throws IllegalArgumentException if argument is not a directory.
+   *                                  <code>Null</code> or empty will be ignored.
    */
   public void setSVNConfigurationPath(final String configurationPath) {
+    if (StringUtils.isEmpty(configurationPath)) {
+      return;
+    }
+
+    if (!new File(configurationPath).isDirectory()) {
+      throw new IllegalArgumentException("Given path, [" + configurationPath + "] is not a directory");
+    }
     SVNConfigurationPath = configurationPath;
   }
 

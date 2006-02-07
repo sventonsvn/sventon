@@ -2,11 +2,14 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.util.ImageUtil;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+
+import java.util.Properties;
 
 public class GetControllerTest extends TestCase {
 
@@ -15,6 +18,7 @@ public class GetControllerTest extends TestCase {
     SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     GetController ctrl = new GetController();
+    ctrl.setImageUtil(getImageUtil());
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
@@ -46,4 +50,15 @@ public class GetControllerTest extends TestCase {
     assertTrue(((String)res.getHeader("Content-disposition")).startsWith("attachment"));
   }
 
+  private ImageUtil getImageUtil() {
+    ImageUtil imageUtil = new ImageUtil();
+    Properties prop = new Properties();
+    prop.setProperty("jpg", "image/jpg");
+    prop.setProperty("jpe", "image/jpg");
+    prop.setProperty("jpeg", "image/jpg");
+    prop.setProperty("gif", "image/gif");
+    prop.setProperty("png", "image/png");
+    imageUtil.setMimeMappings(prop);
+    return imageUtil;
+  }
 }

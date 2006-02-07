@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -41,17 +42,11 @@ public class ConfigurationController extends AbstractFormController {
   /** Logger for this class and subclasses. */
   private final Log logger = LogFactory.getLog(getClass());
 
-  public static final String SVENTON_PROPERTIES = "WEB-INF/classes/default-sventon.properties";
-
+  public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/sventon.properties";
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
-
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
-
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
-
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
-
-  public static final String PROPERTY_KEY_MOUNTPOINT = "svn.mountpoint";
 
   protected ConfigurationController() {
     // TODO: Move to XML-file?
@@ -79,49 +74,57 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                  BindException e) throws Exception {
+                                  BindException e) throws IOException {
     logger.debug("showForm() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
-      logger.debug("Already configured - returning to browser view.");
+      logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
       Map<String, Object> model = new HashMap<String, Object>();
       ConfigCommand configCommand = new ConfigCommand();
-      File currentDir = new File(".");
-      logger.debug("currentDir is: " + currentDir.getCanonicalPath());
-      configCommand.setCurrentDir(currentDir.getCanonicalPath());
+      String tempDir = System.getProperty("java.io.tmpdir");
+      logger.debug("tempDir is: " + tempDir);
+      configCommand.setConfigPath(tempDir);
       logger.debug("'command' set to: " + configCommand);
-      model.put("command", configCommand); // This is for the form to work
-      logger.debug("Displaying the config page.");
+      model.put("command", configCommand);
+      logger.debug("Displaying the config page");
       return new ModelAndView("config", model);
     }
   }
 
   protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest,
-                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws Exception {
+                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws IOException {
     logger.debug("processFormSubmission() started");
-    logger.info("sventon configuration ok: " + configuration.isConfigured());
+    logger.info("sventon configuration OK: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
-      logger.debug("Already configured - returning to browser view.");
+      logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
+      ConfigCommand confCommand = (ConfigCommand) command;
+
       if (exception.hasErrors()) {
-        return new ModelAndView("config", exception.getModel());
+        //noinspection unchecked
+        Map<String, Object> model = exception.getModel();
+        model.put("command", command);
+        return new ModelAndView("config", model);
       }
 
-      //TODO: validate entered url by opening a connection.
-
-      ConfigCommand confCommand = (ConfigCommand) command;
       Properties config = new Properties();
       config.put(PROPERTY_KEY_REPOSITORY_URL, confCommand.getRepositoryURL());
       config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
-      config.put(PROPERTY_KEY_CONFIGPATH, confCommand.getConfigPath());
-      config.put(PROPERTY_KEY_MOUNTPOINT, confCommand.getMountPoint());
+
+      // Make sure the configPath ends with a (back)slash
+      String confPath = confCommand.getConfigPath();
+      if (!confPath.endsWith(System.getProperty("file.separator"))) {
+        confPath += System.getProperty("file.separator");
+      }
+      config.put(PROPERTY_KEY_CONFIGPATH, confPath);
       logger.debug(config.toString());
+
       File propFile = new File(System.getProperty("sventon.root") + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
 
@@ -130,13 +133,12 @@ public class ConfigurationController extends AbstractFormController {
       fos.flush();
       fos.close();
 
-      //TODO: Find a way to refresh the app context, the lines below fails for some reason
-      //(also, are not threadsafe) 
-//      AbstractApplicationContext abstractApplicationContext = ((AbstractApplicationContext) getWebApplicationContext());
-//      logger.debug("Refreshing application context");
-//      abstractApplicationContext.refresh();
+      configuration.setConfiguredUID(confCommand.getUsername());
+      configuration.setConfiguredPWD(confCommand.getPassword());
+      configuration.setSVNConfigurationPath(confPath);
+      configuration.setRepositoryRoot(confCommand.getRepositoryURL());
 
-      return new ModelAndView("restart");
+      return new ModelAndView(new RedirectView("repobrowser.svn"));
     }
   }
 
@@ -161,18 +163,6 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("#   svn.root=svn://svn.berlios.de/sventon/                                     #\n");
     comments.append("#   svn.root=http://domain.com/project/                                        #\n");
     comments.append("#   svn.root=svn+ssh://domain.com/project/                                     #\n");
-    comments.append("################################################################################\n\n");
-    comments.append("################################################################################\n");
-    comments.append("# Key: svn.mountpoint                                                          #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Description:                                                                 #\n");
-    comments.append("# Optionally set a mount point to restrict repository browsing to a specific   #\n");
-    comments.append("# part of the repository. E.g. by setting the mount point to '/trunk/doc' only #\n");
-    comments.append("# the 'doc' directory and its subdirectories will be browsable. This must be   #\n");
-    comments.append("# an absolute path from the repository root.                                   #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.mountpoint=/trunk/doc                                                  #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.configpath                                                          #\n");

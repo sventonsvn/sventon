@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -405,20 +405,20 @@ public class SVNRepositoryStub extends SVNRepository {
     repository.setLogResult(logEntries);
 
     List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
-    entries1.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
-    entries1.add(new SVNDirEntry("file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
-    entries1.add(new SVNDirEntry("dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-    entries1.add(new SVNDirEntry("File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
+    entries1.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
+    entries1.add(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
+    entries1.add(new SVNDirEntry(null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+    entries1.add(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
     List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
-    entries2.add(new SVNDirEntry("dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
-    entries2.add(new SVNDirEntry("DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry(null, "dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
+    entries2.add(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
 
     repository.addDir("/", entries1);
     repository.addDir("/dir1/", entries2);
     repository.addDir("/dir1/dir2/", new ArrayList());
-    repository.infoEntry = new SVNDirEntry("file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
+    repository.infoEntry = new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
 
     return repository;
   }
