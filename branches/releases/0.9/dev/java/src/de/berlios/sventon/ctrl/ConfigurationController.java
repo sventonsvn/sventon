@@ -43,13 +43,9 @@ public class ConfigurationController extends AbstractFormController {
   private final Log logger = LogFactory.getLog(getClass());
 
   public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/sventon.properties";
-
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
-
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
-
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
-
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
 
   protected ConfigurationController() {
@@ -83,7 +79,7 @@ public class ConfigurationController extends AbstractFormController {
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
-      logger.debug("Already configured - returning to browser view.");
+      logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
       Map<String, Object> model = new HashMap<String, Object>();
@@ -93,7 +89,7 @@ public class ConfigurationController extends AbstractFormController {
       configCommand.setConfigPath(tempDir);
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
-      logger.debug("Displaying the config page.");
+      logger.debug("Displaying the config page");
       return new ModelAndView("config", model);
     }
   }
@@ -104,7 +100,7 @@ public class ConfigurationController extends AbstractFormController {
     logger.info("sventon configuration OK: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
-      logger.debug("Already configured - returning to browser view.");
+      logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
       ConfigCommand confCommand = (ConfigCommand) command;
@@ -128,6 +124,7 @@ public class ConfigurationController extends AbstractFormController {
       }
       config.put(PROPERTY_KEY_CONFIGPATH, confPath);
       logger.debug(config.toString());
+
       File propFile = new File(System.getProperty("sventon.root") + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
 
@@ -138,7 +135,7 @@ public class ConfigurationController extends AbstractFormController {
 
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
-      configuration.setSVNConfigurationPath(confCommand.getConfigPath());
+      configuration.setSVNConfigurationPath(confPath);
       configuration.setRepositoryRoot(confCommand.getRepositoryURL());
 
       return new ModelAndView(new RedirectView("repobrowser.svn"));

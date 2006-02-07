@@ -122,7 +122,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
     } else {
       model.put("isBinary", true);  // Indicates that the file is in binary format.
       logger.info("One or both files selected for diff is in binary format. "
-          + "Diff will not be performed.");
+          + "Diff will not be performed");
     }
     return model;
   }

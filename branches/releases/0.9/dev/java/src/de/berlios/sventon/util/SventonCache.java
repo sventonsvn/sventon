@@ -49,7 +49,7 @@ public class SventonCache {
     try {
       init();
     } catch(CacheException ce) {
-      throw new RuntimeException("Unable to create cache instance.");
+      throw new RuntimeException("Unable to create cache instance");
     }
   }
 
@@ -71,7 +71,7 @@ public class SventonCache {
    */
   public void put(final Object cacheKey, final Object value) throws CacheException {
     if (cacheKey == null) {
-      throw new IllegalArgumentException("Cachekey cannot be null.");
+      throw new IllegalArgumentException("Cachekey cannot be null");
     }
     Element element = new Element(cacheKey.toString(), (Serializable) value);
     cache.put(element);

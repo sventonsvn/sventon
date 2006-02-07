@@ -43,13 +43,13 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     // is the path structure of the revision index.
     String fromPath = svnCommand.getPath();
     if (!fromPath.startsWith("/")) {
-      logger.debug("Appending initial slash.");
+      logger.debug("Appending initial slash");
       fromPath = "/" + fromPath;
     }
 
     logger.debug("Flattening directories below: " + fromPath);
     entries.addAll(getRevisionIndexer().getDirectories(fromPath));
-    logger.debug(entries.size() + " entries found.");
+    logger.debug(entries.size() + " entries found");
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();

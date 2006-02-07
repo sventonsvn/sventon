@@ -11,9 +11,12 @@
  */
 package de.berlios.sventon.command;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * ConfigCommand.
- * <p>
+ * <p/>
  * Command class used to bind and pass servlet parameter arguments for sventon configuration.
  *
  * @author jesper@users.berlios.de
@@ -55,5 +58,12 @@ public class ConfigCommand {
 
   public String getConfigPath() {
     return this.configPath;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }
 }
