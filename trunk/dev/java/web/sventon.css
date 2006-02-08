@@ -5,17 +5,17 @@
 body {
   font-family: verdana, sans-serif;
   font-size: 10px;
-  color: #000000;
+  color: #14233D;
   background-color: #ffffff;
   font-weight: normal;
 }
 
 th {
-  text-align: left;
   white-space: nowrap;
   font-family: verdana, sans-serif;
   font-size: 10px;
   font-weight: bold;
+  text-align: left;
 }
 
 td {
@@ -26,7 +26,7 @@ td {
 a:link, a:visited, a:hover, a:active {
   font-family: verdana, sans-serif;
   font-size: 10px;
-  color: #0060CB;
+  color: #0041BA;
   background-color: inherit;
   text-decoration: none;
 }
@@ -34,6 +34,14 @@ a:link, a:visited, a:hover, a:active {
 input {
   font-family: verdana, sans-serif;
   font-size: 10px;
+  vertical-align: middle;
+}
+
+input.btn{
+  border:1px solid;
+  font-family: verdana, sans-serif;
+  font-size: 10px;
+  font-weight:bold;
   vertical-align: middle;
 }
 
@@ -56,7 +64,6 @@ input {
   border-right: black solid 2px;
   border-bottom: black solid 2px;
   padding: 0px;
-  spacing: 0px;
 }
 
 .sventonSelect {
@@ -81,69 +88,73 @@ input {
 }
 
 .sventonHeader {
-  color: #000000;
-  background-color: #ccccff;
+  color: #14233D;
+  background-color: #8B9BBA;
   border: 1px solid black;
   width: 100%;
 }
 
 .sventonRevision {
+  width: 100px;
 }
 
 .sventonHeadlines {
   font-family: verdana, sans-serif;
   font-size: 10px;
   font-weight: bold;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .sventonGoTo {
-  width: 30em;
+  width: 200px;
 }
 
 .sventonEntriesTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #FFC77F;
   border: 1px solid black;
   width: 950px;
+  border-spacing: 1px;
 }
 
 .sventonEntriesTable * TD {
   padding: 0px;
+  padding-right: 5px;
+  border: 0px;
 }
 
 .sventonEntry1 {
-  color: #000000;
-  background-color: #ddddff;
+  color: #14233D;
+  background-color: #ffc77f;
 }
 
 .sventonEntry2 {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #ff9000;
 }
 
 .sventonEntryLogInfo {
-  color: #000000;
-  background-color: #ffffff;
+  color: #14233D;
+  background-color: #FFE3BF;
 }
 
 .sventonLogEntriesTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #ffc77f;
   border: 1px solid black;
   width: 950px;
 }
 
 .sventonStackTraceTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #FF9000;
   border: 1px solid black;
   font-size: 10px;
 }
 
 .sventonErrorMessageTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #FF9000;
   border: 1px solid black;
   width: 250px;
   font-size: 10px;
@@ -173,7 +184,6 @@ input {
 }
 
 .sventonCol4 {
-  text-align: right;
   white-space: nowrap;
 }
 
@@ -183,11 +193,13 @@ input {
 }
 
 .sventonCol6 {
+  text-align: right;
   white-space: nowrap;
 }
 
 .sventonCol7 {
   white-space: nowrap;
+  text-align: left;
 }
 
 .sventonCol8 {
@@ -205,14 +217,14 @@ input {
 }
 
 .sventonPropertiesTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #FFE3BF;
   border: 1px solid black;
 }
 
 .sventonLatestCommitInfoTable {
-  color: #000000;
-  background-color: #eeeeff;
+  color: #14233D;
+  background-color: #FFE3BF;
   border: 1px solid black;
 }
 
@@ -236,6 +248,7 @@ input {
 }
 
 .sventonFunctionLinksTable {
+  width: 100%;
   border-spacing: 3px;
 }
 
