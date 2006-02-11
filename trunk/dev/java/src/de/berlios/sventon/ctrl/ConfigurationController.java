@@ -14,6 +14,8 @@ package de.berlios.sventon.ctrl;
 import de.berlios.sventon.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
@@ -30,16 +32,25 @@ import java.util.Properties;
 
 /**
  * Controller handling the initial sventon configuration.
- * <p>
- * 
+ * <p/>
+ *
  * @author jesper@users.berlios.de
  */
 public class ConfigurationController extends AbstractFormController {
 
-  /** Repository configuration. */
+  /**
+   * Repository configuration.
+   */
   private RepositoryConfiguration configuration;
 
-  /** Logger for this class and subclasses. */
+  /**
+   * The scheduler instance. Used to fire index update job.
+   */
+  private Scheduler scheduler;
+
+  /**
+   * Logger for this class and subclasses.
+   */
   private final Log logger = LogFactory.getLog(getClass());
 
   public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/sventon.properties";
@@ -47,6 +58,7 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
+
 
   protected ConfigurationController() {
     // TODO: Move to XML-file?
@@ -56,8 +68,8 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   /**
-   * Set repository configuration.
-   * 
+   * Sets repository configuration.
+   *
    * @param configuration Configuration
    */
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
@@ -65,12 +77,13 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   /**
-   * Get current repository configuration.
-   * 
-   * @return Configuration
+   * Sets scheduler instance.
+   * The scheduler is used to fire index update job after configuration has been done.
+   *
+   * @param scheduler The scheduler
    */
-  public RepositoryConfiguration getRepositoryConfiguration() {
-    return configuration;
+  public void setScheduler(final Scheduler scheduler) {
+    this.scheduler = scheduler;
   }
 
   protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -138,13 +151,20 @@ public class ConfigurationController extends AbstractFormController {
       configuration.setSVNConfigurationPath(confPath);
       configuration.setRepositoryRoot(confCommand.getRepositoryURL());
 
+      try {
+        logger.debug("Starting index update job");
+        scheduler.triggerJob("indexUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+      } catch (SchedulerException sx) {
+        logger.warn(sx);
+      }
+
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     }
   }
 
   /**
    * Creates the property file comment.
-   * 
+   *
    * @return The comments.
    */
   private String createPropertyFileComment() {

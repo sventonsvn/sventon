@@ -61,7 +61,7 @@
   <c:when test="${pageName == 'repobrowse'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="showlocks.button.text"/>" onclick="javascript:parent.location='${showLockLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" ${isIndexing ? 'disabled title=Index is being updated!' : 'title="Flatten directory structure from current location"'} />
+    <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" ${isIndexing ? 'disabled title="Index is being updated!"' : 'title="Flatten directory structure from current location"'} />
 
   </c:when>
 
