@@ -49,7 +49,7 @@ input.btn{
   font-size: 11px;
   padding: 0.5em;
   color: #000000;
-  background-color: #f0f0f0;
+  background-color: #FFE3BF;
   border-top: black dotted 1px;
   border-left: black dotted 1px;
   border-right: black solid 2px;
@@ -58,7 +58,7 @@ input.btn{
 
 .sventonDiffTable {
   color: #000000;
-  background-color: #f0f0f0;
+  background-color: #FFE3BF;
   border-top: black dotted 1px;
   border-left: black dotted 1px;
   border-right: black solid 2px;
