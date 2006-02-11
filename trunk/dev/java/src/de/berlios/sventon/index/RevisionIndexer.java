@@ -388,7 +388,7 @@ public class RevisionIndexer {
   }
 
   /**
-   * Finds index entries by a search string.
+   * Finds index entries by a search string. Case is ignored.
    *
    * @param searchString The string to search for.
    * @param startDir     The directory where to start search from.
@@ -411,10 +411,13 @@ public class RevisionIndexer {
       throw new RevisionIndexException("Error during index update", svnex);
     }
 
+    String lcStartDir = startDir.toLowerCase();
+    String lcSearchString = searchString.toLowerCase();
+
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     for (RepositoryEntry entry : index.getEntries()) {
       String name = entry.getFullEntryName().toLowerCase();
-      if (name.startsWith(startDir) && name.contains(searchString.toLowerCase())) {
+      if (name.startsWith(lcStartDir) && name.contains(lcSearchString)) {
         result.add(entry);
       }
     }
