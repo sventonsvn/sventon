@@ -180,6 +180,9 @@
     <property name="validator">
       <ref local="configCommandValidator"/>
     </property>
+    <property name="scheduler">
+      <ref local="scheduler"/>
+    </property>
   </bean>
 
   <bean id="clearSessionController" class="de.berlios.sventon.ctrl.ClearSessionController"/>
