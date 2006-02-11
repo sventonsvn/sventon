@@ -94,7 +94,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
       cachedInfo = getXMLAsString(
           createXML((SVNLogEntry) repository.log(targetPaths,
               null, headRevision, headRevision, true, false).iterator().next()),
-          getXmlEncoding());
+          xmlEncoding);
       logger.debug("Updating cache to revision: " + headRevision);
       cachedInfoHeadRevision = headRevision;
     } else {
@@ -119,30 +119,12 @@ public class ShowLatestCommitInfoController extends AbstractController {
   }
 
   /**
-   * Get current repository configuration.
-   *
-   * @return Configuration
-   */
-  public RepositoryConfiguration getRepositoryConfiguration() {
-    return configuration;
-  }
-
-  /**
    * Sets the xml encoding.
    *
    * @param xmlEncoding The encoding
    */
   public void setXmlEncoding(final String xmlEncoding) {
     this.xmlEncoding = xmlEncoding;
-  }
-
-  /**
-   * Gets the xml encoding.
-   *
-   * @return The encoding.
-   */
-  public String getXmlEncoding() {
-    return xmlEncoding;
   }
 
   private Document createXML(final SVNLogEntry log) {
@@ -168,6 +150,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
 
     Element entries = new Element("entries");
 
+    //noinspection unchecked
     Map<String, SVNLogEntryPath> map = log.getChangedPaths();
     List<String> latestPathsList = new ArrayList<String>(map.keySet());
 

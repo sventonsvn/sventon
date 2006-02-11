@@ -48,15 +48,6 @@ public class BlameController extends AbstractSVNTemplateController implements Co
     this.colorer = colorer;
   }
 
-  /**
-   * Gets <tt>Colorer</tt> instance.
-   *
-   * @return The instance.
-   */
-  public Colorer getColorer() {
-    return colorer;
-  }
-
   @Override
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
                                    HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
@@ -67,7 +58,7 @@ public class BlameController extends AbstractSVNTemplateController implements Co
 
 //    repository.doAnnotate(svnCommand.getPath(), FIRST_REVISION, revision, blameHandler);
 
-    blameHandler.colorizeContent(getColorer(), svnCommand.getTarget());
+    blameHandler.colorizeContent(colorer, svnCommand.getTarget());
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Adding blameHandler: " + blameHandler);

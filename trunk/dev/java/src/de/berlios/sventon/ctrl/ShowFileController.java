@@ -49,43 +49,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
   private ImageUtil imageUtil;
 
-  private String archiveFileExtensionPattern;
-
-  /**
-   * Sets the <tt>Colorer</tt> instance.
-   *
-   * @param colorer The instance.
-   */
-  public void setColorer(Colorer colorer) {
-    this.colorer = colorer;
-  }
-
-  /**
-   * Gets <tt>Colorer</tt> instance.
-   *
-   * @return The instance.
-   */
-  public Colorer getColorer() {
-    return colorer;
-  }
-
-  /**
-   * Sets the archive file extension pattern.
-   *
-   * @param fileExtensionPattern The pattern
-   */
-  public void setArchiveFileExtensionPattern(final String fileExtensionPattern) {
-    archiveFileExtensionPattern = fileExtensionPattern;
-  }
-
-  /**
-   * Gets the archive file extension pattern.
-   *
-   * @return The Pattern
-   */
-  public String getArchiveFileExtensionPattern() {
-    return archiveFileExtensionPattern;
-  }
+  protected String archiveFileExtensionPattern;
 
   /**
    * {@inheritDoc}
@@ -109,10 +73,10 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       // It's a binary file
       logger.debug("Binary file detected");
       model.put("isBinary", true);  // Indicates that the file is in binary format.
-      model.put("isImage", getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
+      model.put("isImage", imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
 
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
-          matches(getArchiveFileExtensionPattern())) {
+          matches(archiveFileExtensionPattern)) {
         logger.debug("Binary file as an archive file");
         model.putAll(handleArchiveFile(repository, svnCommand, revision));
       }
@@ -153,7 +117,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       appender.setEmbedStart("<span class=\"sventonLineNo\">");
       appender.setEmbedEnd(":&nbsp;</span>");
       appender.setPadding(5);
-      fileContents = appender.appendTo(getColorer().getColorizedContent(fileContents, svnCommand.getTarget()));
+      fileContents = appender.appendTo(colorer.getColorizedContent(fileContents, svnCommand.getTarget()));
     } catch (IOException ioex) {
       throw new SventonException(ioex);
     }
@@ -198,13 +162,21 @@ public class ShowFileController extends AbstractSVNTemplateController implements
   }
 
   /**
-   * Gets the <code>ImageUtil</code> helper instance.
+   * Sets the <tt>Colorer</tt> instance.
    *
-   * @return The <code>ImageUtil</code>
-   * @see de.berlios.sventon.util.ImageUtil
+   * @param colorer The instance.
    */
-  public ImageUtil getImageUtil() {
-    return imageUtil;
+  public void setColorer(Colorer colorer) {
+    this.colorer = colorer;
+  }
+
+  /**
+   * Sets the archive file extension pattern.
+   *
+   * @param fileExtensionPattern The pattern
+   */
+  public void setArchiveFileExtensionPattern(final String fileExtensionPattern) {
+    archiveFileExtensionPattern = fileExtensionPattern;
   }
 
   /**

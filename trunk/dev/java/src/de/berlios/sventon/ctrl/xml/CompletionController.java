@@ -14,7 +14,6 @@ package de.berlios.sventon.ctrl.xml;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.ctrl.AbstractSVNTemplateController;
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.svnsupport.SventonException;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -92,15 +91,6 @@ public class CompletionController extends AbstractSVNTemplateController implemen
    */
   public void setXmlEncoding(final String xmlEncoding) {
     this.xmlEncoding = xmlEncoding;
-  }
-
-  /**
-   * Gets the xml encoding.
-   *
-   * @return The encoding.
-   */
-  public String getXmlEncoding() {
-    return xmlEncoding;
   }
 
 }
