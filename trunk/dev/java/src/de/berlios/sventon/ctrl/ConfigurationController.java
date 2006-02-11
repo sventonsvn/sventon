@@ -53,7 +53,7 @@ public class ConfigurationController extends AbstractFormController {
    */
   private final Log logger = LogFactory.getLog(getClass());
 
-  public static final String SVENTON_PROPERTIES = "/WEB-INF/classes/sventon.properties";
+  public static final String SVENTON_PROPERTIES = "sventon.properties";
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
@@ -130,15 +130,18 @@ public class ConfigurationController extends AbstractFormController {
       config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
 
+      String fileSeparator = System.getProperty("file.separator");
+
       // Make sure the configPath ends with a (back)slash
       String confPath = confCommand.getConfigPath();
-      if (!confPath.endsWith(System.getProperty("file.separator"))) {
-        confPath += System.getProperty("file.separator");
+      if (!confPath.endsWith(fileSeparator)) {
+        confPath += fileSeparator;
       }
       config.put(PROPERTY_KEY_CONFIGPATH, confPath);
       logger.debug(config.toString());
 
-      File propFile = new File(System.getProperty("sventon.root") + SVENTON_PROPERTIES);
+      File propFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
+          + fileSeparator + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
 
       FileOutputStream fos = new FileOutputStream(propFile);
