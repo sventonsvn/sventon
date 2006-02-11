@@ -8,9 +8,19 @@
     <th>Logs</th>
   </tr>
   <tr>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2314"><img width="150" height="100" alt="Repository browser" src="http://developer.berlios.de/dbimage.php?id=2314"/></a></td>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2312"><img width="150" height="100" alt="File diff" src="http://developer.berlios.de/dbimage.php?id=2312"/></a></td>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2313"><img width="150" height="100" alt="Logs" src="http://developer.berlios.de/dbimage.php?id=2313"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2538"><img width="150" height="100" alt="Repository browser" src="http://developer.berlios.de/dbimage.php?id=2538"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2534"><img width="150" height="100" alt="File diff" src="http://developer.berlios.de/dbimage.php?id=2534"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2537"><img width="150" height="100" alt="Logs" src="http://developer.berlios.de/dbimage.php?id=2537"/></a></td>
+  </tr>
+  <tr>
+    <th>Show lokcs</th>
+    <th>Latest commit</th>
+    <th>&nbsp;</th>
+  </tr>
+  <tr>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2536"><img width="150" height="100" alt="Show locks" src="http://developer.berlios.de/dbimage.php?id=2536"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2535"><img width="150" height="100" alt="Latest commit" src="http://developer.berlios.de/dbimage.php?id=2535"/></a></td>
+    <td>&nbsp;</td>
   </tr>
 </table>
 
