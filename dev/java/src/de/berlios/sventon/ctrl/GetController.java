@@ -76,7 +76,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
       if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
         logger.debug("Getting file as 'thumbnail'");
-        if (!getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+        if (!imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
           return null;
         }
@@ -110,12 +110,12 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           int orgWidth = image.getWidth();
           int orgHeight = image.getHeight();
           // Get preferred thumbnail dimension.
-          Dimension thumbnailSize = getImageUtil().getThumbnailSize(orgWidth, orgHeight);
+          Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
           logger.debug("Thumbnail size: " + thumbnailSize.toString());
           // Resize image.
           Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-          BufferedImage biRescaled = getImageUtil().toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
-          response.setContentType(getImageUtil().getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+          BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+          response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
 
           // Write thumbnail to output stream.
           baos = new ByteArrayOutputStream();
@@ -133,9 +133,9 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         }
       } else {
         if (DISPLAY_TYPE_INLINE.equals(displayType)
-            && getImageUtil().isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+            && imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.debug("Getting file as 'inline'");
-          response.setContentType(getImageUtil().getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+          response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         } else {
           logger.debug("Getting file as 'attachment'");
@@ -153,16 +153,6 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       ioex.printStackTrace();
     }
     return null;
-  }
-
-  /**
-   * Gets the <code>ImageUtil</code> helper instance.
-   *
-   * @return The <code>ImageUtil</code>
-   * @see de.berlios.sventon.util.ImageUtil
-   */
-  public ImageUtil getImageUtil() {
-    return imageUtil;
   }
 
   /**

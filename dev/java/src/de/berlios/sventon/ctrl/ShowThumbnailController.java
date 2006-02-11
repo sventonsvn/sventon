@@ -52,7 +52,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
     // Check what entries are image files - and add them to the list of thumbnails.
     for(String entry : entryParameters) {
       logger.debug("entry: " + entry);
-      if (getImageUtil().isImageFilename(entry)) {
+      if (imageUtil.isImageFilename(entry)) {
         entries.add(entry);
       }
     }
@@ -62,16 +62,6 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
     model.put("thumbnailentries", entries);
     return new ModelAndView("showthumbs", model);
 
-  }
-
-  /**
-   * Gets the <code>ImageUtil</code> helper instance.
-   *
-   * @return The <code>ImageUtil</code>
-   * @see de.berlios.sventon.util.ImageUtil
-   */
-  public ImageUtil getImageUtil() {
-    return imageUtil;
   }
 
   /**

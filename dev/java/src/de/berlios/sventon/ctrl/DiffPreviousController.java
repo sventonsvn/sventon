@@ -66,5 +66,4 @@ public class DiffPreviousController extends DiffController {
     return new ModelAndView("diff", model);
   }
 
-
 }

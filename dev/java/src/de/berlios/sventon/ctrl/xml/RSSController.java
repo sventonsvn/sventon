@@ -151,15 +151,6 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Get current repository configuration.
-   *
-   * @return Configuration
-   */
-  public RepositoryConfiguration getRepositoryConfiguration() {
-    return configuration;
-  }
-
-  /**
    * Sets the feed type. For available types check ROME documentation.
    *
    * @param feedType
@@ -170,40 +161,12 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Gets the feed type. For available types check ROME documentation.
-   *
-   * @return The feed type.
-   * @link https://rome.dev.java.net/
-   */
-  public String getFeedType() {
-    return feedType;
-  }
-
-  /**
-   * Gets the number of items to be included in the feed.
-   *
-   * @return Item count
-   */
-  public int getFeedItemCount() {
-    return feedItemCount;
-  }
-
-  /**
    * Sets the number of items to be included in the feed.
    *
    * @param feedItemCount The number of items (revisions).
    */
   public void setFeedItemCount(int feedItemCount) {
     this.feedItemCount = feedItemCount;
-  }
-
-  /**
-   * Gets the mime-type for the feed.
-   *
-   * @return The mime-type.
-   */
-  public String getFeedMimeType() {
-    return feedMimeType;
   }
 
   /**
