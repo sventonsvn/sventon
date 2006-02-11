@@ -40,7 +40,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
     List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     final String searchString = request.getParameter("searchString");
     final String startDir = request.getParameter("startDir");
-    logger.debug("Searching index for: " + searchString);
+    logger.debug("Searching index for [" + searchString + "] in directory [" + startDir + "]");
 
     if (searchString.toUpperCase().equals(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase index search");
