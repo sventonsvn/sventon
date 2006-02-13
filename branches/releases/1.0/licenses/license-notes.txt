@@ -1,0 +1,9 @@
+The sventon code is licensed under the new BSD license.  The sventon project uses
+several libraries from other open-source projects, these libraries are licensed 
+under different licenses. Read these carefully. In particular, the JavaSVN library
+prohibits use in closed source projects without explicit permission from the 
+author.
+
+The sventon distribution contains a modified version of the jhighlight library. The 
+modifications have been submitted to the jhighlight maintainer and will hopefully 
+make it into future versions.
