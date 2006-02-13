@@ -1,0 +1,17 @@
+<%
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://sventon.berlios.de.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
+%>
+<p>
+  <a href="rss.xml" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" border="0"/></a>
+</p>
+sventon 1.0 RC1 build rev 433
