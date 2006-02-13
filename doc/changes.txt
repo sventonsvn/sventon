@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[423] Added: Upgraded to JavaSVN 1.0.3.
 [408] Fixed: Renamed 'default-sventon.properties' to 'sventon.properties.
 [398] Fixed: Bug #5662 - Uncaught exceptions causes stack trace on screen
 [397] Added: Feature #1685 - Background index population.
