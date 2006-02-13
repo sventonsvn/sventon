@@ -13,7 +13,7 @@
     <td><a href="http://developer.berlios.de/dbimage.php?id=2537"><img width="150" height="100" alt="Logs" src="http://developer.berlios.de/dbimage.php?id=2537"/></a></td>
   </tr>
   <tr>
-    <th>Show lokcs</th>
+    <th>Show locks</th>
     <th>Latest commit</th>
     <th>&nbsp;</th>
   </tr>
