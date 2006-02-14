@@ -148,7 +148,7 @@
           <br/>
           <br/>
           <a href="http://sventonblog.blogspot.com/atom.xml" title="Sventon Atom news feed">
-          	<img src="img/feed-icon-32x32.png" alt="feed icon">
+          	<img src="img/feed-icon-32x32.png" alt="feed icon" border="0">
           	</a>
           <br/>
           <br/>
