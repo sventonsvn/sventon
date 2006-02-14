@@ -36,7 +36,7 @@ sventon is really easy to install, all you need is a <a href="http://java.sun.co
   $title = $item['title'];
   $content = $item['atom_content'];
   echo date("Y-m-d", $created);
-  echo " - $title</b>\r";
+  echo " - $title</b><br/>\r";
   echo "$content\r";
 ?>
 
