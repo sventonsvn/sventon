@@ -125,8 +125,10 @@ public class ConfigurationController extends AbstractFormController {
         return new ModelAndView("config", model);
       }
 
+      // Make sure the URL does not start or end with whitespace.
+      String trimmedURL = confCommand.getRepositoryURL().trim();
       Properties config = new Properties();
-      config.put(PROPERTY_KEY_REPOSITORY_URL, confCommand.getRepositoryURL());
+      config.put(PROPERTY_KEY_REPOSITORY_URL, trimmedURL);
       config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
 
@@ -152,7 +154,7 @@ public class ConfigurationController extends AbstractFormController {
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
       configuration.setSVNConfigurationPath(confPath);
-      configuration.setRepositoryRoot(confCommand.getRepositoryURL());
+      configuration.setRepositoryRoot(trimmedURL);
 
       try {
         logger.debug("Starting index update job");

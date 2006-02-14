@@ -24,8 +24,15 @@ public class ConfigCommandValidatorTest extends TestCase {
     assertEquals(0, exception.getAllErrors().size());
 
     // Valid (typical) input
-
     command.setRepositoryURL("svn://domain.com/svn/");
+    command.setConfigPath("");
+    command.setPassword("");
+    command.setUsername("");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
+
+    // Valid input, spaces will be trimmed
+    command.setRepositoryURL(" svn://domain.com/svn/ ");
     command.setConfigPath("");
     command.setPassword("");
     command.setUsername("");
