@@ -38,7 +38,7 @@
             </td>
             <td valign="top">
               <spring:bind path="command.repositoryURL">
-                <input type="text" name="repositoryURL" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
+                <input type="text" name="repositoryURL" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
               Example:
@@ -55,7 +55,7 @@
             </td>
             <td valign="top">
               <spring:bind path="command.username">
-                <input type="text" name="username" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
+                <input type="text" name="username" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
               (leave blank for anonymous)
@@ -67,7 +67,7 @@
             </td>
             <td valign="top">
               <spring:bind path="command.password">
-                <input type="password" name="password" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
+                <input type="password" name="password" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
               (leave blank for anonymous)
@@ -79,7 +79,7 @@
             </td>
             <td valign="top">
               <spring:bind path="command.configPath">
-                <input type="text" name="configPath" size="30" value="${status.value}"/><c:if test="${status.error}"><font color="#ff0000">*</font></c:if></td>
+                <input type="text" name="configPath" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
               This is the path where the index is stored. <br/>
@@ -96,11 +96,11 @@
           <tr>
             <td colspan="2">
               <spring:hasBindErrors name="command">
-                <font color="#ff0000">
+                <span class="exclamationText">
                   <c:forEach var="errMsgObj" items="${errors.allErrors}">
                     *&nbsp;<spring:message code="${errMsgObj.code}" text="${errMsgObj.defaultMessage}"/><br/>
                   </c:forEach>
-                </font>
+                </span>
               </spring:hasBindErrors>
             </td>
           </tr>
