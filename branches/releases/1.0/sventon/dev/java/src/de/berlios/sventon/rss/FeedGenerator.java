@@ -49,7 +49,7 @@ public class FeedGenerator {
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
           + getAbbreviatedCommitMessage(logEntry.getMessage(), SHORT_COMMIT_MESSAGE_LENGTH));
       entry.setAuthor(logEntry.getAuthor());
-      entry.setLink(baseURL + "revinfo.svn?path=/&revision=head&rev=" + logEntry.getRevision());
+      entry.setLink(baseURL + "revinfo.svn?&rev=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
 
       description = new SyndContentImpl();
