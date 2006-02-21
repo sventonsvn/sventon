@@ -31,18 +31,34 @@ a:link, a:visited, a:hover, a:active {
   text-decoration: none;
 }
 
+a:hover {
+  font-family: verdana, sans-serif;
+  font-size: 10px;
+  color: #0041BA;
+  background-color: inherit;
+  text-decoration: underline;
+}
+
+a.exclamationText {
+  color: #ff0000;  
+}
+
 input {
   font-family: verdana, sans-serif;
   font-size: 10px;
   vertical-align: middle;
 }
 
-input.btn{
+input.btn {
   border:1px solid;
   font-family: verdana, sans-serif;
   font-size: 10px;
   font-weight:bold;
   vertical-align: middle;
+}
+
+.exclamationText {
+  color: #ff0000;
 }
 
 .codeBlock {
