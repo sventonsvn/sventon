@@ -48,6 +48,17 @@
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
 
+    <c:if test="${!isBinary}">
+      <c:choose>
+        <c:when test="${!isRawFormat}">
+          <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" title="<spring:message code="showrawfile.button.tooltip"/>" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
+        </c:when>
+        <c:otherwise>
+          <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+        </c:otherwise>
+      </c:choose>
+    </c:if>
+
     <c:if test="${!empty committedRevision && !isBinary}">
       <c:url value="diffprev.svn" var="diffPreviousUrl">
         <c:param name="path" value="${command.path}${entry.name}" />
