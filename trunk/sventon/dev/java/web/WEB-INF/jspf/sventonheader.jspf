@@ -14,10 +14,11 @@
     <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
       <br/>
         <table class="sventonPropertiesTable">
+          <% pageContext.setAttribute("br", "\n"); %>
           <c:forEach items="${properties}" var="property">
             <tr>
-              <td><b>${property.key}:&nbsp;</b></td>
-              <td>${property.value}</td>
+              <td valign="top"><b>${property.key}:&nbsp;</b></td>
+              <td>${fn:replace(property.value, br, '<br/>')}</td>
             </tr>
           </c:forEach>
         </table>

@@ -18,6 +18,7 @@ import de.berlios.sventon.svnsupport.LineNumberAppender;
 import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -50,6 +51,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
   private ImageUtil imageUtil;
 
   protected String archiveFileExtensionPattern;
+  private static final String FORMAT_REQUEST_PARAMETER = "format";
 
   /**
    * {@inheritDoc}
@@ -58,9 +60,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
                                    HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
     logger.debug("Assembling file contents for: " + svnCommand);
-    Map<String, Object> model = new HashMap<String, Object>();
 
-    HashMap properties = new HashMap();
+    final String formatParameter = request.getParameter(FORMAT_REQUEST_PARAMETER);
+    final Map<String, Object> model = new HashMap<String, Object>();
+    final HashMap properties = new HashMap();
+
     // Get the file's properties without requesting the content.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
     logger.debug(properties);
@@ -68,7 +72,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
-      model.putAll(handleTextFile(repository, svnCommand, revision, properties));
+      if ("raw".equals(formatParameter)) {
+        model.putAll(handleRawTextFile(repository, svnCommand, revision));
+      } else {
+        model.putAll(handleTextFile(repository, svnCommand, revision, properties));
+      }
     } else {
       // It's a binary file
       logger.debug("Binary file detected");
@@ -84,6 +92,30 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     return new ModelAndView("showfile", model);
   }
 
+  /**
+   * Internal method for handling text files in a raw, unprocessed, format.
+   * The characters have to be converted into web safe characters using
+   * {@link org.apache.commons.lang.StringEscapeUtils} <code>escapeHtml</code>.
+   *
+   * @param repository The repository
+   * @param svnCommand The command
+   * @param revision   The revision
+   * @return Populated model
+   * @throws SVNException if Subversion error.
+   */
+  private Map<String, Object> handleRawTextFile(SVNRepository repository, SVNBaseCommand svnCommand,
+                                                SVNRevision revision) throws SVNException {
+
+    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    Map<String, Object> model = new HashMap<String, Object>();
+    // Get the file's content. We can skip the properties in this case.
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
+
+    logger.debug("Create model");
+    model.put("fileContents", StringEscapeUtils.escapeHtml(outStream.toString()));
+    model.put("isRawFormat", true);
+    return model;
+  }
 
   /**
    * Internal method for handling text files.
@@ -92,10 +124,10 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    *
    * @param repository The repository
    * @param svnCommand The command
-   * @param revision The revision
+   * @param revision   The revision
    * @param properties The file's properties
    * @return Populated model.
-   * @throws SVNException if Subversion error.
+   * @throws SVNException     if Subversion error.
    * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleTextFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
@@ -133,13 +165,13 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    *
    * @param repository The repository
    * @param svnCommand The command
-   * @param revision The revision
+   * @param revision   The revision
    * @return Populated model.
-   * @throws SVNException if Subversion error.
+   * @throws SVNException     if Subversion error.
    * @throws SventonException if sventon error.
    */
   private Map<String, Object> handleArchiveFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                             final SVNRevision revision) throws SventonException, SVNException {
+                                                final SVNRevision revision) throws SventonException, SVNException {
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     Map<String, Object> model = new HashMap<String, Object>();
 
@@ -152,8 +184,9 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
     try {
       ZipEntry zipEntry;
-      while ((zipEntry = zip.getNextEntry()) != null)
+      while ((zipEntry = zip.getNextEntry()) != null) {
         archiveEntries.add(zipEntry);
+      }
     } catch (IOException ioex) {
       throw new SventonException("Unable to show contents of archive file", ioex);
     }

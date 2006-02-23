@@ -63,6 +63,7 @@
         <c:set var="nextPath" value=""/>
         <c:set var="nextRev" value=""/>
 
+        <% pageContext.setAttribute("br", "\n"); %>        
         <c:forEach items="${logEntriesPage}" var="entry">
           <c:url value="showfile.svn" var="showUrl">
             <c:param name="path" value="${entry.pathAtRevision}" />
@@ -83,13 +84,7 @@
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <c:set var="message" value="${entry.svnLogEntry.message}" />
-            <jsp:useBean id="message" type="java.lang.String" />
-            <%
-              //fn:replace(entry.svnLogEntry.message, '\\\n', '<br/>' simply refused to work...
-                    //Perhaps other replacements have to be made for this to work for all types of line breaks?
-            %>
-            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');"><%= message.replace("\n", "<br/>\n") %></a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
             <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">[<span id="hdr<%=rowCount%>">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
