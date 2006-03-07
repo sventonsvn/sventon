@@ -12,24 +12,25 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.svnsupport.RepositoryFactory;
 import de.berlios.sventon.svnsupport.SventonException;
-import de.berlios.sventon.index.RevisionIndexer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractFormController;
+import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ import java.util.Map;
  * <p/>
  * Workflow for this controller:
  * <ol>
- * <li>The controller inspects the repository configuration object to see if it
+ * <li>The controller inspects the repository configuration object to see if it's
  * user id and pwd have been provided during setup. If credentials are
  * configured they will be used for authorized repository access, if they do not
  * exist the controller will try to set up the repository with anonymous access.
@@ -71,7 +72,7 @@ import java.util.Map;
  * </tr>
  * <tr>
  * <td>url</td>
- * <td>SVN URL as configured for this webb application</td>
+ * <td>SVN URL as configured for this web application</td>
  * </tr>
  * <tr>
  * <td>numrevision</td>
@@ -97,12 +98,10 @@ import java.util.Map;
  * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
  * page.
  * </dl>
- * <b>GoTo form support</b> This controller also contains support for rendering
- * the GoTo form and processing GoTo form submission.
  *
  * @author patrikfr@users.berlios.de
  */
-public abstract class AbstractSVNTemplateController extends AbstractFormController {
+public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   protected RepositoryConfiguration configuration = null;
 
@@ -126,86 +125,13 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   protected AbstractSVNTemplateController() {
     // TODO: Move to XML-file?
     setCommandClass(SVNBaseCommand.class);
-    setBindOnNewForm(true);
-    setSessionForm(false);
-  }
-
-  /**
-   * Handler for GoTo submit
-   * <p/>
-   * {@inheritDoc}
-   */
-  protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
-                                               Object command, BindException exception) throws Exception {
-
-    SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-
-    // If repository config is not ok - redirect to config.jsp
-    if (!configuration.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to 'config.svn'");
-      return new ModelAndView(new RedirectView("config.svn"));
-    }
-
-    if (exception.hasErrors()) {
-      return prepareExceptionModelAndView(exception, svnCommand);
-    }
-
-    SVNRevision revision = convertAndUpdateRevision(svnCommand);
-
-    try {
-      SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-
-      final ModelAndView modelAndView = svnHandlePost(repository, svnCommand, revision, request, response, exception);
-
-      // It's ok for svnHandlePost to return null.
-      // If the view is a RedirectView it's model has already been populated
-      if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
-        long latestRevision = repository.getLatestRevision();
-        Map<String, Object> model = new HashMap<String, Object>();
-        logger.debug("'command' set to: " + svnCommand);
-        model.put("command", svnCommand); // This is for the form to work
-        model.put("url", configuration.getUrl());
-        model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-        model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
-        model.put("isIndexing", getRevisionIndexer().isIndexing());
-        modelAndView.addAllObjects(model);
-      }
-      return modelAndView;
-    } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(svnae);
-    } catch (SVNException e) {
-      logger.error("SVN Exception", e);
-      Throwable cause = e.getCause();
-      if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
-        exception.reject("error.message.no-route-to-host");
-      } else {
-        exception.reject(null, e.getMessage());
-      }
-      return prepareExceptionModelAndView(exception, svnCommand);
-    }
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException exception)
-      throws Exception {
-
-    // This is for preparing the requested model and view and also rendering the
-    // "Go To" form.
-
-    // Also validate the form backing command (this is not done by Spring MVC
-    // and must be handled manually)
-    getValidator().validate(exception.getTarget(), exception);
-    return handle(request, response, exception.getTarget(), exception);
   }
 
   /**
    * {@inheritDoc}
    */
   public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
-                             BindException exception) throws ServletException, IOException {
+                             BindException exception) {
 
     SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
@@ -242,15 +168,14 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return forwardToAuthenticationFailureView(svnae);
-    } catch (Exception e) {
-      logger.error("Exception", e);
-      Throwable cause = e.getCause();
-      if (cause instanceof java.net.NoRouteToHostException || cause instanceof ConnectException) {
+    } catch (Exception ex) {
+      logger.error("Exception", ex);
+      Throwable cause = ex.getCause();
+      if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
         exception.reject("error.message.no-route-to-host");
       } else {
-        exception.reject(null, e.getMessage());
+        exception.reject(null, ex.getMessage());
       }
-
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
@@ -262,16 +187,22 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * @param repository The repository
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
    * @return Lock info
-   * @throws SVNException if subversion error.
    */
   protected Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException {
-    String path = startPath == null ? "/" : startPath;
+    final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
-    SVNLock[] locksArray = repository.getLocks(path);
-    Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
-    logger.debug("Locks found: " + Arrays.asList(locksArray));
-    for (SVNLock lock : locksArray) {
-      locks.put(lock.getPath(), lock);
+
+    final Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
+    SVNLock[] locksArray = null;
+
+    try {
+      locksArray = repository.getLocks(path);
+      logger.debug("Locks found: " + Arrays.asList(locksArray));
+      for (SVNLock lock : locksArray) {
+        locks.put(lock.getPath(), lock);
+      }
+    } catch (SVNException svne) {
+      logger.info("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
     }
     return locks;
   }
@@ -389,35 +320,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
                                             HttpServletRequest request, HttpServletResponse response,
                                             BindException exception) throws SventonException, SVNException;
 
-  /**
-   * Handles POST requests. Override this method in the subclassing controller if
-   * <i>POST</i> requests should be handled differently from <i>GET<i> requests.
-   * The default implementation simply calls
-   * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)},
-   * i.e. a <i>POST</i> will be handled the same way as a <i>GET</i>.
-   *
-   * @param repository Reference to the repository, prepared with authentication
-   *                   if applicable.
-   * @param svnCommand Command (basically request parameters submitted in user
-   *                   request)
-   * @param revision   SVN type revision.
-   * @param request    Servlet request.
-   * @param response   Servlet response.
-   * @param exception  BindException, could be used by the subclass to add error
-   *                   messages to the exception.
-   * @return Model and view to render.
-   * @throws SventonException              Thrown if a sventon error occurs.
-   * @throws SVNException                  Thrown if exception occurs during SVN operations.
-   * @throws UnsupportedOperationException if subclass has not overridden the method, i.e.
-   *                                       handling of <code>POST</code> requests is not possible.
-   */
-  protected ModelAndView svnHandlePost(final SVNRepository repository,
-                                       SVNBaseCommand svnCommand, SVNRevision revision,
-                                       HttpServletRequest request, HttpServletResponse response,
-                                       BindException exception) throws SventonException, SVNException {
-
-    return svnHandle(repository, svnCommand, revision, request, response, exception);
-  }
 
   /**
    * Sets the revision indexer instance.
