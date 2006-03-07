@@ -106,7 +106,7 @@
         <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
 
-      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <%
         totalSize += entry.getSize();
       %>
@@ -151,7 +151,7 @@
       <% rowCount++; %>
     </c:forEach>
 
-    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
       <td colspan="2" align="right"><b>Total:</b></td>
       <td><b><%=rowCount%> entries</b></td>
       <td></td>
