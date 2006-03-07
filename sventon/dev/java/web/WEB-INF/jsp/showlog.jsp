@@ -74,7 +74,7 @@
 
           <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.LogEntryBundle" />
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
             <c:choose>
               <c:when test="${isFile}">
               <td><input type="checkbox" name="rev" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
