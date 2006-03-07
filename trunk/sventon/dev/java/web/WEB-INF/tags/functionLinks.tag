@@ -39,7 +39,7 @@
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
-<form name="searchForm" action="search.svn" method="get" onsubmit="return doSearch(searchForm);">
+<form name="searchForm" action="search.svn" method="post" onsubmit="return doSearch(searchForm);">
 <table class="sventonFunctionLinksTable" border="0">
   <tr><td>
 
