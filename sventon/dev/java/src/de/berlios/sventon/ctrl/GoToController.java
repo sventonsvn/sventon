@@ -51,10 +51,8 @@ public class GoToController extends AbstractSVNTemplateController implements Con
 
     String redirectUrl = null;
 
-    logger.debug("Checking node kind for command: " + svnCommand);
     SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
-
-    logger.debug("Node kind: " + kind);
+    logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {
       redirectUrl = "repobrowser.svn";
@@ -65,13 +63,13 @@ public class GoToController extends AbstractSVNTemplateController implements Con
       exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
       return prepareExceptionModelAndView(exception, svnCommand);
     }
-    logger.debug("Submitted command: " + svnCommand);
-    logger.debug("Redirecting to: " + redirectUrl);
 
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("path", svnCommand.getPath());
-    m.put("revision", svnCommand.getRevision());
-    return new ModelAndView(new RedirectView(redirectUrl), m);
+    // Populate model and view with basic data
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("path", svnCommand.getPath());
+    model.put("revision", svnCommand.getRevision());
+    logger.debug("Redirecting to: " + redirectUrl);
+    return new ModelAndView(new RedirectView(redirectUrl), model);
   }
 
 }

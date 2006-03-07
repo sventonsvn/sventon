@@ -131,36 +131,18 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Set repository configuration.
-   *
-   * @param configuration Configuration
-   */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
-    this.configuration = configuration;
-  }
-
-  /**
-   * Get current repository configuration.
-   *
-   * @return Configuration
-   */
-  public RepositoryConfiguration getRepositoryConfiguration() {
-    return configuration;
-  }
-
-  /**
    * Handler for GoTo submit
    * <p/>
    * {@inheritDoc}
    */
   protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response,
                                                Object command, BindException exception) throws Exception {
-    SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
-    logger.debug("GoTo form submit with command: " + command);
+    SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
+      logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
@@ -168,28 +150,27 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-    SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-
     SVNRevision revision = convertAndUpdateRevision(svnCommand);
 
-    String redirectUrl = null;
-
     try {
+      SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-      logger.debug("Checking node kind for command: " + svnCommand);
-      SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
+      final ModelAndView modelAndView = svnHandlePost(repository, svnCommand, revision, request, response, exception);
 
-      logger.debug("Node kind: " + kind);
-
-      if (kind == SVNNodeKind.DIR) {
-        redirectUrl = "repobrowser.svn";
-      } else if (kind == SVNNodeKind.FILE) {
-        redirectUrl = "showfile.svn";
-      } else {
-        // Invalid path/rev combo. Forward to error page.
-        exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
-        return prepareExceptionModelAndView(exception, svnCommand);
+      // It's ok for svnHandlePost to return null.
+      // If the view is a RedirectView it's model has already been populated
+      if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
+        long latestRevision = repository.getLatestRevision();
+        Map<String, Object> model = new HashMap<String, Object>();
+        logger.debug("'command' set to: " + svnCommand);
+        model.put("command", svnCommand); // This is for the form to work
+        model.put("url", configuration.getUrl());
+        model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
+        model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+        model.put("isIndexing", getRevisionIndexer().isIndexing());
+        modelAndView.addAllObjects(model);
       }
+      return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       return forwardToAuthenticationFailureView(svnae);
     } catch (SVNException e) {
@@ -203,17 +184,6 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-    logger.debug("Submitted command: " + svnCommand);
-    logger.debug("Redirecting to: " + redirectUrl);
-
-    long latestRevision = repository.getLatestRevision();
-    Map<String, Object> model = new HashMap<String, Object>();
-    model.put("path", svnCommand.getPath());
-    model.put("revision", svnCommand.getRevision());
-    model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-    model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
-    model.put("isIndexing", getRevisionIndexer().isIndexing());
-    return new ModelAndView(new RedirectView(redirectUrl), model);
   }
 
   /**
@@ -256,17 +226,17 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response, exception);
 
-      long latestRevision = repository.getLatestRevision();
-      Map<String, Object> model = new HashMap<String, Object>();
-      logger.debug("'command' set to: " + svnCommand);
-      model.put("command", svnCommand); // This is for the form to work
-      model.put("url", configuration.getUrl());
-      model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-      model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
-      model.put("isIndexing", getRevisionIndexer().isIndexing());
-
       // It's ok for svnHandle to return null in cases like GetController.
-      if (modelAndView != null) {
+      // If the view is a RedirectView it's model has already been populated
+      if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
+        long latestRevision = repository.getLatestRevision();
+        Map<String, Object> model = new HashMap<String, Object>();
+        logger.debug("'command' set to: " + svnCommand);
+        model.put("command", svnCommand); // This is for the form to work
+        model.put("url", configuration.getUrl());
+        model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
+        model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+        model.put("isIndexing", getRevisionIndexer().isIndexing());
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -287,10 +257,10 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Gets the repository locks.
+   * Gets the repository locks, recursively.
    *
    * @param repository The repository
-   * @param startPath The start path. If <code>null</code> locks will be gotten from root.
+   * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
    * @return Lock info
    * @throws SVNException if subversion error.
    */
@@ -354,8 +324,8 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
   }
 
   /**
-   * Prepare the exception model. This sets up a model and view with all stuff
-   * needed to for displaying a useful error mesage.
+   * Prepares the exception model and view with basic data
+   * needed to for displaying a useful error message.
    *
    * @param exception  Bind exception from Spring MVC validation.
    * @param svnCommand Command object.
@@ -381,7 +351,7 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    * <p/>
    * TODO: This (could perhaps) be a suitable place to also handle conversion of
    * date to revision to expand possible user input to handle calendar
-   * intervalls.
+   * intervals.
    *
    * @param svnCommand Command object.
    * @return The converted SVN revision.
@@ -412,12 +382,42 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    *                   messages to the exception.
    * @return Model and view to render.
    * @throws SventonException Thrown if a sventon error occurs.
-   * @throws SVNException Thrown if exception occurs during SVN operations.
+   * @throws SVNException     Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
                                             SVNBaseCommand svnCommand, SVNRevision revision,
                                             HttpServletRequest request, HttpServletResponse response,
                                             BindException exception) throws SventonException, SVNException;
+
+  /**
+   * Handles POST requests. Override this method in the subclassing controller if
+   * <i>POST</i> requests should be handled differently from <i>GET<i> requests.
+   * The default implementation simply calls
+   * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)},
+   * i.e. a <i>POST</i> will be handled the same way as a <i>GET</i>.
+   *
+   * @param repository Reference to the repository, prepared with authentication
+   *                   if applicable.
+   * @param svnCommand Command (basically request parameters submitted in user
+   *                   request)
+   * @param revision   SVN type revision.
+   * @param request    Servlet request.
+   * @param response   Servlet response.
+   * @param exception  BindException, could be used by the subclass to add error
+   *                   messages to the exception.
+   * @return Model and view to render.
+   * @throws SventonException              Thrown if a sventon error occurs.
+   * @throws SVNException                  Thrown if exception occurs during SVN operations.
+   * @throws UnsupportedOperationException if subclass has not overridden the method, i.e.
+   *                                       handling of <code>POST</code> requests is not possible.
+   */
+  protected ModelAndView svnHandlePost(final SVNRepository repository,
+                                       SVNBaseCommand svnCommand, SVNRevision revision,
+                                       HttpServletRequest request, HttpServletResponse response,
+                                       BindException exception) throws SventonException, SVNException {
+
+    return svnHandle(repository, svnCommand, revision, request, response, exception);
+  }
 
   /**
    * Sets the revision indexer instance.
@@ -435,6 +435,24 @@ public abstract class AbstractSVNTemplateController extends AbstractFormControll
    */
   public RevisionIndexer getRevisionIndexer() {
     return revisionIndexer;
+  }
+
+  /**
+   * Set repository configuration.
+   *
+   * @param configuration Configuration
+   */
+  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+    this.configuration = configuration;
+  }
+
+  /**
+   * Get current repository configuration.
+   *
+   * @return Configuration
+   */
+  public RepositoryConfiguration getRepositoryConfiguration() {
+    return configuration;
   }
 
 }

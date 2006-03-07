@@ -20,7 +20,7 @@
   <tr>
     <td valign="bottom" colspan="1"><a href="javascript:toggleElementVisibility('latestCommitInfoDiv'); changeHideShowDisplay('latestCommitLink');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     <td align="right">
-    <form name="gotoForm" method="post" action="repobrowser.svn">
+    <form name="gotoForm" method="post" action="goto.svn">
         <table class="sventonRepositoryFunctionsTable" border="0">
         <tr>
             <td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>

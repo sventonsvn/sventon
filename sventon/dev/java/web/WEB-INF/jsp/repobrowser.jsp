@@ -53,7 +53,7 @@
   <ui:functionLinks pageName="repobrowse"/> 
 
 <div id="entriesDiv" class="sventonEntriesDiv">
-<form method="get" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
+<form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
   <!-- Needed by ASVNTC -->
   <input type="hidden" name="path" value="${command.path}"/>
   <input type="hidden" name="revision" value="${command.revision}"/>
