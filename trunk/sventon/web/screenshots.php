@@ -34,9 +34,9 @@
     <th>Archive file view</th>
   </tr>
   <tr>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2316"><img width="150" height="100" alt="Flattened directory" src="http://developer.berlios.de/dbimage.php?id=2316"/></a></td>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2318"><img width="150" height="100" alt="Thumbnail image view" src="http://developer.berlios.de/dbimage.php?id=2318"/></a></td>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2317"><img width="150" height="100" alt="Archive file view" src="http://developer.berlios.de/dbimage.php?id=2317"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2547"><img width="150" height="100" alt="Flattened directory" src="http://developer.berlios.de/dbimage.php?id=2547"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2549"><img width="150" height="100" alt="Thumbnail image view" src="http://developer.berlios.de/dbimage.php?id=2549"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2548"><img width="150" height="100" alt="Archive file view" src="http://developer.berlios.de/dbimage.php?id=2548"/></a></td>
   </tr>
   <tr>
     <th>File view</th>
@@ -44,8 +44,8 @@
     <th>&nbsp;</th>
   </tr>
   <tr>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2319"><img width="150" height="100" alt="File view" src="http://developer.berlios.de/dbimage.php?id=2319"/></a></td>
-    <td><a href="http://developer.berlios.de/dbimage.php?id=2315"><img width="150" height="100" alt="File diff" src="http://developer.berlios.de/dbimage.php?id=2315"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2551"><img width="150" height="100" alt="File view" src="http://developer.berlios.de/dbimage.php?id=2551"/></a></td>
+    <td><a href="http://developer.berlios.de/dbimage.php?id=2546"><img width="150" height="100" alt="File diff" src="http://developer.berlios.de/dbimage.php?id=2546"/></a></td>
     <td>&nbsp;</td>
   </tr>
 </table>

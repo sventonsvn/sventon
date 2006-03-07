@@ -61,7 +61,7 @@
 
         <c:url value="diff.svn" var="diffUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-          <c:param name="revision" value="head" />
+          <c:param name="revision" value="${details.revision}" />
           <c:if test="${keepVisible}">
             <c:param name="showlatestinfo" value="true" />
           </c:if>

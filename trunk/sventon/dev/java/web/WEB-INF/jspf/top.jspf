@@ -23,8 +23,8 @@
     <form name="gotoForm" method="post" action="goto.svn">
         <table class="sventonRepositoryFunctionsTable" border="0">
         <tr>
-            <td><font color="#FF0000"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></font></td>
-            <td colspan="2"><font color="#FF0000"><spring:bind path="command.path">${status.errorMessage}</spring:bind></font></td>
+            <td><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
+            <td colspan="2"><span class="exclamationText"><spring:bind path="command.path">${status.errorMessage}</spring:bind></span></td>
           </tr>
           <tr>
             <td>Go to revision</td><td colspan="2">Go to path</td>
@@ -56,7 +56,7 @@
           Rev: ${command.revision} (${numrevision})
       </c:when>
       <c:otherwise>
-          Rev: <font color="#ff0000">${command.revision}</font>
+          Rev: <a class="exclamationText" href="revinfo.svn?path=${command.path}&revision=${command.revision}&rev=${command.revision}">${command.revision}</a>
       </c:otherwise>
     </c:choose>
      - <a href="repobrowser.svn?path=/&revision=${command.revision}">
@@ -80,6 +80,6 @@
 
 <spring:hasBindErrors name="command">
   <table class="sventonSpringErrorMessageTable" border="0">
-    <tr><td><font color="#FF0000"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></font></td></tr>
+    <tr><td><span class="exclamationText"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></span></td></tr>
   </table>
 </spring:hasBindErrors>

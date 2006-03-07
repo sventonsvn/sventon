@@ -1,4 +1,4 @@
--sventon release 0.9.2-
+-sventon release 1.0 RC1-
 
 sventon is a Subversion web client for Java Servlet containers.
 
@@ -19,13 +19,14 @@ Currently the library supports colorization of the following file formats:
 Installation:
 1. Download and unzip the file. 
 2. Put the war-file in the appropriate application server directory,
-   on standard Tomcat 5.5 installation this is in 'webapps'.
-3. Point your browser to <host:port>/svn
-4. Enter basic configuration data
-5. Restart the web applicaton context (or the entire container, if you like).
-Note that the file names in the repository HEAD will be indexed at this point,
-if you have repository with many files (and/or tags or branches), this can
-take quite some time.
+   on a standard Tomcat 5.5 installation this is in 'webapps'.
+3. Point your browser to http://<host:port>/svn
+4. Enter and submit basic configuration data.
+Note that the background indexing process of the file names in the
+repository HEAD will start at this point. If you have a repository with
+many files (and/or tags or branches), this can take quite some time.
+You will be able to use sventon during the indexing process, but the
+search and flatten buttons will be disabled until it's done.
 
 Support
 See http://sventon.berlios.de
