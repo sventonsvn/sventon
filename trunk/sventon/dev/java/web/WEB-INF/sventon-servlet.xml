@@ -101,7 +101,7 @@
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
-    <property name="xmlEncoding">
+    <property name="encoding">
       <value>ISO-8859-1</value>
     </property>
   </bean>
@@ -269,6 +269,9 @@
   </bean>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true">
+    <property name="encoding">
+      <value>ISO-8859-1</value>
+    </property>
     <property name="rendererMappings">
       <map>
         <entry key="java" value-ref="javaXhtmlRenderer"/>

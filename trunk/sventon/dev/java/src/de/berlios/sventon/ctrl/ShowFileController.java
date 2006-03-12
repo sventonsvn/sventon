@@ -149,7 +149,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       appender.setEmbedStart("<span class=\"sventonLineNo\">");
       appender.setEmbedEnd(":&nbsp;</span>");
       appender.setPadding(5);
-      fileContents = appender.appendTo(colorer.getColorizedContent(fileContents, svnCommand.getTarget()));
+      fileContents = appender.appendTo(colorer.getColorizedContent(fileContents, PathUtil.getFileExtension(svnCommand.getTarget())));
     } catch (IOException ioex) {
       throw new SventonException(ioex);
     }
