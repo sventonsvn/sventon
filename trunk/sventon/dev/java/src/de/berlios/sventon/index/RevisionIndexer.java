@@ -95,16 +95,7 @@ public class RevisionIndexer {
    * @return Returns the number of indexed repository items.
    */
   public long getIndexCount() {
-    return index.getEntries().size();
-  }
-
-  /**
-   * Gets the interator for index access.
-   *
-   * @return The iterator.
-   */
-  public Iterator<RepositoryEntry> getEntriesIterator() {
-    return index.getEntries().iterator();
+    return index.getUnmodifiableEntries().size();
   }
 
   /**
@@ -415,7 +406,7 @@ public class RevisionIndexer {
     String lcSearchString = searchString.toLowerCase();
 
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    for (RepositoryEntry entry : index.getEntries()) {
+    for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
       String name = entry.getFullEntryName().toLowerCase();
       if (name.startsWith(lcStartDir) && name.contains(lcSearchString)) {
         result.add(entry);
@@ -468,7 +459,7 @@ public class RevisionIndexer {
 
     int count = 0;
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    for (RepositoryEntry entry : index.getEntries()) {
+    for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
       if (entry.getFullEntryName().startsWith(startDir) && entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
         if (limit != null && ++count == limit) {
@@ -481,13 +472,13 @@ public class RevisionIndexer {
   }
 
   /**
-   * Gets all subdirectory entries below given <code>fromPath</code>.
+   * Finds all subdirectory entries below given <code>fromPath</code>.
    *
    * @param fromPath The base path to start from.
    * @return A list containing all subdirectory entries below <code>fromPath</code>.
    * @throws RevisionIndexException if an index error occurs.
    */
-  public List<RepositoryEntry> getDirectories(final String fromPath) throws RevisionIndexException {
+  public List<RepositoryEntry> findDirectories(final String fromPath) throws RevisionIndexException {
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty");
     }
@@ -499,7 +490,7 @@ public class RevisionIndexer {
     }
 
     List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    for (RepositoryEntry entry : index.getEntries()) {
+    for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
       if (RepositoryEntry.Kind.dir == entry.getKind() && entry.getFullEntryName().startsWith(fromPath)) {
         result.add(entry);
       }
@@ -513,7 +504,7 @@ public class RevisionIndexer {
    */
   public void dumpIndex() {
     logger.info("Dumping index to STDOUT...");
-    for (RepositoryEntry repositoryEntry : index.getEntries()) {
+    for (RepositoryEntry repositoryEntry : index.getUnmodifiableEntries()) {
       System.out.println(repositoryEntry);
     }
   }
@@ -526,7 +517,7 @@ public class RevisionIndexer {
    * @throws RevisionIndexException if an index error occurs.
    */
   public void storeIndex(final String storagePathAndName) throws RevisionIndexException {
-    if (index != null && index.getEntries().size() > 0) {
+    if (index != null && index.getUnmodifiableEntries().size() > 0) {
       logger.info("Saving index to disk, " + storagePathAndName);
       ObjectOutputStream out;
       try {
