@@ -48,7 +48,7 @@ public class RevisionIndex implements Serializable {
    * 
    * @param url The url to index.
    */
-  public RevisionIndex(final String url) {
+  protected RevisionIndex(final String url) {
     index = Collections.checkedSet(new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(FULL_NAME, false)), RepositoryEntry.class);
     this.url = url;
   }
@@ -63,18 +63,18 @@ public class RevisionIndex implements Serializable {
   }
 
   /**
-   * Sets the index revision.
+   * Sets the indexed revision.
    *
    * @param revision The revision
    */
-  public void setIndexRevision(final long revision) {
+  protected void setIndexRevision(final long revision) {
     this.indexRevision = revision;
   }
 
   /**
    * Clears the index.
    */
-  public void clearIndex() {
+  protected void clearIndex() {
     index.clear();
   }
 
@@ -83,8 +83,8 @@ public class RevisionIndex implements Serializable {
    *
    * @return The index entries.
    */
-  public Set<RepositoryEntry> getEntries() {
-    return index;
+  protected Set<RepositoryEntry> getUnmodifiableEntries() {
+    return Collections.unmodifiableSet(index);
   }
 
   /**
@@ -93,14 +93,14 @@ public class RevisionIndex implements Serializable {
    * @param entry Entry to add
    * @return True if object added ok, false if not.
    */
-  public boolean add(final RepositoryEntry entry) {
+  protected boolean add(final RepositoryEntry entry) {
     return index.add(entry);
   }
 
   /**
-   * Gets the index url.
+   * Gets the url to the indexed repository.
    *
-   * @return The index url
+   * @return The indexed url
    */
   public String getUrl() {
     return this.url;
@@ -114,7 +114,7 @@ public class RevisionIndex implements Serializable {
    * @param path The full path to the entry to remove.
    * @param recursive Acts recursively if <code>true</code>
    */
-  public void remove(final String path, final boolean recursive) {
+  protected void remove(final String path, final boolean recursive) {
     List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
 
     for (RepositoryEntry entry : index) {

@@ -41,10 +41,10 @@ public class IndexViewer {
     ObjectInputStream in = new ObjectInputStream(new FileInputStream(args[0]));
     index = (RevisionIndex) in.readObject();
 
-    System.out.println("Number of index entries: " + index.getEntries().size());
+    System.out.println("Number of index entries: " + index.getUnmodifiableEntries().size());
     System.out.println("--------------------------------------------------------");
 
-    List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>(index.getEntries());
+    List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>(index.getUnmodifiableEntries());
     Collections.sort(entries, new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false));
 
     for (RepositoryEntry entry : entries) {

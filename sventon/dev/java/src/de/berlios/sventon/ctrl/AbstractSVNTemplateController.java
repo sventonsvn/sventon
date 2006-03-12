@@ -161,6 +161,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", configuration.getUrl());
         model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
+        model.put("isHead", revision == HEAD);
         model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
         model.put("isIndexing", getRevisionIndexer().isIndexing());
         modelAndView.addAllObjects(model);

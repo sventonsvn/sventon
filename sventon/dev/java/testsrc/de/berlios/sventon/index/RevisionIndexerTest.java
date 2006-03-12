@@ -50,13 +50,13 @@ public class RevisionIndexerTest extends TestCase {
   }
 
   public void testGetDirectories() throws Exception {
-    assertEquals(2, indexer.getDirectories("/").size());
-    assertEquals(1, indexer.getDirectories("/dir1/").size());
+    assertEquals(2, indexer.findDirectories("/").size());
+    assertEquals(1, indexer.findDirectories("/dir1/").size());
   }
 
   public void testGetDirectoriesMixedCase() throws Exception {
-    assertEquals(2, indexer.getDirectories("/").size());
-    assertEquals(0, indexer.getDirectories("/DIR1/").size());
+    assertEquals(2, indexer.findDirectories("/").size());
+    assertEquals(0, indexer.findDirectories("/DIR1/").size());
   }
 
   protected void tearDown() throws Exception {
