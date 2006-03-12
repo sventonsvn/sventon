@@ -13,7 +13,7 @@ public class JHighlightColorerTest extends TestCase {
 
     // Should produce colorized java code
     assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\"> </span><span class=\"java_keyword\">class</span><span class=\"java_plain\"> </span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\">\n</span>",
-                 (colorer.getColorizedContent("public class HelloWorld", "file.java")).trim());
+                 (colorer.getColorizedContent("public class HelloWorld", "java")).trim());
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld",
@@ -35,7 +35,7 @@ public class JHighlightColorerTest extends TestCase {
       fail("If content is null, IAE is expected.");
     } catch (IllegalArgumentException iae) { /* expected */ }
 
-    assertEquals("", colorer.getColorizedContent(null, "file.java"));
+    assertEquals("", colorer.getColorizedContent(null, "java"));
   }
 
   public void testGetRenderer() throws Exception {
@@ -47,11 +47,10 @@ public class JHighlightColorerTest extends TestCase {
     } catch (IllegalArgumentException iae) { /* expected */ }
 
     assertNull(col.getRenderer(""));
-    assertNull(col.getRenderer("filename"));
-    assertNull(col.getRenderer("filename.txt"));
-    assertNull(col.getRenderer("filename.htm"));
-    assertTrue(col.getRenderer("file.java") instanceof JavaXhtmlRenderer);
-    assertTrue(col.getRenderer("file.xml") instanceof XmlXhtmlRenderer);
+    assertNull(col.getRenderer("txt"));
+    assertNull(col.getRenderer("htm"));
+    assertTrue(col.getRenderer("java") instanceof JavaXhtmlRenderer);
+    assertTrue(col.getRenderer("xml") instanceof XmlXhtmlRenderer);
   }
 
   private Colorer getColorer() {

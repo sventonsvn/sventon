@@ -41,10 +41,10 @@ public class CompletionController extends AbstractSVNTemplateController implemen
 
   /**
    * The xml encoding, default set to <code>ISO-8859-1</code>.
-   *
+   * <p/>
    * TODO: Use UTF-8 as default instead?
    */
-  private String xmlEncoding = "ISO-8859-1";
+  private String encoding = "ISO-8859-1";
 
   /**
    * {@inheritDoc}
@@ -61,7 +61,7 @@ public class CompletionController extends AbstractSVNTemplateController implemen
 
     // Print the XML document
     Format format = Format.getPrettyFormat();
-    format.setEncoding(xmlEncoding);
+    format.setEncoding(encoding);
     XMLOutputter outputter = new XMLOutputter(format);
 
     try {
@@ -85,12 +85,12 @@ public class CompletionController extends AbstractSVNTemplateController implemen
   }
 
   /**
-   * Sets the xml encoding.
+   * Sets the encoding used when creating the XML document.
    *
-   * @param xmlEncoding The encoding
+   * @param encoding The encoding.
    */
-  public void setXmlEncoding(final String xmlEncoding) {
-    this.xmlEncoding = xmlEncoding;
+  public void setEncoding(final String encoding) {
+    this.encoding = encoding;
   }
 
 }

@@ -20,11 +20,12 @@ public interface Colorer {
 
   /**
    * Converts given contents into colorized HTML code.
-   * @param content The contents.
-   * @param filename The filename, used to determine formatter.
-   * @return The colorized string.
+   *
+   * @param content       The contents.
+   * @param fileExtension The filename, used to determine formatter.
+   * @return The HTML formatted, colorized, string. If no suitable
+   *         formatter was found for given file extension the content will still
+   *         be formatted with HTML entities to be properly displayed on the web.
    */
-  String getColorizedContent(final String content, final String filename);
-  //TODO: Method should not take filename as a parameter.
-  // Better use another type of identifier instead.
+  String getColorizedContent(final String content, final String fileExtension);
 }
