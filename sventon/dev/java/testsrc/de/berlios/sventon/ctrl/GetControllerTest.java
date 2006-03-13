@@ -1,7 +1,7 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.ImageUtil;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;

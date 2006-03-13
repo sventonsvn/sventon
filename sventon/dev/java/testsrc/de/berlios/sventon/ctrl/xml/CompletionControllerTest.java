@@ -3,7 +3,7 @@ package de.berlios.sventon.ctrl.xml;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import de.berlios.sventon.index.RevisionIndexer;
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;

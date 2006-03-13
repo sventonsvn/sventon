@@ -12,7 +12,7 @@
 package de.berlios.sventon.command;
 
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
-import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.repository.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;

@@ -26,7 +26,7 @@ public final class LineNumberAppender {
 
   private String embedStart = "";
   private String embedEnd = "";
-  private int offset;
+  private int offset = 0;
   private int paddingLength = 0;
   private char paddingCharacter = ' ';
 
@@ -84,13 +84,14 @@ public final class LineNumberAppender {
   }
 
   /**
-   * Adds line numbers to previously given input string.
+   * Adds line numbers to given input string.
    *
-   * @return The string with appended line numbers.
+   * @param content The content to add line number to.
+   * @return The string containing appended line numbers.
    * @throws IOException if unable to read given string.
    */
-  private String addLineNumbers(final String string) throws IOException {
-    BufferedReader reader = new BufferedReader(new StringReader(string));
+  public String appendTo(final String content) throws IOException {
+    BufferedReader reader = new BufferedReader(new StringReader(content));
     StringBuilder sb = new StringBuilder();
     String tempLine;
     int lineCount = 0 + offset;
@@ -103,16 +104,5 @@ public final class LineNumberAppender {
       sb.append(System.getProperty("line.separator"));
     }
     return StringUtils.chomp(sb.toString());
-  }
-
-  /**
-   * Adds line numbers to given input string.
-   *
-   * @param content The content to add line number to.
-   * @return The string containing appended line numbers.
-   * @throws IOException if IO error occurs.
-   */
-  public String appendTo(final String content) throws IOException {
-    return addLineNumbers(content);
   }
 }

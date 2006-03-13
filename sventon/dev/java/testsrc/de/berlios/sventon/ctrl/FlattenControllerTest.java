@@ -2,7 +2,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.wc.SVNRevision;

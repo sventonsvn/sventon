@@ -1,7 +1,7 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
-import de.berlios.sventon.svnsupport.SVNRepositoryStub;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.io.SVNRepository;
 

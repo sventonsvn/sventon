@@ -31,7 +31,6 @@ public class SventonException extends Exception {
    *                {@link #getCause()} method).  (A <tt>null</tt> value is
    *                permitted, and indicates that the cause is nonexistent or
    *                unknown.)
-   * @since 1.4
    */
   public SventonException(String message, Throwable cause) {
     super(message, cause);
@@ -49,7 +48,6 @@ public class SventonException extends Exception {
    *              {@link #getCause()} method).  (A <tt>null</tt> value is
    *              permitted, and indicates that the cause is nonexistent or
    *              unknown.)
-   * @since 1.4
    */
   public SventonException(Throwable cause) {
     super(cause);
