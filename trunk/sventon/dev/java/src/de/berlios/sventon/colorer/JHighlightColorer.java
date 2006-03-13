@@ -30,7 +30,7 @@ public class JHighlightColorer implements Colorer {
 
   /**
    * The encoding, default set to <code>ISO-8859-1</code>.
-   *
+   * <p/>
    * TODO: Use UTF-8 as default instead?
    */
   private String encoding = "ISO-8859-1";
