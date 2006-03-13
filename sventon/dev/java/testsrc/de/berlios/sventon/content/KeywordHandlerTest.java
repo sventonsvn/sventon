@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.content;
 
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNProperty;

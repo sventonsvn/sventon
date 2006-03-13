@@ -1,6 +1,7 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.content;
 
 import junit.framework.TestCase;
+import de.berlios.sventon.content.LineNumberAppender;
 
 public class LineNumberAppenderTest extends TestCase {
 

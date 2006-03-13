@@ -13,8 +13,8 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.svnsupport.KeywordHandler;
-import de.berlios.sventon.svnsupport.LineNumberAppender;
+import de.berlios.sventon.content.KeywordHandler;
+import de.berlios.sventon.content.LineNumberAppender;
 import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;

@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.diff;
 
-import de.berlios.sventon.svnsupport.KeywordHandler;
-import de.berlios.sventon.svnsupport.LineNumberAppender;
+import de.berlios.sventon.content.KeywordHandler;
+import de.berlios.sventon.content.LineNumberAppender;
 
 import java.io.*;
 import java.util.ArrayList;
