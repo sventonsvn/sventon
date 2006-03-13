@@ -13,7 +13,7 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
-import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.svnsupport.SventonException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

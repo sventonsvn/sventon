@@ -50,8 +50,13 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
   private ImageUtil imageUtil;
 
+  /**
+   * Regex pattern that identifies archive file extensions.
+   */
   protected String archiveFileExtensionPattern;
+
   private static final String FORMAT_REQUEST_PARAMETER = "format";
+
 
   /**
    * {@inheritDoc}
@@ -199,7 +204,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    *
    * @param colorer The instance.
    */
-  public void setColorer(Colorer colorer) {
+  public void setColorer(final Colorer colorer) {
     this.colorer = colorer;
   }
 

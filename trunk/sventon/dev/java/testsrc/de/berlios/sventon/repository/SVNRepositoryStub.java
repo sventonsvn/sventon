@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.repository;
 
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.*;

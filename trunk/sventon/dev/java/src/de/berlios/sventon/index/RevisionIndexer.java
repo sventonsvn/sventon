@@ -14,7 +14,7 @@ package de.berlios.sventon.index;
 import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import de.berlios.sventon.ctrl.RepositoryEntry;
 import de.berlios.sventon.svnsupport.LogEntryActionType;
-import de.berlios.sventon.svnsupport.RepositoryFactory;
+import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

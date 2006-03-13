@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.repository;
 
 import de.berlios.sventon.ctrl.LogEntryBundle;
 import junit.framework.TestCase;
