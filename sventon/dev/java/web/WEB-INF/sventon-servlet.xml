@@ -161,6 +161,9 @@
     <property name="imageUtil">
       <ref local="imageUtil"/>
     </property>
+    <property name="cache">
+      <ref local="cache"/>
+    </property>
   </bean>
 
   <bean id="blameController" class="de.berlios.sventon.ctrl.BlameController" parent="abstractController">
@@ -227,6 +230,8 @@
       </props>
     </property>
   </bean>
+
+  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl" singleton="true"/>
 
   <bean id="repositoryConfig" class="de.berlios.sventon.ctrl.RepositoryConfiguration" singleton="true">
     <property name="repositoryRoot">

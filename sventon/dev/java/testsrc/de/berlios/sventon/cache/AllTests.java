@@ -1,4 +1,4 @@
-package de.berlios.sventon.util;
+package de.berlios.sventon.cache;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -10,10 +10,8 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.util");
-    suite.addTestSuite(ByteFormatterTest.class);
-    suite.addTestSuite(ImageUtilTest.class);
-    suite.addTestSuite(ZipUtilTest.class);
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.cache");
+    suite.addTestSuite(SventonCacheImplTest.class);
     return suite;
   }
 
