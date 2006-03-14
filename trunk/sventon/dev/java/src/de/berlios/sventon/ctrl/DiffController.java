@@ -15,7 +15,6 @@ import de.berlios.sventon.command.DiffCommand;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.diff.Diff;
-import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.content.KeywordHandler;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
