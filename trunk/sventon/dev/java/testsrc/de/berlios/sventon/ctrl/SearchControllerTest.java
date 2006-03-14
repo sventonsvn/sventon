@@ -4,6 +4,7 @@ import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.repository.RepositoryEntry;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;

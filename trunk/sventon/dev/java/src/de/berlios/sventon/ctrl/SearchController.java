@@ -12,6 +12,7 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.repository.RepositoryEntry;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;

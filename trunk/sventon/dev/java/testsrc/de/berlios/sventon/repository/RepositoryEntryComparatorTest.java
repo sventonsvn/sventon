@@ -1,6 +1,6 @@
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.ctrl.RepositoryEntry;
+import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntryComparator.*;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import junit.framework.TestCase;

@@ -13,7 +13,7 @@
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter, java.util.Locale"%>
-<%@ page import="de.berlios.sventon.ctrl.RepositoryEntry"%>
+<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
 <head>
@@ -95,7 +95,7 @@
     </c:if>
 
     <c:forEach items="${svndir}" var="entry">
-    <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.RepositoryEntry" />
+    <jsp:useBean id="entry" type="RepositoryEntry" />
       <c:url value="repobrowser.svn" var="viewUrl">
         <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>

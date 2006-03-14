@@ -11,8 +11,6 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.ctrl.RepositoryEntry;
-
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;

@@ -13,7 +13,7 @@ package de.berlios.sventon.ctrl.xml;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.ctrl.AbstractSVNTemplateController;
-import de.berlios.sventon.ctrl.RepositoryEntry;
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.ctrl.SventonException;
 import org.jdom.Document;
 import org.jdom.Element;
