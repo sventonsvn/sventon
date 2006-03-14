@@ -11,17 +11,16 @@
  */
 package de.berlios.sventon.ctrl;
 
+import de.berlios.sventon.cache.SventonCache;
 import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
-import de.berlios.sventon.util.SventonCache;
-import de.berlios.sventon.svnsupport.SventonException;
-import net.sf.ehcache.CacheException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -51,12 +50,14 @@ import java.util.HashMap;
 public class GetController extends AbstractSVNTemplateController implements Controller {
 
   private ImageUtil imageUtil;
+  private SventonCache cache;
 
   public static final String THUMBNAIL_FORMAT = "png";
   public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
   public static final String DISPLAY_REQUEST_PARAMETER = "disp";
   public static final String DISPLAY_TYPE_THUMBNAIL = "thumb";
   public static final String DISPLAY_TYPE_INLINE = "inline";
+
 
   /**
    * {@inheritDoc}
@@ -89,12 +90,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         logger.debug(properties);
         String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
         logger.debug("Using cachekey: " + cacheKey);
-        byte[] thumbnailData = null;
-        try {
-          thumbnailData = (byte[]) SventonCache.INSTANCE.get(cacheKey);
-        } catch(CacheException ce) {
-          logger.warn(ce);
-        }
+        byte[] thumbnailData = (byte[]) cache.get(cacheKey);
         if (thumbnailData != null) {
           // Writing cached thumbnail image to ServletOutputStream
           output.write(thumbnailData);
@@ -123,11 +119,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
           // Putting created thumbnail image into the cache.
           logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
-          try {
-            SventonCache.INSTANCE.put(cacheKey, baos.toByteArray());
-          } catch (CacheException ce) {
-            logger.warn("Unable to cache thumbnail");
-          }
+          cache.put(cacheKey, baos.toByteArray());
           // Write thumbnail to ServletOutputStream.
           output.write(baos.toByteArray());
         }
@@ -165,4 +157,12 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     this.imageUtil = imageUtil;
   }
 
+  /**
+   * Sets the cache instance.
+   *
+   * @param cache The cache instance.
+   */
+  public void setCache(final SventonCache cache) {
+    this.cache = cache;
+  }
 }

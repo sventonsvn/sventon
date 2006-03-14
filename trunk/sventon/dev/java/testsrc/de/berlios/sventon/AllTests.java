@@ -8,6 +8,7 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon");
     suite.addTest(de.berlios.sventon.blame.AllTests.suite());
+    suite.addTest(de.berlios.sventon.cache.AllTests.suite());
     suite.addTest(de.berlios.sventon.colorer.AllTests.suite());
     suite.addTest(de.berlios.sventon.command.AllTests.suite());
     suite.addTest(de.berlios.sventon.content.AllTests.suite());
