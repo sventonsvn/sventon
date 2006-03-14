@@ -20,7 +20,7 @@ import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
 
-import de.berlios.sventon.svnsupport.SVNLog4JAdapter;
+import de.berlios.sventon.logging.SVNLog4JAdapter;
 
 import java.io.File;
 
