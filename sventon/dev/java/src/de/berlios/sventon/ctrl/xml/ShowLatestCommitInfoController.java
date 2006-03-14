@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.ctrl.xml;
 
-import de.berlios.sventon.ctrl.RepositoryConfiguration;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

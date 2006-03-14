@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.index;
 
-import de.berlios.sventon.ctrl.RepositoryConfiguration;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.ctrl.RepositoryEntry;
 import de.berlios.sventon.ctrl.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryFactory;

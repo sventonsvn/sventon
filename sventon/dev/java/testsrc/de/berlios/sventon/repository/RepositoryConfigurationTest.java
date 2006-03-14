@@ -1,6 +1,7 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.repository;
 
 import junit.framework.TestCase;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 
 public class RepositoryConfigurationTest extends TestCase {
 

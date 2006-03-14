@@ -11,7 +11,6 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.ctrl.RepositoryConfiguration;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
