@@ -1,7 +1,7 @@
 package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
-import de.berlios.sventon.svnsupport.LogEntryActionType;
+import de.berlios.sventon.ctrl.LogEntryActionType;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.apache.commons.lang.StringUtils;

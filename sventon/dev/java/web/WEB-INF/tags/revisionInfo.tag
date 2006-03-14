@@ -17,7 +17,7 @@
 <%@ tag import="java.util.*" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntryPath" %>
-<%@ tag import="de.berlios.sventon.svnsupport.LogEntryActionType" %>
+<%@ tag import="de.berlios.sventon.ctrl.LogEntryActionType" %>
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
