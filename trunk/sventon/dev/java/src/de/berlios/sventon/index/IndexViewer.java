@@ -12,7 +12,7 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
 
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;

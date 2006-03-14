@@ -12,8 +12,8 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.FULL_NAME;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import static de.berlios.sventon.repository.RepositoryEntryComparator.FULL_NAME;
 import java.io.Serializable;
 import java.util.*;
 
