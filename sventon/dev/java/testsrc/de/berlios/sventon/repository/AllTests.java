@@ -12,6 +12,7 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.repository");
     suite.addTestSuite(RepositoryConfigurationTest.class);
+    suite.addTestSuite(RepositoryEntryTest.class);
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     return suite;
   }

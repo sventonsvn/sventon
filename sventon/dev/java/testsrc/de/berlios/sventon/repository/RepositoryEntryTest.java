@@ -1,10 +1,12 @@
-package de.berlios.sventon.ctrl;
+package de.berlios.sventon.repository;
 
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Date;
+
+import de.berlios.sventon.repository.RepositoryEntry;
 
 public class RepositoryEntryTest extends TestCase {
 

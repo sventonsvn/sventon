@@ -12,7 +12,6 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.ctrl");
     suite.addTestSuite(FlattenControllerTest.class);
-    suite.addTestSuite(RepositoryEntryTest.class);
     suite.addTestSuite(SearchControllerTest.class);
     suite.addTestSuite(GetControllerTest.class);
     return suite;

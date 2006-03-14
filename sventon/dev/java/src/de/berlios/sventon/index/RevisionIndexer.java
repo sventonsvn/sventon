@@ -12,7 +12,7 @@
 package de.berlios.sventon.index;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
-import de.berlios.sventon.ctrl.RepositoryEntry;
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.ctrl.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.util.PathUtil;
@@ -385,7 +385,7 @@ public class RevisionIndexer {
    * @param startDir     The directory where to start search from.
    * @return The <code>List</code> of <code>RepositoryEntry</code> instances found.
    * @throws RevisionIndexException if an index error occurs.
-   * @see de.berlios.sventon.ctrl.RepositoryEntry
+   * @see de.berlios.sventon.repository.RepositoryEntry
    */
   public List<RepositoryEntry> find(final String searchString, final String startDir) throws RevisionIndexException {
     if (searchString == null || searchString.equals("")) {
