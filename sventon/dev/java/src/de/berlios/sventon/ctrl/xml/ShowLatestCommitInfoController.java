@@ -65,7 +65,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
    *
    * TODO: Use UTF-8 as default instead?
    */
-  private String xmlEncoding = "ISO-8859-1";
+  private String encoding = "ISO-8859-1";
 
   private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
@@ -94,7 +94,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
       cachedInfo = getXMLAsString(
           createXML((SVNLogEntry) repository.log(targetPaths,
               null, headRevision, headRevision, true, false).iterator().next()),
-          xmlEncoding);
+          encoding);
       logger.debug("Updating cache to revision: " + headRevision);
       cachedInfoHeadRevision = headRevision;
     } else {
@@ -121,10 +121,10 @@ public class ShowLatestCommitInfoController extends AbstractController {
   /**
    * Sets the xml encoding.
    *
-   * @param xmlEncoding The encoding
+   * @param encoding The encoding
    */
-  public void setXmlEncoding(final String xmlEncoding) {
-    this.xmlEncoding = xmlEncoding;
+  public void setEncoding(final String encoding) {
+    this.encoding = encoding;
   }
 
   private Document createXML(final SVNLogEntry log) {
