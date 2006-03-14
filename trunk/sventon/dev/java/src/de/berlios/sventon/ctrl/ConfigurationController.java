@@ -12,6 +12,7 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.ConfigCommand;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;

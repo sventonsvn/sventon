@@ -13,7 +13,6 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.ctrl");
     suite.addTestSuite(FlattenControllerTest.class);
     suite.addTestSuite(RepositoryEntryTest.class);
-    suite.addTestSuite(RepositoryConfigurationTest.class);
     suite.addTestSuite(SearchControllerTest.class);
     suite.addTestSuite(GetControllerTest.class);
     return suite;

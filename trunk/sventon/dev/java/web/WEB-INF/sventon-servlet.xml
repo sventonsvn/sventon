@@ -233,7 +233,7 @@
 
   <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl" singleton="true"/>
 
-  <bean id="repositoryConfig" class="de.berlios.sventon.ctrl.RepositoryConfiguration" singleton="true">
+  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration" singleton="true">
     <property name="repositoryRoot">
       <value>${svn.root}</value>
     </property>

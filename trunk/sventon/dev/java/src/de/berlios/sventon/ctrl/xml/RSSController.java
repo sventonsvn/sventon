@@ -16,7 +16,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.ctrl.RepositoryConfiguration;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
