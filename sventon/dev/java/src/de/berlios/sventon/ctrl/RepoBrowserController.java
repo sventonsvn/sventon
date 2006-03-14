@@ -12,8 +12,8 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import static de.berlios.sventon.repository.RepositoryEntryComparator.NAME;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;

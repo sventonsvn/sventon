@@ -1,7 +1,8 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.repository;
 
 import de.berlios.sventon.ctrl.RepositoryEntry;
-import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.*;
+import static de.berlios.sventon.repository.RepositoryEntryComparator.*;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNURL;

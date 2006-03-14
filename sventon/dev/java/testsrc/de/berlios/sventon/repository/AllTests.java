@@ -1,4 +1,4 @@
-package de.berlios.sventon.svnsupport;
+package de.berlios.sventon.repository;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -10,8 +10,8 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.svnsupport");
-    suite.addTestSuite(LogEntryActionTypeTest.class);
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.repository");
+    suite.addTestSuite(RepositoryEntryComparatorTest.class);
     return suite;
   }
 

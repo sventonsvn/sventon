@@ -13,6 +13,7 @@ public class AllTests {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.util");
     suite.addTestSuite(ByteFormatterTest.class);
     suite.addTestSuite(ImageUtilTest.class);
+    suite.addTestSuite(PathUtilTest.class);
     suite.addTestSuite(ZipUtilTest.class);
     return suite;
   }
