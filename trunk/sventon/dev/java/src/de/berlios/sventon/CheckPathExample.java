@@ -22,8 +22,8 @@ public class CheckPathExample {
     String svnURL = "svn://svn.berlios.de/sventon/";
     String davURL = "http://svn.berlios.de/svnroot/repos/sventon/";
 
-    String correctPath = "trunk/doc/readme.txt";
-    String incorrectPath = "trunk/doc/readme.txt/fail";
+    String correctPath = "trunk/sventon/doc/readme.txt";
+    String incorrectPath = "trunk/sventon/doc/readme.txt/fail";
 
     try {
 
