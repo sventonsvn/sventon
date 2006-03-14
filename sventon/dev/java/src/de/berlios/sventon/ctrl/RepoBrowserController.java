@@ -13,7 +13,6 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.svnsupport.RepositoryEntryComparator;
-import de.berlios.sventon.svnsupport.SventonException;
 import static de.berlios.sventon.svnsupport.RepositoryEntryComparator.NAME;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;

@@ -13,7 +13,6 @@ package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.cache.SventonCache;
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.svnsupport.SventonException;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import org.springframework.validation.BindException;
