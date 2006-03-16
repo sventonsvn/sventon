@@ -191,7 +191,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> What license do you use?
 </a>
 <br/>
-<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/licenses/license-notes.txt">the license notes</a>. 
+<b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/sventon/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/sventon/licenses/license-notes.txt">the license notes</a>. 
 </p>
 
 <p>
