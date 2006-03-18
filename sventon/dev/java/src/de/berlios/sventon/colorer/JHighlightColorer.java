@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Properties;
+import java.io.IOException;
 
 /**
  * Colorizes given input using the JHighlight syntax highlighting library.
@@ -46,22 +47,23 @@ public class JHighlightColorer implements Colorer {
   /**
    * {@inheritDoc}
    */
-  public String getColorizedContent(final String content, final String fileExtension) {
+  public String getColorizedContent(final String content, final String fileExtension)
+      throws IOException {
+
     logger.debug("Colorizing content, file extension: " + fileExtension);
 
     Renderer renderer = getRenderer(fileExtension);
-    StringBuilder sb = new StringBuilder();
+
+    if (content == null) {
+      return "";
+    }
 
     if (renderer == null) {
       return StringEscapeUtils.escapeXml(content);
     }
-
-    try {
-      sb.append(renderer.highlight(null, content, encoding, true, true));
-    } catch (Exception ioex) {
-      logger.error(ioex);
-    }
-    return sb.toString();
+    // Sorry Geert, but we needed to remove the trailing BR-tags
+    // and the initial comment, as it messes up the line numbering.
+    return renderer.highlight(null, content, encoding, true).substring(73).replace("<br />", "").trim();
   }
 
   /**
@@ -70,6 +72,7 @@ public class JHighlightColorer implements Colorer {
    *
    * @param fileExtension The file extension.
    * @return The JHighlight <code>Renderer</code> instance.
+   * @throws IllegalArgumentException if file extension is null.
    */
   protected Renderer getRenderer(final String fileExtension) {
     if (fileExtension == null) {

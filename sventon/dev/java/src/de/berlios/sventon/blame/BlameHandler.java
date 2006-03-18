@@ -19,6 +19,7 @@ import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.io.IOException;
 
 /**
  * BlameHandler.
@@ -69,9 +70,11 @@ public class BlameHandler implements ISVNAnnotateHandler {
    * 
    * @param colorer  The <code>Colorer</code> instance to use.
    * @param filename Filename, used for choosing formatter.
+   * @throws IOException if exception occurs while colorizing blame content.
    * @throws IllegalStateException if content already colorized.
    */
-  public void colorizeContent(final Colorer colorer, final String filename) {
+  public void colorizeContent(final Colorer colorer, final String filename)
+      throws IOException {
     if (isContentColorized) {
       throw new IllegalStateException("Blame content already colorized.");
     }

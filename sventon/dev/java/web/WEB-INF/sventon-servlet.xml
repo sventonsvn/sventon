@@ -231,9 +231,9 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl" singleton="true"/>
+  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl" />
 
-  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration" singleton="true">
+  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration" >
     <property name="repositoryRoot">
       <value>${svn.root}</value>
     </property>
@@ -267,30 +267,39 @@
     </property>
   </bean>
 
-  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" singleton="true" destroy-method="destroy">
+  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" destroy-method="destroy">
     <constructor-arg>
       <ref bean="repositoryConfig"/>
     </constructor-arg>
   </bean>
 
-  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" singleton="true">
+  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" >
     <property name="encoding">
       <value>ISO-8859-1</value>
     </property>
     <property name="rendererMappings">
       <map>
         <entry key="java" value-ref="javaXhtmlRenderer"/>
+        <entry key="beanshell" value-ref="javaXhtmlRenderer"/>
+        <entry key="bsh" value-ref="javaXhtmlRenderer"/>
         <entry key="html" value-ref="xmlXhtmlRenderer"/>
         <entry key="htm" value-ref="xmlXhtmlRenderer"/>
         <entry key="xml" value-ref="xmlXhtmlRenderer"/>
         <entry key="xhtml" value-ref="xmlXhtmlRenderer"/>
         <entry key="lzx" value-ref="xmlXhtmlRenderer"/>
+        <entry key="cpp" value-ref="cppXhtmlRenderer"/>
+        <entry key="cxx" value-ref="cppXhtmlRenderer"/>
+        <entry key="c++" value-ref="cppXhtmlRenderer"/>
+        <entry key="c" value-ref="cppXhtmlRenderer"/>
+        <entry key="groovy" value-ref="groovyXhtmlRenderer"/>
       </map>
     </property>
   </bean>
 
-  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" singleton="true"/>
-  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" singleton="true"/>
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" />
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" />
+  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer" />
+  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer" />
 
   <!-- Quartz Scheduler, with pre-registered triggers -->
   <!-- Will automatically start scheduling on context startup -->

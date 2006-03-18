@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[465] Added: Upgraded to JHighlight 1.0.
 [450] Fixed: Flatten and search buttons are now disabled if not browsing HEAD.
 [449] Fixed: Bug #6705 and #6374.
 [444] Added: Feature #1867 - Raw file view.
