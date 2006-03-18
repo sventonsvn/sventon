@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.colorer;
 
+import java.io.IOException;
+
 /**
  * Colorer interface.
  *
@@ -26,6 +28,8 @@ public interface Colorer {
    * @return The HTML formatted, colorized, string. If no suitable
    *         formatter was found for given file extension the content will still
    *         be formatted with HTML entities to be properly displayed on the web.
+   *         If given content was <code>null</code> an empty string will be returned.
    */
-  String getColorizedContent(final String content, final String fileExtension);
+  String getColorizedContent(final String content, final String fileExtension)
+      throws IOException;
 }

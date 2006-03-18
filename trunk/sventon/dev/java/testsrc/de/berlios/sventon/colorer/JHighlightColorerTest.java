@@ -12,26 +12,26 @@ public class JHighlightColorerTest extends TestCase {
     Colorer colorer = getColorer();
 
     // Should produce colorized java code
-    assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\"> </span><span class=\"java_keyword\">class</span><span class=\"java_plain\"> </span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\">\n</span>",
-                 (colorer.getColorizedContent("public class HelloWorld", "java")).trim());
+    assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\"></span>",
+                 (colorer.getColorizedContent("public class HelloWorld", "java")));
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld",
-                 (colorer.getColorizedContent("public class HelloWorld", "testing")).trim());
+                 (colorer.getColorizedContent("public class HelloWorld", "testing")));
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld",
-                 (colorer.getColorizedContent("public class HelloWorld", "")).trim());
+                 (colorer.getColorizedContent("public class HelloWorld", "")));
 
     try {
       assertEquals("public class HelloWorld",
-                   (colorer.getColorizedContent("public class HelloWorld", null)).trim());
+                   (colorer.getColorizedContent("public class HelloWorld", null)));
       fail("If filename is null, IAE is expected.");
     } catch (IllegalArgumentException iae) { /* expected */ }
 
     try {
       assertEquals("public class HelloWorld",
-                   (colorer.getColorizedContent(null, null)).trim());
+                   (colorer.getColorizedContent(null, null)));
       fail("If content is null, IAE is expected.");
     } catch (IllegalArgumentException iae) { /* expected */ }
 
