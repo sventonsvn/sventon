@@ -38,8 +38,10 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
   protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
       HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
 
+    final long revNumber;
+    final String path = "/";  // Path to show logs for.
+
     logger.debug("Fetching revision details");
-    long revNumber = 0;
 
     try {
       revNumber = Long.parseLong(request.getParameter("rev"));
@@ -49,7 +51,10 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
     }
 
     logger.debug("Getting revision info details for revision: " + revNumber);
-    SVNLogEntry logEntry = getRevisionInfo(repository, revNumber);
+
+    String[] targetPaths = new String[]{path};
+    SVNLogEntry logEntry = (SVNLogEntry) repository.log(
+        targetPaths, null, revNumber, revNumber, true, false).iterator().next();
 
     logger.debug("Create model");
     Map<String, Object> model = new HashMap<String, Object>();

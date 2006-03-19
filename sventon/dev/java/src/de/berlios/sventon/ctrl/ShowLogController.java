@@ -57,11 +57,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     String path = svnCommand.getPath();
 
-    String nextPathParam = request.getParameter("nextPath");
-    String nextRevParam = request.getParameter("nextRevision");
+    final String nextPathParam = request.getParameter("nextPath");
+    final String nextRevParam = request.getParameter("nextRevision");
 
-    String[] targetPaths;
-    long revNumber = 0;
+    final String[] targetPaths;
+    final long revNumber;
 
     if (!path.startsWith("/")) {
       path = "/" + path;
@@ -69,18 +69,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     if (nextPathParam == null || nextRevParam == null) {
       targetPaths = new String[] { path };
-      long revNumber1;
-      if (revision == HEAD)
-        revNumber1 = repository.getLatestRevision();
-      else
-        revNumber1 = revision.getNumber();
-      revNumber = revNumber1;
+      revNumber = revision == HEAD ? getHeadRevision() : revision.getNumber();
     } else {
-
       targetPaths = new String[] { nextPathParam };
-
       if ("HEAD".equals(nextRevParam)) {
-        revNumber = repository.getLatestRevision();
+        revNumber = getHeadRevision();
       } else {
         try {
           revNumber = Long.parseLong(nextRevParam);
@@ -91,27 +84,22 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
       }
     }
 
-    String pathAtRevision = targetPaths[0];
-
-    List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
+    final List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
-
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
     repository.log(targetPaths, revNumber, 0, true, false, pageSize, new ISVNLogEntryHandler() {
-
       public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
         logEntries.add(logEntry);
       }
-
     });
 
     SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
-    
+    String pathAtRevision = targetPaths[0];
+
     for (SVNLogEntry logEntry : logEntries) {
-      
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
       Set<String> changedPaths = m.keySet();
