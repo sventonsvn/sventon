@@ -209,16 +209,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Gets the latest commit log and puts the result into the cache.
-   * If cache already contains the latest info it will be returned
-   * directly.
+   * Gets the latest commit log and cache the result.
+   * If cached result is up-to-date, it will be returned directly.
    *
    * @param repository     The repository
    * @param latestRevision The latest revision
    * @return The <tt>SVNLogEntry</tt> for the latest revision
    * @throws SVNException if subversion error.
    */
-  private SVNLogEntry getLatestRevisionInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
+  private synchronized SVNLogEntry getLatestRevisionInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
     if (latestRevision != cachedRevision) {
       cachedLogs = getRevisionInfo(repository, latestRevision);
       cachedRevision = latestRevision;
