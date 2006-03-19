@@ -114,11 +114,17 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
   /**
    * Cached most recent log entry.
+   * Do not manipulate.
+   * Use {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)}
+   * or {@link #getHeadRevisionInfo()}.
    */
   private static SVNLogEntry cachedLogs;
 
   /**
    * Cached revision number (HEAD).
+   * Do not manipulate.
+   * Use {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)}
+   * or {@link #getHeadRevision()}.
    */
   private static long cachedRevision;
 
@@ -145,24 +151,24 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-    SVNRevision revision = convertAndUpdateRevision(svnCommand);
-
     try {
       SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, revision, request, response, exception);
+      SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
+      updateHeadRevisionCache(repository);
+
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, request, response, exception);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
       if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
-        long latestRevision = repository.getLatestRevision();
         Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", configuration.getUrl());
-        model.put("numrevision", (revision == HEAD ? Long.toString(latestRevision) : null));
-        model.put("isHead", revision == HEAD);
-        model.put("latestCommitInfo", getLatestRevisionInfo(repository, latestRevision));
+        model.put("numrevision", (requestedRevision == HEAD ? Long.toString(getHeadRevision()) : null));
+        model.put("isHead", requestedRevision == HEAD);
+        model.put("latestCommitInfo", getHeadRevisionInfo());
         model.put("isIndexing", getRevisionIndexer().isIndexing());
         modelAndView.addAllObjects(model);
       }
@@ -203,40 +209,59 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         locks.put(lock.getPath(), lock);
       }
     } catch (SVNException svne) {
-      logger.info("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
+      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
     }
     return locks;
   }
 
   /**
-   * Gets the latest commit log and cache the result.
-   * If cached result is up-to-date, it will be returned directly.
+   * Updates the cached head revision info.
+   * Compares latest revision number to cached revision and
+   * updates revision/log if necessary.
    *
-   * @param repository     The repository
-   * @param latestRevision The latest revision
-   * @return The <tt>SVNLogEntry</tt> for the latest revision
+   * @param repository The repository
    * @throws SVNException if subversion error.
    */
-  private synchronized SVNLogEntry getLatestRevisionInfo(final SVNRepository repository, final long latestRevision) throws SVNException {
+  private synchronized void updateHeadRevisionCache(final SVNRepository repository) throws SVNException {
+    long latestRevision = repository.getLatestRevision();
+
     if (latestRevision != cachedRevision) {
-      cachedLogs = getRevisionInfo(repository, latestRevision);
+      logger.debug("Updating HEAD cache to revision: " + latestRevision);
+      String[] targetPaths = new String[]{"/"}; // the path to show logs for
+      cachedLogs = (SVNLogEntry) repository.log(
+          targetPaths, null, latestRevision, latestRevision, true, false).iterator().next();
       cachedRevision = latestRevision;
+    }
+  }
+
+  /**
+   * Gets the latest, cached, revision logs info.
+   * Make sure {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)} has been
+   * called before this method is invoked.
+   *
+   * @return The <tt>SVNLogEntry</tt> for the latest revision
+   * @throws IllegalStateException if HEAD revision has not been cached yet.
+   */
+  protected synchronized SVNLogEntry getHeadRevisionInfo() {
+    if (cachedLogs == null) {
+      throw new IllegalStateException("HEAD revision info has not yet been cached");
     }
     return cachedLogs;
   }
 
   /**
-   * Gets the latest commit log.
+   * Gets the latest, cached, revision.
+   * Make sure {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)} has been
+   * called before this method is invoked.
    *
-   * @param repository The repository
-   * @param revision   The revision
-   * @return The <tt>SVNLogEntry</tt> for given revision
-   * @throws SVNException if subversion error.
+   * @return Revision
+   * @throws IllegalStateException if HEAD revision has not been cached yet.
    */
-  protected SVNLogEntry getRevisionInfo(final SVNRepository repository, final long revision) throws SVNException {
-    String[] targetPaths = new String[]{"/"}; // the path to show logs for
-    return (SVNLogEntry) repository.log(
-        targetPaths, null, revision, revision, true, false).iterator().next();
+  protected synchronized long getHeadRevision() {
+    if (cachedRevision == 0) {
+      throw new IllegalStateException("HEAD revision info has not yet been cached");
+    }
+    return cachedRevision;
   }
 
   /**
