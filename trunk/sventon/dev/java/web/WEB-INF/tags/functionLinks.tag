@@ -116,6 +116,10 @@
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
   </c:when>
 
+  <c:when test="${pageName == 'showThumbs'}">
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+  </c:when>
+
   <c:when test="${pageName == 'showLock'}">
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
   </c:when>
