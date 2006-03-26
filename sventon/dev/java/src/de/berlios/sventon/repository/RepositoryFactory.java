@@ -51,9 +51,9 @@ public class RepositoryFactory {
     if (configuration == null || configuration.getSVNURL() == null) {
       return null;
     }
-    SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
+    final SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
     if (configuration.getConfiguredUID() != null) {
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
+      final ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
           .getSVNConfigurationPath()), configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
       repository.setAuthenticationManager(authManager);
     }

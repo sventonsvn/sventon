@@ -12,7 +12,7 @@
 package de.berlios.sventon.diff;
 
 /**
- * Diff action bean.
+ * Diff segment bean.
  *
  * @author jesper@users.berlios.de
  */
@@ -55,6 +55,7 @@ public class DiffSegment {
                      final int leftLineIntervalEnd,
                      final int rightLineIntervalStart,
                      final int rightLineIntervalEnd) {
+
     this.action = action;
     this.leftLineIntervalStart = leftLineIntervalStart;
     this.leftLineIntervalEnd = leftLineIntervalEnd;

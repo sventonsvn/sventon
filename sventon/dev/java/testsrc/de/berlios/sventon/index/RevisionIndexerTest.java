@@ -17,6 +17,7 @@ public class RevisionIndexerTest extends TestCase {
     RepositoryConfiguration config = new RepositoryConfiguration();
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     config.setRepositoryRoot(repos.getLocation().toString());
+    config.setIndexUsed(true);
     indexer = new RevisionIndexer(repos);
     indexer.setRepositoryConfiguration(config);
     indexer.populateIndex();

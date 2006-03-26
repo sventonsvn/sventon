@@ -54,16 +54,17 @@ public class DiffResultParser {
    * @see de.regnis.q.sequence.line.diff.QDiffNormalGenerator
    */
   public static List<DiffSegment> parseNormalDiffResult(final String normalDiffResult) {
-    List<DiffSegment> diffActions = new ArrayList<DiffSegment>();
+    final List<DiffSegment> diffActions = new ArrayList<DiffSegment>();
     int leftStart;
     int leftEnd;
     int rightStart;
     int rightEnd;
-    BufferedReader reader = new BufferedReader(new StringReader(normalDiffResult));
+    final BufferedReader reader = new BufferedReader(new StringReader(normalDiffResult));
+
     String tempLine;
     try {
       while ((tempLine = reader.readLine()) != null) {
-        Matcher matcher = DIFF_PATTERN.matcher(tempLine);
+        final Matcher matcher = DIFF_PATTERN.matcher(tempLine);
         if (matcher.matches()) {
           leftStart = Integer.parseInt(matcher.group(1));
           leftEnd = "".equals(matcher.group(2))

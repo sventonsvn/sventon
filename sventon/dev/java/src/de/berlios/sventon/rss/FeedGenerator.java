@@ -32,13 +32,13 @@ public class FeedGenerator {
    */
   @SuppressWarnings({"unchecked"})
   public SyndFeed generateFeed(final List<SVNLogEntry> logEntries, final String baseURL) {
-    SyndFeed feed = new SyndFeedImpl();
+    final SyndFeed feed = new SyndFeedImpl();
 
     feed.setTitle("sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
 
-    List<SyndEntry> entries = new ArrayList<SyndEntry>();
+    final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
     SyndEntry entry;
     SyndContent description;
@@ -55,8 +55,8 @@ public class FeedGenerator {
       description = new SyndContentImpl();
       description.setType("text/html");
 
-      Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-      List<String> latestPathsList = new ArrayList<String>(map.keySet());
+      final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
+      final List<String> latestPathsList = new ArrayList<String>(map.keySet());
 
       int added = 0;
       int modified = 0;
@@ -64,8 +64,7 @@ public class FeedGenerator {
       int deleted = 0;
 
       for (String entryPath : latestPathsList) {
-        LogEntryActionType type =
-            LogEntryActionType.valueOf(String.valueOf(map.get(entryPath).getType()));
+        final LogEntryActionType type = LogEntryActionType.valueOf(String.valueOf(map.get(entryPath).getType()));
         switch (type) {
           case A:
             added++;
@@ -82,7 +81,7 @@ public class FeedGenerator {
         }
       }
 
-      StringBuffer sb = new StringBuffer();
+      final StringBuffer sb = new StringBuffer();
       sb.append("<table border=\"0\">");
       sb.append("<tr colspan=\"2\">");
       sb.append("<td>");

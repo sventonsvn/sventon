@@ -26,7 +26,7 @@ public class DiffException extends Exception {
    * @param message the detail message. The detail message is saved for
    *                later retrieval by the {@link #getMessage()} method.
    */
-  public DiffException(String message) {
+  public DiffException(final String message) {
     super(message);
   }
 
@@ -44,7 +44,7 @@ public class DiffException extends Exception {
    *                unknown.)
    * @since 1.4
    */
-  public DiffException(String message, Throwable cause) {
+  public DiffException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

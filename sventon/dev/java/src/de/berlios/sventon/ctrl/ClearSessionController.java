@@ -20,15 +20,16 @@ import javax.servlet.http.HttpSession;
 
 /**
  * ClearCredentialsController.
+ *
  * @author patrikfr@users.berlios.de
  */
 public class ClearSessionController extends AbstractController {
 
-  protected ModelAndView handleRequestInternal(HttpServletRequest request, 
-      HttpServletResponse response) throws Exception {
-    HttpSession session = request.getSession(false);
-    if (session != null)
-    {
+  protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
+      throws Exception {
+
+    final HttpSession session = request.getSession(false);
+    if (session != null) {
       session.invalidate();
     }
     return new ModelAndView("sessionclear");

@@ -66,7 +66,6 @@ public class RevisionIndexer {
    * @param repository The repository instance
    */
   public RevisionIndexer(final SVNRepository repository) {
-    logger.debug("Creating index instance using given repository");
     this.repository = repository;
   }
 
@@ -78,8 +77,7 @@ public class RevisionIndexer {
    * @param configuration The repository configuration
    */
   public RevisionIndexer(final RepositoryConfiguration configuration) {
-    logger.debug("Creating index instance using given configuration");
-    setRepositoryConfiguration(configuration);
+    this.setRepositoryConfiguration(configuration);
   }
 
   /**
@@ -132,48 +130,52 @@ public class RevisionIndexer {
    */
   @SuppressWarnings("unchecked")
   protected synchronized void updateIndex() throws SVNException {
-    String[] targetPaths = new String[]{"/"}; // the path to log
-    long latestRevision = repository.getLatestRevision();
+    if (configuration.isIndexUsed()) {
 
-    logger.info("Updating index from revision " + index.getIndexRevision() + " to "
-        + latestRevision);
+      final String[] targetPaths = new String[]{"/"}; // the path to log
+      long latestRevision = repository.getLatestRevision();
 
-    List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
-        null, index.getIndexRevision() + 1, latestRevision, true, false);
+      logger.info("Updating index from revision " + index.getIndexRevision() + " to "
+          + latestRevision);
 
-    // One logEntry is one commit (or revision)
-    for (SVNLogEntry logEntry : logEntries) {
-      long revision = logEntry.getRevision();
-      logger.debug("Applying changes from revision " + revision + " to index");
-      Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-      List<String> latestPathsList = new ArrayList<String>(map.keySet());
-      // Sort the entries to apply changes in right order
-      Collections.sort(latestPathsList);
-      for (String entryPath : latestPathsList) {
-        SVNLogEntryPath logEntryPath = map.get(entryPath);
-        switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
-          case A :
-            logger.debug("Adding entry to index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            doIndexAdd(logEntryPath, revision);
-            break;
-          case D :
-            logger.debug("Removing deleted entry from index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            doIndexDelete(logEntryPath, revision);
-            break;
-          case R :
-            logger.debug("Replacing entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            doIndexReplace(logEntryPath, revision);
-            break;
-          case M :
-            logger.debug("Updating modified entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
-            doIndexModify(logEntryPath, revision);
-            break;
-          default :
-            throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+      final List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
+          null, index.getIndexRevision() + 1, latestRevision, true, false);
+
+      // One logEntry is one commit (or revision)
+      for (SVNLogEntry logEntry : logEntries) {
+        long revision = logEntry.getRevision();
+        logger.debug("Applying changes from revision " + revision + " to index");
+        final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
+        final List<String> latestPathsList = new ArrayList<String>(map.keySet());
+        // Sort the entries to apply changes in right order
+        Collections.sort(latestPathsList);
+
+        for (String entryPath : latestPathsList) {
+          final SVNLogEntryPath logEntryPath = map.get(entryPath);
+          switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
+            case A :
+              logger.debug("Adding entry to index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+              doIndexAdd(logEntryPath, revision);
+              break;
+            case D :
+              logger.debug("Removing deleted entry from index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+              doIndexDelete(logEntryPath, revision);
+              break;
+            case R :
+              logger.debug("Replacing entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+              doIndexReplace(logEntryPath, revision);
+              break;
+            case M :
+              logger.debug("Updating modified entry in index: " + logEntryPath.getPath() + " - rev: " + logEntry.getRevision());
+              doIndexModify(logEntryPath, revision);
+              break;
+            default :
+              throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+          }
         }
       }
+      index.setIndexRevision(latestRevision);
     }
-    index.setIndexRevision(latestRevision);
   }
 
   /**
@@ -183,7 +185,7 @@ public class RevisionIndexer {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doIndexModify(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doIndexModify(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     index.remove(logEntryPath.getPath(), false);
     index.add(new RepositoryEntry(
         repository.info(logEntryPath.getPath(), revision),
@@ -197,7 +199,7 @@ public class RevisionIndexer {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doIndexReplace(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doIndexReplace(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     doIndexModify(logEntryPath, revision);
   }
 
@@ -208,9 +210,9 @@ public class RevisionIndexer {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doIndexDelete(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doIndexDelete(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     // Have to find out if deleted entry was a file or directory
-    SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), revision - 1);
+    final SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), revision - 1);
     if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
       // Directory node deleted
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
@@ -228,9 +230,9 @@ public class RevisionIndexer {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doIndexAdd(SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doIndexAdd(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     // Have to find out if added entry was a file or directory
-    SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
+    final SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
 
     // If the entry is a directory and a copyPath exists the entry is
     // a moved or copied directory (branch). In that case we have to recursively
@@ -263,13 +265,16 @@ public class RevisionIndexer {
    * If sventon has entered configuration mode, i.e. the repository
    * connection cannot be established yet, the method will return without
    * any action performed.
+   * <p/>
+   * If repository indexing is disabled during sventon configuration,
+   * this method will do nothing and return silently.
+   *
    *
    * @throws SVNException           if Subversion error occurs.
    * @throws RevisionIndexException if an index error occurs.
    */
   public synchronized void update() throws RevisionIndexException, SVNException {
-
-    if (!isConnectionEstablished()) {
+    if (!isConnectionEstablished() || !configuration.isIndexUsed()) {
       return;
     }
 
@@ -304,10 +309,10 @@ public class RevisionIndexer {
    */
   private boolean isConnectionEstablished() throws SVNException {
     if (repository == null) {
-      logger.debug("Trying to establish the repository connection");
+      logger.debug("Establishing repository connection");
       repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       if (repository == null) {
-        logger.info("Repository not configured yet. Waiting with index creation");
+        logger.info("Repository not configured yet.");
         return false;
       }
     }
@@ -328,8 +333,8 @@ public class RevisionIndexer {
           + configuration.getSVNConfigurationPath()
           + INDEX_FILENAME);
 
-      File indexFile = new File(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-      ObjectInputStream in;
+      final File indexFile = new File(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
+      final ObjectInputStream in;
       if (indexFile.exists()) {
         try {
           in = new ObjectInputStream(new FileInputStream(indexFile));
@@ -350,7 +355,6 @@ public class RevisionIndexer {
    * @return <code>True</code> is index is being updated, <code>false</code> if not.
    */
   public boolean isIndexing() {
-    logger.debug("isIndexing: " + isIndexing);
     return isIndexing;
   }
 
@@ -364,11 +368,11 @@ public class RevisionIndexer {
    */
   @SuppressWarnings("unchecked")
   private void populateIndex(final String path, final long revision) throws SVNException {
-    List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
+    final List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
     entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
-      RepositoryEntry newEntry = new RepositoryEntry(entry, path, null);
+      final RepositoryEntry newEntry = new RepositoryEntry(entry, path, null);
       if (!index.add(newEntry)) {
         logger.warn("Unable to add already existing entry to index: " + newEntry.toString());
       }
@@ -388,6 +392,11 @@ public class RevisionIndexer {
    * @see de.berlios.sventon.repository.RepositoryEntry
    */
   public List<RepositoryEntry> find(final String searchString, final String startDir) throws RevisionIndexException {
+
+    if (!configuration.isIndexUsed()) {
+      throw new IllegalStateException("Indexing is disabled");
+    }
+
     if (searchString == null || searchString.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -402,12 +411,13 @@ public class RevisionIndexer {
       throw new RevisionIndexException("Error during index update", svnex);
     }
 
-    String lcStartDir = startDir.toLowerCase();
-    String lcSearchString = searchString.toLowerCase();
+    final String lcStartDir = startDir.toLowerCase();
+    final String lcSearchString = searchString.toLowerCase();
 
-    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
     for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
-      String name = entry.getFullEntryName().toLowerCase();
+      final String name = entry.getFullEntryName().toLowerCase();
       if (name.startsWith(lcStartDir) && name.contains(lcSearchString)) {
         result.add(entry);
       }
@@ -443,6 +453,11 @@ public class RevisionIndexer {
   public List<RepositoryEntry> findPattern(final String searchPattern,
                                            final String startDir,
                                            final Integer limit) throws RevisionIndexException {
+
+    if (!configuration.isIndexUsed()) {
+      throw new IllegalStateException("Indexing is disabled");
+    }
+
     if (searchPattern == null || searchPattern.equals("")) {
       throw new IllegalArgumentException("Search string was null or empty");
     }
@@ -458,7 +473,8 @@ public class RevisionIndexer {
     }
 
     int count = 0;
-    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
     for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
       if (entry.getFullEntryName().startsWith(startDir) && entry.getFullEntryName().matches(searchPattern)) {
         result.add(entry);
@@ -479,6 +495,11 @@ public class RevisionIndexer {
    * @throws RevisionIndexException if an index error occurs.
    */
   public List<RepositoryEntry> findDirectories(final String fromPath) throws RevisionIndexException {
+
+    if (!configuration.isIndexUsed()) {
+      throw new IllegalStateException("Indexing is disabled");
+    }
+
     if (fromPath == null || fromPath.equals("")) {
       throw new IllegalArgumentException("Path was null or empty");
     }
@@ -489,7 +510,8 @@ public class RevisionIndexer {
       throw new RevisionIndexException("Error during index update", svnex);
     }
 
-    List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
     for (RepositoryEntry entry : index.getUnmodifiableEntries()) {
       if (RepositoryEntry.Kind.dir == entry.getKind() && entry.getFullEntryName().startsWith(fromPath)) {
         result.add(entry);
@@ -519,7 +541,7 @@ public class RevisionIndexer {
   public void storeIndex(final String storagePathAndName) throws RevisionIndexException {
     if (index != null && index.getUnmodifiableEntries().size() > 0) {
       logger.info("Saving index to disk, " + storagePathAndName);
-      ObjectOutputStream out;
+      final ObjectOutputStream out;
       try {
         out = new ObjectOutputStream(new FileOutputStream(storagePathAndName));
         out.writeObject(index);
@@ -528,13 +550,11 @@ public class RevisionIndexer {
       } catch (IOException ioex) {
         throw new RevisionIndexException("Unable to store index to disk", ioex);
       }
-    } else {
-      logger.info("Index does not contain any entries and will not be stored on disk");
     }
   }
 
   /**
-   * This method serializes the index to disk.
+   * Serializes the index to disk.
    */
   public void destroy() {
     if (configuration != null) {

@@ -18,11 +18,14 @@ import org.springframework.validation.Validator;
 
 /**
  * SVNBaseCommandValidator.
+ *
  * @author patrikfr@users.berlios.de
  */
 public class SVNBaseCommandValidator implements Validator {
 
-  /** Logger for this class and subclasses */
+  /**
+   * Logger for this class and subclasses
+   */
   protected final Log logger = LogFactory.getLog(getClass());
 
   public boolean supports(Class clazz) {
@@ -30,9 +33,8 @@ public class SVNBaseCommandValidator implements Validator {
   }
 
   public void validate(Object obj, Errors errors) {
-    SVNBaseCommand command = (SVNBaseCommand) obj;
-
-    String revision = command.getRevision();
+    final SVNBaseCommand command = (SVNBaseCommand) obj;
+    final String revision = command.getRevision();
 
     if (revision == null) {
       return;

@@ -58,7 +58,7 @@ public class SVNLog4JAdapter extends SVNDebugLoggerAdapter {
   /**
    * {@inheritDoc}
    */
-  public void logError(String message, Throwable th) {
+  public void logError(final String message, final Throwable th) {
     logger.error(message, th);
   }
 

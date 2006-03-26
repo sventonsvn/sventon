@@ -67,19 +67,24 @@ public class ShowLatestCommitInfoController extends AbstractController {
    */
   private String encoding = "ISO-8859-1";
 
+  /**
+   * Date pattern, default set to: <code>yyyy-MM-dd HH:mm:ss</code>.
+   */
   private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
+      throws Exception {
+
     logger.debug("Getting latest commit info");
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
-      String errorMessage = "Unable to connect to repository!";
+      final String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
@@ -127,8 +132,14 @@ public class ShowLatestCommitInfoController extends AbstractController {
     this.encoding = encoding;
   }
 
+  /**
+   * Creates the XML document based on given log entry.
+   *
+   * @param log The log entry.
+   * @return The XML document.
+   */
   private Document createXML(final SVNLogEntry log) {
-    Element root = new Element("latestcommitinfo");
+    final Element root = new Element("latestcommitinfo");
     Element element;
 
     element = new Element("revision");
@@ -139,7 +150,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
     element.setText(log.getAuthor());
     root.addContent(element);
 
-    SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
+    final SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
     element = new Element("date");
     element.setText(sdf.format(log.getDate()));
     root.addContent(element);
@@ -148,16 +159,16 @@ public class ShowLatestCommitInfoController extends AbstractController {
     element.setText(log.getMessage());
     root.addContent(element);
 
-    Element entries = new Element("entries");
+    final Element entries = new Element("entries");
 
     //noinspection unchecked
-    Map<String, SVNLogEntryPath> map = log.getChangedPaths();
-    List<String> latestPathsList = new ArrayList<String>(map.keySet());
+    final Map<String, SVNLogEntryPath> map = log.getChangedPaths();
+    final List<String> latestPathsList = new ArrayList<String>(map.keySet());
 
     for (String entryPath : latestPathsList) {
-      SVNLogEntryPath logEntryPath = map.get(entryPath);
+      final SVNLogEntryPath logEntryPath = map.get(entryPath);
 
-      Element entry = new Element("entry");
+      final Element entry = new Element("entry");
       element = new Element("path");
       element.setText(logEntryPath.getPath());
       entry.addContent(element);
@@ -181,11 +192,18 @@ public class ShowLatestCommitInfoController extends AbstractController {
     return new Document(root);
   }
 
+  /**
+   * Gets an XML document as a 'pretty-printed' string.
+   *
+   * @param document The XML document.
+   * @param encoding Encoding
+   * @return The XML document as a String.
+   */
   private String getXMLAsString(final Document document, final String encoding) {
     // Format the XML document into a String
-    Format format = Format.getPrettyFormat();
+    final Format format = Format.getPrettyFormat();
     format.setEncoding(encoding);
-    XMLOutputter outputter = new XMLOutputter(format);
+    final XMLOutputter outputter = new XMLOutputter(format);
     return outputter.outputString(document);
   }
 }

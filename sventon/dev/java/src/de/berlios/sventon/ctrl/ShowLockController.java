@@ -34,15 +34,16 @@ public class ShowLockController extends AbstractSVNTemplateController implements
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     // Update trailing / for path
     if (!svnCommand.getPath().endsWith("/")) {
       svnCommand.setPath(svnCommand.getPath() + "/");
     }
 
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("currentLocks", getLocks(repository, svnCommand.getPath()).values());
     return new ModelAndView("showlock", model);
   }

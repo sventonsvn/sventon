@@ -38,12 +38,13 @@ import java.util.HashMap;
  * Controller used when downloading single files.
  * Image files can be gotten in three different ways.
  * <ul>
- *  <li><b>thumb</b> - Gets a thumbnail version of the image.</li>
- *  <li><b>inline</b> - Gets the image with correct content type.
+ * <li><b>thumb</b> - Gets a thumbnail version of the image.</li>
+ * <li><b>inline</b> - Gets the image with correct content type.
  * Image will be displayed inline in browser.</li>
- *  <li><b>attachment</b> - Gets the image with content type
+ * <li><b>attachment</b> - Gets the image with content type
  * application/octetstream. A download dialog will appear in browser.</li>
  * </ul>
+ *
  * @author jesper@users.berlios.de
  */
 public class GetController extends AbstractSVNTemplateController implements Controller {
@@ -61,14 +62,15 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     logger.debug("Getting file: " + svnCommand.getPath());
 
-    String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
-    ServletOutputStream output = null;
-    ByteArrayOutputStream baos = null;
+    final String displayType = request.getParameter(DISPLAY_REQUEST_PARAMETER);
+    final ServletOutputStream output;
+    final ByteArrayOutputStream baos;
     logger.debug("displayType: " + displayType);
 
     try {
@@ -84,7 +86,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
 
         // Check if the thumbnail exists on the cache
-        HashMap properties = new HashMap();
+        final HashMap properties = new HashMap();
         repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
         logger.debug(properties);
         String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
@@ -96,20 +98,20 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         } else {
           // Thumbnail was not in the cache.
           // Create the thumbnail.
-          StringBuffer urlString = request.getRequestURL();
+          final StringBuffer urlString = request.getRequestURL();
           urlString.append("?");
           urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
-          URL url = new URL(urlString.toString());
+          final URL url = new URL(urlString.toString());
           logger.debug("Getting full size image from url: " + url);
           BufferedImage image = ImageIO.read(url);
           int orgWidth = image.getWidth();
           int orgHeight = image.getHeight();
           // Get preferred thumbnail dimension.
-          Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
+          final Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
           logger.debug("Thumbnail size: " + thumbnailSize.toString());
           // Resize image.
-          Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-          BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+          final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
+          final BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
           response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
 
           // Write thumbnail to output stream.
@@ -133,7 +135,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           response.setContentType(DEFAULT_CONTENT_TYPE);
           response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
         }
-        HashMap properties = new HashMap();
+        final HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
         repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
         logger.debug(properties);
@@ -152,7 +154,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    * @param imageUtil The instance
    * @see de.berlios.sventon.util.ImageUtil
    */
-  public void setImageUtil(ImageUtil imageUtil) {
+  public void setImageUtil(final ImageUtil imageUtil) {
     this.imageUtil = imageUtil;
   }
 

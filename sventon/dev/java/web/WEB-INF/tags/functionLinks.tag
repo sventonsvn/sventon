@@ -73,15 +73,19 @@
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="showlocks.button.text"/>" onclick="javascript:parent.location='${showLockLinkUrl}';"/>
     <c:choose>
-      <c:when test="${isIndexing}">
-        <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.isindexing.tooltip"/>" />
+      <c:when test="${useIndex}">
+        <c:choose>
+          <c:when test="${isIndexing}">
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.isindexing.tooltip"/>" />
+          </c:when>
+          <c:when test="${!isHead}">
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.disabled.tooltip"/>" />
+          </c:when>
+          <c:otherwise>
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" title="<spring:message code="flatten.button.tooltip"/>" />
+          </c:otherwise>
+        </c:choose>
       </c:when>
-      <c:when test="${!isHead}">
-        <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.disabled.tooltip"/>" />
-      </c:when>
-      <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" title="<spring:message code="flatten.button.tooltip"/>" />
-      </c:otherwise>
     </c:choose>
   </c:when>
 
@@ -122,21 +126,23 @@
 </c:choose>
 
     </td>
-    <td align="right" style="white-space: nowrap;"><spring:message code="search.text"/>
-      <input type="text" name="searchString" class="sventonSearchField" value="" ${isIndexing || !isHead ? 'disabled' : ''} />
-      <input type="hidden" name="startDir" value="${command.pathPart}"/>
-      <c:choose>
-        <c:when test="${isIndexing}">
-          <input type="submit" value="go!" disabled title="<spring:message code="search.button.isindexing.tooltip"/>" class="btn"/>
-        </c:when>
-        <c:when test="${!isHead}">
-          <input type="submit" value="go!" disabled title="<spring:message code="search.button.disabled.tooltip"/>" class="btn"/>
-        </c:when>
-        <c:otherwise>
-          <input type="submit" value="go!" title="<spring:message code="search.button.tooltip"/>" class="btn"/>
-        </c:otherwise>
-      </c:choose>
-    </td>
+    <c:if test="${useIndex}">
+      <td align="right" style="white-space: nowrap;"><spring:message code="search.text"/>
+        <input type="text" name="searchString" class="sventonSearchField" value="" ${isIndexing || !isHead ? 'disabled' : ''} />
+        <input type="hidden" name="startDir" value="${command.pathPart}"/>
+        <c:choose>
+          <c:when test="${isIndexing}">
+            <input type="submit" value="go!" disabled title="<spring:message code="search.button.isindexing.tooltip"/>" class="btn"/>
+          </c:when>
+          <c:when test="${!isHead}">
+            <input type="submit" value="go!" disabled title="<spring:message code="search.button.disabled.tooltip"/>" class="btn"/>
+          </c:when>
+          <c:otherwise>
+            <input type="submit" value="go!" title="<spring:message code="search.button.tooltip"/>" class="btn"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </c:if>
   </tr>
 </table>
   <!-- Needed by ASVNTC -->

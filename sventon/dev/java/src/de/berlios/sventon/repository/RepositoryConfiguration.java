@@ -52,47 +52,51 @@ import java.io.File;
 public class RepositoryConfiguration {
 
   /**
-   * Will be <code>true</code> if all parameters are ok.
-   */
-  private boolean configured = false;
-
-  /**
    * The logging instance.
    */
   protected final Log logger = LogFactory.getLog(getClass());
+  
+  /**
+   * Will be <code>true</code> if all parameters are ok.
+   */
+  private boolean configured;
 
   /**
    * The url.
    */
-  private String repositoryURL = null;
+  private String repositoryURL;
 
   /**
    * The repository location.
    */
-  private SVNURL svnURL = null;
+  private SVNURL svnURL;
 
   /**
    * Path to the Subversion configuration libraries
    */
-  private String SVNConfigurationPath = null;
+  private String SVNConfigurationPath;
 
   /**
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String configuredUID = null;
+  private String configuredUID;
 
   /**
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String configuredPWD = null;
+  private String configuredPWD;
+
+  /**
+   * Decides whether the indexing feature will be used.
+   */
+  private Boolean useIndex;
 
   /**
    * Configures and initializes the repository.
    */
   public RepositoryConfiguration() {
-
     configureLogging();
     logger.info("Configuring SVN Repository");
     SVNRepositoryFactoryImpl.setup();
@@ -231,4 +235,23 @@ public class RepositoryConfiguration {
   public boolean isConfigured() {
     return configured;
   }
+
+  /**
+   * Sets the 'useIndex' flag.
+   *
+   * @param useIndex <code>true</code> if index should be enabled, <code>false</code> if not.
+   */
+  public void setIndexUsed(final Boolean useIndex) {
+    this.useIndex = useIndex;
+  }
+
+  /**
+   * Checks if the index should be used.
+   *
+   * @return <code>true</code> if index is enabled, <code>false</code> if not.
+   */
+  public Boolean isIndexUsed() {
+    return this.useIndex;
+  }
+
 }

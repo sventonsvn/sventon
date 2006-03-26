@@ -45,8 +45,14 @@ import java.util.zip.ZipInputStream;
  */
 public class ShowFileController extends AbstractSVNTemplateController implements Controller {
 
+  /**
+   * The colorer instance.
+   */
   private Colorer colorer;
 
+  /**
+   * Image utility.
+   */
   private ImageUtil imageUtil;
 
   /**
@@ -54,14 +60,18 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   protected String archiveFileExtensionPattern;
 
+  /**
+   * FORMAT_REQUEST_PARAMETER = format.
+   */
   private static final String FORMAT_REQUEST_PARAMETER = "format";
 
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     logger.debug("Assembling file contents for: " + svnCommand);
 
@@ -110,8 +120,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
   private Map<String, Object> handleRawTextFile(SVNRepository repository, SVNBaseCommand svnCommand,
                                                 SVNRevision revision) throws SVNException {
 
-    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    Map<String, Object> model = new HashMap<String, Object>();
+    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    final Map<String, Object> model = new HashMap<String, Object>();
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
@@ -137,8 +147,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
   private Map<String, Object> handleTextFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                              final SVNRevision revision, final Map properties) throws SventonException, SVNException {
 
-    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    Map<String, Object> model = new HashMap<String, Object>();
+    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    final Map<String, Object> model = new HashMap<String, Object>();
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
@@ -176,16 +186,15 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   private Map<String, Object> handleArchiveFile(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                                 final SVNRevision revision) throws SventonException, SVNException {
-    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    Map<String, Object> model = new HashMap<String, Object>();
-
+    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("isArchive", true); // Indicates that the file is an archive (zip or jar)
 
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
 
-    ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
-    List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
+    final ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
+    final List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
     try {
       ZipEntry zipEntry;
       while ((zipEntry = zip.getNextEntry()) != null) {

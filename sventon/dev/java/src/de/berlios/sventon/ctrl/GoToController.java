@@ -44,13 +44,12 @@ public class GoToController extends AbstractSVNTemplateController implements Con
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository,
-                                   SVNBaseCommand svnCommand, SVNRevision revision, HttpServletRequest request,
-                                   HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
-    String redirectUrl = null;
-
-    SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
+    final String redirectUrl;
+    final SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {
@@ -64,7 +63,7 @@ public class GoToController extends AbstractSVNTemplateController implements Con
     }
 
     // Populate model and view with basic data
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("path", svnCommand.getPath());
     model.put("revision", svnCommand.getRevision());
     logger.debug("Redirecting to: " + redirectUrl);

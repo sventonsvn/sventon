@@ -16,7 +16,7 @@ function doAction(formName) {
   var undefined;
   var checkedEntry = false;
 
-  // Check if only one entry exists - and wether it's checked
+  // Check if only one entry exists - and whether it's checked
   if (formName.entry.length == undefined) {
     checkedEntry = formName.entry.checked;
   } else {

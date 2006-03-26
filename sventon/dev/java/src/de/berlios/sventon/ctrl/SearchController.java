@@ -34,10 +34,11 @@ public class SearchController extends AbstractSVNTemplateController implements C
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
-    List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     final String searchString = request.getParameter("searchString");
     final String startDir = request.getParameter("startDir");
     logger.debug("Searching index for [" + searchString + "] in directory [" + startDir + "]");
@@ -51,7 +52,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
     }
 
     logger.debug("Create model");
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("searchString", searchString);
     model.put("startDir", startDir);
     model.put("svndir", entries);
@@ -67,7 +68,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
    * @return The regex pattern.
    */
   private String preparePattern(final String searchString) {
-    StringBuffer sb = new StringBuffer(".*/");
+    final StringBuffer sb = new StringBuffer(".*/");
     for (int i = 0; i < searchString.length(); i++) {
       sb.append("[");
       sb.append(searchString.charAt(i));

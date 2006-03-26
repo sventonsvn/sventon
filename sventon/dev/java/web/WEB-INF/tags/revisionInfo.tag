@@ -43,12 +43,12 @@
           <th>Revision</th>
         </tr>
       <%
-        List latestPathsList = new ArrayList(latestChangedPaths.keySet());
+        final List latestPathsList = new ArrayList(latestChangedPaths.keySet());
         Collections.sort(latestPathsList);
-        Iterator latestLogIterator = latestPathsList.iterator();
+        final Iterator latestLogIterator = latestPathsList.iterator();
         while (latestLogIterator.hasNext()) {
-          SVNLogEntryPath logEntryPath = (SVNLogEntryPath) latestChangedPaths.get(latestLogIterator.next());
-          LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
+          final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) latestChangedPaths.get(latestLogIterator.next());
+          final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
       %>
       <tr>
         <c:url value="goto.svn" var="goToUrl">

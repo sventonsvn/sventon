@@ -15,7 +15,7 @@ public class SventonException extends Exception {
    * @param message the detail message. The detail message is saved for
    *                later retrieval by the {@link #getMessage()} method.
    */
-  public SventonException(String message) {
+  public SventonException(final String message) {
     super(message);
   }
 
@@ -32,7 +32,7 @@ public class SventonException extends Exception {
    *                permitted, and indicates that the cause is nonexistent or
    *                unknown.)
    */
-  public SventonException(String message, Throwable cause) {
+  public SventonException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
@@ -49,7 +49,7 @@ public class SventonException extends Exception {
    *              permitted, and indicates that the cause is nonexistent or
    *              unknown.)
    */
-  public SventonException(Throwable cause) {
+  public SventonException(final Throwable cause) {
     super(cause);
   }
 }

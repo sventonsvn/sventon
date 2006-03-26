@@ -17,6 +17,7 @@
         <prop key="svn.configpath"></prop>
         <prop key="svn.uid"></prop>
         <prop key="svn.pwd"></prop>
+        <prop key="svn.useIndex">false</prop>
       </props>
     </property>
     <property name="locations">
@@ -245,6 +246,9 @@
     </property>
     <property name="configuredPWD">
       <value>${svn.pwd}</value>
+    </property>
+    <property name="indexUsed">
+      <value>${svn.useIndex}</value>
     </property>
   </bean>
 

@@ -65,13 +65,13 @@ public class DiffCommand {
 
     // Reverse to get latest first
     Collections.reverse(revisions);
-    Iterator revisionIterator = revisions.iterator();
+    final Iterator revisionIterator = revisions.iterator();
     // Grab the latest..
-    SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();
+    final SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();
     this.toPath = toRevision.getPath();
     this.toRevision = toRevision.getRevision();
     // ..and the previous one...
-    SVNFileRevision fromRevision = (SVNFileRevision) revisionIterator.next();
+    final SVNFileRevision fromRevision = (SVNFileRevision) revisionIterator.next();
     this.fromPath = fromRevision.getPath();
     this.fromRevision = fromRevision.getRevision();
   }

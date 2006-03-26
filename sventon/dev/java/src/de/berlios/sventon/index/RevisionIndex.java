@@ -49,7 +49,8 @@ public class RevisionIndex implements Serializable {
    * @param url The url to index.
    */
   protected RevisionIndex(final String url) {
-    index = Collections.checkedSet(new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(FULL_NAME, false)), RepositoryEntry.class);
+    index = Collections.checkedSet(
+        new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(FULL_NAME, false)), RepositoryEntry.class);
     this.url = url;
   }
 
@@ -115,7 +116,7 @@ public class RevisionIndex implements Serializable {
    * @param recursive Acts recursively if <code>true</code>
    */
   protected void remove(final String path, final boolean recursive) {
-    List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
+    final List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
 
     for (RepositoryEntry entry : index) {
       if (recursive) {

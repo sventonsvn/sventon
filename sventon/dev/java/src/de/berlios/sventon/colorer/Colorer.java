@@ -30,6 +30,5 @@ public interface Colorer {
    *         be formatted with HTML entities to be properly displayed on the web.
    *         If given content was <code>null</code> an empty string will be returned.
    */
-  String getColorizedContent(final String content, final String fileExtension)
-      throws IOException;
+  String getColorizedContent(final String content, final String fileExtension) throws IOException;
 }

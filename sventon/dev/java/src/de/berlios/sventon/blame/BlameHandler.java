@@ -47,7 +47,7 @@ public class BlameHandler implements ISVNAnnotateHandler {
    * @param line     The acutal line.
    */
   public void handleLine(Date date, long revision, String author, String line) {
-    BlameLine blameLine = new BlameLine(date, revision, author);
+    final BlameLine blameLine = new BlameLine(date, revision, author);
     if (logger.isDebugEnabled()) {
       logger.debug("Added blame line: " + blameLine);
     }
@@ -73,8 +73,7 @@ public class BlameHandler implements ISVNAnnotateHandler {
    * @throws IOException if exception occurs while colorizing blame content.
    * @throws IllegalStateException if content already colorized.
    */
-  public void colorizeContent(final Colorer colorer, final String filename)
-      throws IOException {
+  public void colorizeContent(final Colorer colorer, final String filename) throws IOException {
     if (isContentColorized) {
       throw new IllegalStateException("Blame content already colorized.");
     }

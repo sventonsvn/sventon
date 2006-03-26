@@ -31,29 +31,33 @@ import java.util.*;
  * entries exceeds max page siz, {@link #pageSize}. Paged log entries are
  * stored in the user HTTP session using key <code>sventon.logEntryPages</code>.
  * The type of this object is <code>List<List<SVNLogEntry>></code>.
- * 
+ *
  * @author patrikfr@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
-  //Max entries / page
+  /**
+   * Max entries per page, default set to 50.
+   */
   private int pageSize = 50;
-  
+
   /**
    * Set page size, this is the max number of log entires shown at a time
+   *
    * @param pageSize Page size.
    */
   public void setPageSize(final int pageSize) {
     this.pageSize = pageSize;
   }
- 
+
 
   /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     String path = svnCommand.getPath();
 
@@ -68,10 +72,10 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     }
 
     if (nextPathParam == null || nextRevParam == null) {
-      targetPaths = new String[] { path };
+      targetPaths = new String[]{path};
       revNumber = revision == HEAD ? getHeadRevision() : revision.getNumber();
     } else {
-      targetPaths = new String[] { nextPathParam };
+      targetPaths = new String[]{nextPathParam};
       if ("HEAD".equals(nextRevParam)) {
         revNumber = getHeadRevision();
       } else {
@@ -96,13 +100,13 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
       }
     });
 
-    SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
+    final SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
     String pathAtRevision = targetPaths[0];
 
     for (SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
-      Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
-      Set<String> changedPaths = m.keySet();
+      final Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
+      final Set<String> changedPaths = m.keySet();
       for (String entryPath : changedPaths) {
         int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
         if (i == -1) { // Same path
@@ -120,13 +124,12 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     }
 
     logger.debug("Create model");
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
 
     model.put("logEntriesPage", logEntryBundles);
     model.put("pageSize", pageSize);
     model.put("isFile", nodeKind == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
-    model.put("properties", new HashMap()); // TODO: Replace with valid entry properties
     return new ModelAndView("showlog", model);
   }
 }

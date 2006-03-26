@@ -41,14 +41,15 @@ public class DiffController extends AbstractSVNTemplateController implements Con
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     logger.debug("Diffing file contents for: " + svnCommand);
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
 
     try {
-      DiffCommand diffCommand = new DiffCommand(request.getParameterValues("rev"));
+      final DiffCommand diffCommand = new DiffCommand(request.getParameterValues("rev"));
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
       model.putAll(diffInternal(repository, diffCommand));
@@ -66,27 +67,28 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    * @param diffCommand The <code>DiffCommand</code> including to/from diff instructions.
    * @return A populated map containing the following info:
    * <ul>
-   * <li><i>isBinary</i>, indicates wether any of the entries were a binary file.</li>
+   * <li><i>isBinary</i>, indicates whether any of the entries were a binary file.</li>
    * <li><i>leftFileContents</i>, <code>List</code> of <code>SourceLine</code>s for the left (from) file.</li>
    * <li><i>rightFileContents</i>, <code>List</code> of <code>SourceLine</code>s for the right (to) file.</li>
    * </ul>
    * @throws DiffException if unable to produce diff.
    * @throws SVNException if a subversion error occurs.
    */
-  protected Map<String, Object> diffInternal(SVNRepository repository, DiffCommand diffCommand) throws DiffException, SVNException {
+  protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand)
+      throws DiffException, SVNException {
 
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    Map<String, Object> model = new HashMap<String, Object>();
-    String leftLines = null;
-    String rightLines = null;
+    final Map<String, Object> model = new HashMap<String, Object>();
+    final String leftLines;
+    final String rightLines;
 
-    HashMap fromFileProperties = new HashMap();
-    HashMap toFileProperties = new HashMap();
+    final HashMap fromFileProperties = new HashMap();
+    final HashMap toFileProperties = new HashMap();
 
     // Get the file's properties without requesting the content.
     // Make sure files are not in binary format.
     repository.getFile(diffCommand.getFromPath(), diffCommand.getFromRevision(), fromFileProperties, null);
-    boolean isTextType = SVNProperty.isTextMimeType((String) fromFileProperties.get(SVNProperty.MIME_TYPE));
+    final boolean isTextType = SVNProperty.isTextMimeType((String) fromFileProperties.get(SVNProperty.MIME_TYPE));
     repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), toFileProperties, null);
 
     if (isTextType && SVNProperty.isTextMimeType((String) toFileProperties.get(SVNProperty.MIME_TYPE))) {
@@ -111,11 +113,12 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), null, outStream);
       rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
-      KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
+      final KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
           getRepositoryConfiguration().getUrl() + diffCommand.getFromPath());
-      KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
+      final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
           getRepositoryConfiguration().getUrl() + diffCommand.getToPath());
-      Diff differ = new Diff(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
+
+      final Diff differ = new Diff(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
       model.put("leftFileContents", differ.getLeft());
       model.put("rightFileContents", differ.getRight());
     } else {
