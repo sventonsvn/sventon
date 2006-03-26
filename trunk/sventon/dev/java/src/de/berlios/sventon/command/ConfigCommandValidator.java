@@ -33,7 +33,7 @@ public class ConfigCommandValidator implements Validator {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Controls wether repository connection should be tested or not.
+   * Controls whether repository connection should be tested or not.
    */
   private boolean testConnection = true;
 
@@ -58,23 +58,24 @@ public class ConfigCommandValidator implements Validator {
   }
 
   public void validate(Object obj, Errors errors) {
-    ConfigCommand command = (ConfigCommand) obj;
+    final ConfigCommand command = (ConfigCommand) obj;
 
     // Validate the 'configPath'
     String configPath = command.getConfigPath();
     logger.info("configpath is: " + configPath);
+
     if (configPath != null) {
       if (configPath.equals("")) {
         logger.info("Setting configPath to: " + System.getProperty("file.separator"));
         configPath += System.getProperty("file.separator");
       }
-      File configDir = new File(configPath);
+      final File configDir = new File(configPath);
       if (!configDir.isDirectory()) {
         logger.warn("configPath is not a directory");
         errors.rejectValue("configPath", "config.error.illegal-path", "'" + configPath + "' is not a directory.");
       } else {
         if (!configDir.canWrite()) {
-          String msg = "No write permission to path '" + configPath + "'.";
+          final String msg = "No write permission to path '" + configPath + "'.";
           logger.warn(msg);
           errors.rejectValue("configPath", "config.error.no-write-permission", msg);
         }
@@ -82,27 +83,27 @@ public class ConfigCommandValidator implements Validator {
     }
 
     // Validate 'repositoryURL', 'username' and 'password'
-    String repositoryURL = command.getRepositoryURL();
+    final String repositoryURL = command.getRepositoryURL();
 
     if (repositoryURL != null) {
-      String trimmedURL = repositoryURL.trim();
+      final String trimmedURL = repositoryURL.trim();
       SVNURL url = null;
       try {
         url = SVNURL.parseURIDecoded(trimmedURL);
       } catch (SVNException ex) {
-        String msg = "Invalid repository URL: " + repositoryURL;
+        final String msg = "Invalid repository URL: " + repositoryURL;
         logger.warn(msg);
         errors.rejectValue("repositoryURL", "config.error.illegal-url", msg);
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
-        RepositoryConfiguration config = new RepositoryConfiguration();
+        final RepositoryConfiguration config = new RepositoryConfiguration();
         config.setRepositoryRoot(trimmedURL);
         config.setConfiguredUID(command.getUsername());
         config.setConfiguredPWD(command.getPassword());
         config.setSVNConfigurationPath(command.getConfigPath());
         try {
-          SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(config);
+          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(config);
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);

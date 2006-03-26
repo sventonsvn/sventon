@@ -39,11 +39,12 @@ public class DiffPreviousController extends DiffController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
 
     logger.debug("Diffing file contents for: " + svnCommand);
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
 
     try {
       long commitRev = Long.parseLong(request.getParameter("commitrev"));
@@ -53,8 +54,8 @@ public class DiffPreviousController extends DiffController {
         throw new DiffException("Entry has no history in current branch");
       }
       //noinspection unchecked
-      List<SVNFileRevision> revisions = (List) repository.getFileRevisions(svnCommand.getPath(), null, 0, commitRev);
-      DiffCommand diffCommand = new DiffCommand(revisions);
+      final List<SVNFileRevision> revisions = (List) repository.getFileRevisions(svnCommand.getPath(), null, 0, commitRev);
+      final DiffCommand diffCommand = new DiffCommand(revisions);
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
       model.putAll(diffInternal(repository, diffCommand));

@@ -67,10 +67,10 @@ public final class KeywordHandler {
   @SuppressWarnings({"unchecked"})
   public KeywordHandler(final Map properties, final String url) {
 
-    String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
-    String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
-    String revision = (String) properties.get(SVNProperty.COMMITTED_REVISION);
-    String keywords = (String) properties.get(SVNProperty.KEYWORDS);
+    final String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
+    final String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
+    final String revision = (String) properties.get(SVNProperty.COMMITTED_REVISION);
+    final String keywords = (String) properties.get(SVNProperty.KEYWORDS);
     keywordsMap = SVNTranslator.computeKeywords(keywords, url, author, date, revision);
   }
 
@@ -83,9 +83,9 @@ public final class KeywordHandler {
   public String substitute(String content) throws UnsupportedEncodingException {
     logger.debug("Substituting keywords");
     for (String keyword : keywordsMap.keySet()) {
-      String value = new String(keywordsMap.get(keyword), "UTF-8");
+      final String value = new String(keywordsMap.get(keyword), "UTF-8");
       logger.debug(keyword + "=" + value);
-      Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
+      final Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
       content = keywordPattern.matcher(content).replaceAll("\\$"
           + keyword + ": " + value + " \\$");
     }

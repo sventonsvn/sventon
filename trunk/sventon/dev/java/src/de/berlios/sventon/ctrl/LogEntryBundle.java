@@ -14,21 +14,27 @@ package de.berlios.sventon.ctrl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 /**
+ * LogEntryBundle
+ *
  * @author patrikfr@users.berlios.de
  */
 public class LogEntryBundle {
 
-  /** Subversion log entry. */
+  /**
+   * Subversion log entry.
+   */
   private SVNLogEntry svnLogEntry;
 
-  /** The path at revision. */
+  /**
+   * The path at revision.
+   */
   private String pathAtRevision;
-  
+
   /**
    * @param logEntry
    * @param pathAtRevision
    */
-  public LogEntryBundle(SVNLogEntry logEntry, String pathAtRevision) {
+  public LogEntryBundle(final SVNLogEntry logEntry, final String pathAtRevision) {
     svnLogEntry = logEntry;
     this.pathAtRevision = pathAtRevision;
   }
@@ -46,5 +52,5 @@ public class LogEntryBundle {
   public SVNLogEntry getSvnLogEntry() {
     return svnLogEntry;
   }
-  
+
 }

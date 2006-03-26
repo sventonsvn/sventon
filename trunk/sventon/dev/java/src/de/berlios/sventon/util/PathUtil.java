@@ -33,8 +33,8 @@ public class PathUtil {
       return "";
     }
 
-    String[] splittedString = fullpath.split("/");
-    int length = splittedString.length;
+    final String[] splittedString = fullpath.split("/");
+    final int length = splittedString.length;
     if (length == 0) {
       return "";
     } else {
@@ -75,7 +75,7 @@ public class PathUtil {
       return "";
     }
 
-    int lastIndex = fullpath.lastIndexOf('/');
+    final int lastIndex = fullpath.lastIndexOf('/');
     if (lastIndex == -1) {
       return "";
     } else {
@@ -102,7 +102,7 @@ public class PathUtil {
       work = work.substring(0, work.length() - 1);
     }
 
-    int lastIndex = work.lastIndexOf('/');
+    final int lastIndex = work.lastIndexOf('/');
     if (lastIndex == -1) {
       return "";
     } else {

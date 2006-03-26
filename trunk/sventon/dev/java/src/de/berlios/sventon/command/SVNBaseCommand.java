@@ -137,10 +137,10 @@ public class SVNBaseCommand {
    * @return The model map.
    */
   public Map<String, Object> asModel() {
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("revision", getRevision());
-    m.put("path", getPath());
-    return m;
+    final Map<String, Object> model = new HashMap<String, Object>();
+    model.put("revision", getRevision());
+    model.put("path", getPath());
+    return model;
   }
 
   /**

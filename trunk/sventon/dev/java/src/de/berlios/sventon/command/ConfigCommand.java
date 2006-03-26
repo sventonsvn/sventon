@@ -27,6 +27,7 @@ public class ConfigCommand {
   private String username;
   private String password;
   private String configPath;
+  private boolean useIndex;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -60,10 +61,19 @@ public class ConfigCommand {
     return this.configPath;
   }
 
+  public void setIndexUsed(final boolean useIndex) {
+    this.useIndex = useIndex;
+  }
+
+  public boolean isIndexUsed() {
+    return this.useIndex;
+  }
+
   /**
    * {@inheritDoc}
    */
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }
+
 }

@@ -22,7 +22,7 @@ public class RevisionIndexException extends SventonException {
    *                permitted, and indicates that the cause is nonexistent or
    *                unknown.)
    */
-  public RevisionIndexException(String message, Throwable cause) {
+  public RevisionIndexException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

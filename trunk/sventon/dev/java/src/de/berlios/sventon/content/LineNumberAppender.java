@@ -91,14 +91,13 @@ public final class LineNumberAppender {
    * @throws IOException if unable to read given string.
    */
   public String appendTo(final String content) throws IOException {
-    BufferedReader reader = new BufferedReader(new StringReader(content));
-    StringBuilder sb = new StringBuilder();
+    final BufferedReader reader = new BufferedReader(new StringReader(content));
+    final StringBuilder sb = new StringBuilder();
     String tempLine;
     int lineCount = 0 + offset;
     while ((tempLine = reader.readLine()) != null) {
       sb.append(embedStart);
-      sb.append(StringUtils.leftPad(String.valueOf(++lineCount),
-          paddingLength, paddingCharacter));
+      sb.append(StringUtils.leftPad(String.valueOf(++lineCount), paddingLength, paddingCharacter));
       sb.append(embedEnd);
       sb.append(tempLine);
       sb.append(System.getProperty("line.separator"));

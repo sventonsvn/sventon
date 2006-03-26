@@ -47,12 +47,11 @@ public class JHighlightColorer implements Colorer {
   /**
    * {@inheritDoc}
    */
-  public String getColorizedContent(final String content, final String fileExtension)
-      throws IOException {
+  public String getColorizedContent(final String content, final String fileExtension) throws IOException {
 
     logger.debug("Colorizing content, file extension: " + fileExtension);
 
-    Renderer renderer = getRenderer(fileExtension);
+    final Renderer renderer = getRenderer(fileExtension);
 
     if (content == null) {
       return "";

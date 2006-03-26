@@ -33,10 +33,11 @@ public class FlattenController extends AbstractSVNTemplateController implements 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-      HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+      final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
     
-    List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Make sure the path starts with a slash as that
     // is the path structure of the revision index.
@@ -51,7 +52,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     logger.debug(entries.size() + " entries found");
 
     logger.debug("Create model");
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", entries);
     model.put("isFlatten", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);

@@ -13,7 +13,6 @@ package de.berlios.sventon.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -25,15 +24,10 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtil {
 
   /**
-   * Constuctor.
-   */
-  public ZipUtil() {
-  }
-
-  /**
    * Zips the given directory recursively.
+   *
    * @param directory The directory to zip.
-   * @param zos The output stream to write to.
+   * @param zos       The output stream to write to.
    */
   public void zipDir(final String directory, final ZipOutputStream zos) {
     //create a new File object based on the directory we have to zip
@@ -42,8 +36,9 @@ public class ZipUtil {
 
   /**
    * Zips the given directory recursively.
+   *
    * @param directory The directory to zip.
-   * @param zos The output stream to write to.
+   * @param zos       The output stream to write to.
    */
   public void zipDir(final File directory, final ZipOutputStream zos) {
     // TODO: Seems like the ZipEntry does not handle long file names in directories.
@@ -53,13 +48,15 @@ public class ZipUtil {
       if (!directory.isDirectory()) {
         throw new IllegalArgumentException("Argument is not a directory: " + directory);
       }
+
       //get a listing of the directory content
-      String[] dirList = directory.list();
-      byte[] readBuffer = new byte[4096];
+      final String[] dirList = directory.list();
+      final byte[] readBuffer = new byte[4096];
       int bytesIn = 0;
+
       //loop through directory, and zip the files
-      for (int i = 0; i < dirList.length; i++) {
-        File fileEntry = new File(directory, dirList[i]);
+      for (String aDirList : dirList) {
+        final File fileEntry = new File(directory, aDirList);
         if (fileEntry.isDirectory()) {
           //if the File object is a directory, call this
           //function again to add its content recursively
@@ -67,8 +64,8 @@ public class ZipUtil {
           //loop again
           continue;
         }
-        FileInputStream fis = new FileInputStream(fileEntry);
-        ZipEntry anEntry = new ZipEntry(fileEntry.getAbsolutePath());
+        final FileInputStream fis = new FileInputStream(fileEntry);
+        final ZipEntry anEntry = new ZipEntry(fileEntry.getAbsolutePath());
         //place the zip entry in the ZipOutputStream object
         zos.putNextEntry(anEntry);
         //now write the content of the file to the ZipOutputStream
@@ -85,8 +82,9 @@ public class ZipUtil {
 
   /**
    * Zips the given file.
+   *
    * @param file The file to zip.
-   * @param zos The output stream to write to.
+   * @param zos  The output stream to write to.
    */
   public void zipFile(final String file, final ZipOutputStream zos) {
     //create a new File object based on the file we have to zip
@@ -95,18 +93,21 @@ public class ZipUtil {
 
   /**
    * Zips the given file.
+   *
    * @param file The file to zip.
-   * @param zos The output stream to write to.
+   * @param zos  The output stream to write to.
    */
   public void zipFile(final File file, final ZipOutputStream zos) {
     try {
       if (!file.isFile()) {
         throw new IllegalArgumentException("Argument is not a file: " + file);
       }
-      byte[] readBuffer = new byte[2156];
+
+      final byte[] readBuffer = new byte[2156];
       int bytesIn = 0;
-      FileInputStream fis = new FileInputStream(file);
-      ZipEntry anEntry = new ZipEntry(file.getName());
+
+      final FileInputStream fis = new FileInputStream(file);
+      final ZipEntry anEntry = new ZipEntry(file.getName());
       //place the zip entry in the ZipOutputStream object
       zos.putNextEntry(anEntry);
       //now write the content of the file to the ZipOutputStream
@@ -121,9 +122,11 @@ public class ZipUtil {
     }
   }
 
+/*
   public static void main(String[] args) throws Exception {
     ZipOutputStream zip = new ZipOutputStream(new FileOutputStream("/test.zip"));
     new ZipUtil().zipDir("/test", zip);
     zip.close();
   }
+*/
 }

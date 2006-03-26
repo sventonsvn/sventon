@@ -23,10 +23,13 @@ import java.util.Properties;
 public final class ImageUtil {
 
   /**
-   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image.
+   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image, default set to 200.
    */
   private int maxThumbnailSize = 200;
 
+  /**
+   * Mime type / file type mappings.
+   */
   private Properties mimeMappings;
 
   /**
@@ -41,12 +44,14 @@ public final class ImageUtil {
    * @param image The <code>Image<code> instance.
    * @param type
    * @return The buffered image
+   * @see java.awt.image.BufferedImage
    */
   public BufferedImage toBufferedImage(final Image image, final int type) {
     int width = image.getWidth(null);
     int height = image.getHeight(null);
-    BufferedImage result = new BufferedImage(width, height, type);
-    Graphics2D g = result.createGraphics();
+
+    final BufferedImage result = new BufferedImage(width, height, type);
+    final Graphics2D g = result.createGraphics();
     g.drawImage(image, 0, 0, null);
     g.dispose();
     return result;

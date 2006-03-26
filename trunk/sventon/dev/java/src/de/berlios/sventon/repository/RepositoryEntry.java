@@ -50,16 +50,16 @@ public class RepositoryEntry implements Serializable {
    * @param lock       The lock, null if n/a.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
-  public RepositoryEntry(final SVNDirEntry entry,
-                         final String entryPath,
-                         final SVNLock lock) {
+  public RepositoryEntry(final SVNDirEntry entry, final String entryPath, final SVNLock lock) {
 
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
     }
+
     if (entry == null) {
       throw new IllegalArgumentException("entry cannot be null.");
     }
+
     this.entryPath = entryPath;
     this.lock = lock;
     copyEntry(entry);

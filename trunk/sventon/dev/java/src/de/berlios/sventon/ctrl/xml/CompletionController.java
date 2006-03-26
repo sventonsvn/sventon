@@ -49,10 +49,11 @@ public class CompletionController extends AbstractSVNTemplateController implemen
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException {
 
-    List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     final String searchString = request.getParameter("complete");
     final String startDir = request.getParameter("startDir");
     logger.debug("Searching index for: " + searchString);
@@ -60,9 +61,9 @@ public class CompletionController extends AbstractSVNTemplateController implemen
     entries.addAll(getRevisionIndexer().findPattern(".*/" + searchString + ".*", startDir, 10));
 
     // Print the XML document
-    Format format = Format.getPrettyFormat();
+    final Format format = Format.getPrettyFormat();
     format.setEncoding(encoding);
-    XMLOutputter outputter = new XMLOutputter(format);
+    final XMLOutputter outputter = new XMLOutputter(format);
 
     try {
       response.setContentType("text/xml");
@@ -74,10 +75,16 @@ public class CompletionController extends AbstractSVNTemplateController implemen
     return null;
   }
 
+  /**
+   * Creates the XML document.
+   *
+   * @param entries The repository entries.
+   * @return The XML document.
+   */
   private Document createXMLDocument(final List<RepositoryEntry> entries) {
-    Element items = new Element("items");
+    final Element items = new Element("items");
     for (RepositoryEntry entry : entries) {
-      Element item = new Element("item");
+      final Element item = new Element("item");
       item.setText(entry.getFullEntryName());
       items.addContent(item);
     }

@@ -41,21 +41,20 @@ public class Diff {
    * @throws DiffException if IO error occurs.
    */
   public Diff(final String leftContent, final KeywordHandler leftKeywordHandler,
-              final String rightContent, final KeywordHandler rightKeywordHandler)
-      throws DiffException {
+              final String rightContent, final KeywordHandler rightKeywordHandler) throws DiffException {
 
     String tempLine;
     BufferedReader reader;
 
-    List<String> leftSourceLines = new ArrayList<String>();
-    List<String> rightSourceLines = new ArrayList<String>();
+    final List<String> leftSourceLines = new ArrayList<String>();
+    final List<String> rightSourceLines = new ArrayList<String>();
 
-    InputStream leftStream = new ByteArrayInputStream(leftContent.getBytes());
-    InputStream rightStream = new ByteArrayInputStream(rightContent.getBytes());
+    final InputStream leftStream = new ByteArrayInputStream(leftContent.getBytes());
+    final InputStream rightStream = new ByteArrayInputStream(rightContent.getBytes());
 
     try {
-      ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, Diff.ENCODING);
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, Diff.ENCODING);
       diffProducer.doNormalDiff(diffResult);
       diffResultString = diffResult.toString();
 
@@ -63,8 +62,9 @@ public class Diff {
         throw new DiffException("Files are identical.");
       }
 
-      String leftString;
-      String rightString;
+      final String leftString;
+      final String rightString;
+
       // Append keywords, if any.
       if (leftKeywordHandler != null) {
         leftString = leftKeywordHandler.substitute(leftContent);
@@ -78,7 +78,7 @@ public class Diff {
       }
 
       // Append line numbers
-      LineNumberAppender appender = new LineNumberAppender();
+      final LineNumberAppender appender = new LineNumberAppender();
       appender.setEmbedStart("<span class=\"sventonLineNo\">");
       appender.setEmbedEnd(":&nbsp;</span>");
       appender.setPadding(5);
@@ -95,13 +95,13 @@ public class Diff {
       throw new DiffException("Unable to produce diff.");
     }
 
-    List<DiffSegment> diffActions = DiffResultParser.parseNormalDiffResult(diffResultString);
+    final List<DiffSegment> diffActions = DiffResultParser.parseNormalDiffResult(diffResultString);
 
     leftLinesList = processLeft(leftSourceLines, diffActions);
     rightLinesList = processRight(rightSourceLines, diffActions);
 
     if (leftLinesList.size() != rightLinesList.size()) {
-      StringBuffer sb = new StringBuffer("Error while applying diff result!");
+      final StringBuffer sb = new StringBuffer("Error while applying diff result!");
       sb.append("\nLine diff count: ");
       sb.append(leftLinesList.size() - rightLinesList.size());
       sb.append("\nDiffresult:\n");
@@ -114,15 +114,22 @@ public class Diff {
     }
   }
 
-  private List<SourceLine> processLeft(final List<String> sourceLines, final List<DiffSegment> diffActions) {
-    List<SourceLine> resultLines = new ArrayList<SourceLine>();
+  /**
+   * Process left (from) file.
+   *
+   * @param sourceLines Source lines.
+   * @param diffSegments Diffing segments.
+   * @return List of source lines
+   */
+  private List<SourceLine> processLeft(final List<String> sourceLines, final List<DiffSegment> diffSegments) {
+    final List<SourceLine> resultLines = new ArrayList<SourceLine>();
     for (String tempLine : sourceLines) {
       resultLines.add(new SourceLine(DiffAction.u, tempLine));
     }
 
     int offset = 0;
 
-    for (DiffSegment diffAction : diffActions) {
+    for (DiffSegment diffAction : diffSegments) {
       if (DiffAction.a == diffAction.getAction()) {
         // Apply diff action ADD
         int addedLines = 0;
@@ -156,15 +163,22 @@ public class Diff {
     return resultLines;
   }
 
-  private List<SourceLine> processRight(final List<String> sourceLines, final List<DiffSegment> diffActions) {
-    List<SourceLine> resultLines = new ArrayList<SourceLine>();
+  /**
+   * Process right (to) file.
+   *
+   * @param sourceLines Source lines.
+   * @param diffSegments Diffing segments.
+   * @return List of source lines
+   */
+  private List<SourceLine> processRight(final List<String> sourceLines, final List<DiffSegment> diffSegments) {
+    final List<SourceLine> resultLines = new ArrayList<SourceLine>();
     for (String tempLine : sourceLines) {
       resultLines.add(new SourceLine(DiffAction.u, tempLine));
     }
 
     int offset = 0;
 
-    for (DiffSegment diffAction : diffActions) {
+    for (DiffSegment diffAction : diffSegments) {
       if (DiffAction.a == diffAction.getAction()) {
         // Apply diff action ADD
         for (int i = diffAction.getRightLineIntervalStart(); i <= diffAction.getRightLineIntervalEnd(); i++) {

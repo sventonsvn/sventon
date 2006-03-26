@@ -136,10 +136,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /**
    * {@inheritDoc}
    */
-  public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object command,
-                             BindException exception) {
+  public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response, Object command,
+                             final BindException exception) {
 
-    SVNBaseCommand svnCommand = (SVNBaseCommand) command;
+    final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If repository config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
@@ -152,9 +152,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-      SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
+      final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       updateHeadRevisionCache(repository);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, request, response, exception);
@@ -162,14 +162,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
       if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
-        Map<String, Object> model = new HashMap<String, Object>();
+        final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", configuration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(getHeadRevision()) : null));
-        model.put("isHead", requestedRevision == HEAD);
         model.put("latestCommitInfo", getHeadRevisionInfo());
+        model.put("isHead", requestedRevision == HEAD);
         model.put("isIndexing", getRevisionIndexer().isIndexing());
+        model.put("useIndex", configuration.isIndexUsed());
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -223,7 +224,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @throws SVNException if subversion error.
    */
   private synchronized void updateHeadRevisionCache(final SVNRepository repository) throws SVNException {
-    long latestRevision = repository.getLatestRevision();
+    final long latestRevision = repository.getLatestRevision();
 
     if (latestRevision != cachedRevision) {
       logger.debug("Updating HEAD cache to revision: " + latestRevision);

@@ -59,7 +59,7 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
-
+  public static final String PROPERTY_KEY_USE_INDEX = "svn.useIndex";
 
   protected ConfigurationController() {
     // TODO: Move to XML-file?
@@ -87,8 +87,10 @@ public class ConfigurationController extends AbstractFormController {
     this.scheduler = scheduler;
   }
 
-  protected ModelAndView showForm(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                  BindException e) throws IOException {
+  protected ModelAndView showForm(final HttpServletRequest httpServletRequest,
+                                  final HttpServletResponse httpServletResponse, final BindException e)
+      throws IOException {
+
     logger.debug("showForm() started");
     logger.info("sventon configuration ok: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
@@ -108,8 +110,10 @@ public class ConfigurationController extends AbstractFormController {
     }
   }
 
-  protected ModelAndView processFormSubmission(HttpServletRequest httpServletRequest,
-                                               HttpServletResponse httpServletResponse, Object command, BindException exception) throws IOException {
+  protected ModelAndView processFormSubmission(final HttpServletRequest httpServletRequest,
+                                               final HttpServletResponse httpServletResponse, final Object command,
+                                               final BindException exception) throws IOException {
+
     logger.debug("processFormSubmission() started");
     logger.info("sventon configuration OK: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
@@ -118,6 +122,7 @@ public class ConfigurationController extends AbstractFormController {
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
       ConfigCommand confCommand = (ConfigCommand) command;
+      logger.debug("useIndex: " + confCommand.isIndexUsed());
 
       if (exception.hasErrors()) {
         //noinspection unchecked
@@ -128,40 +133,44 @@ public class ConfigurationController extends AbstractFormController {
 
       // Make sure the URL does not start or end with whitespace.
       String trimmedURL = confCommand.getRepositoryURL().trim();
-      Properties config = new Properties();
-      config.put(PROPERTY_KEY_REPOSITORY_URL, trimmedURL);
-      config.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
-      config.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
+      Properties configProperties = new Properties();
+      configProperties.put(PROPERTY_KEY_REPOSITORY_URL, trimmedURL);
+      configProperties.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
+      configProperties.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
+      configProperties.put(PROPERTY_KEY_USE_INDEX, Boolean.TRUE == confCommand.isIndexUsed() ? "true" : "false");
 
       String fileSeparator = System.getProperty("file.separator");
 
       // Make sure the configPath ends with a (back)slash
-      String confPath = confCommand.getConfigPath();
-      if (!confPath.endsWith(fileSeparator)) {
-        confPath += fileSeparator;
+      String configurationPath = confCommand.getConfigPath();
+      if (!configurationPath.endsWith(fileSeparator)) {
+        configurationPath += fileSeparator;
       }
-      config.put(PROPERTY_KEY_CONFIGPATH, confPath);
-      logger.debug(config.toString());
+      configProperties.put(PROPERTY_KEY_CONFIGPATH, configurationPath);
+      logger.debug(configProperties.toString());
 
-      File propFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
+      File propertyFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
           + fileSeparator + SVENTON_PROPERTIES);
-      logger.debug("Storing configuration properties in: " + propFile.getAbsolutePath());
+      logger.debug("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
-      FileOutputStream fos = new FileOutputStream(propFile);
-      config.store(fos, createPropertyFileComment());
-      fos.flush();
-      fos.close();
+      FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
+      configProperties.store(fileOutputStream, createPropertyFileComment());
+      fileOutputStream.flush();
+      fileOutputStream.close();
 
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
-      configuration.setSVNConfigurationPath(confPath);
+      configuration.setSVNConfigurationPath(configurationPath);
+      configuration.setIndexUsed(confCommand.isIndexUsed());
       configuration.setRepositoryRoot(trimmedURL);
 
-      try {
-        logger.debug("Starting index update job");
-        scheduler.triggerJob("indexUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-      } catch (SchedulerException sx) {
-        logger.warn(sx);
+      if (configuration.isIndexUsed()) {
+        try {
+          logger.debug("Starting index update job");
+          scheduler.triggerJob("indexUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+        } catch (SchedulerException sx) {
+          logger.warn(sx);
+        }
       }
 
       return new ModelAndView(new RedirectView("repobrowser.svn"));
@@ -169,7 +178,7 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   /**
-   * Creates the property file comment.
+   * Creates the property file comment, oldskool style.
    *
    * @return The comments.
    */
@@ -209,6 +218,16 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# individual sventon web user will be promted for user ID and password.        #\n");
     comments.append("# The latter approach brings several security issues, assigning a dedicated    #\n");
     comments.append("# Subversion user for sventon repository browsing is the preferred approach.   #\n");
+    comments.append("################################################################################\n\n");
+    comments.append("################################################################################\n");
+    comments.append("# Key: svn.useIndex                                                            #\n");
+    comments.append("#                                                                              #\n");
+    comments.append("# Description:                                                                 #\n");
+    comments.append("# Decides whether indexing feature is enabled or not. If true, the repository  #\n");
+    comments.append("# will be indexed which enables the search and directory flatten features.     #\n");
+    comments.append("# A good reason for disabling the index is if the repository is really large   #\n");
+    comments.append("# and contains a lot of branches and tags, or if the network connection to it  #\n");
+    comments.append("# is slow.                                                                     #\n");
     comments.append("################################################################################\n\n");
     return comments.toString();
   }

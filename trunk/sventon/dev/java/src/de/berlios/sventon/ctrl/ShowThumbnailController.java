@@ -34,18 +34,23 @@ import java.util.Map;
  */
 public class ShowThumbnailController extends AbstractSVNTemplateController implements Controller {
 
+  /**
+   * Image utility.
+   */
   private ImageUtil imageUtil;
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response, BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response, final BindException exception)
+      throws SventonException, SVNException {
+
     final String[] entryParameters = request.getParameterValues("entry");
 
     logger.debug("Create model");
-    Map<String, Object> model = new HashMap<String, Object>();
-    List<String> entries = new ArrayList<String>();
+    final Map<String, Object> model = new HashMap<String, Object>();
+    final List<String> entries = new ArrayList<String>();
 
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.

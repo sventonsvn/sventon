@@ -62,9 +62,9 @@ public class DiffProducer {
    */
   public void doNormalDiff(final OutputStream output) throws IOException {
     QDiffNormalGenerator.setup();
-    Map<String, String> generatorProperties = new HashMap<String, String>();
-    QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffNormalGenerator.TYPE, generatorProperties);
-    Writer writer = new OutputStreamWriter(output);
+    final Map<String, String> generatorProperties = new HashMap<String, String>();
+    final QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffNormalGenerator.TYPE, generatorProperties);
+    final Writer writer = new OutputStreamWriter(output);
     QDiffManager.generateTextDiff(this.left, this.right, this.encoding, writer, generator);
     writer.flush();
     writer.close();
@@ -78,9 +78,9 @@ public class DiffProducer {
    */
   public void doUniDiff(final OutputStream output) throws IOException {
     QDiffUniGenerator.setup();
-    Map<String, String> generatorProperties = new HashMap<String, String>();
-    QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffUniGenerator.TYPE, generatorProperties);
-    Writer writer = new OutputStreamWriter(output);
+    final Map<String, String> generatorProperties = new HashMap<String, String>();
+    final QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffUniGenerator.TYPE, generatorProperties);
+    final Writer writer = new OutputStreamWriter(output);
     QDiffManager.generateTextDiff(left, right, encoding, writer, generator);
     writer.flush();
     writer.close();

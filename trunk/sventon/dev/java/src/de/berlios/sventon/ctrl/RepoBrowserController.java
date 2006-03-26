@@ -36,23 +36,23 @@ import java.util.*;
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
 
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(SVNRepository repository, SVNBaseCommand svnCommand, SVNRevision revision,
-                                   HttpServletRequest request, HttpServletResponse response,
-                                   BindException exception) throws SventonException, SVNException {
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws SventonException, SVNException {
 
-    List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Update trailing / for path
     if (!svnCommand.getPath().endsWith("/")) {
       svnCommand.setPath(svnCommand.getPath() + "/");
     }
 
-    String completePath = svnCommand.getPath();
-    Map<String, SVNLock> locks = getLocks(repository, completePath);
+    final String completePath = svnCommand.getPath();
+    final Map<String, SVNLock> locks = getLocks(repository, completePath);
 
     logger.debug("Getting directory contents for: " + completePath);
-    HashMap properties = new HashMap();
-    Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
+    final HashMap properties = new HashMap();
+    final Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
     for (Object ent : entries) {
       SVNDirEntry entry = (SVNDirEntry) ent;
       dir.add(new RepositoryEntry(entry,
@@ -63,7 +63,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     Collections.sort(dir, new RepositoryEntryComparator(NAME, true));
 
     logger.debug("Create model");
-    Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", dir);
     logger.debug(properties);
     model.put("properties", properties);

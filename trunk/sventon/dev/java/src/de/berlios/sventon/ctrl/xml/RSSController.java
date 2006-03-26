@@ -76,12 +76,15 @@ public class RSSController extends AbstractController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
+      throws Exception {
+
     logger.debug("Getting RSS feed");
     response.setContentType(feedMimeType);
-    SyndFeedOutput output = new SyndFeedOutput();
 
-    SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final SyndFeedOutput output = new SyndFeedOutput();
+
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
@@ -108,7 +111,7 @@ public class RSSController extends AbstractController {
       }
     });
 
-    SyndFeed feed;
+    final SyndFeed feed;
 
     try {
       feed = new FeedGenerator().generateFeed(logEntries, getRequestURL(request));
@@ -117,7 +120,7 @@ public class RSSController extends AbstractController {
       output.output(feed, response.getWriter());
     }
     catch (FeedException ex) {
-      String errorMessage = "Unable to generate RSS feed";
+      final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
@@ -129,8 +132,15 @@ public class RSSController extends AbstractController {
     return null;
   }
 
-  private String getRequestURL(HttpServletRequest request) {
-    StringBuilder sb = new StringBuilder();
+  /**
+   * Gets the full request URL, including scheme, server name,
+   * server port and context path.
+   *
+   * @param request The request.
+   * @return The full URL.
+   */
+  private String getRequestURL(final HttpServletRequest request) {
+    final StringBuilder sb = new StringBuilder();
     sb.append(request.getScheme());
     sb.append("://");
     sb.append(request.getServerName());
@@ -174,7 +184,7 @@ public class RSSController extends AbstractController {
    *
    * @param feedMimeType The mime-type
    */
-  public void setFeedMimeType(String feedMimeType) {
+  public void setFeedMimeType(final String feedMimeType) {
     this.feedMimeType = feedMimeType;
   }
 

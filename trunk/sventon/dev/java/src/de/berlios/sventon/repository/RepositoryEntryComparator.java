@@ -64,6 +64,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
   private int sortType = 0;
 
   private static final Set<Integer> legalTypes = new HashSet<Integer>();
+
   static {
     legalTypes.add(NAME);
     legalTypes.add(AUTHOR);
@@ -99,8 +100,8 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
   public int compare(RepositoryEntry entry1, RepositoryEntry entry2) {
 
     if (groupDirs) {
-      RepositoryEntry.Kind kind1 = entry1.getKind();
-      RepositoryEntry.Kind kind2 = entry2.getKind();
+      final RepositoryEntry.Kind kind1 = entry1.getKind();
+      final RepositoryEntry.Kind kind2 = entry2.getKind();
       if (kind1 != kind2) // Not equal kinds, have to inspect.
       {
         if (RepositoryEntry.Kind.dir == kind1) {
