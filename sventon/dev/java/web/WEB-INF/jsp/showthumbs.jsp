@@ -23,13 +23,20 @@
   <body>
     <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
+    <p>
+      <table class="sventonHeader">
+        <tr>
+          <td>Show thumbnails - <b>${command.target}</b>&nbsp;</td>
+        </tr>
+      </table>
+    </p>
+
+    <br/>
+    <ui:functionLinks pageName="showThumbs"/>
+
     <c:url value="get.svn" var="downloadUrl" >
       <c:param name="revision" value="${command.revision}" />
     </c:url>
-    <p>
-      <table class="sventonHeader"><tr><td>Thumbnail view</td></tr></table>
-      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
-    </p>
 
     <br/>
 
