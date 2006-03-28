@@ -71,7 +71,7 @@
         <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
         <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
         <% } else if (LogEntryActionType.M == actionType) { %>
-        <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&rev=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
+        <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
         <% } else { %>
         <td><%= logEntryPath.getPath() %></td>
         <% } %>

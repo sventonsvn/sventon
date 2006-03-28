@@ -77,7 +77,7 @@
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
             <c:choose>
               <c:when test="${isFile}">
-              <td><input type="checkbox" name="rev" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
+              <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
                 <td><a href="${showUrl}">${entry.svnLogEntry.revision}</a></td>
               </c:when>
               <c:otherwise>
@@ -102,14 +102,14 @@
 
                 <jsp:useBean id="changedPaths" type="java.util.Map" />
                 <%
-                  Set paths = changedPaths.keySet();
-                  List pathsList = new java.util.ArrayList(paths);
+                  final Set paths = changedPaths.keySet();
+                  final List pathsList = new java.util.ArrayList(paths);
                   Collections.sort(pathsList);
-                  Iterator i = pathsList.iterator();
+                  final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {
-                    SVNLogEntryPath logEntryPath =
+                    final SVNLogEntryPath logEntryPath =
                       (SVNLogEntryPath)changedPaths.get(i.next());
-                    LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
+                    final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
                 %>
                 <tr>
 
@@ -122,7 +122,7 @@
                   <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else if (LogEntryActionType.M == actionType) { %>
-                  <td><a href="${diffUrl}&rev=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&rev=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+                  <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
                   <% } %>
