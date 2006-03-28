@@ -36,26 +36,37 @@ public class DiffCommand {
    *
    * @param parameters The string array containing exactly two entries in the format,
    *                   <i>pathAndFilename;;revision</i>.
+   *                   The first is assumed to be the <i>to (i.e. latest)</i> revision,
+   *                   the second to be the <i>from (i.e. oldest)</i> revision.
    * @throws DiffException            if unable to parse given input.
    * @throws IllegalArgumentException if argument is null or array does not contain
    *                                  exactly two entries.
    */
   public DiffCommand(final String[] parameters) throws DiffException {
-    String[] pathAndRevision;
+    final String[] toPathAndRevision;
+    final String[] fromPathAndRevision;
 
     if (parameters == null || parameters.length != 2) {
       throw new IllegalArgumentException("Parameter list must contain exactly two entries");
     }
 
     try {
-      pathAndRevision = parameters[0].split(";;");
-      toPath = pathAndRevision[0];
-      toRevision = Long.parseLong(pathAndRevision[1]);
-      pathAndRevision = parameters[1].split(";;");
-      fromPath = pathAndRevision[0];
-      fromRevision = Long.parseLong(pathAndRevision[1]);
-    } catch (Throwable ex) {
-      throw new DiffException("Unable to diff. Unable to parse revision and path", ex);
+      toPathAndRevision = parameters[0].split(";;");
+      toPath = toPathAndRevision[0];
+
+      fromPathAndRevision = parameters[1].split(";;");
+      fromPath = fromPathAndRevision[0];
+
+      if (toPathAndRevision.length == 1 && fromPathAndRevision.length == 1) {
+        // Assume HEAD revision
+        toRevision = -1;
+        fromRevision = -1;
+      } else {
+        toRevision = Long.parseLong(toPathAndRevision[1]);
+        fromRevision = Long.parseLong(fromPathAndRevision[1]);
+      }
+    } catch (Exception ex) {
+      throw new DiffException("Unable to diff. Unable to parse revision and path.", ex);
     }
   }
 
@@ -64,6 +75,8 @@ public class DiffCommand {
    * Used when diffing an entry to its previous entry in history.
    *
    * @param revisions The list containing at least two <code>SVNFileRevision</code> objects.
+   *                  The first is assumed to be the <i>to (i.e. latest)</i> revision,
+   *                  the second to be the <i>from (i.e. oldest)</i> revision.
    * @throws DiffException            if given list does not contain at least two entries.
    * @throws IllegalArgumentException if argument is null or array does not contain
    *                                  exactly two entries.

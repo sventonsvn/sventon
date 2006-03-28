@@ -22,28 +22,31 @@ function toggleEntryFields(formName) {
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-  var undefined;
-  var checkedEntry = false;
 
-  // Check if only one entry exists - and whether it's checked
-  if (formName.entry.length == undefined) {
-    checkedEntry = formName.entry.checked;
-  } else {
-    // More than one entry exists - Check if any are checked
-    for (i = 0; i < formName.entry.length; i++) {
-      if (formName.entry[i].checked == true) {
-        checkedEntry = true;
-        break;
-      }
-    }
+  // If no option value is selected, no action is taken.
+  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '') {
+    return false;
   }
-  
-  // If no value is selected or no entries selected, no action is taken.
-  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '' || !checkedEntry) return false;
 
+  // Check which action to execute
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
-    formName.action = 'showthumbs.svn'
-    return true;
+    // One or more entries must be checked
+    if (getCheckedCount(formName) < 1) {
+      return false
+    } else {
+      formName.action = 'showthumbs.svn'
+      return true;
+    }
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff' ) {
+    // Exactly two entries must be checked
+    if (getCheckedCount(formName) != 2)
+    {
+      alert('Two entries must be selected');
+      return false;
+    } else {
+      formName.action = 'diff.svn'
+      return true;
+    }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip' ) {
     //TODO:Change action to url for the zipController and return true
     //formName.action = 'zip'
@@ -124,14 +127,13 @@ function changeHideShowDisplay(theId) {
   return
 }
 
-
 // function to handle diff submissions
 function doDiff(formName) {
 
   // Check if any entry is checked
   var checkedEntry = 0;
-  for (i = 0; i < formName.rev.length; i++) {
-    if (formName.rev[i].type == 'checkbox' && formName.rev[i].checked == true) {
+  for (i = 0; i < formName.entry.length; i++) {
+    if (formName.entry[i].type == 'checkbox' && formName.entry[i].checked == true) {
       checkedEntry++;
     }
   }
@@ -149,10 +151,10 @@ function verifyCheckBox(checkbox) {
   var count = 0;
   var first = null;
   var form = checkbox.form;
-  for (i = 0 ; i < form.rev.length ; i++) {
-    if (form.rev[i].type == 'checkbox' && form.rev[i].checked) {
-      if (first == null && form.rev[i] != checkbox) {
-        first = form.rev[i];
+  for (i = 0 ; i < form.entry.length ; i++) {
+    if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
+      if (first == null && form.entry[i] != checkbox) {
+        first = form.entry[i];
       }
      count += 1;
     }
@@ -173,4 +175,23 @@ function flatteningWarning() {
 // function to display warning in case search string is too short.
 function searchWarning() {
   return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
+}
+
+// returns number of checked entries.
+function getCheckedCount(formName) {
+  var undefined;
+  var checkedEntriesCount = 0;
+
+  // Check if only one entry exists - and whether it's checked
+  if (formName.entry.length == undefined) {
+    checkedEntriesCount = formName.entry.checked ? 1 : 0;
+  } else {
+    // More than one entry exists - Check how many are checked
+    for (i = 0; i < formName.entry.length; i++) {
+      if (formName.entry[i].checked == true) {
+        checkedEntriesCount++;
+      }
+    }
+  }
+  return checkedEntriesCount;
 }

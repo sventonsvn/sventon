@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[477] Added: Possibility to diff entries in browser and search result view.
 [468] Added: Feature #1871 - Possibility to disable index.
 [465] Added: Upgraded to JHighlight 1.0.
 [450] Fixed: Flatten and search buttons are now disabled if not browsing HEAD.
