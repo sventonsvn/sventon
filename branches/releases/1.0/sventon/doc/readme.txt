@@ -1,4 +1,4 @@
--sventon release 1.0 RC1-
+-sventon release 1.0 RC2-
 
 sventon is a Subversion web client for Java Servlet containers.
 
@@ -7,14 +7,16 @@ required for deployment, thus Tomcat 5.5 is a good container companion.
 You'll also need a Subversion server set up and configured with a
 repository. For info on Subversion, see http://subversion.tigris.org
 
-A slightly modified verson of the JHighlight library from
-https://jhighlight.dev.java.net is used for syntax highlighting.
+The JHighlight library from https://jhighlight.dev.java.net is used for
+syntax highlighting.
 Currently the library supports colorization of the following file formats:
 * HTML/XHTML
 * Java
+* Groovy
+* C++
 * XML
 * LZX
-* RIFE (https://rife.dev.java.net)
+* RIFE (http://rifers.org)
 
 Installation:
 1. Download and unzip the file. 
@@ -22,11 +24,12 @@ Installation:
    on a standard Tomcat 5.5 installation this is in 'webapps'.
 3. Point your browser to http://<host:port>/svn
 4. Enter and submit basic configuration data.
-Note that the background indexing process of the file names in the
-repository HEAD will start at this point. If you have a repository with
-many files (and/or tags or branches), this can take quite some time.
-You will be able to use sventon during the indexing process, but the
-search and flatten buttons will be disabled until it's done.
+If the indexing feature has been configured to be active, the background
+indexing process of the file names in the repository HEAD will start at
+this point. If you have a repository with many files (and/or tags or branches),
+this can take quite some time. You will be able to use sventon during the
+indexing process, but the search and flatten buttons will be disabled until
+it's done.
 
 Support
 See http://sventon.berlios.de
