@@ -118,17 +118,17 @@
   color: rgb(147,147,147);
 }
 
-.cpp_doxygen_comment
+.cpp_doxygen_comment {
   color: rgb(147,147,147);
   font-style: italic;
 }
 
-.cpp_doxygen_tag
+.cpp_doxygen_tag {
   color: rgb(147,147,147);
   font-style: italic;
   font-weight: bold;
 }
 
-.cpp_preproc
+.cpp_preproc {
   color: purple;
 }
