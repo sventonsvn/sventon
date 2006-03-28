@@ -11,7 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite("Test for de.berlios.sventon.rss");
-    suite.addTestSuite(FeedGeneratorTest.class);
+    suite.addTestSuite(SyndFeedGeneratorTest.class);
     return suite;
   }
 
