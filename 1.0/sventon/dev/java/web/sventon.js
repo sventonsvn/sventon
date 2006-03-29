@@ -56,6 +56,11 @@ function doAction(formName) {
   return false;
 }
 
+// sets the value of the revision input text field to 'HEAD'
+function setHeadRevision() {
+  document.getElementById('revisionInput').value = 'HEAD'
+}
+
 // function to handle search submission
 function doSearch(formName) {
   // If no search string is entered, no action is taken.
