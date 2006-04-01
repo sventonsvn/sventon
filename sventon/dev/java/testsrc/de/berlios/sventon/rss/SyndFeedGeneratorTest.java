@@ -1,20 +1,17 @@
 package de.berlios.sventon.rss;
 
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.SyndFeedOutput;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 
-public class FeedGeneratorTest extends TestCase {
-
-  private static final String FEED_TYPE_RSS_20 = "rss_2.0";
+public class SyndFeedGeneratorTest extends TestCase {
 
   public void testGenerateFeedRSS20() throws Exception {
-    FeedGenerator generator = new FeedGenerator();
+    SyndFeedGenerator generator = new SyndFeedGenerator();
 
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths;
@@ -33,12 +30,10 @@ public class FeedGeneratorTest extends TestCase {
     changedPaths.put("/anotherfile4.def", new SVNLogEntryPath("/file4.def", 'R', "/file44.def", 1));
     logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another commit message."));
 
-    SyndFeed feed = generator.generateFeed(logEntries, "http://localhost:8888/svn/");
-    feed.setFeedType(FEED_TYPE_RSS_20);
-    SyndFeedOutput output = new SyndFeedOutput();
+    generator.generateFeed(logEntries, "http://localhost:8888/svn/");
 
     File tempFile = File.createTempFile("sventon-rss-test", null);
-    output.output(feed, tempFile);
+    generator.outputFeed(new FileWriter(tempFile));
 
     if (tempFile.exists()) {
       tempFile.delete();
@@ -49,7 +44,7 @@ public class FeedGeneratorTest extends TestCase {
   }
 
   public void testGetAbbreviatedCommitMessage() throws Exception {
-    FeedGenerator f = new FeedGenerator();
+    SyndFeedGenerator f = new SyndFeedGenerator();
     assertEquals("this is...", f.getAbbreviatedCommitMessage("this is a message", 10));
     assertEquals("this is a mes...", f.getAbbreviatedCommitMessage("this is a message", 16));
     assertEquals("this is a message", f.getAbbreviatedCommitMessage("this is a message", 17));

@@ -79,7 +79,7 @@
         <c:param name="path" value="${command.pathNoLeaf}" />
       </c:url>
 
-      <tr class="sventonEntry1">
+      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
         <td class="sventonCol1"></td>
         <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
         <td class="sventonCol3">
@@ -106,7 +106,7 @@
         <c:param name="path" value="${entry.fullEntryName}" />
       </c:url>
 
-      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
       <%
         totalSize += entry.getSize();
       %>
@@ -151,7 +151,7 @@
       <% rowCount++; %>
     </c:forEach>
 
-    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry1"); else out.print("sventonEntry2");%>">
+    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
       <td colspan="2" align="right"><b>Total:</b></td>
       <td><b><%=rowCount%> entries</b></td>
       <td></td>
@@ -166,6 +166,7 @@
       <td>
         <select class="sventonSelect" name="actionSelect">
           <option class="sventonSelectOption">Actions...</option>
+          <option value="diff">&nbsp;&nbsp;Diff entries</option>
           <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
         </select><input type="submit" class="btn" value="go!"/>
       </td>
