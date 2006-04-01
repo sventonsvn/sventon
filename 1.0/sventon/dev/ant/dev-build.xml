@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <project name="sventon" basedir="." default="usage">
-  <property file="build.properties"/>
-  <property file="default-build.properties"/>
+  <property file="dev-build.properties"/>
+  <property file="default-dev-build.properties"/>
 
   <property name="dist.dir" value="../dist"/>
   <property name="src.dir" value="../java/src"/>
