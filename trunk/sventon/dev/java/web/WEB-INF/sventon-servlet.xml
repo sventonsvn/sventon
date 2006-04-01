@@ -56,14 +56,23 @@
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
-    <property name="feedType">
-      <value>rss_2.0</value>
-    </property>
-    <property name="feedMimeType">
+    <property name="mimeType">
       <value>application/xml; charset=UTF-8</value>
     </property>
     <property name="feedItemCount">
       <value>20</value>
+    </property>
+    <property name="feedGenerator">
+      <ref local="syndFeedGenerator"/>
+    </property>
+  </bean>
+
+  <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
+    <property name="feedType">
+      <value>rss_2.0</value>
+    </property>
+    <property name="commitMessageLength">
+      <value>40</value>
     </property>
   </bean>
 

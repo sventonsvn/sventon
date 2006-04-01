@@ -49,7 +49,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
     final Map<String, Object> model = new HashMap<String, Object>();
 
     try {
-      final DiffCommand diffCommand = new DiffCommand(request.getParameterValues("rev"));
+      final DiffCommand diffCommand = new DiffCommand(request.getParameterValues("entry"));
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
       model.putAll(diffInternal(repository, diffCommand));

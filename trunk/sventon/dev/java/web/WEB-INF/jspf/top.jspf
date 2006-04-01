@@ -22,16 +22,23 @@
     <td align="right">
     <form name="gotoForm" method="post" action="goto.svn">
         <table class="sventonRepositoryFunctionsTable" border="0">
-        <tr>
+          <tr>
+            <td>&nbsp;</td>
             <td><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
             <td colspan="2"><span class="exclamationText"><spring:bind path="command.path">${status.errorMessage}</spring:bind></span></td>
           </tr>
           <tr>
+            <td>&nbsp;</td>
             <td>Go to revision</td><td colspan="2">Go to path</td>
           </tr>
           <tr>
-            <td><spring:bind path="command.revision"><input class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
-            <td><spring:bind path="command.path"><input class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
+            <td>
+              <c:if test="${!isHead}">
+                <a href="javascript:setHeadRevision()" title="Click to insert 'HEAD' into revision field">HEAD</a>
+              </c:if>
+            </td>
+            <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
+            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
             <td><input type="submit" class="btn" value="go!"/></td>
           </tr>
         </table>
@@ -56,7 +63,7 @@
           Rev: ${command.revision} (${numrevision})
       </c:when>
       <c:otherwise>
-          Rev: <a class="exclamationText" href="revinfo.svn?path=${command.path}&revision=${command.revision}&rev=${command.revision}">${command.revision}</a>
+          Rev: <a class="exclamationText" href="revinfo.svn?revision=${command.revision}">${command.revision}</a>
       </c:otherwise>
     </c:choose>
      - <a href="repobrowser.svn?path=/&revision=${command.revision}">

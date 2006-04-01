@@ -6,7 +6,7 @@
   <li><a href="#q5">What configurations have been tested?</a></li>
   <li><a href="#q6">How do I install and configure sventon?</a></li>
   <li><a href="#q7">How do I uninstall sventon?</a></li>
-  <li><a href="#q8">How does the search function work?</a></li>
+  <li><a href="#q8">How does the indexing work?</a></li>
   <li><a href="#q9">How do I upgrade sventon to a newer version?</a></li>
   <li><a href="#q10">Will sventon in any way jeopardize my Subversion repository?</a></li>
   <li><a href="#q11">Will sventon write any information to my Windows registry?</a></li>
@@ -67,7 +67,7 @@
     <th>Protocols</th>
     <th>Java version</th>
     <th>Tester</th>
-    <th>Revision</th>
+    <th>Version</th>
   </tr>
   <tr>
     <td>Win2k</td>
@@ -76,7 +76,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>249</td>
+    <td>RC1</td>
   </tr>
   <tr>
     <td>WinXP</td>
@@ -85,7 +85,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>379</td>
+    <td>RC1</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
@@ -94,7 +94,7 @@
     <td>svn/dav</td>
     <td>1.5.0_05</td>
     <td>sventon committer</td>
-    <td>249</td>
+    <td>RC1</td>
   </tr>
 </table>
 
@@ -116,10 +116,10 @@
 
 <p>
 <a name="q8">
-<b>Q:</b> How does the search function work?
+<b>Q:</b> How does the indexing work?
 </a>
 <br/>
-<b>A:</b> The first time sventon is started the repository <tt>HEAD</tt> will be indexed. This can take a couple of minutes depending on network speed and the number of entries. Each time the search or directory flattening functions are used, the index will be updated if necessary. There's also a scheduled job that triggers regularly and ensures that the index is up-to-date. The polling interval can be customized in <code>WEB-INF/sventon-servlet.xml</code>.
+<b>A:</b> The index function, if configured to be active, enables features such as searching and directory flattening. The first time sventon is started the repository <tt>HEAD</tt> will be indexed. This can take a couple of minutes depending on network speed and the number of entries. Each time the search or directory flattening functions are used, the index will be updated if necessary. There's also a scheduled job that triggers regularly and ensures that the index is up-to-date. The polling interval is default set to 10 minutes, but can be customized in <code>WEB-INF/sventon-servlet.xml</code>.<br/>A good reason for disabling the index is if the repository is really large and contains a lot of branches and tags, or if the network connection to it is slow.
 </p>
 
 <p>
@@ -127,7 +127,7 @@
 <b>Q:</b> How do I upgrade sventon to a newer version?
 </a>
 <br/>
-<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screen again. As long as the same repository url and configuration path is used, the index will be preserved. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
+<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screen again. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
 </p>
 
 <p>
@@ -156,9 +156,11 @@
 <ul>
   <li>HTML&#47;XHTML</li>
   <li>Java</li>
+  <li>Groovy</li>
+  <li>C++</li>
   <li>XML</li>
   <li>LZX</li>
-  <li><a href="https://rife.dev.java.net">RIFE</a></li>
+  <li><a href="http://rifers.org">RIFE</a></li>
 </ul>
 The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> to enable easy modification or additions.
 

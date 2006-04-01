@@ -11,25 +11,22 @@
  */
 package de.berlios.sventon.ctrl.xml;
 
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedOutput;
-import de.berlios.sventon.rss.FeedGenerator;
-import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RepositoryConfiguration;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
+import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.rss.FeedGenerator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.AbstractController;
+import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.ISVNLogEntryHandler;
+import org.tmatesoft.svn.core.SVNException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Controller used for generating RSS feeds.
@@ -44,14 +41,9 @@ public class RSSController extends AbstractController {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The generated feed type, default set to <tt>rss_2.0</tt>.
-   */
-  private String feedType = "rss_2.0";
-
-  /**
    * RSS mime type, default set to <tt>application/xml; charset=UTF-8</tt>.
    */
-  private String feedMimeType = "application/xml; charset=UTF-8";
+  private String mimeType = "application/xml; charset=UTF-8";
 
   /**
    * Number of items in the feed, default set to 10.
@@ -64,14 +56,14 @@ public class RSSController extends AbstractController {
   private RepositoryConfiguration configuration;
 
   /**
-   * The cached feed.
-   */
-  private SyndFeed cachedFeed;
-
-  /**
    * The cached feed head revision.
    */
   private long cachedFeedHeadRevision;
+
+  /**
+   * The feed generator.
+   */
+  private FeedGenerator feedGenerator;
 
   /**
    * {@inheritDoc}
@@ -80,9 +72,7 @@ public class RSSController extends AbstractController {
       throws Exception {
 
     logger.debug("Getting RSS feed");
-    response.setContentType(feedMimeType);
-
-    final SyndFeedOutput output = new SyndFeedOutput();
+    response.setContentType(mimeType);
 
     final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
     if (repository == null) {
@@ -92,43 +82,17 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    final long headRevision = repository.getLatestRevision();
-    logger.debug("Latest revision is: " + headRevision);
-
-    if (cachedFeedHeadRevision == headRevision) {
-      logger.debug("Returning cached feed");
-      output.output(cachedFeed, response.getWriter());
-      return null;
-    }
-
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    final String[] targetPaths = new String[]{"/"}; // the path to show logs for
-
-    logger.debug("Getting log info for latest " + feedItemCount + " revisions");
-    repository.log(targetPaths, headRevision, headRevision - feedItemCount, true, false, feedItemCount, new ISVNLogEntryHandler() {
-      public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
-        logEntries.add(logEntry);
-      }
-    });
-
-    final SyndFeed feed;
-
     try {
-      feed = new FeedGenerator().generateFeed(logEntries, getRequestURL(request));
-      feed.setFeedType(feedType);
-      logger.debug("Outputting feed");
-      output.output(feed, response.getWriter());
-    }
-    catch (FeedException ex) {
+      generateFeed(repository, getRequestURL(request));
+    } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
 
-    logger.debug("Caching feed");
-    cachedFeed = feed;
-    cachedFeedHeadRevision = headRevision;
+    logger.debug("Outputting feed");
+    feedGenerator.outputFeed(response.getWriter());
     return null;
   }
 
@@ -151,6 +115,28 @@ public class RSSController extends AbstractController {
     return sb.toString();
   }
 
+  private synchronized void generateFeed(final SVNRepository repository, final String baseURL) throws Exception {
+    final long headRevision = repository.getLatestRevision();
+    logger.debug("Cached feed revision is: " + cachedFeedHeadRevision);
+
+    if (cachedFeedHeadRevision != headRevision) {
+      logger.debug("Updating feed for revision: " + headRevision);
+      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+      final String[] targetPaths = new String[]{"/"}; // the path to show logs for
+
+      logger.debug("Getting log info for latest " + feedItemCount + " revisions");
+      repository.log(targetPaths, headRevision, headRevision - feedItemCount, true, false, feedItemCount, new ISVNLogEntryHandler() {
+        public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
+          logEntries.add(logEntry);
+        }
+      });
+
+      feedGenerator.generateFeed(logEntries, baseURL);
+      logger.debug("Caching feed revision");
+      cachedFeedHeadRevision = headRevision;
+    }
+  }
+
   /**
    * Set repository configuration.
    *
@@ -161,13 +147,21 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Sets the feed type. For available types check ROME documentation.
+   * Sets the mime-type for the feed.
    *
-   * @param feedType
-   * @link https://rome.dev.java.net/
+   * @param mimeType The mime-type
    */
-  public void setFeedType(final String feedType) {
-    this.feedType = feedType;
+  public void setMimeType(final String mimeType) {
+    this.mimeType = mimeType;
+  }
+
+  /**
+   * Sets the feed generator.
+   *
+   * @param feedGenerator The generator.
+   */
+  public void setFeedGenerator(final FeedGenerator feedGenerator) {
+    this.feedGenerator = feedGenerator;
   }
 
   /**
@@ -177,15 +171,6 @@ public class RSSController extends AbstractController {
    */
   public void setFeedItemCount(int feedItemCount) {
     this.feedItemCount = feedItemCount;
-  }
-
-  /**
-   * Sets the mime-type for the feed.
-   *
-   * @param feedMimeType The mime-type
-   */
-  public void setFeedMimeType(final String feedMimeType) {
-    this.feedMimeType = feedMimeType;
   }
 
 }

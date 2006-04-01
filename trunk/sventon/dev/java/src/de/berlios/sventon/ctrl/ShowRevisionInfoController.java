@@ -45,7 +45,7 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
     logger.debug("Fetching revision details");
 
     try {
-      revNumber = Long.parseLong(request.getParameter("rev"));
+      revNumber = Long.parseLong(request.getParameter("revision"));
     } catch (NumberFormatException nfe) {
       exception.reject("goto.command.invalidpath", "Invalid revision");
       return prepareExceptionModelAndView(exception, svnCommand);
