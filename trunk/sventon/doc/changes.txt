@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[496] Release 1.0 RC2 (2006-04-02)
 [477] Added: Possibility to diff entries in browser and search result view.
 [468] Added: Feature #1871 - Possibility to disable index.
 [465] Added: Upgraded to JHighlight 1.0.
