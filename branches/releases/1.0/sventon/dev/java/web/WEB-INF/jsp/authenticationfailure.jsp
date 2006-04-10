@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>sventon repository browser</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>sventon repository browser</title>
   </head>
   <body>
     <p class="sventonHeader">

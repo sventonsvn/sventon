@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>Show thumbnails</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>Show thumbnails</title>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
