@@ -53,7 +53,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   private SventonCache cache;
 
   public static final String THUMBNAIL_FORMAT = "png";
-  public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
+  public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
   public static final String DISPLAY_REQUEST_PARAMETER = "disp";
   public static final String DISPLAY_TYPE_THUMBNAIL = "thumb";
   public static final String DISPLAY_TYPE_INLINE = "inline";
@@ -132,7 +132,17 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
         } else {
           logger.debug("Getting file as 'attachment'");
-          response.setContentType(DEFAULT_CONTENT_TYPE);
+          String mimeType = null;
+          try {
+            mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
+          } catch (IllegalStateException ise) {
+            logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default.");
+          }
+          if (mimeType == null) {
+            response.setContentType(DEFAULT_CONTENT_TYPE);
+          } else {
+            response.setContentType(mimeType);
+          }
           response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
         }
         final HashMap properties = new HashMap();
