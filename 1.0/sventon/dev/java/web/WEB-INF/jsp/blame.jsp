@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>Blame - ${command.target}</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>Blame - ${command.target}</title>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 

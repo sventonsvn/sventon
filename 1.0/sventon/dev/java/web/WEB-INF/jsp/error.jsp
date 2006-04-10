@@ -14,8 +14,8 @@
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
   <head>
-    <title>Unhandled error</title>
     <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <title>Unhandled error</title>
   </head>
 
   <body>

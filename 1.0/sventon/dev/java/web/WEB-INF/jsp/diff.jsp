@@ -17,8 +17,8 @@
 
 <html>
   <head>
-    <title>Diff view</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>Diff view</title>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 

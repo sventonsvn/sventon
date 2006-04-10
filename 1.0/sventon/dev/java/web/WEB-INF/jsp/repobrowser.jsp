@@ -16,10 +16,10 @@
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
-<head>
-<title>sventon repository browser - ${url}</title>
-<%@ include file="/WEB-INF/jspf/head.jspf"%>
-</head>
+  <head>
+    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>sventon repository browser - ${url}</title>
+  </head>
 <body>
   <%@ include file="/WEB-INF/jspf/top.jspf"%>
 
