@@ -12,12 +12,13 @@
   <li><a href="#q11">Will sventon write any information to my Windows registry?</a></li>
   <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
   <li><a href="#q13">Is there a log file for sventon?</a></li>
-  <li><a href="#q14">Can I send suggestions for new functions?</a></li>
-  <li><a href="#q15">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
-  <li><a href="#q16">What license do you use?</a></li>
-  <li><a href="#q17">Why did you start this project?</a></li>
-  <li><a href="#q18">Is there a publicly running version of Sventon that I can try?</a></li>
-  <li><a href="#q19">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q14">Does sventon support non-Latin 1 charsets?</a></li>
+  <li><a href="#q15">Can I send suggestions for new functions?</a></li>
+  <li><a href="#q16">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
+  <li><a href="#q17">What license do you use?</a></li>
+  <li><a href="#q18">Why did you start this project?</a></li>
+  <li><a href="#q19">Is there a publicly running version of Sventon that I can try?</a></li>
+  <li><a href="#q20">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -174,6 +175,15 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q14">
+<b>Q:</b> Does sventon support non-Latin 1 charsets?
+</a>
+<br/>
+<b>A:</b> Yes, hopefully. It is of course hard to test all possible combinations, so please report issues if you find any.
+<br/>For Tomcat to work correctly with non-Latin 1 charsets, the Tomcat connector attribute <code>URIEncoding</code> should be set to <code>UTF-8</code>, or alternatively the attribute <code>useBodyEncodingForURI</code> should be set to <code>true</code>.
+</p>
+
+<p>
+<a name="q15">
 <b>Q:</b> Can I send suggestions for new functions?
 </a>
 <br/>
@@ -181,7 +191,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q15">
+<a name="q16">
 <b>Q:</b> Will sventon be avaliable for CVS (or any other version control system) in the future?
 </a>
 <br/>
@@ -189,7 +199,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q16">
+<a name="q17">
 <b>Q:</b> What license do you use?
 </a>
 <br/>
@@ -197,7 +207,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q17">
+<a name="q18">
 <b>Q:</b> Why did you start this project?
 </a>
 <br/>
@@ -205,7 +215,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q18">
+<a name="q19">
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
@@ -213,7 +223,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q19">
+<a name="q20">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
