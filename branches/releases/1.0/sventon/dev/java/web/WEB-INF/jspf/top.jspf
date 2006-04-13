@@ -74,7 +74,11 @@
             ${pathSegment}
           </c:when>
           <c:otherwise>
-        <a href="repobrowser.svn?path=/${accuPath}&revision=${command.revision}">${pathSegment}</a>
+          <c:url value="repobrowser.svn" var="pathUrl">
+            <c:param name="path" value="/${accuPath}" />
+            <c:param name="revision" value="${command.revision}" />
+          </c:url>
+          <a href="${pathUrl}">${pathSegment}</a>
       </c:otherwise>
         </c:choose>
          /
