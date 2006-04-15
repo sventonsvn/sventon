@@ -46,7 +46,7 @@ public class GetControllerTest extends TestCase {
 
     assertNull(modelAndView);
 
-    assertEquals("application/octetstream", res.getContentType());
+    assertEquals("application/octet-stream", res.getContentType());
     assertTrue(((String)res.getHeader("Content-disposition")).startsWith("attachment"));
   }
 

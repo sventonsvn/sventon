@@ -40,11 +40,10 @@ import java.util.List;
 public class CompletionController extends AbstractSVNTemplateController implements Controller {
 
   /**
-   * The xml encoding, default set to <code>ISO-8859-1</code>.
+   * The xml encoding, default set to <code>UTF-8</code>.
    * <p/>
-   * TODO: Use UTF-8 as default instead?
    */
-  private String encoding = "ISO-8859-1";
+  private String encoding = "UTF-8";
 
   /**
    * {@inheritDoc}

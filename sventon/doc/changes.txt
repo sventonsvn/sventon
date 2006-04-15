@@ -1,6 +1,9 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[501] Added: Upgraded to JavaSVN 1.0.4.
+[499] Fixed: Bug #7000 - Chinese characters in file name doesn't work.
+
 [496] Release 1.0 RC2 (2006-04-02)
 [477] Added: Possibility to diff entries in browser and search result view.
 [468] Added: Feature #1871 - Possibility to disable index.

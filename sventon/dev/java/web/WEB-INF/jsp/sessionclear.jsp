@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>Logged out</title>
     <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <title>Logged out</title>
   </head>
 
   <body>

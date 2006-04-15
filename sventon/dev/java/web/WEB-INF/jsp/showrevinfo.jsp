@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>Revision information details</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>Revision information details</title>
   </head>
 
   <body>

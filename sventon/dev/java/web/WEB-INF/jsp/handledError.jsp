@@ -14,8 +14,8 @@
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
 <html>
   <head>
-    <title><fmt:message key="${errorHeadingKey}"/></title>
     <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <title><fmt:message key="${errorHeadingKey}"/></title>
   </head>
 
   <body>

@@ -27,11 +27,14 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.mail.internet.MimeUtility;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 /**
@@ -53,7 +56,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   private SventonCache cache;
 
   public static final String THUMBNAIL_FORMAT = "png";
-  public static final String DEFAULT_CONTENT_TYPE = "application/octetstream";
+  public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
   public static final String DISPLAY_REQUEST_PARAMETER = "disp";
   public static final String DISPLAY_TYPE_THUMBNAIL = "thumb";
   public static final String DISPLAY_TYPE_INLINE = "inline";
@@ -129,11 +132,21 @@ public class GetController extends AbstractSVNTemplateController implements Cont
             && imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.debug("Getting file as 'inline'");
           response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-          response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
+          response.setHeader("Content-disposition", "inline; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
         } else {
           logger.debug("Getting file as 'attachment'");
-          response.setContentType(DEFAULT_CONTENT_TYPE);
-          response.setHeader("Content-disposition", "attachment; filename=\"" + svnCommand.getTarget() + "\"");
+          String mimeType = null;
+          try {
+            mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
+          } catch (IllegalStateException ise) {
+            logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default.");
+          }
+          if (mimeType == null) {
+            response.setContentType(DEFAULT_CONTENT_TYPE);
+          } else {
+            response.setContentType(mimeType);
+          }
+          response.setHeader("Content-disposition", "attachment; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
         }
         final HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
@@ -146,6 +159,29 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       ioex.printStackTrace();
     }
     return null;
+  }
+
+  /**
+   * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
+   * File name will be returned as-is if unable to parse <code>USER-AGENT</code>.
+   *
+   * @param filename File name to encode
+   * @param request The request
+   * @return The coded file name.
+   */
+  private String encodeFilename(final String filename, final HttpServletRequest request) {
+    final String userAgent = request.getHeader("USER-AGENT");
+    String codedFilename = null;
+    try {
+      if (null != userAgent && -1 != userAgent.indexOf("MSIE")) {
+          codedFilename = URLEncoder.encode(filename, "UTF-8");
+      } else if (null != userAgent && -1 != userAgent.indexOf("Mozilla")) {
+        codedFilename = MimeUtility.encodeText(filename, "UTF-8", "B");
+      }
+    } catch (UnsupportedEncodingException uee) {
+      // Silently ignore
+    }
+    return codedFilename != null ? codedFilename : filename;
   }
 
   /**

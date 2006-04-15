@@ -81,7 +81,7 @@
       <ref local="repositoryConfig"/>
     </property>
     <property name="encoding">
-      <value>ISO-8859-1</value>
+      <value>UTF-8</value>
     </property>
   </bean>
 
@@ -112,7 +112,7 @@
       <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="encoding">
-      <value>ISO-8859-1</value>
+      <value>UTF-8</value>
     </property>
   </bean>
 
@@ -288,7 +288,7 @@
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" >
     <property name="encoding">
-      <value>ISO-8859-1</value>
+      <value>UTF-8</value>
     </property>
     <property name="rendererMappings">
       <map>
