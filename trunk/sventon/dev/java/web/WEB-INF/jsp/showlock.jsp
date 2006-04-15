@@ -15,8 +15,8 @@
 
 <html>
   <head>
-    <title>Show locks - ${command.target}</title>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <title>Show locks - ${command.target}</title>
   </head>
 
   <body>

@@ -61,11 +61,9 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private long cachedInfoHeadRevision;
 
   /**
-   * The xml encoding, default set to <code>ISO-8859-1</code>.
-   *
-   * TODO: Use UTF-8 as default instead?
+   * The xml encoding, default set to <code>UTF-8</code>.
    */
-  private String encoding = "ISO-8859-1";
+  private String encoding = "UTF-8";
 
   /**
    * Date pattern, default set to: <code>yyyy-MM-dd HH:mm:ss</code>.
