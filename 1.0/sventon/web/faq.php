@@ -77,7 +77,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>RC1</td>
+    <td>RC3</td>
   </tr>
   <tr>
     <td>WinXP</td>
@@ -86,7 +86,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>RC1</td>
+    <td>RC3</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
@@ -95,7 +95,7 @@
     <td>svn/dav</td>
     <td>1.5.0_05</td>
     <td>sventon committer</td>
-    <td>RC1</td>
+    <td>RC3</td>
   </tr>
 </table>
 
