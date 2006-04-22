@@ -20,7 +20,6 @@ public class RevisionIndexerTest extends TestCase {
     config.setIndexUsed(true);
     indexer = new RevisionIndexer(repos);
     indexer.setRepositoryConfiguration(config);
-    indexer.populateIndex();
     assertEquals(8, indexer.getIndexCount());
     //indexer.dumpIndex();
   }
