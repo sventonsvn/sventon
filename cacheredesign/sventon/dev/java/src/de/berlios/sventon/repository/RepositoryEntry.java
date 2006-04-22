@@ -40,7 +40,7 @@ public class RepositoryEntry implements Serializable {
   private String entryCommitMessage;
   private String url;
 
-  public enum Kind {dir, file, none, unknown;}
+  public enum Kind {dir, file, none, unknown, any};
 
   /**
    * Constructor.

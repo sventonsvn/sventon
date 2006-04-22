@@ -82,7 +82,7 @@
                 <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
-              This is the path where the index is stored. <br/>
+              This is the path where the disk persistent cache file is stored. <br/>
               The web server running sventon must have read/write access to this directory.
             </td>
           </tr>

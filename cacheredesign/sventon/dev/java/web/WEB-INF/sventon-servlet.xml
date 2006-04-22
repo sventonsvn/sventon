@@ -280,7 +280,7 @@
     </property>
   </bean>
 
-  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" destroy-method="destroy">
+  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" >
     <constructor-arg>
       <ref bean="repositoryConfig"/>
     </constructor-arg>

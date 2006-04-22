@@ -97,22 +97,6 @@ public class RevisionIndexer {
   }
 
   /**
-   * Indexes the files and directories.
-   *
-   * @throws SVNException if a Subversion error occurs.
-   */
-  protected synchronized void populateIndex() throws SVNException {
-    logger.info("Populating index");
-    index = new RevisionIndex(configuration.getUrl());
-    logger.debug("Index url: " + index.getUrl());
-    long head = repository.getLatestRevision();
-    logger.debug("Revision (head): " + head);
-    populateIndex("/", head);
-    index.setIndexRevision(head);
-    logger.info("Number of indexed entries: " + getIndexCount());
-  }
-
-  /**
    * Updates the index to HEAD revision.
    * A Subversion <i>log</i> command will be performed and
    * the index will be updated accordingly.
@@ -288,7 +272,14 @@ public class RevisionIndexer {
         // or the repository URL has changed in the config properties
         // or the repository revision is LOWER than the index revision
         // do a full repository indexing
-        populateIndex();
+        logger.info("Populating index");
+        index = new RevisionIndex(configuration.getUrl());
+        logger.debug("RepositoryEntryCache url: " + index.getUrl());
+        long head = repository.getLatestRevision();
+        logger.debug("Revision (head): " + head);
+        populateIndex("/", head);
+        index.setIndexRevision(head);
+        logger.info("Number of indexed entries: " + getIndexCount());
         storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
       } else if (index.getIndexRevision() < repository.getLatestRevision()) {
         // index is out-of-date
@@ -549,19 +540,6 @@ public class RevisionIndexer {
         out.close();
       } catch (IOException ioex) {
         throw new RevisionIndexException("Unable to store index to disk", ioex);
-      }
-    }
-  }
-
-  /**
-   * Serializes the index to disk.
-   */
-  public void destroy() {
-    if (configuration != null) {
-      try {
-        storeIndex(configuration.getSVNConfigurationPath() + INDEX_FILENAME);
-      } catch (RevisionIndexException re) {
-        logger.warn(re);
       }
     }
   }
