@@ -62,10 +62,15 @@ public class GoToController extends AbstractSVNTemplateController implements Con
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
+    final String showLatestInfoParameter = request.getParameter("showlatestinfo");
+
     // Populate model and view with basic data
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("path", svnCommand.getPath());
     model.put("revision", svnCommand.getRevision());
+    if (showLatestInfoParameter != null) {
+      model.put("showlatestinfo", true);
+    }
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl), model);
   }
