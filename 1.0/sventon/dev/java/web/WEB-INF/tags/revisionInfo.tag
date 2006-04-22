@@ -21,6 +21,7 @@
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
+<%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
 <table class="sventonLatestCommitInfoTable">
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
@@ -53,7 +54,7 @@
       <tr>
         <c:url value="goto.svn" var="goToUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-          <c:param name="revision" value="${details.revision}" />
+          <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
           <c:if test="${keepVisible}">
             <c:param name="showlatestinfo" value="true" />
           </c:if>
@@ -61,7 +62,7 @@
 
         <c:url value="diff.svn" var="diffUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-          <c:param name="revision" value="${details.revision}" />
+          <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
           <c:if test="${keepVisible}">
             <c:param name="showlatestinfo" value="true" />
           </c:if>
