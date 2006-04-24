@@ -11,7 +11,11 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public interface RepositoryCacheService {
+public interface CacheService {
+
+  void updateCaches() throws Exception;
+
+  boolean isUpdating();
 
   /**
    * Searched the cached entries for given string (name fragment).

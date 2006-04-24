@@ -12,9 +12,9 @@
 package de.berlios.sventon.ctrl;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.index.RevisionIndexer;
-import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.repository.cache.CacheService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -105,7 +105,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
   protected RepositoryConfiguration configuration = null;
 
-  private RevisionIndexer revisionIndexer;
+  private CacheService cacheService;
 
   /**
    * Logger for this class and subclasses.
@@ -169,8 +169,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(getHeadRevision()) : null));
         model.put("latestCommitInfo", getHeadRevisionInfo());
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isIndexing", getRevisionIndexer().isIndexing());
-        model.put("useIndex", configuration.isIndexUsed());
+        model.put("isUpdating", getCacheService().isUpdating());
+        model.put("useCache", configuration.isCacheUsed());
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -348,21 +348,21 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
 
   /**
-   * Sets the revision indexer instance.
+   * Sets the cache service instance.
    *
-   * @param revisionIndexer The instance.
+   * @param cacheService The instance.
    */
-  public void setRevisionIndexer(final RevisionIndexer revisionIndexer) {
-    this.revisionIndexer = revisionIndexer;
+  public void setCacheService(final CacheService cacheService) {
+    this.cacheService = cacheService;
   }
 
   /**
-   * Gets the revision indexer instance.
+   * Gets the cache service instance.
    *
    * @return The instance.
    */
-  public RevisionIndexer getRevisionIndexer() {
-    return revisionIndexer;
+  public CacheService getCacheService() {
+    return cacheService;
   }
 
   /**

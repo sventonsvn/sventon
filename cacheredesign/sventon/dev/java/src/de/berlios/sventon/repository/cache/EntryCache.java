@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author jesper@users.berlios.de
  */
-public interface RepositoryEntryCache {
+public interface EntryCache {
 
   /**
    * Finds entry names based on given regex pattern.

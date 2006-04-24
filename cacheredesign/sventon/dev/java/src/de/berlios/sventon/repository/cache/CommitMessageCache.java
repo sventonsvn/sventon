@@ -1,7 +1,6 @@
 package de.berlios.sventon.repository.cache;
 
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.List;
 
@@ -21,6 +20,13 @@ public interface CommitMessageCache {
    * @throws Exception
    */
   List<Object> find(final String searchString) throws Exception;
+
+  /**
+   * Add one log entry to the cache.
+   *
+   * @param entry The entry to parse and add
+   */
+  void add(final SVNLogEntry entry);
 
   /**
    * Add one or more log entries to the cache.
@@ -57,12 +63,5 @@ public interface CommitMessageCache {
    * @return The URL to the repository.
    */
   String getRepositoryUrl();
-
-  /**
-   * Updates the cache using given repository connection.
-   *
-   * @param repository The repository connection.
-   */
-  void update(final SVNRepository repository);
 
 }
