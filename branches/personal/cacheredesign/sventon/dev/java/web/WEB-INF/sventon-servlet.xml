@@ -17,7 +17,7 @@
         <prop key="svn.configpath"></prop>
         <prop key="svn.uid"></prop>
         <prop key="svn.pwd"></prop>
-        <prop key="svn.useIndex">false</prop>
+        <prop key="svn.useCache">false</prop>
       </props>
     </property>
     <property name="locations">
@@ -35,8 +35,8 @@
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
-    <property name="revisionIndexer">
-      <ref local="revisionIndexer"/>
+    <property name="cacheService">
+      <ref local="cacheService"/>
     </property>
   </bean>
 
@@ -143,7 +143,8 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController" parent="abstractController">
+  <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -241,9 +242,9 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl" />
+  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl"/>
 
-  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration" >
+  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration">
     <property name="repositoryRoot">
       <value>${svn.root}</value>
     </property>
@@ -256,16 +257,18 @@
     <property name="configuredPWD">
       <value>${svn.pwd}</value>
     </property>
-    <property name="indexUsed">
-      <value>${svn.useIndex}</value>
+    <property name="cacheUsed">
+      <value>${svn.useCache}</value>
     </property>
   </bean>
 
   <!-- temporarily use the reloadable version (makes developing easier) -->
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    <property name="basename" value="/WEB-INF/classes/messages" />
-    <property name="useCodeAsDefaultMessage"><value>true</value></property>
-    <property name="cacheSeconds" value="0" />
+    <property name="basename" value="/WEB-INF/classes/messages"/>
+    <property name="useCodeAsDefaultMessage">
+      <value>true</value>
+    </property>
+    <property name="cacheSeconds" value="0"/>
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -280,13 +283,31 @@
     </property>
   </bean>
 
-  <bean id="revisionIndexer" class="de.berlios.sventon.index.RevisionIndexer" >
+  <bean id="cacheService" class="de.berlios.sventon.repository.cache.CacheServiceImpl">
+    <property name="repositoryConfiguration">
+      <ref local="repositoryConfig"/>
+    </property>
+    <property name="entryCache">
+      <ref local="entryCache"/>
+    </property>
+    <property name="commitMessageCache">
+      <ref local="commitMessageCache"/>
+    </property>
+  </bean>
+
+  <bean id="entryCache" class="de.berlios.sventon.repository.cache.EntryCacheImpl">
     <constructor-arg>
-      <ref bean="repositoryConfig"/>
+      <ref local="repositoryConfig"/>
     </constructor-arg>
   </bean>
 
-  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer" >
+  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.CommitMessageCacheImpl">
+    <constructor-arg>
+      <ref local="repositoryConfig"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">
       <value>UTF-8</value>
     </property>
@@ -309,10 +330,10 @@
     </property>
   </bean>
 
-  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer" />
-  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer" />
-  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer" />
-  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer" />
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer"/>
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer"/>
+  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
+  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
   <!-- Quartz Scheduler, with pre-registered triggers -->
   <!-- Will automatically start scheduling on context startup -->
@@ -320,24 +341,24 @@
     <property name="waitForJobsToCompleteOnShutdown" value="true"/>
     <property name="triggers">
       <list>
-        <ref local="indexUpdateTrigger"/>
+        <ref local="cacheUpdateTrigger"/>
       </list>
     </property>
   </bean>
 
   <!-- Registered by the 'scheduler' bean -->
-  <bean id="indexUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+  <bean id="cacheUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail">
-      <ref local="indexUpdateJobDetail"/>
+      <ref local="cacheUpdateJobDetail"/>
     </property>
     <property name="startDelay" value="0"/>
     <property name="repeatInterval" value="600000"/>
   </bean>
 
   <!-- Convenient way of invoking existing business logic instead of writing a job -->
-  <bean id="indexUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-    <property name="targetObject" ref="revisionIndexer"/>
-    <property name="targetMethod" value="update"/>
+  <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="cacheService"/>
+    <property name="targetMethod" value="updateCaches"/>
   </bean>
 
 </beans>

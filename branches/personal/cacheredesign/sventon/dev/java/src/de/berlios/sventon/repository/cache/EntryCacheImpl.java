@@ -1,8 +1,11 @@
 package de.berlios.sventon.repository.cache;
 
-import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
+import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
@@ -12,7 +15,12 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class DiskPersistentRepositoryEntryCache implements RepositoryEntryCache {
+public class EntryCacheImpl implements EntryCache {
+
+  /**
+   * The logging instance.
+   */
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The index.
@@ -31,15 +39,16 @@ public class DiskPersistentRepositoryEntryCache implements RepositoryEntryCache 
 
 
   /**
-   * Constructor
+   * Constructor.
    *
-   * @param repositoryURL Url to repository
+   * @param configuration Repository config
    */
-  public DiskPersistentRepositoryEntryCache(final String repositoryURL) {
+  public EntryCacheImpl(final RepositoryConfiguration configuration) {
+    logger.debug("Initializing cache using [" + configuration.getUrl() + "]");
     cachedEntries = Collections.checkedSet(
         new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
         RepositoryEntry.class);
-    this.repositoryURL = repositoryURL;
+    this.repositoryURL = configuration.getUrl();
   }
 
   /**
@@ -63,21 +72,21 @@ public class DiskPersistentRepositoryEntryCache implements RepositoryEntryCache 
   /**
    * {@inheritDoc}
    */
-  public boolean add(final RepositoryEntry entry) {
+  public synchronized boolean add(final RepositoryEntry entry) {
     return cachedEntries.add(entry);
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean add(final List<RepositoryEntry> entries) {
+  public synchronized boolean add(final List<RepositoryEntry> entries) {
     return cachedEntries.addAll(entries);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void removeByName(final String pathAndName, final boolean recursive) {
+  public synchronized void removeByName(final String pathAndName, final boolean recursive) {
     final List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
 
     for (RepositoryEntry entry : cachedEntries) {
@@ -105,14 +114,21 @@ public class DiskPersistentRepositoryEntryCache implements RepositoryEntryCache 
   /**
    * {@inheritDoc}
    */
-  public void setCachedRevision(final long revision) {
+  public synchronized void setCachedRevision(final long revision) {
     this.cachedRevision = revision;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void clear() {
+  public String getRepositoryUrl() {
+    return repositoryURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public synchronized void clear() {
     cachedEntries.clear();
   }
 
@@ -121,13 +137,6 @@ public class DiskPersistentRepositoryEntryCache implements RepositoryEntryCache 
    */
   public Set<RepositoryEntry> getUnmodifiableEntries() {
     return Collections.unmodifiableSet(cachedEntries);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getRepositoryUrl() {
-    return repositoryURL;
   }
 
 }

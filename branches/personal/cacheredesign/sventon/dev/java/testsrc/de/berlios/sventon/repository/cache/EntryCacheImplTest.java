@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DiskPersistentRepositoryEntryCacheTest extends TestCase {
+public class EntryCacheImplTest extends TestCase {
 
-  public void testDiskPersistentRepositoryEntryCache() throws Exception {
-    final DiskPersistentRepositoryEntryCache cache = new DiskPersistentRepositoryEntryCache("http://localhost");
+  public void testEntryCache() throws Exception {
+    final EntryCacheImpl cache = new EntryCacheImpl("http://localhost");
 
     assertEquals("http://localhost", cache.getRepositoryUrl());
     assertEquals(0, cache.getCachedRevision());
     assertEquals(0, cache.getUnmodifiableEntries().size());
   }
 
-  public void testDiskPersistentRepositoryEntryCacheClear() throws Exception {
-    final DiskPersistentRepositoryEntryCache cache = new DiskPersistentRepositoryEntryCache("http://localhost");
+  public void testEntryCacheClear() throws Exception {
+    final EntryCacheImpl cache = new EntryCacheImpl("http://localhost");
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
@@ -32,16 +32,16 @@ public class DiskPersistentRepositoryEntryCacheTest extends TestCase {
     assertEquals(0, cache.getUnmodifiableEntries().size());
   }
 
-  public void testDiskPersistentRepositoryEntryCacheAdd() throws Exception {
-    final DiskPersistentRepositoryEntryCache cache = new DiskPersistentRepositoryEntryCache("http://localhost");
+  public void testEntryCacheAdd() throws Exception {
+    final EntryCacheImpl cache = new EntryCacheImpl("http://localhost");
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
     assertEquals(11, cache.getUnmodifiableEntries().size());
   }
 
-  public void testDiskPersistentRepositoryEntryCacheRemove() throws Exception {
-    final DiskPersistentRepositoryEntryCache cache = new DiskPersistentRepositoryEntryCache("http://localhost");
+  public void testEntryCacheRemove() throws Exception {
+    final EntryCacheImpl cache = new EntryCacheImpl("http://localhost");
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
@@ -67,8 +67,8 @@ public class DiskPersistentRepositoryEntryCacheTest extends TestCase {
     assertEquals(2, cache.getUnmodifiableEntries().size());
   }
 
-  public void testDiskPersistentRepositoryEntryCacheFindPattern() throws Exception {
-    final DiskPersistentRepositoryEntryCache cache = new DiskPersistentRepositoryEntryCache("http://localhost");
+  public void testEntryCacheFindPattern() throws Exception {
+    final EntryCacheImpl cache = new EntryCacheImpl("http://localhost");
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());

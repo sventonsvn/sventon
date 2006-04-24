@@ -114,7 +114,7 @@ public class RevisionIndexer {
    */
   @SuppressWarnings("unchecked")
   protected synchronized void updateIndex() throws SVNException {
-    if (configuration.isIndexUsed()) {
+    if (configuration.isCacheUsed()) {
 
       final String[] targetPaths = new String[]{"/"}; // the path to log
       long latestRevision = repository.getLatestRevision();
@@ -258,7 +258,7 @@ public class RevisionIndexer {
    * @throws RevisionIndexException if an index error occurs.
    */
   public synchronized void update() throws RevisionIndexException, SVNException {
-    if (!isConnectionEstablished() || !configuration.isIndexUsed()) {
+    if (!isConnectionEstablished() || !configuration.isCacheUsed()) {
       return;
     }
 
@@ -274,7 +274,7 @@ public class RevisionIndexer {
         // do a full repository indexing
         logger.info("Populating index");
         index = new RevisionIndex(configuration.getUrl());
-        logger.debug("RepositoryEntryCache url: " + index.getUrl());
+        logger.debug("EntryCache url: " + index.getUrl());
         long head = repository.getLatestRevision();
         logger.debug("Revision (head): " + head);
         populateIndex("/", head);
@@ -384,7 +384,7 @@ public class RevisionIndexer {
    */
   public List<RepositoryEntry> find(final String searchString, final String startDir) throws RevisionIndexException {
 
-    if (!configuration.isIndexUsed()) {
+    if (!configuration.isCacheUsed()) {
       throw new IllegalStateException("Indexing is disabled");
     }
 
@@ -445,7 +445,7 @@ public class RevisionIndexer {
                                            final String startDir,
                                            final Integer limit) throws RevisionIndexException {
 
-    if (!configuration.isIndexUsed()) {
+    if (!configuration.isCacheUsed()) {
       throw new IllegalStateException("Indexing is disabled");
     }
 
@@ -487,7 +487,7 @@ public class RevisionIndexer {
    */
   public List<RepositoryEntry> findDirectories(final String fromPath) throws RevisionIndexException {
 
-    if (!configuration.isIndexUsed()) {
+    if (!configuration.isCacheUsed()) {
       throw new IllegalStateException("Indexing is disabled");
     }
 

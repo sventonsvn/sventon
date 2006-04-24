@@ -26,7 +26,7 @@ public class FlattenControllerTest extends TestCase {
     RepositoryConfiguration config = new RepositoryConfiguration();
     config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
-    config.setIndexUsed(true);
+    config.setCacheUsed(true);
     indexer.setRepositoryConfiguration(config);
     controller.setRevisionIndexer(indexer);
     modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, null, null, null);

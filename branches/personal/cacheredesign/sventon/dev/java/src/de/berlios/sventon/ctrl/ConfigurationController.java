@@ -45,7 +45,7 @@ public class ConfigurationController extends AbstractFormController {
   private RepositoryConfiguration configuration;
 
   /**
-   * The scheduler instance. Used to fire index update job.
+   * The scheduler instance. Used to fire cache update job.
    */
   private Scheduler scheduler;
 
@@ -59,7 +59,7 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
   public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
-  public static final String PROPERTY_KEY_USE_INDEX = "svn.useIndex";
+  public static final String PROPERTY_KEY_USE_CACHE = "svn.useCache";
 
   protected ConfigurationController() {
     // TODO: Move to XML-file?
@@ -79,7 +79,7 @@ public class ConfigurationController extends AbstractFormController {
 
   /**
    * Sets scheduler instance.
-   * The scheduler is used to fire index update job after configuration has been done.
+   * The scheduler is used to fire cache update job after configuration has been done.
    *
    * @param scheduler The scheduler
    */
@@ -122,7 +122,7 @@ public class ConfigurationController extends AbstractFormController {
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
       ConfigCommand confCommand = (ConfigCommand) command;
-      logger.debug("useIndex: " + confCommand.isIndexUsed());
+      logger.debug("useCache: " + confCommand.isCacheUsed());
 
       if (exception.hasErrors()) {
         //noinspection unchecked
@@ -137,7 +137,7 @@ public class ConfigurationController extends AbstractFormController {
       configProperties.put(PROPERTY_KEY_REPOSITORY_URL, trimmedURL);
       configProperties.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       configProperties.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
-      configProperties.put(PROPERTY_KEY_USE_INDEX, Boolean.TRUE == confCommand.isIndexUsed() ? "true" : "false");
+      configProperties.put(PROPERTY_KEY_USE_CACHE, Boolean.TRUE == confCommand.isCacheUsed() ? "true" : "false");
 
       String fileSeparator = System.getProperty("file.separator");
 
@@ -161,13 +161,13 @@ public class ConfigurationController extends AbstractFormController {
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
       configuration.setSVNConfigurationPath(configurationPath);
-      configuration.setIndexUsed(confCommand.isIndexUsed());
+      configuration.setCacheUsed(confCommand.isCacheUsed());
       configuration.setRepositoryRoot(trimmedURL);
 
-      if (configuration.isIndexUsed()) {
+      if (configuration.isCacheUsed()) {
         try {
-          logger.debug("Starting index update job");
-          scheduler.triggerJob("indexUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+          logger.debug("Starting cache update job");
+          scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
         } catch (SchedulerException sx) {
           logger.warn(sx);
         }
@@ -203,7 +203,7 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# Key: svn.configpath                                                          #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Description:                                                                 #\n");
-    comments.append("# Path where the index will be stored. The user running the sventon web        #\n");
+    comments.append("# Path where the cache file will be stored. The user running the sventon web   #\n");
     comments.append("# container must have read/write access to this directory.                     #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Example:                                                                     #\n");
@@ -220,14 +220,12 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# Subversion user for sventon repository browsing is the preferred approach.   #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
-    comments.append("# Key: svn.useIndex                                                            #\n");
+    comments.append("# Key: svn.useCache                                                            #\n");
     comments.append("#                                                                              #\n");
     comments.append("# Description:                                                                 #\n");
-    comments.append("# Decides whether indexing feature is enabled or not. If true, the repository  #\n");
-    comments.append("# will be indexed which enables the search and directory flatten features.     #\n");
-    comments.append("# A good reason for disabling the index is if the repository is really large   #\n");
-    comments.append("# and contains a lot of branches and tags, or if the network connection to it  #\n");
-    comments.append("# is slow.                                                                     #\n");
+    comments.append("# Decides whether caching feature is enabled or not. If true, the repository   #\n");
+    comments.append("# will be scanned and cached which enables the search and directory flatten    #\n");
+    comments.append("# features aswell as the commit message search.                                #\n");
     comments.append("################################################################################\n\n");
     return comments.toString();
   }
