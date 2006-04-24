@@ -48,7 +48,7 @@
     <td style="white-space: nowrap;" colspan="2">
       <c:if test="${!empty latestCommitInfo}">
         <div id="latestCommitInfoDiv" ${param.showlatestinfo == null || param.showlatestinfo == 'false' ? 'style="display:none"' : ''}" >
-          <ui:revisionInfo details="${latestCommitInfo}" keepVisible="true"/>
+          <ui:revisionInfo details="${latestCommitInfo}" keepVisible="true" linkToHead="true" />
         </div>
       </c:if>
     </td>

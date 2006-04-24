@@ -3,6 +3,13 @@
   <head>
     <title>sventon - subversion repository browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="description" content="sventon - the pure java subversion repository browser">
+    <meta name="keywords" content="sventon, subversion, svn, repository, repositories, browse, browser, browsing, servlet, java, tomcat, web, search, track, log">
+    <meta name="ROBOTS" content="INDEX,FOLLOW">
+    <meta name="author" content="sventon project team">
+    <meta name="copyright" content="Copyright (c) 2005-2006 sventon project.">
+    <meta name="distribution" content="Global">
+    <meta name="rating" content="General">
     <link rel="stylesheet" type="text/css" href="sventon.css">
     <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml" />
   </head>
