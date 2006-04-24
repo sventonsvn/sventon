@@ -29,7 +29,7 @@
     <br/>
     <ui:functionLinks pageName="showRevInfo"/>
 
-    <ui:revisionInfo details="${revisionInfo}" keepVisible="false"/>
+    <ui:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
     <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
