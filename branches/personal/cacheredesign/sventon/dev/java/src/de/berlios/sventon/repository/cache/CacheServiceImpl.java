@@ -2,6 +2,7 @@ package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
+import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +45,7 @@ public class CacheServiceImpl implements CacheService {
     this.configuration = configuration;
   }
 
-  public void setRepositoryEntryCache(final EntryCache entryCache) {
+  public void setEntryCache(final EntryCache entryCache) {
     this.entryCache = entryCache;
   }
 
@@ -55,7 +56,7 @@ public class CacheServiceImpl implements CacheService {
   /**
    * {@inheritDoc}
    */
-  public synchronized void updateCaches() throws Exception {
+  public synchronized void updateCaches() throws CacheException {
     //TODO: Are we up-to-date?
     //TODO: Make the repo connection & get latest log entries & update both caches
 /*
@@ -69,7 +70,7 @@ public class CacheServiceImpl implements CacheService {
 
 */
 
-    if (!establishConnection() || !configuration.isCacheUsed()) {
+    if (!isConnectionEstablished() || !configuration.isCacheUsed()) {
       return;
     }
 
@@ -87,13 +88,15 @@ public class CacheServiceImpl implements CacheService {
   /**
    * Checks if the repository connection is properly initialized.
    * If not, a connection will be created.
-   *
-   * @throws SVNException If an error occur during the repository connection creation.
    */
-  private boolean establishConnection() throws SVNException {
+  private boolean isConnectionEstablished() {
     if (repository == null) {
+      try {
       logger.debug("Establishing repository connection");
       repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      } catch (SVNException svne) {
+        logger.warn("Could not establish repository connection", svne);
+      }
       if (repository == null) {
         logger.info("Repository not configured yet.");
         return false;
@@ -139,15 +142,40 @@ public class CacheServiceImpl implements CacheService {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final String searchString) throws Exception {
+  public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
     updateCaches();
-    return entryCache.findByPattern(searchString, RepositoryEntry.Kind.any, null);
+    return entryCache.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<Object> find(final String searchString) throws Exception {
+  public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
+    updateCaches();
+    return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
+    updateCaches();
+    return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException {
+    updateCaches();
+    return entryCache.findByPattern(fromPath + ".*?", dir, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<Object> find(final String searchString) throws CacheException {
     updateCaches();
     return commitMessageCache.find(searchString);
   }

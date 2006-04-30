@@ -37,7 +37,7 @@ public class CompletionControllerTest extends TestCase {
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     config.setCacheUsed(true);
     indexer.setRepositoryConfiguration(config);
-    ctrl.setRevisionIndexer(indexer);
+    //ctrl.setRevisionIndexer(indexer);
     ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, res, null);
 
     DocumentBuilder parser =

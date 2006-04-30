@@ -57,7 +57,7 @@ public class CompletionController extends AbstractSVNTemplateController implemen
     final String startDir = request.getParameter("startDir");
     logger.debug("Searching index for: " + searchString);
 
-    entries.addAll(getRevisionIndexer().findPattern(".*/" + searchString + ".*", startDir, 10));
+    entries.addAll(getCacheService().findEntry(searchString, startDir, 10));
 
     // Print the XML document
     final Format format = Format.getPrettyFormat();
