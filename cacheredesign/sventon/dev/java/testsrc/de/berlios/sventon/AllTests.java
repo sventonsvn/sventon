@@ -6,7 +6,7 @@ import junit.framework.TestSuite;
 public class AllTests {
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon");
+    TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTest(de.berlios.sventon.blame.AllTests.suite());
     suite.addTest(de.berlios.sventon.cache.AllTests.suite());
     suite.addTest(de.berlios.sventon.colorer.AllTests.suite());
@@ -16,6 +16,7 @@ public class AllTests {
     suite.addTest(de.berlios.sventon.ctrl.xml.AllTests.suite());
     suite.addTest(de.berlios.sventon.diff.AllTests.suite());
     suite.addTest(de.berlios.sventon.repository.AllTests.suite());
+    suite.addTest(de.berlios.sventon.repository.cache.AllTests.suite());
     suite.addTest(de.berlios.sventon.rss.AllTests.suite());
     suite.addTest(de.berlios.sventon.index.AllTests.suite());
     suite.addTest(de.berlios.sventon.util.AllTests.suite());

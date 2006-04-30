@@ -17,9 +17,9 @@ public interface CommitMessageCache {
    *
    * @param searchString String to search for
    * @return List of something. Kind of depends on Lucene implementation. -- REVISIT
-   * @throws Exception
+   * @throws CacheException
    */
-  List<Object> find(final String searchString) throws Exception;
+  List<Object> find(final String searchString) throws CacheException;
 
   /**
    * Add one log entry to the cache.

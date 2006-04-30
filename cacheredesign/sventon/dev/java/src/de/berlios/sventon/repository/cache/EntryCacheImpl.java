@@ -54,7 +54,10 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findByPattern(final String searchString, final RepositoryEntry.Kind kind, final Integer limit) throws Exception {
+  public List<RepositoryEntry> findByPattern(final String searchString, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Finding [" + searchString + "] of kind [" + kind + "] with limit [" + limit + "]");
+    }
     int count = 0;
     final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
@@ -65,6 +68,10 @@ public class EntryCacheImpl implements EntryCache {
           break;
         }
       }
+    }
+    if (logger.isDebugEnabled()) {
+      logger.debug("Result count: " + result.size());
+      logger.debug("Result: " + result);
     }
     return result;
   }

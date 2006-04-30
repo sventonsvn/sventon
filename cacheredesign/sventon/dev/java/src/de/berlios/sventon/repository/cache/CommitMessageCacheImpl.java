@@ -44,7 +44,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
   /**
    * {@inheritDoc}
    */
-  public List<Object> find(final String searchString) throws Exception {
+  public List<Object> find(final String searchString) throws CacheException {
     return null;
   }
 

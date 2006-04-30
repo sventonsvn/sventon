@@ -10,7 +10,7 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.command");
+    TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(ConfigCommandValidatorTest.class);
     suite.addTestSuite(SVNBaseCommandTest.class);
     suite.addTestSuite(SVNBaseCommandValidatorTest.class);

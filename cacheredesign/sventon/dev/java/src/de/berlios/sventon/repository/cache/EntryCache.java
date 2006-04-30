@@ -18,9 +18,9 @@ public interface EntryCache {
    *
    * @param pattern Entry name pattern to search for
    * @return List of entries.
-   * @throws Exception if error
+   * @throws CacheException if error
    */
-  List<RepositoryEntry> findByPattern(final String pattern, final RepositoryEntry.Kind kind, final Integer limit) throws Exception;
+  List<RepositoryEntry> findByPattern(final String pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException;
 
   /**
    * Add one or more entries to the cache.
