@@ -13,8 +13,20 @@ import java.util.List;
  */
 public interface CacheService {
 
+  /**
+   * Updates the service caches.
+   * If caches are disabled (i.e the configuration property <i>useCache</i> is set to false)
+   * or if unable to establish repository connection, this method will silently return without any action.
+   *
+   * @throws CacheException
+   */
   void updateCaches() throws CacheException;
 
+  /**
+   * Checks if the service is currently updating its caches.
+   *
+   * @return True if caches are being updated, false if not.
+   */
   boolean isUpdating();
 
   /**
@@ -30,7 +42,7 @@ public interface CacheService {
    * Searches the cached entries for given string (name fragment) starting from given directory.
    *
    * @param searchString String to search for
-   * @param startDir Start path
+   * @param startDir     Start path
    * @return List of entries
    * @throws CacheException if error
    */
@@ -40,8 +52,8 @@ public interface CacheService {
    * Searches the cached entries for given string (name fragment) starting from given directory.
    *
    * @param searchString String to search for
-   * @param startDir Start path
-   * @param limit Limit search result entries.
+   * @param startDir     Start path
+   * @param limit        Limit search result entries.
    * @return List of entries
    * @throws CacheException if error
    */

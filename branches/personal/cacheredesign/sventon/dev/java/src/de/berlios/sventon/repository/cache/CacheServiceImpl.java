@@ -57,29 +57,31 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public synchronized void updateCaches() throws CacheException {
-    //TODO: Are we up-to-date?
-    //TODO: Make the repo connection & get latest log entries & update both caches
+
 /*
 * Kolla om indexet är påslaget
-* Kolla om det finns en repos connection
+* Kolla om det finns en repo-connection
 * Kolla att indexet är initierat
 * Toggla isIndexing-flagga
 * Avgöra om indexet är uptodate
 * Antingen populera eller trigga update
 * Toggla isIndexing-flaggan igen
-
 */
 
-    if (!isConnectionEstablished() || !configuration.isCacheUsed()) {
+    if (!configuration.isCacheUsed() || !isConnectionEstablished()) {
       return;
     }
 
     updating = true;
-
+    // update entryCache
+    // update commitMessageCache
     updating = false;
 
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public boolean isUpdating() {
     return updating;
   }
@@ -92,8 +94,8 @@ public class CacheServiceImpl implements CacheService {
   private boolean isConnectionEstablished() {
     if (repository == null) {
       try {
-      logger.debug("Establishing repository connection");
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+        logger.debug("Establishing repository connection");
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       } catch (SVNException svne) {
         logger.warn("Could not establish repository connection", svne);
       }
@@ -104,6 +106,7 @@ public class CacheServiceImpl implements CacheService {
     }
     return true;
   }
+
 
   /**
    * Checks if the cache is properly initialized.
