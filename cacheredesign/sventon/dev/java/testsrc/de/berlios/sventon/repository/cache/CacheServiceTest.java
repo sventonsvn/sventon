@@ -2,6 +2,7 @@ package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -14,33 +15,39 @@ public class CacheServiceTest extends TestCase {
 
   public void testFindEntry() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(false); // Prevent physical connection during update check
     config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl entryCache = new EntryCacheImpl(config);
+    final EntryCacheImpl entryCache = new EntryCacheImpl();
     entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
     assertEquals(4, cacheService.findEntry("java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(false); // Prevent physical connection during update check
     config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl entryCache = new EntryCacheImpl(config);
+    final EntryCacheImpl entryCache = new EntryCacheImpl();
     entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
     assertEquals(1, cacheService.findEntry("html", "/trunk/src/").size());
   }
 
   public void testFindEntryWithLimit() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(false); // Prevent physical connection during update check
     config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl entryCache = new EntryCacheImpl(config);
+    final EntryCacheImpl entryCache = new EntryCacheImpl();
     entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
     assertEquals(2, cacheService.findEntry("java", "/", 2).size());
 
@@ -52,15 +59,48 @@ public class CacheServiceTest extends TestCase {
 
   public void testFindDirectories() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(false); // Prevent physical connection during update check
     config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl entryCache = new EntryCacheImpl(config);
+    final EntryCacheImpl entryCache = new EntryCacheImpl();
     entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
     assertEquals(3, cacheService.findDirectories("/").size());
 
     assertEquals(1, cacheService.findDirectories("/trunk/").size());
+  }
+
+  public void testPopulate() throws Exception {
+    final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(true);
+    config.setRepositoryRoot("http://localhost");
+
+    final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
+    cacheService.setRepository(SVNRepositoryStub.getInstance());
+    cacheService.setEntryCache(new EntryCacheImpl());
+
+    assertEquals(8, cacheService.findEntry(".*").size());
+  }
+
+  public void testUpdate() throws Exception {
+    final RepositoryConfiguration config = new RepositoryConfiguration();
+    config.setCacheUsed(true);
+    config.setRepositoryRoot("http://localhost");
+
+    final EntryCache entryCache = new EntryCacheImpl();
+    entryCache.setCachedRevision(100);
+    entryCache.setRepositoryURL("http://localhost");
+    entryCache.add(getEntryTemplateList());
+
+    final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setRepositoryConfiguration(config);
+    cacheService.setRepository(SVNRepositoryStub.getInstance());
+    cacheService.setEntryCache(entryCache);
+
+    assertEquals(10, cacheService.findEntry(".*").size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

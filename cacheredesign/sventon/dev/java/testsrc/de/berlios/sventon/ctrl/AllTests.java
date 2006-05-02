@@ -12,6 +12,9 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(GetControllerTest.class);
+    suite.addTestSuite(LogEntryActionTypeTest.class);
+    suite.addTestSuite(ShowFileControllerTest.class);
+    suite.addTestSuite(ShowThumbnailControllerTest.class);
     return suite;
   }
 

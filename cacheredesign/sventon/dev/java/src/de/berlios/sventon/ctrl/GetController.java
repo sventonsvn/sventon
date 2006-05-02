@@ -139,7 +139,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           try {
             mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
           } catch (IllegalStateException ise) {
-            logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default.");
+            logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
           }
           if (mimeType == null) {
             response.setContentType(DEFAULT_CONTENT_TYPE);
