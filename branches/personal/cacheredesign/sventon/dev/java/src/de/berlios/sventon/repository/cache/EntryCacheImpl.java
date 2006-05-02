@@ -1,6 +1,5 @@
 package de.berlios.sventon.repository.cache;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
@@ -41,28 +40,26 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * Constructor.
    *
-   * @param configuration Repository config
    */
-  public EntryCacheImpl(final RepositoryConfiguration configuration) {
-    logger.debug("Initializing cache using [" + configuration.getUrl() + "]");
+  public EntryCacheImpl() {
+    logger.debug("Initializing cache");
     cachedEntries = Collections.checkedSet(
         new TreeSet<RepositoryEntry>(new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
         RepositoryEntry.class);
-    this.repositoryURL = configuration.getUrl();
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findByPattern(final String searchString, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
+  public List<RepositoryEntry> findByPattern(final String pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding [" + searchString + "] of kind [" + kind + "] with limit [" + limit + "]");
+      logger.debug("Finding [" + pattern + "] of kind [" + kind + "] with limit [" + limit + "]");
     }
     int count = 0;
     final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     for (RepositoryEntry entry : getUnmodifiableEntries()) {
-      if (entry.getFullEntryName().matches(searchString) && (entry.getKind() == kind || kind == any)) {
+      if (entry.getFullEntryName().matches(pattern) && (entry.getKind() == kind || kind == any)) {
         result.add(entry);
         if (limit != null && ++count == limit) {
           break;
@@ -130,6 +127,13 @@ public class EntryCacheImpl implements EntryCache {
    */
   public String getRepositoryUrl() {
     return repositoryURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public synchronized void setRepositoryURL(final String repositoryURL) {
+    this.repositoryURL = repositoryURL;
   }
 
   /**

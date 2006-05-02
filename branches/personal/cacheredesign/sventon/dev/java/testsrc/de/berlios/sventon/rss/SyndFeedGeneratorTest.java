@@ -5,7 +5,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class SyndFeedGeneratorTest extends TestCase {
@@ -33,7 +33,10 @@ public class SyndFeedGeneratorTest extends TestCase {
     generator.generateFeed(logEntries, "http://localhost:8888/svn/");
 
     File tempFile = File.createTempFile("sventon-rss-test", null);
-    generator.outputFeed(new FileWriter(tempFile));
+    PrintWriter pw = new PrintWriter(tempFile);
+    generator.outputFeed(pw);
+    pw.flush();
+    pw.close();
 
     if (tempFile.exists()) {
       tempFile.delete();

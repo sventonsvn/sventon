@@ -1,10 +1,7 @@
 package de.berlios.sventon.repository.cache;
 
-import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
-import static de.berlios.sventon.repository.RepositoryEntry.Kind.file;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RepositoryConfiguration;
-import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
+import static de.berlios.sventon.repository.RepositoryEntry.Kind.*;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -16,19 +13,15 @@ import java.util.List;
 public class EntryCacheImplTest extends TestCase {
 
   public void testEntryCache() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl cache = new EntryCacheImpl(config);
+    final EntryCacheImpl cache = new EntryCacheImpl();
 
-    assertEquals("http://localhost", cache.getRepositoryUrl());
+    assertNull(cache.getRepositoryUrl());
     assertEquals(0, cache.getCachedRevision());
     assertEquals(0, cache.getUnmodifiableEntries().size());
   }
 
   public void testEntryCacheClear() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl cache = new EntryCacheImpl(config);
+    final EntryCacheImpl cache = new EntryCacheImpl();
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
@@ -38,9 +31,7 @@ public class EntryCacheImplTest extends TestCase {
   }
 
   public void testEntryCacheAdd() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl cache = new EntryCacheImpl(config);
+    final EntryCacheImpl cache = new EntryCacheImpl();
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
@@ -48,9 +39,7 @@ public class EntryCacheImplTest extends TestCase {
   }
 
   public void testEntryCacheRemove() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl cache = new EntryCacheImpl(config);
+    final EntryCacheImpl cache = new EntryCacheImpl();
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());
@@ -77,9 +66,7 @@ public class EntryCacheImplTest extends TestCase {
   }
 
   public void testEntryCacheFindPattern() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setRepositoryRoot("http://localhost");
-    final EntryCacheImpl cache = new EntryCacheImpl(config);
+    final EntryCacheImpl cache = new EntryCacheImpl();
 
     assertEquals(0, cache.getUnmodifiableEntries().size());
     cache.add(getEntryTemplateList());

@@ -401,7 +401,7 @@ public class SVNRepositoryStub extends SVNRepository {
     changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
     changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Commit message."));
+    logEntries.add(new SVNLogEntry(changedPaths, 123, "jesper", new Date(), "Commit message."));
     repository.setLogResult(logEntries);
 
     List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
