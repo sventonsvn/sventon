@@ -11,10 +11,9 @@
  */
 package de.berlios.sventon.repository.cache;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
@@ -44,12 +43,9 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
 
   /**
    * Constructor.
-   *
-   * @param configuration Repository config
    */
-  public CommitMessageCacheImpl(final RepositoryConfiguration configuration) {
-    logger.debug("Initializing cache using [" + configuration.getUrl() + "]");
-    this.repositoryURL = configuration.getUrl();
+  public CommitMessageCacheImpl() {
+    logger.debug("Initializing cache");
   }
 
   /**
@@ -92,6 +88,12 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
     return repositoryURL;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public synchronized void setRepositoryURL(final String repositoryURL) {
+    this.repositoryURL = repositoryURL;
+  }
 
   /**
    * {@inheritDoc}

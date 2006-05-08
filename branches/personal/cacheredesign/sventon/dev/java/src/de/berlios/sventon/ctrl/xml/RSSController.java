@@ -124,7 +124,7 @@ public class RSSController extends AbstractController {
       final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
       final String[] targetPaths = new String[]{"/"}; // the path to show logs for
 
-      logger.debug("Getting log info for latest " + feedItemCount + " revisions");
+      logger.debug("Getting log info for latest [" + feedItemCount + "] revisions");
       repository.log(targetPaths, headRevision, headRevision - feedItemCount, true, false, feedItemCount, new ISVNLogEntryHandler() {
         public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
           logEntries.add(logEntry);

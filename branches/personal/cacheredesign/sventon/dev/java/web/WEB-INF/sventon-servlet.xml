@@ -295,17 +295,9 @@
     </property>
   </bean>
 
-  <bean id="entryCache" class="de.berlios.sventon.repository.cache.EntryCacheImpl">
-    <constructor-arg>
-      <ref local="repositoryConfig"/>
-    </constructor-arg>
-  </bean>
+  <bean id="entryCache" class="de.berlios.sventon.repository.cache.EntryCacheImpl"/>
 
-  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.CommitMessageCacheImpl">
-    <constructor-arg>
-      <ref local="repositoryConfig"/>
-    </constructor-arg>
-  </bean>
+  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.CommitMessageCacheImpl"/>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">
