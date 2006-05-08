@@ -4,12 +4,9 @@ import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class CacheServiceTest extends TestCase {
 
@@ -77,9 +74,10 @@ public class CacheServiceTest extends TestCase {
     config.setCacheUsed(true);
     config.setRepositoryRoot("http://localhost");
 
+    final TestRepository repos = new TestRepository();
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setRepositoryConfiguration(config);
-    cacheService.setRepository(SVNRepositoryStub.getInstance());
+    cacheService.setRepository(repos);
     cacheService.setEntryCache(new EntryCacheImpl());
 
     assertEquals(8, cacheService.findEntry(".*").size());
@@ -97,7 +95,7 @@ public class CacheServiceTest extends TestCase {
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setRepositoryConfiguration(config);
-    cacheService.setRepository(SVNRepositoryStub.getInstance());
+    cacheService.setRepository(new TestRepository());
     cacheService.setEntryCache(entryCache);
 
     assertEquals(10, cacheService.findEntry(".*").size());
@@ -118,4 +116,56 @@ public class CacheServiceTest extends TestCase {
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/", null));
     return entries;
   }
+
+  class TestRepository extends SVNRepositoryStub {
+
+    private HashMap<String, Collection> repositoryEntries = new HashMap<String, Collection>();
+    private List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    private SVNDirEntry infoEntry;
+
+    public TestRepository() throws SVNException {
+      super(SVNURL.parseURIDecoded("http://localhost/"), null);
+
+      final List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
+      entries1.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
+      final List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
+      entries2.add(new SVNDirEntry(null, "dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
+      repositoryEntries.put("/", entries1);
+      repositoryEntries.put("/dir1/", entries2);
+      repositoryEntries.put("/dir1/dir2/", new ArrayList());
+
+      final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
+      changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+      changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
+      changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
+      changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
+      logEntries.add(new SVNLogEntry(changedPaths, 123, "jesper", new Date(), "Commit message."));
+
+      infoEntry = new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
+    }
+
+    public long getLatestRevision() {
+      return 123;
+    }
+
+    public Collection getDir(String path, long revision, Map properties, Collection dirEntries) throws SVNException {
+      return repositoryEntries.get(path);
+    }
+
+    public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
+      return logEntries;
+    }
+
+    public SVNDirEntry info(String path, long revision) throws SVNException {
+      return infoEntry;
+    }
+
+  }
+
 }

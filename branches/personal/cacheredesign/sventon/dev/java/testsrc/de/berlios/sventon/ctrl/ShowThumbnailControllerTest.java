@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.List;
 import java.util.Map;
@@ -35,12 +37,18 @@ public class ShowThumbnailControllerTest extends TestCase {
 
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
-    final ModelAndView modelAndView = controller.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
+    final ModelAndView modelAndView = controller.svnHandle(new TestRepository(), command, SVNRevision.HEAD, req, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("thumbnailentries");
 
     assertEquals(2, entries.size());
+  }
+
+  class TestRepository extends SVNRepositoryStub {
+    public TestRepository() throws SVNException {
+      super(SVNURL.parseURIDecoded("http://localhost/"), null);
+    }
   }
 
 }
