@@ -44,6 +44,7 @@ public class CacheServiceImpl implements CacheService {
   private final Log logger = LogFactory.getLog(getClass());
 
   private boolean updating = false;
+  private CachePersister cachePersister;
 
   public CacheServiceImpl() {
     logger.info("Starting cache service");
@@ -61,6 +62,10 @@ public class CacheServiceImpl implements CacheService {
     this.commitMessageCache = commitMessageCache;
   }
 
+  public void setCachePersister(final CachePersister cachePersister) {
+    this.cachePersister = cachePersister;
+  }
+
   /**
    * Sets the repository. This method exists for testing purposes only!
    *
@@ -76,11 +81,9 @@ public class CacheServiceImpl implements CacheService {
   public synchronized void updateCaches() throws CacheException {
 
 /*
-* Kolla att cachen är initierat
-* Toggla isUpdating-flagga
-* Avgöra om cachen är uptodate
-* Antingen populera eller trigga update
-* Toggla isUpdating-flaggan igen
+* Kolla att cachen är initierad
+* Avgör om cachen är uptodate
+* populera eller trigga update
 */
 
     if (!isConnectionEstablished() || !configuration.isCacheUsed()) {
@@ -90,9 +93,12 @@ public class CacheServiceImpl implements CacheService {
     // update entryCache
     // update commitMessageCache
 
-    updating = true;
+
     try {
+      updating = true;
+
       //TODO: Load cache (if exists)
+
 
       long headRevision = repository.getLatestRevision();
       logger.debug("HEAD revision: " + headRevision);
@@ -109,12 +115,14 @@ public class CacheServiceImpl implements CacheService {
         populate("/", headRevision);
         entryCache.setCachedRevision(headRevision);
         logger.info("Number of cached entries: " + entryCache.getUnmodifiableEntries().size());
-        //TODO: Store cache
+        cachePersister.save(entryCache);
+        cachePersister.save(commitMessageCache);
       } else if (entryCache.getCachedRevision() < headRevision) {
         logger.debug("Updating cache from revision [" + entryCache.getCachedRevision()
             + "] to [" + headRevision + "]");
         update(headRevision);
-        //TODO: Store cache
+        cachePersister.save(entryCache);
+        cachePersister.save(commitMessageCache);
       }
       logger.debug("Cache is up-to-date");
     } catch (SVNException svnex) {
