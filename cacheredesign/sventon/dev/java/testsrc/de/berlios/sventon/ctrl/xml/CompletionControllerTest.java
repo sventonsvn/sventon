@@ -1,14 +1,16 @@
 package de.berlios.sventon.ctrl.xml;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.index.RevisionIndexer;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -30,7 +32,7 @@ public class CompletionControllerTest extends TestCase {
 
     MockHttpServletResponse res = new MockHttpServletResponse();
 
-    SVNRepository repos = SVNRepositoryStub.getInstance();
+    SVNRepository repos = new TestRepository();
     RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
     config.setRepositoryRoot(repos.getLocation().toString());
@@ -38,7 +40,7 @@ public class CompletionControllerTest extends TestCase {
     config.setCacheUsed(true);
     indexer.setRepositoryConfiguration(config);
     //ctrl.setRevisionIndexer(indexer);
-    ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, res, null);
+    ctrl.svnHandle(repos, command, SVNRevision.HEAD, req, res, null);
 
     DocumentBuilder parser =
         DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -53,7 +55,7 @@ public class CompletionControllerTest extends TestCase {
 
     req = new MockHttpServletRequest();
     try {
-      ctrl.svnHandle(SVNRepositoryStub.getInstance(), command, SVNRevision.HEAD, req, null, null);
+      ctrl.svnHandle(repos, command, SVNRevision.HEAD, req, null, null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException ex) {
       // expected
@@ -67,5 +69,10 @@ public class CompletionControllerTest extends TestCase {
     }
   }
 
+  class TestRepository extends SVNRepositoryStub {
+    public TestRepository() throws SVNException {
+      super(SVNURL.parseURIDecoded("http://localhost/"), null);
+    }
+  }
 
 }
