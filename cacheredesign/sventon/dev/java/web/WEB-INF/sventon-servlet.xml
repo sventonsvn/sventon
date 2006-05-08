@@ -293,11 +293,15 @@
     <property name="commitMessageCache">
       <ref local="commitMessageCache"/>
     </property>
+    <property name="cachePersister">
+      <ref local="cachePersister"/>
+    </property>
   </bean>
 
   <bean id="entryCache" class="de.berlios.sventon.repository.cache.EntryCacheImpl"/>
-
   <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.CommitMessageCacheImpl"/>
+
+  <bean id="cachePersister" class="de.berlios.sventon.repository.cache.DiskCachePersister"/>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">
