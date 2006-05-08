@@ -27,6 +27,7 @@ import java.util.Date;
  */
 public class RepositoryEntry implements Serializable {
 
+  public static final int FULL_ENTRY_NAME_MAX_LENGTH = 60;
   private static final long serialVersionUID = 3617229449081593805L;
   private transient SVNLock lock;
   private String entryPath;
@@ -115,12 +116,13 @@ public class RepositoryEntry implements Serializable {
 
   /**
    * Gets the full entry name in a display friendly format. <p/> The file name
-   * and path will be abbreviated down to 50 characters.
+   * and path will be abbreviated down to 60 characters.
    *
    * @return The abbreviated display friendly entry name
+   * @see #FULL_ENTRY_NAME_MAX_LENGTH
    */
   public String getFriendlyFullEntryName() {
-    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 50));
+    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 70));
   }
 
   /**

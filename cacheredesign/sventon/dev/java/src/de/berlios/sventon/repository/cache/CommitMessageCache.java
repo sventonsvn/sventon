@@ -75,4 +75,11 @@ public interface CommitMessageCache {
    */
   String getRepositoryUrl();
 
+  /**
+   * Sets the repository URL.
+   *
+   * @param repositoryURL The URL
+   */
+  void setRepositoryURL(final String repositoryURL);
+
 }

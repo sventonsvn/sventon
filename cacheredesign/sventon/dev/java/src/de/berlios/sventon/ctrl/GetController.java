@@ -109,6 +109,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           BufferedImage image = ImageIO.read(url);
           int orgWidth = image.getWidth();
           int orgHeight = image.getHeight();
+
           // Get preferred thumbnail dimension.
           final Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
           logger.debug("Thumbnail size: " + thumbnailSize.toString());
@@ -148,10 +149,8 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           }
           response.setHeader("Content-disposition", "attachment; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
         }
-        final HashMap properties = new HashMap();
         // Get the image data and write it to the outputStream.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, output);
-        logger.debug(properties);
+        repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
       }
       output.flush();
       output.close();

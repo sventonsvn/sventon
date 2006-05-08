@@ -112,8 +112,9 @@ public class CacheServiceImpl implements CacheService {
         //TODO: Store cache
       } else if (entryCache.getCachedRevision() < headRevision) {
         logger.debug("Updating cache from revision [" + entryCache.getCachedRevision()
-            + "] to [" + headRevision+ "]");
+            + "] to [" + headRevision + "]");
         update(headRevision);
+        //TODO: Store cache
       }
       logger.debug("Cache is up-to-date");
     } catch (SVNException svnex) {
@@ -202,7 +203,7 @@ public class CacheServiceImpl implements CacheService {
    * @throws SVNException if Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
-  private synchronized void update(final long headRevision) throws SVNException {
+  private void update(final long headRevision) throws SVNException {
 
     final String[] targetPaths = new String[]{"/"}; // the path to log
     final List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
@@ -210,6 +211,10 @@ public class CacheServiceImpl implements CacheService {
 
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
+
+      //TODO: Update commitMessageCache here!
+      // logEntry.getMessage();
+
       long revision = logEntry.getRevision();
       logger.debug("Applying changes from revision " + revision + " to cache");
       final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
@@ -222,19 +227,19 @@ public class CacheServiceImpl implements CacheService {
         switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
           case A :
             logger.debug("Adding entry to cache: " + logEntryPath.getPath());
-            doCacheAdd(logEntryPath, revision);
+            doEntryCacheAdd(logEntryPath, revision);
             break;
           case D :
             logger.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
-            doCacheDelete(logEntryPath, revision);
+            doEntryCacheDelete(logEntryPath, revision);
             break;
           case R :
             logger.debug("Replacing entry in cache: " + logEntryPath.getPath());
-            doCacheReplace(logEntryPath, revision);
+            doEntryCacheReplace(logEntryPath, revision);
             break;
           case M :
             logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
-            doCacheModify(logEntryPath, revision);
+            doEntryCacheModify(logEntryPath, revision);
             break;
           default :
             throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
@@ -251,7 +256,7 @@ public class CacheServiceImpl implements CacheService {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doCacheModify(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doEntryCacheModify(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     entryCache.removeByName(logEntryPath.getPath(), false);
     entryCache.add(new RepositoryEntry(repository.info(logEntryPath.getPath(), revision),
         PathUtil.getPathPart(logEntryPath.getPath()), null));
@@ -264,8 +269,8 @@ public class CacheServiceImpl implements CacheService {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doCacheReplace(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
-    doCacheModify(logEntryPath, revision);
+  private void doEntryCacheReplace(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+    doEntryCacheModify(logEntryPath, revision);
   }
 
   /**
@@ -275,7 +280,7 @@ public class CacheServiceImpl implements CacheService {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doCacheDelete(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doEntryCacheDelete(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     // Have to find out if deleted entry was a file or directory
     final SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), revision - 1);
     if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
@@ -295,7 +300,7 @@ public class CacheServiceImpl implements CacheService {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doCacheAdd(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doEntryCacheAdd(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
     // Have to find out if added entry was a file or directory
     final SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
 
