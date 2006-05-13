@@ -6,39 +6,37 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Date;
 
-import de.berlios.sventon.repository.RepositoryEntry;
-
 public class RepositoryEntryTest extends TestCase {
 
   public void testGetFriendlyFullEntryNameLongFullName() throws Exception {
     SVNDirEntry e = new SVNDirEntry(null, "test.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaaaaaaaaaaaaaaaaaaaaaaaaa/", null);
-    assertEquals(".../bla/blu/saaaaaaaaaaaaaaaaaaaaaaaaaaaa/test.fil", indexEntry.getFriendlyFullEntryName());
-    assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
+    RepositoryEntry entry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaaoooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/", null);
+    assertEquals(".../saaaaaoooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/test.fil", entry.getFriendlyFullEntryName());
+    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getFriendlyFullEntryName().length());
 
     e = new SVNDirEntry(null, "reallylongfilenamejustfortestingpurposes.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
-    assertEquals("...aa/reallylongfilenamejustfortestingpurposes.fil", indexEntry.getFriendlyFullEntryName());
-    assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
+    entry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
+    assertEquals("...aaaaaaaaaaaa/reallylongfilenamejustfortestingpurposes.fil", entry.getFriendlyFullEntryName());
+    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getFriendlyFullEntryName().length());
   }
 
   public void testGetFriendlyFullEntryNameShortName() throws Exception {
     SVNDirEntry e = new SVNDirEntry(null, "test.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
-    assertEquals("/source/com/bli/bla/blu/test.fil", indexEntry.getFriendlyFullEntryName());
+    RepositoryEntry entry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
+    assertEquals("/source/com/bli/bla/blu/test.fil", entry.getFriendlyFullEntryName());
   }
 
   public void testGetFriendlyFullEntryNameLongName() throws Exception {
-    SVNDirEntry e = new SVNDirEntry(null, "thisisafilenamewithmorethanfiftycharactersinitreallynotperfect.fil", SVNNodeKind.FILE, 1,
+    SVNDirEntry e = new SVNDirEntry(null, "thisisafilenamewithmorethanfiftycharactersinitreallynotperfectlookingontheweb.fil", SVNNodeKind.FILE, 1,
         false, 1, new Date(), "A");
-    RepositoryEntry indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
-    assertEquals("...morethanfiftycharactersinitreallynotperfect.fil", indexEntry.getFriendlyFullEntryName());
-    assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
+    RepositoryEntry entry = new RepositoryEntry(e, "/source/com/bli/bla/blu/", null);
+    assertEquals("...hanfiftycharactersinitreallynotperfectlookingontheweb.fil", entry.getFriendlyFullEntryName());
+    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getFriendlyFullEntryName().length());
 
     e = new SVNDirEntry(null, "reallylongfilenamejustfortestingpurposesonly.fil", SVNNodeKind.FILE, 1, false, 1, new Date(), "A");
-    indexEntry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
-    assertEquals("...eallylongfilenamejustfortestingpurposesonly.fil", indexEntry.getFriendlyFullEntryName());
-    assertEquals(50, indexEntry.getFriendlyFullEntryName().length());
+    entry = new RepositoryEntry(e, "/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", null);
+    assertEquals("...aaaaaaaa/reallylongfilenamejustfortestingpurposesonly.fil", entry.getFriendlyFullEntryName());
+    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getFriendlyFullEntryName().length());
   }
 
 }

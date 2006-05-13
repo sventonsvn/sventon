@@ -122,7 +122,7 @@ public class RepositoryEntry implements Serializable {
    * @see #FULL_ENTRY_NAME_MAX_LENGTH
    */
   public String getFriendlyFullEntryName() {
-    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 70));
+    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), FULL_ENTRY_NAME_MAX_LENGTH));
   }
 
   /**

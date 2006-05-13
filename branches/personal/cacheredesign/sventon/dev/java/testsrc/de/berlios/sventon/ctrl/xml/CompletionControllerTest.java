@@ -1,7 +1,6 @@
 package de.berlios.sventon.ctrl.xml;
 
 import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.index.RevisionIndexer;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
@@ -17,7 +16,6 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.StringReader;
 
 public class CompletionControllerTest extends TestCase {
@@ -33,12 +31,12 @@ public class CompletionControllerTest extends TestCase {
     MockHttpServletResponse res = new MockHttpServletResponse();
 
     SVNRepository repos = new TestRepository();
-    RevisionIndexer indexer = new RevisionIndexer(repos);
+//    RevisionIndexer indexer = new RevisionIndexer(repos);
     RepositoryConfiguration config = new RepositoryConfiguration();
     config.setRepositoryRoot(repos.getLocation().toString());
     config.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
     config.setCacheUsed(true);
-    indexer.setRepositoryConfiguration(config);
+//    indexer.setRepositoryConfiguration(config);
     //ctrl.setRevisionIndexer(indexer);
     ctrl.svnHandle(repos, command, SVNRevision.HEAD, req, res, null);
 
@@ -63,10 +61,10 @@ public class CompletionControllerTest extends TestCase {
   }
 
   protected void tearDown() throws Exception {
-    File tempIndex = new File(System.getProperty("java.io.tmpdir") + "/" + RevisionIndexer.INDEX_FILENAME);
-    if (tempIndex.exists()) {
-      tempIndex.delete();
-    }
+//    File tempIndex = new File(System.getProperty("java.io.tmpdir") + "/" + RevisionIndexer.INDEX_FILENAME);
+//    if (tempIndex.exists()) {
+//      tempIndex.delete();
+//    }
   }
 
   class TestRepository extends SVNRepositoryStub {

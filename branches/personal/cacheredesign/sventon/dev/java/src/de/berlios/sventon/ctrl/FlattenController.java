@@ -40,7 +40,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Make sure the path starts with a slash as that
-    // is the path structure of the revision index.
+    // is the path structure of the entry cache.
     String fromPath = svnCommand.getPath();
     if (!fromPath.startsWith("/")) {
       logger.debug("Appending initial slash");

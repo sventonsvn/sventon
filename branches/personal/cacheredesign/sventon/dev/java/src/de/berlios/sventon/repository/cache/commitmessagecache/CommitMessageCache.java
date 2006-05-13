@@ -9,8 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.repository.cache.commitmessagecache;
 
+import de.berlios.sventon.repository.cache.CacheException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface CommitMessageCache {
    *
    * @param searchString String to search for
    * @return List of something. Kind of depends on Lucene implementation. -- REVISIT
-   * @throws CacheException
+   * @throws de.berlios.sventon.repository.cache.CacheException
    */
   List<Object> find(final String searchString) throws CacheException;
 

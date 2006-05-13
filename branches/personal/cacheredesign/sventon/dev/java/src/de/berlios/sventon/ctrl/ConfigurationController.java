@@ -98,9 +98,9 @@ public class ConfigurationController extends AbstractFormController {
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
-      Map<String, Object> model = new HashMap<String, Object>();
-      ConfigCommand configCommand = new ConfigCommand();
-      String tempDir = System.getProperty("java.io.tmpdir");
+      final Map<String, Object> model = new HashMap<String, Object>();
+      final ConfigCommand configCommand = new ConfigCommand();
+      final String tempDir = System.getProperty("java.io.tmpdir");
       logger.debug("tempDir is: " + tempDir);
       configCommand.setConfigPath(tempDir);
       logger.debug("'command' set to: " + configCommand);
@@ -121,7 +121,7 @@ public class ConfigurationController extends AbstractFormController {
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     } else {
-      ConfigCommand confCommand = (ConfigCommand) command;
+      final ConfigCommand confCommand = (ConfigCommand) command;
       logger.debug("useCache: " + confCommand.isCacheUsed());
 
       if (exception.hasErrors()) {
@@ -132,14 +132,14 @@ public class ConfigurationController extends AbstractFormController {
       }
 
       // Make sure the URL does not start or end with whitespace.
-      String trimmedURL = confCommand.getRepositoryURL().trim();
-      Properties configProperties = new Properties();
+      final String trimmedURL = confCommand.getRepositoryURL().trim();
+      final Properties configProperties = new Properties();
       configProperties.put(PROPERTY_KEY_REPOSITORY_URL, trimmedURL);
       configProperties.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       configProperties.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
       configProperties.put(PROPERTY_KEY_USE_CACHE, Boolean.TRUE == confCommand.isCacheUsed() ? "true" : "false");
 
-      String fileSeparator = System.getProperty("file.separator");
+      final String fileSeparator = System.getProperty("file.separator");
 
       // Make sure the configPath ends with a (back)slash
       String configurationPath = confCommand.getConfigPath();
@@ -149,11 +149,11 @@ public class ConfigurationController extends AbstractFormController {
       configProperties.put(PROPERTY_KEY_CONFIGPATH, configurationPath);
       logger.debug(configProperties.toString());
 
-      File propertyFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
+      final File propertyFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
           + fileSeparator + SVENTON_PROPERTIES);
       logger.debug("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
-      FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
+      final FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
       configProperties.store(fileOutputStream, createPropertyFileComment());
       fileOutputStream.flush();
       fileOutputStream.close();
@@ -166,6 +166,7 @@ public class ConfigurationController extends AbstractFormController {
 
       if (configuration.isCacheUsed()) {
         try {
+          logger.debug("Calling cacheService init method");
           logger.debug("Starting cache update job");
           scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
         } catch (SchedulerException sx) {
