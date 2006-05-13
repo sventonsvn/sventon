@@ -9,8 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.repository.cache.commitmessagecache;
 
+import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -32,12 +33,12 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Current indexed revision.
+   * Current cached revision.
    */
   private long cachedRevision = 0;
 
   /**
-   * Indexed URL.
+   * Cached URL.
    */
   private String repositoryURL;
 

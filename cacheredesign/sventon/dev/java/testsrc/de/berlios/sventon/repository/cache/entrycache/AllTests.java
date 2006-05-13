@@ -1,4 +1,4 @@
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.repository.cache.entrycache;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -11,7 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(CacheServiceTest.class);
+    suite.addTestSuite(EntryCacheTest.class);
     return suite;
   }
 

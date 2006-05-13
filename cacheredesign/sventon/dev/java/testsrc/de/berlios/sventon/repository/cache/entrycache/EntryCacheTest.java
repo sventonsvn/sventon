@@ -1,4 +1,4 @@
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.*;
@@ -10,80 +10,89 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EntryCacheImplTest extends TestCase {
+public class EntryCacheTest extends TestCase {
 
   public void testEntryCache() throws Exception {
-    final EntryCacheImpl cache = new EntryCacheImpl();
+    final EntryCache cache = new MemoryCache();
+    final EntryCacheReader reader = new EntryCacheReader(cache);
 
     assertNull(cache.getRepositoryUrl());
     assertEquals(0, cache.getCachedRevision());
-    assertEquals(0, cache.getUnmodifiableEntries().size());
+    assertEquals(0, reader.getEntriesCount());
   }
 
   public void testEntryCacheClear() throws Exception {
-    final EntryCacheImpl cache = new EntryCacheImpl();
+    final EntryCache cache = new MemoryCache();
+    final EntryCacheWriter writer = new EntryCacheWriter(cache);
+    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, cache.getUnmodifiableEntries().size());
-    cache.add(getEntryTemplateList());
-    assertEquals(11, cache.getUnmodifiableEntries().size());
-    cache.clear();
-    assertEquals(0, cache.getUnmodifiableEntries().size());
+    assertEquals(0, reader.getEntriesCount());
+    writer.add(getEntryTemplateList());
+    assertEquals(11, reader.getEntriesCount());
+    writer.clear();
+    assertEquals(0, reader.getEntriesCount());
   }
 
   public void testEntryCacheAdd() throws Exception {
-    final EntryCacheImpl cache = new EntryCacheImpl();
+    final EntryCache cache = new MemoryCache();
+    final EntryCacheWriter writer = new EntryCacheWriter(cache);
+    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, cache.getUnmodifiableEntries().size());
-    cache.add(getEntryTemplateList());
-    assertEquals(11, cache.getUnmodifiableEntries().size());
+    assertEquals(0, reader.getEntriesCount());
+    writer.add(getEntryTemplateList());
+    assertEquals(11, reader.getEntriesCount());
   }
 
   public void testEntryCacheRemove() throws Exception {
-    final EntryCacheImpl cache = new EntryCacheImpl();
+    final EntryCache cache = new MemoryCache();
+    final EntryCacheWriter writer = new EntryCacheWriter(cache);
+    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, cache.getUnmodifiableEntries().size());
-    cache.add(getEntryTemplateList());
-    assertEquals(11, cache.getUnmodifiableEntries().size());
+    assertEquals(0, reader.getEntriesCount());
+    writer.add(getEntryTemplateList());
+    assertEquals(11, reader.getEntriesCount());
 
-    cache.removeByName("/file1.java", false);
-    assertEquals(10, cache.getUnmodifiableEntries().size());
+    writer.removeByName("/file1.java", false);
+    assertEquals(10, reader.getEntriesCount());
 
     // Try to remove again
-    cache.removeByName("/file1.java", false);
-    assertEquals(10, cache.getUnmodifiableEntries().size());
+    writer.removeByName("/file1.java", false);
+    assertEquals(10, reader.getEntriesCount());
 
     // Recursive must not matter in this case (entry is a file)
-    cache.removeByName("/file2.html", true);
-    assertEquals(9, cache.getUnmodifiableEntries().size());
+    writer.removeByName("/file2.html", true);
+    assertEquals(9, reader.getEntriesCount());
 
     // Remove the 'trunk' recursively (trailing slash keeps the dir itself)
-    cache.removeByName("/trunk/", true);
-    assertEquals(5, cache.getUnmodifiableEntries().size());
+    writer.removeByName("/trunk/", true);
+    assertEquals(5, reader.getEntriesCount());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
-    cache.removeByName("/tags", true);
-    assertEquals(2, cache.getUnmodifiableEntries().size());
+    writer.removeByName("/tags", true);
+    assertEquals(2, reader.getEntriesCount());
   }
 
   public void testEntryCacheFindPattern() throws Exception {
-    final EntryCacheImpl cache = new EntryCacheImpl();
+    final EntryCache cache = new MemoryCache();
+    final EntryCacheWriter writer = new EntryCacheWriter(cache);
+    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, cache.getUnmodifiableEntries().size());
-    cache.add(getEntryTemplateList());
-    assertEquals(11, cache.getUnmodifiableEntries().size());
+    assertEquals(0, reader.getEntriesCount());
+    writer.add(getEntryTemplateList());
+    assertEquals(11, reader.getEntriesCount());
 
-    assertEquals(5, cache.findByPattern(".*[12].*", any, null).size());
-    assertEquals(5, cache.findByPattern(".*[12].*", file, null).size());
-    assertEquals(0, cache.findByPattern(".*[12].*", dir, null).size());
+    assertEquals(5, reader.findByPattern(".*[12].*", any, null).size());
+    assertEquals(5, reader.findByPattern(".*[12].*", file, null).size());
+    assertEquals(0, reader.findByPattern(".*[12].*", dir, null).size());
 
-    assertEquals(5, cache.findByPattern(".*trunk.*", any, null).size());
-    assertEquals(2, cache.findByPattern(".*trunk.*", dir, null).size());
+    assertEquals(5, reader.findByPattern(".*trunk.*", any, null).size());
+    assertEquals(2, reader.findByPattern(".*trunk.*", dir, null).size());
 
-    assertEquals(3, cache.findByPattern(".*", dir, null).size());
+    assertEquals(3, reader.findByPattern(".*", dir, null).size());
 
-    assertEquals(1, cache.findByPattern(".*/trunk/src/.*", file, null).size());
+    assertEquals(1, reader.findByPattern(".*/trunk/src/.*", file, null).size());
 
-    assertEquals(0, cache.findByPattern(".*/TrUnK/sRc/.*", file, null).size());
+    assertEquals(0, reader.findByPattern(".*/TrUnK/sRc/.*", file, null).size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {
@@ -102,11 +111,9 @@ public class EntryCacheImplTest extends TestCase {
     return entries;
   }
 
-  private void print(List<RepositoryEntry> entries)
-  {
+  private void print(List<RepositoryEntry> entries) {
     for (RepositoryEntry entry : entries) {
       System.out.println(entry);
     }
   }
-
 }

@@ -41,6 +41,11 @@ public interface CacheService {
   boolean isUpdating();
 
   /**
+   * Initializes the caches.
+   */
+  void initialize();
+
+  /**
    * Searches the cached entries for given string (name fragment).
    *
    * @param searchString String to search for

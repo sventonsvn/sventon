@@ -11,11 +11,15 @@
  */
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.ctrl.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.ctrl.LogEntryActionType;
+import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCache;
+import de.berlios.sventon.repository.cache.entrycache.EntryCache;
+import de.berlios.sventon.repository.cache.entrycache.EntryCacheReader;
+import de.berlios.sventon.repository.cache.entrycache.EntryCacheWriter;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +41,8 @@ public class CacheServiceImpl implements CacheService {
   private RepositoryConfiguration configuration;
   private EntryCache entryCache;
   private CommitMessageCache commitMessageCache;
+  private EntryCacheReader entryCacheReader;
+  private EntryCacheWriter entryCacheWriter;
 
   /**
    * The logging instance.
@@ -44,26 +50,46 @@ public class CacheServiceImpl implements CacheService {
   private final Log logger = LogFactory.getLog(getClass());
 
   private boolean updating = false;
-  private CachePersister cachePersister;
 
   public CacheServiceImpl() {
     logger.info("Starting cache service");
   }
 
+  /**
+   * Sets the repository configuration.
+   *
+   * @param configuration Configuration
+   */
   public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
     this.configuration = configuration;
   }
 
+  /**
+   * Sets the entry cache instance.
+   *
+   * @param entryCache EntryCache instance.
+   */
   public void setEntryCache(final EntryCache entryCache) {
     this.entryCache = entryCache;
   }
 
+  /**
+   * Sets the commit message cache instance.
+   *
+   * @param commitMessageCache The cache instance.
+   */
   public void setCommitMessageCache(final CommitMessageCache commitMessageCache) {
     this.commitMessageCache = commitMessageCache;
   }
 
-  public void setCachePersister(final CachePersister cachePersister) {
-    this.cachePersister = cachePersister;
+  /**
+   * Initializes the cache service.
+   */
+  public synchronized void initialize() {
+    if (entryCache.isInitialized()) {
+      entryCacheReader = new EntryCacheReader(entryCache);
+      entryCacheWriter = new EntryCacheWriter(entryCache);
+    }
   }
 
   /**
@@ -80,51 +106,34 @@ public class CacheServiceImpl implements CacheService {
    */
   public synchronized void updateCaches() throws CacheException {
 
-/*
-* Kolla att cachen är initierad
-* Avgör om cachen är uptodate
-* populera eller trigga update
-*/
-
     if (!isConnectionEstablished() || !configuration.isCacheUsed()) {
+      // Silently return. Either cache is disabled or sventon
+      // has not yet been configured.
       return;
     }
 
-    // update entryCache
-    // update commitMessageCache
-
-
     try {
       updating = true;
-
-      //TODO: Load cache (if exists)
-
-
       long headRevision = repository.getLatestRevision();
-      logger.debug("HEAD revision: " + headRevision);
-
-      if (entryCache.getUnmodifiableEntries().size() == 0
-          || !configuration.getUrl().equals(entryCache.getRepositoryUrl())
-          || entryCache.getCachedRevision() > headRevision) {
+      if (entryCacheReader.getEntriesCount() == 0
+          || !configuration.getUrl().equals(entryCacheReader.getRepositoryUrl())
+          || entryCacheReader.getCachedRevision() > headRevision) {
         // cache is just created and does not contain any entries
         // or the repository URL has changed in the config properties
         // or the repository revision is LOWER than the cached revision
-        logger.info("Populating cache");
-        entryCache.setRepositoryURL(configuration.getUrl());
-        logger.debug("Caching url: " + entryCache.getRepositoryUrl());
-        populate("/", headRevision);
-        entryCache.setCachedRevision(headRevision);
-        logger.info("Number of cached entries: " + entryCache.getUnmodifiableEntries().size());
-        cachePersister.save(entryCache);
-        cachePersister.save(commitMessageCache);
-      } else if (entryCache.getCachedRevision() < headRevision) {
-        logger.debug("Updating cache from revision [" + entryCache.getCachedRevision()
+        logger.info("Populating entry cache");
+        entryCacheWriter.setRepositoryURL(configuration.getUrl());
+        logger.debug("Caching url: " + entryCacheReader.getRepositoryUrl());
+        populateEntryCache("/", headRevision);
+        entryCacheWriter.setCachedRevision(headRevision);
+        logger.info("Number of cached entries: " + entryCacheReader.getEntriesCount());
+        //TODO: Flush cache file
+      } else if (entryCacheReader.getCachedRevision() < headRevision) {
+        logger.debug("Updating cache from revision [" + entryCacheReader.getCachedRevision()
             + "] to [" + headRevision + "]");
         update(headRevision);
-        cachePersister.save(entryCache);
-        cachePersister.save(commitMessageCache);
+        //TODO: Flush cache file
       }
-      logger.debug("Cache is up-to-date");
     } catch (SVNException svnex) {
       throw new CacheException("Unable to update caches", svnex);
     } finally {
@@ -139,7 +148,6 @@ public class CacheServiceImpl implements CacheService {
     return updating;
   }
 
-
   /**
    * Checks if the repository connection is properly initialized.
    * If not, a connection will be created.
@@ -153,25 +161,15 @@ public class CacheServiceImpl implements CacheService {
         logger.warn("Could not establish repository connection", svne);
       }
       if (repository == null) {
-        logger.info("Repository not configured yet.");
+        logger.info("Repository not configured yet");
         return false;
       }
     }
     return true;
   }
 
-
   /**
-   * Checks if the cache is properly initialized.
-   * If not, the cache will be loaded.
-   *
-   * @throws Exception if unable to load cache.
-   */
-  private void assertCacheIsInitialized() throws Exception {
-  }
-
-  /**
-   * Populates the cache by getting all entries in given path
+   * Populates the entry cache by getting all entries in given path
    * and adding them to the cache. This method will be recursively
    * called by itself.
    *
@@ -179,17 +177,17 @@ public class CacheServiceImpl implements CacheService {
    * @throws SVNException if a Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
-  private void populate(final String path, final long revision) throws SVNException {
+  private void populateEntryCache(final String path, final long revision) throws SVNException {
     final List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
 
     entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
     for (SVNDirEntry entry : entriesList) {
       final RepositoryEntry newEntry = new RepositoryEntry(entry, path, null);
-      if (!entryCache.add(newEntry)) {
+      if (!entryCacheWriter.add(newEntry)) {
         logger.warn("Unable to add already existing entry to cache: " + newEntry.toString());
       }
       if (entry.getKind() == SVNNodeKind.DIR) {
-        populate(path + entry.getName() + "/", revision);
+        populateEntryCache(path + entry.getName() + "/", revision);
       }
     }
   }
@@ -215,7 +213,7 @@ public class CacheServiceImpl implements CacheService {
 
     final String[] targetPaths = new String[]{"/"}; // the path to log
     final List<SVNLogEntry> logEntries = (List<SVNLogEntry>) repository.log(targetPaths,
-        null, entryCache.getCachedRevision() + 1, headRevision, true, false);
+        null, entryCacheReader.getCachedRevision() + 1, headRevision, true, false);
 
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
@@ -253,7 +251,7 @@ public class CacheServiceImpl implements CacheService {
             throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
-      entryCache.setCachedRevision(headRevision);
+      entryCacheWriter.setCachedRevision(headRevision);
     }
   }
 
@@ -265,8 +263,8 @@ public class CacheServiceImpl implements CacheService {
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheModify(final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
-    entryCache.removeByName(logEntryPath.getPath(), false);
-    entryCache.add(new RepositoryEntry(repository.info(logEntryPath.getPath(), revision),
+    entryCacheWriter.removeByName(logEntryPath.getPath(), false);
+    entryCacheWriter.add(new RepositoryEntry(repository.info(logEntryPath.getPath(), revision),
         PathUtil.getPathPart(logEntryPath.getPath()), null));
   }
 
@@ -294,10 +292,10 @@ public class CacheServiceImpl implements CacheService {
     if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
       // Directory node deleted
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
-      entryCache.removeByName(logEntryPath.getPath(), true);
+      entryCacheWriter.removeByName(logEntryPath.getPath(), true);
     } else {
       // Single entry delete
-      entryCache.removeByName(logEntryPath.getPath(), false);
+      entryCacheWriter.removeByName(logEntryPath.getPath(), false);
     }
   }
 
@@ -320,22 +318,21 @@ public class CacheServiceImpl implements CacheService {
         && logEntryPath.getCopyPath() != null) {
       // Directory node added
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
-      entryCache.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+      entryCacheWriter.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
       // Add directory contents
-      populate(logEntryPath.getPath() + "/", revision);
+      populateEntryCache(logEntryPath.getPath() + "/", revision);
     } else {
       // Single entry added
-      entryCache.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+      entryCacheWriter.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
     }
   }
-
 
   /**
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
     updateCaches();
-    return entryCache.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
+    return entryCacheReader.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -343,7 +340,7 @@ public class CacheServiceImpl implements CacheService {
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
     updateCaches();
-    return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
+    return entryCacheReader.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -351,7 +348,7 @@ public class CacheServiceImpl implements CacheService {
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
     updateCaches();
-    return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
+    return entryCacheReader.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
   }
 
   /**
@@ -359,7 +356,7 @@ public class CacheServiceImpl implements CacheService {
    */
   public List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException {
     updateCaches();
-    return entryCache.findByPattern(fromPath + ".*?", dir, null);
+    return entryCacheReader.findByPattern(fromPath + ".*?", dir, null);
   }
 
   /**
@@ -369,6 +366,5 @@ public class CacheServiceImpl implements CacheService {
     updateCaches();
     return commitMessageCache.find(searchString);
   }
-
 
 }

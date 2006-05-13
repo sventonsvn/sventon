@@ -55,7 +55,7 @@ public class CompletionController extends AbstractSVNTemplateController implemen
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
     final String searchString = request.getParameter("complete");
     final String startDir = request.getParameter("startDir");
-    logger.debug("Searching index for: " + searchString);
+    logger.debug("Searching cache for: " + searchString);
 
     entries.addAll(getCacheService().findEntry(searchString, startDir, 10));
 
