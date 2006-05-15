@@ -18,7 +18,6 @@ import java.util.List;
 
 /**
  * Contains cached commit messages.
- * This class is a data holder, with various finder methods.
  *
  * @author jesper@users.berlios.de
  */

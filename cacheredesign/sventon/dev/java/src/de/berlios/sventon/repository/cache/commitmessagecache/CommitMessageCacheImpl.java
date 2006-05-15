@@ -33,8 +33,7 @@ import java.util.List;
 
 /**
  * Contains cached commit messages.
- * This implementation should use Lucene internally.
- * This class is a data holder only, with various finder methods.
+ * This implementation uses <a href="http://lucene.apache.org">Lucene</a> internally.
  *
  * @author jesper@users.berlios.de
  */
