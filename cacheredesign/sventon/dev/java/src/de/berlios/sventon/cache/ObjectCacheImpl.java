@@ -99,4 +99,15 @@ public final class ObjectCacheImpl implements ObjectCache {
     return cache.getMissCountNotFound();
   }
 
+  /**
+   * {@inheritDoc]
+   */
+  public void shutdown() throws Exception {
+    try {
+      CacheManager.getInstance().shutdown();
+    } catch (CacheException ce) {
+      throw new Exception("Unable to shutdown cache instance", ce);
+    }
+  }
+
 }

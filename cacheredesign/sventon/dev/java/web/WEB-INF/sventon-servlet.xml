@@ -242,7 +242,7 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl"/>
+  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown"/>
 
   <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration">
     <property name="repositoryRoot">

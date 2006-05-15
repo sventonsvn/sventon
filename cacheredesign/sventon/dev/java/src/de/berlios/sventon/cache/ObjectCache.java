@@ -23,7 +23,7 @@ public interface ObjectCache {
    * @param value    The object to cache.
    * @throws IllegalArgumentException if cacheKey is null.
    */
-  public void put(final Object cacheKey, final Object value);
+  void put(final Object cacheKey, final Object value);
 
   /**
    * Gets an object from the cache.
@@ -32,20 +32,26 @@ public interface ObjectCache {
    * @return The cached object. <code>null</code> if cache miss.
    * @throws IllegalArgumentException if cacheKey is null.
    */
-  public Object get(final Object cacheKey);
+  Object get(final Object cacheKey);
 
   /**
    * Gets the cache hit count.
    *
    * @return The cache hit count.
    */
-  public long getHitCount();
+  long getHitCount();
 
   /**
    * Gets the cache miss count.
    *
    * @return The cache miss count.
    */
-  public long getMissCount();
+  long getMissCount();
 
+  /**
+   * Shuts the cache down.
+   *
+   * @throws Exception if unable to shutdown cache.
+   */
+  void shutdown() throws Exception;
 }
