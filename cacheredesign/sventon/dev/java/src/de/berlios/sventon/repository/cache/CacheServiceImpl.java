@@ -16,6 +16,7 @@ import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.repository.CommitMessage;
 import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheReader;
@@ -222,7 +223,7 @@ public class CacheServiceImpl implements CacheService {
       // logEntry.getMessage();
 
       long revision = logEntry.getRevision();
-      logger.debug("Applying changes from revision " + revision + " to cache");
+      logger.debug("Applying changes from revision [" + revision + "] to cache");
       final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       final List<String> latestPathsList = new ArrayList<String>(map.keySet());
       // Sort the entries to apply changes in right order
@@ -362,9 +363,9 @@ public class CacheServiceImpl implements CacheService {
   /**
    * {@inheritDoc}
    */
-  public List<Object> find(final String searchString) throws CacheException {
+  public List<CommitMessage> find(final String queryString) throws CacheException {
     updateCaches();
-    return commitMessageCache.find(searchString);
+    return commitMessageCache.find(queryString);
   }
 
 }

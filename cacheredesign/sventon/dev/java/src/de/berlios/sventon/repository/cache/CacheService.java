@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.CommitMessage;
 
 import java.util.List;
 
@@ -87,10 +88,10 @@ public interface CacheService {
   /**
    * Searches the cached commit messages for given string.
    *
-   * @param searchString String to search for
-   * @return List of something. Depends on Lucene.
+   * @param queryString String to search for.
+   * @return List of commit messages.
    * @throws CacheException if error
    */
-  List<Object> find(final String searchString) throws CacheException;
+  List<CommitMessage> find(final String queryString) throws CacheException;
 
 }
