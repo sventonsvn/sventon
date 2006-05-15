@@ -2,10 +2,10 @@ package de.berlios.sventon.cache;
 
 import junit.framework.TestCase;
 
-public class SventonCacheImplTest extends TestCase {
+public class ObjectCacheImplTest extends TestCase {
 
   public void testPut() throws Exception {
-    SventonCache cache = new SventonCacheImpl();
+    ObjectCache cache = new ObjectCacheImpl();
     cache.put("test1", new Integer(10));
     cache.put("test2", new Integer(20));
 
@@ -26,7 +26,7 @@ public class SventonCacheImplTest extends TestCase {
   }
 
   public void testPutNull() throws Exception {
-    SventonCache cache = new SventonCacheImpl();
+    ObjectCache cache = new ObjectCacheImpl();
     try {
       cache.put(null, null);
       fail("Should cause IllegalArgumentException");
@@ -36,7 +36,7 @@ public class SventonCacheImplTest extends TestCase {
   }
 
   public void testGetNull() throws Exception {
-    SventonCache cache = new SventonCacheImpl();
+    ObjectCache cache = new ObjectCacheImpl();
     try {
       cache.get(null);
       fail("Should cause IllegalArgumentException");

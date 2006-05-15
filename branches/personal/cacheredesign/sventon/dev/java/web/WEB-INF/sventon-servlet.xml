@@ -242,7 +242,7 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.SventonCacheImpl"/>
+  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl"/>
 
   <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration">
     <property name="repositoryRoot">
@@ -299,7 +299,7 @@
     <constructor-arg><value>${java.io.tmpdir}</value></constructor-arg>
   </bean>
 
-  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl" />
+  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl"/>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">

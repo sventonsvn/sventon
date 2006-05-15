@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.ctrl;
 
-import de.berlios.sventon.cache.SventonCache;
+import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
@@ -53,7 +53,7 @@ import java.util.HashMap;
 public class GetController extends AbstractSVNTemplateController implements Controller {
 
   private ImageUtil imageUtil;
-  private SventonCache cache;
+  private ObjectCache cache;
 
   public static final String THUMBNAIL_FORMAT = "png";
   public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
@@ -198,7 +198,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    *
    * @param cache The cache instance.
    */
-  public void setCache(final SventonCache cache) {
+  public void setCache(final ObjectCache cache) {
     this.cache = cache;
   }
 }

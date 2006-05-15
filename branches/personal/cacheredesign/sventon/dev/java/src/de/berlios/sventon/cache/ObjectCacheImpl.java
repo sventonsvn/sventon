@@ -26,7 +26,7 @@ import java.io.Serializable;
  *
  * @author jesper@users.berlios.de
  */
-public final class SventonCacheImpl implements SventonCache {
+public final class ObjectCacheImpl implements ObjectCache {
 
   /**
    * The cache instance.
@@ -48,7 +48,7 @@ public final class SventonCacheImpl implements SventonCache {
    *
    * @throws Exception if unable to create cache instance.
    */
-  public SventonCacheImpl() throws Exception {
+  public ObjectCacheImpl() throws Exception {
     try {
       CacheManager cacheManager = CacheManager.getInstance();
       cache = cacheManager.getCache(CACHE_NAME);

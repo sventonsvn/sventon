@@ -14,7 +14,7 @@ package de.berlios.sventon.cache;
 /**
  * Interface to be implemented by sventon object cache class.
  */
-public interface SventonCache {
+public interface ObjectCache {
 
   /**
    * Puts an object into the cache.
