@@ -1,12 +1,18 @@
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
+import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCache;
+import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheWriter;
 import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
 import junit.framework.TestCase;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
@@ -80,22 +86,30 @@ public class CacheServiceTest extends TestCase {
     assertEquals(1, cacheService.findDirectories("/trunk/").size());
   }
 
-  public void testPopulate() throws Exception {
+  public void testPopulateCaches() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
     config.setCacheUsed(true);
     config.setRepositoryRoot("http://localhost");
 
+    final EntryCache entryCache = new MemoryCache();
+
+    final Directory directory = new RAMDirectory();
+    final CommitMessageCache messageCache = new CommitMessageCacheImpl(directory);
+
     final TestRepository repos = new TestRepository();
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setObjectCache(new TestObjectCache());
     cacheService.setRepositoryConfiguration(config);
     cacheService.setRepository(repos);
-    cacheService.setEntryCache(new MemoryCache());
+    cacheService.setEntryCache(entryCache);
+    cacheService.setCommitMessageCache(messageCache);
     cacheService.initialize();
 
+    assertEquals(1, cacheService.find("revision").size());
     assertEquals(8, cacheService.findEntry(".*").size());
   }
 
-  public void testUpdate() throws Exception {
+  public void testUpdateCaches() throws Exception {
     final RepositoryConfiguration config = new RepositoryConfiguration();
     config.setCacheUsed(true);
     config.setRepositoryRoot("http://localhost");
@@ -106,12 +120,24 @@ public class CacheServiceTest extends TestCase {
     writer.setRepositoryURL("http://localhost");
     writer.add(getEntryTemplateList());
 
+    final Directory directory = new RAMDirectory();
+    final CommitMessageCache messageCache = new CommitMessageCacheImpl(directory);
+
+    final TestRepository repos = new TestRepository();
     final CacheServiceImpl cacheService = new CacheServiceImpl();
+    cacheService.setObjectCache(new TestObjectCache());
     cacheService.setRepositoryConfiguration(config);
-    cacheService.setRepository(new TestRepository());
+    cacheService.setRepository(repos);
     cacheService.setEntryCache(entryCache);
+    cacheService.setCommitMessageCache(messageCache);
     cacheService.initialize();
-    assertEquals(10, cacheService.findEntry(".*").size());
+
+    cacheService.updateCaches(); // Triggers the populationn
+//    repos.setLatestRevision(repos.getLatestRevision() + 1);
+    assertEquals(11, cacheService.findEntry(".*").size());
+    List<CommitMessage> msgs = cacheService.find("revision");
+    assertEquals(2, msgs.size());  // Triggers the update
+
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {
@@ -130,11 +156,36 @@ public class CacheServiceTest extends TestCase {
     return entries;
   }
 
+  class TestObjectCache implements ObjectCache {
+    private HashMap cache = new HashMap();
+
+    public void put(final Object cacheKey, final Object value) {
+      cache.put(cacheKey, value);
+    }
+
+    public Object get(final Object cacheKey) {
+      return cache.get(cacheKey);
+    }
+
+    public long getHitCount() {
+      return 0;
+    }
+
+    public long getMissCount() {
+      return 0;
+    }
+
+    public void shutdown() throws Exception {
+    }
+  }
+
   class TestRepository extends SVNRepositoryStub {
 
     private HashMap<String, Collection> repositoryEntries = new HashMap<String, Collection>();
-    private List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    private List<SVNLogEntry> logEntriesForPopulation = new ArrayList<SVNLogEntry>();
+    private List<SVNLogEntry> logEntriesForUpdate = new ArrayList<SVNLogEntry>();
     private SVNDirEntry infoEntry;
+    private long headRevision = 123;
 
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
@@ -153,18 +204,26 @@ public class CacheServiceTest extends TestCase {
       repositoryEntries.put("/dir1/", entries2);
       repositoryEntries.put("/dir1/dir2/", new ArrayList());
 
-      final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
-      changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-      changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
-      changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
-      changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-      logEntries.add(new SVNLogEntry(changedPaths, 123, "jesper", new Date(), "Commit message."));
+      final Map<String, SVNLogEntryPath> changedPathsPopulation = new HashMap<String, SVNLogEntryPath>();
+      changedPathsPopulation.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+      changedPathsPopulation.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
+      changedPathsPopulation.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
+      changedPathsPopulation.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
+      logEntriesForPopulation.add(new SVNLogEntry(changedPathsPopulation, 123, "jesper", new Date(), "Commit message for revision 123."));
+
+      final Map<String, SVNLogEntryPath> changedPathsUpdate = new HashMap<String, SVNLogEntryPath>();
+      changedPathsUpdate.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+      logEntriesForUpdate.add(new SVNLogEntry(changedPathsUpdate, 124, "jesper", new Date(), "Commit message for revision 124."));
 
       infoEntry = new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
     }
 
     public long getLatestRevision() {
-      return 123;
+      return headRevision;
+    }
+
+    public void setLatestRevision(final long headRevision) {
+      this.headRevision = headRevision;
     }
 
     public Collection getDir(String path, long revision, Map properties, Collection dirEntries) throws SVNException {
@@ -172,7 +231,14 @@ public class CacheServiceTest extends TestCase {
     }
 
     public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
-      return logEntries;
+      return logEntriesForUpdate;
+    }
+
+    public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, ISVNLogEntryHandler handler) throws SVNException {
+      for (final SVNLogEntry svnLogEntry : logEntriesForPopulation) {
+        handler.handleLogEntry(svnLogEntry);
+      }
+      return logEntriesForPopulation.size();
     }
 
     public SVNDirEntry info(String path, long revision) throws SVNException {

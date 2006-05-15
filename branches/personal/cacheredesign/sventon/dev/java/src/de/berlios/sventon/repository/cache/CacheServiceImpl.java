@@ -22,6 +22,7 @@ import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheReader;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheWriter;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.cache.ObjectCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -42,14 +43,26 @@ public class CacheServiceImpl implements CacheService {
   private CommitMessageCache commitMessageCache;
   private EntryCacheReader entryCacheReader;
   private EntryCacheWriter entryCacheWriter;
+  public static final String LAST_CACHED_LOG_REVISION_CACHE_KEY = "lastCachedLogRevision";
 
   /**
    * The logging instance.
    */
   private final Log logger = LogFactory.getLog(getClass());
 
+  /**
+   * Determines whether the index is buzy updating or not.
+   */
   private boolean updating = false;
 
+  /**
+   * The ObjectCache instance.
+   */
+  private ObjectCache objectCache;
+
+  /**
+   * Constructor.
+   */
   public CacheServiceImpl() {
     logger.info("Starting cache service");
   }
@@ -79,6 +92,15 @@ public class CacheServiceImpl implements CacheService {
    */
   public void setCommitMessageCache(final CommitMessageCache commitMessageCache) {
     this.commitMessageCache = commitMessageCache;
+  }
+
+  /**
+   * Sets the cache instance.
+   *
+   * @param objectCache The cache instance.
+   */
+  public void setObjectCache(final ObjectCache objectCache) {
+    this.objectCache = objectCache;
   }
 
   /**
@@ -114,6 +136,25 @@ public class CacheServiceImpl implements CacheService {
     try {
       updating = true;
       long headRevision = repository.getLatestRevision();
+
+      if (objectCache.get(LAST_CACHED_LOG_REVISION_CACHE_KEY) == null) {
+        logger.debug("No cached commit messages - populating cache");
+        long revisionCount = repository.log(new String[]{"/"}, headRevision, 0, true, false, new ISVNLogEntryHandler() {
+          public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
+            try {
+              commitMessageCache.add(new CommitMessage(logEntry.getRevision(), logEntry.getMessage()));
+            } catch (CacheException ce) {
+              logger.warn("Unable to add commit message to cache", ce);
+            }
+          }
+        });
+        logger.debug("Revisions cached: " + revisionCount);
+        if (revisionCount > 0) {
+          logger.debug("Updating '" + LAST_CACHED_LOG_REVISION_CACHE_KEY + "' to [" + headRevision + "]");
+          objectCache.put(LAST_CACHED_LOG_REVISION_CACHE_KEY, headRevision);
+        }
+      }
+
       if (entryCacheReader.getEntriesCount() == 0
           || !configuration.getUrl().equals(entryCacheReader.getRepositoryUrl())
           || entryCacheReader.getCachedRevision() > headRevision) {
@@ -133,6 +174,8 @@ public class CacheServiceImpl implements CacheService {
         update(headRevision);
         //TODO: Flush cache file
       }
+
+
     } catch (SVNException svnex) {
       throw new CacheException("Unable to update caches", svnex);
     } finally {
@@ -216,12 +259,19 @@ public class CacheServiceImpl implements CacheService {
 
     // One logEntry is one commit (or revision)
     for (SVNLogEntry logEntry : logEntries) {
-
-      //TODO: Update commitMessageCache here!
-      // logEntry.getMessage();
-
       long revision = logEntry.getRevision();
       logger.debug("Applying changes from revision [" + revision + "] to cache");
+
+      long lastCachedLogRevision = (Long) objectCache.get(LAST_CACHED_LOG_REVISION_CACHE_KEY);
+      if (lastCachedLogRevision < revision) {
+        logger.debug("Updating commitMessageCache");
+        try {
+          commitMessageCache.add(new CommitMessage(revision, logEntry.getMessage()));
+        } catch (CacheException ce) {
+          logger.warn("Unable to add commit message to cache", ce);
+        }
+      }
+
       final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
       final List<String> latestPathsList = new ArrayList<String>(map.keySet());
       // Sort the entries to apply changes in right order
@@ -250,8 +300,9 @@ public class CacheServiceImpl implements CacheService {
             throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
-      entryCacheWriter.setCachedRevision(headRevision);
     }
+    entryCacheWriter.setCachedRevision(headRevision);
+    objectCache.put(LAST_CACHED_LOG_REVISION_CACHE_KEY, headRevision);
   }
 
   /**
