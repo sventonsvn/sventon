@@ -11,7 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(SventonCacheImplTest.class);
+    suite.addTestSuite(ObjectCacheImplTest.class);
     return suite;
   }
 
