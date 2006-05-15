@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Service class used to access the caches.
- * <p/>
- * Responsibility: Start/stop the transaction, trigger cache update and perform search.
  *
  * @author jesper@users.berlios.de
  */
