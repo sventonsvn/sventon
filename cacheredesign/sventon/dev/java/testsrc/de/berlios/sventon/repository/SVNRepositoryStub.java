@@ -201,7 +201,7 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  protected ISVNSession getOptions() {
+  public ISVNSession getOptions() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
