@@ -242,7 +242,32 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown"/>
+  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown">
+    <constructor-arg index="0">
+      <value>sventonCache</value>
+    </constructor-arg>
+    <constructor-arg index="1">
+      <value>10000</value>
+    </constructor-arg>
+    <constructor-arg index="2">
+      <value>true</value>
+    </constructor-arg>
+    <constructor-arg index="3">
+      <value>false</value>
+    </constructor-arg>
+    <constructor-arg index="4">
+      <value>0</value>
+    </constructor-arg>
+    <constructor-arg index="5">
+      <value>0</value>
+    </constructor-arg>
+    <constructor-arg index="6">
+      <value>true</value>
+    </constructor-arg>
+    <constructor-arg index="7">
+      <value>120</value>
+    </constructor-arg>
+  </bean>
 
   <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration">
     <property name="repositoryRoot">
@@ -296,7 +321,9 @@
   </bean>
 
   <bean id="entryCache" class="de.berlios.sventon.repository.cache.entrycache.DiskCache" destroy-method="shutdown">
-    <constructor-arg><value>${java.io.tmpdir}</value></constructor-arg>
+    <constructor-arg>
+      <value>${java.io.tmpdir}</value>
+    </constructor-arg>
   </bean>
 
   <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl"/>

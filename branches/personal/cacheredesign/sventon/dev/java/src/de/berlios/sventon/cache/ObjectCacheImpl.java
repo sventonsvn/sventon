@@ -29,9 +29,14 @@ import java.io.Serializable;
 public final class ObjectCacheImpl implements ObjectCache {
 
   /**
+   * The cache manager instance.
+   */
+  private CacheManager cacheManager;
+
+  /**
    * The cache instance.
    */
-  private Cache cache = null;
+  private Cache cache;
 
   /**
    * Logger for this class and subclasses
@@ -39,19 +44,38 @@ public final class ObjectCacheImpl implements ObjectCache {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Sventon cache name.
+   * Name of the cache.
    */
-  public static final String CACHE_NAME = "sventonCache";
+  private String cacheName;
 
   /**
-   * Constructs the cache instance.
+   * Constructor.
    *
-   * @throws Exception if unable to create cache instance.
+   * @param cacheName           Name of the cache.
+   * @param maxElementsInMemory Max elements in memory
+   * @param overflowToDisk      Overflow to disk
+   * @param eternal             If true, objects never expire
+   * @param timeToLiveSeconds   Object time to live in seconds
+   * @param timeToIdleSeconds   Object time to idle in seconds
+   * @param diskPersistent      If true, cache will be stored on disk
+   * @param diskExpiryThreadIntervalSeconds
+   *                            Expiry thread interval
+   * @throws Exception if unable to create cache.
    */
-  public ObjectCacheImpl() throws Exception {
+  public ObjectCacheImpl(final String cacheName,
+                         final int maxElementsInMemory,
+                         final boolean overflowToDisk,
+                         final boolean eternal,
+                         final int timeToLiveSeconds,
+                         final int timeToIdleSeconds,
+                         final boolean diskPersistent,
+                         final int diskExpiryThreadIntervalSeconds) throws Exception {
     try {
-      CacheManager cacheManager = CacheManager.getInstance();
-      cache = cacheManager.getCache(CACHE_NAME);
+      // Initialize cache using failsafe configuration
+      cacheManager = new CacheManager(getClass().getResource("/ehcache-failsafe.xml"));
+      cache = new Cache(cacheName, maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds,
+          timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds);
+      cacheManager.addCache(cache);
     } catch (CacheException ce) {
       throw new Exception("Unable to create cache instance", ce);
     }
@@ -104,7 +128,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    */
   public void shutdown() throws Exception {
     try {
-      CacheManager.getInstance().shutdown();
+      cacheManager.shutdown();
     } catch (CacheException ce) {
       throw new Exception("Unable to shutdown cache instance", ce);
     }
