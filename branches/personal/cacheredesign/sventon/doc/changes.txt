@@ -1,6 +1,9 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[536] Added: Upgraded to ehcache 1.2.
+[536] Added: Upgraded to JavaSVN 1.1.0b.
+
 [513] Release 1.0 RC3 (2006-04-16)
 [509] Fixed: Bug #7136 - The path link contains Chinese still doesn't work.
 [501] Added: Upgraded to JavaSVN 1.0.4.
