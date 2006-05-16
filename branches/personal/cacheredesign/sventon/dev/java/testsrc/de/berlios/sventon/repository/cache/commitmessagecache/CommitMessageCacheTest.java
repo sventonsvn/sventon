@@ -1,28 +1,18 @@
 package de.berlios.sventon.repository.cache.commitmessagecache;
 
 import de.berlios.sventon.repository.CommitMessage;
-import de.berlios.sventon.repository.cache.CacheException;
 import junit.framework.TestCase;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 
 public class CommitMessageCacheTest extends TestCase {
 
-  public void testFindWhenEmpty() throws Exception {
-    final Directory directory = new RAMDirectory();
-    final CommitMessageCacheImpl cache = new CommitMessageCacheImpl(directory);
-
-    try {
-      cache.find("test");
-      fail("Should cause CacheException");
-    } catch (CacheException ce) {
-      // expected
-    }
-    directory.close();
-  }
-
   public void testAdd() throws Exception {
     final Directory directory = new RAMDirectory();
+
+    //final String tempDir = System.getProperty("java.io.tmpdir") + "sventonCacheTest";
+    //final Directory directory = FSDirectory.getDirectory(tempDir, true);
+
     final CommitMessageCacheImpl cache = new CommitMessageCacheImpl(directory);
 
     cache.add(new CommitMessage(123, "This is a commit message for revision 123."));

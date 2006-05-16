@@ -18,8 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
@@ -49,8 +49,6 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
    */
   private Directory directory;
 
-  private boolean createIndex = false;
-
   /**
    * Constructor.
    * Initializes the commit message cache.
@@ -59,20 +57,16 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
    */
   public CommitMessageCacheImpl(final Directory directory) throws CacheException {
     logger.debug("Initializing cache");
-    this.directory = directory;
 
     IndexWriter writer = null;
     try {
-      writer = getIndexWriter();
-    } catch (Exception ex) {
-      createIndex = true;
-      try {
-        if (IndexReader.isLocked(this.directory)) {
-          IndexReader.unlock(this.directory);
-        }
-      } catch (IOException ioex) {
-        throw new CacheException("Unable to startup lucene index - index is locked and cannot be unlocked", ioex);
+      if (!IndexReader.indexExists(directory)) {
+        writer = new IndexWriter(directory, new StandardAnalyzer(), true);
+        writer.close();
       }
+      this.directory = directory;
+    } catch (IOException ioex) {
+      throw new CacheException("Unable to startup lucene index", ioex);
     } finally {
       if (writer != null) {
         try {
@@ -92,17 +86,6 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
    */
   private synchronized Searcher getIndexSearcher() throws IOException {
     return new IndexSearcher(directory);
-  }
-
-  /**
-   * Gets the index Writer.
-   *
-   * @return The index writer.
-   */
-  private synchronized IndexWriter getIndexWriter() throws IOException {
-    final IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(), createIndex);
-    createIndex = false;
-    return writer;
   }
 
   /**
@@ -147,7 +130,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
     IndexWriter writer = null;
 
     try {
-      writer = getIndexWriter();
+      writer = new IndexWriter(directory, new StandardAnalyzer(), false);
       final Document document = new Document();
       document.add(new Field("revision", String.valueOf(commitMessage.getRevision()), Field.Store.YES, Field.Index.NO));
       document.add(new Field("content", commitMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
@@ -180,7 +163,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
     IndexWriter writer = null;
 
     try {
-      writer = getIndexWriter();
+      writer = new IndexWriter(directory, new StandardAnalyzer(), false);
       count = writer.docCount();
       writer.close();
     } catch (IOException ioex) {
