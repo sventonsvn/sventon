@@ -29,39 +29,72 @@ import java.io.File;
  * @author jesper@users.berlios.de
  */
 public class LuceneDirectoryBean implements FactoryBean, InitializingBean {
-  private String path = null;
+
+  /**
+   * The <i>lucene</i> directory. Can be RAMDirectory or FSDirectory.
+   * Specified by setting <code>diskPersistent</code> property.
+   *
+   * @see org.apache.lucene.store.FSDirectory
+   * @see org.apache.lucene.store.RAMDirectory
+   */
   private Directory directory = null;
-  private boolean create = false;
+
+  /**
+   * Path where to store files. Only used if <code>diskPersistent</code> is <code>true</code>.
+   */
+  private String path = null;
+
+  /**
+   * Controls whether lucene cache will be disk persistent or not.
+   */
   private boolean diskPersistent = false;
 
-  public boolean isCreate() {
-    return create;
-  }
-
-  public void setCreate(final boolean create) {
-    this.create = create;
-  }
-
+  /**
+   * Checks if cache is disk persistent or not.
+   *
+   * @return True if disk persistent.
+   */
   public boolean isDiskPersistent() {
     return diskPersistent;
   }
 
+  /**
+   * Sets disk persisten flag.
+   *
+   * @param diskPersistent True or false.
+   */
   public void setDiskPersistent(final boolean diskPersistent) {
     this.diskPersistent = diskPersistent;
   }
 
+  /**
+   * Gets the path where files will be store. Only used if <code>diskPersistent</code> is true.
+   *
+   * @return The path
+   */
   public String getPath() {
     return path;
   }
 
+  /**
+   * Sets the path where files will be store. Only used if <code>diskPersistent</code> is true.
+   *
+   * @param path The path
+   */
   public void setPath(final String path) {
     this.path = path;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public Object getObject() throws Exception {
     return directory;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public Class getObjectType() {
     if (diskPersistent) {
       return FSDirectory.class;
@@ -70,21 +103,28 @@ public class LuceneDirectoryBean implements FactoryBean, InitializingBean {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public boolean isSingleton() {
     return true;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public void afterPropertiesSet() throws Exception {
-    if (path == null) {
-      throw new BeanInitializationException("No path specified for lucene index directory");
-    }
-    final File file = new File(path);
-    if (!file.isDirectory()) {
-      throw new BeanInitializationException("Invalid path for lucene index directory");
-    }
-
     if (diskPersistent) {
-      directory = FSDirectory.getDirectory(file, create);
+      if (path == null) {
+        throw new BeanInitializationException("No path specified for lucene index directory");
+      }
+
+      final File file = new File(path);
+      if (!file.isDirectory()) {
+        throw new BeanInitializationException("Not a valid directory: " + path);
+      }
+
+      directory = FSDirectory.getDirectory(file, false);
       if (!IndexReader.indexExists(directory)) {
         IndexWriter iw = new IndexWriter(directory, new StandardAnalyzer(), true);
         iw.close();

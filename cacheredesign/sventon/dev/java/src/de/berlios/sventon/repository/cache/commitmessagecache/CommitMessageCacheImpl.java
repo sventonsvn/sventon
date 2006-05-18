@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.CommitMessage;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -25,9 +26,11 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,13 +103,23 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
       searcher = getIndexSearcher();
       final Hits hits = searcher.search(query);
 
+      final Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter(), new QueryScorer(query));
+      highlighter.setTextFragmenter(new SimpleFragmenter(20));
+      highlighter.setEncoder(new SimpleHTMLEncoder());
+
       final int hitCount = hits.length();
       logger.debug("Hit count: " + hitCount);
       result = new ArrayList<CommitMessage>(hitCount);
+
       if (hitCount > 0) {
         for (int i = 0; i < hitCount; i++) {
           final Document document = hits.doc(i);
-          result.add(new CommitMessage(Long.parseLong(document.get("revision")), document.get("content")));
+          final String content = document.get("content");
+          final int maxNumFragmentsRequired = 100;
+          final String fragmentSeparator = "...";
+          final TokenStream tokenStream = new StandardAnalyzer().tokenStream("content", new StringReader(content));
+          result.add(new CommitMessage(Long.parseLong(document.get("revision")),
+              highlighter.getBestFragments(tokenStream, content, maxNumFragmentsRequired, fragmentSeparator)));
         }
       }
     } catch (Exception ex) {

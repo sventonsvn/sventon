@@ -333,9 +333,6 @@
   </bean>
 
   <bean id="luceneDirectory" class="de.berlios.sventon.repository.cache.commitmessagecache.LuceneDirectoryBean">
-    <property name="create">
-      <value>false</value>
-    </property>
     <property name="diskPersistent">
       <value>true</value>
     </property>
