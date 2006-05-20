@@ -40,19 +40,19 @@
     </property>
   </bean>
 
-  <bean id="repoBrowserController" class="de.berlios.sventon.ctrl.RepoBrowserController" parent="abstractController">
+  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="showLockController" class="de.berlios.sventon.ctrl.ShowLockController" parent="abstractController">
+  <bean id="showLockController" class="de.berlios.sventon.web.ctrl.ShowLockController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="rssController" class="de.berlios.sventon.ctrl.xml.RSSController">
+  <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
@@ -76,7 +76,7 @@
     </property>
   </bean>
 
-  <bean id="latestInfoController" class="de.berlios.sventon.ctrl.xml.ShowLatestCommitInfoController">
+  <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
@@ -85,19 +85,19 @@
     </property>
   </bean>
 
-  <bean id="revInfoController" class="de.berlios.sventon.ctrl.ShowRevisionInfoController" parent="abstractController">
+  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="goToController" class="de.berlios.sventon.ctrl.GoToController" parent="abstractController">
+  <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="showLogsController" class="de.berlios.sventon.ctrl.ShowLogController" parent="abstractController">
+  <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -107,7 +107,7 @@
     </property>
   </bean>
 
-  <bean id="completionController" class="de.berlios.sventon.ctrl.xml.CompletionController" parent="abstractController">
+  <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -116,19 +116,19 @@
     </property>
   </bean>
 
-  <bean id="searchController" class="de.berlios.sventon.ctrl.SearchController" parent="abstractController">
+  <bean id="searchController" class="de.berlios.sventon.web.ctrl.SearchController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="flattenController" class="de.berlios.sventon.ctrl.FlattenController" parent="abstractController">
+  <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="showFileController" class="de.berlios.sventon.ctrl.ShowFileController" parent="abstractController">
+  <bean id="showFileController" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
     <property name="archiveFileExtensionPattern">
       <value>(jar|zip|war|ear)</value>
     </property>
@@ -143,7 +143,7 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController" class="de.berlios.sventon.ctrl.ShowThumbnailController"
+  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController"
         parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
@@ -153,31 +153,31 @@
     </property>
   </bean>
 
-  <bean id="diffController" class="de.berlios.sventon.ctrl.DiffController" parent="abstractController">
+  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="diffPreviousController" class="de.berlios.sventon.ctrl.DiffPreviousController" parent="abstractController">
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
   </bean>
 
-  <bean id="getController" class="de.berlios.sventon.ctrl.GetController" parent="abstractController">
+  <bean id="getController" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="imageUtil">
       <ref local="imageUtil"/>
     </property>
-    <property name="cache">
-      <ref local="cache"/>
+    <property name="objectCache">
+      <ref local="objectCache"/>
     </property>
   </bean>
 
-  <bean id="blameController" class="de.berlios.sventon.ctrl.BlameController" parent="abstractController">
+  <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">
     <property name="colorer">
       <ref local="colorer"/>
     </property>
@@ -186,7 +186,7 @@
     </property>
   </bean>
 
-  <bean id="configurationController" class="de.berlios.sventon.ctrl.ConfigurationController">
+  <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
@@ -198,7 +198,7 @@
     </property>
   </bean>
 
-  <bean id="clearSessionController" class="de.berlios.sventon.ctrl.ClearSessionController"/>
+  <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
 
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
@@ -242,7 +242,7 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown">
+  <bean id="objectCache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown">
     <constructor-arg index="0">
       <value>sventonCache</value>
     </constructor-arg>
@@ -317,6 +317,9 @@
     </property>
     <property name="commitMessageCache">
       <ref local="commitMessageCache"/>
+    </property>
+    <property name="objectCache">
+      <ref local="objectCache"/>
     </property>
   </bean>
 

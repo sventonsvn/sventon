@@ -12,7 +12,7 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
-<%@ page import="de.berlios.sventon.ctrl.LogEntryActionType"%>
+<%@ page import="de.berlios.sventon.web.ctrl.LogEntryActionType"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 
 <html>
@@ -72,7 +72,7 @@
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
-          <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.LogEntryBundle" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.web.ctrl.LogEntryBundle" />
 
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
             <c:choose>

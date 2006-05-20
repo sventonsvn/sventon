@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache.commitmessagecache;
 
 import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.CommitMessageComparator;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,8 +32,9 @@ import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Contains cached commit messages.
@@ -95,7 +97,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
    * {@inheritDoc}
    */
   public synchronized List<CommitMessage> find(final String queryString) throws CacheException {
-    List<CommitMessage> result = null;
+    final List<CommitMessage> result = new ArrayList<CommitMessage>();;
     Searcher searcher = null;
     try {
       logger.debug("Searching for: [" + queryString + "]");
@@ -109,7 +111,6 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
 
       final int hitCount = hits.length();
       logger.debug("Hit count: " + hitCount);
-      result = new ArrayList<CommitMessage>(hitCount);
 
       if (hitCount > 0) {
         for (int i = 0; i < hitCount; i++) {
@@ -133,6 +134,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
         }
       }
     }
+    Collections.sort(result, new CommitMessageComparator(CommitMessageComparator.DESCENDING));
     return result;
   }
 
@@ -146,7 +148,8 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
       writer = new IndexWriter(directory, new StandardAnalyzer(), false);
       final Document document = new Document();
       document.add(new Field("revision", String.valueOf(commitMessage.getRevision()), Field.Store.YES, Field.Index.NO));
-      document.add(new Field("content", commitMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
+      document.add(new Field("content", commitMessage.getMessage() == null ? "" :
+          commitMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
       writer.addDocument(document);
     } catch (IOException ioex) {
       throw new CacheException("Unable to add content to lucene cache", ioex);

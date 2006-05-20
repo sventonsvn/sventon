@@ -52,10 +52,7 @@ public class DiskCache extends EntryCache {
     } else {
       logger.info("Initializing DiskCache");
       logger.debug("Using directory: " + cacheDirectoryPath);
-
-      this.cacheFileName = cacheDirectoryPath
-          + System.getProperty("file.separator") + ENTRY_CACHE_FILENAME;
-
+      this.cacheFileName = cacheDirectoryPath + ENTRY_CACHE_FILENAME;
       new File(cacheDirectoryPath).mkdirs();
       load();
       initialized = true;

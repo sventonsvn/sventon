@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository.cache;
 
-import de.berlios.sventon.ctrl.LogEntryActionType;
+import de.berlios.sventon.web.ctrl.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
@@ -142,6 +142,8 @@ public class CacheServiceImpl implements CacheService {
         long revisionCount = repository.log(new String[]{"/"}, headRevision, 0, true, false, new ISVNLogEntryHandler() {
           public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
             try {
+              //TODO: SVNLogEntry is not serializable yet (in javasvn trunk only so far)
+              //objectCache.put("cachedRevision-" + logEntry.getRevision(), logEntry);
               commitMessageCache.add(new CommitMessage(logEntry.getRevision(), logEntry.getMessage()));
             } catch (CacheException ce) {
               logger.warn("Unable to add commit message to cache", ce);
