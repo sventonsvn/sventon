@@ -53,8 +53,11 @@ public class CommitMessageCacheTest extends TestCase {
     final Directory directory = new RAMDirectory();
     final CommitMessageCacheImpl cache = new CommitMessageCacheImpl(directory);
 
-    cache.add(new CommitMessage(123, "this is"));
+    cache.add(new CommitMessage(123, ""));
     assertEquals(1, cache.getSize());
+
+    cache.add(new CommitMessage(123, null));
+    assertEquals(2, cache.getSize());
 
     directory.close();
   }

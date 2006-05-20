@@ -131,7 +131,12 @@
 
     </td>
     <c:if test="${useCache}">
-      <td align="right" style="white-space: nowrap;"><spring:message code="search.text"/>
+      <td align="right" style="white-space: nowrap;">
+        <spring:message code="search.text"/>
+        <input type="radio" id="sm1" name="searchMode" class="rdo" checked value="entries"/>
+        <label for="sm1">entries</label>
+        <input type="radio" id="sm2" name="searchMode" class="rdo" value="commitMessages">
+        <label for="sm2">logs</label>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
         <c:choose>
