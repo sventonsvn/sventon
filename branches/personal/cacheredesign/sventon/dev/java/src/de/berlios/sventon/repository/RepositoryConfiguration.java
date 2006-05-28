@@ -48,6 +48,8 @@ import java.io.File;
  *
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
+ *
+ * @author patrikfr@user.berlios.de 
  */
 public class RepositoryConfiguration {
 

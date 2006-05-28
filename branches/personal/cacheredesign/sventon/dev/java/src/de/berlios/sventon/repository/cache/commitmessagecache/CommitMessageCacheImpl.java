@@ -12,7 +12,6 @@
 package de.berlios.sventon.repository.cache.commitmessagecache;
 
 import de.berlios.sventon.repository.CommitMessage;
-import de.berlios.sventon.repository.CommitMessageComparator;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,9 +31,8 @@ import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Contains cached commit messages.
@@ -134,7 +132,6 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
         }
       }
     }
-    Collections.sort(result, new CommitMessageComparator(CommitMessageComparator.DESCENDING));
     return result;
   }
 

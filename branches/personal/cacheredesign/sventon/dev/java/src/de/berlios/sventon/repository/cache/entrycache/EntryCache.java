@@ -12,11 +12,15 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
+import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Set;
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
 
 /**
  * Contains a cached set of the repository entries for a specific revision and URL.
@@ -41,36 +45,11 @@ public abstract class EntryCache {
   private long cachedRevision = 0;
 
   /**
-   * Cached URL.
-   */
-  private String repositoryURL;
-
-  protected boolean initialized = false;
-
-  /**
-   * Checks if the cache has been properly initialized.
-   *
-   * @return True if initialized, false if not.
-   */
-  public synchronized boolean isInitialized() {
-    return initialized;
-  }
-
-  /**
    * Shuts down the cache.
    *
    * @throws CacheException if unable to shut down cache instance.
    */
   public abstract void shutdown() throws CacheException;
-
-  /**
-   * Gets all entries in the cache.
-   *
-   * @return All entries currently in the cache
-   */
-  protected synchronized Set<RepositoryEntry> getEntries() {
-    return cachedEntries;
-  }
 
   /**
    * Sets the entries.
@@ -92,6 +71,15 @@ public abstract class EntryCache {
   }
 
   /**
+   * Gets the set of the cached entries.
+   *
+   * @return Set of cached entries
+   */
+  protected synchronized Set<RepositoryEntry> getCachedEntries() {
+    return cachedEntries;
+  }
+
+  /**
    * Sets the cached revision number.
    * Used if cache has been updated.
    *
@@ -102,23 +90,90 @@ public abstract class EntryCache {
   }
 
   /**
-   * Gets the repository URL.
-   * Used to verifiy that the cache state and url matches.
+   * Gets the number of entries in cache.
    *
-   * @return The URL to the repository.
+   * @return Count
    */
-  protected synchronized String getRepositoryUrl() {
-    return repositoryURL;
+  public int getSize() {
+    return cachedEntries.size();
   }
 
   /**
-   * Sets the repository URL.
+   * Adds one entry to the cache.
    *
-   * @param repositoryURL The URL
+   * @param entry The entry to parse and add
    */
-  protected synchronized void setRepositoryURL(final String repositoryURL) {
-    this.repositoryURL = repositoryURL;
+  public synchronized boolean add(final RepositoryEntry entry) {
+    return cachedEntries.add(entry);
   }
 
+  /**
+   * Adds one or more entries to the cache.
+   *
+   * @param entries The entries to parse and add
+   */
+  public synchronized boolean add(final List<RepositoryEntry> entries) {
+    return cachedEntries.addAll(entries);
+  }
+
+  /**
+   * Removes entries from the cache, based by path and file name.
+   *
+   * @param pathAndName Entry to remove from cache.
+   * @param recursive   True if remove should be performed recursively
+   */
+  public synchronized void removeByName(final String pathAndName, final boolean recursive) {
+    final List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
+
+    for (RepositoryEntry entry : cachedEntries) {
+      if (recursive) {
+        if (entry.getFullEntryName().startsWith(pathAndName)) {
+          toBeRemoved.add(entry);
+        }
+      } else {
+        if (entry.getFullEntryName().equals(pathAndName)) {
+          toBeRemoved.add(entry);
+          break;
+        }
+      }
+    }
+    cachedEntries.removeAll(toBeRemoved);
+  }
+
+  /**
+   * Clears the entire cache.
+   */
+  public synchronized void clear() {
+    cachedEntries.clear();
+  }
+
+  /**
+   * Finds entry names based on given regex pattern.
+   *
+   * @param pattern Entry name pattern to search for
+   * @return List of entries.
+   * @throws CacheException if error
+   */
+  public synchronized List<RepositoryEntry> findByPattern(final String pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Finding [" + pattern + "] of kind [" + kind + "] with limit [" + limit + "]");
+    }
+    int count = 0;
+    final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
+    for (final RepositoryEntry entry : cachedEntries) {
+      if (entry.getFullEntryName().matches(pattern) && (entry.getKind() == kind || kind == any)) {
+        result.add(entry);
+        if (limit != null && ++count == limit) {
+          break;
+        }
+      }
+    }
+    if (logger.isDebugEnabled()) {
+      logger.debug("Result count: " + result.size());
+      logger.debug("Result: " + result);
+    }
+    return result;
+  }
 
 }

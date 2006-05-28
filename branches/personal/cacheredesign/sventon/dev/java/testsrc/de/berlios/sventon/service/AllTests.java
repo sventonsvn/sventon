@@ -1,4 +1,4 @@
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.service;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

@@ -1,18 +1,12 @@
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.service;
 
 import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
-import de.berlios.sventon.repository.CommitMessage;
-import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCache;
-import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl;
+import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
-import de.berlios.sventon.repository.cache.entrycache.EntryCacheWriter;
 import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
 import junit.framework.TestCase;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
@@ -20,47 +14,32 @@ import java.util.*;
 public class CacheServiceTest extends TestCase {
 
   public void testFindEntry() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(false); // Prevent physical connection during update check
-    config.setRepositoryRoot("http://localhost");
     final EntryCache entryCache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(entryCache);
-    writer.add(getEntryTemplateList());
+    entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
-    cacheService.initialize();
+    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(4, cacheService.findEntry("java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(false); // Prevent physical connection during update check
-    config.setRepositoryRoot("http://localhost");
     final EntryCache entryCache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(entryCache);
-    writer.add(getEntryTemplateList());
+    entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
-    cacheService.initialize();
+    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(1, cacheService.findEntry("html", "/trunk/src/").size());
   }
 
   public void testFindEntryWithLimit() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(false); // Prevent physical connection during update check
-    config.setRepositoryRoot("http://localhost");
     final EntryCache entryCache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(entryCache);
-    writer.add(getEntryTemplateList());
+    entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
-    cacheService.initialize();
+    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(2, cacheService.findEntry("java", "/", 2).size());
 
     assertEquals(4, cacheService.findEntry("java", "/", null).size());
@@ -70,74 +49,15 @@ public class CacheServiceTest extends TestCase {
   }
 
   public void testFindDirectories() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(false); // Prevent physical connection during update check
-    config.setRepositoryRoot("http://localhost");
     final EntryCache entryCache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(entryCache);
-    writer.add(getEntryTemplateList());
+    entryCache.add(getEntryTemplateList());
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setRepositoryConfiguration(config);
     cacheService.setEntryCache(entryCache);
-    cacheService.initialize();
+    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(3, cacheService.findDirectories("/").size());
 
     assertEquals(1, cacheService.findDirectories("/trunk/").size());
-  }
-
-  public void testPopulateCaches() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(true);
-    config.setRepositoryRoot("http://localhost");
-
-    final EntryCache entryCache = new MemoryCache();
-
-    final Directory directory = new RAMDirectory();
-    final CommitMessageCache messageCache = new CommitMessageCacheImpl(directory);
-
-    final TestRepository repos = new TestRepository();
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setObjectCache(new TestObjectCache());
-    cacheService.setRepositoryConfiguration(config);
-    cacheService.setRepository(repos);
-    cacheService.setEntryCache(entryCache);
-    cacheService.setCommitMessageCache(messageCache);
-    cacheService.initialize();
-
-    assertEquals(1, cacheService.find("revision").size());
-    assertEquals(8, cacheService.findEntry(".*").size());
-  }
-
-  public void testUpdateCaches() throws Exception {
-    final RepositoryConfiguration config = new RepositoryConfiguration();
-    config.setCacheUsed(true);
-    config.setRepositoryRoot("http://localhost");
-
-    final EntryCache entryCache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(entryCache);
-    writer.setCachedRevision(100);
-    writer.setRepositoryURL("http://localhost");
-    writer.add(getEntryTemplateList());
-
-    final Directory directory = new RAMDirectory();
-    final CommitMessageCache messageCache = new CommitMessageCacheImpl(directory);
-
-    final TestRepository repos = new TestRepository();
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setObjectCache(new TestObjectCache());
-    cacheService.setRepositoryConfiguration(config);
-    cacheService.setRepository(repos);
-    cacheService.setEntryCache(entryCache);
-    cacheService.setCommitMessageCache(messageCache);
-    cacheService.initialize();
-
-    cacheService.updateCaches(); // Triggers the populationn
-//    repos.setLatestRevision(repos.getLatestRevision() + 1);
-    assertEquals(11, cacheService.findEntry(".*").size());
-    List<CommitMessage> msgs = cacheService.find("revision");
-    assertEquals(2, msgs.size());  // Triggers the update
-
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {
@@ -176,6 +96,15 @@ public class CacheServiceTest extends TestCase {
     }
 
     public void shutdown() throws Exception {
+    }
+  }
+
+  class TestRevisionObservable implements RevisionObservable {
+    public void update() {
+      System.out.println("[STUB] updating...");
+    }
+    public boolean isUpdating() {
+      return false;
     }
   }
 

@@ -11,10 +11,11 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.CommitMessage;
 import de.berlios.sventon.SventonException;
+import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.CommitMessageComparator;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -71,6 +72,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
       final List<CommitMessage> commitMessages = Collections.checkedList(new ArrayList<CommitMessage>(),
           CommitMessage.class);
       commitMessages.addAll(getCacheService().find(searchString));
+      Collections.sort(commitMessages, new CommitMessageComparator(CommitMessageComparator.DESCENDING));
       model.put("commitMessages", commitMessages);
     } else {
       throw new SventonException("Illegal searchMode: " + searchMode);

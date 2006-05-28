@@ -9,10 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache;
+package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.cache.CacheException;
 
 import java.util.List;
 
@@ -22,27 +23,6 @@ import java.util.List;
  * @author jesper@users.berlios.de
  */
 public interface CacheService {
-
-  /**
-   * Updates the service caches.
-   * If caches are disabled (i.e the configuration property <i>useCache</i> is set to false)
-   * or if unable to establish repository connection, this method will silently return without any action.
-   *
-   * @throws CacheException
-   */
-  void updateCaches() throws CacheException;
-
-  /**
-   * Checks if the service is currently updating its caches.
-   *
-   * @return True if caches are being updated, false if not.
-   */
-  boolean isUpdating();
-
-  /**
-   * Initializes the caches.
-   */
-  void initialize();
 
   /**
    * Searches the cached entries for given string (name fragment).
