@@ -12,6 +12,7 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(EntryCacheTest.class);
+    suite.addTestSuite(EntryCacheUpdaterTest.class);
     return suite;
   }
 

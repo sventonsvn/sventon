@@ -31,7 +31,7 @@ public class DiskCache extends EntryCache {
   /**
    * Default cache filename.
    */
-  private static final String ENTRY_CACHE_FILENAME = "sventonEntryCache.ser";
+  private static final String ENTRY_CACHE_FILENAME = "entrycache.ser";
 
   /**
    * The cache directory and filename.
@@ -55,7 +55,6 @@ public class DiskCache extends EntryCache {
       this.cacheFileName = cacheDirectoryPath + ENTRY_CACHE_FILENAME;
       new File(cacheDirectoryPath).mkdirs();
       load();
-      initialized = true;
     }
   }
 
@@ -71,10 +70,9 @@ public class DiskCache extends EntryCache {
       try {
         inputStream = new ObjectInputStream(new FileInputStream(entryCacheFile));
         setCachedRevision(inputStream.readLong());
-        setRepositoryURL((String) inputStream.readObject());
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
         logger.debug("Cached revision is: " + getCachedRevision());
-        logger.debug("Number of loaded cached entries: " + getEntries().size());
+        logger.debug("Number of loaded cached entries: " + getSize());
       } catch (Exception ex) {
         throw new CacheException("Unable to read entryCache file", ex);
       }
@@ -84,7 +82,6 @@ public class DiskCache extends EntryCache {
           new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
           RepositoryEntry.class));
     }
-
   }
 
   /**
@@ -92,20 +89,19 @@ public class DiskCache extends EntryCache {
    */
   public synchronized void shutdown() throws CacheException {
     logger.info("Shutting down");
-    if (getEntries().size() > 0) {
+    if (getSize() > 0) {
       logger.info("Saving entryCache to disk, " + cacheFileName);
       final ObjectOutputStream out;
       try {
         out = new ObjectOutputStream(new FileOutputStream(cacheFileName));
         out.writeLong(getCachedRevision());
-        out.writeObject(getRepositoryUrl());
-        out.writeObject(getEntries());
+        out.writeObject(getCachedEntries());
         out.flush();
         out.close();
       } catch (IOException ioex) {
         throw new CacheException("Unable to store entryCache to disk", ioex);
       }
     }
-
   }
+
 }

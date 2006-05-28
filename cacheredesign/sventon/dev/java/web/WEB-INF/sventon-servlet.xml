@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<!--
-  - Application context definition for Sventon DispatcherServlet.
--->
+<!-- Application context definition for sventon DispatcherServlet -->
 
 <beans default-lazy-init="false">
+
+  <bean id="sventonDir" class="java.lang.String">
+    <constructor-arg>
+      <value>${java.io.tmpdir}/sventoncache/</value>
+    </constructor-arg>
+  </bean>
+
+  <!-- Makes sure the directory is created -->
+  <bean class="java.io.File" init-method="mkdirs">
+    <constructor-arg>
+      <ref local="sventonDir"/>
+    </constructor-arg>
+  </bean>
 
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -28,7 +39,6 @@
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.command.SVNBaseCommandValidator"/>
-
   <bean id="configCommandValidator" class="de.berlios.sventon.command.ConfigCommandValidator"/>
 
   <bean id="abstractController" abstract="true">
@@ -38,9 +48,13 @@
     <property name="cacheService">
       <ref local="cacheService"/>
     </property>
+    <property name="revisionObservable">
+      <ref local="revisionObservable"/>
+    </property>
   </bean>
 
-  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController">
+  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -103,7 +117,7 @@
     </property>
     <!-- Number of log entries / page in logs view -->
     <property name="pageSize">
-      <value>10</value>
+      <value>20</value>
     </property>
   </bean>
 
@@ -143,8 +157,7 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController"
-        parent="abstractController">
+  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -244,7 +257,7 @@
 
   <bean id="objectCache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown">
     <constructor-arg index="0">
-      <value>sventonCache</value>
+      <value>sventoncache/objectcache</value>
     </constructor-arg>
     <constructor-arg index="1">
       <value>10000</value>
@@ -308,27 +321,67 @@
     </property>
   </bean>
 
-  <bean id="cacheService" class="de.berlios.sventon.repository.cache.CacheServiceImpl" init-method="initialize">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
-    </property>
+  <!-- Service class for accessing the caches -->
+  <bean id="cacheService" class="de.berlios.sventon.service.CacheServiceImpl">
     <property name="entryCache">
       <ref local="entryCache"/>
     </property>
     <property name="commitMessageCache">
       <ref local="commitMessageCache"/>
     </property>
+    <property name="revisionObservable">
+      <ref local="revisionObservable"/>
+    </property>
+  </bean>
+
+  <!-- Monitors the repository and polls for changes -->
+  <bean id="revisionObservable" class="de.berlios.sventon.repository.RevisionObservableImpl">
+    <constructor-arg>
+      <ref local="observerList"/>
+    </constructor-arg>
+    <property name="repositoryConfiguration">
+      <ref local="repositoryConfig"/>
+    </property>
     <property name="objectCache">
       <ref local="objectCache"/>
     </property>
   </bean>
 
-  <bean id="entryCache" class="de.berlios.sventon.repository.cache.entrycache.DiskCache" destroy-method="shutdown">
+  <!-- List of RevisionObservers registered to get repository changes -->
+  <bean id="observerList" class="java.util.ArrayList">
     <constructor-arg>
-      <value>${java.io.tmpdir}/sventoncache/</value>
+      <list>
+        <ref local="entryCacheUpdater"/>
+        <ref local="commitMessageCacheUpdater"/>
+      </list>
     </constructor-arg>
   </bean>
 
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
+    <constructor-arg>
+      <ref local="entryCache"/>
+    </constructor-arg>
+    <property name="repositoryConfiguration">
+      <ref local="repositoryConfig"/>
+    </property>
+  </bean>
+
+  <!-- The entryCache implementation class -->
+  <bean id="entryCache" class="de.berlios.sventon.repository.cache.entrycache.DiskCache" destroy-method="shutdown">
+    <constructor-arg>
+      <ref local="sventonDir"/>
+    </constructor-arg>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="commitMessageCacheUpdater" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheUpdater">
+    <constructor-arg>
+      <ref local="commitMessageCache"/>
+    </constructor-arg>
+  </bean>
+
+  <!-- The commitMessageCache implementation class -->
   <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl">
     <constructor-arg>
       <ref local="luceneDirectory"/>
@@ -340,7 +393,7 @@
       <value>true</value>
     </property>
     <property name="path">
-      <value>${java.io.tmpdir}/sventoncache/</value>
+      <ref local="sventonDir"/>
     </property>
   </bean>
 
@@ -372,8 +425,7 @@
   <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
   <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
-  <!-- Quartz Scheduler, with pre-registered triggers -->
-  <!-- Will automatically start scheduling on context startup -->
+  <!--Start scheduling automatically on context startup -->
   <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="waitForJobsToCompleteOnShutdown" value="true"/>
     <property name="triggers">
@@ -394,8 +446,8 @@
 
   <!-- Convenient way of invoking existing business logic instead of writing a job -->
   <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-    <property name="targetObject" ref="cacheService"/>
-    <property name="targetMethod" value="updateCaches"/>
+    <property name="targetObject" ref="revisionObservable"/>
+    <property name="targetMethod" value="update"/>
   </bean>
 
 </beans>

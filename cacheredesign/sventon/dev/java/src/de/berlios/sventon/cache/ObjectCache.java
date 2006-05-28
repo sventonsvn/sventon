@@ -13,6 +13,8 @@ package de.berlios.sventon.cache;
 
 /**
  * Interface to be implemented by sventon object cache class.
+ *
+ * @author jesper@user.berlios.de
  */
 public interface ObjectCache {
 

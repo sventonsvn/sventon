@@ -12,6 +12,8 @@ public class SyndFeedGeneratorTest extends TestCase {
 
   public void testGenerateFeedRSS20() throws Exception {
     SyndFeedGenerator generator = new SyndFeedGenerator();
+    generator.setFeedType("rss_2.0");
+    generator.setCommitMessageLength(20);
 
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths;

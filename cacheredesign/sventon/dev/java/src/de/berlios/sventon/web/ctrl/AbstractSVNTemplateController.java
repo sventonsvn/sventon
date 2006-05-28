@@ -14,7 +14,8 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.repository.cache.CacheService;
+import de.berlios.sventon.repository.RevisionObservable;
+import de.berlios.sventon.service.CacheService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -103,9 +104,20 @@ import java.util.Map;
  */
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
+  /**
+   * The repository configuration instance.
+   */
   protected RepositoryConfiguration configuration = null;
 
+  /**
+   * Service class for accessing the caches.
+   */
   private CacheService cacheService;
+
+  /**
+   * The observable instance. Used to check whether it's buzy updating or not.
+   */
+  private RevisionObservable revisionObservable;
 
   /**
    * Logger for this class and subclasses.
@@ -128,6 +140,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   private static long cachedRevision;
 
+  /**
+   * Constructor.
+   */
   protected AbstractSVNTemplateController() {
     // TODO: Move to XML-file?
     setCommandClass(SVNBaseCommand.class);
@@ -153,8 +168,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     try {
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
+
       updateHeadRevisionCache(repository);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, request, response, exception);
@@ -169,7 +184,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(getHeadRevision()) : null));
         model.put("latestCommitInfo", getHeadRevisionInfo());
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isUpdating", getCacheService().isUpdating());
+        model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", configuration.isCacheUsed());
         modelAndView.addAllObjects(model);
       }
@@ -382,6 +397,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public RepositoryConfiguration getRepositoryConfiguration() {
     return configuration;
+  }
+
+  /**
+   * Sets the observable. Needed to trigger cache updates.
+   *
+   * @param revisionObservable The observable
+   */
+  public void setRevisionObservable(final RevisionObservable revisionObservable) {
+    this.revisionObservable = revisionObservable;
   }
 
 }

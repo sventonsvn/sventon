@@ -14,85 +14,75 @@ public class EntryCacheTest extends TestCase {
 
   public void testEntryCache() throws Exception {
     final EntryCache cache = new MemoryCache();
-    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertNull(cache.getRepositoryUrl());
     assertEquals(0, cache.getCachedRevision());
-    assertEquals(0, reader.getEntriesCount());
+    assertEquals(0, cache.getSize());
   }
 
   public void testEntryCacheClear() throws Exception {
     final EntryCache cache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(cache);
-    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, reader.getEntriesCount());
-    writer.add(getEntryTemplateList());
-    assertEquals(11, reader.getEntriesCount());
-    writer.clear();
-    assertEquals(0, reader.getEntriesCount());
+    assertEquals(0, cache.getSize());
+    cache.add(getEntryTemplateList());
+    assertEquals(11, cache.getSize());
+    cache.clear();
+    assertEquals(0, cache.getSize());
   }
 
   public void testEntryCacheAdd() throws Exception {
     final EntryCache cache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(cache);
-    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, reader.getEntriesCount());
-    writer.add(getEntryTemplateList());
-    assertEquals(11, reader.getEntriesCount());
+    assertEquals(0, cache.getSize());
+    cache.add(getEntryTemplateList());
+    assertEquals(11, cache.getSize());
   }
 
   public void testEntryCacheRemove() throws Exception {
     final EntryCache cache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(cache);
-    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, reader.getEntriesCount());
-    writer.add(getEntryTemplateList());
-    assertEquals(11, reader.getEntriesCount());
+    assertEquals(0, cache.getSize());
+    cache.add(getEntryTemplateList());
+    assertEquals(11, cache.getSize());
 
-    writer.removeByName("/file1.java", false);
-    assertEquals(10, reader.getEntriesCount());
+    cache.removeByName("/file1.java", false);
+    assertEquals(10, cache.getSize());
 
     // Try to remove again
-    writer.removeByName("/file1.java", false);
-    assertEquals(10, reader.getEntriesCount());
+    cache.removeByName("/file1.java", false);
+    assertEquals(10, cache.getSize());
 
     // Recursive must not matter in this case (entry is a file)
-    writer.removeByName("/file2.html", true);
-    assertEquals(9, reader.getEntriesCount());
+    cache.removeByName("/file2.html", true);
+    assertEquals(9, cache.getSize());
 
     // Remove the 'trunk' recursively (trailing slash keeps the dir itself)
-    writer.removeByName("/trunk/", true);
-    assertEquals(5, reader.getEntriesCount());
+    cache.removeByName("/trunk/", true);
+    assertEquals(5, cache.getSize());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
-    writer.removeByName("/tags", true);
-    assertEquals(2, reader.getEntriesCount());
+    cache.removeByName("/tags", true);
+    assertEquals(2, cache.getSize());
   }
 
   public void testEntryCacheFindPattern() throws Exception {
     final EntryCache cache = new MemoryCache();
-    final EntryCacheWriter writer = new EntryCacheWriter(cache);
-    final EntryCacheReader reader = new EntryCacheReader(cache);
 
-    assertEquals(0, reader.getEntriesCount());
-    writer.add(getEntryTemplateList());
-    assertEquals(11, reader.getEntriesCount());
+    assertEquals(0, cache.getSize());
+    cache.add(getEntryTemplateList());
+    assertEquals(11, cache.getSize());
 
-    assertEquals(5, reader.findByPattern(".*[12].*", any, null).size());
-    assertEquals(5, reader.findByPattern(".*[12].*", file, null).size());
-    assertEquals(0, reader.findByPattern(".*[12].*", dir, null).size());
+    assertEquals(5, cache.findByPattern(".*[12].*", any, null).size());
+    assertEquals(5, cache.findByPattern(".*[12].*", file, null).size());
+    assertEquals(0, cache.findByPattern(".*[12].*", dir, null).size());
 
-    assertEquals(5, reader.findByPattern(".*trunk.*", any, null).size());
-    assertEquals(2, reader.findByPattern(".*trunk.*", dir, null).size());
+    assertEquals(5, cache.findByPattern(".*trunk.*", any, null).size());
+    assertEquals(2, cache.findByPattern(".*trunk.*", dir, null).size());
 
-    assertEquals(3, reader.findByPattern(".*", dir, null).size());
+    assertEquals(3, cache.findByPattern(".*", dir, null).size());
 
-    assertEquals(1, reader.findByPattern(".*/trunk/src/.*", file, null).size());
+    assertEquals(1, cache.findByPattern(".*/trunk/src/.*", file, null).size());
 
-    assertEquals(0, reader.findByPattern(".*/TrUnK/sRc/.*", file, null).size());
+    assertEquals(0, cache.findByPattern(".*/TrUnK/sRc/.*", file, null).size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

@@ -34,7 +34,6 @@ public class MemoryCache extends EntryCache {
     setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
         new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
         RepositoryEntry.class));
-    initialized = true;
   }
 
   /**

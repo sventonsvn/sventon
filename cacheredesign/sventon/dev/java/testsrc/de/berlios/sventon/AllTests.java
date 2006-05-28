@@ -16,7 +16,7 @@ public class AllTests {
     suite.addTest(de.berlios.sventon.web.ctrl.xml.AllTests.suite());
     suite.addTest(de.berlios.sventon.diff.AllTests.suite());
     suite.addTest(de.berlios.sventon.repository.AllTests.suite());
-    suite.addTest(de.berlios.sventon.repository.cache.AllTests.suite());
+    suite.addTest(de.berlios.sventon.service.AllTests.suite());
     suite.addTest(de.berlios.sventon.repository.cache.entrycache.AllTests.suite());
     suite.addTest(de.berlios.sventon.repository.cache.commitmessagecache.AllTests.suite());    
     suite.addTest(de.berlios.sventon.rss.AllTests.suite());
