@@ -71,7 +71,7 @@
               </spring:bind>
             <td valign="top">
               Controls whether repository caching feature should be used. <br/>
-              If enabled, the search and directory flattening features will be available, aswell as the commit message search <br/>
+              If enabled, the search and directory flattening features will be available, as well as the commit message search <br/>
             </td>
           </tr>
           <tr>
