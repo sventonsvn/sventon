@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[544] Release 1.0 RC4 (2006-05-28)
 [520] Fixed: Bug #7229 - Latest commit info not shown.
 [519] Fixed: Bug #7230 - Wrong revision in links from 'latest commit info' box.
 
