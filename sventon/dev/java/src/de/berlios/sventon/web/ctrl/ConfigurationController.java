@@ -58,7 +58,6 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_REPOSITORY_URL = "svn.root";
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
-  public static final String PROPERTY_KEY_CONFIGPATH = "svn.configpath";
   public static final String PROPERTY_KEY_USE_CACHE = "svn.useCache";
 
   protected ConfigurationController() {
@@ -87,8 +86,8 @@ public class ConfigurationController extends AbstractFormController {
     this.scheduler = scheduler;
   }
 
-  protected ModelAndView showForm(final HttpServletRequest httpServletRequest,
-                                  final HttpServletResponse httpServletResponse, final BindException e)
+  protected ModelAndView showForm(final HttpServletRequest request,
+                                  final HttpServletResponse response, final BindException e)
       throws IOException {
 
     logger.debug("showForm() started");
@@ -100,9 +99,6 @@ public class ConfigurationController extends AbstractFormController {
     } else {
       final Map<String, Object> model = new HashMap<String, Object>();
       final ConfigCommand configCommand = new ConfigCommand();
-      final String tempDir = System.getProperty("java.io.tmpdir");
-      logger.debug("tempDir is: " + tempDir);
-      configCommand.setConfigPath(tempDir);
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
       logger.debug("Displaying the config page");
@@ -110,9 +106,9 @@ public class ConfigurationController extends AbstractFormController {
     }
   }
 
-  protected ModelAndView processFormSubmission(final HttpServletRequest httpServletRequest,
-                                               final HttpServletResponse httpServletResponse, final Object command,
-                                               final BindException exception) throws IOException {
+  protected ModelAndView processFormSubmission(final HttpServletRequest request,
+                                               final HttpServletResponse response, final Object command,
+                                               final BindException errors) throws IOException {
 
     logger.debug("processFormSubmission() started");
     logger.info("sventon configuration OK: " + configuration.isConfigured());
@@ -124,9 +120,9 @@ public class ConfigurationController extends AbstractFormController {
       final ConfigCommand confCommand = (ConfigCommand) command;
       logger.debug("useCache: " + confCommand.isCacheUsed());
 
-      if (exception.hasErrors()) {
+      if (errors.hasErrors()) {
         //noinspection unchecked
-        Map<String, Object> model = exception.getModel();
+        Map<String, Object> model = errors.getModel();
         model.put("command", command);
         return new ModelAndView("config", model);
       }
@@ -141,12 +137,6 @@ public class ConfigurationController extends AbstractFormController {
 
       final String fileSeparator = System.getProperty("file.separator");
 
-      // Make sure the configPath ends with a (back)slash
-      String configurationPath = confCommand.getConfigPath();
-      if (!configurationPath.endsWith(fileSeparator)) {
-        configurationPath += fileSeparator;
-      }
-      configProperties.put(PROPERTY_KEY_CONFIGPATH, configurationPath);
       logger.debug(configProperties.toString());
 
       final File propertyFile = new File(getServletContext().getRealPath("/WEB-INF/classes")
@@ -160,7 +150,6 @@ public class ConfigurationController extends AbstractFormController {
 
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
-      configuration.setSVNConfigurationPath(configurationPath);
       configuration.setCacheUsed(confCommand.isCacheUsed());
       configuration.setRepositoryRoot(trimmedURL);
 
@@ -173,7 +162,6 @@ public class ConfigurationController extends AbstractFormController {
           logger.warn(sx);
         }
       }
-
       return new ModelAndView(new RedirectView("repobrowser.svn"));
     }
   }
@@ -199,16 +187,6 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("#   svn.root=svn://svn.berlios.de/sventon/                                     #\n");
     comments.append("#   svn.root=http://domain.com/project/                                        #\n");
     comments.append("#   svn.root=svn+ssh://domain.com/project/                                     #\n");
-    comments.append("################################################################################\n\n");
-    comments.append("################################################################################\n");
-    comments.append("# Key: svn.configpath                                                          #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Description:                                                                 #\n");
-    comments.append("# Path where the cache file will be stored. The user running the sventon web   #\n");
-    comments.append("# container must have read/write access to this directory.                     #\n");
-    comments.append("#                                                                              #\n");
-    comments.append("# Example:                                                                     #\n");
-    comments.append("#   svn.configpath=c:/temp/                                                    #\n");
     comments.append("################################################################################\n\n");
     comments.append("################################################################################\n");
     comments.append("# Key: svn.uid                                                                 #\n");

@@ -25,7 +25,6 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     // Valid (typical) input
     command.setRepositoryURL("svn://domain.com/svn/");
-    command.setConfigPath("");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -33,7 +32,6 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     // Valid input, spaces will be trimmed
     command.setRepositoryURL(" svn://domain.com/svn/ ");
-    command.setConfigPath("");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -41,7 +39,6 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     command.setPassword(null);
     command.setUsername(null);
-    command.setConfigPath(null);
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
@@ -58,16 +55,13 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
-    command.setConfigPath("");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
     
-
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
-    command.setConfigPath("\\");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -76,12 +70,10 @@ public class ConfigCommandValidatorTest extends TestCase {
     File tempFile = File.createTempFile("sventon-test", null);
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
-    command.setConfigPath(tempFile.getAbsolutePath());
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
-    assertEquals(1, exception.getAllErrors().size());
-    assertEquals("config.error.illegal-path" ,exception.getFieldError("configPath").getCode());
+    assertEquals(0, exception.getAllErrors().size());
     tempFile.delete();
   }
 
