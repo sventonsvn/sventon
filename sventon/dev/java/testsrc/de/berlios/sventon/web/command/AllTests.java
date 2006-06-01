@@ -1,4 +1,4 @@
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

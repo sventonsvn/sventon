@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import static de.berlios.sventon.repository.RepositoryEntryComparator.NAME;

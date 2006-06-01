@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.diff.DiffException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;

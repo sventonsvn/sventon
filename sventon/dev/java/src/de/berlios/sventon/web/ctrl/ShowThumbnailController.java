@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.util.ImageUtil;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;

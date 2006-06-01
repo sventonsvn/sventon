@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import org.springframework.validation.BindException;

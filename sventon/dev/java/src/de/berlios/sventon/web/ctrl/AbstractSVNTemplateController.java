@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
@@ -55,8 +55,8 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
- * method with the given {@link de.berlios.sventon.command.SVNBaseCommand}
+ * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
+ * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
@@ -81,11 +81,11 @@ import java.util.Map;
  * </tr>
  * <tr>
  * <td>command</td>
- * <td>{@link de.berlios.sventon.command.SVNBaseCommand}-object</td>
+ * <td>{@link de.berlios.sventon.web.command.SVNBaseCommand}-object</td>
  * </tr>
  * </table> <p/> <b>Input arguments</b><br>
  * Input to this argument is wrapped in a
- * <code>{@link de.berlios.sventon.command.SVNBaseCommand}</code> object by the
+ * <code>{@link de.berlios.sventon.web.command.SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception

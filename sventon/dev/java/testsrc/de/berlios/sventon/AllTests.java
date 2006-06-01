@@ -10,7 +10,7 @@ public class AllTests {
     suite.addTest(de.berlios.sventon.blame.AllTests.suite());
     suite.addTest(de.berlios.sventon.cache.AllTests.suite());
     suite.addTest(de.berlios.sventon.colorer.AllTests.suite());
-    suite.addTest(de.berlios.sventon.command.AllTests.suite());
+    suite.addTest(de.berlios.sventon.web.command.AllTests.suite());
     suite.addTest(de.berlios.sventon.content.AllTests.suite());
     suite.addTest(de.berlios.sventon.web.ctrl.AllTests.suite());
     suite.addTest(de.berlios.sventon.web.ctrl.xml.AllTests.suite());
