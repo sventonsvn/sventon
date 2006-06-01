@@ -26,7 +26,6 @@ public class ConfigCommand {
   private String repositoryURL;
   private String username;
   private String password;
-  private String configPath;
   private boolean useCache;
 
   public String getRepositoryURL() {
@@ -51,14 +50,6 @@ public class ConfigCommand {
 
   public void setPassword(final String password) {
     this.password = password;
-  }
-
-  public void setConfigPath(final String path) {
-    this.configPath = path;
-  }
-
-  public String getConfigPath() {
-    return this.configPath;
   }
 
   public void setCacheUsed(final boolean useCache) {

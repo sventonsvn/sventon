@@ -21,21 +21,27 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.io.File;
-
 /**
  * ConfigCommandValidator.
+ *
  * @author jesper@users.berlios.de
  */
 public class ConfigCommandValidator implements Validator {
 
-  /** Logger for this class and subclasses */
+  /**
+   * Logger for this class and subclasses
+   */
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Controls whether repository connection should be tested or not.
    */
   private boolean testConnection = true;
+
+  /**
+   * Sventon temporary config path.
+   */
+  private String configPath;
 
   /**
    * Constructor.
@@ -47,10 +53,19 @@ public class ConfigCommandValidator implements Validator {
    * Constructor for testing purposes.
    *
    * @param testConnection If <tt>false</tt> repository
-   * connection will not be tested.
+   *                       connection will not be tested.
    */
   protected ConfigCommandValidator(boolean testConnection) {
     this.testConnection = testConnection;
+  }
+
+  /**
+   * Sets the config path where temporary files will be stored.
+   *
+   * @param configPath The path
+   */
+  public void setConfigPath(final String configPath) {
+    this.configPath = configPath;
   }
 
   public boolean supports(Class clazz) {
@@ -59,28 +74,6 @@ public class ConfigCommandValidator implements Validator {
 
   public void validate(Object obj, Errors errors) {
     final ConfigCommand command = (ConfigCommand) obj;
-
-    // Validate the 'configPath'
-    String configPath = command.getConfigPath();
-    logger.info("configpath is: " + configPath);
-
-    if (configPath != null) {
-      if (configPath.equals("")) {
-        logger.info("Setting configPath to: " + System.getProperty("file.separator"));
-        configPath += System.getProperty("file.separator");
-      }
-      final File configDir = new File(configPath);
-      if (!configDir.isDirectory()) {
-        logger.warn("configPath is not a directory");
-        errors.rejectValue("configPath", "config.error.illegal-path", "'" + configPath + "' is not a directory.");
-      } else {
-        if (!configDir.canWrite()) {
-          final String msg = "No write permission to path '" + configPath + "'.";
-          logger.warn(msg);
-          errors.rejectValue("configPath", "config.error.no-write-permission", msg);
-        }
-      }
-    }
 
     // Validate 'repositoryURL', 'username' and 'password'
     final String repositoryURL = command.getRepositoryURL();
@@ -101,7 +94,7 @@ public class ConfigCommandValidator implements Validator {
         config.setRepositoryRoot(trimmedURL);
         config.setConfiguredUID(command.getUsername());
         config.setConfiguredPWD(command.getPassword());
-        config.setSVNConfigurationPath(command.getConfigPath());
+        config.setSVNConfigurationPath(configPath);
         try {
           final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(config);
           repos.testConnection();
