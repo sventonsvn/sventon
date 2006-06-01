@@ -48,6 +48,8 @@ import java.io.File;
  *
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
+ *
+ * @author patrikfr@user.berlios.de 
  */
 public class RepositoryConfiguration {
 
@@ -89,9 +91,9 @@ public class RepositoryConfiguration {
   private String configuredPWD;
 
   /**
-   * Decides whether the indexing feature will be used.
+   * Decides whether the caching feature will be used.
    */
-  private Boolean useIndex;
+  private Boolean useCache;
 
   /**
    * Configures and initializes the repository.
@@ -237,21 +239,21 @@ public class RepositoryConfiguration {
   }
 
   /**
-   * Sets the 'useIndex' flag.
+   * Sets the 'useCache' flag.
    *
-   * @param useIndex <code>true</code> if index should be enabled, <code>false</code> if not.
+   * @param useCache <code>true</code> if cache should be enabled, <code>false</code> if not.
    */
-  public void setIndexUsed(final Boolean useIndex) {
-    this.useIndex = useIndex;
+  public void setCacheUsed(final Boolean useCache) {
+    this.useCache = useCache;
   }
 
   /**
-   * Checks if the index should be used.
+   * Checks if the cache should be used.
    *
-   * @return <code>true</code> if index is enabled, <code>false</code> if not.
+   * @return <code>true</code> if cache is enabled, <code>false</code> if not.
    */
-  public Boolean isIndexUsed() {
-    return this.useIndex;
+  public Boolean isCacheUsed() {
+    return this.useCache;
   }
 
 }

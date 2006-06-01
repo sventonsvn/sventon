@@ -64,15 +64,14 @@
             <td valign="top">(leave blank for anonymous)</td>
           </tr>
           <tr>
-            <td valign="top" align="right" style="white-space: nowrap;">Use indexing feature:</td>
+            <td valign="top" align="right" style="white-space: nowrap;">Use repository caching feature:</td>
             <td valign="top">
-              <spring:bind path="command.indexUsed">
+              <spring:bind path="command.cacheUsed">
                 <input type="checkbox" name="${status.expression}" <c:if test="${status.value}">checked</c:if>/></td>
               </spring:bind>
             <td valign="top">
-              Controls whether repository indexing feature should be used. <br/>
-              If enabled, the search and directory flattening features will be available. <br/>
-              It's recommended to turn off indexing if the repository is large and contains lots of tags and branches, or if the network connection to it is slow.
+              Controls whether repository caching feature should be used. <br/>
+              If enabled, the search and directory flattening features will be available, as well as the commit message search <br/>
             </td>
           </tr>
           <tr>
@@ -82,7 +81,7 @@
                 <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
-              This is the path where the index is stored. <br/>
+              This is the path where the disk persistent cache file is stored. <br/>
               The web server running sventon must have read/write access to this directory.
             </td>
           </tr>
