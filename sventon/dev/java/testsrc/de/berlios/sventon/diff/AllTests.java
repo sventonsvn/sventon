@@ -10,8 +10,9 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite("Test for de.berlios.sventon.diff");
+    TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(DiffTest.class);
+    suite.addTestSuite(DiffActionTest.class);
     suite.addTestSuite(DiffProducerTest.class);
     suite.addTestSuite(DiffResultParserTest.class);
     return suite;

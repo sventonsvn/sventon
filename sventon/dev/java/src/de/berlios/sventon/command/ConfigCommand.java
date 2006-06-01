@@ -27,7 +27,7 @@ public class ConfigCommand {
   private String username;
   private String password;
   private String configPath;
-  private boolean useIndex;
+  private boolean useCache;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -61,12 +61,12 @@ public class ConfigCommand {
     return this.configPath;
   }
 
-  public void setIndexUsed(final boolean useIndex) {
-    this.useIndex = useIndex;
+  public void setCacheUsed(final boolean useCache) {
+    this.useCache = useCache;
   }
 
-  public boolean isIndexUsed() {
-    return this.useIndex;
+  public boolean isCacheUsed() {
+    return this.useCache;
   }
 
   /**

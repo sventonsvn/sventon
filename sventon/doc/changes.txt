@@ -1,6 +1,11 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[546] Fixed: Redesign of entry cache.
+      Added: Feature #2175 - Commit message cache using Lucene.
+      Added: Upgraded to ehcache 1.2.
+      Added: Upgraded to JavaSVN 1.1.0b.
+
 [544] Release 1.0 RC4 (2006-05-28)
 [520] Fixed: Bug #7229 - Latest commit info not shown.
 [519] Fixed: Bug #7230 - Wrong revision in links from 'latest commit info' box.
