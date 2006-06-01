@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
 import org.jdom.Document;

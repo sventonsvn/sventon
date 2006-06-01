@@ -9,12 +9,13 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 
 /**
  * SVNBaseCommandValidator.

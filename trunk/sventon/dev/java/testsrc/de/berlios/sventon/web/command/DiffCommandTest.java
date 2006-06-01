@@ -1,7 +1,8 @@
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import junit.framework.TestCase;
 import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.web.command.DiffCommand;
 
 public class DiffCommandTest extends TestCase {
 

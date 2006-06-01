@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.DiffCommand;
-import de.berlios.sventon.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.DiffCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.Diff;
 import de.berlios.sventon.diff.DiffException;

@@ -1,9 +1,9 @@
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
-import de.berlios.sventon.command.SVNBaseCommand;
-import de.berlios.sventon.command.SVNBaseCommandValidator;
+import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.command.SVNBaseCommandValidator;
 
 public class SVNBaseCommandValidatorTest extends TestCase {
 

@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.command.ConfigCommand;
+import de.berlios.sventon.web.command.ConfigCommand;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

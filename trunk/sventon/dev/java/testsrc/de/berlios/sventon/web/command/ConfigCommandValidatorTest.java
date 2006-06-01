@@ -1,9 +1,12 @@
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
 
 import java.io.File;
+
+import de.berlios.sventon.web.command.ConfigCommand;
+import de.berlios.sventon.web.command.ConfigCommandValidator;
 
 public class ConfigCommandValidatorTest extends TestCase {
 
@@ -59,7 +62,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setUsername("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    
+
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setPassword("");

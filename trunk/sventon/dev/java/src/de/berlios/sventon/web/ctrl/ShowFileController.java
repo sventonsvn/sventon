@@ -12,8 +12,8 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.SventonException;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.colorer.Colorer;
-import de.berlios.sventon.command.SVNBaseCommand;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.content.LineNumberAppender;
 import de.berlios.sventon.util.ImageUtil;

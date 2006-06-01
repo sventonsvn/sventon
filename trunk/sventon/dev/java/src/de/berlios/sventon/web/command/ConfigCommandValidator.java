@@ -9,10 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.command;
+package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
