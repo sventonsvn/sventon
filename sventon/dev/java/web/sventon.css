@@ -139,12 +139,12 @@ input.btn {
   border: 0px;
 }
 
-.sventonEntry1 {
+.sventonEntryOdd {
   color: #14233D;
   background-color: #ffc77f;
 }
 
-.sventonEntry2 {
+.sventonEntryEven {
   color: #14233D;
   background-color: #ff9000;
 }
