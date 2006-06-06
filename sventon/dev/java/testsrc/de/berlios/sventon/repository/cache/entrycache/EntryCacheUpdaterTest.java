@@ -21,11 +21,11 @@ public class EntryCacheUpdaterTest extends TestCase {
     changedPaths1.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
     changedPaths1.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
     changedPaths1.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths1, 123, "jesper", new Date(), "Commit message for revision 123."));
+    logEntries.add(new SVNLogEntry(changedPaths1, 123, "jesper", new Date(), "Log message for revision 123."));
 
     final Map<String, SVNLogEntryPath> changedPaths2 = new HashMap<String, SVNLogEntryPath>();
     changedPaths2.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Commit message for revision 124."));
+    logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, entryCache.getSize());
     cacheUpdater.update(logEntries);

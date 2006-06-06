@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains cached commit messages.
+ * Contains cached log messages.
  * This implementation uses <a href="http://lucene.apache.org">Lucene</a> internally.
  *
  * @author jesper@users.berlios.de
@@ -54,7 +54,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
 
   /**
    * Constructor.
-   * Initializes the commit message cache.
+   * Initializes the log message cache.
    *
    * @param directory The <i>lucene</i> directory.
    */

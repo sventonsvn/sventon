@@ -25,7 +25,7 @@ public class LogMessage {
    * Constructor.
    *
    * @param revision The revision
-   * @param message The commit message
+   * @param message The log message
    */
   public LogMessage(final long revision, final String message) {
     this.revision = revision;
@@ -33,7 +33,7 @@ public class LogMessage {
   }
 
   /**
-   * Gets the revision for this commit message.
+   * Gets the revision for this log message.
    *
    * @return The revision
    */
@@ -42,7 +42,7 @@ public class LogMessage {
   }
 
   /**
-   * Gets the commit message.
+   * Gets the log message.
    *
    * @return The message.
    */

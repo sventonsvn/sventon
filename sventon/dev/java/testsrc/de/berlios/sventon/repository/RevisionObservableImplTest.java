@@ -42,7 +42,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
 
     public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
       List<SVNLogEntry> logs = new ArrayList<SVNLogEntry>();
-      logs.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 124, "jesper", new Date(), "Commit message for revision 124."));
+      logs.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 124, "jesper", new Date(), "Log message for revision 124."));
       return logs;
     }
 

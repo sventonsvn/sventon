@@ -64,10 +64,10 @@ public interface CacheService {
   List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException;
 
   /**
-   * Searches the cached commit messages for given string.
+   * Searches the cached log messages for given string.
    *
    * @param queryString String to search for.
-   * @return List of commit messages.
+   * @return List of log messages.
    * @throws CacheException if error
    */
   List<LogMessage> find(final String queryString) throws CacheException;

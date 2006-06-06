@@ -17,7 +17,7 @@ import de.berlios.sventon.repository.LogMessage;
 import java.util.List;
 
 /**
- * Contains cached commit messages.
+ * Contains cached log messages.
  *
  * @author jesper@users.berlios.de
  */
@@ -27,14 +27,14 @@ public interface LogMessageCache {
    * Finds occurencies of given search string among the cached log messages.
    *
    * @param queryString Index query string.
-   * @return List of commit messages.
+   * @return List of log messages.
    * @throws de.berlios.sventon.repository.cache.CacheException
    *
    */
   List<LogMessage> find(final String queryString) throws CacheException;
 
   /**
-   * Add one commit message to the cache.
+   * Add one log message to the cache.
    *
    * @param logMessage The log message to cache.
    * @throws CacheException if error during index addition.

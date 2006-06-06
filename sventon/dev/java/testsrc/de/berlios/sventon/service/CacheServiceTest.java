@@ -138,11 +138,11 @@ public class CacheServiceTest extends TestCase {
       changedPathsPopulation.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
       changedPathsPopulation.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
       changedPathsPopulation.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-      logEntriesForPopulation.add(new SVNLogEntry(changedPathsPopulation, 123, "jesper", new Date(), "Commit message for revision 123."));
+      logEntriesForPopulation.add(new SVNLogEntry(changedPathsPopulation, 123, "jesper", new Date(), "Log message for revision 123."));
 
       final Map<String, SVNLogEntryPath> changedPathsUpdate = new HashMap<String, SVNLogEntryPath>();
       changedPathsUpdate.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-      logEntriesForUpdate.add(new SVNLogEntry(changedPathsUpdate, 124, "jesper", new Date(), "Commit message for revision 124."));
+      logEntriesForUpdate.add(new SVNLogEntry(changedPathsUpdate, 124, "jesper", new Date(), "Log message for revision 124."));
 
       infoEntry = new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
     }

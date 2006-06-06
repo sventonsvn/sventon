@@ -42,7 +42,7 @@ public class SyndFeedGenerator implements FeedGenerator {
   private String feedType = "rss_2.0";
 
   /**
-   * Number of characters in the abbreviated commit message, default set to 40.
+   * Number of characters in the abbreviated log message, default set to 40.
    */
   private int logMessageLength = 40;
 

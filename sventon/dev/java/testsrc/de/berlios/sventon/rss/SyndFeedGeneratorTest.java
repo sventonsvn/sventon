@@ -23,14 +23,14 @@ public class SyndFeedGeneratorTest extends TestCase {
     changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
     changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Commit message."));
+    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "A log message."));
 
     changedPaths = new HashMap<String, SVNLogEntryPath>();
     changedPaths.put("/anotherfile1.java", new SVNLogEntryPath("/file1.java", 'M', null, 2));
     changedPaths.put("/anotherfile2.html", new SVNLogEntryPath("/file2.html", 'D', null, 2));
     changedPaths.put("/anotherfile3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 2));
     changedPaths.put("/anotherfile4.def", new SVNLogEntryPath("/file4.def", 'R', "/file44.def", 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another commit message."));
+    logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another log message."));
 
     generator.generateFeed(logEntries, "http://localhost:8888/svn/");
 
