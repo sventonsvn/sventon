@@ -138,20 +138,20 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
 
           for (final String entryPath : latestPathsList) {
             final SVNLogEntryPath logEntryPath = map.get(entryPath);
-            switch (LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()))) {
-              case A :
+            switch (LogEntryActionType.parse(logEntryPath.getType())) {
+              case ADDED:
                 logger.debug("Adding entry to cache: " + logEntryPath.getPath());
                 doEntryCacheAdd(logEntryPath, revision);
                 break;
-              case D :
+              case DELETED:
                 logger.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
                 doEntryCacheDelete(logEntryPath, revision);
                 break;
-              case R :
+              case REPLACED:
                 logger.debug("Replacing entry in cache: " + logEntryPath.getPath());
                 doEntryCacheReplace(logEntryPath, revision);
                 break;
-              case M :
+              case MODIFIED:
                 logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
                 doEntryCacheModify(logEntryPath, revision);
                 break;
