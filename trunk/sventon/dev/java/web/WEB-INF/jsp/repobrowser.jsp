@@ -29,7 +29,14 @@
 
   <c:choose>
     <c:when test="${isSearch}">
-      Search result for - <b>${searchString}</b> (directory '${startDir}' and below)
+      <c:choose>
+        <c:when test="${searchMode eq 'logMessages'}">
+          Search result for - <b>${searchString}</b>
+        </c:when>
+        <c:otherwise>
+          Search result for - <b>${searchString}</b> (directory '${startDir}' and below)
+        </c:otherwise>
+      </c:choose>
     </c:when>
     <c:otherwise>
       <c:choose>
@@ -82,7 +89,7 @@
             <c:param name="path" value="${command.pathNoLeaf}" />
           </c:url>
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
             <td class="sventonCol1"></td>
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
@@ -109,7 +116,7 @@
             <c:param name="path" value="${entry.fullEntryName}" />
           </c:url>
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
       <%
             totalSize += entry.getSize();
       %>
@@ -154,7 +161,7 @@
       <% rowCount++; %>
         </c:forEach>
 
-        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
           <td colspan="2" align="right"><b>Total:</b></td>
           <td><b><%=rowCount%> entries</b></td>
           <td></td>

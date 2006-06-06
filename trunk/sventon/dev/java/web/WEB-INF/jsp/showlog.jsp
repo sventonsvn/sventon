@@ -74,7 +74,7 @@
 
           <jsp:useBean id="entry" type="de.berlios.sventon.web.ctrl.LogEntryBundle" />
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
+          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
             <c:choose>
               <c:when test="${isFile}">
                 <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
@@ -90,7 +90,7 @@
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top">Changed<br>paths</td><td colspan="5">
+            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
               <table width="100%">
                 <tr>
                   <th>Action</th>
@@ -107,8 +107,7 @@
                   Collections.sort(pathsList);
                   final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {
-                    final SVNLogEntryPath logEntryPath =
-                      (SVNLogEntryPath)changedPaths.get(i.next());
+                    final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) changedPaths.get(i.next());
                     final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
                 %>
                 <tr>
