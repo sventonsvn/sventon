@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[552] Added: Upgraded to JavaSVN 1.1.0beta2.
 [546] Fixed: Redesign of entry cache.
       Added: Feature #2175 - Commit message cache using Lucene.
       Added: Upgraded to ehcache 1.2.

@@ -116,6 +116,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
       } catch (SVNException svnex) {
         logger.error("Unable to populate cache", svnex);
       }
+      logger.info("Cache population done");
     } else {
       // Initial population has already been performed - only apply changes for now.
       if (lastRevision < entryCache.getCachedRevision()) {
