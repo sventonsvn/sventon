@@ -12,7 +12,7 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
 
 import java.util.List;
@@ -70,6 +70,6 @@ public interface CacheService {
    * @return List of commit messages.
    * @throws CacheException if error
    */
-  List<CommitMessage> find(final String queryString) throws CacheException;
+  List<LogMessage> find(final String queryString) throws CacheException;
 
 }

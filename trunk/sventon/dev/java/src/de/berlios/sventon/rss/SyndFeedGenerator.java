@@ -44,7 +44,7 @@ public class SyndFeedGenerator implements FeedGenerator {
   /**
    * Number of characters in the abbreviated commit message, default set to 40.
    */
-  private int commitMessageLength = 40;
+  private int logMessageLength = 40;
 
   /**
    * {@inheritDoc}
@@ -76,7 +76,7 @@ public class SyndFeedGenerator implements FeedGenerator {
     for (SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
-          + getAbbreviatedCommitMessage(logEntry.getMessage(), commitMessageLength));
+          + getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength));
       entry.setAuthor(logEntry.getAuthor());
       entry.setLink(baseURL + "revinfo.svn?&revision=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
@@ -156,13 +156,13 @@ public class SyndFeedGenerator implements FeedGenerator {
   }
 
   /**
-   * Gets the abbreviated version of given commit message.
+   * Gets the abbreviated version of given log message.
    *
-   * @param message The original commit message
+   * @param message The original log message
    * @param length  Length, shortened string length
-   * @return The abbreviated commit message
+   * @return The abbreviated log message
    */
-  protected String getAbbreviatedCommitMessage(final String message, final int length) {
+  protected String getAbbreviatedLogMessage(final String message, final int length) {
     if (message != null && message.length() <= length) {
       return message;
     } else {
@@ -182,11 +182,11 @@ public class SyndFeedGenerator implements FeedGenerator {
   }
 
   /**
-   * Sets the length of the commit message to be displayed.
+   * Sets the length of the log message to be displayed.
    *
    * @param length The length.
    */
-  public void setCommitMessageLength(final int length) {
-    this.commitMessageLength = length;
+  public void setLogMessageLength(final int length) {
+    this.logMessageLength = length;
   }
 }

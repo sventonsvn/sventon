@@ -1,4 +1,4 @@
-package de.berlios.sventon.repository.cache.commitmessagecache;
+package de.berlios.sventon.repository.cache.logmessagecache;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -11,8 +11,8 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(CommitMessageCacheTest.class);
-    suite.addTestSuite(CommitMessageCacheUpdaterTest.class);
+    suite.addTestSuite(LogMessageCacheTest.class);
+    suite.addTestSuite(LogMessageCacheUpdaterTest.class);
     return suite;
   }
 

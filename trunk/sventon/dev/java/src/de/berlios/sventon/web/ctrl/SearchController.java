@@ -13,9 +13,9 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.SventonException;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.CommitMessageComparator;
+import de.berlios.sventon.repository.LogMessageComparator;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,14 +66,14 @@ public class SearchController extends AbstractSVNTemplateController implements C
         entries.addAll(getCacheService().findEntry(searchString, startDir));
       }
       model.put("svndir", entries);
-    } else if ("commitMessages".equals(searchMode)) {
-      logger.debug("Searchin commitMessages for: " + searchString);
+    } else if ("logMessages".equals(searchMode)) {
+      logger.debug("Searchin logMessages for: " + searchString);
 
-      final List<CommitMessage> commitMessages = Collections.checkedList(new ArrayList<CommitMessage>(),
-          CommitMessage.class);
-      commitMessages.addAll(getCacheService().find(searchString));
-      Collections.sort(commitMessages, new CommitMessageComparator(CommitMessageComparator.DESCENDING));
-      model.put("commitMessages", commitMessages);
+      final List<LogMessage> logMessages = Collections.checkedList(new ArrayList<LogMessage>(),
+          LogMessage.class);
+      logMessages.addAll(getCacheService().find(searchString));
+      Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
+      model.put("logMessages", logMessages);
     } else {
       throw new SventonException("Illegal searchMode: " + searchMode);
     }

@@ -11,12 +11,12 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RevisionObservable;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCache;
+import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class CacheServiceImpl implements CacheService {
 
-  private CommitMessageCache commitMessageCache;
+  private LogMessageCache logMessageCache;
   private EntryCache entryCache;
   private RevisionObservable revisionObservable;
 
@@ -65,12 +65,12 @@ public class CacheServiceImpl implements CacheService {
   }
 
   /**
-   * Sets the commit message cache instance.
+   * Sets the log message cache instance.
    *
-   * @param commitMessageCache The cache instance.
+   * @param logMessageCache The cache instance.
    */
-  public void setCommitMessageCache(final CommitMessageCache commitMessageCache) {
-    this.commitMessageCache = commitMessageCache;
+  public void setLogMessageCache(final LogMessageCache logMessageCache) {
+    this.logMessageCache = logMessageCache;
   }
 
   /**
@@ -108,9 +108,9 @@ public class CacheServiceImpl implements CacheService {
   /**
    * {@inheritDoc}
    */
-  public List<CommitMessage> find(final String queryString) throws CacheException {
+  public List<LogMessage> find(final String queryString) throws CacheException {
     revisionObservable.update();
-    return commitMessageCache.find(queryString);
+    return logMessageCache.find(queryString);
   }
 
 }

@@ -95,7 +95,7 @@
     <property name="feedType">
       <value>rss_2.0</value>
     </property>
-    <property name="commitMessageLength">
+    <property name="logMessageLength">
       <value>40</value>
     </property>
   </bean>
@@ -336,8 +336,8 @@
     <property name="entryCache">
       <ref local="entryCache"/>
     </property>
-    <property name="commitMessageCache">
-      <ref local="commitMessageCache"/>
+    <property name="logMessageCache">
+      <ref local="logMessageCache"/>
     </property>
     <property name="revisionObservable">
       <ref local="revisionObservable"/>
@@ -362,7 +362,7 @@
     <constructor-arg>
       <list>
         <ref local="entryCacheUpdater"/>
-        <ref local="commitMessageCacheUpdater"/>
+        <ref local="logMessageCacheUpdater"/>
       </list>
     </constructor-arg>
   </bean>
@@ -385,20 +385,20 @@
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="commitMessageCacheUpdater" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheUpdater">
+  <bean id="logMessageCacheUpdater" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheUpdater">
     <constructor-arg>
-      <ref local="commitMessageCache"/>
+      <ref local="logMessageCache"/>
     </constructor-arg>
   </bean>
 
-  <!-- The commitMessageCache implementation class -->
-  <bean id="commitMessageCache" class="de.berlios.sventon.repository.cache.commitmessagecache.CommitMessageCacheImpl">
+  <!-- The logMessageCache implementation class -->
+  <bean id="logMessageCache" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheImpl">
     <constructor-arg>
       <ref local="luceneDirectory"/>
     </constructor-arg>
   </bean>
 
-  <bean id="luceneDirectory" class="de.berlios.sventon.repository.cache.commitmessagecache.LuceneDirectoryBean">
+  <bean id="luceneDirectory" class="de.berlios.sventon.repository.cache.logmessagecache.LuceneDirectoryBean">
     <property name="diskPersistent">
       <value>true</value>
     </property>

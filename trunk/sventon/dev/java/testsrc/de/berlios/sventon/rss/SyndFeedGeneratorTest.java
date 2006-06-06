@@ -13,7 +13,7 @@ public class SyndFeedGeneratorTest extends TestCase {
   public void testGenerateFeedRSS20() throws Exception {
     SyndFeedGenerator generator = new SyndFeedGenerator();
     generator.setFeedType("rss_2.0");
-    generator.setCommitMessageLength(20);
+    generator.setLogMessageLength(20);
 
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths;
@@ -48,12 +48,12 @@ public class SyndFeedGeneratorTest extends TestCase {
 
   }
 
-  public void testGetAbbreviatedCommitMessage() throws Exception {
+  public void testGetAbbreviatedLogMessage() throws Exception {
     SyndFeedGenerator f = new SyndFeedGenerator();
-    assertEquals("this is...", f.getAbbreviatedCommitMessage("this is a message", 10));
-    assertEquals("this is a mes...", f.getAbbreviatedCommitMessage("this is a message", 16));
-    assertEquals("this is a message", f.getAbbreviatedCommitMessage("this is a message", 17));
-    assertEquals(null, f.getAbbreviatedCommitMessage(null, 10));
-    assertEquals("", f.getAbbreviatedCommitMessage("", 10));
+    assertEquals("this is...", f.getAbbreviatedLogMessage("this is a message", 10));
+    assertEquals("this is a mes...", f.getAbbreviatedLogMessage("this is a message", 16));
+    assertEquals("this is a message", f.getAbbreviatedLogMessage("this is a message", 17));
+    assertEquals(null, f.getAbbreviatedLogMessage(null, 10));
+    assertEquals("", f.getAbbreviatedLogMessage("", 10));
   }
 }
