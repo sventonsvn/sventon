@@ -191,7 +191,7 @@
         <table>
           <tr>
             <th>Revision</th>
-            <th>Commit Message</th>
+            <th>Log Message</th>
           </tr>
           <c:forEach items="${logMessages}" var="logMessage">
           <jsp:useBean id="logMessage" type="LogMessage" />

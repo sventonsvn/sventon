@@ -192,9 +192,9 @@ public class RepositoryEntry implements Serializable {
   }
 
   /**
-   * Retrieves the commit message.
+   * Retrieves the log message.
    *
-   * @return the commit message.
+   * @return the log message.
    */
   public String getCommitMessage() {
     return entryLogMessage;

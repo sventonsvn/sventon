@@ -48,7 +48,7 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
   }
 
   /**
-   * Updates the commit message cache with given revision information.
+   * Updates the log message cache with given revision information.
    *
    * @param revisions The new revisions
    */

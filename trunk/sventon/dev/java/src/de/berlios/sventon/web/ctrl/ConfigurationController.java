@@ -204,7 +204,7 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# Description:                                                                 #\n");
     comments.append("# Decides whether caching feature is enabled or not. If true, the repository   #\n");
     comments.append("# will be scanned and cached which enables the search and directory flatten    #\n");
-    comments.append("# features as well as the commit message search.                               #\n");
+    comments.append("# features as well as the log message search.                                  #\n");
     comments.append("################################################################################\n\n");
     return comments.toString();
   }
