@@ -24,6 +24,12 @@
     </constructor-arg>
   </bean>
 
+  <bean id="defaultEncoding" class="java.lang.String">
+    <constructor-arg>
+      <value>UTF-8</value>
+    </constructor-arg>
+  </bean>
+
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="ignoreResourceNotFound" value="true"/>
@@ -105,7 +111,7 @@
       <ref local="repositoryConfig"/>
     </property>
     <property name="encoding">
-      <value>UTF-8</value>
+      <ref local="defaultEncoding"/>
     </property>
   </bean>
 
@@ -136,7 +142,7 @@
       <ref local="svnBaseCommandValidator"/>
     </property>
     <property name="encoding">
-      <value>UTF-8</value>
+      <ref local="defaultEncoding"/>
     </property>
   </bean>
 
@@ -409,7 +415,7 @@
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">
-      <value>UTF-8</value>
+      <ref local="defaultEncoding"/>
     </property>
     <property name="rendererMappings">
       <map>

@@ -56,19 +56,19 @@ public class DiffProducerTest extends TestCase {
 
     Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffSegment action = actions.next();
-    assertSame(DiffAction.c, action.getAction());
+    assertSame(DiffAction.CHANGED, action.getAction());
     assertEquals(2, action.getLeftLineIntervalStart());
     assertEquals(2, action.getLeftLineIntervalEnd());
     assertEquals(2, action.getRightLineIntervalStart());
     assertEquals(2, action.getRightLineIntervalEnd());
-    assertEquals("DiffSegment: c, left: 2-2, right: 2-2", action.toString());
+    assertEquals("DiffSegment: CHANGED, left: 2-2, right: 2-2", action.toString());
     action = actions.next();
-    assertSame(DiffAction.a, action.getAction());
+    assertSame(DiffAction.ADDED, action.getAction());
     assertEquals(8, action.getLeftLineIntervalStart());
     assertEquals(8, action.getLeftLineIntervalEnd());
     assertEquals(8, action.getRightLineIntervalStart());
     assertEquals(12, action.getRightLineIntervalEnd());
-    assertEquals("DiffSegment: a, left: 8-8, right: 8-12", action.toString());
+    assertEquals("DiffSegment: ADDED, left: 8-8, right: 8-12", action.toString());
   }
 
   public void testDoNormalDiffII() throws Exception {
@@ -139,26 +139,26 @@ public class DiffProducerTest extends TestCase {
 
     Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffSegment action = actions.next();
-    assertSame(DiffAction.a, action.getAction());
+    assertSame(DiffAction.ADDED, action.getAction());
     assertEquals(2, action.getLeftLineIntervalStart());
     assertEquals(2, action.getLeftLineIntervalEnd());
     assertEquals(2, action.getRightLineIntervalStart());
     assertEquals(8, action.getRightLineIntervalEnd());
-    assertEquals("DiffSegment: a, left: 2-2, right: 2-8", action.toString());
+    assertEquals("DiffSegment: ADDED, left: 2-2, right: 2-8", action.toString());
     action = actions.next();
-    assertSame(DiffAction.c, action.getAction());
+    assertSame(DiffAction.CHANGED, action.getAction());
     assertEquals(10, action.getLeftLineIntervalStart());
     assertEquals(12, action.getLeftLineIntervalEnd());
     assertEquals(3, action.getRightLineIntervalStart());
     assertEquals(4, action.getRightLineIntervalEnd());
-    assertEquals("DiffSegment: c, left: 10-12, right: 3-4", action.toString());
+    assertEquals("DiffSegment: CHANGED, left: 10-12, right: 3-4", action.toString());
     action = actions.next();
-    assertSame(DiffAction.a, action.getAction());
+    assertSame(DiffAction.ADDED, action.getAction());
     assertEquals(10, action.getLeftLineIntervalStart());
     assertEquals(10, action.getLeftLineIntervalEnd());
     assertEquals(18, action.getRightLineIntervalStart());
     assertEquals(22, action.getRightLineIntervalEnd());
-    assertEquals("DiffSegment: a, left: 10-10, right: 18-22", action.toString());
+    assertEquals("DiffSegment: ADDED, left: 10-10, right: 18-22", action.toString());
   }
 
   public void testDoNormalDiffNoDiff() throws Exception {

@@ -2,7 +2,7 @@ package de.berlios.sventon.diff;
 
 import junit.framework.TestCase;
 
-public class DiffTest extends TestCase {
+public class DiffCreatorTest extends TestCase {
 
   public void testDiff() throws Exception {
 
@@ -28,8 +28,8 @@ public class DiffTest extends TestCase {
         "OneMore=2\n" +
         "OneMore=3\n";
 
-    Diff diff = new Diff(leftString, null, rightString, null);
-    assertEquals(diff.getLeft().size(), diff.getRight().size());
+    DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
   }
 
   public void testDiffII() throws Exception {
@@ -133,20 +133,20 @@ public class DiffTest extends TestCase {
 < * $Id$
 
 */
-    Diff diff = new Diff(leftString, null, rightString, null);
-    assertEquals(diff.getLeft().size(), diff.getRight().size());
+    DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
 
     StringBuffer sb = new StringBuffer();
-    for (SourceLine tempStr : diff.getLeft()) {
-      sb.append(tempStr.getAction());
+    for (SourceLine tempStr : diffCreator.getLeft()) {
+      sb.append(tempStr.getAction().getCode());
       sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(leftResult, sb.toString());
 
     sb = new StringBuffer();
-    for (SourceLine tempStr : diff.getRight()) {
-      sb.append(tempStr.getAction());
+    for (SourceLine tempStr : diffCreator.getRight()) {
+      sb.append(tempStr.getAction().getCode());
       sb.append(tempStr.getLine());
       sb.append("\n");
     }
@@ -203,11 +203,11 @@ public class DiffTest extends TestCase {
 <OneMore=8
 
 */
-    Diff diff = new Diff(leftString, null, rightString, null);
+    DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
 //    System.out.println("diff.getLeft() = " + diff.getLeft());
 //    System.out.println("diff.getRight() = " + diff.getRight());
 
-    assertEquals(diff.getLeft().size(), diff.getRight().size());
+    assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
   }
 
 
@@ -289,23 +289,23 @@ public class DiffTest extends TestCase {
 >OneMore=9
 
 */
-    Diff diff = new Diff(leftString, null, rightString, null);
+    DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
 
 //    System.out.println("diff.getDiffResultString() = " + diff.getDiffResultString());
 
-    assertEquals(diff.getLeft().size(), diff.getRight().size());
+    assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
 
     StringBuffer sb = new StringBuffer();
-    for (SourceLine tempStr : diff.getLeft()) {
-      sb.append(tempStr.getAction());
+    for (SourceLine tempStr : diffCreator.getLeft()) {
+      sb.append(tempStr.getAction().getCode());
       sb.append(tempStr.getLine());
       sb.append("\n");
     }
     assertEquals(leftResult, sb.toString());
 
     sb = new StringBuffer();
-    for (SourceLine tempStr : diff.getRight()) {
-      sb.append(tempStr.getAction());
+    for (SourceLine tempStr : diffCreator.getRight()) {
+      sb.append(tempStr.getAction().getCode());
       sb.append(tempStr.getLine());
       sb.append("\n");
     }
@@ -321,7 +321,7 @@ public class DiffTest extends TestCase {
         "[.ShellClassInfo]\n";
 
     try {
-      new Diff(leftString, null, rightString, null);
+      new DiffCreator(leftString, null, rightString, null);
       fail("Should raise DiffException");
     } catch (DiffException de) {
       // expected
