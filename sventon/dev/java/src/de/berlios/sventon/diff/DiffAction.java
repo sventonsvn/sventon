@@ -40,14 +40,14 @@ public enum DiffAction {
   /**
    * Action code.
    */
-  private final Character code;
+  private final char code;
 
   /**
    * Private constructor.
    *
    * @param description The description
    */
-  private DiffAction(final String description, final Character code, final String symbol, final String cssClass) {
+  private DiffAction(final String description, final char code, final String symbol, final String cssClass) {
     this.description = description;
     this.code = code;
     this.symbol = symbol;
@@ -76,7 +76,6 @@ public enum DiffAction {
    * @throws IllegalArgumentException if unable to parse code.
    */
   public static DiffAction parse(final char code) {
-    final DiffAction action;
     switch (code) {
       case 'd':
         return DELETED;
@@ -126,5 +125,5 @@ public enum DiffAction {
   public char getCode() {
     return code;
   }
-  
+
 }

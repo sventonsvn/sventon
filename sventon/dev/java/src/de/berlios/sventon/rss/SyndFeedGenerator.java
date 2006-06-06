@@ -94,18 +94,18 @@ public class SyndFeedGenerator implements FeedGenerator {
       int deleted = 0;
 
       for (String entryPath : latestPathsList) {
-        final LogEntryActionType type = LogEntryActionType.valueOf(String.valueOf(map.get(entryPath).getType()));
+        final LogEntryActionType type = LogEntryActionType.parse(map.get(entryPath).getType());
         switch (type) {
-          case A:
+          case ADDED:
             added++;
             break;
-          case M:
+          case MODIFIED:
             modified++;
             break;
-          case R:
+          case REPLACED:
             relocated++;
             break;
-          case D:
+          case DELETED:
             deleted++;
             break;
         }
@@ -123,25 +123,25 @@ public class SyndFeedGenerator implements FeedGenerator {
       sb.append("<td><b>Count</b></td>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.A);
+      sb.append(LogEntryActionType.ADDED);
       sb.append("</td><td>");
       sb.append(added);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.M);
+      sb.append(LogEntryActionType.MODIFIED);
       sb.append("</td><td>");
       sb.append(modified);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.R);
+      sb.append(LogEntryActionType.REPLACED);
       sb.append("</td><td>");
       sb.append(relocated);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.D);
+      sb.append(LogEntryActionType.DELETED);
       sb.append("</td><td>");
       sb.append(deleted);
       sb.append("</td></tr>");

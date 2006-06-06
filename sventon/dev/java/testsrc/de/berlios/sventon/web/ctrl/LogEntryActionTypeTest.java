@@ -1,32 +1,31 @@
 package de.berlios.sventon.web.ctrl;
 
 import junit.framework.TestCase;
-import de.berlios.sventon.web.ctrl.LogEntryActionType;
 
 public class LogEntryActionTypeTest extends TestCase {
 
   public void testLogEntryAction() throws Exception {
     // Yes - really stupid tests, I know.. :-)
-    assertEquals("Added", LogEntryActionType.A.toString());
-    assertEquals("Modified", LogEntryActionType.M.toString());
-    assertEquals("Replaced", LogEntryActionType.R.toString());
-    assertEquals("Deleted", LogEntryActionType.D.toString());
+    assertEquals("Added", LogEntryActionType.ADDED.toString());
+    assertEquals("Modified", LogEntryActionType.MODIFIED.toString());
+    assertEquals("Replaced", LogEntryActionType.REPLACED.toString());
+    assertEquals("Deleted", LogEntryActionType.DELETED.toString());
   }
 
   public void testLogEntryActionValueOf() throws Exception {
-    assertEquals(LogEntryActionType.D, LogEntryActionType.valueOf("D"));
-    assertEquals("Deleted", LogEntryActionType.valueOf("D").toString());
+    assertEquals(LogEntryActionType.DELETED, LogEntryActionType.parse("D"));
+    assertEquals("Deleted", LogEntryActionType.parse("D").toString());
   }
 
   public void testLogEntryActionSwitch() throws Exception {
-    switch (LogEntryActionType.M) {
-      case A:
+    switch (LogEntryActionType.MODIFIED) {
+      case ADDED:
         fail();
-      case M:
+      case MODIFIED:
         break;
-      case R:
+      case REPLACED:
         fail();
-      case D:
+      case DELETED:
         fail();
     }
   }

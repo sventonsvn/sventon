@@ -108,7 +108,7 @@
                   final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {
                     final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) changedPaths.get(i.next());
-                    final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
+                    final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
                 %>
                 <tr>
 
@@ -118,9 +118,9 @@
                   </c:url>
 
                   <td><i><%= actionType %></i></td>
-                  <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
+                  <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
-                  <% } else if (LogEntryActionType.M == actionType) { %>
+                  <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
                   <td><a href="${diffUrl}&path=<%= logEntryPath.getPath() %>&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
