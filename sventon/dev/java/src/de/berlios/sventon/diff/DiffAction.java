@@ -17,10 +17,10 @@ package de.berlios.sventon.diff;
  * @author jesper@users.berlios.de
  */
 public enum DiffAction {
-  d("Deleted", "-", "srcDel"),
-  c("Changed", "&#8800;", "srcChg"),
-  a("Added", "+", "srcAdd"),
-  u("Unchanged", "&nbsp;", "src");
+  DELETED("Deleted", 'd', "-", "srcDel"),
+  CHANGED("Changed", 'c', "&#8800;", "srcChg"),
+  ADDED("Added", 'a', "+", "srcAdd"),
+  UNCHANGED("Unchanged", 'u', "&nbsp;", "src");
 
   /**
    * The diff segment action description.
@@ -36,15 +36,59 @@ public enum DiffAction {
    * CSS (Cascading style sheet) class name.
    */
   private final String cssClass;
+
+  /**
+   * Action code.
+   */
+  private final Character code;
+
   /**
    * Private constructor.
    *
    * @param description The description
    */
-  private DiffAction(final String description, final String symbol, final String cssClass) {
+  private DiffAction(final String description, final Character code, final String symbol, final String cssClass) {
     this.description = description;
+    this.code = code;
     this.symbol = symbol;
     this.cssClass = cssClass;
+  }
+
+  /**
+   * Parses given code and returns apropriate <code>DiffAction</code>.
+   *
+   * @param code Code to parse
+   * @return The DiffAction
+   * @throws IllegalArgumentException if code was null
+   */
+  public static DiffAction parse(final String code) {
+    if (code == null) {
+      throw new IllegalArgumentException("Unable to parse code as it was null");
+    }
+    return parse(code.charAt(0));
+  }
+
+  /**
+   * Parses given code and returns apropriate <code>DiffAction</code>.
+   *
+   * @param code Code to parse
+   * @return The DiffAction
+   * @throws IllegalArgumentException if unable to parse code.
+   */
+  public static DiffAction parse(final char code) {
+    final DiffAction action;
+    switch (code) {
+      case 'd':
+        return DELETED;
+      case 'c':
+        return CHANGED;
+      case 'a':
+        return ADDED;
+      case 'u':
+        return UNCHANGED;
+      default:
+        throw new IllegalArgumentException("Unable to parse code: " + code);
+    }
   }
 
   /**
@@ -74,4 +118,13 @@ public enum DiffAction {
     return cssClass;
   }
 
+  /**
+   * Gets the code.
+   *
+   * @return The code
+   */
+  public char getCode() {
+    return code;
+  }
+  
 }

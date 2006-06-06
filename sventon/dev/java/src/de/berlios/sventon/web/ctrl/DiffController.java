@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.diff.Diff;
+import de.berlios.sventon.diff.DiffCreator;
 import de.berlios.sventon.diff.DiffException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.validation.BindException;
@@ -120,7 +120,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
           getRepositoryConfiguration().getUrl() + diffCommand.getToPath());
 
-      final Diff differ = new Diff(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
+      final DiffCreator differ = new DiffCreator(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
       model.put("leftFileContents", differ.getLeft());
       model.put("rightFileContents", differ.getRight());
     } else {

@@ -12,7 +12,8 @@
 package de.berlios.sventon.diff;
 
 /**
- * Diff segment bean.
+ * Diff segment bean. Represents one result segment produced by
+ * {@link de.berlios.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
  *
  * @author jesper@users.berlios.de
  */

@@ -12,7 +12,8 @@
 package de.berlios.sventon.diff;
 
 /**
- * Source line bean.
+ * Source line bean. Represents one line of text including
+ * the line's {@link de.berlios.sventon.diff.DiffAction}.
  *
  * @author jesper@users.berlios.de
  */
@@ -35,7 +36,7 @@ public class SourceLine {
   /**
    * Gets the action code.
    *
-   * @return Code
+   * @return The line's {@link de.berlios.sventon.diff.DiffAction}
    */
   public DiffAction getAction() {
     return action;
@@ -44,7 +45,7 @@ public class SourceLine {
   /**
    * Gets the source line.
    *
-   * @return Line
+   * @return The line of text.
    */
   public String getLine() {
     return line;

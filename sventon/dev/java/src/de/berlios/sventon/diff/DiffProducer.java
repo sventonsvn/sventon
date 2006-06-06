@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * DiffProducer class for producing normal or unified diff results.
+ * Class for producing normal or unified diff results.
  *
  * @author jesper@users.berlios.de
  */
@@ -37,6 +37,7 @@ public class DiffProducer {
   /**
    * Character encoding. Default set to UTF-8.
    */
+  //TODO: Move to Spring XML
   private String encoding = "UTF-8";
 
   /**

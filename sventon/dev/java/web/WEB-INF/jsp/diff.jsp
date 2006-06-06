@@ -62,10 +62,10 @@
               %>
               <tr>
                 <%
-                    SourceLine line = (SourceLine) leftLines.get(i);
+                  SourceLine line = (SourceLine) leftLines.get(i);
                 %>
                 <td>
-                  <% if (DiffAction.u != line.getAction()) { %>
+                  <% if (DiffAction.UNCHANGED != line.getAction()) { %>
                     <a name="diff<%=diffCount%>"/><a href="#diff<%=++diffCount%>">
                       <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
                     </a>
