@@ -28,7 +28,7 @@ public interface LogMessageCache {
    *
    * @param queryString Index query string.
    * @return List of log messages.
-   * @throws de.berlios.sventon.repository.cache.CacheException
+   * @throws CacheException if error.
    *
    */
   List<LogMessage> find(final String queryString) throws CacheException;
@@ -37,7 +37,7 @@ public interface LogMessageCache {
    * Add one log message to the cache.
    *
    * @param logMessage The log message to cache.
-   * @throws CacheException if error during index addition.
+   * @throws CacheException if error.
    */
   void add(final LogMessage logMessage) throws CacheException;
 
@@ -46,7 +46,7 @@ public interface LogMessageCache {
    * of cached messages.
    *
    * @return Cache size
-   * @throws CacheException if unable to get cache size
+   * @throws CacheException if unable to get cache size.
    */
   int getSize() throws CacheException;
 
