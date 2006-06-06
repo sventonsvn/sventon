@@ -9,10 +9,10 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache.commitmessagecache;
+package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.AbstractRevisionObserver;
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,11 +21,11 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
- * CommitMessageCacheUpdater.
+ * LogMessageCacheUpdater.
  *
  * @author jesper@user.berlios.de 
  */
-public class CommitMessageCacheUpdater extends AbstractRevisionObserver {
+public class LogMessageCacheUpdater extends AbstractRevisionObserver {
 
   /**
    * The logging instance.
@@ -35,16 +35,16 @@ public class CommitMessageCacheUpdater extends AbstractRevisionObserver {
   /**
    * The cache instance.
    */
-  private CommitMessageCache commitMessageCache;
+  private LogMessageCache logMessageCache;
 
   /**
    * Constructor.
    *
-   * @param commitMessageCache The cache instance.
+   * @param logMessageCache The cache instance.
    */
-  public CommitMessageCacheUpdater(final CommitMessageCache commitMessageCache) {
+  public LogMessageCacheUpdater(final LogMessageCache logMessageCache) {
     logger.info("Starting");
-    this.commitMessageCache = commitMessageCache;
+    this.logMessageCache = logMessageCache;
   }
 
   /**
@@ -56,10 +56,10 @@ public class CommitMessageCacheUpdater extends AbstractRevisionObserver {
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
-        commitMessageCache.add(new CommitMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));
+        logMessageCache.add(new LogMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));
       }
     } catch (CacheException ce) {
-      logger.error("Unable to update commitMessageCache", ce);
+      logger.error("Unable to update logMessageCache", ce);
     }
   }
 }

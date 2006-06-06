@@ -1,7 +1,7 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.CacheException;
@@ -90,7 +90,7 @@ public class CompletionControllerTest extends TestCase {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<CommitMessage> find(final String queryString) throws CacheException {
+    public List<LogMessage> find(final String queryString) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
   }

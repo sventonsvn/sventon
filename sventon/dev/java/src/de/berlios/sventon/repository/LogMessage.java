@@ -12,11 +12,11 @@
 package de.berlios.sventon.repository;
 
 /**
- * CommitMessage.
+ * LogMessage.
  *
  * @author jesper@users.berlios.de
  */
-public class CommitMessage {
+public class LogMessage {
 
   final private long revision;
   final private String message;
@@ -27,7 +27,7 @@ public class CommitMessage {
    * @param revision The revision
    * @param message The commit message
    */
-  public CommitMessage(final long revision, final String message) {
+  public LogMessage(final long revision, final String message) {
     this.revision = revision;
     this.message = message;
   }

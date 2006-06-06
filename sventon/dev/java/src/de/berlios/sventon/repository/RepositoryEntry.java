@@ -38,7 +38,7 @@ public class RepositoryEntry implements Serializable {
   private long entryFirstRevision;
   private Date entryCreatedDate;
   private String entryLastAuthor;
-  private String entryCommitMessage;
+  private String entryLogMessage;
   private String url;
 
   public enum Kind {dir, file, none, unknown, any};
@@ -68,7 +68,7 @@ public class RepositoryEntry implements Serializable {
 
   private void copyEntry(final SVNDirEntry entry) {
     this.entryLastAuthor = entry.getAuthor();
-    this.entryCommitMessage = entry.getCommitMessage();
+    this.entryLogMessage = entry.getCommitMessage();
     this.entryCreatedDate = entry.getDate();
     this.entryKind = Kind.valueOf(entry.getKind().toString());
     this.entryName = entry.getName();
@@ -197,7 +197,7 @@ public class RepositoryEntry implements Serializable {
    * @return the commit message.
    */
   public String getCommitMessage() {
-    return entryCommitMessage;
+    return entryLogMessage;
   }
 
   /**

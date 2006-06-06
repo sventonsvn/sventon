@@ -18,13 +18,13 @@ import java.util.Set;
 
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
- * ordering of <code>CommitMessage</code> objects.
+ * ordering of <code>LogMessage</code> objects.
  * <p/>
  * The comparator can be configured during construction to tweak sorting behavior.
  *
  * @author jesper@users.berlios.de
  */
-public class CommitMessageComparator implements Comparator<CommitMessage>, Serializable {
+public class LogMessageComparator implements Comparator<LogMessage>, Serializable {
 
   private static final long serialVersionUID = -123291078109887289L;
 
@@ -48,11 +48,11 @@ public class CommitMessageComparator implements Comparator<CommitMessage>, Seria
   }
 
   /**
-   * Create a new comparator for comparing <code>CommitMessage</code> objects.
+   * Create a new comparator for comparing <code>LogMessage</code> objects.
    *
    * @param sortType See constants defined in this class.
    */
-  public CommitMessageComparator(final int sortType) {
+  public LogMessageComparator(final int sortType) {
 
     if (!legalTypes.contains(sortType)) {
       throw new IllegalArgumentException("Not a valid sort type: " + sortType);
@@ -63,7 +63,7 @@ public class CommitMessageComparator implements Comparator<CommitMessage>, Seria
   /**
    * {@inheritDoc}
    */
-  public int compare(final CommitMessage message1, final CommitMessage message2) {
+  public int compare(final LogMessage message1, final LogMessage message2) {
     final long revision1 = message1.getRevision();
     final long revision2 = message2.getRevision();
     if (sortType == ASCENDING) {

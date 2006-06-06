@@ -14,7 +14,7 @@
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
-<%@ page import="de.berlios.sventon.repository.CommitMessage"%>
+<%@ page import="de.berlios.sventon.repository.LogMessage"%>
 
 <html>
   <head>
@@ -54,7 +54,7 @@
   <ui:functionLinks pageName="repobrowse"/> 
 
   <c:choose>
-    <c:when test="${searchMode ne 'commitMessages'}">
+    <c:when test="${searchMode ne 'logMessages'}">
       <div id="entriesDiv" class="sventonEntriesDiv">
         <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
       <!-- Needed by ASVNTC -->
@@ -180,17 +180,17 @@
       </div>
     </c:when>
     <c:otherwise>
-      <div id="commitMessagesDiv" class="sventonEntriesDiv">
+      <div id="logMessagesDiv" class="sventonEntriesDiv">
         <table>
           <tr>
             <th>Revision</th>
             <th>Commit Message</th>
           </tr>
-          <c:forEach items="${commitMessages}" var="commitMessage">
-          <jsp:useBean id="commitMessage" type="CommitMessage" />
+          <c:forEach items="${logMessages}" var="logMessage">
+          <jsp:useBean id="logMessage" type="LogMessage" />
             <tr>
-              <td><a href="revinfo.svn?revision=${commitMessage.revision}">${commitMessage.revision}</a></td>
-              <td>${commitMessage.message}</td>
+              <td><a href="revinfo.svn?revision=${logMessage.revision}">${logMessage.revision}</a></td>
+              <td>${logMessage.message}</td>
             </tr>
           </c:forEach>
         </table>

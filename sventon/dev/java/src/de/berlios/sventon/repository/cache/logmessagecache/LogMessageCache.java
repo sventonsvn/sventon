@@ -9,10 +9,10 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache.commitmessagecache;
+package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 
 import java.util.List;
 
@@ -21,28 +21,28 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public interface CommitMessageCache {
+public interface LogMessageCache {
 
   /**
-   * Finds occurencies of given search string among the cached commit messages.
+   * Finds occurencies of given search string among the cached log messages.
    *
    * @param queryString Index query string.
    * @return List of commit messages.
    * @throws de.berlios.sventon.repository.cache.CacheException
    *
    */
-  List<CommitMessage> find(final String queryString) throws CacheException;
+  List<LogMessage> find(final String queryString) throws CacheException;
 
   /**
    * Add one commit message to the cache.
    *
-   * @param commitMessage The commit message to cache.
+   * @param logMessage The log message to cache.
    * @throws CacheException if error during index addition.
    */
-  void add(final CommitMessage commitMessage) throws CacheException;
+  void add(final LogMessage logMessage) throws CacheException;
 
   /**
-   * Gets the size of the commit message cache, i.e. the number
+   * Gets the size of the log message cache, i.e. the number
    * of cached messages.
    *
    * @return Cache size

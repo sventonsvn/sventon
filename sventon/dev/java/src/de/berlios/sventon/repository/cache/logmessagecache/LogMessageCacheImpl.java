@@ -9,9 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository.cache.commitmessagecache;
+package de.berlios.sventon.repository.cache.logmessagecache;
 
-import de.berlios.sventon.repository.CommitMessage;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class CommitMessageCacheImpl implements CommitMessageCache {
+public class LogMessageCacheImpl implements LogMessageCache {
 
   /**
    * The logging instance.
@@ -58,7 +58,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
    *
    * @param directory The <i>lucene</i> directory.
    */
-  public CommitMessageCacheImpl(final Directory directory) throws CacheException {
+  public LogMessageCacheImpl(final Directory directory) throws CacheException {
     logger.debug("Initializing cache");
 
     IndexWriter writer = null;
@@ -94,8 +94,8 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
   /**
    * {@inheritDoc}
    */
-  public synchronized List<CommitMessage> find(final String queryString) throws CacheException {
-    final List<CommitMessage> result = new ArrayList<CommitMessage>();;
+  public synchronized List<LogMessage> find(final String queryString) throws CacheException {
+    final List<LogMessage> result = new ArrayList<LogMessage>();;
     Searcher searcher = null;
     try {
       logger.debug("Searching for: [" + queryString + "]");
@@ -117,7 +117,7 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
           final int maxNumFragmentsRequired = 100;
           final String fragmentSeparator = "...";
           final TokenStream tokenStream = new StandardAnalyzer().tokenStream("content", new StringReader(content));
-          result.add(new CommitMessage(Long.parseLong(document.get("revision")),
+          result.add(new LogMessage(Long.parseLong(document.get("revision")),
               highlighter.getBestFragments(tokenStream, content, maxNumFragmentsRequired, fragmentSeparator)));
         }
       }
@@ -138,15 +138,15 @@ public class CommitMessageCacheImpl implements CommitMessageCache {
   /**
    * {@inheritDoc}
    */
-  public synchronized void add(final CommitMessage commitMessage) throws CacheException {
+  public synchronized void add(final LogMessage logMessage) throws CacheException {
     IndexWriter writer = null;
 
     try {
       writer = new IndexWriter(directory, new StandardAnalyzer(), false);
       final Document document = new Document();
-      document.add(new Field("revision", String.valueOf(commitMessage.getRevision()), Field.Store.YES, Field.Index.NO));
-      document.add(new Field("content", commitMessage.getMessage() == null ? "" :
-          commitMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
+      document.add(new Field("revision", String.valueOf(logMessage.getRevision()), Field.Store.YES, Field.Index.NO));
+      document.add(new Field("content", logMessage.getMessage() == null ? "" :
+          logMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
       writer.addDocument(document);
     } catch (IOException ioex) {
       throw new CacheException("Unable to add content to lucene cache", ioex);

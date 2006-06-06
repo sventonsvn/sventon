@@ -11,7 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(CommitMessageComparatorTest.class);
+    suite.addTestSuite(LogMessageComparatorTest.class);
     suite.addTestSuite(RevisionObservableImplTest.class);
     suite.addTestSuite(RepositoryConfigurationTest.class);
     suite.addTestSuite(RepositoryEntryTest.class);
