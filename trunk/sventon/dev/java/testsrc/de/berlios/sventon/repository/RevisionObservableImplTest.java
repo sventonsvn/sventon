@@ -1,39 +1,47 @@
 package de.berlios.sventon.repository;
 
 import de.berlios.sventon.cache.ObjectCache;
+import de.berlios.sventon.cache.ObjectCacheImpl;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.*;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
-  public void testUpdate() throws Exception {
-    final ObjectCache cache = new MemoryCache();
+  private ObjectCache createMemoryCache() throws Exception {
+    return new ObjectCacheImpl("sventonTestCache", 1000, false, false, 0, 0, false, 0);
+  }
 
+  public void testUpdate() throws Exception {
     final RepositoryConfiguration configuration = new RepositoryConfiguration();
     configuration.setCacheUsed(true);
 
-    final List<RevisionObserver> observers = new ArrayList<RevisionObserver>();
-    observers.add(this);
-    final RevisionObservableImpl revisionObservableImpl = new RevisionObservableImpl(observers);
-    revisionObservableImpl.setRepository(new TestRepository());
-    revisionObservableImpl.setRepositoryConfiguration(configuration);
-    revisionObservableImpl.setObjectCache(cache);
-    assertFalse(revisionObservableImpl.isUpdating());
-    revisionObservableImpl.update();
+    final ObjectCache cache = createMemoryCache();
+
+    try {
+      final List<RevisionObserver> observers = new ArrayList<RevisionObserver>();
+      observers.add(this);
+      final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
+      revisionObservable.setRepository(new TestRepository());
+      revisionObservable.setRepositoryConfiguration(configuration);
+      revisionObservable.setObjectCache(cache);
+      assertFalse(revisionObservable.isUpdating());
+      revisionObservable.update();
+    } finally {
+      cache.shutdown();
+    }
   }
 
   public void update(Observable o, Object arg) {
-    assertEquals(1, ((List<SVNLogEntry>)arg).size());
+    assertEquals(1, ((List<SVNLogEntry>) arg).size());
   }
 
   public void update(final List<SVNLogEntry> revisions) {
   }
-
 
   class TestRepository extends SVNRepositoryStub {
     public TestRepository() throws SVNException {
@@ -51,26 +59,4 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     }
   }
 
-  class MemoryCache implements ObjectCache {
-    private Map cache = new HashMap();
-
-    public void put(final Object cacheKey, final Object value) {
-      cache.put(cacheKey, value);
-    }
-
-    public Object get(final Object cacheKey) {
-      return cache.get(cacheKey);
-    }
-
-    public long getHitCount() {
-      return 0;
-    }
-
-    public long getMissCount() {
-      return 0;
-    }
-
-    public void shutdown() throws Exception {
-    }
-  }
 }

@@ -1,9 +1,8 @@
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.RevisionObservable;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
 import junit.framework.TestCase;
@@ -74,29 +73,6 @@ public class CacheServiceTest extends TestCase {
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/", null));
     return entries;
-  }
-
-  class TestObjectCache implements ObjectCache {
-    private HashMap cache = new HashMap();
-
-    public void put(final Object cacheKey, final Object value) {
-      cache.put(cacheKey, value);
-    }
-
-    public Object get(final Object cacheKey) {
-      return cache.get(cacheKey);
-    }
-
-    public long getHitCount() {
-      return 0;
-    }
-
-    public long getMissCount() {
-      return 0;
-    }
-
-    public void shutdown() throws Exception {
-    }
   }
 
   class TestRevisionObservable implements RevisionObservable {
