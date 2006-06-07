@@ -21,7 +21,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
- * LogMessageCacheUpdater.
+ * Class responsible for updating the log message cache.
  *
  * @author jesper@user.berlios.de 
  */
