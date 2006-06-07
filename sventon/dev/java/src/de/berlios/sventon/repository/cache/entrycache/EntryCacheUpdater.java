@@ -22,7 +22,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import java.util.*;
 
 /**
- * EntryCacheUpdater.
+ * Class responsible for updating the entry cache.
  *
  * @author jesper@users.berlios.de
  */

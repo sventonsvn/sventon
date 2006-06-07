@@ -20,7 +20,9 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
+ * Class responsible for updating the revision cache.
  *
+ * @author jesper@users.berlios.de
  */
 public class RevisionCacheUpdater extends AbstractRevisionObserver {
 
