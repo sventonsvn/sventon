@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[563] Added: Feature #2259 - Revision info cache.
 [552] Added: Upgraded to JavaSVN 1.1.0beta2.
 [546] Fixed: Redesign of entry cache.
       Added: Feature #2175 - Commit message cache using Lucene.

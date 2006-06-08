@@ -13,11 +13,10 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.bind.ServletRequestBindingException;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -40,11 +39,10 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
                                    final SVNRevision revision, final HttpServletRequest request,
                                    final HttpServletResponse response, final BindException exception) throws Exception {
 
+    logger.debug("Create model");
+    final Map<String, Object> model = new HashMap<String, Object>();
+
     final long revNumber;
-    final String path = "/";  // Path to show logs for.
-
-    logger.debug("Fetching revision details");
-
     try {
       revNumber = RequestUtils.getLongParameter(request, "revision");
     } catch (ServletRequestBindingException ex) {
@@ -53,14 +51,8 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
     }
 
     logger.debug("Getting revision info details for revision: " + revNumber);
-
-    final String[] targetPaths = new String[]{path};
-    final SVNLogEntry logEntry = (SVNLogEntry) repository.log(
-        targetPaths, null, revNumber, revNumber, true, false).iterator().next();
-
-    logger.debug("Create model");
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("revisionInfo", logEntry);
+    model.put("revisionInfo", getRepositoryService().getRevision(repository, revNumber));
     return new ModelAndView("showrevinfo", model);
   }
+
 }

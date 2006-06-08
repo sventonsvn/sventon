@@ -2,11 +2,9 @@ package de.berlios.sventon.repository;
 
 import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.cache.ObjectCacheImpl;
+import de.berlios.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.*;
 
 import java.util.*;
 
@@ -29,6 +27,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setRepository(new TestRepository());
       revisionObservable.setRepositoryConfiguration(configuration);
       revisionObservable.setObjectCache(cache);
+      revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());
       revisionObservable.update();
     } finally {
@@ -48,10 +47,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }
 
-    public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
-      List<SVNLogEntry> logs = new ArrayList<SVNLogEntry>();
-      logs.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 124, "jesper", new Date(), "Log message for revision 124."));
-      return logs;
+    public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, long limit, ISVNLogEntryHandler handler) throws SVNException {
+      handler.handleLogEntry(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 124, "jesper", new Date(), "Log message for revision 124."));
+      return 1;
     }
 
     public long getLatestRevision() throws SVNException {

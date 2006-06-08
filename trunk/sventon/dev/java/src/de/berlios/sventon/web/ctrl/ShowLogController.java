@@ -14,10 +14,12 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.RequestUtils;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -51,7 +53,6 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     this.pageSize = pageSize;
   }
 
-
   /**
    * {@inheritDoc}
    */
@@ -74,11 +75,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     if (nextPathParam == null || nextRevParam == null) {
       targetPaths = new String[]{path};
-      revNumber = revision == HEAD ? getHeadRevision() : revision.getNumber();
+      revNumber = revision == HEAD ? getHeadRevision(repository) : revision.getNumber();
     } else {
       targetPaths = new String[]{nextPathParam};
       if ("HEAD".equals(nextRevParam)) {
-        revNumber = getHeadRevision();
+        revNumber = getHeadRevision(repository);
       } else {
         try {
           revNumber = Long.parseLong(nextRevParam);
@@ -93,13 +94,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-
-    repository.log(targetPaths, revNumber, 0, true, false, pageSize, new ISVNLogEntryHandler() {
-      public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
-        logEntries.add(logEntry);
-      }
-    });
+    final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(repository, revNumber, 0, pageSize);
 
     final SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
     String pathAtRevision = targetPaths[0];

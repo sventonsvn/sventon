@@ -11,11 +11,12 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.service.CacheService;
+import de.berlios.sventon.service.RepositoryService;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -25,7 +26,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -125,20 +125,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Cached most recent log entry.
-   * Do not manipulate.
-   * Use {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)}
-   * or {@link #getHeadRevisionInfo()}.
+   * The repository service instance.
    */
-  private static SVNLogEntry cachedLogs;
-
-  /**
-   * Cached revision number (HEAD).
-   * Do not manipulate.
-   * Use {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)}
-   * or {@link #getHeadRevision()}.
-   */
-  private static long cachedRevision;
+  private RepositoryService repositoryService;
 
   /**
    * Constructor.
@@ -169,8 +158,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     try {
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
-
-      updateHeadRevisionCache(repository);
+      final long headRevision = getHeadRevision(repository);
 
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, request, response, exception);
 
@@ -181,8 +169,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", configuration.getUrl());
-        model.put("numrevision", (requestedRevision == HEAD ? Long.toString(getHeadRevision()) : null));
-        model.put("latestCommitInfo", getHeadRevisionInfo());
+        model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
+        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", configuration.isCacheUsed());
@@ -202,6 +190,17 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
+  }
+
+  /**
+   * Gets the latest (HEAD) revision
+   *
+   * @param repository Repository
+   * @return Head revision
+   * @throws SVNException if subversion error
+   */
+  protected synchronized long getHeadRevision(final SVNRepository repository) throws SVNException {
+    return repository.getLatestRevision();
   }
 
   /**
@@ -228,56 +227,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
     }
     return locks;
-  }
-
-  /**
-   * Updates the cached head revision info.
-   * Compares latest revision number to cached revision and
-   * updates revision/log if necessary.
-   *
-   * @param repository The repository
-   * @throws SVNException if subversion error.
-   */
-  private synchronized void updateHeadRevisionCache(final SVNRepository repository) throws SVNException {
-    final long latestRevision = repository.getLatestRevision();
-
-    if (latestRevision != cachedRevision) {
-      logger.debug("Updating HEAD cache to revision: " + latestRevision);
-      String[] targetPaths = new String[]{"/"}; // the path to show logs for
-      cachedLogs = (SVNLogEntry) repository.log(
-          targetPaths, null, latestRevision, latestRevision, true, false).iterator().next();
-      cachedRevision = latestRevision;
-    }
-  }
-
-  /**
-   * Gets the latest, cached, revision logs info.
-   * Make sure {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)} has been
-   * called before this method is invoked.
-   *
-   * @return The <tt>SVNLogEntry</tt> for the latest revision
-   * @throws IllegalStateException if HEAD revision has not been cached yet.
-   */
-  protected synchronized SVNLogEntry getHeadRevisionInfo() {
-    if (cachedLogs == null) {
-      throw new IllegalStateException("HEAD revision info has not yet been cached");
-    }
-    return cachedLogs;
-  }
-
-  /**
-   * Gets the latest, cached, revision.
-   * Make sure {@link #updateHeadRevisionCache(org.tmatesoft.svn.core.io.SVNRepository)} has been
-   * called before this method is invoked.
-   *
-   * @return Revision
-   * @throws IllegalStateException if HEAD revision has not been cached yet.
-   */
-  protected synchronized long getHeadRevision() {
-    if (cachedRevision == 0) {
-      throw new IllegalStateException("HEAD revision info has not yet been cached");
-    }
-    return cachedRevision;
   }
 
   /**
@@ -406,6 +355,24 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public void setRevisionObservable(final RevisionObservable revisionObservable) {
     this.revisionObservable = revisionObservable;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
+
+  /**
+   * Gets the repository service instance.
+   *
+   * @return Repository service
+   */
+  public RepositoryService getRepositoryService() {
+    return repositoryService;
   }
 
 }

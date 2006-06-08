@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository;
 
 import de.berlios.sventon.cache.ObjectCache;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -52,6 +53,20 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * Object cache key, <code>lastCachedLogRevision</code>
    */
   private static final String LAST_UPDATED_LOG_REVISION_CACHE_KEY = "lastCachedLogRevision";
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
 
   /**
    * Constructor.
@@ -117,9 +132,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       final long headRevision = repository.getLatestRevision();
 
       if (headRevision > lastUpdatedRevision) {
-        //noinspection unchecked
-        logEntries.addAll((List<SVNLogEntry>)
-            repository.log(new String[]{"/"}, null, lastUpdatedRevision + 1, headRevision, true, false));
+        logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
         logger.debug("Reading [" + logEntries.size() + "] revision(s)");
         setChanged();
         logger.debug("Notifying observers");
