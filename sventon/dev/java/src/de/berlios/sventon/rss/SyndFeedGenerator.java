@@ -32,11 +32,6 @@ import java.io.Writer;
 public class SyndFeedGenerator implements FeedGenerator {
 
   /**
-   * The feed.
-   */
-  private SyndFeed cachedFeed;
-
-  /**
    * The generated feed type, default set to <tt>rss_2.0</tt>.
    */
   private String feedType = "rss_2.0";
@@ -49,21 +44,14 @@ public class SyndFeedGenerator implements FeedGenerator {
   /**
    * {@inheritDoc}
    */
-  public void generateFeed(final List<SVNLogEntry> logEntries, final String baseURL) {
+  public void outputFeed(final List<SVNLogEntry> logEntries, final String baseURL, final Writer writer) throws Exception {
     final SyndFeed feed = new SyndFeedImpl();
     feed.setTitle("sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
     feed.setEntries(createEntries(logEntries, baseURL));
     feed.setFeedType(feedType);
-    cachedFeed = feed;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void outputFeed(final Writer writer) throws Exception {
-    new SyndFeedOutput().output(cachedFeed, writer);
+    new SyndFeedOutput().output(feed, writer);
   }
 
   private List createEntries(final List<SVNLogEntry> logEntries, final String baseURL) {

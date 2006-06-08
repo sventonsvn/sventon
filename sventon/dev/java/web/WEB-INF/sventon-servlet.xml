@@ -57,6 +57,15 @@
     </property>
   </bean>
 
+  <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
+    <property name="repositoryConfiguration">
+      <ref local="repositoryConfig"/>
+    </property>
+    <property name="revisionCache">
+      <ref local="revisionCache"/>
+    </property>
+  </bean>
+
   <bean id="abstractController" abstract="true">
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
@@ -66,6 +75,9 @@
     </property>
     <property name="revisionObservable">
       <ref local="revisionObservable"/>
+    </property>
+    <property name="repositoryService">
+      <ref local="repositoryService"/>
     </property>
   </bean>
 
@@ -95,6 +107,9 @@
     <property name="feedGenerator">
       <ref local="syndFeedGenerator"/>
     </property>
+    <property name="repositoryService">
+      <ref local="repositoryService"/>
+    </property>
   </bean>
 
   <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
@@ -113,9 +128,13 @@
     <property name="encoding">
       <ref local="defaultEncoding"/>
     </property>
+    <property name="repositoryService">
+      <ref local="repositoryService"/>
+    </property>
   </bean>
 
-  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController">
+  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -137,7 +156,8 @@
     </property>
   </bean>
 
-  <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController" parent="abstractController">
+  <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -173,7 +193,8 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController" parent="abstractController">
+  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -188,7 +209,8 @@
     </property>
   </bean>
 
-  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController">
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -361,6 +383,9 @@
     <property name="objectCache">
       <ref local="objectCache"/>
     </property>
+    <property name="repositoryService">
+      <ref local="repositoryService"/>
+    </property>
   </bean>
 
   <!-- List of RevisionObservers registered to get repository changes -->
@@ -369,8 +394,23 @@
       <list>
         <ref local="entryCacheUpdater"/>
         <ref local="logMessageCacheUpdater"/>
+        <ref local="revisionCacheUpdater"/>
       </list>
     </constructor-arg>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
+    <constructor-arg>
+      <ref local="revisionCache"/>
+    </constructor-arg>
+  </bean>
+
+  <!-- The revisionCache implementation class -->
+  <bean id="revisionCache" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheImpl">
+    <property name="objectCache">
+      <ref local="objectCache"/>
+    </property>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->

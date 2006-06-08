@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
@@ -51,16 +52,6 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private RepositoryConfiguration configuration;
 
   /**
-   * The cached commit info.
-   */
-  private String cachedInfo;
-
-  /**
-   * The cached info's head revision.
-   */
-  private long cachedInfoHeadRevision;
-
-  /**
    * The xml encoding, default set to <code>UTF-8</code>.
    */
   private String encoding = "UTF-8";
@@ -69,6 +60,11 @@ public class ShowLatestCommitInfoController extends AbstractController {
    * Date pattern, default set to: <code>yyyy-MM-dd HH:mm:ss</code>.
    */
   private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * {@inheritDoc}
@@ -91,21 +87,9 @@ public class ShowLatestCommitInfoController extends AbstractController {
     final long headRevision = repository.getLatestRevision();
     logger.debug("Latest revision is: " + headRevision);
 
-    if (cachedInfoHeadRevision != headRevision) {
-      final String[] targetPaths = new String[]{"/"}; // the path to show logs for
-      logger.debug("Creating xml");
-      cachedInfo = getXMLAsString(
-          createXML((SVNLogEntry) repository.log(targetPaths,
-              null, headRevision, headRevision, true, false).iterator().next()),
-          encoding);
-      logger.debug("Updating cache to revision: " + headRevision);
-      cachedInfoHeadRevision = headRevision;
-    } else {
-      logger.debug("Returning cached commit info");
-    }
-
     try {
-      response.getWriter().write(cachedInfo);
+      response.getWriter().write(
+          getXMLAsString(createXML(repositoryService.getRevision(repository, headRevision)), encoding));
     } catch (IOException ioex) {
       logger.warn(ioex);
     }
@@ -128,6 +112,15 @@ public class ShowLatestCommitInfoController extends AbstractController {
    */
   public void setEncoding(final String encoding) {
     this.encoding = encoding;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
   /**

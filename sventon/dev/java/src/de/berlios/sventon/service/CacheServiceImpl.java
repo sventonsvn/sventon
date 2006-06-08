@@ -77,6 +77,7 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
+    //TODO: replace with aspect
     revisionObservable.update();
     return entryCache.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
@@ -85,6 +86,7 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
+    //TODO: replace with aspect
     revisionObservable.update();
     return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
@@ -93,6 +95,7 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
+    //TODO: replace with aspect
     revisionObservable.update();
     return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
   }
@@ -101,6 +104,7 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException {
+    //TODO: replace with aspect
     revisionObservable.update();
     return entryCache.findByPattern(fromPath + ".*?", dir, null);
   }
@@ -109,6 +113,7 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<LogMessage> find(final String queryString) throws CacheException {
+    //TODO: replace with aspect
     revisionObservable.update();
     return logMessageCache.find(queryString);
   }

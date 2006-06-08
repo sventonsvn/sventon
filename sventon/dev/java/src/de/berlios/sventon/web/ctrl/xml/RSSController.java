@@ -14,19 +14,17 @@ package de.berlios.sventon.web.ctrl.xml;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Controller used for generating RSS feeds.
@@ -56,14 +54,14 @@ public class RSSController extends AbstractController {
   private RepositoryConfiguration configuration;
 
   /**
-   * The cached feed head revision.
-   */
-  private long cachedFeedHeadRevision;
-
-  /**
    * The feed generator.
    */
   private FeedGenerator feedGenerator;
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * {@inheritDoc}
@@ -83,16 +81,18 @@ public class RSSController extends AbstractController {
     }
 
     try {
-      generateFeed(repository, getRequestURL(request));
+      final long headRevision = repository.getLatestRevision();
+      logger.debug("Producing feed for revision: " + headRevision);
+
+      final List<SVNLogEntry> logEntries = repositoryService.getRevisions(repository, headRevision,
+          headRevision - feedItemCount, feedItemCount);
+      logger.debug("Outputting feed");
+      feedGenerator.outputFeed(logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
-      return null;
     }
-
-    logger.debug("Outputting feed");
-    feedGenerator.outputFeed(response.getWriter());
     return null;
   }
 
@@ -113,28 +113,6 @@ public class RSSController extends AbstractController {
     sb.append(request.getContextPath());
     sb.append("/");
     return sb.toString();
-  }
-
-  private synchronized void generateFeed(final SVNRepository repository, final String baseURL) throws Exception {
-    final long headRevision = repository.getLatestRevision();
-    logger.debug("Cached feed revision is: " + cachedFeedHeadRevision);
-
-    if (cachedFeedHeadRevision != headRevision) {
-      logger.debug("Updating feed for revision: " + headRevision);
-      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-      final String[] targetPaths = new String[]{"/"}; // the path to show logs for
-
-      logger.debug("Getting log info for latest [" + feedItemCount + "] revisions");
-      repository.log(targetPaths, headRevision, headRevision - feedItemCount, true, false, feedItemCount, new ISVNLogEntryHandler() {
-        public void handleLogEntry(SVNLogEntry logEntry) throws SVNException {
-          logEntries.add(logEntry);
-        }
-      });
-
-      feedGenerator.generateFeed(logEntries, baseURL);
-      logger.debug("Caching feed revision");
-      cachedFeedHeadRevision = headRevision;
-    }
   }
 
   /**
@@ -171,6 +149,15 @@ public class RSSController extends AbstractController {
    */
   public void setFeedItemCount(int feedItemCount) {
     this.feedItemCount = feedItemCount;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
 }
