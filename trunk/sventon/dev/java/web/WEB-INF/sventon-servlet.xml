@@ -61,8 +61,8 @@
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
-    <property name="revisionCache">
-      <ref local="revisionCache"/>
+    <property name="cacheService">
+      <ref local="cacheService"/>
     </property>
   </bean>
 
@@ -366,6 +366,9 @@
     </property>
     <property name="logMessageCache">
       <ref local="logMessageCache"/>
+    </property>
+    <property name="revisionCache">
+      <ref local="revisionCache"/>
     </property>
     <property name="revisionObservable">
       <ref local="revisionObservable"/>

@@ -9,10 +9,7 @@ import de.berlios.sventon.service.CacheService;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -93,5 +90,10 @@ public class CompletionControllerTest extends TestCase {
     public List<LogMessage> find(final String queryString) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    public SVNLogEntry getRevision(final long revision) throws CacheException {
+      return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
   }
 }
