@@ -16,10 +16,12 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RevisionObservable;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
@@ -30,9 +32,10 @@ import java.util.List;
  */
 public class CacheServiceImpl implements CacheService {
 
-  private LogMessageCache logMessageCache;
-  private EntryCache entryCache;
   private RevisionObservable revisionObservable;
+  private EntryCache entryCache;
+  private LogMessageCache logMessageCache;
+  private RevisionCache revisionCache;
 
   /**
    * The logging instance.
@@ -71,6 +74,15 @@ public class CacheServiceImpl implements CacheService {
    */
   public void setLogMessageCache(final LogMessageCache logMessageCache) {
     this.logMessageCache = logMessageCache;
+  }
+
+  /**
+   * Sets the revision cache instance.
+   *
+   * @param revisionCache The cache instance.
+   */
+  public void setRevisionCache(final RevisionCache revisionCache) {
+    this.revisionCache = revisionCache;
   }
 
   /**
@@ -118,4 +130,12 @@ public class CacheServiceImpl implements CacheService {
     return logMessageCache.find(queryString);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public SVNLogEntry getRevision(final long revision) throws CacheException {
+    //TODO: replace with aspect
+    revisionObservable.update();
+    return revisionCache.get(revision);
+  }
 }

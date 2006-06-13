@@ -11,9 +11,10 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.LogMessage;
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
@@ -72,4 +73,13 @@ public interface CacheService {
    */
   List<LogMessage> find(final String queryString) throws CacheException;
 
+  /**
+   * Gets a revision by number.
+   *
+   * @param revision Revision number of revision to get.
+   * @return The revision info
+   * @throws CacheException if error.
+   *
+   */
+  SVNLogEntry getRevision(final long revision) throws CacheException;
 }

@@ -1,14 +1,13 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
-import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
 import de.berlios.sventon.repository.cache.CacheException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +30,9 @@ public class RepositoryServiceImpl implements RepositoryService {
   private RepositoryConfiguration configuration;
 
   /**
-   * The revision cache instance.
+   * The cache service instance.
    */
-  private RevisionCache revisionCache;
+  private CacheService cacheService;
 
   /**
    * {@inheritDoc}
@@ -98,7 +97,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   private SVNLogEntry getCachedRevision(final long revision) throws CacheException {
-    return revisionCache.get(revision);
+    return cacheService.getRevision(revision);
   }
 
   private List<SVNLogEntry> getCachedRevisions(final long fromRevision, final long toRevision) throws CacheException {
@@ -106,11 +105,11 @@ public class RepositoryServiceImpl implements RepositoryService {
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (fromRevision < toRevision) {
       for (long i = fromRevision; i <= toRevision; i++) {
-        logEntries.add(revisionCache.get(i));
+        logEntries.add(cacheService.getRevision(i));
       }
     } else {
       for (long i = fromRevision; i >= toRevision; i--) {
-        logEntries.add(revisionCache.get(i));
+        logEntries.add(cacheService.getRevision(i));
       }
     }
     return logEntries;
@@ -126,12 +125,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   /**
-   * Sets the revision cache instance.
+   * Sets the cache service instance.
    *
-   * @param revisionCache Cache instance
+   * @param cacheService Cache instance
    */
-  public void setRevisionCache(RevisionCache revisionCache) {
-    this.revisionCache = revisionCache;
+  public void setCacheService(final CacheService cacheService) {
+    this.cacheService = cacheService;
   }
 
 }
