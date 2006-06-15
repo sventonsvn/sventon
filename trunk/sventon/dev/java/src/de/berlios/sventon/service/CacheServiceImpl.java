@@ -13,12 +13,11 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RevisionObservable;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
-import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
+import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
+import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -32,7 +31,6 @@ import java.util.List;
  */
 public class CacheServiceImpl implements CacheService {
 
-  private RevisionObservable revisionObservable;
   private EntryCache entryCache;
   private LogMessageCache logMessageCache;
   private RevisionCache revisionCache;
@@ -47,15 +45,6 @@ public class CacheServiceImpl implements CacheService {
    */
   public CacheServiceImpl() {
     logger.info("Starting cache service");
-  }
-
-  /**
-   * Sets the observable. Needed to trigger cache updates.
-   *
-   * @param revisionObservable The observable
-   */
-  public void setRevisionObservable(final RevisionObservable revisionObservable) {
-    this.revisionObservable = revisionObservable;
   }
 
   /**
@@ -89,8 +78,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return entryCache.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
 
@@ -98,8 +85,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
   }
 
@@ -107,8 +92,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return entryCache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
   }
 
@@ -116,8 +99,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return entryCache.findByPattern(fromPath + ".*?", dir, null);
   }
 
@@ -125,8 +106,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public List<LogMessage> find(final String queryString) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return logMessageCache.find(queryString);
   }
 
@@ -134,8 +113,6 @@ public class CacheServiceImpl implements CacheService {
    * {@inheritDoc}
    */
   public SVNLogEntry getRevision(final long revision) throws CacheException {
-    //TODO: replace with aspect
-    revisionObservable.update();
     return revisionCache.get(revision);
   }
 }
