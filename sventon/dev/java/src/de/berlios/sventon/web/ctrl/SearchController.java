@@ -67,7 +67,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
       }
       model.put("svndir", entries);
     } else if ("logMessages".equals(searchMode)) {
-      logger.debug("Searchin logMessages for: " + searchString);
+      logger.debug("Searching logMessages for: " + searchString);
 
       final List<LogMessage> logMessages = Collections.checkedList(new ArrayList<LogMessage>(),
           LogMessage.class);

@@ -1,7 +1,6 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
@@ -18,7 +17,6 @@ public class CacheServiceTest extends TestCase {
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setEntryCache(entryCache);
-    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(4, cacheService.findEntry("java").size());
   }
 
@@ -28,7 +26,6 @@ public class CacheServiceTest extends TestCase {
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setEntryCache(entryCache);
-    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(1, cacheService.findEntry("html", "/trunk/src/").size());
   }
 
@@ -38,7 +35,6 @@ public class CacheServiceTest extends TestCase {
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setEntryCache(entryCache);
-    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(2, cacheService.findEntry("java", "/", 2).size());
 
     assertEquals(4, cacheService.findEntry("java", "/", null).size());
@@ -53,7 +49,6 @@ public class CacheServiceTest extends TestCase {
 
     final CacheServiceImpl cacheService = new CacheServiceImpl();
     cacheService.setEntryCache(entryCache);
-    cacheService.setRevisionObservable(new TestRevisionObservable());
     assertEquals(3, cacheService.findDirectories("/").size());
 
     assertEquals(1, cacheService.findDirectories("/trunk/").size());
@@ -73,15 +68,6 @@ public class CacheServiceTest extends TestCase {
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/", null));
     return entries;
-  }
-
-  class TestRevisionObservable implements RevisionObservable {
-    public void update() {
-      System.out.println("[STUB] updating...");
-    }
-    public boolean isUpdating() {
-      return false;
-    }
   }
 
   class TestRepository extends SVNRepositoryStub {
