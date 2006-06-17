@@ -103,7 +103,7 @@ public class DiffCreator {
     rightLinesList = processRight(rightSourceLines, diffActions);
 
     if (leftLinesList.size() != rightLinesList.size()) {
-      final StringBuffer sb = new StringBuffer("Error while applying diff result!");
+      final StringBuilder sb = new StringBuilder("Error while applying diff result!");
       sb.append("\nLine diff count: ");
       sb.append(leftLinesList.size() - rightLinesList.size());
       sb.append("\nDiffresult:\n");
