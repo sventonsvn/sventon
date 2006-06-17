@@ -101,7 +101,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
         } else {
           // Thumbnail was not in the cache.
           // Create the thumbnail.
-          final StringBuffer urlString = request.getRequestURL();
+          final StringBuilder urlString = new StringBuilder(request.getRequestURL());
           urlString.append("?");
           urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
           final URL url = new URL(urlString.toString());

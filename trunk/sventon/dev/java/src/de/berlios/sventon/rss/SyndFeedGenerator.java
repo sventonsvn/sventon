@@ -99,7 +99,7 @@ public class SyndFeedGenerator implements FeedGenerator {
         }
       }
 
-      final StringBuffer sb = new StringBuffer();
+      final StringBuilder sb = new StringBuilder();
       sb.append("<table border=\"0\">");
       sb.append("<tr colspan=\"2\">");
       sb.append("<td>");

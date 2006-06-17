@@ -88,7 +88,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
    * @return The regex pattern.
    */
   private String preparePattern(final String searchString) {
-    final StringBuffer sb = new StringBuffer(".*/");
+    final StringBuilder sb = new StringBuilder(".*/");
     for (int i = 0; i < searchString.length(); i++) {
       sb.append("[");
       sb.append(searchString.charAt(i));
