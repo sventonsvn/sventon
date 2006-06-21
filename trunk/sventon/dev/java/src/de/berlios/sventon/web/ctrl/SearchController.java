@@ -60,8 +60,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
 
       if (searchString.toUpperCase().equals(searchString)) {
         logger.debug("Search string was in upper case only - performing CamelCase cache search");
-        String ccPattern = preparePattern(searchString);
-        //entries.addAll(getCacheService().findPattern(ccPattern, startDir));
+        entries.addAll(getCacheService().findEntryByCamelCase(searchString, startDir));
       } else {
         entries.addAll(getCacheService().findEntry(searchString, startDir));
       }
@@ -79,23 +78,4 @@ public class SearchController extends AbstractSVNTemplateController implements C
     }
     return new ModelAndView("repobrowser", model);
   }
-
-  /**
-   * Prepares a regex search pattern based on given
-   * search string.
-   *
-   * @param searchString The search string.
-   * @return The regex pattern.
-   */
-  private String preparePattern(final String searchString) {
-    final StringBuilder sb = new StringBuilder(".*/");
-    for (int i = 0; i < searchString.length(); i++) {
-      sb.append("[");
-      sb.append(searchString.charAt(i));
-      sb.append("][a-z0-9]+");
-    }
-    sb.append(".*");
-    return sb.toString();
-  }
-
 }

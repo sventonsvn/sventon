@@ -71,8 +71,12 @@ public class CompletionControllerTest extends TestCase {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public List<RepositoryEntry> findEntryByCamelCase(final String searchString, final String startDir) throws CacheException {
+      return null;
+    }
+
     public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return null;
     }
 
     public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
