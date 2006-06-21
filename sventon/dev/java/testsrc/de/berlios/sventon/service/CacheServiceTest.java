@@ -54,6 +54,34 @@ public class CacheServiceTest extends TestCase {
     assertEquals(1, cacheService.findDirectories("/trunk/").size());
   }
 
+  public void testCreateCamelCasePatternForString() throws Exception {
+    final CacheServiceImpl service = new CacheServiceImpl();
+
+    assertTrue("/ATestFile".matches("/" + service.createCamelCasePatternForString("A")));
+    assertTrue("/ATestFile".matches("/" + service.createCamelCasePatternForString("AT")));
+
+    assertTrue("/TestFile".matches("/" + service.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFile1".matches("/" + service.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFile1".matches("/" + service.createCamelCasePatternForString("TF1")));
+
+    assertTrue("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TFNT")));
+    assertFalse("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TFT")));
+
+    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TFA")));
+    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TFABC")));
+
+    assertTrue("/TestFile1ABC".matches("/" + service.createCamelCasePatternForString("TFA")));
+    assertTrue("/TestFile1ABC".matches("/" + service.createCamelCasePatternForString("TFABC")));
+
+    assertTrue("/HTML".matches("/" + service.createCamelCasePatternForString("HT")));
+    assertTrue("/HTML".matches("/" + service.createCamelCasePatternForString("HTML")));
+
+    assertTrue("/trunk/TestFile".matches("/trunk/" + service.createCamelCasePatternForString("TF")));
+    assertTrue("/trunk/dev/AnotherTestFile".matches("/trunk/dev/" + service.createCamelCasePatternForString("ATF")));
+  }
+
   private List<RepositoryEntry> getEntryTemplateList() {
     final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/", null));
