@@ -108,12 +108,14 @@
           <jsp:useBean id="entry" type="RepositoryEntry" />
           <c:url value="repobrowser.svn" var="viewUrl">
             <c:param name="path" value="${entry.fullEntryName}" />
-          </c:url>
-          <c:url value="showlog.svn" var="showLogUrl">
-            <c:param name="path" value="${entry.fullEntryName}" />
+            <c:param name="revision" value="${command.revision}" />
           </c:url>
           <c:url value="showfile.svn" var="showFileUrl">
             <c:param name="path" value="${entry.fullEntryName}" />
+            <c:param name="revision" value="${command.revision}" />
+          </c:url>
+          <c:url value="revinfo.svn" var="showRevInfoUrl">
+            <c:param name="revision" value="${entry.revision}" />
           </c:url>
 
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
@@ -126,10 +128,10 @@
             <td class="sventonCol3">
               <c:choose>
                 <c:when test="${isSearch || isFlatten}">
-                  <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">${entry.friendlyFullEntryName}</a>
+                  <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">${entry.friendlyFullEntryName}</a>
                 </c:when>
                 <c:otherwise>
-                  <a href="${viewUrl}/&revision=${command.revision}">${entry.name}</a>
+                  <a href="${viewUrl}">${entry.name}</a>
                 </c:otherwise>
               </c:choose>
             </td>
@@ -138,12 +140,12 @@
             <td class="sventonCol3">
               <c:choose>
                 <c:when test="${isSearch || isFlatten}">
-                  <a href="${showFileUrl}&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
+                  <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
                 ${entry.friendlyFullEntryName}
                   </a>
                 </c:when>
                 <c:otherwise>
-                  <a href="${showFileUrl}&revision=${command.revision}">${entry.name}</a>
+                  <a href="${showFileUrl}">${entry.name}</a>
                 </c:otherwise>
               </c:choose>
               </td>
@@ -154,7 +156,7 @@
               </c:if>
             </td>
             <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
-            <td class="sventonCol6">${entry.revision}</td>
+            <td class="sventonCol6"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${entry.revision}</a></td>
             <td class="sventonCol7">${entry.author}</td>
             <td class="sventonCol8"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
@@ -188,18 +190,29 @@
     </c:when>
     <c:otherwise>
       <div id="logMessagesDiv" class="sventonEntriesDiv">
-        <table>
+        <table class="sventonEntriesTable">
           <tr>
             <th>Revision</th>
             <th>Log Message</th>
           </tr>
+          <%
+            int hitCount = 0;
+          %>
           <c:forEach items="${logMessages}" var="logMessage">
           <jsp:useBean id="logMessage" type="LogMessage" />
-            <tr>
-              <td><a href="revinfo.svn?revision=${logMessage.revision}">${logMessage.revision}</a></td>
+            <c:url value="revinfo.svn" var="showRevInfoUrl">
+              <c:param name="revision" value="${logMessage.revision}" />
+            </c:url>
+            <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+              <td><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
               <td>${logMessage.message}</td>
             </tr>
+            <% hitCount++; %>
           </c:forEach>
+          <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+            <td><b>Total: <%=hitCount%> hits</b></td>
+            <td></td>
+          </tr>
         </table>
       </div>
     </c:otherwise>
