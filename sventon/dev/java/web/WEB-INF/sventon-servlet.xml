@@ -131,6 +131,9 @@
     <property name="repositoryService">
       <ref local="repositoryService"/>
     </property>
+    <property name="datePattern">
+      <value>yyyy-MM-dd HH:mm:ss</value>
+    </property>
   </bean>
 
   <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController"

@@ -45,7 +45,7 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
     final long revNumber;
     try {
       revNumber = RequestUtils.getLongParameter(request, "revision");
-    } catch (ServletRequestBindingException ex) {
+    } catch (final ServletRequestBindingException ex) {
       exception.reject("goto.command.invalidpath", "Invalid revision");
       return prepareExceptionModelAndView(exception, svnCommand);
     }

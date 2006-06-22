@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNProperty;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -85,72 +86,16 @@ public class GetController extends AbstractSVNTemplateController implements Cont
           logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
           return null;
         }
-
-        response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
-
-        // Check if the thumbnail exists on the cache
-        final HashMap properties = new HashMap();
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
-        logger.debug(properties);
-        String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
-        logger.debug("Using cachekey: " + cacheKey);
-        byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
-        if (thumbnailData != null) {
-          // Writing cached thumbnail image to ServletOutputStream
-          output.write(thumbnailData);
-        } else {
-          // Thumbnail was not in the cache.
-          // Create the thumbnail.
-          final StringBuilder urlString = new StringBuilder(request.getRequestURL());
-          urlString.append("?");
-          urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
-          final URL url = new URL(urlString.toString());
-          logger.debug("Getting full size image from url: " + url);
-          BufferedImage image = ImageIO.read(url);
-          int orgWidth = image.getWidth();
-          int orgHeight = image.getHeight();
-
-          // Get preferred thumbnail dimension.
-          final Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
-          logger.debug("Thumbnail size: " + thumbnailSize.toString());
-          // Resize image.
-          final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-          final BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
-          response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-
-          // Write thumbnail to output stream.
-          baos = new ByteArrayOutputStream();
-          ImageIO.write(biRescaled, THUMBNAIL_FORMAT, baos);
-
-          // Putting created thumbnail image into the cache.
-          logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
-          objectCache.put(cacheKey, baos.toByteArray());
-          // Write thumbnail to ServletOutputStream.
-          output.write(baos.toByteArray());
-        }
+        getAsThumbnail(response, svnCommand, repository, revision, output, request);
       } else {
         if (DISPLAY_TYPE_INLINE.equals(displayType)
             && imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
           logger.debug("Getting file as 'inline'");
-          response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-          response.setHeader("Content-disposition", "inline; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+          getAsInlineImage(response, svnCommand, request, repository, revision, output);
         } else {
           logger.debug("Getting file as 'attachment'");
-          String mimeType = null;
-          try {
-            mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
-          } catch (IllegalStateException ise) {
-            logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
-          }
-          if (mimeType == null) {
-            response.setContentType(DEFAULT_CONTENT_TYPE);
-          } else {
-            response.setContentType(mimeType);
-          }
-          response.setHeader("Content-disposition", "attachment; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+          getAsAttachment(svnCommand, response, request, repository, revision, output);
         }
-        // Get the image data and write it to the outputStream.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
       }
       output.flush();
       output.close();
@@ -158,6 +103,76 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       ioex.printStackTrace();
     }
     return null;
+  }
+
+  private void getAsAttachment(SVNBaseCommand svnCommand, HttpServletResponse response, HttpServletRequest request, SVNRepository repository, SVNRevision revision, ServletOutputStream output) throws SVNException {
+    String mimeType = null;
+    try {
+      mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
+    } catch (IllegalStateException ise) {
+      logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
+    }
+    if (mimeType == null) {
+      response.setContentType(DEFAULT_CONTENT_TYPE);
+    } else {
+      response.setContentType(mimeType);
+    }
+    response.setHeader("Content-disposition", "attachment; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+    // Get the image data and write it to the outputStream.
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
+  }
+
+  private void getAsInlineImage(HttpServletResponse response, SVNBaseCommand svnCommand, HttpServletRequest request, SVNRepository repository, SVNRevision revision, ServletOutputStream output) throws SVNException {
+    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+    response.setHeader("Content-disposition", "inline; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+    // Get the image data and write it to the outputStream.
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
+  }
+
+  private void getAsThumbnail(HttpServletResponse response, SVNBaseCommand svnCommand, SVNRepository repository, SVNRevision revision, ServletOutputStream output, HttpServletRequest request) throws SVNException, IOException {
+    final ByteArrayOutputStream baos;
+    response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
+
+    // Check if the thumbnail exists on the cache
+    final HashMap properties = new HashMap();
+    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
+    logger.debug(properties);
+    String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
+    logger.debug("Using cachekey: " + cacheKey);
+    byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
+    if (thumbnailData != null) {
+      // Writing cached thumbnail image to ServletOutputStream
+      output.write(thumbnailData);
+    } else {
+      // Thumbnail was not in the cache.
+      // Create the thumbnail.
+      final StringBuilder urlString = new StringBuilder(request.getRequestURL());
+      urlString.append("?");
+      urlString.append(request.getQueryString().replaceAll(DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_THUMBNAIL, DISPLAY_REQUEST_PARAMETER + "=" + DISPLAY_TYPE_INLINE));
+      final URL url = new URL(urlString.toString());
+      logger.debug("Getting full size image from url: " + url);
+      BufferedImage image = ImageIO.read(url);
+      int orgWidth = image.getWidth();
+      int orgHeight = image.getHeight();
+
+      // Get preferred thumbnail dimension.
+      final Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
+      logger.debug("Thumbnail size: " + thumbnailSize.toString());
+      // Resize image.
+      final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
+      final BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+      response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+
+      // Write thumbnail to output stream.
+      baos = new ByteArrayOutputStream();
+      ImageIO.write(biRescaled, THUMBNAIL_FORMAT, baos);
+
+      // Putting created thumbnail image into the cache.
+      logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+      objectCache.put(cacheKey, baos.toByteArray());
+      // Write thumbnail to ServletOutputStream.
+      output.write(baos.toByteArray());
+    }
   }
 
   /**
