@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
-import de.berlios.sventon.service.CacheService;
+import de.berlios.sventon.repository.cache.Cache;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.logging.Log;
@@ -110,9 +110,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   protected RepositoryConfiguration configuration = null;
 
   /**
-   * Service class for accessing the caches.
+   * Gateway class for accessing the caches.
    */
-  private CacheService cacheService;
+  private Cache cache;
 
   /**
    * The observable instance. Used to check whether it's buzy updating or not.
@@ -313,21 +313,21 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
 
   /**
-   * Sets the cache service instance.
+   * Sets the cache instance.
    *
-   * @param cacheService The instance.
+   * @param cache The instance.
    */
-  public void setCacheService(final CacheService cacheService) {
-    this.cacheService = cacheService;
+  public void setCache(final Cache cache) {
+    this.cache = cache;
   }
 
   /**
-   * Gets the cache service instance.
+   * Gets the cache instance.
    *
    * @return The instance.
    */
-  public CacheService getCacheService() {
-    return cacheService;
+  public Cache getCache() {
+    return cache;
   }
 
   /**

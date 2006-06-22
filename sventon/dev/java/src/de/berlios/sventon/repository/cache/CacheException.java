@@ -14,7 +14,7 @@ package de.berlios.sventon.repository.cache;
 import de.berlios.sventon.SventonException;
 
 /**
- * Exception thrown by <code>CacheService</code>.
+ * Exception thrown by <code>Cache</code>.
  *
  * @author jesper@users.berlios.de
  */

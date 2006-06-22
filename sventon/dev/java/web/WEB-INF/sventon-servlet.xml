@@ -61,8 +61,8 @@
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
-    <property name="cacheService">
-      <ref local="cacheServiceBean"/>
+    <property name="cache">
+      <ref local="cacheBean"/>
     </property>
   </bean>
 
@@ -70,8 +70,8 @@
     <property name="repositoryConfiguration">
       <ref local="repositoryConfig"/>
     </property>
-    <property name="cacheService">
-      <ref local="cacheServiceBean"/>
+    <property name="cache">
+      <ref local="cacheBean"/>
     </property>
     <property name="revisionObservable">
       <ref local="revisionObservable"/>
@@ -359,26 +359,26 @@
     </property>
   </bean>
 
-  <!-- Service class for accessing the caches -->
+  <!-- Gateway class for accessing the caches -->
   <!-- Bean configuration -->
-  <bean id="cacheServiceBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="cacheBean" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="proxyInterfaces">
-      <value>de.berlios.sventon.service.CacheService</value>
+      <value>de.berlios.sventon.repository.cache.Cache</value>
     </property>
     <property name="target">
-      <ref local="cacheService"/>
+      <ref local="cache"/>
     </property>
     <property name="interceptorNames">
       <list>
-        <value>cacheServiceBeforeAdvisor</value>
+        <value>cacheBeforeAdvisor</value>
       </list>
     </property>
   </bean>
 
   <!-- Advisor pointcut definition for before advice -->
-  <bean id="cacheServiceBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+  <bean id="cacheBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
     <property name="advice">
-      <ref local="cacheServiceBeforeAdvice"/>
+      <ref local="cacheBeforeAdvice"/>
     </property>
     <property name="pattern">
       <value>.*</value>
@@ -386,13 +386,13 @@
   </bean>
 
   <!-- Advice classes -->
-  <bean id="cacheServiceBeforeAdvice" class="de.berlios.sventon.service.CacheServiceBeforeAdvice">
+  <bean id="cacheBeforeAdvice" class="de.berlios.sventon.repository.cache.CacheBeforeAdvice">
     <property name="revisionObservable">
       <ref local="revisionObservable"/>
     </property>
   </bean>
 
-  <bean id="cacheService" class="de.berlios.sventon.service.CacheServiceImpl">
+  <bean id="cache" class="de.berlios.sventon.repository.cache.CacheImpl">
     <property name="entryCache">
       <ref local="entryCache"/>
     </property>

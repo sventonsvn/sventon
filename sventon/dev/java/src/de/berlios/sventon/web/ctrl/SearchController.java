@@ -60,9 +60,9 @@ public class SearchController extends AbstractSVNTemplateController implements C
 
       if (searchString.toUpperCase().equals(searchString)) {
         logger.debug("Search string was in upper case only - performing CamelCase cache search");
-        entries.addAll(getCacheService().findEntryByCamelCase(searchString, startDir));
+        entries.addAll(getCache().findEntryByCamelCase(searchString, startDir));
       } else {
-        entries.addAll(getCacheService().findEntry(searchString, startDir));
+        entries.addAll(getCache().findEntry(searchString, startDir));
       }
       model.put("svndir", entries);
     } else if ("logMessages".equals(searchMode)) {
@@ -70,7 +70,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
 
       final List<LogMessage> logMessages = Collections.checkedList(new ArrayList<LogMessage>(),
           LogMessage.class);
-      logMessages.addAll(getCacheService().find(searchString));
+      logMessages.addAll(getCache().find(searchString));
       Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
       model.put("logMessages", logMessages);
     } else {

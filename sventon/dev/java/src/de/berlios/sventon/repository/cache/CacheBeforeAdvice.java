@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.service;
+package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RevisionObservable;
 import org.springframework.aop.MethodBeforeAdvice;
@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
  *
  * @author jesper@users.berlios.de
  */
-public class CacheServiceBeforeAdvice implements MethodBeforeAdvice {
+public class CacheBeforeAdvice implements MethodBeforeAdvice {
 
   /**
    * The Observable. Used to trigger cache updates.

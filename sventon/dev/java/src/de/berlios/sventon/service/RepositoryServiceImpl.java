@@ -13,6 +13,7 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.Cache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
@@ -41,9 +42,9 @@ public class RepositoryServiceImpl implements RepositoryService {
   private RepositoryConfiguration configuration;
 
   /**
-   * The cache service instance.
+   * The cache instance.
    */
-  private CacheService cacheService;
+  private Cache cache;
 
   /**
    * {@inheritDoc}
@@ -108,7 +109,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   private SVNLogEntry getCachedRevision(final long revision) throws CacheException {
-    return cacheService.getRevision(revision);
+    return cache.getRevision(revision);
   }
 
   private List<SVNLogEntry> getCachedRevisions(final long fromRevision, final long toRevision) throws CacheException {
@@ -116,11 +117,11 @@ public class RepositoryServiceImpl implements RepositoryService {
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (fromRevision < toRevision) {
       for (long i = fromRevision; i <= toRevision; i++) {
-        logEntries.add(cacheService.getRevision(i));
+        logEntries.add(cache.getRevision(i));
       }
     } else {
       for (long i = fromRevision; i >= toRevision; i--) {
-        logEntries.add(cacheService.getRevision(i));
+        logEntries.add(cache.getRevision(i));
       }
     }
     return logEntries;
@@ -136,12 +137,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   /**
-   * Sets the cache service instance.
+   * Sets the cache instance.
    *
-   * @param cacheService Cache instance
+   * @param cache Cache instance
    */
-  public void setCacheService(final CacheService cacheService) {
-    this.cacheService = cacheService;
+  public void setCache(final Cache cache) {
+    this.cache = cache;
   }
 
 }

@@ -58,7 +58,7 @@ public class CompletionController extends AbstractSVNTemplateController implemen
     final String startDir = RequestUtils.getStringParameter(request, "startDir");
     logger.debug("Searching cache for [" + searchString + "] starting in [" + startDir + "]");
 
-    entries.addAll(getCacheService().findEntry(searchString, startDir, 10));
+    entries.addAll(getCache().findEntry(searchString, startDir, 10));
 
     // Print the XML document
     final Format format = Format.getPrettyFormat();
