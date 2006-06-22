@@ -9,12 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.service;
+package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
-import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
@@ -25,11 +24,11 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
- * Service class used to access the caches.
+ * Gateway class used to access the caches.
  *
  * @author jesper@users.berlios.de
  */
-public class CacheServiceImpl implements CacheService {
+public class CacheImpl implements Cache {
 
   private EntryCache entryCache;
   private LogMessageCache logMessageCache;
@@ -43,8 +42,8 @@ public class CacheServiceImpl implements CacheService {
   /**
    * Constructor.
    */
-  public CacheServiceImpl() {
-    logger.info("Starting cache service");
+  public CacheImpl() {
+    logger.info("Starting cache");
   }
 
   /**

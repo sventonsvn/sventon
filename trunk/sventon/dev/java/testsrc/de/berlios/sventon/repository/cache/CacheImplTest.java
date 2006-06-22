@@ -1,4 +1,4 @@
-package de.berlios.sventon.service;
+package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
@@ -9,77 +9,77 @@ import org.tmatesoft.svn.core.*;
 
 import java.util.*;
 
-public class CacheServiceTest extends TestCase {
+public class CacheImplTest extends TestCase {
 
   public void testFindEntry() throws Exception {
     final EntryCache entryCache = new MemoryCache();
     entryCache.add(getEntryTemplateList());
 
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setEntryCache(entryCache);
-    assertEquals(4, cacheService.findEntry("java").size());
+    final CacheImpl cache = new CacheImpl();
+    cache.setEntryCache(entryCache);
+    assertEquals(4, cache.findEntry("java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
     final EntryCache entryCache = new MemoryCache();
     entryCache.add(getEntryTemplateList());
 
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setEntryCache(entryCache);
-    assertEquals(1, cacheService.findEntry("html", "/trunk/src/").size());
+    final CacheImpl cache = new CacheImpl();
+    cache.setEntryCache(entryCache);
+    assertEquals(1, cache.findEntry("html", "/trunk/src/").size());
   }
 
   public void testFindEntryWithLimit() throws Exception {
     final EntryCache entryCache = new MemoryCache();
     entryCache.add(getEntryTemplateList());
 
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setEntryCache(entryCache);
-    assertEquals(2, cacheService.findEntry("java", "/", 2).size());
+    final CacheImpl cache = new CacheImpl();
+    cache.setEntryCache(entryCache);
+    assertEquals(2, cache.findEntry("java", "/", 2).size());
 
-    assertEquals(4, cacheService.findEntry("java", "/", null).size());
-    assertEquals(4, cacheService.findEntry("java", "/", 8).size());
-    assertEquals(4, cacheService.findEntry("java", "/", 0).size());
-    assertEquals(1, cacheService.findEntry("java", "/", 1).size());
+    assertEquals(4, cache.findEntry("java", "/", null).size());
+    assertEquals(4, cache.findEntry("java", "/", 8).size());
+    assertEquals(4, cache.findEntry("java", "/", 0).size());
+    assertEquals(1, cache.findEntry("java", "/", 1).size());
   }
 
   public void testFindDirectories() throws Exception {
     final EntryCache entryCache = new MemoryCache();
     entryCache.add(getEntryTemplateList());
 
-    final CacheServiceImpl cacheService = new CacheServiceImpl();
-    cacheService.setEntryCache(entryCache);
-    assertEquals(3, cacheService.findDirectories("/").size());
+    final CacheImpl cache = new CacheImpl();
+    cache.setEntryCache(entryCache);
+    assertEquals(3, cache.findDirectories("/").size());
 
-    assertEquals(1, cacheService.findDirectories("/trunk/").size());
+    assertEquals(1, cache.findDirectories("/trunk/").size());
   }
 
   public void testCreateCamelCasePatternForString() throws Exception {
-    final CacheServiceImpl service = new CacheServiceImpl();
+    final CacheImpl cache = new CacheImpl();
 
-    assertTrue("/ATestFile".matches("/" + service.createCamelCasePatternForString("A")));
-    assertTrue("/ATestFile".matches("/" + service.createCamelCasePatternForString("AT")));
+    assertTrue("/ATestFile".matches("/" + cache.createCamelCasePatternForString("A")));
+    assertTrue("/ATestFile".matches("/" + cache.createCamelCasePatternForString("AT")));
 
-    assertTrue("/TestFile".matches("/" + service.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFile1".matches("/" + service.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFile1".matches("/" + service.createCamelCasePatternForString("TF1")));
+    assertTrue("/TestFile".matches("/" + cache.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFile1".matches("/" + cache.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFile1".matches("/" + cache.createCamelCasePatternForString("TF1")));
 
-    assertTrue("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TFNT")));
-    assertFalse("/TestFileNumberTwo".matches("/" + service.createCamelCasePatternForString("TFT")));
+    assertTrue("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TFNT")));
+    assertFalse("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TFT")));
 
-    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TFA")));
-    assertTrue("/TestFileABC".matches("/" + service.createCamelCasePatternForString("TFABC")));
+    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TF")));
+    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TFA")));
+    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TFABC")));
 
-    assertTrue("/TestFile1ABC".matches("/" + service.createCamelCasePatternForString("TFA")));
-    assertTrue("/TestFile1ABC".matches("/" + service.createCamelCasePatternForString("TFABC")));
+    assertTrue("/TestFile1ABC".matches("/" + cache.createCamelCasePatternForString("TFA")));
+    assertTrue("/TestFile1ABC".matches("/" + cache.createCamelCasePatternForString("TFABC")));
 
-    assertTrue("/HTML".matches("/" + service.createCamelCasePatternForString("HT")));
-    assertTrue("/HTML".matches("/" + service.createCamelCasePatternForString("HTML")));
+    assertTrue("/HTML".matches("/" + cache.createCamelCasePatternForString("HT")));
+    assertTrue("/HTML".matches("/" + cache.createCamelCasePatternForString("HTML")));
 
-    assertTrue("/trunk/TestFile".matches("/trunk/" + service.createCamelCasePatternForString("TF")));
-    assertTrue("/trunk/dev/AnotherTestFile".matches("/trunk/dev/" + service.createCamelCasePatternForString("ATF")));
+    assertTrue("/trunk/TestFile".matches("/trunk/" + cache.createCamelCasePatternForString("TF")));
+    assertTrue("/trunk/dev/AnotherTestFile".matches("/trunk/dev/" + cache.createCamelCasePatternForString("ATF")));
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

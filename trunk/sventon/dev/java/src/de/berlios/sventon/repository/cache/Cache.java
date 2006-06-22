@@ -9,21 +9,20 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.service;
+package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.CacheException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
 /**
- * Service class used to access the caches.
+ * Gateway class used to access the caches.
  *
  * @author jesper@users.berlios.de
  */
-public interface CacheService {
+public interface Cache {
 
   /**
    * Searches the cached entries for given string (name fragment).

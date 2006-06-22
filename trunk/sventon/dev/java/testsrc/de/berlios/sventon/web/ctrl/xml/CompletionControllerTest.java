@@ -5,7 +5,7 @@ import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.service.CacheService;
+import de.berlios.sventon.repository.cache.Cache;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -36,7 +36,7 @@ public class CompletionControllerTest extends TestCase {
     SVNBaseCommand command = new SVNBaseCommand();
     CompletionController ctrl = new CompletionController();
     ctrl.setEncoding("UTF-8");
-    ctrl.setCacheService(new TestCacheService());
+    ctrl.setCache(new TestCache());
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.addParameter("complete", "file");
@@ -65,7 +65,7 @@ public class CompletionControllerTest extends TestCase {
     }
   }
 
-  class TestCacheService implements CacheService {
+  class TestCache implements Cache {
 
     public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
