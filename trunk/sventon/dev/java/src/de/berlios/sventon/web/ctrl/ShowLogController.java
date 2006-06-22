@@ -83,7 +83,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
       } else {
         try {
           revNumber = Long.parseLong(nextRevParam);
-        } catch (NumberFormatException nfe) {
+        } catch (final NumberFormatException nfe) {
           exception.reject("log.command.invalidpath", "Invalid revision/path combination for logs");
           return prepareExceptionModelAndView(exception, svnCommand);
         }
@@ -101,17 +101,17 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     for (SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
-      final Map<String, SVNLogEntryPath> m = logEntry.getChangedPaths();
-      final Set<String> changedPaths = m.keySet();
+      final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
+      final Set<String> changedPaths = allChangedPaths.keySet();
       for (String entryPath : changedPaths) {
         int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
         if (i == -1) { // Same path
-          SVNLogEntryPath logEntryPath = m.get(entryPath);
+          final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath();
           }
         } else if (entryPath.length() == i) { // Part path, can be a branch
-          SVNLogEntryPath logEntryPath = m.get(entryPath);
+          final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
           if (logEntryPath.getCopyPath() != null) {
             pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
           }

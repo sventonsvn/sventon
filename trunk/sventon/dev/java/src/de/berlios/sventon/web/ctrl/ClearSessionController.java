@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * ClearCredentialsController.
+ * ClearSessionController.
  *
  * @author patrikfr@users.berlios.de
  */
