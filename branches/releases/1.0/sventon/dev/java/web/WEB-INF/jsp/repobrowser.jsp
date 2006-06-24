@@ -43,7 +43,7 @@
   </c:choose>
 
   <c:if test="${!empty properties}">
-    <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
+    <a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
     <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
