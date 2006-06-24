@@ -42,9 +42,7 @@
       <input type="hidden" name="revision" value="${command.revision}"/>
 
       <c:url value="diff.svn" var="diffUrl">
-        <c:if test="${isFile}">
-          <c:param name="path" value="${command.path}" />
-        </c:if>
+        <c:param name="path" value="${command.path}" />
         <c:param name="revision" value="${command.revision}" />
       </c:url>
 
@@ -122,7 +120,7 @@
                   <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else if (LogEntryActionType.M == actionType) { %>
-                  <td><a href="${diffUrl}&path=<%= logEntryPath.getPath() %>&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+                  <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
                   <% } %>
