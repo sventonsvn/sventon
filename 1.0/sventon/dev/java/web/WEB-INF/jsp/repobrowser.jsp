@@ -116,7 +116,7 @@
         <td class="sventonCol3">
           <c:choose>
             <c:when test="${isSearch || isFlatten}">
-              <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">${entry.friendlyFullEntryName}</a>
+              <a href="${viewUrl}/&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
             </c:when>
             <c:otherwise>
               <a href="${viewUrl}/&revision=${command.revision}">${entry.name}</a>
@@ -128,7 +128,7 @@
         <td class="sventonCol3">
           <c:choose>
             <c:when test="${isSearch || isFlatten}">
-              <a href="${showFileUrl}&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
+              <a href="${showFileUrl}&revision=${command.revision}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
               </a>
             </c:when>
