@@ -26,7 +26,7 @@
     <p>
       <table class="sventonHeader">
         <tr>
-          <td>Show File - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
+          <td>Show File - <b>${command.target}</b>&nbsp;<a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
         </tr>
       </table>
       <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
