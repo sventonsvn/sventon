@@ -78,6 +78,7 @@ public class ZipUtilTest extends TestCase {
     ZipUtil zipUtil = null;
     File tempZipFile = null;
     File dirToZip = null;
+    File subdir = null;
     File fileToZip1 = null;
     File fileToZip2 = null;
     PrintWriter writer = null;
@@ -91,12 +92,15 @@ public class ZipUtilTest extends TestCase {
       dirToZip = new File(tempZipFile.getParent() + "/sventontest/");
       dirToZip.mkdir();
 
+      subdir = new File(dirToZip, "dir2");
+      subdir.mkdir();
+
       fileToZip1 = File.createTempFile("sventonfile", null, dirToZip);
       writer = new PrintWriter(fileToZip1);
       writer.println("Contents of file one.");
       writer.close();
 
-      fileToZip2 = File.createTempFile("sventonfile", null, dirToZip);
+      fileToZip2 = File.createTempFile("sventonfile", null, subdir);
       writer = new PrintWriter(fileToZip2);
       writer.println("Contents of file two.");
       writer.close();
@@ -134,10 +138,20 @@ public class ZipUtilTest extends TestCase {
       if (fileToZip2 != null) {
         fileToZip2.delete();
       }
+      if (subdir != null) {
+        subdir.delete();
+      }
       if (dirToZip != null) {
         dirToZip.delete();
       }
     }
   }
 
+
+  public void testCreateZipEntryName() throws Exception {
+    ZipUtil z = new ZipUtil();
+    assertEquals("\\file1", z.createZipEntryName("c:\\base", "c:\\base\\file1"));
+    assertEquals("\\file1\\", z.createZipEntryName("c:\\base", "c:\\base\\file1\\"));
+    assertEquals("\\dir\\file1", z.createZipEntryName("c:\\base", "c:\\base\\dir\\file1"));
+  }
 }

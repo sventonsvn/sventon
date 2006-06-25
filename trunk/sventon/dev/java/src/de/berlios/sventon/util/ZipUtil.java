@@ -28,67 +28,50 @@ public class ZipUtil {
    *
    * @param directory The directory to zip.
    * @param zos       The output stream to write to.
+   * @throws IllegalArgumentException if <code>directory</code> isn't a directory.
    */
-  public void zipDir(final String directory, final ZipOutputStream zos) {
-    //create a new File object based on the directory we have to zip
-    zipDir(new File(directory), zos);
+  public void zipDir(final File directory, final ZipOutputStream zos) {
+    zipDirInternal(directory, directory, zos);
   }
 
   /**
    * Zips the given directory recursively.
    *
+   * @param baseDir   Base directory root to zip.
    * @param directory The directory to zip.
    * @param zos       The output stream to write to.
+   * @throws IllegalArgumentException if <code>directory</code> isn't a directory.
    */
-  public void zipDir(final File directory, final ZipOutputStream zos) {
-    // TODO: Seems like the ZipEntry does not handle long file names in directories.
-    // Have to check that more into detail. Also, maybe only relative path is
-    // interesting to store in zip archive?!
+  protected void zipDirInternal(final File baseDir, final File directory, final ZipOutputStream zos) {
     try {
       if (!directory.isDirectory()) {
         throw new IllegalArgumentException("Argument is not a directory: " + directory);
       }
 
-      //get a listing of the directory content
       final String[] dirList = directory.list();
       final byte[] readBuffer = new byte[4096];
       int bytesIn = 0;
 
-      //loop through directory, and zip the files
       for (String aDirList : dirList) {
         final File fileEntry = new File(directory, aDirList);
         if (fileEntry.isDirectory()) {
-          //if the File object is a directory, call this
-          //function again to add its content recursively
-          zipDir(fileEntry, zos);
-          //loop again
+          //add directory contents recursively
+          zipDirInternal(baseDir, fileEntry, zos);
           continue;
         }
         final FileInputStream fis = new FileInputStream(fileEntry);
-        final ZipEntry anEntry = new ZipEntry(fileEntry.getAbsolutePath());
-        //place the zip entry in the ZipOutputStream object
+        final String entryName = createZipEntryName(baseDir.getAbsolutePath(), fileEntry.getAbsolutePath());
+        System.out.println("entryName = " + entryName);
+        final ZipEntry anEntry = new ZipEntry(entryName);
         zos.putNextEntry(anEntry);
-        //now write the content of the file to the ZipOutputStream
         while ((bytesIn = fis.read(readBuffer)) != -1) {
           zos.write(readBuffer, 0, bytesIn);
         }
-        //close the Stream
         fis.close();
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * Zips the given file.
-   *
-   * @param file The file to zip.
-   * @param zos  The output stream to write to.
-   */
-  public void zipFile(final String file, final ZipOutputStream zos) {
-    //create a new File object based on the file we have to zip
-    zipFile(new File(file), zos);
   }
 
   /**
@@ -108,13 +91,10 @@ public class ZipUtil {
 
       final FileInputStream fis = new FileInputStream(file);
       final ZipEntry anEntry = new ZipEntry(file.getName());
-      //place the zip entry in the ZipOutputStream object
       zos.putNextEntry(anEntry);
-      //now write the content of the file to the ZipOutputStream
       while ((bytesIn = fis.read(readBuffer)) != -1) {
         zos.write(readBuffer, 0, bytesIn);
       }
-      //close the Stream
       fis.close();
 
     } catch (Exception e) {
@@ -122,11 +102,15 @@ public class ZipUtil {
     }
   }
 
-/*
-  public static void main(String[] args) throws Exception {
-    ZipOutputStream zip = new ZipOutputStream(new FileOutputStream("/test.zip"));
-    new ZipUtil().zipDir("/test", zip);
-    zip.close();
+  /**
+   * Creates a zip entry name.
+   *
+   * @param basePath Base path to remove from given <code>path</code>.
+   * @param path     The path and file name to the zip entry.
+   * @return The stripped path used to store entry in zip file.
+   */
+  protected String createZipEntryName(final String basePath, final String path) {
+    return (path.substring(basePath.length(), path.length()));
   }
-*/
+
 }
