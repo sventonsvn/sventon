@@ -11,8 +11,5 @@ svn/WEB-INF/classes/sventon.properties, replace the old
 svn.war with the new one to trigger a redeploy, and then add the
 backed up sventon.properties to the svn/WEB-INF/classes directory again.
 
-The index file format has changed between 1.0 RC1 and 1.0 RC2.
-A complete index rebuild is necessary.
-
 Support
 See http://sventon.berlios.de
