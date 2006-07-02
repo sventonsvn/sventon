@@ -1,0 +1,15 @@
+Upgrading sventon to a newer version
+
+The sventon configuration settings are stored in the file
+svn/WEB-INF/classes/sventon.properties.
+
+The easiest way to upgrade sventon is to replace the old svn.war
+file and walk through the configuration screen again.
+
+Another way is to make a backup copy of the configuration file
+svn/WEB-INF/classes/sventon.properties, replace the old
+svn.war with the new one to trigger a redeploy, and then add the
+backed up sventon.properties to the svn/WEB-INF/classes directory again.
+
+Support
+See http://sventon.berlios.de
