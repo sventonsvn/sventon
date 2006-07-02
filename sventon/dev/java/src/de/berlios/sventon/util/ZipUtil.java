@@ -11,8 +11,12 @@
  */
 package de.berlios.sventon.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -21,7 +25,12 @@ import java.util.zip.ZipOutputStream;
  *
  * @author jesper@users.berlios.de
  */
-public class ZipUtil {
+public final class ZipUtil {
+
+  /**
+   * Logger for this class and subclasses.
+   */
+  protected final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Zips the given directory recursively.
@@ -29,8 +38,10 @@ public class ZipUtil {
    * @param directory The directory to zip.
    * @param zos       The output stream to write to.
    * @throws IllegalArgumentException if <code>directory</code> isn't a directory.
+   * @throws IOException              if IO error occurs
    */
-  public void zipDir(final File directory, final ZipOutputStream zos) {
+  public void zipDir(final File directory, final ZipOutputStream zos) throws IOException {
+    logger.debug("Zipping directory: " + directory.getAbsolutePath());
     zipDirInternal(directory, directory, zos);
   }
 
@@ -41,17 +52,19 @@ public class ZipUtil {
    * @param directory The directory to zip.
    * @param zos       The output stream to write to.
    * @throws IllegalArgumentException if <code>directory</code> isn't a directory.
+   * @throws IOException              if IO error occurs
    */
-  protected void zipDirInternal(final File baseDir, final File directory, final ZipOutputStream zos) {
+  protected void zipDirInternal(final File baseDir, final File directory, final ZipOutputStream zos) throws IOException {
+    if (!directory.isDirectory()) {
+      throw new IllegalArgumentException("Argument is not a directory: " + directory);
+    }
+
+    FileInputStream input = null;
+    final String[] dirList = directory.list();
+    final byte[] readBuffer = new byte[4096];
+    int bytesIn = 0;
+
     try {
-      if (!directory.isDirectory()) {
-        throw new IllegalArgumentException("Argument is not a directory: " + directory);
-      }
-
-      final String[] dirList = directory.list();
-      final byte[] readBuffer = new byte[4096];
-      int bytesIn = 0;
-
       for (String aDirList : dirList) {
         final File fileEntry = new File(directory, aDirList);
         if (fileEntry.isDirectory()) {
@@ -59,18 +72,19 @@ public class ZipUtil {
           zipDirInternal(baseDir, fileEntry, zos);
           continue;
         }
-        final FileInputStream fis = new FileInputStream(fileEntry);
+        input = new FileInputStream(fileEntry);
         final String entryName = createZipEntryName(baseDir.getAbsolutePath(), fileEntry.getAbsolutePath());
-        System.out.println("entryName = " + entryName);
         final ZipEntry anEntry = new ZipEntry(entryName);
+        logger.debug("Adding ZipEntry: " + entryName);
         zos.putNextEntry(anEntry);
-        while ((bytesIn = fis.read(readBuffer)) != -1) {
+        while ((bytesIn = input.read(readBuffer)) != -1) {
           zos.write(readBuffer, 0, bytesIn);
         }
-        fis.close();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } finally {
+      if (input != null) {
+        input.close();
+      }
     }
   }
 
@@ -79,26 +93,28 @@ public class ZipUtil {
    *
    * @param file The file to zip.
    * @param zos  The output stream to write to.
+   * @throws IOException if IO error occurs
    */
-  public void zipFile(final File file, final ZipOutputStream zos) {
-    try {
-      if (!file.isFile()) {
-        throw new IllegalArgumentException("Argument is not a file: " + file);
-      }
+  public void zipFile(final File file, final ZipOutputStream zos) throws IOException {
 
+    if (!file.isFile()) {
+      throw new IllegalArgumentException("Argument is not a file: " + file);
+    }
+
+    FileInputStream input = null;
+    try {
       final byte[] readBuffer = new byte[2156];
       int bytesIn = 0;
-
-      final FileInputStream fis = new FileInputStream(file);
+      input = new FileInputStream(file);
       final ZipEntry anEntry = new ZipEntry(file.getName());
       zos.putNextEntry(anEntry);
-      while ((bytesIn = fis.read(readBuffer)) != -1) {
+      while ((bytesIn = input.read(readBuffer)) != -1) {
         zos.write(readBuffer, 0, bytesIn);
       }
-      fis.close();
-
-    } catch (Exception e) {
-      e.printStackTrace();
+    } finally {
+      if (input != null) {
+        input.close();
+      }
     }
   }
 

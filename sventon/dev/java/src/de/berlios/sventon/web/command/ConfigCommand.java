@@ -27,6 +27,7 @@ public class ConfigCommand {
   private String username;
   private String password;
   private boolean useCache;
+  private boolean zipDownloadsAllowed;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -52,12 +53,20 @@ public class ConfigCommand {
     this.password = password;
   }
 
+  public boolean isCacheUsed() {
+    return useCache;
+  }
+
   public void setCacheUsed(final boolean useCache) {
     this.useCache = useCache;
   }
 
-  public boolean isCacheUsed() {
-    return this.useCache;
+  public boolean isZippedDownloadsAllowed() {
+    return zipDownloadsAllowed;
+  }
+
+  public void setZippedDownloadsAllowed(final boolean zipDownloadsAllowed) {
+    this.zipDownloadsAllowed = zipDownloadsAllowed;
   }
 
   /**

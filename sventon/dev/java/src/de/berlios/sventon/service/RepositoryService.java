@@ -16,6 +16,7 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.List;
+import java.io.File;
 
 /**
  * Service class for accessing the subversion repository.
@@ -83,5 +84,15 @@ public interface RepositoryService {
    */
   List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision,
                                  final String path, final long limit) throws SVNException;
+
+  /**
+   * Exports given list of target entries to the given destination export directory.
+   *
+   * @param repository The repository
+   * @param targets    Targets to export.
+   * @param revision   Revision to export
+   * @param exportDir  Destination directory
+   */
+  void export(final SVNRepository repository, final List<String> targets, final long revision, final File exportDir) throws SVNException;
 
 }

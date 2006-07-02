@@ -179,6 +179,9 @@
             <select class="sventonSelect" name="actionSelect">
               <option class="sventonSelectOption">Actions...</option>
               <option value="diff">&nbsp;&nbsp;Diff entries</option>
+              <c:if test="${isZipDownloadsAllowed}">
+                <option value="zip">&nbsp;&nbsp;Download as zip</option>
+              </c:if>
               <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
             </select><input type="submit" class="btn" value="go!"/>
           </td>

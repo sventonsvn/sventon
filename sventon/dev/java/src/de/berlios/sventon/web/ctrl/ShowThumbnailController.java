@@ -60,9 +60,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
         entries.add(entry);
       }
     }
-    logger.debug(entries.size() + " entries out of " + entryParameters.length
-        + " are image files");
-
+    logger.debug(entries.size() + " entries out of " + entryParameters.length + " are image files");
     model.put("thumbnailentries", entries);
     return new ModelAndView("showthumbs", model);
 
@@ -74,7 +72,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
    * @param imageUtil The instance
    * @see de.berlios.sventon.util.ImageUtil
    */
-  public void setImageUtil(ImageUtil imageUtil) {
+  public void setImageUtil(final ImageUtil imageUtil) {
     this.imageUtil = imageUtil;
   }
 

@@ -59,6 +59,7 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_USERNAME = "svn.uid";
   public static final String PROPERTY_KEY_PASSWORD = "svn.pwd";
   public static final String PROPERTY_KEY_USE_CACHE = "svn.useCache";
+  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "svn.allowZipDownloads";
 
   protected ConfigurationController() {
     // TODO: Move to XML-file?
@@ -134,6 +135,7 @@ public class ConfigurationController extends AbstractFormController {
       configProperties.put(PROPERTY_KEY_USERNAME, confCommand.getUsername());
       configProperties.put(PROPERTY_KEY_PASSWORD, confCommand.getPassword());
       configProperties.put(PROPERTY_KEY_USE_CACHE, Boolean.TRUE == confCommand.isCacheUsed() ? "true" : "false");
+      configProperties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, Boolean.TRUE == confCommand.isZippedDownloadsAllowed() ? "true" : "false");
 
       final String fileSeparator = System.getProperty("file.separator");
 
@@ -151,6 +153,7 @@ public class ConfigurationController extends AbstractFormController {
       configuration.setConfiguredUID(confCommand.getUsername());
       configuration.setConfiguredPWD(confCommand.getPassword());
       configuration.setCacheUsed(confCommand.isCacheUsed());
+      configuration.setZippedDownloadsAllowed(confCommand.isZippedDownloadsAllowed());
       configuration.setRepositoryRoot(trimmedURL);
 
       if (configuration.isCacheUsed()) {
@@ -205,6 +208,12 @@ public class ConfigurationController extends AbstractFormController {
     comments.append("# Decides whether caching feature is enabled or not. If true, the repository   #\n");
     comments.append("# will be scanned and cached which enables the search and directory flatten    #\n");
     comments.append("# features as well as the log message search.                                  #\n");
+    comments.append("################################################################################\n\n");
+    comments.append("################################################################################\n");
+    comments.append("# Key: svn.allowZipDownloads                                                   #\n");
+    comments.append("#                                                                              #\n");
+    comments.append("# Description:                                                                 #\n");
+    comments.append("# Decides whether the 'download as zip' function is enabled or not.            #\n");
     comments.append("################################################################################\n\n");
     return comments.toString();
   }
