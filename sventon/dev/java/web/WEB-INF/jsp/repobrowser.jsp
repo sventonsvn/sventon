@@ -51,7 +51,7 @@
   </c:choose>
 
   <c:if test="${!empty properties}">
-    <a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
+    <a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
     <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
@@ -128,7 +128,7 @@
             <td class="sventonCol3">
               <c:choose>
                 <c:when test="${isSearch || isFlatten}">
-                  <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">${entry.friendlyFullEntryName}</a>
+                  <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
                 </c:when>
                 <c:otherwise>
                   <a href="${viewUrl}">${entry.name}</a>
@@ -140,7 +140,7 @@
             <td class="sventonCol3">
               <c:choose>
                 <c:when test="${isSearch || isFlatten}">
-                  <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('${entry.fullEntryName}')">
+                  <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                   </a>
                 </c:when>
