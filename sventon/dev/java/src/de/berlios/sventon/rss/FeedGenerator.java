@@ -24,12 +24,19 @@ import java.io.Writer;
 public interface FeedGenerator {
 
   /**
-   * Outputs the generated feed to given writer.
+   * Generates a feed based on given log entries.
    *
    * @param logEntries The log entries
    * @param baseURL    Base URL used to build anchor links. Must end with a slash (/).
+   */
+  void generateFeed(final List<SVNLogEntry> logEntries, final String baseURL);
+
+  /**
+   * Outputs the generated feed to given writer.
+   *
    * @param writer Writer.
    * @throws Exception if unable to output feed.
    */
-  void outputFeed(final List<SVNLogEntry> logEntries, final String baseURL, final Writer writer) throws Exception;
+  void outputFeed(final Writer writer) throws Exception;
+
 }

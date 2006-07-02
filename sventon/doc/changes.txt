@@ -1,12 +1,9 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[563] Added: Feature #2259 - Revision info cache.
-[552] Added: Upgraded to JavaSVN 1.1.0beta2.
-[546] Fixed: Redesign of entry cache.
-      Added: Feature #2175 - Commit message cache using Lucene.
-      Added: Upgraded to ehcache 1.2.
-      Added: Upgraded to JavaSVN 1.1.0b.
+[582] Release 1.0.0 (2006-07-03)
+[575] Fixed: Bug #7985 - Tooltip text wrap in browser view.
+[573] Fixed: Bug #7983 - View log for a file renders incorrect navigation.
 
 [544] Release 1.0 RC4 (2006-05-28)
 [520] Fixed: Bug #7229 - Latest commit info not shown.

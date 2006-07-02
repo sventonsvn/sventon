@@ -7,6 +7,7 @@ body {
   font-size: 11px;
   color: #000000;
   font-weight: normal;
+  background-color: #ffffff;
 }
 
 pre {
@@ -17,7 +18,7 @@ pre {
 a:link, a:visited {
   font-family: verdana, sans-serif;
   font-size: 11px;
-  color: #0060CB;
+  color: #ff7711;
   text-decoration: none;
 }
 
@@ -30,3 +31,4 @@ td {
   font-family: verdana, sans-serif;
   font-size: 11px;
 }
+

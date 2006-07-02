@@ -52,7 +52,7 @@
           <c:param name="revision" value="${command.revision}" />
         </c:url>
 
-        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
           <td><img src="images/icon_file.gif" alt="file"/></td>
           <td><a href="${showUrl}">${lock.path}</a></td>
           <td>${lock.owner}</td>
@@ -63,7 +63,7 @@
     <% rowCount++; %>
       </c:forEach>
 
-      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
         <td>&nbsp;</td>
         <td><b>Total: <%=rowCount%> entries</b></td>
         <td>&nbsp;</td>

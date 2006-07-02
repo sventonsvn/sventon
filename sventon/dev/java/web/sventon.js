@@ -48,13 +48,10 @@ function doAction(formName) {
       return true;
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip' ) {
-    // One or more entries must be checked
-    if (getCheckedCount(formName) < 1) {
-      return false
-    } else {
-      formName.action = 'zip.svn'
-      return true;
-    }
+    //TODO:Change action to url for the zipController and return true
+    //formName.action = 'zip'
+    alert('zip not yet supported');
+    return false;
   }
   return false;
 }

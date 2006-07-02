@@ -46,7 +46,6 @@ import java.io.File;
  * <p/>
  * This class is preferably configured using Spring.
  *
- * @author patrikfr@user.berlios.de
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
  */
@@ -56,7 +55,7 @@ public class RepositoryConfiguration {
    * The logging instance.
    */
   protected final Log logger = LogFactory.getLog(getClass());
-
+  
   /**
    * Will be <code>true</code> if all parameters are ok.
    */
@@ -90,14 +89,9 @@ public class RepositoryConfiguration {
   private String configuredPWD;
 
   /**
-   * Decides whether the caching feature will be used.
+   * Decides whether the indexing feature will be used.
    */
-  private Boolean useCache;
-
-  /**
-   * Decides whether <i>download as zip</i> is allowed.
-   */
-  private boolean zipDownloadsAllowed;
+  private Boolean useIndex;
 
   /**
    * Configures and initializes the repository.
@@ -243,39 +237,21 @@ public class RepositoryConfiguration {
   }
 
   /**
-   * Sets the 'useCache' flag.
+   * Sets the 'useIndex' flag.
    *
-   * @param useCache <code>true</code> if cache should be enabled, <code>false</code> if not.
+   * @param useIndex <code>true</code> if index should be enabled, <code>false</code> if not.
    */
-  public void setCacheUsed(final boolean useCache) {
-    this.useCache = useCache;
+  public void setIndexUsed(final Boolean useIndex) {
+    this.useIndex = useIndex;
   }
 
   /**
-   * Checks if the cache should be used.
+   * Checks if the index should be used.
    *
-   * @return <code>true</code> if cache is enabled, <code>false</code> if not.
+   * @return <code>true</code> if index is enabled, <code>false</code> if not.
    */
-  public boolean isCacheUsed() {
-    return this.useCache;
-  }
-
-  /**
-   * Sets the 'zipDownloadsAllowed' flag.
-   *
-   * @param zipDownloadsAllowed <code>true</code> if <i>download as zip</i> is allowed.
-   */
-  public void setZippedDownloadsAllowed(final boolean zipDownloadsAllowed) {
-    this.zipDownloadsAllowed = zipDownloadsAllowed;
-  }
-
-  /**
-   * Checks if <i>download as zip</i> is allowed.
-   *
-   * @return <code>true</code> if zipped downloads are allowed.
-   */
-  public boolean isZippedDownloadsAllowed() {
-    return this.zipDownloadsAllowed;
+  public Boolean isIndexUsed() {
+    return this.useIndex;
   }
 
 }

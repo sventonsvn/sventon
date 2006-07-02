@@ -13,7 +13,7 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
-import de.berlios.sventon.web.ctrl.LogEntryActionType;
+import de.berlios.sventon.ctrl.LogEntryActionType;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.apache.commons.lang.StringUtils;
@@ -32,26 +32,38 @@ import java.io.Writer;
 public class SyndFeedGenerator implements FeedGenerator {
 
   /**
+   * The feed.
+   */
+  private SyndFeed cachedFeed;
+
+  /**
    * The generated feed type, default set to <tt>rss_2.0</tt>.
    */
   private String feedType = "rss_2.0";
 
   /**
-   * Number of characters in the abbreviated log message, default set to 40.
+   * Number of characters in the abbreviated commit message, default set to 40.
    */
-  private int logMessageLength = 40;
+  private int commitMessageLength = 40;
 
   /**
    * {@inheritDoc}
    */
-  public void outputFeed(final List<SVNLogEntry> logEntries, final String baseURL, final Writer writer) throws Exception {
+  public void generateFeed(final List<SVNLogEntry> logEntries, final String baseURL) {
     final SyndFeed feed = new SyndFeedImpl();
     feed.setTitle("sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
     feed.setEntries(createEntries(logEntries, baseURL));
     feed.setFeedType(feedType);
-    new SyndFeedOutput().output(feed, writer);
+    cachedFeed = feed;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void outputFeed(final Writer writer) throws Exception {
+    new SyndFeedOutput().output(cachedFeed, writer);
   }
 
   private List createEntries(final List<SVNLogEntry> logEntries, final String baseURL) {
@@ -64,7 +76,7 @@ public class SyndFeedGenerator implements FeedGenerator {
     for (SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
-          + getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength));
+          + getAbbreviatedCommitMessage(logEntry.getMessage(), commitMessageLength));
       entry.setAuthor(logEntry.getAuthor());
       entry.setLink(baseURL + "revinfo.svn?&revision=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
@@ -82,24 +94,24 @@ public class SyndFeedGenerator implements FeedGenerator {
       int deleted = 0;
 
       for (String entryPath : latestPathsList) {
-        final LogEntryActionType type = LogEntryActionType.parse(map.get(entryPath).getType());
+        final LogEntryActionType type = LogEntryActionType.valueOf(String.valueOf(map.get(entryPath).getType()));
         switch (type) {
-          case ADDED:
+          case A:
             added++;
             break;
-          case MODIFIED:
+          case M:
             modified++;
             break;
-          case REPLACED:
+          case R:
             relocated++;
             break;
-          case DELETED:
+          case D:
             deleted++;
             break;
         }
       }
 
-      final StringBuilder sb = new StringBuilder();
+      final StringBuffer sb = new StringBuffer();
       sb.append("<table border=\"0\">");
       sb.append("<tr colspan=\"2\">");
       sb.append("<td>");
@@ -111,25 +123,25 @@ public class SyndFeedGenerator implements FeedGenerator {
       sb.append("<td><b>Count</b></td>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.ADDED);
+      sb.append(LogEntryActionType.A);
       sb.append("</td><td>");
       sb.append(added);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.MODIFIED);
+      sb.append(LogEntryActionType.M);
       sb.append("</td><td>");
       sb.append(modified);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.REPLACED);
+      sb.append(LogEntryActionType.R);
       sb.append("</td><td>");
       sb.append(relocated);
       sb.append("</td></tr>");
 
       sb.append("<tr><td>");
-      sb.append(LogEntryActionType.DELETED);
+      sb.append(LogEntryActionType.D);
       sb.append("</td><td>");
       sb.append(deleted);
       sb.append("</td></tr>");
@@ -144,13 +156,13 @@ public class SyndFeedGenerator implements FeedGenerator {
   }
 
   /**
-   * Gets the abbreviated version of given log message.
+   * Gets the abbreviated version of given commit message.
    *
-   * @param message The original log message
+   * @param message The original commit message
    * @param length  Length, shortened string length
-   * @return The abbreviated log message
+   * @return The abbreviated commit message
    */
-  protected String getAbbreviatedLogMessage(final String message, final int length) {
+  protected String getAbbreviatedCommitMessage(final String message, final int length) {
     if (message != null && message.length() <= length) {
       return message;
     } else {
@@ -170,11 +182,11 @@ public class SyndFeedGenerator implements FeedGenerator {
   }
 
   /**
-   * Sets the length of the log message to be displayed.
+   * Sets the length of the commit message to be displayed.
    *
    * @param length The length.
    */
-  public void setLogMessageLength(final int length) {
-    this.logMessageLength = length;
+  public void setCommitMessageLength(final int length) {
+    this.commitMessageLength = length;
   }
 }

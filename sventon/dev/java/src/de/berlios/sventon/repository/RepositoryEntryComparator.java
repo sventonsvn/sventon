@@ -97,7 +97,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
   /**
    * {@inheritDoc}
    */
-  public int compare(final RepositoryEntry entry1, final RepositoryEntry entry2) {
+  public int compare(RepositoryEntry entry1, RepositoryEntry entry2) {
 
     if (groupDirs) {
       final RepositoryEntry.Kind kind1 = entry1.getKind();
@@ -146,7 +146,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
     }
   }
 
-  private <T> int nullSafeCompare(final Comparable<T> o1, T o2) {
+  private <T> int nullSafeCompare(Comparable<T> o1, T o2) {
     if (o1 != null && o2 != null) {
       return o1.compareTo(o2);
     } else if (o1 == null && o2 == null) {

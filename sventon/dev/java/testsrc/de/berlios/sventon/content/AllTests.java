@@ -10,7 +10,7 @@ public class AllTests {
   }
 
   public static Test suite() {
-    TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
+    TestSuite suite = new TestSuite("Test for de.berlios.sventon.content");
     suite.addTestSuite(KeywordHandlerTest.class);
     suite.addTestSuite(LineNumberAppenderTest.class);
     return suite;

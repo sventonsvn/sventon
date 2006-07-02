@@ -41,9 +41,9 @@
             <td valign="top">
               Example:
               <p>
-                <b>http://domain/project/</b><br>
                 <b>svn://domain/project/</b><br>
                 <b>svn+ssh://domain/project/</b><br>
+                <b>http://domain/project/</b><br>
               </p>
             </td>
           </tr>
@@ -64,35 +64,40 @@
             <td valign="top">(leave blank for anonymous)</td>
           </tr>
           <tr>
-            <td valign="top" align="right" style="white-space: nowrap;">Use repository caching feature:</td>
+            <td valign="top" align="right" style="white-space: nowrap;">Use indexing feature:</td>
             <td valign="top">
-              <spring:bind path="command.cacheUsed">
+              <spring:bind path="command.indexUsed">
                 <input type="checkbox" name="${status.expression}" <c:if test="${status.value}">checked</c:if>/></td>
               </spring:bind>
             <td valign="top">
-              Controls whether repository caching feature should be used. <br/>
-              If enabled, the search and directory flattening features will be available, as well as the log message search <br/>
+              Controls whether repository indexing feature should be used. <br/>
+              If enabled, the search and directory flattening features will be available. <br/>
+              It's recommended to turn off indexing if the repository is large and contains lots of tags and branches, or if the network connection to it is slow.
             </td>
           </tr>
           <tr>
-            <td valign="top" align="right" style="white-space: nowrap;">Allow download as compressed ZIP:</td>
+            <td valign="top" align="right" style="white-space: nowrap;">Enter sventon config/temp path:</td>
             <td valign="top">
-              <spring:bind path="command.zippedDownloadsAllowed">
-                <input type="checkbox" name="${status.expression}" <c:if test="${status.value}">checked</c:if>/></td>
+              <spring:bind path="command.configPath">
+                <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span class="exclamationText">*</span></c:if></td>
               </spring:bind>
             <td valign="top">
-              Enable/disable the 'download as zip' function. used. <br/>
+              This is the path where the index is stored. <br/>
+              The web server running sventon must have read/write access to this directory.
             </td>
           </tr>
           <tr><td>&nbsp;</td></tr>
           <tr>
-            <td colspan="3">
-              By default, the temporary files created by sventon, including the <b>sventon.log</b> file will be stored in <b><%=System.getProperty("java.io.tmpdir")%></b>.<br>
-              Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
-              <br/>
-              If this sventon instance will be used with Tomcat in a non-ISO-8859-1 environment, making fully use of Subversion's
-              UTF-8 support, modifications must be made to the Coyote HTTP/1.1 connector: In server.xml, either set attribute
-              <code>URIEncoding="UTF-8"</code> and/or set <code>useBodyEncodingForURI="true"</code>.
+            <td colspan="2">
+  By default the <b>sventon.log</b> file will be stored in the temporary directory, <b><%=System.getProperty("java.io.tmpdir")%></b>.<br>
+  Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
+            </td>
+          </tr>
+          <tr>
+          <td colspan="2">
+  If this sventon instance will be used with Tomcat in a non-ISO-8859-1 environment, making fully use of Subversion's 
+  UTF-8 support, modifications must be made to the Coyote HTTP/1.1 connector: In server.xml, either set attribute 
+  <code>URIEncoding="UTF-8"</code> and/or set <code>useBodyEncodingForURI="true"</code>.
             </td>
           </tr>
           <tr>

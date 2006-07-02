@@ -27,7 +27,6 @@ import java.util.Date;
  */
 public class RepositoryEntry implements Serializable {
 
-  public static final int FULL_ENTRY_NAME_MAX_LENGTH = 60;
   private static final long serialVersionUID = 3617229449081593805L;
   private transient SVNLock lock;
   private String entryPath;
@@ -38,10 +37,10 @@ public class RepositoryEntry implements Serializable {
   private long entryFirstRevision;
   private Date entryCreatedDate;
   private String entryLastAuthor;
-  private String entryLogMessage;
+  private String entryCommitMessage;
   private String url;
 
-  public enum Kind {dir, file, none, unknown, any};
+  public enum Kind {dir, file, none, unknown;}
 
   /**
    * Constructor.
@@ -68,7 +67,7 @@ public class RepositoryEntry implements Serializable {
 
   private void copyEntry(final SVNDirEntry entry) {
     this.entryLastAuthor = entry.getAuthor();
-    this.entryLogMessage = entry.getCommitMessage();
+    this.entryCommitMessage = entry.getCommitMessage();
     this.entryCreatedDate = entry.getDate();
     this.entryKind = Kind.valueOf(entry.getKind().toString());
     this.entryName = entry.getName();
@@ -116,13 +115,12 @@ public class RepositoryEntry implements Serializable {
 
   /**
    * Gets the full entry name in a display friendly format. <p/> The file name
-   * and path will be abbreviated down to 60 characters.
+   * and path will be abbreviated down to 50 characters.
    *
    * @return The abbreviated display friendly entry name
-   * @see #FULL_ENTRY_NAME_MAX_LENGTH
    */
   public String getFriendlyFullEntryName() {
-    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), FULL_ENTRY_NAME_MAX_LENGTH));
+    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), 50));
   }
 
   /**
@@ -192,12 +190,12 @@ public class RepositoryEntry implements Serializable {
   }
 
   /**
-   * Retrieves the log message.
+   * Retrieves the commit message.
    *
-   * @return the log message.
+   * @return the commit message.
    */
   public String getCommitMessage() {
-    return entryLogMessage;
+    return entryCommitMessage;
   }
 
   /**

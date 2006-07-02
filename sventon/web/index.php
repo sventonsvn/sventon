@@ -14,7 +14,7 @@
     <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml" />
   </head>
 
-  <body bgcolor="#FFFFFF">
+  <body>
     <p>&nbsp;</p>
 
 <?php
@@ -60,21 +60,21 @@
         <td width="20%">&nbsp;</td>
         <td width="2%">&nbsp;</td>
         <td>&nbsp;</td>
-        <td width="2%" style="background-color: #dddddd; border-right: black solid 1px;">&nbsp;</td>
+        <td width="2%" style="background-color: #99adbd; border-right: black solid 1px;">&nbsp;</td>
         <td width="20%">&nbsp;</td>
        </tr>
       <tr>
         <td width="20%">&nbsp;</td>
         <td width="2%">&nbsp;</td>
         <td align="center"><img src="img/sventon.png" alt="sventon logo"/><br/>the pure java subversion repository browser</td>
-        <td width="2%" style="background-color: #dddddd; border-right: black solid 1px;">&nbsp;</td>
+        <td width="2%" style="background-color: #99adbd; border-right: black solid 1px;">&nbsp;</td>
         <td width="20%">&nbsp;</td>
        </tr>
-      <tr style="background-color: #dddddd;">
+      <tr style="background-color: #99adbd;">
         <td style="border-bottom: black solid 1px;">&nbsp;</td>
         <td style="border-bottom: black solid 1px;">&nbsp;</td>
         <td style="border-bottom: black solid 1px;">&nbsp;</td>
-        <td style="background-color: #dddddd;">&nbsp;</td>
+        <td style="background-color: #99adbd;">&nbsp;</td>
         <td style="border-bottom: black solid 1px; border-right: black solid 1px;">&nbsp;</td>
        </tr>
       <tr>
@@ -147,7 +147,7 @@
         </td>
         <td>&nbsp;</td>
         <td valign="top"><?php require($includepage); ?></td>
-        <td style="background-color: #dddddd; border-right: black solid 1px;">&nbsp;</td>
+        <td style="background-color: #99adbd; border-right: black solid 1px;">&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -166,7 +166,7 @@
         </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <td style="background-color: #dddddd; border-bottom: black solid 1px; border-right: black solid 1px;">&nbsp;</td>
+        <td style="background-color: #99adbd; border-bottom: black solid 1px; border-right: black solid 1px;">&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
     </table>

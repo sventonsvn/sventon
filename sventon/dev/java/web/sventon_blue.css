@@ -31,18 +31,6 @@ a:link, a:visited, a:hover, a:active {
   text-decoration: none;
 }
 
-a:hover {
-  font-family: verdana, sans-serif;
-  font-size: 10px;
-  color: #0041BA;
-  background-color: inherit;
-  text-decoration: underline;
-}
-
-a.exclamationText {
-  color: #ff0000;  
-}
-
 input {
   font-family: verdana, sans-serif;
   font-size: 10px;
@@ -55,10 +43,6 @@ input.btn{
   font-size: 10px;
   font-weight:bold;
   vertical-align: middle;
-}
-
-.exclamationText {
-  color: #ff0000;
 }
 
 .codeBlock {
@@ -139,12 +123,12 @@ input.btn{
   border: 0px;
 }
 
-.sventonEntryOdd {
+.sventonEntry1 {
   color: #000000;
   background-color: #ddddff;
 }
 
-.sventonEntryEven {
+.sventonEntry2 {
   color: #000000;
   background-color: #eeeeff;
 }

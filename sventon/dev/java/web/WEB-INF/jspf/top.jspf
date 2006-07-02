@@ -54,7 +54,7 @@
     </td>
   </tr>
   <c:set var="command" value="${command}"/>
-  <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
+  <jsp:useBean id="command" type="de.berlios.sventon.command.SVNBaseCommand" />
   <tr>
     <td class="sventonHeadlines" colspan="2">
     <c:choose>

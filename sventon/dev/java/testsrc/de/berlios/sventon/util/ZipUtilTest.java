@@ -2,14 +2,14 @@ package de.berlios.sventon.util;
 
 import junit.framework.TestCase;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.Deflater;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.FileInputStream;
 
 public class ZipUtilTest extends TestCase {
 
@@ -78,7 +78,6 @@ public class ZipUtilTest extends TestCase {
     ZipUtil zipUtil = null;
     File tempZipFile = null;
     File dirToZip = null;
-    File subdir = null;
     File fileToZip1 = null;
     File fileToZip2 = null;
     PrintWriter writer = null;
@@ -92,15 +91,12 @@ public class ZipUtilTest extends TestCase {
       dirToZip = new File(tempZipFile.getParent() + "/sventontest/");
       dirToZip.mkdir();
 
-      subdir = new File(dirToZip, "dir2");
-      subdir.mkdir();
-
       fileToZip1 = File.createTempFile("sventonfile", null, dirToZip);
       writer = new PrintWriter(fileToZip1);
       writer.println("Contents of file one.");
       writer.close();
 
-      fileToZip2 = File.createTempFile("sventonfile", null, subdir);
+      fileToZip2 = File.createTempFile("sventonfile", null, dirToZip);
       writer = new PrintWriter(fileToZip2);
       writer.println("Contents of file two.");
       writer.close();
@@ -130,19 +126,18 @@ public class ZipUtilTest extends TestCase {
       System.out.println("Cleaning up...");
       // Clean up
       if (tempZipFile != null) {
-        System.out.println("Deleting: " + tempZipFile);
         tempZipFile.delete();
       }
+      if (fileToZip1 != null) {
+        fileToZip1.delete();
+      }
+      if (fileToZip2 != null) {
+        fileToZip2.delete();
+      }
       if (dirToZip != null) {
-        FileUtils.deleteDir(dirToZip);
+        dirToZip.delete();
       }
     }
   }
 
-  public void testCreateZipEntryName() throws Exception {
-    ZipUtil z = new ZipUtil();
-    assertEquals("\\file1", z.createZipEntryName("c:\\base", "c:\\base\\file1"));
-    assertEquals("\\file1\\", z.createZipEntryName("c:\\base", "c:\\base\\file1\\"));
-    assertEquals("\\dir\\file1", z.createZipEntryName("c:\\base", "c:\\base\\dir\\file1"));
-  }
 }

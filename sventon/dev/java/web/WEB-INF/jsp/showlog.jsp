@@ -12,7 +12,7 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
-<%@ page import="de.berlios.sventon.web.ctrl.LogEntryActionType"%>
+<%@ page import="de.berlios.sventon.ctrl.LogEntryActionType"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 
 <html>
@@ -41,13 +41,6 @@
       <input type="hidden" name="path" value="${command.path}${entry.name}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
 
-      <c:url value="diff.svn" var="diffUrl">
-        <c:if test="${isFile}">
-          <c:param name="path" value="${command.path}" />
-        </c:if>
-        <c:param name="revision" value="${command.revision}" />
-      </c:url>
-
       <table class="sventonLogEntriesTable">
         <tr>
           <c:if test="${isFile}">
@@ -72,9 +65,9 @@
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
-          <jsp:useBean id="entry" type="de.berlios.sventon.web.ctrl.LogEntryBundle" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.ctrl.LogEntryBundle" />
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
             <c:choose>
               <c:when test="${isFile}">
                 <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
@@ -90,7 +83,7 @@
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
+            <td valign="top">Changed<br>paths</td><td colspan="5">
               <table width="100%">
                 <tr>
                   <th>Action</th>
@@ -107,8 +100,9 @@
                   Collections.sort(pathsList);
                   final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {
-                    final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) changedPaths.get(i.next());
-                    final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+                    final SVNLogEntryPath logEntryPath =
+                      (SVNLogEntryPath)changedPaths.get(i.next());
+                    final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
                 %>
                 <tr>
 
@@ -118,10 +112,18 @@
                   </c:url>
 
                   <td><i><%= actionType %></i></td>
-                  <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
+                  <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
-                  <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-                  <td><a href="${diffUrl}&path=<%= logEntryPath.getPath() %>&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+                  <% } else if (LogEntryActionType.M == actionType) { %>
+
+                  <c:url value="diff.svn" var="diffUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + entry.getSvnLogEntry().getRevision() %>"/>
+                    <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + (entry.getSvnLogEntry().getRevision() - 1) %>"/>
+                  </c:url>
+
+                  <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
                   <% } %>

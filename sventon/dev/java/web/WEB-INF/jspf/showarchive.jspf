@@ -32,7 +32,7 @@
     <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
     <jsp:useBean id="entryDate" class="java.util.Date" />
 
-    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
       <%
         entryDate = new Date(zipEntry.getTime());
         totalOrigSize += zipEntry.getSize();
@@ -55,7 +55,7 @@
     <% rowCount++; %>
   </c:forEach>
 
-  <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+  <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntry2"); else out.print("sventonEntry1");%>">
     <td align="right"><b>Total:</b></td>
     <td><b><%=rowCount%> entries</b></td>
     <td align="right" title="<%=totalOrigSize%>&nbsp;bytes"><b><%if (totalOrigSize != 0) out.print(ByteFormatter.format(totalOrigSize, request.getLocale()));%></b></td>

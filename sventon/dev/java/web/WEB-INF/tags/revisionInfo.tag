@@ -17,7 +17,7 @@
 <%@ tag import="java.util.*" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntryPath" %>
-<%@ tag import="de.berlios.sventon.web.ctrl.LogEntryActionType"%>
+<%@ tag import="de.berlios.sventon.ctrl.LogEntryActionType" %>
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
@@ -49,7 +49,7 @@
         final Iterator latestLogIterator = latestPathsList.iterator();
         while (latestLogIterator.hasNext()) {
           final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) latestChangedPaths.get(latestLogIterator.next());
-          final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+          final LogEntryActionType actionType = LogEntryActionType.valueOf(String.valueOf(logEntryPath.getType()));
       %>
       <tr>
         <c:url value="goto.svn" var="goToUrl">
@@ -69,9 +69,9 @@
         </c:url>
 
         <td><i><%= actionType %></i></td>
-        <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
+        <% if (LogEntryActionType.A == actionType || LogEntryActionType.R == actionType) { %>
         <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
-        <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
+        <% } else if (LogEntryActionType.M == actionType) { %>
         <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
         <% } else { %>
         <td><%= logEntryPath.getPath() %></td>

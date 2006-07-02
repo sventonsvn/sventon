@@ -11,8 +11,5 @@ svn/WEB-INF/classes/sventon.properties, replace the old
 svn.war with the new one to trigger a redeploy, and then add the
 backed up sventon.properties to the svn/WEB-INF/classes directory again.
 
-The disk persistent cache file format has changed since the last version.
-A complete repository recache is necessary.
-
 Support
 See http://sventon.berlios.de

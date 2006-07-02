@@ -72,7 +72,7 @@ public class DiffResultParser {
           rightStart = Integer.parseInt(matcher.group(4));
           rightEnd = "".equals(matcher.group(5))
               ? Integer.parseInt(matcher.group(4)) : Integer.parseInt(matcher.group(5));
-          diffActions.add(new DiffSegment(DiffAction.parse(matcher.group(3)),
+          diffActions.add(new DiffSegment(DiffAction.valueOf(matcher.group(3)),
               leftStart, leftEnd, rightStart, rightEnd));
         }
       }
