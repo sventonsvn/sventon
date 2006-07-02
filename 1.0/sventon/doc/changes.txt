@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[582] Release 1.0.0 (2006-07-03)
 [575] Fixed: Bug #7985 - Tooltip text wrap in browser view.
 [573] Fixed: Bug #7983 - View log for a file renders incorrect navigation.
 
