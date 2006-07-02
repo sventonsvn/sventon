@@ -174,6 +174,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", configuration.isCacheUsed());
+        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
         modelAndView.addAllObjects(model);
       }
       return modelAndView;

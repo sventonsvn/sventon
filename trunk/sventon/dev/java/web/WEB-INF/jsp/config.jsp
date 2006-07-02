@@ -41,9 +41,9 @@
             <td valign="top">
               Example:
               <p>
+                <b>http://domain/project/</b><br>
                 <b>svn://domain/project/</b><br>
                 <b>svn+ssh://domain/project/</b><br>
-                <b>http://domain/project/</b><br>
               </p>
             </td>
           </tr>
@@ -72,6 +72,16 @@
             <td valign="top">
               Controls whether repository caching feature should be used. <br/>
               If enabled, the search and directory flattening features will be available, as well as the log message search <br/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" align="right" style="white-space: nowrap;">Allow download as compressed ZIP:</td>
+            <td valign="top">
+              <spring:bind path="command.zippedDownloadsAllowed">
+                <input type="checkbox" name="${status.expression}" <c:if test="${status.value}">checked</c:if>/></td>
+              </spring:bind>
+            <td valign="top">
+              Enable/disable the 'download as zip' function. used. <br/>
             </td>
           </tr>
           <tr><td>&nbsp;</td></tr>

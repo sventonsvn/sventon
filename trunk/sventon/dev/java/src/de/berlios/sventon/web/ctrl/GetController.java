@@ -12,20 +12,20 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.RequestUtils;
-import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.imageio.ImageIO;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +33,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 
 /**
@@ -74,7 +72,6 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
     final String displayType = RequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, null);
     final ServletOutputStream output;
-    final ByteArrayOutputStream baos;
     logger.debug("displayType: " + displayType);
 
     try {
@@ -99,8 +96,8 @@ public class GetController extends AbstractSVNTemplateController implements Cont
       }
       output.flush();
       output.close();
-    } catch (IOException ioex) {
-      ioex.printStackTrace();
+    } catch (final IOException ioex) {
+      logger.error(ioex);
     }
     return null;
   }
@@ -117,14 +114,14 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     } else {
       response.setContentType(mimeType);
     }
-    response.setHeader("Content-disposition", "attachment; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+    response.setHeader("Content-disposition", "attachment; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
   }
 
   private void getAsInlineImage(HttpServletResponse response, SVNBaseCommand svnCommand, HttpServletRequest request, SVNRepository repository, SVNRevision revision, ServletOutputStream output) throws SVNException {
     response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-    response.setHeader("Content-disposition", "inline; filename=\"" + encodeFilename(svnCommand.getTarget(), request) + "\"");
+    response.setHeader("Content-disposition", "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
   }
@@ -176,29 +173,6 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   }
 
   /**
-   * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
-   * File name will be returned as-is if unable to parse <code>USER-AGENT</code>.
-   *
-   * @param filename File name to encode
-   * @param request The request
-   * @return The coded file name.
-   */
-  private String encodeFilename(final String filename, final HttpServletRequest request) {
-    final String userAgent = request.getHeader("USER-AGENT");
-    String codedFilename = null;
-    try {
-      if (null != userAgent && -1 != userAgent.indexOf("MSIE")) {
-          codedFilename = URLEncoder.encode(filename, "UTF-8");
-      } else if (null != userAgent && -1 != userAgent.indexOf("Mozilla")) {
-        codedFilename = MimeUtility.encodeText(filename, "UTF-8", "B");
-      }
-    } catch (UnsupportedEncodingException uee) {
-      // Silently ignore
-    }
-    return codedFilename != null ? codedFilename : filename;
-  }
-
-  /**
    * Sets the <code>ImageUtil</code> helper instance.
    *
    * @param imageUtil The instance
@@ -216,4 +190,5 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   public void setObjectCache(final ObjectCache objectCache) {
     this.objectCache = objectCache;
   }
+
 }

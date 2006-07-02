@@ -2,14 +2,14 @@ package de.berlios.sventon.util;
 
 import junit.framework.TestCase;
 
-import java.util.zip.ZipOutputStream;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.Deflater;
-import java.io.FileOutputStream;
 import java.io.File;
-import java.io.PrintWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class ZipUtilTest extends TestCase {
 
@@ -130,23 +130,14 @@ public class ZipUtilTest extends TestCase {
       System.out.println("Cleaning up...");
       // Clean up
       if (tempZipFile != null) {
+        System.out.println("Deleting: " + tempZipFile);
         tempZipFile.delete();
       }
-      if (fileToZip1 != null) {
-        fileToZip1.delete();
-      }
-      if (fileToZip2 != null) {
-        fileToZip2.delete();
-      }
-      if (subdir != null) {
-        subdir.delete();
-      }
       if (dirToZip != null) {
-        dirToZip.delete();
+        FileUtils.deleteDir(dirToZip);
       }
     }
   }
-
 
   public void testCreateZipEntryName() throws Exception {
     ZipUtil z = new ZipUtil();

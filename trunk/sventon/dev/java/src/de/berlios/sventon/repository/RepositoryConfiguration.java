@@ -46,10 +46,9 @@ import java.io.File;
  * <p/>
  * This class is preferably configured using Spring.
  *
+ * @author patrikfr@user.berlios.de
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
- *
- * @author patrikfr@user.berlios.de 
  */
 public class RepositoryConfiguration {
 
@@ -57,7 +56,7 @@ public class RepositoryConfiguration {
    * The logging instance.
    */
   protected final Log logger = LogFactory.getLog(getClass());
-  
+
   /**
    * Will be <code>true</code> if all parameters are ok.
    */
@@ -94,6 +93,11 @@ public class RepositoryConfiguration {
    * Decides whether the caching feature will be used.
    */
   private Boolean useCache;
+
+  /**
+   * Decides whether <i>download as zip</i> is allowed.
+   */
+  private boolean zipDownloadsAllowed;
 
   /**
    * Configures and initializes the repository.
@@ -243,7 +247,7 @@ public class RepositoryConfiguration {
    *
    * @param useCache <code>true</code> if cache should be enabled, <code>false</code> if not.
    */
-  public void setCacheUsed(final Boolean useCache) {
+  public void setCacheUsed(final boolean useCache) {
     this.useCache = useCache;
   }
 
@@ -252,8 +256,26 @@ public class RepositoryConfiguration {
    *
    * @return <code>true</code> if cache is enabled, <code>false</code> if not.
    */
-  public Boolean isCacheUsed() {
+  public boolean isCacheUsed() {
     return this.useCache;
+  }
+
+  /**
+   * Sets the 'zipDownloadsAllowed' flag.
+   *
+   * @param zipDownloadsAllowed <code>true</code> if <i>download as zip</i> is allowed.
+   */
+  public void setZippedDownloadsAllowed(final boolean zipDownloadsAllowed) {
+    this.zipDownloadsAllowed = zipDownloadsAllowed;
+  }
+
+  /**
+   * Checks if <i>download as zip</i> is allowed.
+   *
+   * @return <code>true</code> if zipped downloads are allowed.
+   */
+  public boolean isZippedDownloadsAllowed() {
+    return this.zipDownloadsAllowed;
   }
 
 }
