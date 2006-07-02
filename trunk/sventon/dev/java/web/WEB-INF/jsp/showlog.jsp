@@ -41,13 +41,6 @@
       <input type="hidden" name="path" value="${command.path}${entry.name}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
 
-      <c:url value="diff.svn" var="diffUrl">
-        <c:if test="${isFile}">
-          <c:param name="path" value="${command.path}" />
-        </c:if>
-        <c:param name="revision" value="${command.revision}" />
-      </c:url>
-
       <table class="sventonLogEntriesTable">
         <tr>
           <c:if test="${isFile}">
@@ -121,7 +114,15 @@
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-                  <td><a href="${diffUrl}&path=<%= logEntryPath.getPath() %>&entry=<%= logEntryPath.getPath() %>;;${entry.svnLogEntry.revision}&entry=<%= logEntryPath.getPath() %>;;<%= entry.getSvnLogEntry().getRevision()-1 %>" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+
+                  <c:url value="diff.svn" var="diffUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + entry.getSvnLogEntry().getRevision() %>"/>
+                    <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + (entry.getSvnLogEntry().getRevision() - 1) %>"/>
+                  </c:url>
+
+                  <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else { %>
                   <td><%= logEntryPath.getPath() %></td>
                   <% } %>
