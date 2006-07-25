@@ -54,34 +54,6 @@ public class CacheImplTest extends TestCase {
     assertEquals(1, cache.findDirectories("/trunk/").size());
   }
 
-  public void testCreateCamelCasePatternForString() throws Exception {
-    final CacheImpl cache = new CacheImpl();
-
-    assertTrue("/ATestFile".matches("/" + cache.createCamelCasePatternForString("A")));
-    assertTrue("/ATestFile".matches("/" + cache.createCamelCasePatternForString("AT")));
-
-    assertTrue("/TestFile".matches("/" + cache.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFile1".matches("/" + cache.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFile1".matches("/" + cache.createCamelCasePatternForString("TF1")));
-
-    assertTrue("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TFNT")));
-    assertFalse("/TestFileNumberTwo".matches("/" + cache.createCamelCasePatternForString("TFT")));
-
-    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TF")));
-    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TFA")));
-    assertTrue("/TestFileABC".matches("/" + cache.createCamelCasePatternForString("TFABC")));
-
-    assertTrue("/TestFile1ABC".matches("/" + cache.createCamelCasePatternForString("TFA")));
-    assertTrue("/TestFile1ABC".matches("/" + cache.createCamelCasePatternForString("TFABC")));
-
-    assertTrue("/HTML".matches("/" + cache.createCamelCasePatternForString("HT")));
-    assertTrue("/HTML".matches("/" + cache.createCamelCasePatternForString("HTML")));
-
-    assertTrue("/trunk/TestFile".matches("/trunk/" + cache.createCamelCasePatternForString("TF")));
-    assertTrue("/trunk/dev/AnotherTestFile".matches("/trunk/dev/" + cache.createCamelCasePatternForString("ATF")));
-  }
-
   private List<RepositoryEntry> getEntryTemplateList() {
     final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/", null));

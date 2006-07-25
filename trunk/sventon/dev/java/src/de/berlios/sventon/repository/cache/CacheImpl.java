@@ -83,8 +83,8 @@ public class CacheImpl implements Cache {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntryByCamelCase(final String searchString, final String startDir) throws CacheException {
-    return entryCache.findByPattern(".*" + startDir + createCamelCasePatternForString(searchString), RepositoryEntry.Kind.any, null);
+  public List<RepositoryEntry> findEntryByCamelCase(final CamelCasePattern pattern, final String startDir) throws CacheException {
+    return entryCache.findByPattern(".*" + startDir + pattern.getPattern(), RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -120,23 +120,6 @@ public class CacheImpl implements Cache {
    */
   public SVNLogEntry getRevision(final long revision) throws CacheException {
     return revisionCache.get(revision);
-  }
-
-  /**
-   * Creates a regex CamelCase search pattern based on given search string.
-   *
-   * @param searchString The search string.
-   * @return The regex pattern string.
-   */
-  protected String createCamelCasePatternForString(final String searchString) {
-    final StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < searchString.length(); i++) {
-      sb.append("[");
-      sb.append(searchString.charAt(i));
-      sb.append("][a-z0-9]*?");
-    }
-    sb.append(".*");
-    return sb.toString();
   }
 
 }
