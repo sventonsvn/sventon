@@ -36,11 +36,11 @@ public interface Cache {
   /**
    * Searches the cached entries for given string CamelCase name.
    *
-   * @param searchString CamelCase string to search for
+   * @param pattern CamelCase pattern to search for
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntryByCamelCase(final String searchString, final String startDir) throws CacheException;
+  List<RepositoryEntry> findEntryByCamelCase(final CamelCasePattern pattern, final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for given string (name fragment) starting from given directory.

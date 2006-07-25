@@ -16,6 +16,7 @@ import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.LogMessageComparator;
+import de.berlios.sventon.repository.cache.CamelCasePattern;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,7 +61,7 @@ public class SearchController extends AbstractSVNTemplateController implements C
 
       if (searchString.toUpperCase().equals(searchString)) {
         logger.debug("Search string was in upper case only - performing CamelCase cache search");
-        entries.addAll(getCache().findEntryByCamelCase(searchString, startDir));
+        entries.addAll(getCache().findEntryByCamelCase(new CamelCasePattern(searchString), startDir));
       } else {
         entries.addAll(getCache().findEntry(searchString, startDir));
       }
