@@ -29,8 +29,9 @@ import java.util.*;
 
 /**
  * RepoBrowserController.
- * 
+ *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class RepoBrowserController extends AbstractSVNTemplateController implements Controller {
 
@@ -52,8 +53,8 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     logger.debug("Getting directory contents for: " + completePath);
     final HashMap properties = new HashMap();
     final Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
-    for (Object ent : entries) {
-      SVNDirEntry entry = (SVNDirEntry) ent;
+    for (final Object ent : entries) {
+      final SVNDirEntry entry = (SVNDirEntry) ent;
       dir.add(new RepositoryEntry(entry,
           completePath,
           locks.get(completePath + entry.getName())));

@@ -28,6 +28,7 @@ import java.io.IOException;
  * annotate function.
  *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class BlameHandler implements ISVNAnnotateHandler {
 

@@ -12,22 +12,21 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.validation.BindException;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -55,6 +54,11 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
   private String imageFormatName;
 
   /**
+   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image.
+   */
+  private int maxThumbnailSize;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
@@ -70,7 +74,6 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
       return null;
     }
 
-    final ByteArrayOutputStream baos;
     response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
 
     // Check if the thumbnail exists on the cache
@@ -79,34 +82,19 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     logger.debug(properties);
     String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
     logger.debug("Using cachekey: " + cacheKey);
-    byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
+    final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
     if (thumbnailData != null) {
       // Writing cached thumbnail image to ServletOutputStream
       output.write(thumbnailData);
     } else {
       // Thumbnail was not in the cache.
       // Create the thumbnail.
-      final StringBuilder urlString = new StringBuilder(
-          request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
-      urlString.append("?");
-      urlString.append(request.getQueryString());
-      final URL url = new URL(urlString.toString());
+      final URL url = new URL(getFullSizeImageURL(request));
       logger.debug("Getting full size image from url: " + url);
-      BufferedImage image = ImageIO.read(url);
-      int orgWidth = image.getWidth();
-      int orgHeight = image.getHeight();
-
-      // Get preferred thumbnail dimension.
-      final Dimension thumbnailSize = imageUtil.getThumbnailSize(orgWidth, orgHeight);
-      logger.debug("Thumbnail size: " + thumbnailSize.toString());
-      // Resize image.
-      final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(), (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
-      final BufferedImage biRescaled = imageUtil.toBufferedImage(rescaled, BufferedImage.TYPE_INT_ARGB);
+      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(url));
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, baos);
       response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-
-      // Write thumbnail to output stream.
-      baos = new ByteArrayOutputStream();
-      ImageIO.write(biRescaled, imageFormatName, baos);
 
       // Putting created thumbnail image into the cache.
       logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
@@ -117,6 +105,14 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
       output.close();
     }
     return null;
+  }
+
+  private String getFullSizeImageURL(final HttpServletRequest request) {
+    final StringBuilder urlString = new StringBuilder(
+        request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
+    urlString.append("?");
+    urlString.append(request.getQueryString());
+    return urlString.toString();
   }
 
   /**
@@ -147,4 +143,12 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     this.imageUtil = imageUtil;
   }
 
+  /**
+   * Sets the maximum vertical/horizontal size in pixels for the generated thumbnail images.
+   *
+   * @param maxSize Size in pixels.
+   */
+  public void setMaxThumbnailSize(final int maxSize) {
+    this.maxThumbnailSize = maxSize;
+  }
 }

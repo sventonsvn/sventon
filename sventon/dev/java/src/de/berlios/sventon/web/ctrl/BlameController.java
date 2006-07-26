@@ -27,9 +27,11 @@ import java.util.Map;
 
 /**
  * BlameController.
- * <P>
+ * <p/>
  * Controller to support the blame/praise/annotate functionality of Subversion.
+ *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de 
  */
 public class BlameController extends AbstractSVNTemplateController implements Controller {
 

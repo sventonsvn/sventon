@@ -33,6 +33,7 @@ import java.util.Map;
  * ShowFileController.
  *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class ShowFileController extends AbstractSVNTemplateController implements Controller {
 

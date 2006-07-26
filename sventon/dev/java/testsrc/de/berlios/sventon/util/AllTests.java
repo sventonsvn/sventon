@@ -12,6 +12,7 @@ public class AllTests {
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(ByteFormatterTest.class);
+    suite.addTestSuite(ImageScalerTest.class);
     suite.addTestSuite(ImageUtilTest.class);
     suite.addTestSuite(PathUtilTest.class);
     suite.addTestSuite(ZipUtilTest.class);

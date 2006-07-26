@@ -101,6 +101,7 @@ import java.util.Map;
  * </dl>
  *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de 
  */
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 

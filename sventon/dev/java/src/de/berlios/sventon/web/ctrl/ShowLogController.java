@@ -36,6 +36,7 @@ import java.util.*;
  * The type of this object is <code>List<List<SVNLogEntry>></code>.
  *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
