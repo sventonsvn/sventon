@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class ShowThumbnailController extends AbstractSVNTemplateController implements Controller {
+public class ShowThumbnailsController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Image utility.
@@ -54,7 +54,7 @@ public class ShowThumbnailController extends AbstractSVNTemplateController imple
 
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.
-    for(String entry : entryParameters) {
+    for(final String entry : entryParameters) {
       logger.debug("entry: " + entry);
       if (imageUtil.isImageFilename(entry)) {
         entries.add(entry);

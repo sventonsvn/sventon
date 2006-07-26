@@ -17,7 +17,6 @@
   <head>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
     <title>Show file - ${command.target}</title>
-    <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
@@ -35,37 +34,8 @@
     <br/>
     <ui:functionLinks pageName="showFile"/>
 
-    <c:url value="get.svn" var="showUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-      <c:param name="revision" value="${command.revision}" />
-    </c:url>
+    <%@ include file="/WEB-INF/jspf/showarchive.jspf"%>
 
-    <c:choose>
-      <c:when test="${isBinary}">
-        <c:choose>
-          <c:when test="${isImage}">
-<p>
-  <a href="${showUrl}&disp=inline">
-    <img src="${showUrl}&disp=thumb" alt="Thumbnail" border="0"/>
-  </a>
-</p>
-          </c:when>
-          <c:otherwise>
-            <c:choose>
-              <c:when test="${isArchive}">
-                <%@ include file="/WEB-INF/jspf/showarchive.jspf"%>
-              </c:when>
-              <c:otherwise>
-<p>File is in binary format.</p>
-              </c:otherwise>
-            </c:choose>
-          </c:otherwise>
-        </c:choose>
-      </c:when>
-     	<c:otherwise>
-<pre class="codeBlock"><c:out value="${fileContents}" escapeXml="false"/></pre>
-      </c:otherwise>
-    </c:choose>
     <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
