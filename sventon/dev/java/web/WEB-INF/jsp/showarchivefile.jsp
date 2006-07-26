@@ -32,7 +32,7 @@
     </p>
 
     <br/>
-    <ui:functionLinks pageName="showFile"/>
+    <ui:functionLinks pageName="showArchiveFile"/>
 
     <%@ include file="/WEB-INF/jspf/showarchive.jspf"%>
 

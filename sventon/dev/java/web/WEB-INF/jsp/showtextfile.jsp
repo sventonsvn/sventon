@@ -33,7 +33,7 @@
     </p>
 
     <br/>
-    <ui:functionLinks pageName="showFile"/>
+    <ui:functionLinks pageName="showTextFile"/>
 
 <pre class="codeBlock"><c:out value="${fileContents}" escapeXml="false"/></pre>
 

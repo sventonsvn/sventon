@@ -98,7 +98,6 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     } else {
       // It's a binary file
       logger.debug("Binary file detected");
-      model.put("isBinary", true);  // Indicates that the file is in binary format.
 
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
           matches(archiveFileExtensionPattern)) {
@@ -107,10 +106,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
         return new ModelAndView("showarchivefile", model);
       } else {
         if (imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
-          model.put("isImage", true);
           return new ModelAndView("showimagefile", model);
         }
-        model.put("isImage", false); // TODO: needed?
         return new ModelAndView("showbinaryfile", model);
       }
     }
@@ -198,7 +195,6 @@ public class ShowFileController extends AbstractSVNTemplateController implements
                                                 final SVNRevision revision) throws SventonException, SVNException {
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("isArchive", true); // Indicates that the file is an archive (zip or jar)
 
     // Get the file's content. We can skip the properties in this case.
     repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);

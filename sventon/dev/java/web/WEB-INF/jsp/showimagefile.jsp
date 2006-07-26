@@ -32,7 +32,7 @@
     </p>
 
     <br/>
-    <ui:functionLinks pageName="showFile"/>
+    <ui:functionLinks pageName="showImageFile"/>
 
     <c:url value="get.svn" var="showUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
