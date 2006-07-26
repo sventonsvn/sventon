@@ -11,13 +11,15 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import static de.berlios.sventon.repository.RepositoryEntryComparator.NAME;
+import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -40,6 +42,9 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
                                    final SVNRevision revision, final HttpServletRequest request,
                                    final HttpServletResponse response, final BindException exception) throws Exception {
 
+    final String filterExtension = RequestUtils.getStringParameter(request, "filterExtension", "all");
+    logger.debug("filterExtension: " + filterExtension);
+
     final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Update trailing / for path
@@ -53,12 +58,19 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     logger.debug("Getting directory contents for: " + completePath);
     final HashMap properties = new HashMap();
     final Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
+    final Set existingExtensions = new TreeSet();
+
     for (final Object ent : entries) {
       final SVNDirEntry entry = (SVNDirEntry) ent;
-      dir.add(new RepositoryEntry(entry,
-          completePath,
-          locks.get(completePath + entry.getName())));
+      final String fileExtension = PathUtil.getFileExtension(entry.getName()).toLowerCase();
+      if (!"".equals(fileExtension)) {
+        existingExtensions.add(fileExtension);
+      }
+      if (fileExtension.equals(filterExtension) || "all".equals(filterExtension)) {
+        dir.add(new RepositoryEntry(entry, completePath, locks.get(completePath + entry.getName())));
+      }
     }
+    logger.debug("Existing extensions in dir: " + existingExtensions);
 
     Collections.sort(dir, new RepositoryEntryComparator(NAME, true));
 
@@ -67,7 +79,8 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     model.put("svndir", dir);
     logger.debug(properties);
     model.put("properties", properties);
-
+    model.put("existingExtensions", existingExtensions);
+    model.put("filterExtension", filterExtension);
     return new ModelAndView("repobrowser", model);
   }
 }

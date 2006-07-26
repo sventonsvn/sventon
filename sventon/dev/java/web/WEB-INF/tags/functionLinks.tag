@@ -91,6 +91,18 @@
         </c:choose>
       </c:when>
     </c:choose>
+    <c:if test="${!isFlatten && !isSearch}">
+      </td>
+      <td align="right"><spring:message code="filter.text"/></td>
+      <td>
+        <select name="filterExtension" class="sventonSelect">
+          <option value="all">all</option>
+          <c:forEach items="${existingExtensions}" var="extension">
+            <option value="${extension}" ${extension eq filterExtension ? "selected" : ""}>${extension}</option>
+          </c:forEach>
+        </select>
+        <input type="button" class="btn" value="<spring:message code="filter.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;"/>
+    </c:if>
   </c:when>
 
   <c:when test="${pageName == 'showLog'}">
