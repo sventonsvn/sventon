@@ -66,7 +66,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     final String nextPathParam = RequestUtils.getStringParameter(request, "nextPath", null);
     final String nextRevParam = RequestUtils.getStringParameter(request, "nextRevision", null);
 
-    final String[] targetPaths;
+    final String targetPath;
     final long revNumber;
 
     if (!path.startsWith("/")) {
@@ -74,10 +74,10 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     }
 
     if (nextPathParam == null || nextRevParam == null) {
-      targetPaths = new String[]{path};
+      targetPath = path;
       revNumber = revision == HEAD ? getHeadRevision(repository) : revision.getNumber();
     } else {
-      targetPaths = new String[]{nextPathParam};
+      targetPath = nextPathParam;
       if ("HEAD".equals(nextRevParam)) {
         revNumber = getHeadRevision(repository);
       } else {
@@ -94,10 +94,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
-    final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(repository, revNumber, 0, pageSize);
+    final List<SVNLogEntry> logEntries =
+        getRepositoryService().getRevisions(repository, revNumber, 0, targetPath, pageSize);
 
     final SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
-    String pathAtRevision = targetPaths[0];
+    String pathAtRevision = targetPath;
 
     for (SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
