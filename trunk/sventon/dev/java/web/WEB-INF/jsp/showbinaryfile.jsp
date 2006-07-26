@@ -32,7 +32,7 @@
     </p>
 
     <br/>
-    <ui:functionLinks pageName="showFile"/>
+    <ui:functionLinks pageName="showBinaryFile"/>
 
     <p>File is in binary format.</p>
 

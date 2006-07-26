@@ -44,22 +44,21 @@
   <tr><td>
 
 <c:choose>
-  <c:when test="${pageName == 'showFile'}">
+
+  <c:when test="${pageName == 'showTextFile'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
 
-    <c:if test="${!isBinary}">
-      <c:choose>
-        <c:when test="${!isRawFormat}">
-          <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" title="<spring:message code="showrawfile.button.tooltip"/>" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
-        </c:when>
-        <c:otherwise>
-          <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-        </c:otherwise>
-      </c:choose>
-    </c:if>
+    <c:choose>
+      <c:when test="${!isRawFormat}">
+        <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" title="<spring:message code="showrawfile.button.tooltip"/>" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
+      </c:when>
+      <c:otherwise>
+        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+      </c:otherwise>
+    </c:choose>
 
-    <c:if test="${!empty committedRevision && !isBinary}">
+    <c:if test="${!empty committedRevision}">
       <c:url value="diffprev.svn" var="diffPreviousUrl">
         <c:param name="path" value="${command.path}${entry.name}" />
         <c:param name="revision" value="${command.revision}" />
@@ -67,6 +66,11 @@
       </c:url>
       <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" title="<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
     </c:if>
+  </c:when>
+
+  <c:when test="${pageName == 'showImageFile' || pageName == 'showBinaryFile' || pageName == 'showArchiveFile'}">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'repobrowse'}">
