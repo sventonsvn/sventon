@@ -96,7 +96,7 @@
       <td align="right"><spring:message code="filter.text"/></td>
       <td>
         <select name="filterExtension" class="sventonSelect">
-          <option value="all">all</option>
+          <option value="all">&lt;show all&gt;</option>
           <c:forEach items="${existingExtensions}" var="extension">
             <option value="${extension}" ${extension eq filterExtension ? "selected" : ""}>${extension}</option>
           </c:forEach>
