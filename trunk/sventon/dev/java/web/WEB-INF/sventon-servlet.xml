@@ -254,6 +254,9 @@
     <property name="imageFormatName">
       <value>png</value>
     </property>
+    <property name="maxThumbnailSize">
+      <value>200</value>
+    </property>
   </bean>
 
   <bean id="zipController" class="de.berlios.sventon.web.ctrl.ZipController" parent="abstractController">
@@ -318,9 +321,6 @@
   </bean>
 
   <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
-    <property name="maxThumbnailSize">
-      <value>200</value>
-    </property>
     <property name="mimeMappings">
       <props>
         <prop key="gif">image/gif</prop>

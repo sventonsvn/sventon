@@ -37,6 +37,7 @@ import java.util.Map;
  * should be rmoved.
  *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class GoToController extends AbstractSVNTemplateController implements Controller {
 

@@ -11,8 +11,6 @@
  */
 package de.berlios.sventon.util;
 
-import java.awt.image.BufferedImage;
-import java.awt.*;
 import java.util.Properties;
 
 /**
@@ -23,57 +21,14 @@ import java.util.Properties;
 public final class ImageUtil {
 
   /**
-   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image, default set to 200.
-   */
-  private int maxThumbnailSize = 200;
-
-  /**
    * Mime type / file type mappings.
    */
   private Properties mimeMappings;
 
   /**
-   * Private - not supposed to instantiate.
+   * Constructor.
    */
   public ImageUtil() {
-  }
-
-  /**
-   * Converts an <code>Image</code> instance into a <code>BufferedImage</code> instance.
-   *
-   * @param image The <code>Image<code> instance.
-   * @param type
-   * @return The buffered image
-   * @see java.awt.image.BufferedImage
-   */
-  public BufferedImage toBufferedImage(final Image image, final int type) {
-    int width = image.getWidth(null);
-    int height = image.getHeight(null);
-
-    final BufferedImage result = new BufferedImage(width, height, type);
-    final Graphics2D g = result.createGraphics();
-    g.drawImage(image, 0, 0, null);
-    g.dispose();
-    return result;
-  }
-
-  /**
-   * Gets the preferred thumbnail dimension for given <code>width</code>
-   * and <code>height</code>.
-   *
-   * @param width  The width.
-   * @param height The height.
-   * @return The thumbnail dimension.
-   */
-  public Dimension getThumbnailSize(final int width, final int height) {
-    int max = (width >= height) ? width : height;
-    if (max <= getMaxThumbnailSize()) {
-      // Image is smaller than maximum size - no need for a resize
-      return new Dimension(width, height);
-    } else {
-      double scaleFactor = (double) max / getMaxThumbnailSize();
-      return new Dimension(((int) (width / scaleFactor)), ((int) (height / scaleFactor)));
-    }
   }
 
   /**
@@ -117,24 +72,6 @@ public final class ImageUtil {
       fileExtension = filename.substring(filename.lastIndexOf(".") + 1);
     }
     return getContentType(fileExtension) != null;
-  }
-
-  /**
-   * Gets the maximum thumbnail size in pixels.
-   *
-   * @return The size
-   */
-  public int getMaxThumbnailSize() {
-    return maxThumbnailSize;
-  }
-
-  /**
-   * Sets the maximum thumbnail size in pixels.
-   *
-   * @param maxThumbnailSize The size
-   */
-  public void setMaxThumbnailSize(int maxThumbnailSize) {
-    this.maxThumbnailSize = maxThumbnailSize;
   }
 
   /**

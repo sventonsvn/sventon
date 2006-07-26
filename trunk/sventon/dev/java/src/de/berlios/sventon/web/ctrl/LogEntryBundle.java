@@ -31,8 +31,8 @@ public class LogEntryBundle {
   private String pathAtRevision;
 
   /**
-   * @param logEntry
-   * @param pathAtRevision
+   * @param logEntry       The log entry
+   * @param pathAtRevision The path
    */
   public LogEntryBundle(final SVNLogEntry logEntry, final String pathAtRevision) {
     svnLogEntry = logEntry;

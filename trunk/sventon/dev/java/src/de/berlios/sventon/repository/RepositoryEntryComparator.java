@@ -24,6 +24,7 @@ import java.io.Serializable;
  * The comparator can be configured during construction to tweak sorting behavior.
  * 
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de 
  */
 public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
 
