@@ -18,7 +18,7 @@ import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNLock;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Represents an entry in the repository.
@@ -41,14 +41,16 @@ public class RepositoryEntry implements Serializable {
   private String entryLogMessage;
   private String url;
 
-  public enum Kind {dir, file, none, unknown, any};
+  public enum Kind {
+    dir, file, none, unknown, any
+  }
 
   /**
    * Constructor.
    *
-   * @param entry      The <code>SVNDirEntry</code>.
-   * @param entryPath  The entry repository path.
-   * @param lock       The lock, null if n/a.
+   * @param entry     The <code>SVNDirEntry</code>.
+   * @param entryPath The entry repository path.
+   * @param lock      The lock, null if n/a.
    * @throws IllegalArgumentException if any of the parameters are null.
    */
   public RepositoryEntry(final SVNDirEntry entry, final String entryPath, final SVNLock lock) {
@@ -64,6 +66,27 @@ public class RepositoryEntry implements Serializable {
     this.entryPath = entryPath;
     this.lock = lock;
     copyEntry(entry);
+  }
+
+  /**
+   * Creates a collection of <code>RepositoryEntry</code> objects based
+   * on given collection of <code>SVNDirEntry</code> instances.
+   *
+   * @param entries  Collection of entries.
+   * @param basePath Base repository path for the entries.
+   * @param locks    Map of active locks. Provide an empty Map to ignore locking details.
+   * @return The collection of entries.
+   */
+  public static List<RepositoryEntry> createEntryCollection(final Collection entries,
+                                                            final String basePath,
+                                                            final Map<String, SVNLock> locks) {
+
+    final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    for (final Object ent : entries) {
+      final SVNDirEntry entry = (SVNDirEntry) ent;
+      dir.add(new RepositoryEntry(entry, basePath, locks.get(basePath + entry.getName())));
+    }
+    return dir;
   }
 
   private void copyEntry(final SVNDirEntry entry) {
