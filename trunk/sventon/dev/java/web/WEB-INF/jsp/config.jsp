@@ -81,7 +81,7 @@
                 <input type="checkbox" name="${status.expression}" <c:if test="${status.value}">checked</c:if>/></td>
               </spring:bind>
             <td valign="top">
-              Enable/disable the 'download as zip' function. used. <br/>
+              Enable/disable the 'download as zip' function. <br/>
             </td>
           </tr>
           <tr><td>&nbsp;</td></tr>

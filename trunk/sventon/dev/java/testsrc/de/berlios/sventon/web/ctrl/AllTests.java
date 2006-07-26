@@ -14,7 +14,7 @@ public class AllTests {
     suite.addTestSuite(GetControllerTest.class);
     suite.addTestSuite(LogEntryActionTypeTest.class);
     suite.addTestSuite(ShowFileControllerTest.class);
-    suite.addTestSuite(ShowThumbnailControllerTest.class);
+    suite.addTestSuite(ShowThumbnailsControllerTest.class);
     return suite;
   }
 

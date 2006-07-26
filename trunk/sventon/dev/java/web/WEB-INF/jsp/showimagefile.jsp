@@ -16,8 +16,7 @@
 <html>
   <head>
     <%@ include file="/WEB-INF/jspf/head.jspf"%>
-    <title>Show thumbnails</title>
-    <link rel="stylesheet" type="text/css" href="jhighlight.css" >
+    <title>Show file - ${command.target}</title>
   </head>
 
   <body>
@@ -26,32 +25,30 @@
     <p>
       <table class="sventonHeader">
         <tr>
-          <td>Show thumbnails - <b>${command.target}</b>&nbsp;</td>
+          <td>Show File - <b>${command.target}</b>&nbsp;<a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
         </tr>
       </table>
+      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
     </p>
 
     <br/>
-    <ui:functionLinks pageName="showThumbs"/>
+    <ui:functionLinks pageName="showFile"/>
 
-    <c:url value="get.svn" var="downloadUrl" >
+    <c:url value="get.svn" var="showUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
     </c:url>
 
-    <c:url value="getthumb.svn" var="getThumbUrl" >
+    <c:url value="getthumb.svn" var="getThumbUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
     </c:url>
 
-    <br/>
-
-    <c:forEach items="${thumbnailentries}" var="entry">
-      <p>
-        <b>${entry}</b><br/>
-        <a href="${downloadUrl}&path=${entry}&disp=inline">
-          <img src="${getThumbUrl}&path=${entry}" alt="Thumbnail of ${entry}" border="0"/>
-        </a>
-      </p>
-    </c:forEach>
+    <p>
+      <a href="${showUrl}&disp=inline">
+        <img src="${getThumbUrl}" alt="Thumbnail" border="0"/>
+      </a>
+    </p>
 
     <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>

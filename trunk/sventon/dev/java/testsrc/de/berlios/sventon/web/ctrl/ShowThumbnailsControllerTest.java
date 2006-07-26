@@ -4,7 +4,7 @@ import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.web.ctrl.GetController;
-import de.berlios.sventon.web.ctrl.ShowThumbnailController;
+import de.berlios.sventon.web.ctrl.ShowThumbnailsController;
 import junit.framework.TestCase;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class ShowThumbnailControllerTest extends TestCase {
+public class ShowThumbnailsControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
     SVNBaseCommand command = new SVNBaseCommand();
-    ShowThumbnailController controller = new ShowThumbnailController();
+    ShowThumbnailsController controller = new ShowThumbnailsController();
 
     final Properties mimeMappings = new Properties();
     mimeMappings.setProperty("jpg", "image/jpg");

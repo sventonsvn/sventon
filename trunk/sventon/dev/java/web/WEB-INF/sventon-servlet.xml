@@ -209,7 +209,7 @@
     </property>
   </bean>
 
-  <bean id="showThumbnailController" class="de.berlios.sventon.web.ctrl.ShowThumbnailController"
+  <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController"
         parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
@@ -239,8 +239,20 @@
     <property name="imageUtil">
       <ref local="imageUtil"/>
     </property>
+  </bean>
+
+  <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController" parent="abstractController">
+    <property name="validator">
+      <ref local="svnBaseCommandValidator"/>
+    </property>
+    <property name="imageUtil">
+      <ref local="imageUtil"/>
+    </property>
     <property name="objectCache">
       <ref local="objectCache"/>
+    </property>
+    <property name="imageFormatName">
+      <value>png</value>
     </property>
   </bean>
 
@@ -289,7 +301,8 @@
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>
         <prop key="/config.svn">configurationController</prop>
-        <prop key="/showthumbs.svn">showThumbnailController</prop>
+        <prop key="/getthumb.svn">getThumbnailController</prop>
+        <prop key="/showthumbs.svn">showThumbnailsController</prop>
         <prop key="/diff.svn">diffController</prop>
         <prop key="/diffprev.svn">diffPreviousController</prop>
         <prop key="/goto.svn">goToController</prop>
@@ -330,7 +343,7 @@
       <value>true</value>
     </constructor-arg>
     <constructor-arg index="3">
-      <value>false</value>
+      <value>true</value>
     </constructor-arg>
     <constructor-arg index="4">
       <value>0</value>

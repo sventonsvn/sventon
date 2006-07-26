@@ -93,19 +93,27 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       } else {
         model.putAll(handleTextFile(repository, svnCommand, revision, properties));
       }
+      return new ModelAndView("showtextfile", model);
+
     } else {
       // It's a binary file
       logger.debug("Binary file detected");
       model.put("isBinary", true);  // Indicates that the file is in binary format.
-      model.put("isImage", imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath())));
 
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
           matches(archiveFileExtensionPattern)) {
         logger.debug("Binary file as an archive file");
         model.putAll(handleArchiveFile(repository, svnCommand, revision));
+        return new ModelAndView("showarchivefile", model);
+      } else {
+        if (imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+          model.put("isImage", true);
+          return new ModelAndView("showimagefile", model);
+        }
+        model.put("isImage", false); // TODO: needed?
+        return new ModelAndView("showbinaryfile", model);
       }
     }
-    return new ModelAndView("showfile", model);
   }
 
   /**
