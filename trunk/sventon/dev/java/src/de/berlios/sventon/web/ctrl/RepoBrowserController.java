@@ -63,7 +63,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
       directoryListing = fileExtensionFilter.filter(RepositoryEntry.createEntryCollection(entries, completePath, locks));
     }
 
-    final FileExtensionList fileExtensionList = new FileExtensionList(directoryListing);
+    final FileExtensionList fileExtensionList = new FileExtensionList(entries);
     logger.debug("Existing extensions in dir: " + fileExtensionList.getExtensions());
 
     Collections.sort(directoryListing, new RepositoryEntryComparator(NAME, true));
