@@ -52,9 +52,9 @@
               <tr>
                 <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision ${diffCommand.fromRevision}</th>
+                <th width="50%">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
                 <th>&nbsp;</th>
-                <th width="50%">Revision ${diffCommand.toRevision}</th>
+                <th width="50%">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <%
                 int diffCount = 0;

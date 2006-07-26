@@ -11,16 +11,16 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.DiffCreator;
 import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.diff.DiffProducer;
+import de.berlios.sventon.web.command.DiffCommand;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -28,16 +28,18 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The DiffController generates a diff between two repository entries.
+ * Generates a unified diff between two repository entries.
  *
  * @author jesper@users.berlios.de
  */
-public class DiffController extends AbstractSVNTemplateController implements Controller {
+public class UnifiedDiffController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -47,7 +49,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
                                    final HttpServletResponse response, final BindException exception) throws Exception {
 
     final String[] entries = RequestUtils.getStringParameters(request, "entry");
-    logger.debug("Diffing file contents for: " + svnCommand);
+    logger.debug("Unified diffing file contents for: " + svnCommand);
     final Map<String, Object> model = new HashMap<String, Object>();
 
     try {
@@ -59,7 +61,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       model.put("diffException", dex.getMessage());
     }
 
-    return new ModelAndView("diff", model);
+    return new ModelAndView("unifieddiff", model);
   }
 
   /**
@@ -73,8 +75,10 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    *         <li><i>leftFileContents</i>, <code>List</code> of <code>SourceLine</code>s for the left (from) file.</li>
    *         <li><i>rightFileContents</i>, <code>List</code> of <code>SourceLine</code>s for the right (to) file.</li>
    *         </ul>
-   * @throws DiffException if unable to produce diff.
-   * @throws SVNException  if a subversion error occurs.
+   * @throws de.berlios.sventon.diff.DiffException
+   *          if unable to produce diff.
+   * @throws org.tmatesoft.svn.core.SVNException
+   *          if a subversion error occurs.
    */
   protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand)
       throws DiffException, SVNException {
@@ -112,14 +116,15 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       repository.getFile(diffCommand.getToPath(), diffCommand.getToRevision(), null, outStream);
       rightLines = StringEscapeUtils.escapeHtml(outStream.toString());
 
-      final KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
-          getRepositoryConfiguration().getUrl() + diffCommand.getFromPath());
-      final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
-          getRepositoryConfiguration().getUrl() + diffCommand.getToPath());
-
-      final DiffCreator differ = new DiffCreator(leftLines, fromFileKeywordHandler, rightLines, toFileKeywordHandler);
-      model.put("leftFileContents", differ.getLeft());
-      model.put("rightFileContents", differ.getRight());
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftLines.getBytes()),
+          new ByteArrayInputStream(rightLines.getBytes()), DiffCreator.ENCODING);
+      try {
+        diffProducer.doUniDiff(diffResult);
+      } catch (final IOException ioex) {
+        throw new DiffException("Unable to procude unified diff");
+      }
+      model.put("diffResult", diffResult.toString());
     } else {
       model.put("isBinary", true);  // Indicates that the file is in binary format.
       logger.info("One or both files selected for diff is in binary format. "

@@ -232,6 +232,13 @@
     </property>
   </bean>
 
+  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController"
+        parent="abstractController">
+    <property name="validator">
+      <ref local="svnBaseCommandValidator"/>
+    </property>
+  </bean>
+
   <bean id="getController" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
@@ -308,6 +315,7 @@
         <prop key="/showthumbs.svn">showThumbnailsController</prop>
         <prop key="/diff.svn">diffController</prop>
         <prop key="/diffprev.svn">diffPreviousController</prop>
+        <prop key="/unifieddiff.svn">unifiedDiffController</prop>
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
         <prop key="/showlock.svn">showLockController</prop>

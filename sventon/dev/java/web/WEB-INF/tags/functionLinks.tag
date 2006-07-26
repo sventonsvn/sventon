@@ -112,6 +112,27 @@
   <c:when test="${pageName == 'showDiff'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+
+    <c:url value="unifieddiff.svn" var="unifiedDiffUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+      <c:param name="revision" value="${command.revision}" />
+      <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
+      <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
+    </c:url>
+    <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" title="<spring:message code="unifieddiff.button.tooltip" />" onclick="javascript:parent.location='${unifiedDiffUrl}';"/>
+  </c:when>
+
+  <c:when test="${pageName == 'showUnifiedDiff'}">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+
+    <c:url value="diff.svn" var="diffUrl">
+      <c:param name="path" value="${command.path}${entry.name}" />
+      <c:param name="revision" value="${command.revision}" />
+      <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
+      <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
+    </c:url>
+    <input type="button" class="btn" value="<spring:message code="diff.button.text"/>" title="<spring:message code="diff.button.tooltip" />" onclick="javascript:parent.location='${diffUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showBlame'}">
