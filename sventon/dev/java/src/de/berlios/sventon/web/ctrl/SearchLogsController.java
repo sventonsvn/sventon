@@ -11,12 +11,9 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.SventonException;
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.LogMessage;
-import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.LogMessageComparator;
-import de.berlios.sventon.repository.cache.CamelCasePattern;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,11 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Controller used when searching for file or directory entries in the repository.
+ * Controller used when searching for log messages.
  *
  * @author jesper@users.berlios.de
  */
-public class SearchController extends AbstractSVNTemplateController implements Controller {
+public class SearchLogsController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -44,39 +41,17 @@ public class SearchController extends AbstractSVNTemplateController implements C
 
     final String searchString = RequestUtils.getStringParameter(request, "searchString");
     final String startDir = RequestUtils.getStringParameter(request, "startDir");
-    final String searchMode = RequestUtils.getStringParameter(request, "searchMode", "entries");
+
+    logger.debug("Searching logMessages for: " + searchString);
+
+    final List<LogMessage> logMessages = getCache().find(searchString);
+    Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
     final Map<String, Object> model = new HashMap<String, Object>();
+    model.put("logMessages", logMessages);
     model.put("searchString", searchString);
     model.put("startDir", startDir);
-    model.put("searchMode", searchMode);
-    model.put("isSearch", true);  // Indicates that path should be shown in browser view.
-
-    logger.debug("Search mode is: " + searchMode);
-    if ("entries".equals(searchMode)) {
-      logger.debug("Searching cache for [" + searchString + "] in directory [" + startDir + "]");
-
-      final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(),
-          RepositoryEntry.class);
-
-      if (searchString.toUpperCase().equals(searchString)) {
-        logger.debug("Search string was in upper case only - performing CamelCase cache search");
-        entries.addAll(getCache().findEntryByCamelCase(new CamelCasePattern(searchString), startDir));
-      } else {
-        entries.addAll(getCache().findEntry(searchString, startDir));
-      }
-      model.put("svndir", entries);
-    } else if ("logMessages".equals(searchMode)) {
-      logger.debug("Searching logMessages for: " + searchString);
-
-      final List<LogMessage> logMessages = Collections.checkedList(new ArrayList<LogMessage>(),
-          LogMessage.class);
-      logMessages.addAll(getCache().find(searchString));
-      Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
-      model.put("logMessages", logMessages);
-    } else {
-      throw new SventonException("Illegal searchMode: " + searchMode);
-    }
+    model.put("isLogSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);
   }
 }

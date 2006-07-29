@@ -79,7 +79,7 @@ public class DiskCache extends EntryCache {
     } else {
       // No serialized cachefile exsisted - initialize an empty one.
       setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
-          new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
+          new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)),
           RepositoryEntry.class));
     }
   }

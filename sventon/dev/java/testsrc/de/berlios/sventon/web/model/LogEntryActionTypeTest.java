@@ -1,6 +1,7 @@
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.model;
 
 import junit.framework.TestCase;
+import de.berlios.sventon.web.model.LogEntryActionType;
 
 public class LogEntryActionTypeTest extends TestCase {
 

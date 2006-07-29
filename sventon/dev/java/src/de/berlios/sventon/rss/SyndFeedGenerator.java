@@ -13,7 +13,7 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
-import de.berlios.sventon.web.ctrl.LogEntryActionType;
+import de.berlios.sventon.web.model.LogEntryActionType;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.apache.commons.lang.StringUtils;

@@ -124,7 +124,13 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
       } catch (final IOException ioex) {
         throw new DiffException("Unable to procude unified diff");
       }
-      model.put("diffResult", diffResult.toString());
+
+      final String diffResultString = diffResult.toString();
+      if ("".equals(diffResultString)) {
+        throw new DiffException("Files are identical.");
+      }
+
+      model.put("diffResult", diffResultString);
     } else {
       model.put("isBinary", true);  // Indicates that the file is in binary format.
       logger.info("One or both files selected for diff is in binary format. "

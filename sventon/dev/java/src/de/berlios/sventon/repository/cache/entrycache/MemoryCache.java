@@ -32,7 +32,7 @@ public class MemoryCache extends EntryCache {
   public MemoryCache() {
     logger.info("Initializing Memorycache");
     setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
-        new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false)),
+        new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)),
         RepositoryEntry.class));
   }
 

@@ -15,7 +15,6 @@ public class AllTests {
     suite.addTestSuite(ImageScalerTest.class);
     suite.addTestSuite(ImageUtilTest.class);
     suite.addTestSuite(PathUtilTest.class);
-    suite.addTestSuite(ZipUtilTest.class);
     return suite;
   }
 

@@ -11,16 +11,16 @@
  */
 package de.berlios.sventon.repository;
 
+import de.berlios.sventon.logging.SVNLog4JAdapter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.StringUtils;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
-
-import de.berlios.sventon.logging.SVNLog4JAdapter;
 
 import java.io.File;
 
@@ -107,6 +107,7 @@ public class RepositoryConfiguration {
     logger.info("Configuring SVN Repository");
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
+    FSRepositoryFactory.setup();
   }
 
   /**

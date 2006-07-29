@@ -69,10 +69,18 @@ function doSearch(formName) {
   // If no search string is entered, no action is taken.
   if (formName.searchString.value == '') {
     return false;
-  } else if (formName.searchString.value.length < 3) {
-    return searchWarning();
   } else {
-    return true;
+
+    if (getCheckedValue(formName.elements['searchMode']) == 'entries') {
+      formName.action = 'searchentries.svn';
+    } else {
+      formName.action = 'searchlogs.svn';
+    }
+    if (formName.searchString.value.length < 3) {
+      return searchWarning();
+    } else {
+      return true;
+    }
   }
 }
 
@@ -183,6 +191,28 @@ function flatteningWarning() {
 // function to display warning in case search string is too short.
 function searchWarning() {
   return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
+}
+
+// returns the value of the radio button that is checked
+// returns an empty string if none are checked, or there are no radio buttons
+function getCheckedValue(radioObj) {
+  if (!radioObj) {
+    return "";
+  }
+  var radioLength = radioObj.length;
+  if (radioLength == undefined) {
+    if(radioObj.checked) {
+      return radioObj.value;
+    } else {
+      return "";
+    }
+  }
+  for (var i = 0; i < radioLength; i++) {
+    if(radioObj[i].checked) {
+      return radioObj[i].value;
+    }
+  }
+  return "";
 }
 
 // returns number of checked entries.

@@ -62,7 +62,6 @@ public class ConfigurationController extends AbstractFormController {
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "svn.allowZipDownloads";
 
   protected ConfigurationController() {
-    // TODO: Move to XML-file?
     setCommandClass(ConfigCommand.class);
     setBindOnNewForm(true);
     setSessionForm(false);

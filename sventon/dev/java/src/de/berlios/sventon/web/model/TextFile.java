@@ -9,14 +9,14 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.model;
 
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.content.LineNumberAppender;
+import de.berlios.sventon.repository.RepositoryConfiguration;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.repository.RepositoryConfiguration;
 
 import java.io.IOException;
 import java.util.Map;

@@ -1,7 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[591] Added: Feature #2420 - File extension filtering in repobrowser
+[594] Added: Feature #2417 - Search result order by.
+[591] Added: Feature #2420 - File extension filtering in repobrowser.
 [590] Added: Feature #1868 - Unified diff view.
 [563] Added: Feature #2259 - Revision info cache.
 [552] Added: Upgraded to JavaSVN 1.1.0beta2.

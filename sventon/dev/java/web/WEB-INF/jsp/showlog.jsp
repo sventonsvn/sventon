@@ -12,8 +12,8 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
-<%@ page import="de.berlios.sventon.web.ctrl.LogEntryActionType"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
+<%@ page import="de.berlios.sventon.web.model.LogEntryActionType"%>
 
 <html>
   <head>
@@ -65,7 +65,7 @@
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
-          <jsp:useBean id="entry" type="de.berlios.sventon.web.ctrl.LogEntryBundle" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.web.model.LogEntryBundle" />
 
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
             <c:choose>

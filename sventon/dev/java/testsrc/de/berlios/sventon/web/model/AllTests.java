@@ -1,4 +1,4 @@
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.model;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -11,9 +11,8 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(GetControllerTest.class);
-    suite.addTestSuite(ShowFileControllerTest.class);
-    suite.addTestSuite(ShowThumbnailsControllerTest.class);
+    suite.addTestSuite(FileExtensionListTest.class);
+    suite.addTestSuite(LogEntryActionTypeTest.class);
     return suite;
   }
 

@@ -47,7 +47,7 @@ public class EntryCacheViewer {
     System.out.println("Cached revision: " + cachedRevision);
     System.out.println("--------------------------------------------------------");
 
-    Collections.sort(new ArrayList<RepositoryEntry>(entries), new RepositoryEntryComparator(RepositoryEntryComparator.FULL_NAME, false));
+    Collections.sort(new ArrayList<RepositoryEntry>(entries), new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false));
 
     for (RepositoryEntry entry : entries) {
       System.out.println(entry);
