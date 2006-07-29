@@ -39,9 +39,9 @@
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
-<form name="searchForm" action="search.svn" method="post" onsubmit="return doSearch(searchForm);">
+<form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
 <table class="sventonFunctionLinksTable" border="0">
-  <tr><td>
+  <tr><td style="white-space: nowrap;">
 
 <c:choose>
 
@@ -91,10 +91,10 @@
         </c:choose>
       </c:when>
     </c:choose>
-    <c:if test="${!isFlatten && !isSearch}">
+    <c:if test="${!isFlatten && !isEntrySearch && !isLogSearch}">
       </td>
-      <td align="right"><spring:message code="filter.text"/></td>
-      <td>
+      <td align="right" style="white-space: nowrap;"><spring:message code="filter.text"/></td>
+      <td style="white-space: nowrap;">
         <select name="filterExtension" class="sventonSelect">
           <option value="all">&lt;show all&gt;</option>
           <c:forEach items="${existingExtensions}" var="extension">
@@ -170,10 +170,10 @@
     <c:if test="${useCache}">
       <td align="right" style="white-space: nowrap;">
         <spring:message code="search.text"/>
-        <input type="radio" id="sm1" name="searchMode" class="rdo" checked value="entries"/>
-        <label for="sm1">entries</label>
-        <input type="radio" id="sm2" name="searchMode" class="rdo" value="logMessages">
-        <label for="sm2">logs</label>
+        <input type="radio" id="entrySearch" name="searchMode" class="rdo" checked value="entries"/>
+        <label for="entrySearch">entries</label>
+        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages">
+        <label for="logSearch">logs</label>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
         <c:choose>

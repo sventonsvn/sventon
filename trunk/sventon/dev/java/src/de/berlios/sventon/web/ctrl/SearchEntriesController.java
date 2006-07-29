@@ -11,10 +11,12 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
+import de.berlios.sventon.repository.cache.CamelCasePattern;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -25,10 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Controller used when flatting directory structure.
+ * Controller used when searching for file or directory entries in the repository.
+ *
  * @author jesper@users.berlios.de
  */
-public class FlattenController extends AbstractSVNTemplateController implements Controller {
+public class SearchEntriesController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -36,26 +39,31 @@ public class FlattenController extends AbstractSVNTemplateController implements 
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                    final SVNRevision revision, final HttpServletRequest request,
                                    final HttpServletResponse response, final BindException exception) throws Exception {
-    
-    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
-    // Make sure the path starts with a slash as that is the path structure of the entry cache.
-    String fromPath = svnCommand.getPath();
-    if (!fromPath.startsWith("/")) {
-      fromPath = "/" + fromPath;
-    }
+    final String searchString = RequestUtils.getStringParameter(request, "searchString");
+    final String startDir = RequestUtils.getStringParameter(request, "startDir");
 
-    logger.debug("Flattening directories below: " + fromPath);
-    entries.addAll(getCache().findDirectories(fromPath));
-    logger.debug(entries.size() + " entries found");
-
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(entries);
+    logger.debug("Searching cache for [" + searchString + "] in directory [" + startDir + "]");
+    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
+    if (isAllUpperCase(searchString)) {
+      logger.debug("Search string was in upper case only - performing CamelCase cache search");
+      entries.addAll(getCache().findEntryByCamelCase(new CamelCasePattern(searchString), startDir));
+    } else {
+      entries.addAll(getCache().findEntry(searchString, startDir));
+    }
+
+    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(entries);
     model.put("svndir", entries);
-    model.put("isFlatten", true);  // Indicates that path should be shown in browser view.
+    model.put("searchString", searchString);
+    model.put("startDir", startDir);
+    model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("repobrowser", model);
+  }
+
+  private boolean isAllUpperCase(final String string) {
+    return string.toUpperCase().equals(string);
   }
 }

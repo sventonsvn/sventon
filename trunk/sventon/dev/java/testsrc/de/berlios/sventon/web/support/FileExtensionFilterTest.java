@@ -1,6 +1,7 @@
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.support;
 
 import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.web.support.FileExtensionFilter;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;

@@ -11,11 +11,9 @@
  */
 package de.berlios.sventon.repository;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.io.Serializable;
 
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
@@ -30,67 +28,30 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
 
   private static final long serialVersionUID = -823291078109887289L;
 
-  /**
-   * Constant for comparing on name.
-   */
-  public static final int NAME = 0;
-
-  /**
-   * Constant for comparing on last author
-   */
-  public static final int AUTHOR = 1;
-
-  /**
-   * Constant for comparing on revision.
-   */
-  public static final int REVISION = 2;
-
-  /**
-   * Constant for comparing on changed date.
-   */
-  public static final int DATE = 3;
-
-  /**
-   * Constant for comparing on full name including path.
-   */
-  public static final int FULL_NAME = 4;
-
-  /**
-   * Constant for comparing on entry URL.
-   */
-  public static final int URL = 5;
+  public enum SortType {
+    NAME, AUTHOR, REVISION, DATE, FULL_NAME, URL, SIZE
+  }
 
   private boolean groupDirs = false;
 
-  private int sortType = 0;
-
-  private static final Set<Integer> legalTypes = new HashSet<Integer>();
-
-  static {
-    legalTypes.add(NAME);
-    legalTypes.add(AUTHOR);
-    legalTypes.add(REVISION);
-    legalTypes.add(DATE);
-    legalTypes.add(FULL_NAME);
-    legalTypes.add(URL);
-  }
+  private final SortType sortType;
 
   /**
    * Create a new comparator for comparing <code>RepositoryEntry</code> objects.
    * 
    * @param sortType
-   *          Entry type property to perform the comparisions on. See constants
+   *          Entry type property to perform the comparisions on. See enum constants
    *          defined in this class.
    * @param groupDirs
    *          <code>true</code> to group directories, this will sort an entry
    *          of kind <code>SVNNodeKind.DIR</code> before an entries of other
    *          kinds.
+   * @throws IllegalArgumentException if given sortType is null.
    */
-  public RepositoryEntryComparator(final int sortType, final boolean groupDirs) {
-
-    if (!legalTypes.contains(sortType))
-      throw new IllegalArgumentException("Not a valid sort type: " + sortType);
-
+  public RepositoryEntryComparator(final SortType sortType, final boolean groupDirs) {
+    if (sortType == null) {
+      throw new IllegalArgumentException("sortType cannot be null");
+    }
     this.groupDirs = groupDirs;
     this.sortType = sortType;
   }
@@ -133,6 +94,14 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
       } else {
         return revision1 < revision2 ? -1 : 1;
       }
+      case SIZE:
+        final long size1 = entry1.getSize();
+        final long size2 = entry2.getSize();
+        if (size1 == size2) {
+          return nullSafeCompare(entryName1, entryName2);
+        } else {
+          return size1 < size2 ? -1 : 1;
+        }
     case DATE:
       final Date date1 = entry1.getDate();
       final Date date2 = entry2.getDate();

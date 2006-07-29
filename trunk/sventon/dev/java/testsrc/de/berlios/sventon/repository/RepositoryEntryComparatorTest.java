@@ -1,13 +1,11 @@
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.repository.RepositoryEntry;
-import static de.berlios.sventon.repository.RepositoryEntryComparator.*;
-import de.berlios.sventon.repository.RepositoryEntryComparator;
+import static de.berlios.sventon.repository.RepositoryEntryComparator.SortType.*;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNURL;
 import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,16 +80,21 @@ public class RepositoryEntryComparatorTest extends TestCase {
     assertSame(e2, entries.get(2));
     assertSame(e3, entries.get(1));
 
+    Collections.sort(entries, new RepositoryEntryComparator(SIZE, false));
+    assertSame(e1, entries.get(0));
+    assertSame(e2, entries.get(1));
+    assertSame(e3, entries.get(2));
+
     // Tricking the constructor with an illegal type should fail fast
     try {
-      new RepositoryEntryComparator(6, false);
+      new RepositoryEntryComparator(RepositoryEntryComparator.SortType.valueOf("test"), false);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException iae) {
       // Expected
     }
 
     // null values are not OK
-    RepositoryEntryComparator comparator = new RepositoryEntryComparator(RepositoryEntryComparator.DATE, false);
+    RepositoryEntryComparator comparator = new RepositoryEntryComparator(DATE, false);
     try {
       comparator.compare(null, null);
       fail("NullPointerException expected");

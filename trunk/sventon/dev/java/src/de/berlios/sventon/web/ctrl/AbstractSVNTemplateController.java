@@ -101,7 +101,7 @@ import java.util.Map;
  * </dl>
  *
  * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de 
+ * @author jesper@users.berlios.de
  */
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
@@ -134,7 +134,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Constructor.
    */
   protected AbstractSVNTemplateController() {
-    // TODO: Move to XML-file?
     setCommandClass(SVNBaseCommand.class);
   }
 

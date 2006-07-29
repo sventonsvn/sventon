@@ -11,7 +11,8 @@
  */
 package de.berlios.sventon.util;
 
-import java.io.File;
+import javax.servlet.ServletOutputStream;
+import java.io.*;
 
 /**
  * File and directory utility class.
@@ -24,7 +25,7 @@ public final class FileUtils {
    * Deletes a directory recursively.
    *
    * @param dir Directory to delete
-   * @return If directory was successfully deleted.
+   * @return True if directory was successfully deleted.
    */
   public static boolean deleteDir(final File dir) {
     if (dir.isDirectory()) {
@@ -45,9 +46,40 @@ public final class FileUtils {
    * @param parentDir Parent directory
    * @return The temporary directory
    */
-  public static synchronized File generateTempDir(final String parentDir) {
+  public static synchronized File createTempDir(final String parentDir) {
     final File tempDir = new File(parentDir, "sventon-" + System.currentTimeMillis());
     tempDir.mkdirs();
     return tempDir;
+  }
+
+  /**
+   * Reads the given input stream and writes the buffered contents to the output.
+   *
+   * @param input  Input (source) stream
+   * @param output Output (destination) stream
+   * @throws IOException If unable to write to output stream.
+   */
+  public static void writeStream(InputStream input, ServletOutputStream output) throws IOException {
+    byte[] buffer = new byte[8192];
+    int bytesRead;
+    while ((bytesRead = input.read(buffer)) >= 0) {
+      output.write(buffer, 0, bytesRead);
+    }
+  }
+
+  /**
+   * Closes given <code>Closeable</code> instance.
+   * <b>Exceptions will be ignored.</b>
+   *
+   * @param closable
+   */
+  public static void close(final Closeable closable) {
+    if (closable != null) {
+      try {
+        closable.close();
+      } catch (IOException e) {
+        // ignore
+      }
+    }
   }
 }

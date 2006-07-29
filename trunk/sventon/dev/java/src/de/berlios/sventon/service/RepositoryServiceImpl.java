@@ -12,21 +12,20 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryConfiguration;
-import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.Cache;
+import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.export.ExportEditor;
+import de.berlios.sventon.repository.export.ExportReporterBaton;
+import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.ISVNReporterBaton;
-import org.tmatesoft.svn.core.io.ISVNEditor;
-import org.tmatesoft.svn.core.io.ISVNReporter;
-import org.tmatesoft.svn.core.io.diff.SVNDeltaProcessor;
-import org.tmatesoft.svn.core.io.diff.SVNDiffWindow;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
 
 /**
  * Service class for accessing the subversion repository.
@@ -105,7 +104,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
-      public void handleLogEntry(final SVNLogEntry logEntry) throws SVNException {
+      public void handleLogEntry(final SVNLogEntry logEntry) {
         logEntries.add(logEntry);
       }
     });
@@ -120,12 +119,12 @@ public class RepositoryServiceImpl implements RepositoryService {
     //TODO: revisit!
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (fromRevision < toRevision) {
-      for (long i = fromRevision; i <= toRevision; i++) {
-        logEntries.add(cache.getRevision(i));
+      for (long revision = fromRevision; revision <= toRevision; revision++) {
+        logEntries.add(cache.getRevision(revision));
       }
     } else {
-      for (long i = fromRevision; i >= toRevision; i--) {
-        logEntries.add(cache.getRevision(i));
+      for (long revision = fromRevision; revision >= toRevision; revision--) {
+        logEntries.add(cache.getRevision(revision));
       }
     }
     return logEntries;
@@ -142,21 +141,30 @@ public class RepositoryServiceImpl implements RepositoryService {
       exportRevision = repository.getLatestRevision();
     }
     final ISVNReporterBaton reporterBaton = new ExportReporterBaton(exportRevision);
-    final ISVNEditor exportEditor = new ExportEditor(exportDir);
+
     try {
-      for (String target : targets) {
+      for (final String target : targets) {
         final SVNNodeKind nodeKind = repository.checkPath(target, exportRevision);
+        final File entryToExport = new File(exportDir, target);
         if (nodeKind == SVNNodeKind.FILE) {
-          final File fileToExport = new File(exportDir, target);
-          fileToExport.getParentFile().mkdirs();
-          final OutputStream output = new BufferedOutputStream(new FileOutputStream(fileToExport));
+          entryToExport.getParentFile().mkdirs();
+          final OutputStream output = new BufferedOutputStream(new FileOutputStream(entryToExport));
           logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
           repository.getFile(target, exportRevision, null, output);
           output.flush();
           output.close();
         } else if (nodeKind == SVNNodeKind.DIR) {
-          logger.debug("Exporting dir [" + target + "] revision [" + exportRevision + "]");
-          repository.update(exportRevision, target, true, reporterBaton, exportEditor);
+          logger.debug("Exporting directory [" + target + "] revision [" + exportRevision + "]");
+          entryToExport.mkdirs();
+          // The update method does not accept a path, only a single file or dir
+          // Temporarily changing repository location.
+          final SVNURL originalLocation = repository.getLocation();
+          repository.setLocation(SVNURL.parseURIDecoded(originalLocation.toDecodedString()
+              + PathUtil.getPathNoLeaf(target)), false);
+          // Do the export
+          repository.update(exportRevision, target, true, reporterBaton, new ExportEditor(entryToExport.getParentFile()));
+          // Reset the repository's original location
+          repository.setLocation(originalLocation, false);
         } else {
           throw new IllegalArgumentException("Target [" + target + "] does not exist in revision [" + exportRevision + "]");
         }
@@ -185,236 +193,5 @@ public class RepositoryServiceImpl implements RepositoryService {
     this.cache = cache;
   }
 
-
-  /**
-   * ReporterBaton implementation that always reports 'empty wc' state.
-   */
-  private static class ExportReporterBaton implements ISVNReporterBaton {
-
-    private long exportRevision;
-
-    public ExportReporterBaton(long revision) {
-      exportRevision = revision;
-    }
-
-    public void report(final ISVNReporter reporter) throws SVNException {
-      /*
-      * Here empty working copy is reported.
-      *
-      * ISVNReporter includes methods that allows to report mixed-rev working copy
-      * and even let server know that some files or directories are locally missing or
-      * locked.
-      */
-      reporter.setPath("", null, exportRevision, true);
-
-      /*
-      * Don't forget to finish the report!
-      */
-      reporter.finishReport();
-    }
-  }
-
-  /**
-   * ISVNEditor implementation that will add directories and files into the target directory
-   * accordingly to update instructions sent by the server.
-   */
-  private static class ExportEditor implements ISVNEditor {
-
-    /**
-     * Logger for this class and subclasses.
-     */
-    protected final Log logger = LogFactory.getLog(getClass());
-
-    private File myRootDirectory;
-    private SVNDeltaProcessor myDeltaProcessor;
-
-    /*
-    * root - the local directory where the node tree is to be exported into.
-    */
-    public ExportEditor(final File root) {
-      myRootDirectory = root;
-      /*
-      * Utility class that will help us to transform 'deltas' sent by the
-      * server to the new files contents.
-      */
-      myDeltaProcessor = new SVNDeltaProcessor();
-    }
-
-    /*
-    * Server reports revision to which application of the further
-    * instructions will update working copy to.
-    */
-    public void targetRevision(long revision) throws SVNException {
-    }
-
-    /*
-    * Called before sending other instructions.
-    */
-    public void openRoot(long revision) throws SVNException {
-    }
-
-    /*
-    * Called when a new directory has to be added.
-    *
-    * For each 'addDir' call server will call 'closeDir' method after
-    * all children of the added directory are added.
-    *
-    * This implementation creates corresponding directory below root directory.
-    */
-    public void addDir(final String path, final String copyFromPath, final long copyFromRevision) throws SVNException {
-      final File newDir = new File(myRootDirectory, path);
-      if (!newDir.exists()) {
-        if (!newDir.mkdirs()) {
-          final SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.IO_ERROR, "error: failed to add the directory ''{0}''.", newDir);
-          throw new SVNException(err);
-        }
-      }
-    }
-
-    /*
-    * Called when there is an existing directory that has to be 'opened' either
-    * to modify this directory properties or to process other files and directories
-    * inside this directory.
-    *
-    * In case of export this method will never be called because we reported
-    * that our 'working copy' is empty and so server knows that there are
-    * no 'existing' directories.
-    */
-    public void openDir(String path, long revision) throws SVNException {
-    }
-
-    /*
-    * Instructs to change opened or added directory property.
-    *
-    * This method is called to update properties set by the user as well
-    * as those created automatically, like "svn:committed-rev".
-    * See SVNProperty class for default property names.
-    *
-    * When property has to be deleted value will be 'null'.
-    */
-    public void changeDirProperty(String name, String value) throws SVNException {
-    }
-
-    /*
-    * Called when a new file has to be created.
-    *
-    * For each 'addFile' call server will call 'closeFile' method after
-    * sending file properties and contents.
-    *
-    * This implementation creates empty file below root directory, file contents
-    * will be updated later, and for empty files may not be sent at all.
-    */
-    public void addFile(final String path, final String copyFromPath, final long copyFromRevision) throws SVNException {
-      final File file = new File(myRootDirectory, path);
-      if (file.exists()) {
-        SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.IO_ERROR, "error: exported file ''{0}'' already exists!", file);
-        throw new SVNException(err);
-      }
-      try {
-        file.createNewFile();
-      } catch (IOException e) {
-        final SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.IO_ERROR, "error: cannot create new  file ''{0}''", file);
-        throw new SVNException(err);
-      }
-    }
-
-    /*
-    * Called when there is an existing files that has to be 'opened' either
-    * to modify file contents or properties.
-    *
-    * In case of export this method will never be called because we reported
-    * that our 'working copy' is empty and so server knows that there are
-    * no 'existing' files.
-    */
-    public void openFile(final String path, final long revision) throws SVNException {
-    }
-
-    /*
-    * Instructs to add, modify or delete file property.
-    * In this example we skip this instruction, but 'real' export operation
-    * may inspect 'svn:eol-style' or 'svn:mime-type' property values to
-    * transfor file contents propertly after receiving.
-    */
-    public void changeFileProperty(final String path, final String name, final String value) throws SVNException {
-    }
-
-    /*
-    * Called before sending 'delta' for a file. Delta may include instructions
-    * on how to create a file or how to modify existing file. In this example
-    * delta will always contain instructions on how to create a new file and so
-    * we set up deltaProcessor with 'null' base file and target file to which we would
-    * like to store the result of delta application.
-    */
-    public void applyTextDelta(final String path, final String baseChecksum) throws SVNException {
-      myDeltaProcessor.applyTextDelta(null, new File(myRootDirectory, path), false);
-    }
-
-    /*
-    * Server sends deltas in form of 'diff windows'. Depending on the file size
-    * there may be several diff windows. Utility class SVNDeltaProcessor process
-    * these windows for us.
-    */
-    public OutputStream textDeltaChunk(final String path, final SVNDiffWindow diffWindow) throws SVNException {
-      return myDeltaProcessor.textDeltaChunk(diffWindow);
-    }
-
-    /*
-    * Called when all diff windows (delta) is transferred.
-    */
-    public void textDeltaEnd(final String path) throws SVNException {
-      myDeltaProcessor.textDeltaEnd();
-    }
-
-    /*
-    * Called when file update is completed.
-    * This call always matches addFile or openFile call.
-    */
-    public void closeFile(final String path, final String textChecksum) throws SVNException {
-      logger.debug("Exported: " + path);
-    }
-
-    /*
-    * Called when all child files and directories are processed.
-    * This call always matches addDir, openDir or openRoot call.
-    */
-    public void closeDir() throws SVNException {
-    }
-
-    /*
-    * Insturcts to delete an entry in the 'working copy'. Of course will not be
-    * called during export operation.
-    */
-    public void deleteEntry(final String path, final long revision) throws SVNException {
-    }
-
-    /*
-    * Called when directory at 'path' should be somehow processed,
-    * but authenticated user (or anonymous user) doesn't have enough
-    * access rights to get information on this directory (properties, children).
-    */
-    public void absentDir(final String path) throws SVNException {
-    }
-
-    /*
-    * Called when file at 'path' should be somehow processed,
-    * but authenticated user (or anonymous user) doesn't have enough
-    * access rights to get information on this file (contents, properties).
-    */
-    public void absentFile(final String path) throws SVNException {
-    }
-
-    /*
-    * Called when update is completed.
-    */
-    public SVNCommitInfo closeEdit() throws SVNException {
-      return null;
-    }
-
-    /*
-    * Called when update is completed with an error or server
-    * requests client to abort update operation.
-    */
-    public void abortEdit() throws SVNException {
-    }
-  }
 }
+

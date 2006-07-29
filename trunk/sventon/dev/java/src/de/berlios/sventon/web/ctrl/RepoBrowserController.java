@@ -12,9 +12,10 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RepositoryEntryComparator;
-import static de.berlios.sventon.repository.RepositoryEntryComparator.NAME;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.FileExtensionList;
+import de.berlios.sventon.web.support.FileExtensionFilter;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +26,10 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * RepoBrowserController.
@@ -41,6 +45,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
                                    final HttpServletResponse response, final BindException exception) throws Exception {
 
     final String filterExtension = RequestUtils.getStringParameter(request, "filterExtension", "all");
+
     logger.debug("filterExtension: " + filterExtension);
 
     // Update trailing / for path
@@ -55,6 +60,9 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
     final HashMap properties = new HashMap();
     final Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
 
+    final FileExtensionList fileExtensionList = new FileExtensionList(entries);
+    logger.debug("Existing extensions in dir: " + fileExtensionList.getExtensions());
+
     final List<RepositoryEntry> directoryListing;
     if ("all".equals(filterExtension)) {
       directoryListing = RepositoryEntry.createEntryCollection(entries, completePath, locks);
@@ -63,10 +71,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
       directoryListing = fileExtensionFilter.filter(RepositoryEntry.createEntryCollection(entries, completePath, locks));
     }
 
-    final FileExtensionList fileExtensionList = new FileExtensionList(entries);
-    logger.debug("Existing extensions in dir: " + fileExtensionList.getExtensions());
-
-    Collections.sort(directoryListing, new RepositoryEntryComparator(NAME, true));
+    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(directoryListing);
 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();

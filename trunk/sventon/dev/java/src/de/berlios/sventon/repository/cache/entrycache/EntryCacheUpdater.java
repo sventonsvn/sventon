@@ -12,7 +12,7 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.*;
-import de.berlios.sventon.web.ctrl.LogEntryActionType;
+import de.berlios.sventon.web.model.LogEntryActionType;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

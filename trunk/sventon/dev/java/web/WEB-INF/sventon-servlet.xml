@@ -182,7 +182,13 @@
     </property>
   </bean>
 
-  <bean id="searchController" class="de.berlios.sventon.web.ctrl.SearchController" parent="abstractController">
+  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController">
+    <property name="validator">
+      <ref local="svnBaseCommandValidator"/>
+    </property>
+  </bean>
+
+  <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -306,7 +312,8 @@
         <prop key="/showlog.svn">showLogsController</prop>
         <prop key="/showfile.svn">showFileController</prop>
         <prop key="/clearsession.svn">clearSessionController</prop>
-        <prop key="/search.svn">searchController</prop>
+        <prop key="/searchentries.svn">searchEntriesController</prop>
+        <prop key="/searchlogs.svn">searchLogsController</prop>
         <prop key="/blame.svn">blameController</prop>
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>

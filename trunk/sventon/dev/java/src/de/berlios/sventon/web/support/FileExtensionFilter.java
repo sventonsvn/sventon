@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.support;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.util.PathUtil;

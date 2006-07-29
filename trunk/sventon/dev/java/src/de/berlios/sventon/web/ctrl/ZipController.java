@@ -11,9 +11,9 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.util.FileUtils;
-import de.berlios.sventon.util.ZipUtil;
 import de.berlios.sventon.util.EncodingUtils;
+import de.berlios.sventon.util.FileUtils;
+import de.berlios.sventon.util.ZipUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
@@ -25,11 +25,11 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Controller used when downloading files or directories as a zip file.
@@ -62,51 +62,40 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
                                    final HttpServletResponse response, final BindException exception) throws Exception {
 
     ServletOutputStream output = null;
-    ZipOutputStream zos = null;
+    InputStream fileInputStream = null;
 
     final List<String> targets = Arrays.asList(RequestUtils.getStringParameters(request, "entry"));
+    final File tempExportDirectory = FileUtils.createTempDir(exportDir);
 
     try {
-
       // Export selected files/directories into java.io.tmpdir + generated UID-named dir
+      logger.debug("Using export directory: " + tempExportDirectory);
+      getRepositoryService().export(repository, targets, revision.getNumber(), tempExportDirectory);
 
-      final File tempExportDir = FileUtils.generateTempDir(exportDir);
-      logger.debug("Using export directory: " + tempExportDir);
-      getRepositoryService().export(repository, targets, revision.getNumber(), tempExportDir);
-
-      // Zip the contents of the generated UID-named dir
-      final ZipUtil zipUtil = new ZipUtil();
-      final File zipFile = new File(tempExportDir.getParentFile(), tempExportDir.getName() + ".zip");
+      final File zipFile = createZipFile(tempExportDirectory);
       logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
+      new ZipUtils().zipDir(zipFile, tempExportDirectory);
 
       output = response.getOutputStream();
       response.setContentType(DEFAULT_CONTENT_TYPE);
-      response.setHeader("Content-disposition", "attachment; filename=\"" + EncodingUtils.encodeFilename(zipFile.getName(), request) + "\"");
+      response.setHeader("Content-disposition", "attachment; filename=\""
+          + EncodingUtils.encodeFilename(zipFile.getName(), request) + "\"");
 
-      zos = new ZipOutputStream(new FileOutputStream(zipFile));
-      zos.setLevel(Deflater.BEST_COMPRESSION);
-      zipUtil.zipDir(tempExportDir, zos);
-      zos.close();
-
-      // Write the resulting zip file to the servlet output stream
-      final InputStream input = new FileInputStream(zipFile);
-      byte[] buffer = new byte[8192];
-      int bytesRead;
-      while ((bytesRead = input.read(buffer)) >= 0) {
-        output.write(buffer, 0, bytesRead);
-      }
-      input.close();
-    } catch (final IOException ioex) {
-      logger.error(ioex);
+      fileInputStream = new FileInputStream(zipFile);
+      FileUtils.writeStream(fileInputStream, output);
     } finally {
-      if (output != null) {
-        output.flush();
-        output.close();
-      }
+      FileUtils.close(fileInputStream);
+      FileUtils.close(output);
+
+      //boolean result = FileUtils.deleteDir(tempExportDirectory);
+      //logger.debug("Cleanup ok: " + result);
     }
+
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
     return null;
   }
 
-
+  private File createZipFile(final File tempDirectory) {
+    return new File(tempDirectory.getParentFile(), tempDirectory.getName() + ".zip");
+  }
 }

@@ -11,30 +11,45 @@
  */
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.util.PathUtil;
-import org.apache.commons.lang.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * SVNBaseCommand.
- * <p>
+ * <p/>
  * Command class used to bind and pass servlet parameter arguments in sventon.
- * <p>
+ * <p/>
  * A newly created instance is initialized to have path <code>/</code> and
  * revision <code>null</code>.
- * 
+ *
  * @author patrikfr@users.berlios.de
+ * @author jesper@users.berlios.de
  */
 public class SVNBaseCommand {
 
-  /** The full path. */
+  /**
+   * The full path.
+   */
   private String path = "/";
 
-  /** The revision. */
+  /**
+   * The revision.
+   */
   private String revision = null;
 
+  /**
+   * The sort type.
+   */
+  private RepositoryEntryComparator.SortType sortType = RepositoryEntryComparator.SortType.NAME;
+
+  /**
+   * Sort mode.
+   */
+  private RepositoryEntrySorter.SortMode sortMode = RepositoryEntrySorter.SortMode.ASC;
 
   /**
    * Gets the path.
@@ -48,7 +63,7 @@ public class SVNBaseCommand {
   /**
    * Set path. <code>null</code> and <code>""</code> arguments will be
    * converted <code>/</code>
-   * 
+   *
    * @param path The path to set.
    */
   public void setPath(final String path) {
@@ -69,10 +84,10 @@ public class SVNBaseCommand {
   /**
    * Set revision. Any revision is legal here (but may be rejected by the
    * validator, {@link SVNBaseCommandValidator}).
-   * <p>
+   * <p/>
    * All case variations of the logical name "HEAD" will be converted to HEAD,
    * all other revision arguments will be set as is.
-   * 
+   *
    * @param revision The revision to set.
    */
   public void setRevision(final String revision) {
@@ -86,7 +101,7 @@ public class SVNBaseCommand {
   /**
    * Get target (leaf/end) part of the <code>path</code>, it could be a file
    * or a directory.
-   * <p>
+   * <p/>
    * The returned string will have no final "/", even if it is a directory.
    *
    * @return Target part of the path.
@@ -98,7 +113,7 @@ public class SVNBaseCommand {
   /**
    * Get path, excluding the end/leaf. For complete path including target,see
    * {@link SVNBaseCommand#getPath()}.
-   * <p>
+   * <p/>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
    *
@@ -112,7 +127,7 @@ public class SVNBaseCommand {
   /**
    * Get path, excluding the leaf. For complete path including target,see
    * {@link SVNBaseCommand#getPath()}.
-   * <p>
+   * <p/>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
    *
@@ -123,56 +138,94 @@ public class SVNBaseCommand {
   }
 
   /**
+   * Gets the sort type, i.e. the field to sort on.
+   *
+   * @return Sort type
+   */
+  public RepositoryEntryComparator.SortType getSortType() {
+    return sortType;
+  }
+
+  /**
+   * Sets the sort type, i.e. which field to sort on.
+   *
+   * @param sortType Sort type
+   */
+  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
+    if (sortType != null) {
+      this.sortType = sortType;
+    }
+  }
+
+  /**
+   * Gets the sort mode, ascending or descending.
+   *
+   * @return Sort mode
+   */
+  public RepositoryEntrySorter.SortMode getSortMode() {
+    return sortMode;
+  }
+
+  /**
+   * Sets the sort mode.
+   *
+   * @param sortMode Sort mode
+   */
+  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
+    if (sortMode != null) {
+      this.sortMode = sortMode;
+    }
+  }
 
   /**
    * Return the contents of this object as a map model.
-   * <p>
+   * <p/>
    * Model data keys:
    * <ul>
-   * <li><code>completePath</code></li>
    * <li><code>revision</code></li>
    * <li><code>path</code></li>
    * </ul>
-   * 
+   *
    * @return The model map.
    */
   public Map<String, Object> asModel() {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("revision", getRevision());
     model.put("path", getPath());
+    model.put("sortType", getSortType());
+    model.put("sortMode", getSortMode());
     return model;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public String toString() {
-    return "SVNBaseCommand{path='" + path + "', " +
-    "revision='" + revision + "'}";
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    final SVNBaseCommand that = (SVNBaseCommand) o;
+
+    if (path != null ? !path.equals(that.path) : that.path != null) return false;
+    if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
+    if (sortMode != null ? !sortMode.equals(that.sortMode) : that.sortMode != null) return false;
+    if (sortType != null ? !sortType.equals(that.sortType) : that.sortType != null) return false;
+
+    return true;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj instanceof SVNBaseCommand) {
-      SVNBaseCommand o = (SVNBaseCommand) obj;
-      return (StringUtils.equals(o.path, path) && StringUtils.equals(o.revision, revision));
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public int hashCode() {
-    // TODO: Impelement!
-    return super.hashCode();
+    int result;
+    result = (path != null ? path.hashCode() : 0);
+    result = 29 * result + (revision != null ? revision.hashCode() : 0);
+    result = 29 * result + (sortType != null ? sortType.hashCode() : 0);
+    result = 29 * result + (sortMode != null ? sortMode.hashCode() : 0);
+    return result;
   }
 
+  public String toString() {
+    return "SVNBaseCommand{" +
+        "path='" + path + '\'' +
+        ", revision='" + revision + '\'' +
+        ", sortType='" + sortType + '\'' +
+        ", sortMode='" + sortMode + '\'' +
+        '}';
+  }
 }

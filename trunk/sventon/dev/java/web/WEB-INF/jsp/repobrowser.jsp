@@ -14,7 +14,6 @@
 <%@ include file="/WEB-INF/jspf/include.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
-<%@ page import="de.berlios.sventon.repository.LogMessage"%>
 
 <html>
   <head>
@@ -28,26 +27,10 @@
     <table class="sventonHeader"><tr><td>
 
   <c:choose>
-    <c:when test="${isSearch}">
-      <c:choose>
-        <c:when test="${searchMode eq 'logMessages'}">
-          Search result for - <b>${searchString}</b>
-        </c:when>
-        <c:otherwise>
-          Search result for - <b>${searchString}</b> (directory '${startDir}' and below)
-        </c:otherwise>
-      </c:choose>
-    </c:when>
-    <c:otherwise>
-      <c:choose>
-        <c:when test="${isFlatten}">
-          Flattened structure - <b>${command.target}</b> (and below)
-        </c:when>
-        <c:otherwise>
-          Repository Browser - <b>${command.target}</b>
-        </c:otherwise>
-      </c:choose>
-    </c:otherwise>
+    <c:when test="${isLogSearch}">Search result for - <b>${searchString}</b></c:when>
+    <c:when test="${isEntrySearch}">Search result for - <b>${searchString}</b> (directory '${startDir}' and below)</c:when>
+    <c:when test="${isFlatten}">Flattened structure - <b>${command.target}</b> (and below)</c:when>
+    <c:otherwise>Repository Browser - <b>${command.target}</b></c:otherwise>
   </c:choose>
 
   <c:if test="${!empty properties}">
@@ -61,7 +44,7 @@
   <ui:functionLinks pageName="repobrowse"/> 
 
   <c:choose>
-    <c:when test="${searchMode ne 'logMessages'}">
+    <c:when test="${!isLogSearch}">
       <div id="entriesDiv" class="sventonEntriesDiv">
         <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
       <!-- Needed by ASVNTC -->
@@ -72,19 +55,56 @@
         <tr>
           <th></th>
           <th></th>
-          <th>File</th>
+
+          <c:choose>
+            <c:when test="${isEntrySearch}">
+              <c:url value="searchentries.svn" var="sortUrl">
+                <c:param name="path" value="${command.path}" />
+                <c:param name="revision" value="${command.revision}" />
+                <c:param name="searchString" value="${searchString}" />
+                <c:param name="startDir" value="${startDir}" />
+              </c:url>
+            </c:when>
+            <c:when test="${isFlatten}">
+              <c:url value="flatten.svn" var="sortUrl">
+                <c:param name="path" value="${command.path}" />
+                <c:param name="revision" value="${command.revision}" />
+              </c:url>
+            </c:when>
+            <c:otherwise>
+              <c:url value="repobrowser.svn" var="sortUrl">
+                <c:param name="path" value="${command.path}" />
+                <c:param name="revision" value="${command.revision}" />
+              </c:url>
+            </c:otherwise>
+          </c:choose>
+
+          <c:set var="sortModeArrow" value="${command.sortMode eq 'ASC' ? '&uArr;' : '&dArr;'}"/>
+          <c:set var="opositeSortType" value="${command.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
+
+          <th><a href="${sortUrl}&sortType=NAME&sortMode=${opositeSortType}" style="color: #000000;">
+              <c:if test="${command.sortType eq 'NAME'}">${sortModeArrow}</c:if>File</a>
+          </th>
           <th></th>
-          <th>Size (bytes)</th>
-          <th>Revision</th>
-          <th>Author</th>
-          <th>Date</th>
+          <th><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
+            <c:if test="${command.sortType eq 'SIZE'}">${sortModeArrow}</c:if>Size (bytes)</a>
+          </th>
+          <th><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
+            <c:if test="${command.sortType eq 'REVISION'}">${sortModeArrow}</c:if>Revision</a>
+          </th>
+          <th><a href="${sortUrl}&sortType=AUTHOR&sortMode=${opositeSortType}" style="color: #000000;">
+            <c:if test="${command.sortType eq 'AUTHOR'}">${sortModeArrow}</c:if>Author</a>
+          </th>
+          <th><a href="${sortUrl}&sortType=DATE&sortMode=${opositeSortType}" style="color: #000000;">
+            <c:if test="${command.sortType eq 'DATE'}">${sortModeArrow}</c:if>Date</a>
+          </th>
         </tr>
     <%
           int rowCount = 0;
           long totalSize = 0;
     %>
 
-        <c:if test="${!empty command.pathNoLeaf && !isSearch && !isFlatten}">
+        <c:if test="${!empty command.pathNoLeaf && !isEntrySearch && !isLogSearch && !isFlatten}">
           <c:url value="repobrowser.svn" var="backUrl">
             <c:param name="path" value="${command.pathNoLeaf}" />
           </c:url>
@@ -127,7 +147,7 @@
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
               <c:choose>
-                <c:when test="${isSearch || isFlatten}">
+                <c:when test="${isLogSearch || isEntrySearch || isFlatten}">
                   <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
                 </c:when>
                 <c:otherwise>
@@ -139,7 +159,7 @@
             <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
             <td class="sventonCol3">
               <c:choose>
-                <c:when test="${isSearch || isFlatten}">
+                <c:when test="${isLogSearch || isEntrySearch || isFlatten}">
                   <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                   </a>
@@ -202,7 +222,6 @@
             int hitCount = 0;
           %>
           <c:forEach items="${logMessages}" var="logMessage">
-          <jsp:useBean id="logMessage" type="LogMessage" />
             <c:url value="revinfo.svn" var="showRevInfoUrl">
               <c:param name="revision" value="${logMessage.revision}" />
             </c:url>

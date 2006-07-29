@@ -9,29 +9,27 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.model;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Handles text files in a raw, unprocessed, format.
- * The characters have to be converted into web safe characters using
- * {@link org.apache.commons.lang.StringEscapeUtils} <code>escapeHtml</code>.
+ * Abstract file represenation class.
  *
  * @author jesper@users.berlios.de
  */
-public class RawTextFile extends AbstractFile {
+public class AbstractFile {
+
+  final Map<String, Object> model = new HashMap<String, Object>();
 
   /**
-   * Constructor.
+   * Gets the model.
    *
-   * @param contents The file contents.
+   * @return The model.
    */
-  public RawTextFile(final String contents) throws IOException {
-    model.put("fileContents", StringEscapeUtils.escapeHtml(contents));
-    model.put("isRawFormat", true);
+  public Map<String, Object> getModel() {
+    return model;
   }
 
 }
