@@ -542,6 +542,15 @@
     </property>
   </bean>
 
+  <bean id="exportFileCleaner" class="de.berlios.sventon.repository.export.ExportFileCleaner">
+    <property name="exportRootDir">
+      <ref local="sventonExportDir"/>
+    </property>
+    <property name="timeThreshold">
+      <value>600000</value>
+    </property>
+  </bean>
+
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="encoding">
       <ref local="defaultEncoding"/>
@@ -570,17 +579,16 @@
   <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
   <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
-  <!--Start scheduling automatically on context startup -->
   <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="waitForJobsToCompleteOnShutdown" value="true"/>
     <property name="triggers">
       <list>
         <ref local="cacheUpdateTrigger"/>
+        <ref local="exportFileCleanerTrigger"/>
       </list>
     </property>
   </bean>
 
-  <!-- Registered by the 'scheduler' bean -->
   <bean id="cacheUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail">
       <ref local="cacheUpdateJobDetail"/>
@@ -589,10 +597,22 @@
     <property name="repeatInterval" value="600000"/>
   </bean>
 
-  <!-- Convenient way of invoking existing business logic instead of writing a job -->
+  <bean id="exportFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail">
+      <ref local="exportFileCleanerJobDetail"/>
+    </property>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
   <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
     <property name="targetObject" ref="revisionObservable"/>
     <property name="targetMethod" value="update"/>
+  </bean>
+
+  <bean id="exportFileCleanerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="exportFileCleaner"/>
+    <property name="targetMethod" value="clean"/>
   </bean>
 
 </beans>
