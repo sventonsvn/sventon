@@ -11,12 +11,14 @@
  */
 package de.berlios.sventon.service;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.util.List;
 import java.io.File;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service class for accessing the subversion repository.
@@ -93,6 +95,66 @@ public interface RepositoryService {
    * @param revision   Revision to export
    * @param exportDir  Destination directory
    */
-  void export(final SVNRepository repository, final List<String> targets, final long revision, final File exportDir) throws SVNException;
+  void export(final SVNRepository repository, final List<String> targets, final long revision, final File exportDir)
+      throws SVNException;
+
+  /**
+   * Gets a file from the repository.
+   *
+   * @param repository The repository
+   * @param path       Target to get
+   * @param revision   The revision
+   * @param output     Output stream to write contents to
+   * @throws SVNException if a subversion error occur
+   */
+  void getFile(final SVNRepository repository, final String path, final long revision, final OutputStream output)
+      throws SVNException;
+
+  /**
+   * Gets a file from the repository.
+   *
+   * @param repository The repository
+   * @param path       Target to get
+   * @param revision   The revision
+   * @param output     Output stream to write contents to
+   * @param properties The map to be populated with the file's properties
+   * @throws SVNException if a subversion error occur
+   */
+  void getFile(final SVNRepository repository, final String path, final long revision, final OutputStream output,
+               final Map properties) throws SVNException;
+
+  /**
+   * Gets a file's properties from the repository.
+   *
+   * @param repository The repository
+   * @param path       Target of target to get properties for
+   * @param revision   The revision
+   * @param properties The map to be populated with the file's properties
+   * @throws SVNException if a subversion error occur
+   */
+  void getFileProperties(final SVNRepository repository, final String path, final long revision, final Map properties)
+      throws SVNException;
+
+  /**
+   * Checks whether given target file is a text file, by inspecting it's mime-type property.
+   *
+   * @param repository The repository
+   * @param path       Target of target to get properties for
+   * @param revision   The revision
+   * @return <code>true</code> if file is a text file, <code>false</code> if not.
+   * @throws SVNException if a subversion error occur
+   */
+  boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException;
+
+  /**
+   * Gets a file's checksum.
+   *
+   * @param repository The repository
+   * @param path       Target of target to get properties for
+   * @param revision   The revision
+   * @return The file's checksum
+   * @throws SVNException if a subversion error occur
+   */
+  String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
 }

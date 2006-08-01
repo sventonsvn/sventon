@@ -35,7 +35,7 @@
     <br/>
     <ui:functionLinks pageName="showTextFile"/>
 
-<pre class="codeBlock"><c:out value="${fileContents}" escapeXml="false"/></pre>
+<pre class="codeBlock"><c:out value="${fileContent}" escapeXml="false"/></pre>
 
     <br>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>

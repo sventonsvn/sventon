@@ -1,6 +1,7 @@
 package de.berlios.sventon.diff;
 
 import junit.framework.TestCase;
+import de.berlios.sventon.web.model.RawTextFile;
 
 public class DiffCreatorTest extends TestCase {
 
@@ -28,7 +29,7 @@ public class DiffCreatorTest extends TestCase {
             "OneMore=2\n" +
             "OneMore=3\n";
 
-    final DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    final DiffCreator diffCreator = new DiffCreator(new RawTextFile(leftString), null, new RawTextFile(rightString), null);
     assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
   }
 
@@ -133,7 +134,7 @@ public class DiffCreatorTest extends TestCase {
 < * $Id$
 
 */
-    final DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    final DiffCreator diffCreator = new DiffCreator(new RawTextFile(leftString), null, new RawTextFile(rightString), null);
     assertEquals(diffCreator.getLeft().size(), diffCreator.getRight().size());
 
     StringBuilder sb = new StringBuilder();
@@ -203,7 +204,7 @@ public class DiffCreatorTest extends TestCase {
 <OneMore=8
 
 */
-    final DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    final DiffCreator diffCreator = new DiffCreator(new RawTextFile(leftString), null, new RawTextFile(rightString), null);
 //    System.out.println("diff.getLeft() = " + diff.getLeft());
 //    System.out.println("diff.getRight() = " + diff.getRight());
 
@@ -288,7 +289,7 @@ public class DiffCreatorTest extends TestCase {
 >OneMore=9
 
 */
-    final DiffCreator diffCreator = new DiffCreator(leftString, null, rightString, null);
+    final DiffCreator diffCreator = new DiffCreator(new RawTextFile(leftString), null, new RawTextFile(rightString), null);
 
 //    System.out.println("diff.getDiffResultString() = " + diff.getDiffResultString());
 
@@ -317,7 +318,7 @@ public class DiffCreatorTest extends TestCase {
     final String rightString = "[.ShellClassInfo]\n";
 
     try {
-      new DiffCreator(leftString, null, rightString, null);
+      new DiffCreator(new RawTextFile(leftString), null, new RawTextFile(rightString), null);
       fail("Should raise DiffException");
     } catch (DiffException de) {
       // expected

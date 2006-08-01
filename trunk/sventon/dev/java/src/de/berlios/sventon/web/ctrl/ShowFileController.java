@@ -16,8 +16,8 @@ import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.ArchiveFile;
+import de.berlios.sventon.web.model.HTMLDecoratedTextFile;
 import de.berlios.sventon.web.model.RawTextFile;
-import de.berlios.sventon.web.model.TextFile;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -75,25 +75,20 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     final HashMap properties = new HashMap();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-    // Get the file's properties without requesting the content.
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
+    getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber(), properties);
     logger.debug(properties);
     model.put("properties", properties);
     model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
+      getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
       if ("raw".equals(formatParameter)) {
-        // Get the file's content. We can skip the properties in this case.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
-        model.putAll(new RawTextFile(outStream.toString()).getModel());
+        model.putAll(new RawTextFile(outStream.toString(), true).getModel());
       } else {
-        // Get the file's content. We can skip the properties in this case.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
-        model.putAll(new TextFile(outStream.toString(), properties, getRepositoryConfiguration(), colorer,
-            svnCommand).getModel());
+        model.putAll(new HTMLDecoratedTextFile(outStream.toString(), properties, svnCommand.getPath(),
+            repository.getLocation().toDecodedString(), colorer).getModel());
       }
       return new ModelAndView("showtextfile", model);
-
     } else {
       // It's a binary file
       logger.debug("Binary file detected");
@@ -101,8 +96,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
           matches(archiveFileExtensionPattern)) {
         logger.debug("Binary file as an archive file");
-        // Get the file's content. We can skip the properties in this case.
-        repository.getFile(svnCommand.getPath(), revision.getNumber(), null, outStream);
+        getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
         model.putAll(new ArchiveFile(outStream.toByteArray()).getModel());
         return new ModelAndView("showarchivefile", model);
       } else {

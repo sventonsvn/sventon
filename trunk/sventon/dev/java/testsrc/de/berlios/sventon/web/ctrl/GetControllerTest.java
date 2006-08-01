@@ -1,29 +1,29 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.web.ctrl.GetController;
+import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import java.util.Properties;
-import java.util.Map;
 import java.io.OutputStream;
+import java.util.Map;
+import java.util.Properties;
 
 public class GetControllerTest extends TestCase {
-
 
   public void testSvnHandleGetImageAsInline() throws Exception {
     SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     GetController ctrl = new GetController();
     ctrl.setImageUtil(getImageUtil());
+    ctrl.setRepositoryService(new RepositoryServiceImpl());
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
@@ -41,6 +41,7 @@ public class GetControllerTest extends TestCase {
     SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     GetController ctrl = new GetController();
+    ctrl.setRepositoryService(new RepositoryServiceImpl());
     ModelAndView modelAndView;
 
     MockHttpServletRequest req = new MockHttpServletRequest();
