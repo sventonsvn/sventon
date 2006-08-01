@@ -13,6 +13,8 @@ public class AllTests {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(FileExtensionListTest.class);
     suite.addTestSuite(LogEntryActionTypeTest.class);
+    suite.addTestSuite(ArchiveFileTest.class);
+    suite.addTestSuite(RawTextFileTest.class);
     return suite;
   }
 

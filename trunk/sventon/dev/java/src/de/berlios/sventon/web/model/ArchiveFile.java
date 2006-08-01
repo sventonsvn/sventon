@@ -28,10 +28,10 @@ public class ArchiveFile extends AbstractFile {
   /**
    * Constructor.
    *
-   * @param contents The file contents.
+   * @param content The file contents.
    */
-  public ArchiveFile(final byte[] contents) throws IOException {
-    final ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(contents));
+  public ArchiveFile(final byte[] content) throws IOException {
+    final ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
     final List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
     ZipEntry zipEntry;
     while ((zipEntry = zip.getNextEntry()) != null) {
@@ -41,7 +41,7 @@ public class ArchiveFile extends AbstractFile {
   }
 
   /**
-   * {@inheritDoc} 
+   * {@inheritDoc}
    */
   public String getContent() {
     throw new UnsupportedOperationException();
