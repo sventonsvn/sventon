@@ -28,13 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller used when downloading single files.
- *
+ * <p/>
  * Non-image files will be gotten as <i>attachment</i> using it's corresponding
  * mime-type or <i>application/octet-stream</i> if unknown.
- *
+ * <p/>
  * Image files can be gotten in two different ways.
  * <ul>
-  * <li><b>inline</b> - Gets the image with correct content type.
+ * <li><b>inline</b> - Gets the image with correct content type.
  * Image will be displayed inline in browser.</li>
  * <li><b>attachment</b> - Gets the image with content type
  * application/octetstream. A download dialog will appear in browser.</li>
@@ -85,7 +85,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
     response.setHeader("Content-disposition", "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
+    getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);
     output.flush();
     output.close();
   }
@@ -107,7 +107,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     }
     response.setHeader("Content-disposition", "attachment; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), null, output);
+    getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);
     output.flush();
     output.close();
   }

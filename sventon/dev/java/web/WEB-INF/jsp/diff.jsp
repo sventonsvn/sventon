@@ -43,8 +43,8 @@
       <c:otherwise>
         <c:choose>
           <c:when test="${!isBinary}">
-            <c:set var="leftLines" value="${leftFileContents}" />
-            <c:set var="rightLines" value="${rightFileContents}" />
+            <c:set var="leftLines" value="${leftFileContent}" />
+            <c:set var="rightLines" value="${rightFileContent}" />
             <jsp:useBean id="leftLines" type="java.util.ArrayList" />
             <jsp:useBean id="rightLines" type="java.util.ArrayList" />
 

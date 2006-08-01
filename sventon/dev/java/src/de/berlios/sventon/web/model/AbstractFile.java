@@ -15,13 +15,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract file represenation class.
+ * Abstract file representation class.
  *
  * @author jesper@users.berlios.de
  */
 public class AbstractFile {
 
+  /**
+   * Model map.
+   */
   final Map<String, Object> model = new HashMap<String, Object>();
+
+  /**
+   * The file content.
+   */
+  protected String content;
 
   /**
    * Gets the model.
@@ -30,6 +38,15 @@ public class AbstractFile {
    */
   public Map<String, Object> getModel() {
     return model;
+  }
+
+  /**
+   * Gets the file content.
+   *
+   * @return File content.
+   */
+  public String getContent() {
+    return content;
   }
 
 }

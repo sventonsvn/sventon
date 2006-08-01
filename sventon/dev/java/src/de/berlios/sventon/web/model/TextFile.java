@@ -11,48 +11,35 @@
  */
 package de.berlios.sventon.web.model;
 
-import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.content.LineNumberAppender;
-import de.berlios.sventon.repository.RepositoryConfiguration;
-import de.berlios.sventon.util.PathUtil;
-import de.berlios.sventon.web.command.SVNBaseCommand;
 
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * Handles text files.
- * Keywords will be expanded and the file will be colorized
- * depending of it's format.
+ * Represents a text file with expanded keywords.
  *
  * @author jesper@users.berlios.de
  */
-public class TextFile extends AbstractFile {
+public class TextFile extends RawTextFile {
 
   /**
    * Constructor.
    *
-   * @param contents The file contents.
+   * @param content       The file content.
+   * @param properties    The file properties
+   * @param repositoryURL The repository root URL
+   * @param path          The target path
    */
-  public TextFile(final String contents, final Map properties, final RepositoryConfiguration configuration,
-                  final Colorer colorer, final SVNBaseCommand command) throws IOException {
+  public TextFile(final String content, final Map properties, final String repositoryURL, final String path)
+      throws IOException {
 
-    String fileContents;
+    super(content);
+    final KeywordHandler keywordHandler = new KeywordHandler(properties, repositoryURL + path);
+    this.content = keywordHandler.substitute(content);
 
-    // Expand keywords, if any.
-    final KeywordHandler keywordHandler = new KeywordHandler(properties, configuration.getUrl()
-        + command.getPath());
-    fileContents = keywordHandler.substitute(contents);
-
-    final LineNumberAppender appender = new LineNumberAppender();
-    appender.setEmbedStart("<span class=\"sventonLineNo\">");
-    appender.setEmbedEnd(":&nbsp;</span>");
-    appender.setPadding(5);
-    fileContents = appender.appendTo(colorer.getColorizedContent(fileContents,
-        PathUtil.getFileExtension(command.getTarget())));
-
-    model.put("fileContents", fileContents);
+    model.put("fileContent", this.content);
+    model.put("isRawFormat", false);
   }
 
 }

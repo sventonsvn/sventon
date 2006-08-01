@@ -40,4 +40,11 @@ public class ArchiveFile extends AbstractFile {
     model.put("entries", archiveEntries);
   }
 
+  /**
+   * {@inheritDoc} 
+   */
+  public String getContent() {
+    throw new UnsupportedOperationException();
+  }
+
 }

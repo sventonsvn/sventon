@@ -87,8 +87,8 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
       FileUtils.close(fileInputStream);
       FileUtils.close(output);
 
-      //boolean result = FileUtils.deleteDir(tempExportDirectory);
-      //logger.debug("Cleanup ok: " + result);
+      boolean result = FileUtils.deleteDir(tempExportDirectory);
+      logger.debug("Cleanup ok: " + result);
     }
 
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.

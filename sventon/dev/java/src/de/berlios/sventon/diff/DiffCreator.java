@@ -14,6 +14,7 @@ package de.berlios.sventon.diff;
 import static de.berlios.sventon.diff.DiffAction.*;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.content.LineNumberAppender;
+import de.berlios.sventon.web.model.RawTextFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -36,14 +37,14 @@ public class DiffCreator {
   /**
    * Constructor.
    *
-   * @param leftContent         Left (old/from) string content to diff.
+   * @param leftFile            Left (old/from) string content to diff.
    * @param leftKeywordHandler  Left file's keyword handler.
-   * @param rightContent        Right (new/to) string content to diff.
+   * @param rightFile           Right (new/to) string content to diff.
    * @param rightKeywordHandler Right file's keyword handler.
    * @throws DiffException if IO error occurs.
    */
-  public DiffCreator(final String leftContent, final KeywordHandler leftKeywordHandler,
-                     final String rightContent, final KeywordHandler rightKeywordHandler) throws DiffException {
+  public DiffCreator(final RawTextFile leftFile, final KeywordHandler leftKeywordHandler,
+                     final RawTextFile rightFile, final KeywordHandler rightKeywordHandler) throws DiffException {
 
     String tempLine;
     BufferedReader reader;
@@ -51,8 +52,8 @@ public class DiffCreator {
     final List<String> leftSourceLines = new ArrayList<String>();
     final List<String> rightSourceLines = new ArrayList<String>();
 
-    final InputStream leftStream = new ByteArrayInputStream(leftContent.getBytes());
-    final InputStream rightStream = new ByteArrayInputStream(rightContent.getBytes());
+    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
+    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
 
     try {
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -68,15 +69,12 @@ public class DiffCreator {
       final String rightString;
 
       // Append keywords, if any.
-      if (leftKeywordHandler != null) {
-        leftString = leftKeywordHandler.substitute(leftContent);
+      if (leftKeywordHandler != null && rightKeywordHandler != null) {
+        leftString = leftKeywordHandler.substitute(leftFile.getContent());
+        rightString = rightKeywordHandler.substitute(rightFile.getContent());
       } else {
-        leftString = leftContent;
-      }
-      if (rightKeywordHandler != null) {
-        rightString = rightKeywordHandler.substitute(rightContent);
-      } else {
-        rightString = rightContent;
+        leftString = leftFile.getContent();
+        rightString = rightFile.getContent();
       }
 
       // Append line numbers

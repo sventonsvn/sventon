@@ -17,6 +17,7 @@ import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.export.ExportEditor;
 import de.berlios.sventon.repository.export.ExportReporterBaton;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.web.model.TextFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -26,6 +27,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Service class for accessing the subversion repository.
@@ -148,11 +151,16 @@ public class RepositoryServiceImpl implements RepositoryService {
         final File entryToExport = new File(exportDir, target);
         if (nodeKind == SVNNodeKind.FILE) {
           entryToExport.getParentFile().mkdirs();
-          final OutputStream output = new BufferedOutputStream(new FileOutputStream(entryToExport));
+          final OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(entryToExport));
+          final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
           logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
-          repository.getFile(target, exportRevision, null, output);
-          output.flush();
-          output.close();
+          final Map properties = new HashMap();
+          getFile(repository, target, exportRevision, outStream, properties);
+          final TextFile textFile = new TextFile(outStream.toString(), properties,
+              repository.getLocation().toDecodedString(), target);
+          fileOutputStream.write(textFile.getContent().getBytes());
+          fileOutputStream.flush();
+          fileOutputStream.close();
         } else if (nodeKind == SVNNodeKind.DIR) {
           logger.debug("Exporting directory [" + target + "] revision [" + exportRevision + "]");
           entryToExport.mkdirs();
@@ -173,6 +181,48 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.warn(ioex);
       throw new RuntimeException(ioex);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void getFile(final SVNRepository repository, final String path, final long revision,
+                      final OutputStream output) throws SVNException {
+    repository.getFile(path, revision, null, output);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void getFile(final SVNRepository repository, final String path, final long revision,
+                      final OutputStream output, final Map properties) throws SVNException {
+    repository.getFile(path, revision, properties, output);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void getFileProperties(final SVNRepository repository, final String path, final long revision,
+                                final Map properties) throws SVNException {
+    repository.getFile(path, revision, properties, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
+    final Map properties = new HashMap();
+    repository.getFile(path, revision, properties, null);
+    return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
+    final Map properties = new HashMap();
+    repository.getFile(path, revision, properties, null);
+    return (String) properties.get(SVNProperty.CHECKSUM);
   }
 
   /**

@@ -19,7 +19,6 @@ import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -29,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.HashMap;
 
 /**
  * Controller used when downloading single image files as thumbnails.
@@ -77,10 +75,8 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
 
     // Check if the thumbnail exists on the cache
-    final HashMap properties = new HashMap();
-    repository.getFile(svnCommand.getPath(), revision.getNumber(), properties, null);
-    logger.debug(properties);
-    String cacheKey = (String) properties.get(SVNProperty.CHECKSUM) + svnCommand.getPath();
+    final String checksum = getRepositoryService().getFileChecksum(repository, svnCommand.getPath(), revision.getNumber());
+    final String cacheKey = checksum + svnCommand.getPath();
     logger.debug("Using cachekey: " + cacheKey);
     final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
     if (thumbnailData != null) {
