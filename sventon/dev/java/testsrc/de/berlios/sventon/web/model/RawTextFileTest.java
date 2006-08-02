@@ -10,7 +10,7 @@ public class RawTextFileTest extends TestCase {
   public void testRawTextFile() throws Exception {
     final String content = "test file content";
     final RawTextFile file = new RawTextFile(content);
-    Map<String, Object> model = file.getModel();
+    final Map<String, Object> model = file.getModel();
     assertEquals(2, model.size());
     assertEquals(content, model.get("fileContent"));
     assertEquals(content, file.getContent());
