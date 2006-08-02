@@ -15,6 +15,8 @@ public class AllTests {
     suite.addTestSuite(LogEntryActionTypeTest.class);
     suite.addTestSuite(ArchiveFileTest.class);
     suite.addTestSuite(RawTextFileTest.class);
+    suite.addTestSuite(TextFileTest.class);
+    suite.addTestSuite(HTMLDecoratedTextFileTest.class);
     return suite;
   }
 
