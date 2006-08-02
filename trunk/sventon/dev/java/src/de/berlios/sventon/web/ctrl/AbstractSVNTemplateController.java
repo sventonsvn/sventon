@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.Cache;
@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
- * plumbing functionality such as authorization and basic repository configuration.
+ * plumbing functionality such as authorization and basic application configuration.
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
@@ -48,7 +48,7 @@ import java.util.Map;
  * <p/>
  * Workflow for this controller:
  * <ol>
- * <li>The controller inspects the repository configuration object to see if it's
+ * <li>The controller inspects the application configuration object to see if it's
  * user id and pwd have been provided during setup. If credentials are
  * configured they will be used for authorized repository access, if they do not
  * exist the controller will try to set up the repository with anonymous access.
@@ -106,9 +106,9 @@ import java.util.Map;
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   /**
-   * The repository configuration instance.
+   * The application configuration instance.
    */
-  protected RepositoryConfiguration configuration = null;
+  protected ApplicationConfiguration configuration = null;
 
   /**
    * Gateway class for accessing the caches.
@@ -145,7 +145,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
-    // If repository config is not ok - redirect to config.jsp
+    // If application config is not ok - redirect to config.jsp
     if (!configuration.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
@@ -332,20 +332,20 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Set repository configuration.
+   * Set application configuration.
    *
-   * @param configuration Configuration
+   * @param configuration ApplicationConfiguration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 
   /**
-   * Get current repository configuration.
+   * Get current application configuration.
    *
-   * @return Configuration
+   * @return ApplicationConfiguration
    */
-  public RepositoryConfiguration getRepositoryConfiguration() {
+  public ApplicationConfiguration getConfiguration() {
     return configuration;
   }
 

@@ -19,6 +19,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
 
+import de.berlios.sventon.config.ApplicationConfiguration;
+
 /**
  * RepositoryFactory.
  *
@@ -39,15 +41,15 @@ public class RepositoryFactory {
   }
 
   /**
-   * Gets a repository instance configured using given <code>RepositoryConfiguration</code>.
+   * Gets a repository instance configured using given <code>ApplicationConfiguration</code>.
    * <p/>
-   * This method will assign credentials as they are set in the given <code>RepositoryConfiguration</code>.
+   * This method will assign credentials as they are set in the given <code>ApplicationConfiguration</code>.
    *
    * @param configuration The configuration
    * @return The repository instance
    * @throws SVNException if unable to create repository instance.
    */
-  public SVNRepository getRepository(final RepositoryConfiguration configuration) throws SVNException {
+  public SVNRepository getRepository(final ApplicationConfiguration configuration) throws SVNException {
     if (configuration == null || configuration.getSVNURL() == null) {
       return null;
     }

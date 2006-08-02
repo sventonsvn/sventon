@@ -3,6 +3,7 @@ package de.berlios.sventon.repository;
 import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.cache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -15,7 +16,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final RepositoryConfiguration configuration = new RepositoryConfiguration();
+    final ApplicationConfiguration configuration = new ApplicationConfiguration();
     configuration.setCacheUsed(true);
 
     final ObjectCache cache = createMemoryCache();
@@ -25,7 +26,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       observers.add(this);
       final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
       revisionObservable.setRepository(new TestRepository());
-      revisionObservable.setRepositoryConfiguration(configuration);
+      revisionObservable.setConfiguration(configuration);
       revisionObservable.setObjectCache(cache);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());

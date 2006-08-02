@@ -85,8 +85,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
       if ("raw".equals(formatParameter)) {
         model.putAll(new RawTextFile(outStream.toString(), true).getModel());
       } else {
-        model.putAll(new HTMLDecoratedTextFile(outStream.toString(), properties, svnCommand.getPath(),
-            repository.getLocation().toDecodedString(), colorer).getModel());
+        model.putAll(new HTMLDecoratedTextFile(outStream.toString(), properties,
+            repository.getLocation().toDecodedString(), svnCommand.getPath(), colorer).getModel());
       }
       return new ModelAndView("showtextfile", model);
     } else {
