@@ -71,8 +71,8 @@
   </bean>
 
   <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="cache">
       <ref local="cacheBean"/>
@@ -80,8 +80,8 @@
   </bean>
 
   <bean id="abstractController" abstract="true">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="cache">
       <ref local="cacheBean"/>
@@ -108,8 +108,8 @@
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="mimeType">
       <value>application/xml; charset=UTF-8</value>
@@ -135,8 +135,8 @@
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="encoding">
       <ref local="defaultEncoding"/>
@@ -291,8 +291,8 @@
   </bean>
 
   <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="validator">
       <ref local="configCommandValidator"/>
@@ -374,7 +374,7 @@
     </constructor-arg>
   </bean>
 
-  <bean id="repositoryConfig" class="de.berlios.sventon.repository.RepositoryConfiguration">
+  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
     <property name="repositoryRoot">
       <value>${svn.root}</value>
     </property>
@@ -466,8 +466,8 @@
     <constructor-arg>
       <ref local="observerList"/>
     </constructor-arg>
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
     <property name="objectCache">
       <ref local="objectCache"/>
@@ -507,8 +507,8 @@
     <constructor-arg>
       <ref local="entryCache"/>
     </constructor-arg>
-    <property name="repositoryConfiguration">
-      <ref local="repositoryConfig"/>
+    <property name="configuration">
+      <ref local="configuration"/>
     </property>
   </bean>
 

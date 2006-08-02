@@ -1,12 +1,12 @@
-package de.berlios.sventon.repository;
+package de.berlios.sventon.config;
 
 import junit.framework.TestCase;
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 
-public class RepositoryConfigurationTest extends TestCase {
+public class ApplicationConfigurationTest extends TestCase {
 
   public void testSetRepositoryRoot() throws Exception {
-    RepositoryConfiguration rc = new RepositoryConfiguration();
+    ApplicationConfiguration rc = new ApplicationConfiguration();
 
     assertFalse(rc.isConfigured());
     rc.setRepositoryRoot(null);
@@ -24,7 +24,7 @@ public class RepositoryConfigurationTest extends TestCase {
   }
 
   public void testSetSVNConfigurationPath() throws Exception {
-    RepositoryConfiguration rc = new RepositoryConfiguration();
+    ApplicationConfiguration rc = new ApplicationConfiguration();
 
     assertFalse(rc.isConfigured());
 

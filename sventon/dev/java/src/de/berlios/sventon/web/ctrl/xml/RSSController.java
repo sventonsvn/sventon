@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
@@ -49,9 +49,9 @@ public class RSSController extends AbstractController {
   private int feedItemCount = 10;
 
   /**
-   * The repository configuration.
+   * The application configuration.
    */
-  private RepositoryConfiguration configuration;
+  private ApplicationConfiguration configuration;
 
   /**
    * The feed generator.
@@ -116,11 +116,11 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Set repository configuration.
+   * Set application configuration.
    *
-   * @param configuration Configuration
+   * @param configuration ApplicationConfiguration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 

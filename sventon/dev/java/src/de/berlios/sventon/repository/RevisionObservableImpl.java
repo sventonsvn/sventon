@@ -13,6 +13,7 @@ package de.berlios.sventon.repository;
 
 import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.service.RepositoryService;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -39,7 +40,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   private final Log logger = LogFactory.getLog(getClass());
 
-  private RepositoryConfiguration configuration;
+  private ApplicationConfiguration configuration;
   private SVNRepository repository;
   private boolean updating = false;
 
@@ -82,11 +83,11 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   }
 
   /**
-   * Sets the repository configuration.
+   * Sets the application configuration.
    *
-   * @param configuration Configuration
+   * @param configuration ApplicationConfiguration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 

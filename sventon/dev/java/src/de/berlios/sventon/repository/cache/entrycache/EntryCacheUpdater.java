@@ -14,6 +14,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 import de.berlios.sventon.repository.*;
 import de.berlios.sventon.web.model.LogEntryActionType;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -44,9 +45,9 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   private SVNRepository repository;
 
   /**
-   * Repository configuration instance.
+   * Application configuration instance.
    */
-  private RepositoryConfiguration configuration;
+  private ApplicationConfiguration configuration;
 
   /**
    * Constructor.
@@ -68,11 +69,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   }
 
   /**
-   * Sets the repository configuration.
+   * Sets the application configuration.
    *
-   * @param configuration The repository configuration
+   * @param configuration The application configuration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 

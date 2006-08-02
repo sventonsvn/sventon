@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository;
+package de.berlios.sventon.config;
 
 import de.berlios.sventon.logging.SVNLog4JAdapter;
 import org.apache.commons.lang.StringUtils;
@@ -25,20 +25,8 @@ import org.tmatesoft.svn.util.SVNDebugLog;
 import java.io.File;
 
 /**
- * Small wrapper class to hold connection info for the repository.
- * <p/>
- * The following should be configured for sventon to work propertly:
- * <ul>
- * <li>Subverison repository URL, e.g.
- * <code>svn://svn.berlios.de/sventon/</code>
- * <li>Subversion configuration path, the path to the SVN configuration
- * directory, the user running the servlet container running sventon must have
- * read and write access to this directory.
- * <li>Configured Subversion user and password for repository browsing. If
- * these properties are not configured and the repository requires user/pwd for
- * browsing, the web application will display an error message.
- * </ul>
- * All other configurations are optional.
+ * Sventon application configuration class holding configuration parameters
+ * and repository connection information.
  * <p/>
  * The class also performs JavaSVN initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
@@ -50,7 +38,7 @@ import java.io.File;
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
  */
-public class RepositoryConfiguration {
+public class ApplicationConfiguration {
 
   /**
    * The logging instance.
@@ -102,7 +90,7 @@ public class RepositoryConfiguration {
   /**
    * Configures and initializes the repository.
    */
-  public RepositoryConfiguration() {
+  public ApplicationConfiguration() {
     configureLogging();
     logger.info("Configuring SVN Repository");
     SVNRepositoryFactoryImpl.setup();
@@ -196,7 +184,7 @@ public class RepositoryConfiguration {
   /**
    * Get SVN configuration path.
    *
-   * @param configurationPath Configuration path.
+   * @param configurationPath ApplicationConfiguration path.
    * @throws IllegalArgumentException if argument is not a directory.
    *                                  <code>Null</code> or empty will be ignored.
    */

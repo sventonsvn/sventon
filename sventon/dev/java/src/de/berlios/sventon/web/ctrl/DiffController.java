@@ -112,9 +112,9 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       rightFile = new RawTextFile(outStream.toString(), true);
 
       final KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
-          getRepositoryConfiguration().getUrl() + diffCommand.getFromPath());
+          getConfiguration().getUrl() + diffCommand.getFromPath());
       final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
-          getRepositoryConfiguration().getUrl() + diffCommand.getToPath());
+          getConfiguration().getUrl() + diffCommand.getToPath());
 
       final DiffCreator differ = new DiffCreator(leftFile, fromFileKeywordHandler, rightFile, toFileKeywordHandler);
       model.put("leftFileContent", differ.getLeft());

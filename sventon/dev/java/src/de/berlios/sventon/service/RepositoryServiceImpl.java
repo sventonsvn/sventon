@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.cache.Cache;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.export.ExportEditor;
@@ -43,9 +43,9 @@ public class RepositoryServiceImpl implements RepositoryService {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The repository configuration. Used to check whether caching is enabled or not.
+   * The application configuration. Used to check whether caching is enabled or not.
    */
-  private RepositoryConfiguration configuration;
+  private ApplicationConfiguration configuration;
 
   /**
    * The cache instance.
@@ -226,11 +226,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   /**
-   * Set repository configuration.
+   * Set application configuration.
    *
-   * @param configuration Configuration
+   * @param configuration ApplicationConfiguration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 

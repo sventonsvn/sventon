@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.ConfigCommand;
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -40,9 +40,9 @@ import java.util.Properties;
 public class ConfigurationController extends AbstractFormController {
 
   /**
-   * Repository configuration.
+   * Application configuration.
    */
-  private RepositoryConfiguration configuration;
+  private ApplicationConfiguration configuration;
 
   /**
    * The scheduler instance. Used to fire cache update job.
@@ -68,11 +68,11 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   /**
-   * Sets repository configuration.
+   * Sets application configuration.
    *
-   * @param configuration Configuration
+   * @param configuration ApplicationConfiguration
    */
-  public void setRepositoryConfiguration(final RepositoryConfiguration configuration) {
+  public void setConfiguration(final ApplicationConfiguration configuration) {
     this.configuration = configuration;
   }
 

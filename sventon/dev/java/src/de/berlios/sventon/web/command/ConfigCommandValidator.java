@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.repository.RepositoryConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
@@ -91,7 +91,7 @@ public class ConfigCommandValidator implements Validator {
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
-        final RepositoryConfiguration config = new RepositoryConfiguration();
+        final ApplicationConfiguration config = new ApplicationConfiguration();
         config.setRepositoryRoot(trimmedURL);
         config.setConfiguredUID(command.getUsername());
         config.setConfiguredPWD(command.getPassword());
