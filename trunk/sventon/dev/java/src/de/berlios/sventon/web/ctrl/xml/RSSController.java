@@ -74,15 +74,15 @@ public class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String repositoryInstanceName = RequestUtils.getStringParameter(request, "name", null);
+    final String instanceName = RequestUtils.getStringParameter(request, "name", null);
 
-    if (repositoryInstanceName == null) {
+    if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
       return null;
     }
 
     final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(repositoryInstanceName),
+        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName),
             configuration.getSVNConfigurationPath());
 
     if (repository == null) {
@@ -99,7 +99,7 @@ public class RSSController extends AbstractController {
       final List<SVNLogEntry> logEntries = repositoryService.getRevisions(repository, headRevision,
           headRevision - feedItemCount, feedItemCount);
       logger.debug("Outputting feed");
-      feedGenerator.outputFeed(logEntries, getRequestURL(request), response.getWriter());
+      feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);

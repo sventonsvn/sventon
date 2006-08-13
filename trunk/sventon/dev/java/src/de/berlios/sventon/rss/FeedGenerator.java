@@ -26,10 +26,12 @@ public interface FeedGenerator {
   /**
    * Outputs the generated feed to given writer.
    *
-   * @param logEntries The log entries
-   * @param baseURL    Base URL used to build anchor links. Must end with a slash (/).
-   * @param writer Writer.
+   * @param instanceName The instance name.
+   * @param logEntries   The log entries.
+   * @param baseURL      Base URL used to build anchor links. Must end with a slash (/).
+   * @param writer       Writer.
    * @throws Exception if unable to output feed.
    */
-  void outputFeed(final List<SVNLogEntry> logEntries, final String baseURL, final Writer writer) throws Exception;
+  void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL,
+                  final Writer writer) throws Exception;
 }
