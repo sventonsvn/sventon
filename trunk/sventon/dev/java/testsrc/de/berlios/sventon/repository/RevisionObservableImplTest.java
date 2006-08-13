@@ -4,6 +4,7 @@ import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.cache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -16,8 +17,11 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final ApplicationConfiguration configuration = new ApplicationConfiguration();
-    configuration.setCacheUsed(true);
+    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
+    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+    instanceConfiguration.setInstanceName("defaultsvn");
+    instanceConfiguration.setCacheUsed(true);
+    applicationConfiguration.addInstanceConfiguration(instanceConfiguration);
 
     final ObjectCache cache = createMemoryCache();
 
@@ -25,12 +29,11 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       final List<RevisionObserver> observers = new ArrayList<RevisionObserver>();
       observers.add(this);
       final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
-      revisionObservable.setRepository(new TestRepository());
-      revisionObservable.setConfiguration(configuration);
+      revisionObservable.setConfiguration(applicationConfiguration);
       revisionObservable.setObjectCache(cache);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());
-      revisionObservable.update();
+      revisionObservable.update(new TestRepository(), "defaultsvn");
     } finally {
       cache.shutdown();
     }
@@ -40,7 +43,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     assertEquals(1, ((List<SVNLogEntry>) arg).size());
   }
 
-  public void update(final List<SVNLogEntry> revisions) {
+  public void update(final String instanceName, final List<SVNLogEntry> revisions) {
   }
 
   class TestRepository extends SVNRepositoryStub {

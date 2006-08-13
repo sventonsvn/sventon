@@ -91,14 +91,16 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * </td><td>Entry's details are updated</td></tr>
    * </table>
    *
-   * @param revisions The new revisions.
+   * @param instanceName The instance name.
+   * @param revisions    The new revisions.
    */
-  public void update(final List<SVNLogEntry> revisions) {
+  public void update(final String instanceName, final List<SVNLogEntry> revisions) {
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
 
     try {
       if (repository == null) {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration("defaultsvn"),
+            configuration.getSVNConfigurationPath());
       }
     } catch (SVNException svne) {
       logger.warn("Could not establish repository connection", svne);

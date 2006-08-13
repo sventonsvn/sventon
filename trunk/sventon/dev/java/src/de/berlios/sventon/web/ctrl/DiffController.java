@@ -17,6 +17,7 @@ import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.config.InstanceConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,7 +54,10 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       final DiffCommand diffCommand = new DiffCommand(entries);
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
-      model.putAll(diffInternal(repository, diffCommand));
+
+      model.putAll(diffInternal(repository, diffCommand,
+          getConfiguration().getInstanceConfiguration(svnCommand.getName())));
+
     } catch (DiffException dex) {
       model.put("diffException", dex.getMessage());
     }
@@ -64,8 +68,9 @@ public class DiffController extends AbstractSVNTemplateController implements Con
   /**
    * Internal method for creating the diff between two entries.
    *
-   * @param repository  The repository instance.
-   * @param diffCommand The <code>DiffCommand</code> including to/from diff instructions.
+   * @param repository    The repository instance.
+   * @param diffCommand   The <code>DiffCommand</code> including to/from diff instructions.
+   * @param configuration Instance configuration.
    * @return A populated map containing the following info:
    *         <ul>
    *         <li><i>isBinary</i>, indicates whether any of the entries were a binary file.</li>
@@ -75,8 +80,8 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    * @throws DiffException if unable to produce diff.
    * @throws SVNException  if a subversion error occurs.
    */
-  protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand)
-      throws DiffException, SVNException {
+  protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand,
+                                             InstanceConfiguration configuration) throws DiffException, SVNException {
 
     ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -112,9 +117,9 @@ public class DiffController extends AbstractSVNTemplateController implements Con
       rightFile = new RawTextFile(outStream.toString(), true);
 
       final KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
-          getConfiguration().getUrl() + diffCommand.getFromPath());
+          configuration.getUrl() + diffCommand.getFromPath());
       final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
-          getConfiguration().getUrl() + diffCommand.getToPath());
+          configuration.getUrl() + diffCommand.getToPath());
 
       final DiffCreator differ = new DiffCreator(leftFile, fromFileKeywordHandler, rightFile, toFileKeywordHandler);
       model.put("leftFileContent", differ.getLeft());

@@ -76,7 +76,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
     // Check if the thumbnail exists on the cache
     final String checksum = getRepositoryService().getFileChecksum(repository, svnCommand.getPath(), revision.getNumber());
-    final String cacheKey = checksum + svnCommand.getPath();
+    final String cacheKey = svnCommand.getName() + checksum + svnCommand.getPath();
     logger.debug("Using cachekey: " + cacheKey);
     final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
     if (thumbnailData != null) {

@@ -3,11 +3,6 @@ package de.berlios.sventon.web.command;
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
 
-import java.io.File;
-
-import de.berlios.sventon.web.command.ConfigCommand;
-import de.berlios.sventon.web.command.ConfigCommandValidator;
-
 public class ConfigCommandValidatorTest extends TestCase {
 
   public void testSupports() {
@@ -26,8 +21,29 @@ public class ConfigCommandValidatorTest extends TestCase {
     // An empty base command is valid
     assertEquals(0, exception.getAllErrors().size());
 
+    // Invalid repository instance name
+    command.setName("Illegal!");
+    command.setRepositoryURL("svn://domain.com/svn/");
+    command.setPassword("");
+    command.setUsername("");
+    validator.validate(command, exception);
+    assertEquals(1, exception.getAllErrors().size());
+    assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
+    exception = new BindException(command, "test");
+
+    // Empty name is not ok
+    command.setName("");
+    command.setRepositoryURL("svn://domain.com/svn/");
+    command.setPassword("");
+    command.setUsername("");
+    validator.validate(command, exception);
+    assertEquals(1, exception.getAllErrors().size());
+    assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
+    exception = new BindException(command, "test");
+
     // Valid (typical) input
     command.setRepositoryURL("svn://domain.com/svn/");
+    command.setName("default");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
@@ -48,13 +64,13 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setRepositoryURL("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
-    assertEquals("config.error.illegal-url" ,exception.getFieldError("repositoryURL").getCode());
+    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryURL").getCode());
 
     exception = new BindException(command, "test");
     command.setRepositoryURL("notavalidurl");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
-    assertEquals("config.error.illegal-url" ,exception.getFieldError("repositoryURL").getCode());
+    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryURL").getCode());
 
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
@@ -70,14 +86,12 @@ public class ConfigCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    File tempFile = File.createTempFile("sventon-test", null);
     exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
     command.setPassword("");
     command.setUsername("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-    tempFile.delete();
   }
 
 }

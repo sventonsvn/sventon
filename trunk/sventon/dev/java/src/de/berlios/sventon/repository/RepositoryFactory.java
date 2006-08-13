@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository;
 
+import de.berlios.sventon.config.InstanceConfiguration;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -18,8 +19,6 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
-
-import de.berlios.sventon.config.ApplicationConfiguration;
 
 /**
  * RepositoryFactory.
@@ -41,26 +40,26 @@ public class RepositoryFactory {
   }
 
   /**
-   * Gets a repository instance configured using given <code>ApplicationConfiguration</code>.
+   * Gets a repository instance configured using given <code>InstanceConfiguration</code>.
    * <p/>
-   * This method will assign credentials as they are set in the given <code>ApplicationConfiguration</code>.
+   * This method will assign credentials as they are set in the given <code>InstanceConfiguration</code>.
    *
-   * @param configuration The configuration
+   * @param configuration The instance configuration
+   * @param configPath    Configuration path, needed by JavaSVN.
    * @return The repository instance
    * @throws SVNException if unable to create repository instance.
    */
-  public SVNRepository getRepository(final ApplicationConfiguration configuration) throws SVNException {
+  public SVNRepository getRepository(final InstanceConfiguration configuration, final String configPath) throws SVNException {
     if (configuration == null || configuration.getSVNURL() == null) {
       return null;
     }
     final SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
     if (configuration.getConfiguredUID() != null) {
-      final ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configuration
-          .getSVNConfigurationPath()), configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
+      final ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File(configPath),
+          configuration.getConfiguredUID(), configuration.getConfiguredPWD(), false);
       repository.setAuthenticationManager(authManager);
     }
     return repository;
   }
-
 
 }

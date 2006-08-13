@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Class responsible for updating the log message cache.
  *
- * @author jesper@user.berlios.de 
+ * @author jesper@user.berlios.de
  */
 public class LogMessageCacheUpdater extends AbstractRevisionObserver {
 
@@ -50,9 +50,10 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
   /**
    * Updates the log message cache with given revision information.
    *
-   * @param revisions The new revisions
+   * @param instanceName The instance name.
+   * @param revisions    The new revisions.
    */
-  public void update(final List<SVNLogEntry> revisions) {
+  public void update(final String instanceName, final List<SVNLogEntry> revisions) {
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {

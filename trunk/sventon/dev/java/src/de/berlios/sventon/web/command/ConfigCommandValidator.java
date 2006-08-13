@@ -11,9 +11,8 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
@@ -76,6 +75,16 @@ public class ConfigCommandValidator implements Validator {
   public void validate(Object obj, Errors errors) {
     final ConfigCommand command = (ConfigCommand) obj;
 
+    // Validate 'repository instance name'
+    final String instanceName = command.getName();
+    if (instanceName != null) {
+      if (!instanceName.matches("[a-z0-9]+")) {
+        final String msg = "Name must be in lower case a-z and/or 0-9";
+        logger.warn(msg);
+        errors.rejectValue("name", "config.error.illegal-name", msg);
+      }
+    }
+
     // Validate 'repositoryURL', 'username' and 'password'
     final String repositoryURL = command.getRepositoryURL();
 
@@ -91,13 +100,13 @@ public class ConfigCommandValidator implements Validator {
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
-        final ApplicationConfiguration config = new ApplicationConfiguration();
-        config.setRepositoryRoot(trimmedURL);
-        config.setConfiguredUID(command.getUsername());
-        config.setConfiguredPWD(command.getPassword());
-        config.setSVNConfigurationPath(configPath);
+        final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+        instanceConfiguration.setInstanceName(instanceConfiguration.getInstanceName());
+        instanceConfiguration.setRepositoryRoot(trimmedURL);
+        instanceConfiguration.setConfiguredUID(command.getUsername());
+        instanceConfiguration.setConfiguredPWD(command.getPassword());
         try {
-          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(config);
+          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configPath);
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);

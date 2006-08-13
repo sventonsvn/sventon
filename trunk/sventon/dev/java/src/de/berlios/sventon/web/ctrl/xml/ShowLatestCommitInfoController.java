@@ -12,12 +12,14 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +68,17 @@ public class ShowLatestCommitInfoController extends AbstractController {
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final String repositoryInstanceName = RequestUtils.getStringParameter(request, "name", null);
+
+    if (repositoryInstanceName == null) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
+      return null;
+    }
+
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(repositoryInstanceName);
+    final SVNRepository repository =
+        RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
+
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
@@ -79,7 +91,8 @@ public class ShowLatestCommitInfoController extends AbstractController {
 
     try {
       response.getWriter().write(XMLDocumentHelper.getAsString(XMLDocumentHelper.createXML(
-          repositoryService.getRevision(repository, headRevision), datePattern), encoding));
+          repositoryService.getRevision(repository, headRevision, instanceConfiguration.isCacheUsed()), datePattern),
+          encoding));
     } catch (IOException ioex) {
       logger.warn(ioex);
     }
