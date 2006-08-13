@@ -34,7 +34,7 @@ public class SyndFeedGeneratorTest extends TestCase {
 
     File tempFile = File.createTempFile("sventon-rss-test", null);
     PrintWriter pw = new PrintWriter(tempFile);
-    generator.outputFeed(logEntries, "http://localhost:8888/svn/", pw);
+    generator.outputFeed("defaultsvn", logEntries, "http://localhost:8888/svn/", pw);
     pw.flush();
     pw.close();
 

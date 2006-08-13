@@ -44,17 +44,19 @@ public class SyndFeedGenerator implements FeedGenerator {
   /**
    * {@inheritDoc}
    */
-  public void outputFeed(final List<SVNLogEntry> logEntries, final String baseURL, final Writer writer) throws Exception {
+  public void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL,
+                         final Writer writer) throws Exception {
+
     final SyndFeed feed = new SyndFeedImpl();
     feed.setTitle("sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
-    feed.setEntries(createEntries(logEntries, baseURL));
+    feed.setEntries(createEntries(instanceName, logEntries, baseURL));
     feed.setFeedType(feedType);
     new SyndFeedOutput().output(feed, writer);
   }
 
-  private List createEntries(final List<SVNLogEntry> logEntries, final String baseURL) {
+  private List createEntries(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL) {
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
     SyndEntry entry;
@@ -66,7 +68,7 @@ public class SyndFeedGenerator implements FeedGenerator {
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
           + getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength));
       entry.setAuthor(logEntry.getAuthor());
-      entry.setLink(baseURL + "revinfo.svn?&revision=" + logEntry.getRevision());
+      entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
 
       description = new SyndContentImpl();
