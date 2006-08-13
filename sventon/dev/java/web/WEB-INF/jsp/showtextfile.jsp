@@ -38,6 +38,7 @@
 <pre class="codeBlock"><c:out value="${fileContent}" escapeXml="false"/></pre>
 
     <br>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -71,8 +72,19 @@ public class RSSController extends AbstractController {
 
     logger.debug("Getting RSS feed");
     response.setContentType(mimeType);
+    response.setHeader("Cache-Control", "no-cache");
 
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final String repositoryInstanceName = RequestUtils.getStringParameter(request, "name", null);
+
+    if (repositoryInstanceName == null) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
+      return null;
+    }
+
+    final SVNRepository repository =
+        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(repositoryInstanceName),
+            configuration.getSVNConfigurationPath());
+
     if (repository == null) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");

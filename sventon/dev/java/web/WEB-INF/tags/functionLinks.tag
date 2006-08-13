@@ -21,22 +21,27 @@
 <c:url var="downloadLinkUrl" value="get.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
 </c:url>
 <c:url var="showLogLinkUrl" value="showlog.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
 </c:url>
 <c:url var="showLockLinkUrl" value="showlock.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
 </c:url>
 <c:url var="showDirLinkUrl" value="repobrowser.svn">
   <c:param name="path" value="${command.path}" />
   <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
 </c:url>
 <c:url var="showFileLinkUrl" value="showfile.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
 </c:url>
 
 <form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
@@ -62,6 +67,7 @@
       <c:url value="diffprev.svn" var="diffPreviousUrl">
         <c:param name="path" value="${command.path}${entry.name}" />
         <c:param name="revision" value="${command.revision}" />
+        <c:param name="name" value="${command.name}" />
         <c:param name="commitrev" value="${committedRevision}" />
       </c:url>
       <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" title="<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
@@ -128,6 +134,7 @@
     <c:url value="unifieddiff.svn" var="unifiedDiffUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
+      <c:param name="name" value="${command.name}" />
       <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
@@ -141,6 +148,7 @@
     <c:url value="diff.svn" var="diffUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
+      <c:param name="name" value="${command.name}" />
       <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
@@ -194,4 +202,5 @@
   <!-- Needed by ASVNTC -->
   <input type="hidden" name="path" value="${command.path}${entry.name}"/>
   <input type="hidden" name="revision" value="${command.revision}"/>
+  <input type="hidden" name="name" value="${command.name}"/>
 </form>

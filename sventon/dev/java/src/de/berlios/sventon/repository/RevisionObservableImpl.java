@@ -12,8 +12,9 @@
 package de.berlios.sventon.repository;
 
 import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -40,8 +41,11 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   private final Log logger = LogFactory.getLog(getClass());
 
+  /**
+   * The global application configuration.
+   */
   private ApplicationConfiguration configuration;
-  private SVNRepository repository;
+
   private boolean updating = false;
 
   /**
@@ -101,12 +105,42 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   }
 
   /**
-   * For testing purposes only!
+   * Update.
    *
-   * @param repository Repository instance
+   * @param repository Repository to use for update.
    */
-  protected void setRepository(final SVNRepository repository) {
-    this.repository = repository;
+  protected void update(final SVNRepository repository, final String instanceName) {
+    if (!configuration.isConfigured()) {
+      // Silently return. sventon has not yet been configured.
+      return;
+    } else {
+      updating = true;
+
+      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+
+      try {
+        Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY);
+        if (lastUpdatedRevision == null) {
+          logger.info("No record about previously fetched revisions exists - fetching all revisions");
+          lastUpdatedRevision = 0L;
+        }
+
+        final long headRevision = repository.getLatestRevision();
+
+        if (headRevision > lastUpdatedRevision) {
+          logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
+          logger.debug("Reading [" + logEntries.size() + "] revision(s)");
+          setChanged();
+          logger.debug("Notifying observers");
+          notifyObservers(logEntries);
+          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, headRevision);
+        }
+      } catch (SVNException svnex) {
+        throw new RuntimeException(svnex);
+      } finally {
+        updating = false;
+      }
+    }
   }
 
   /**
@@ -115,35 +149,27 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public synchronized void update() {
-    if (!configuration.isCacheUsed() || !isConnectionEstablished()) {
+    if (!configuration.isConfigured()) {
       // Silently return. sventon has not yet been configured.
       return;
     }
 
-    updating = true;
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration("defaultsvn");
+    if (!instanceConfiguration.isCacheUsed()) {
+      // Silently return. Cache is disabled.
+      return;
+    } else {
 
-    try {
-      Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY);
-      if (lastUpdatedRevision == null) {
-        logger.info("No record about previously fetched revisions exists - fetching all revisions");
-        lastUpdatedRevision = 0L;
+      updating = true;
+
+      SVNRepository repository = null;
+      try {
+        repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
+      } catch (SVNException svnex) {
+        logger.warn("Unable to etablish repository connection", svnex);
+        return;
       }
-
-      final long headRevision = repository.getLatestRevision();
-
-      if (headRevision > lastUpdatedRevision) {
-        logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
-        logger.debug("Reading [" + logEntries.size() + "] revision(s)");
-        setChanged();
-        logger.debug("Notifying observers");
-        notifyObservers(logEntries);
-        objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY, headRevision);
-      }
-    } catch (SVNException svnex) {
-      throw new RuntimeException(svnex);
-    } finally {
-      updating = false;
+      update(repository, instanceConfiguration.getInstanceName());
     }
   }
 
@@ -152,26 +178,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   public boolean isUpdating() {
     return updating;
-  }
-
-  /**
-   * Checks if the repository connection is properly initialized.
-   * If not, a connection will be created.
-   */
-  private boolean isConnectionEstablished() {
-    if (repository == null) {
-      try {
-        logger.debug("Establishing repository connection");
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-      } catch (SVNException svne) {
-        logger.warn("Could not establish repository connection", svne);
-      }
-      if (repository == null) {
-        logger.info("Repository not configured yet");
-        return false;
-      }
-    }
-    return true;
   }
 
 }

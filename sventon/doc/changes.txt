@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[600] Fixed: Bug #8371 - Misspelled revision parameter in logs view.
+      Fixed: Bug #8370 - Revision parameter forgotten in back-link.
 [594] Added: Feature #2417 - Search result order by.
 [591] Added: Feature #2420 - File extension filtering in repobrowser.
 [590] Added: Feature #1868 - Unified diff view.

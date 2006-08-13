@@ -58,7 +58,10 @@ public class DiffPreviousController extends DiffController {
       final DiffCommand diffCommand = new DiffCommand(revisions);
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
-      model.putAll(diffInternal(repository, diffCommand));
+
+      model.putAll(diffInternal(repository, diffCommand,
+          getConfiguration().getInstanceConfiguration(svnCommand.getName())));
+
     } catch (DiffException dex) {
       model.put("diffException", dex.getMessage());
     }

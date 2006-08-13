@@ -55,6 +55,7 @@
     </c:otherwise>
   </c:choose>
   <br>
-<%@ include file="/WEB-INF/jspf/foot.jspf" %>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
+<%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>

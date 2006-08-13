@@ -50,6 +50,7 @@
       <!-- Needed by ASVNTC -->
       <input type="hidden" name="path" value="${command.path}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
+      <input type="hidden" name="name" value="${command.name}"/>
 
       <table class="sventonEntriesTable">
         <tr>
@@ -61,6 +62,7 @@
               <c:url value="searchentries.svn" var="sortUrl">
                 <c:param name="path" value="${command.path}" />
                 <c:param name="revision" value="${command.revision}" />
+                <c:param name="name" value="${command.name}" />
                 <c:param name="searchString" value="${searchString}" />
                 <c:param name="startDir" value="${startDir}" />
               </c:url>
@@ -69,12 +71,14 @@
               <c:url value="flatten.svn" var="sortUrl">
                 <c:param name="path" value="${command.path}" />
                 <c:param name="revision" value="${command.revision}" />
+                <c:param name="name" value="${command.name}" />
               </c:url>
             </c:when>
             <c:otherwise>
               <c:url value="repobrowser.svn" var="sortUrl">
                 <c:param name="path" value="${command.path}" />
                 <c:param name="revision" value="${command.revision}" />
+                <c:param name="name" value="${command.name}" />
               </c:url>
             </c:otherwise>
           </c:choose>
@@ -107,6 +111,8 @@
         <c:if test="${!empty command.pathNoLeaf && !isEntrySearch && !isLogSearch && !isFlatten}">
           <c:url value="repobrowser.svn" var="backUrl">
             <c:param name="path" value="${command.pathNoLeaf}" />
+            <c:param name="revision" value="${command.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
 
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
@@ -129,13 +135,16 @@
           <c:url value="repobrowser.svn" var="viewUrl">
             <c:param name="path" value="${entry.fullEntryName}" />
             <c:param name="revision" value="${command.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
           <c:url value="showfile.svn" var="showFileUrl">
             <c:param name="path" value="${entry.fullEntryName}" />
             <c:param name="revision" value="${command.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
           <c:url value="revinfo.svn" var="showRevInfoUrl">
             <c:param name="revision" value="${entry.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
 
           <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
@@ -242,6 +251,7 @@
 
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
 </body>
 </html>

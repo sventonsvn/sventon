@@ -66,6 +66,7 @@ public class GoToController extends AbstractSVNTemplateController implements Con
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("path", svnCommand.getPath());
     model.put("revision", svnCommand.getRevision());
+    model.put("name", svnCommand.getName());
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl), model);
   }

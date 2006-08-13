@@ -27,12 +27,13 @@ public abstract class AbstractRevisionObserver implements RevisionObserver {
   /**
    * Called to update the observer.
    *
-   * @param observable The observable
-   * @param arg        Argument object
+   * @param observable   The observable.
+   * @param arg          Argument object.
    */
   public void update(final Observable observable, final Object arg) {
     if (observable != null && observable instanceof RevisionObservableImpl) {
-      update((List<SVNLogEntry>) arg);
+      final Object[] nameAndObject = (Object[]) arg;
+      update((String) nameAndObject[0], (List<SVNLogEntry>) nameAndObject[1]);
     }
   }
 

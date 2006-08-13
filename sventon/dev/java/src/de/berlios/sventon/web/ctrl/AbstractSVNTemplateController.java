@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.Cache;
@@ -108,7 +109,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /**
    * The application configuration instance.
    */
-  protected ApplicationConfiguration configuration = null;
+  private ApplicationConfiguration configuration = null;
 
   /**
    * Gateway class for accessing the caches.
@@ -156,7 +157,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration,
+          configuration.getSVNConfigurationPath());
+
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       final long headRevision = getHeadRevision(repository);
 
@@ -168,13 +172,13 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", configuration.getUrl());
+        model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
-        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision));
+        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision, instanceConfiguration.isCacheUsed()));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
-        model.put("useCache", configuration.isCacheUsed());
-        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
+        model.put("useCache", instanceConfiguration.isCacheUsed());
+        model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -255,10 +259,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
-    model.put("url", configuration.getUrl());
+    model.put("url", instanceConfiguration != null ? instanceConfiguration.getUrl() : "");
     model.put("numrevision", null);
     return new ModelAndView("goto", model);
   }

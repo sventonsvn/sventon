@@ -11,7 +11,6 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.cache.Cache;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.export.ExportEditor;
@@ -26,9 +25,9 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Service class for accessing the subversion repository.
@@ -43,11 +42,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The application configuration. Used to check whether caching is enabled or not.
-   */
-  private ApplicationConfiguration configuration;
-
-  /**
    * The cache instance.
    */
   private Cache cache;
@@ -55,11 +49,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final SVNRepository repository, final long revision, final boolean useCache)
       throws SVNException {
 
     SVNLogEntry entry = null;
-    if (configuration.isCacheUsed()) {
+    if (useCache) {
       try {
         logger.debug("Getting cached revision: " + revision);
         entry = getCachedRevision(revision);
@@ -223,15 +217,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     final Map properties = new HashMap();
     repository.getFile(path, revision, properties, null);
     return (String) properties.get(SVNProperty.CHECKSUM);
-  }
-
-  /**
-   * Set application configuration.
-   *
-   * @param configuration ApplicationConfiguration
-   */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
   }
 
   /**

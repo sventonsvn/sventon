@@ -49,9 +49,10 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
   /**
    * Updates the revision cache with given revision information.
    *
+   * @param instanceName The instance name.
    * @param revisions The new revisions
    */
-  public void update(final List<SVNLogEntry> revisions) {
+  public void update(final String instanceName, final List<SVNLogEntry> revisions) {
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {

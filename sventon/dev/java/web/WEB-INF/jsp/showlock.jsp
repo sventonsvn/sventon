@@ -50,6 +50,7 @@
         <c:url value="showfile.svn" var="showUrl">
           <c:param name="path" value="${lock.path}" />
           <c:param name="revision" value="${command.revision}" />
+          <c:param name="name" value="${command.name}" />
         </c:url>
 
         <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
@@ -74,6 +75,7 @@
     </table>
 
     <br>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

@@ -42,6 +42,11 @@ public class SVNBaseCommand {
   private String revision = null;
 
   /**
+   * Repository instance name.
+   */
+  private String name;
+
+  /**
    * The sort type.
    */
   private RepositoryEntryComparator.SortType sortType = RepositoryEntryComparator.SortType.NAME;
@@ -178,6 +183,24 @@ public class SVNBaseCommand {
   }
 
   /**
+   * Sets the repository instance name.
+   *
+   * @param name Repository instance name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the repository instance name.
+   *
+   * @return The repository instance name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * Return the contents of this object as a map model.
    * <p/>
    * Model data keys:
@@ -192,6 +215,7 @@ public class SVNBaseCommand {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("revision", getRevision());
     model.put("path", getPath());
+    model.put("name", getName());
     model.put("sortType", getSortType());
     model.put("sortMode", getSortMode());
     return model;
@@ -202,12 +226,11 @@ public class SVNBaseCommand {
     if (o == null || getClass() != o.getClass()) return false;
 
     final SVNBaseCommand that = (SVNBaseCommand) o;
-
+    if (name != null ? !name.equals(that.name) : that.name != null) return false;
     if (path != null ? !path.equals(that.path) : that.path != null) return false;
     if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
-    if (sortMode != null ? !sortMode.equals(that.sortMode) : that.sortMode != null) return false;
-    if (sortType != null ? !sortType.equals(that.sortType) : that.sortType != null) return false;
-
+    if (sortMode != that.sortMode) return false;
+    if (sortType != that.sortType) return false;
     return true;
   }
 
@@ -215,17 +238,20 @@ public class SVNBaseCommand {
     int result;
     result = (path != null ? path.hashCode() : 0);
     result = 29 * result + (revision != null ? revision.hashCode() : 0);
+    result = 29 * result + (name != null ? name.hashCode() : 0);
     result = 29 * result + (sortType != null ? sortType.hashCode() : 0);
     result = 29 * result + (sortMode != null ? sortMode.hashCode() : 0);
     return result;
   }
 
+
   public String toString() {
     return "SVNBaseCommand{" +
         "path='" + path + '\'' +
         ", revision='" + revision + '\'' +
-        ", sortType='" + sortType + '\'' +
-        ", sortMode='" + sortMode + '\'' +
+        ", name='" + name + '\'' +
+        ", sortType=" + sortType +
+        ", sortMode=" + sortMode +
         '}';
   }
 }

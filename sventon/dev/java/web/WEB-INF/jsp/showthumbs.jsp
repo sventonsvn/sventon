@@ -34,26 +34,32 @@
     <br/>
     <ui:functionLinks pageName="showThumbs"/>
 
-    <c:url value="get.svn" var="downloadUrl" >
-      <c:param name="revision" value="${command.revision}" />
-    </c:url>
-
-    <c:url value="getthumb.svn" var="getThumbUrl" >
-      <c:param name="revision" value="${command.revision}" />
-    </c:url>
-
     <br/>
 
     <c:forEach items="${thumbnailentries}" var="entry">
+
+      <c:url value="get.svn" var="downloadUrl" >
+        <c:param name="revision" value="${command.revision}" />
+        <c:param name="path" value="${entry}" />
+        <c:param name="name" value="${command.name}" />
+        <c:param name="disp" value="inline" />
+      </c:url>
+  
+      <c:url value="getthumb.svn" var="getThumbUrl" >
+        <c:param name="revision" value="${command.revision}" />
+        <c:param name="path" value="${entry}" />
+        <c:param name="name" value="${command.name}" />
+
+      </c:url>
+
       <p>
         <b>${entry}</b><br/>
-        <a href="${downloadUrl}&path=${entry}&disp=inline">
-          <img src="${getThumbUrl}&path=${entry}" alt="Thumbnail of ${entry}" border="0"/>
-        </a>
+        <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
       </p>
     </c:forEach>
 
     <br>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

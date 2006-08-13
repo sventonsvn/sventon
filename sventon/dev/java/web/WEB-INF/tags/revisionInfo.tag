@@ -55,6 +55,7 @@
         <c:url value="goto.svn" var="goToUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
           <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
+          <c:param name="name" value="${command.name}" />
           <c:if test="${keepVisible}">
             <c:param name="showlatestinfo" value="true" />
           </c:if>
@@ -63,6 +64,7 @@
         <c:url value="diff.svn" var="diffUrl">
           <c:param name="path" value="<%= logEntryPath.getPath() %>" />
           <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
+          <c:param name="name" value="${command.name}" />
           <c:if test="${keepVisible}">
             <c:param name="showlatestinfo" value="true" />
           </c:if>

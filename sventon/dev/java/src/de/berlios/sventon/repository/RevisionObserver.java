@@ -27,8 +27,9 @@ public interface RevisionObserver extends Observer {
   /**
    * Called to update the observer.
    *
-   * @param revisions The new revisions.
+   * @param instanceName Instance name.
+   * @param revisions    The new revisions.
    */
-  void update(final List<SVNLogEntry> revisions);
+  void update(final String instanceName, final List<SVNLogEntry> revisions);
 
 }

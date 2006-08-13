@@ -12,19 +12,29 @@
   */
 %>
 <%@ include file="/WEB-INF/jspf/include.jspf" %>
-
 <html>
   <head>
     <%@ include file="/WEB-INF/jspf/nonrsshead.jspf" %>
-    <title>Logged out</title>
+    <title>Repository instances</title>
   </head>
 
   <body>
+    <%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
 
-    <%@ include file="/WEB-INF/jspf/sventonbar.jspf" %>
+    <h1>Repository instances</h1>
+
     <p>
-The session has been cleared.
+      <ol>
+        <c:forEach items="${instanceNames}" var="instanceName">
+          <c:url value="repobrowser.svn" var="instanceUrl">
+            <c:param name="name" value="${instanceName}" />
+          </c:url>
+          <li>
+            <a href="${instanceUrl}">${instanceName}</a>
+          </li>
+        </c:forEach>
+      </ol>
     </p>
-    <a href="repobrowser.svn">sventon</a>
+  <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

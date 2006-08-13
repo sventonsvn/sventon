@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class ConfigCommand {
 
+  private String name;
   private String repositoryURL;
   private String username;
   private String password;
@@ -67,6 +68,14 @@ public class ConfigCommand {
 
   public void setZippedDownloadsAllowed(final boolean zipDownloadsAllowed) {
     this.zipDownloadsAllowed = zipDownloadsAllowed;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

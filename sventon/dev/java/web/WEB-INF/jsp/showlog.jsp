@@ -40,6 +40,7 @@
       <!-- Needed by ASVNTC -->
       <input type="hidden" name="path" value="${command.path}${entry.name}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
+      <input type="hidden" name="name" value="${command.name}"/>
 
       <table class="sventonLogEntriesTable">
         <tr>
@@ -61,6 +62,7 @@
           <c:url value="showfile.svn" var="showUrl">
             <c:param name="path" value="${entry.pathAtRevision}" />
             <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
@@ -108,6 +110,7 @@
                   <c:url value="goto.svn" var="goToUrl">
                     <c:param name="path" value="<%= logEntryPath.getPath() %>" />
                     <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="name" value="${command.name}" />
                   </c:url>
 
                   <td><i><%= actionType %></i></td>
@@ -118,6 +121,7 @@
                   <c:url value="diff.svn" var="diffUrl">
                     <c:param name="path" value="<%= logEntryPath.getPath() %>" />
                     <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="name" value="${command.name}" />
                     <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + entry.getSvnLogEntry().getRevision() %>"/>
                     <c:param name="entry" value="<%= logEntryPath.getPath() + ";;" + (entry.getSvnLogEntry().getRevision() - 1) %>"/>
                   </c:url>
@@ -141,7 +145,8 @@
           <c:param name="nextPath" value="${nextPath}" />
           <c:param name="nextRevision" value="${nextRev}" />
           <c:param name="path" value="${command.path}"/>
-          <c:param name="rev" value="${command.revision}"/>
+          <c:param name="revision" value="${command.revision}"/>
+          <c:param name="name" value="${command.name}" />
         </c:url>
 
         <c:choose>
@@ -162,6 +167,7 @@
       </table>
     </form>
     <br>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

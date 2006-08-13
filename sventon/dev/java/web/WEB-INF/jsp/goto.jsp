@@ -15,7 +15,7 @@
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf" %>
+    <%@ include file="/WEB-INF/jspf/nonrsshead.jspf" %>
     <title>sventon - error</title>
   </head>
 

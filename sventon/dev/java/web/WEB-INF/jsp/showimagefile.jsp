@@ -37,11 +37,13 @@
     <c:url value="get.svn" var="showUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
+      <c:param name="name" value="${command.name}" />
     </c:url>
 
     <c:url value="getthumb.svn" var="getThumbUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
+      <c:param name="name" value="${command.name}" />
     </c:url>
 
     <p>
@@ -51,6 +53,7 @@
     </p>
 
     <br>
+<%@ include file="/WEB-INF/jspf/rss.jspf"%>
 <%@ include file="/WEB-INF/jspf/foot.jspf"%>
   </body>
 </html>

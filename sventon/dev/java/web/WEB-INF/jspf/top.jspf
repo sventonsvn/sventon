@@ -38,7 +38,7 @@
             </td>
             <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
             <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
-            <td><input type="submit" class="btn" value="go!"/></td>
+            <td><input type="hidden" name="name" value="${command.name}"><input type="submit" class="btn" value="go!"/></td>
           </tr>
         </table>
       </form>
@@ -65,7 +65,7 @@
           Rev: <a class="exclamationText" href="revinfo.svn?revision=${command.revision}">${command.revision}</a>
       </c:otherwise>
     </c:choose>
-     - <a href="repobrowser.svn?path=/&revision=${command.revision}">
+     - <a href="repobrowser.svn?path=/&revision=${command.revision}&name=${command.name}">
       ${url} </a> /
       <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
         <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
@@ -77,6 +77,7 @@
           <c:url value="repobrowser.svn" var="pathUrl">
             <c:param name="path" value="/${accuPath}" />
             <c:param name="revision" value="${command.revision}" />
+            <c:param name="name" value="${command.name}" />
           </c:url>
           <a href="${pathUrl}">${pathSegment}</a>
       </c:otherwise>

@@ -33,7 +33,7 @@ public class RevisionCacheUpdaterTest extends TestCase {
       changedPaths2.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
       logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
-      cacheUpdater.update(logEntries);
+      cacheUpdater.update("defaultsvn", logEntries);
       final SVNLogEntry result1 = cache.get(123);
       final SVNLogEntry result2 = cache.get(124);
 
