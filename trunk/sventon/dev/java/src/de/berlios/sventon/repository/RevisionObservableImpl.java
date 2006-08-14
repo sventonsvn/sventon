@@ -107,9 +107,10 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   /**
    * Update.
    *
-   * @param repository Repository to use for update.
+   * @param instanceName The instance name.
+   * @param repository   Repository to use for update.
    */
-  protected void update(final SVNRepository repository, final String instanceName) {
+  protected void update(final String instanceName, final SVNRepository repository) {
     if (!configuration.isConfigured()) {
       // Silently return. sventon has not yet been configured.
       return;
@@ -119,7 +120,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
       try {
-        Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY);
+        Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
         if (lastUpdatedRevision == null) {
           logger.info("No record about previously fetched revisions exists - fetching all revisions");
           lastUpdatedRevision = 0L;
@@ -132,7 +133,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
           logger.debug("Reading [" + logEntries.size() + "] revision(s)");
           setChanged();
           logger.debug("Notifying observers");
-          notifyObservers(logEntries);
+          notifyObservers(new RevisionUpdate(instanceName, logEntries));
           objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, headRevision);
         }
       } catch (SVNException svnex) {
@@ -154,23 +155,20 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       return;
     }
 
-    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration("defaultsvn");
-    if (!instanceConfiguration.isCacheUsed()) {
-      // Silently return. Cache is disabled.
-      return;
-    } else {
-
-      updating = true;
-
-      SVNRepository repository = null;
-      try {
-        repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
-      } catch (SVNException svnex) {
-        logger.warn("Unable to etablish repository connection", svnex);
-        return;
+    for (final String instanceName : configuration.getInstanceNames()) {
+      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
+      if (instanceConfiguration.isCacheUsed()) {
+        SVNRepository repository = null;
+        try {
+          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
+        } catch (SVNException svnex) {
+          logger.warn("Unable to etablish repository connection", svnex);
+          continue;
+        }
+        update(instanceConfiguration.getInstanceName(), repository);
       }
-      update(repository, instanceConfiguration.getInstanceName());
     }
+
   }
 
   /**

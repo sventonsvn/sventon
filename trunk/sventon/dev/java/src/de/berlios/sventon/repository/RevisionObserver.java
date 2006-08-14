@@ -11,10 +11,7 @@
  */
 package de.berlios.sventon.repository;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
-
 import java.util.Observer;
-import java.util.List;
 
 /**
  * RevisionObserver. Interface to be implemented by
@@ -27,9 +24,8 @@ public interface RevisionObserver extends Observer {
   /**
    * Called to update the observer.
    *
-   * @param instanceName Instance name.
-   * @param revisions    The new revisions.
+   * @param revisionUpdate The updated revisions.
    */
-  void update(final String instanceName, final List<SVNLogEntry> revisions);
+  void update(final RevisionUpdate revisionUpdate);
 
 }

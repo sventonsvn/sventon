@@ -1,5 +1,6 @@
 package de.berlios.sventon.repository.cache.logmessagecache;
 
+import de.berlios.sventon.repository.RevisionUpdate;
 import junit.framework.TestCase;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
@@ -28,7 +29,7 @@ public class LogMessageCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, cache.getSize());
-    cacheUpdater.update("defaultsvn", logEntries);
+    cacheUpdater.update(new RevisionUpdate("defaultsvn", logEntries));
     assertEquals(2, cache.find("revision").size());
   }
 }
