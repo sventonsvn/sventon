@@ -112,14 +112,7 @@ public class ConfigurationSubmissionController extends AbstractController {
       logger.warn(sx);
     }
 
-    final ModelAndView modelAndView;
-    if (configuration.getInstanceCount() > 1) {
-      modelAndView = new ModelAndView(new RedirectView("listinstances.svn"));
-    } else {
-      final String instanceName = configuration.getInstanceNames().iterator().next();
-      modelAndView = new ModelAndView(new RedirectView("repobrowser.svn?name=" + instanceName));
-    }
-    return modelAndView;
+    return new ModelAndView(new RedirectView("start.svn"));
   }
 
   /**

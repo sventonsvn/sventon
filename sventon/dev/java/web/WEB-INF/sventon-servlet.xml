@@ -291,6 +291,12 @@
     </property>
   </bean>
 
+  <bean id="startController" class="de.berlios.sventon.web.ctrl.StartController">
+    <property name="configuration">
+      <ref local="configuration"/>
+    </property>
+  </bean>
+
   <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
     <property name="configuration">
       <ref local="configuration"/>
@@ -327,6 +333,7 @@
         <prop key="/config.svn">configurationController</prop>
         <prop key="/submitconfig.svn">configurationSubmissionController</prop>
         <prop key="/listinstances.svn">listInstancesController</prop>
+        <prop key="/start.svn">startController</prop>
         <prop key="/getthumb.svn">getThumbnailController</prop>
         <prop key="/showthumbs.svn">showThumbnailsController</prop>
         <prop key="/diff.svn">diffController</prop>
