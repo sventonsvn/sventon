@@ -2,6 +2,7 @@ package de.berlios.sventon.repository.cache.revisioncache;
 
 import de.berlios.sventon.cache.ObjectCache;
 import de.berlios.sventon.cache.ObjectCacheImpl;
+import de.berlios.sventon.repository.RevisionUpdate;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -33,7 +34,7 @@ public class RevisionCacheUpdaterTest extends TestCase {
       changedPaths2.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
       logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
-      cacheUpdater.update("defaultsvn", logEntries);
+      cacheUpdater.update(new RevisionUpdate("defaultsvn", logEntries));
       final SVNLogEntry result1 = cache.get(123);
       final SVNLogEntry result2 = cache.get(124);
 

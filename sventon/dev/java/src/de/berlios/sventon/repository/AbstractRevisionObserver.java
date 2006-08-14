@@ -11,9 +11,6 @@
  */
 package de.berlios.sventon.repository;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
-
-import java.util.List;
 import java.util.Observable;
 
 /**
@@ -32,8 +29,7 @@ public abstract class AbstractRevisionObserver implements RevisionObserver {
    */
   public void update(final Observable observable, final Object arg) {
     if (observable != null && observable instanceof RevisionObservableImpl) {
-      final Object[] nameAndObject = (Object[]) arg;
-      update((String) nameAndObject[0], (List<SVNLogEntry>) nameAndObject[1]);
+      update((RevisionUpdate) arg);
     }
   }
 

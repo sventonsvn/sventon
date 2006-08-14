@@ -19,8 +19,8 @@ package de.berlios.sventon.repository;
 public interface RevisionObservable {
 
   /**
-   * Updates the observable. Polls the repository and looks for
-   * new revisions to fetch and publish to registered observers.
+   * Updates the observable. For each configured repository instance, polls the repository
+   * and looks for new revisions to fetch and publish to registered observers.
    */
   void update();
 

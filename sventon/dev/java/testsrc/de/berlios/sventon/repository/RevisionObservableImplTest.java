@@ -33,7 +33,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setObjectCache(cache);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());
-      revisionObservable.update(new TestRepository(), "defaultsvn");
+      revisionObservable.update("defaultsvn", new TestRepository());
     } finally {
       cache.shutdown();
     }
@@ -43,7 +43,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     assertEquals(1, ((List<SVNLogEntry>) arg).size());
   }
 
-  public void update(final String instanceName, final List<SVNLogEntry> revisions) {
+  public void update(final RevisionUpdate revisionUpdate) {
   }
 
   class TestRepository extends SVNRepositoryStub {
