@@ -62,7 +62,7 @@
           Rev: ${command.revision} (${numrevision})
       </c:when>
       <c:otherwise>
-          Rev: <a class="exclamationText" href="revinfo.svn?revision=${command.revision}">${command.revision}</a>
+          Rev: <a class="exclamationText" href="revinfo.svn?revision=${command.revision}&name=${command.name}">${command.revision}</a>
       </c:otherwise>
     </c:choose>
      - <a href="repobrowser.svn?path=/&revision=${command.revision}&name=${command.name}">
