@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * the controller will redirect to the repository browser view.
  * In any other case, the {@link ListInstancesController} will be called
  * so that the user can choose which repository instance to browse.
+ * If no instance has been configured user will be redirected to
+ * the config page.
  *
  * @author jesper@users.berlios.de
  */
@@ -28,7 +30,9 @@ public class StartController extends AbstractController {
       throws Exception {
 
     final ModelAndView modelAndView;
-    if (configuration.getInstanceCount() > 1) {
+    if (!configuration.isConfigured()) {
+      modelAndView = new ModelAndView(new RedirectView("config.svn"));
+    } else if (configuration.getInstanceCount() > 1) {
       modelAndView = new ModelAndView(new RedirectView("listinstances.svn"));
     } else if (configuration.getInstanceCount() == 1) {
       final String instanceName = configuration.getInstanceNames().iterator().next();

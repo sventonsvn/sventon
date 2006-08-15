@@ -233,6 +233,7 @@
           <c:forEach items="${logMessages}" var="logMessage">
             <c:url value="revinfo.svn" var="showRevInfoUrl">
               <c:param name="revision" value="${logMessage.revision}" />
+              <c:param name="name" value="${command.name}" />
             </c:url>
             <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
               <td><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
