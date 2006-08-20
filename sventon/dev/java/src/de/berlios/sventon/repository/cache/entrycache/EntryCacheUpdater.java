@@ -85,7 +85,9 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
-    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s)");
+    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
+        + revisionUpdate.getInstanceName());
+
     if (configuration == null) {
       logger.warn("Method setConfiguration() has not yet been called!");
     }
@@ -119,7 +121,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     final long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
-      logger.info("Starting initial cache population");
+      logger.info("Starting initial population of cache: " + revisionUpdate.getInstanceName());
       try {
         addDirectories(entryCache, repository, "/", lastRevision);
         entryCache.setCachedRevision(lastRevision);
