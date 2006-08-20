@@ -31,17 +31,12 @@ public class ConfigCommandValidator implements Validator {
   /**
    * Logger for this class and subclasses
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Controls whether repository connection should be tested or not.
    */
   private boolean testConnection = true;
-
-  /**
-   * Sventon temporary config path.
-   */
-  private String configPath;
 
   /**
    * Constructor.
@@ -57,15 +52,6 @@ public class ConfigCommandValidator implements Validator {
    */
   protected ConfigCommandValidator(boolean testConnection) {
     this.testConnection = testConnection;
-  }
-
-  /**
-   * Sets the config path where temporary files will be stored.
-   *
-   * @param configPath The path
-   */
-  public void setConfigPath(final String configPath) {
-    this.configPath = configPath;
   }
 
   public boolean supports(Class clazz) {
@@ -106,7 +92,7 @@ public class ConfigCommandValidator implements Validator {
         instanceConfiguration.setConfiguredUID(command.getUsername());
         instanceConfiguration.setConfiguredPWD(command.getPassword());
         try {
-          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configPath);
+          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);

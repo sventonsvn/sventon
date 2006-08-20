@@ -163,7 +163,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       if (instanceConfiguration.isCacheUsed()) {
         SVNRepository repository = null;
         try {
-          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
+          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
           final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
           update(instanceConfiguration.getInstanceName(), repository, objectCache);
         } catch (final Exception ex) {

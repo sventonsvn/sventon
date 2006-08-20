@@ -77,7 +77,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
 
     final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(repositoryInstanceName);
     final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
+        RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";

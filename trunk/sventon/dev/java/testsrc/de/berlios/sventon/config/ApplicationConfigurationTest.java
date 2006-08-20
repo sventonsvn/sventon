@@ -4,24 +4,9 @@ import junit.framework.TestCase;
 
 public class ApplicationConfigurationTest extends TestCase {
 
-  public void testSetSVNConfigurationPath() throws Exception {
-    final ApplicationConfiguration ac = new ApplicationConfiguration();
-
-    ac.setSVNConfigurationPath(null);
-    assertNull(ac.getSVNConfigurationPath());
-    ac.setSVNConfigurationPath("");
-    assertNull(ac.getSVNConfigurationPath());
-
-    try {
-      ac.setSVNConfigurationPath("/this/is/not/a/sventon/directory/and/if/it/is/-/bad/luck");
-      fail("Should cause IllegalArgumentException");
-    } catch (IllegalArgumentException iae) {
-      // expected
-    }
-    assertNull(ac.getSVNConfigurationPath());
-
-    ac.setSVNConfigurationPath(System.getProperty("java.io.tmpdir"));
-    assertNotNull(ac.getSVNConfigurationPath());
+  public void testApplicationConfiguration() throws Exception {
+    final ApplicationConfiguration configuration = new ApplicationConfiguration();
+    assertFalse(configuration.isConfigured());
+    assertEquals(0, configuration.getInstanceCount());
   }
-
 }

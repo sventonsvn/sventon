@@ -59,7 +59,7 @@ public final class FileUtils {
    * @param output Output (destination) stream
    * @throws IOException If unable to write to output stream.
    */
-  public static void writeStream(InputStream input, ServletOutputStream output) throws IOException {
+  public static void writeStream(final InputStream input, final ServletOutputStream output) throws IOException {
     byte[] buffer = new byte[8192];
     int bytesRead;
     while ((bytesRead = input.read(buffer)) >= 0) {

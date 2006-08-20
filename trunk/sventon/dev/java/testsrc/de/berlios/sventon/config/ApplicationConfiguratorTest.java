@@ -27,7 +27,6 @@ public class ApplicationConfiguratorTest extends TestCase {
     final ApplicationConfiguration configuration = new ApplicationConfiguration();
     assertEquals(0, configuration.getInstanceCount());
     assertFalse(configuration.isConfigured());
-    assertNull(configuration.getSVNConfigurationPath());
 
     File tempConfigFile = null;
     OutputStream os = null;
@@ -43,7 +42,6 @@ public class ApplicationConfiguratorTest extends TestCase {
 
       assertEquals(1, configuration.getInstanceCount());
       assertTrue(configuration.isConfigured());
-      assertNull(configuration.getSVNConfigurationPath());
 
       final InstanceConfiguration defaultSVN = configuration.getInstanceConfiguration("defaultsvn");
       assertNotNull(defaultSVN);

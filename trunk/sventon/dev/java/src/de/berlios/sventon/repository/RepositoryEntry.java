@@ -25,7 +25,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntry implements Serializable {
+public final class RepositoryEntry implements Serializable {
 
   public static final int FULL_ENTRY_NAME_MAX_LENGTH = 60;
   private static final long serialVersionUID = 3617229449081593805L;
