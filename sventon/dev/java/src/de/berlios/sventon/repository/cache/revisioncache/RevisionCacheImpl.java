@@ -13,7 +13,7 @@ package de.berlios.sventon.repository.cache.revisioncache;
 
 import org.tmatesoft.svn.core.SVNLogEntry;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.cache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 
 /**
  * Contains cached revisions.

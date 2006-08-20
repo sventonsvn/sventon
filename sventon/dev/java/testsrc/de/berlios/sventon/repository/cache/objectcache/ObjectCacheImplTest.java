@@ -1,6 +1,8 @@
-package de.berlios.sventon.cache;
+package de.berlios.sventon.repository.cache.objectcache;
 
 import junit.framework.TestCase;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 
 public class ObjectCacheImplTest extends TestCase {
 

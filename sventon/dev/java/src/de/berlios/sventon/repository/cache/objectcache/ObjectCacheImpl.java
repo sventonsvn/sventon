@@ -9,9 +9,10 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.cache;
+package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;

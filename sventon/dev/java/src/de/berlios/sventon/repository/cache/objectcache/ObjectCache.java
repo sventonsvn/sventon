@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.cache;
+package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
 
