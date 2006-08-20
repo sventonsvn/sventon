@@ -11,9 +11,10 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,10 +50,10 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   private boolean updating = false;
 
   /**
-   * Object cache instance. Used to get/put info regarding
-   * repository URL and last observed revision.
+   * Object cache manager instance.
+   * Used to get/put info regarding repository URL and last observed revision.
    */
-  private ObjectCache objectCache;
+  private ObjectCacheManager objectCacheManager;
 
   /**
    * Object cache key, <code>lastCachedLogRevision</code>
@@ -96,12 +97,12 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   }
 
   /**
-   * Sets the object cache instance.
+   * Sets the object cache manager instance.
    *
-   * @param objectCache The cache instance.
+   * @param objectCacheManager The cache manager instance.
    */
-  public void setObjectCache(final ObjectCache objectCache) {
-    this.objectCache = objectCache;
+  public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
+    this.objectCacheManager = objectCacheManager;
   }
 
   /**
@@ -109,8 +110,9 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    *
    * @param instanceName The instance name.
    * @param repository   Repository to use for update.
+   * @param objectCache  ObjectCache instance to read/write information about last observed revisions.
    */
-  protected void update(final String instanceName, final SVNRepository repository) {
+  protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache) {
     if (!configuration.isConfigured()) {
       // Silently return. sventon has not yet been configured.
       return;
@@ -161,14 +163,14 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
         SVNRepository repository = null;
         try {
           repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
-        } catch (SVNException svnex) {
-          logger.warn("Unable to etablish repository connection", svnex);
-          continue;
+          final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
+          logger.debug("Updating instance [" + instanceConfiguration.getInstanceName() + "]");
+          update(instanceConfiguration.getInstanceName(), repository, objectCache);
+        } catch (final Exception ex) {
+          logger.warn("Unable to establish repository connection", ex);
         }
-        update(instanceConfiguration.getInstanceName(), repository);
       }
     }
-
   }
 
   /**

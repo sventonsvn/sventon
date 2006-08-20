@@ -2,7 +2,6 @@ package de.berlios.sventon.repository.cache.revisioncache;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
-import de.berlios.sventon.repository.RevisionUpdate;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -12,13 +11,12 @@ import java.util.*;
 public class RevisionCacheUpdaterTest extends TestCase {
 
   private ObjectCache createMemoryCache() throws Exception {
-    return new ObjectCacheImpl("sventonTestCache", 1000, false, false, 0, 0, false, 0);
+    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
     final ObjectCache objectCache = createMemoryCache();
     final RevisionCacheImpl cache = new RevisionCacheImpl(objectCache);
-    final RevisionCacheUpdater cacheUpdater = new RevisionCacheUpdater(cache);
 
     try {
       final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -33,7 +31,7 @@ public class RevisionCacheUpdaterTest extends TestCase {
       changedPaths2.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
       logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
-      cacheUpdater.update(new RevisionUpdate("defaultsvn", logEntries));
+      RevisionCacheUpdater.updateInternal(cache, logEntries);
       final SVNLogEntry result1 = cache.get(123);
       final SVNLogEntry result2 = cache.get(124);
 

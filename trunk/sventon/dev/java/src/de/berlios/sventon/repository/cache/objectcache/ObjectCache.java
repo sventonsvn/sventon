@@ -12,13 +12,14 @@
 package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.Cache;
 
 /**
  * Interface to be implemented by sventon object cache class.
  *
  * @author jesper@user.berlios.de
  */
-public interface ObjectCache {
+public interface ObjectCache extends Cache {
 
   /**
    * Puts an object into the cache.

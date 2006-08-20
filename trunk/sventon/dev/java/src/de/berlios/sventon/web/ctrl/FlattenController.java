@@ -46,7 +46,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     }
 
     logger.debug("Flattening directories below: " + fromPath);
-    entries.addAll(getCache().findDirectories(fromPath));
+    entries.addAll(getCache().findDirectories(svnCommand.getName(), fromPath));
     logger.debug(entries.size() + " entries found");
 
     logger.debug("Create model");

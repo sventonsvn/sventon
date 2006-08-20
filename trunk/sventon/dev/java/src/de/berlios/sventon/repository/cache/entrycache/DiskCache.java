@@ -34,9 +34,9 @@ public class DiskCache extends EntryCache {
   private static final String ENTRY_CACHE_FILENAME = "entrycache.ser";
 
   /**
-   * The cache directory and filename.
+   * The cache file.
    */
-  private String cacheFileName;
+  private final File cacheFile;
 
   /**
    * Constructor.
@@ -47,15 +47,23 @@ public class DiskCache extends EntryCache {
    * @throws CacheException if unable to load cache file.
    */
   public DiskCache(final String cacheDirectoryPath) throws CacheException {
-    if (cacheDirectoryPath == null || "".equals(cacheDirectoryPath)) {
-      return;
-    } else {
+    this(new File(cacheDirectoryPath));
+  }
+
+  /**
+   * Constructor.
+   * Loads the persisted cache from disk, if it exists.
+   * If not, a new empty cache will be created.
+   *
+   * @param cacheDirectory The path where the cache file is located.
+   * @throws CacheException if unable to load cache file.
+   */
+  public DiskCache(final File cacheDirectory) throws CacheException {
       logger.info("Initializing DiskCache");
-      logger.debug("Using directory: " + cacheDirectoryPath);
-      this.cacheFileName = cacheDirectoryPath + ENTRY_CACHE_FILENAME;
-      new File(cacheDirectoryPath).mkdirs();
+      logger.debug("Using directory: " + cacheDirectory.getAbsolutePath());
+      cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
+      cacheDirectory.mkdirs();
       load();
-    }
   }
 
   /**
@@ -64,11 +72,10 @@ public class DiskCache extends EntryCache {
    * @throws CacheException if unable to read cache file.
    */
   private void load() throws CacheException {
-    final File entryCacheFile = new File(cacheFileName);
     final ObjectInputStream inputStream;
-    if (entryCacheFile.exists()) {
+    if (cacheFile.exists()) {
       try {
-        inputStream = new ObjectInputStream(new FileInputStream(entryCacheFile));
+        inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
         setCachedRevision(inputStream.readLong());
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
         logger.debug("Cached revision is: " + getCachedRevision());
@@ -90,10 +97,10 @@ public class DiskCache extends EntryCache {
   public synchronized void shutdown() throws CacheException {
     logger.info("Shutting down");
     if (getSize() > 0) {
-      logger.info("Saving entryCache to disk, " + cacheFileName);
+      logger.info("Saving entryCache to disk, " + cacheFile.getAbsolutePath());
       final ObjectOutputStream out;
       try {
-        out = new ObjectOutputStream(new FileOutputStream(cacheFileName));
+        out = new ObjectOutputStream(new FileOutputStream(cacheFile));
         out.writeLong(getCachedRevision());
         out.writeObject(getCachedEntries());
         out.flush();

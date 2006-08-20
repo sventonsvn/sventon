@@ -14,6 +14,7 @@ package de.berlios.sventon.repository.cache.revisioncache;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -21,30 +22,39 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
- * Class responsible for updating the revision cache.
+ * Class responsible for updating one or more revision cache instances.
  *
  * @author jesper@users.berlios.de
  */
 public class RevisionCacheUpdater extends AbstractRevisionObserver {
 
   /**
-   * The logging instance.
+   * The static logging instance.
    */
-  private final Log logger = LogFactory.getLog(getClass());
+  private static final Log logger = LogFactory.getLog(RevisionCacheUpdater.class);
 
   /**
-   * The cache instance.
+   * The cache manager instance.
    */
-  private RevisionCache revisionCache;
+  private final RevisionCacheManager revisionCacheManager;
 
   /**
    * Constructor.
    *
-   * @param revisionCache The cache instance.
+   * @param revisionCacheManager The cache manager instance.
+   * @param configuration        ApplicationConfiguration instance.
    */
-  public RevisionCacheUpdater(final RevisionCache revisionCache) {
-    logger.info("Starting");
-    this.revisionCache = revisionCache;
+  public RevisionCacheUpdater(final RevisionCacheManager revisionCacheManager,
+                              final ApplicationConfiguration configuration) {
+    this.revisionCacheManager = revisionCacheManager;
+    for (final String instanceName : configuration.getInstanceNames()) {
+      logger.debug("Initializing cache instance: " + instanceName);
+      try {
+        this.revisionCacheManager.getCache(instanceName);
+      } catch (CacheException ce) {
+        logger.warn("Unable to initialize instance");
+      }
+    }
   }
 
   /**
@@ -55,6 +65,18 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
+    for (final RevisionCache revisionCache : revisionCacheManager.getCaches().values()) {
+      updateInternal(revisionCache, revisions);
+    }
+  }
+
+  /**
+   * Internal update method. Made protected for testing reasons only.
+   *
+   * @param revisionCache Cache instance
+   * @param revisions     Revisions
+   */
+  protected static void updateInternal(final RevisionCache revisionCache, final List<SVNLogEntry> revisions) {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         revisionCache.add(svnLogEntry);

@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.repository.cache.Cache;
+import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.export.ExportEditor;
 import de.berlios.sventon.repository.export.ExportReporterBaton;
@@ -44,33 +44,19 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * The cache instance.
    */
-  private Cache cache;
+  private CacheGateway cacheGateway;
 
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final SVNRepository repository, final long revision, final boolean useCache)
-      throws SVNException {
-
-    SVNLogEntry entry = null;
-    if (useCache) {
-      try {
-        logger.debug("Getting cached revision: " + revision);
-        entry = getCachedRevision(revision);
-      } catch (CacheException ce) {
-        logger.warn("Unable to get cache revision: " + revision, ce);
-        logger.info("Fallback - make a deep log fetch instead");
-      }
-    }
-    return entry != null ? entry : getRevision(repository, revision, "/");
+  public SVNLogEntry getRevision(final SVNRepository repository, final long revision) throws SVNException {
+    return getRevision(repository, revision, "/");
   }
 
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final SVNRepository repository, final long revision, final String path)
-      throws SVNException {
-
+  public SVNLogEntry getRevision(final SVNRepository repository, final long revision, final String path) throws SVNException {
     return (SVNLogEntry) repository.log(
         new String[]{path}, null, revision, revision, true, false).iterator().next();
   }
@@ -108,20 +94,22 @@ public class RepositoryServiceImpl implements RepositoryService {
     return logEntries;
   }
 
-  private SVNLogEntry getCachedRevision(final long revision) throws CacheException {
-    return cache.getRevision(revision);
+  private SVNLogEntry getCachedRevision(final String instanceName, final long revision) throws CacheException {
+    return cacheGateway.getRevision(instanceName, revision);
   }
 
-  private List<SVNLogEntry> getCachedRevisions(final long fromRevision, final long toRevision) throws CacheException {
+  private List<SVNLogEntry> getCachedRevisions(final String instanceName, final long fromRevision, final long toRevision)
+      throws CacheException {
+
     //TODO: revisit!
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (fromRevision < toRevision) {
       for (long revision = fromRevision; revision <= toRevision; revision++) {
-        logEntries.add(cache.getRevision(revision));
+        logEntries.add(cacheGateway.getRevision(instanceName, revision));
       }
     } else {
       for (long revision = fromRevision; revision >= toRevision; revision--) {
-        logEntries.add(cache.getRevision(revision));
+        logEntries.add(cacheGateway.getRevision(instanceName, revision));
       }
     }
     return logEntries;
@@ -220,12 +208,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   /**
-   * Sets the cache instance.
+   * Sets the cache gateway instance.
    *
-   * @param cache Cache instance
+   * @param cacheGateway Cache gateway instance
    */
-  public void setCache(final Cache cache) {
-    this.cache = cache;
+  public void setCacheGateway(final CacheGateway cacheGateway) {
+    this.cacheGateway = cacheGateway;
   }
 
 }

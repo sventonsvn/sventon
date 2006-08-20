@@ -50,9 +50,9 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
 
     if (isAllUpperCase(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");
-      entries.addAll(getCache().findEntryByCamelCase(new CamelCasePattern(searchString), startDir));
+      entries.addAll(getCache().findEntryByCamelCase(svnCommand.getName(), new CamelCasePattern(searchString), startDir));
     } else {
-      entries.addAll(getCache().findEntry(searchString, startDir));
+      entries.addAll(getCache().findEntry(svnCommand.getName(), searchString, startDir));
     }
 
     new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(entries);

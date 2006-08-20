@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
@@ -37,9 +38,9 @@ import java.net.URL;
 public class GetThumbnailController extends AbstractSVNTemplateController implements Controller {
 
   /**
-   * Object cache instance.
+   * Object cache manager instance.
    */
-  private ObjectCache objectCache;
+  private ObjectCacheManager objectCacheManager;
 
   /**
    * Image utility.
@@ -66,6 +67,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     logger.debug("Getting file as 'thumbnail'");
 
     final ServletOutputStream output = response.getOutputStream();
+    final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
 
     if (!imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
@@ -112,12 +114,12 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
   }
 
   /**
-   * Sets the object cache instance.
+   * Sets the object cache manager instance.
    *
-   * @param objectCache The cache instance.
+   * @param objectCacheManager The cache manager instance.
    */
-  public void setObjectCache(final ObjectCache objectCache) {
-    this.objectCache = objectCache;
+  public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
+    this.objectCacheManager = objectCacheManager;
   }
 
   /**

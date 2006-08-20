@@ -14,6 +14,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.Cache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  *
  * @author jesper@users.berlios.de
  */
-public abstract class EntryCache {
+public abstract class EntryCache implements Cache {
 
   /**
    * The logging instance.

@@ -11,10 +11,10 @@ public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
     final EntryCache entryCache = new MemoryCache();
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
-    cacheManager.addCache("testCache", entryCache);
-    final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(cacheManager);
-    cacheUpdater.setRepository(new TestRepository());
+    //final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    //cacheManager.addCache("testCache", entryCache);
+    //final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(cacheManager);
+    //cacheUpdater.setRepository(new TestRepository());
 
     assertEquals(0, entryCache.getSize());
 
@@ -31,7 +31,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, entryCache.getSize());
-    cacheUpdater.update(new RevisionUpdate("defaultsvn", logEntries));
+    EntryCacheUpdater.updateInternal(entryCache, new TestRepository(), new RevisionUpdate("defaultsvn", logEntries));
     //TODO: Fix this test - all repository.info()-calls returns the same value now.
     assertEquals(1, entryCache.getSize());
   }

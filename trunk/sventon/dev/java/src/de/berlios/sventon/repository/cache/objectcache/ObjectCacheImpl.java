@@ -12,10 +12,10 @@
 package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -45,14 +45,10 @@ public final class ObjectCacheImpl implements ObjectCache {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Name of the cache.
-   */
-  private String cacheName;
-
-  /**
    * Constructor.
    *
    * @param cacheName           Name of the cache.
+   * @param diskStorePath       Path where to store cache files
    * @param maxElementsInMemory Max elements in memory
    * @param overflowToDisk      Overflow to disk
    * @param eternal             If true, objects never expire
@@ -64,6 +60,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    * @throws CacheException if unable to create cache.
    */
   public ObjectCacheImpl(final String cacheName,
+                         final String diskStorePath,
                          final int maxElementsInMemory,
                          final boolean overflowToDisk,
                          final boolean eternal,
@@ -74,8 +71,8 @@ public final class ObjectCacheImpl implements ObjectCache {
     try {
       // Initialize cache using failsafe configuration
       cacheManager = new CacheManager(getClass().getResource("/ehcache-failsafe.xml"));
-      cache = new Cache(cacheName, maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds,
-          timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds);
+      cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
+          eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
       cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
       throw new CacheException("Unable to create cache instance", ce);

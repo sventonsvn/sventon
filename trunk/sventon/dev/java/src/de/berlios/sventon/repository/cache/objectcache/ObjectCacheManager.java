@@ -12,29 +12,16 @@
 package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import de.berlios.sventon.repository.cache.CacheManager;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 /**
  * Handles EntryCache instances.
  *
  * @author jesper@users.berlios.de
  */
-public class ObjectCacheManager {
-
-  /**
-   * Logger for this class and subclasses
-   */
-  protected final Log logger = LogFactory.getLog(getClass());
-
-  /**
-   * The cache instances.
-   */
-  final Map<String, ObjectCache> caches = new HashMap<String, ObjectCache>();
+public class ObjectCacheManager extends CacheManager<ObjectCache> {
 
   /**
    * Root directory for cache files.
@@ -80,22 +67,6 @@ public class ObjectCacheManager {
   }
 
   /**
-   * Gets a cache by name. If cache does not exist yet, it will be created
-   * using the default settings.
-   *
-   * @param cacheName Name of cache to get
-   * @return The cache instance.
-   */
-  public ObjectCache getCache(final String cacheName) throws CacheException {
-    logger.debug("Getting cache: " + cacheName);
-    ObjectCache cache = caches.get(cacheName);
-    if (cache == null) {
-      cache = addCache(cacheName, createCache(cacheName));
-    }
-    return cache;
-  }
-
-  /**
    * Creates a new cache instance using given name and default settings.
    *
    * @param cacheName Name of cache instance.
@@ -103,10 +74,13 @@ public class ObjectCacheManager {
    * @throws de.berlios.sventon.repository.cache.CacheException
    *          if unable to create cache.
    */
-  private ObjectCache createCache(final String cacheName) throws CacheException {
+  protected ObjectCache createCache(final String cacheName) throws CacheException {
     logger.debug("Creating cache: " + cacheName);
+    final File cachePath = new File(rootDirectory, cacheName);
+    cachePath.mkdirs();
     return new ObjectCacheImpl(
         cacheName,
+        cachePath.getAbsolutePath(),
         maxElementsInMemory,
         overflowToDisk,
         eternal,
@@ -114,28 +88,6 @@ public class ObjectCacheManager {
         timeToIdleSeconds,
         diskPersistent,
         diskExpiryThreadIntervalSeconds);
-  }
-
-  /**
-   * For test purposes only.
-   * Adds a cache instance to the manager's list.
-   *
-   * @param cacheName  Name of cache
-   * @param objectCache Cache instance
-   * @return The added cache instance
-   */
-  public ObjectCache addCache(final String cacheName, final ObjectCache objectCache) {
-    return caches.put(cacheName, objectCache);
-  }
-
-
-  /**
-   * Gets all cache instances.
-   *
-   * @return Cache instances.
-   */
-  public Map<String, ObjectCache> getCaches() {
-    return Collections.unmodifiableMap(caches);
   }
 
   /**

@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.Cache;
 import de.berlios.sventon.repository.LogMessage;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public interface LogMessageCache {
+public interface LogMessageCache extends Cache {
 
   /**
    * Finds occurencies of given search string among the cached log messages.
