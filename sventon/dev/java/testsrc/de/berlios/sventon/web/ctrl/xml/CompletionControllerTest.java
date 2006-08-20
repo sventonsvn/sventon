@@ -5,7 +5,7 @@ import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.cache.Cache;
+import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.cache.CamelCasePattern;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -37,7 +37,7 @@ public class CompletionControllerTest extends TestCase {
     SVNBaseCommand command = new SVNBaseCommand();
     CompletionController ctrl = new CompletionController();
     ctrl.setEncoding("UTF-8");
-    ctrl.setCache(new TestCache());
+    ctrl.setCacheGateway(new TestCacheGatewayImpl());
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.addParameter("complete", "file");
@@ -66,37 +66,46 @@ public class CompletionControllerTest extends TestCase {
     }
   }
 
-  class TestCache implements Cache {
+  class TestCacheGatewayImpl implements CacheGateway {
 
-    public List<RepositoryEntry> findEntry(final String searchString) throws CacheException {
+    public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<RepositoryEntry> findEntryByCamelCase(final CamelCasePattern pattern, final String startDir) throws CacheException {
+    public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern,
+                                                      final String startDir) throws CacheException {
       return null;
     }
 
-    public List<RepositoryEntry> findEntry(final String searchString, final String startDir) throws CacheException {
+    public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir)
+        throws CacheException {
       return null;
     }
 
-    public List<RepositoryEntry> findEntry(final String searchString, final String startDir, final Integer limit) throws CacheException {
+    public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir,
+                                           final Integer limit) throws CacheException {
+
       final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
-      entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/", null));
-      entries.add(new RepositoryEntry(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/", null));
-      entries.add(new RepositoryEntry(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/", null));
+      entries.add(new RepositoryEntry(
+          new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/", null));
+      entries.add(new RepositoryEntry(
+          new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/", null));
+      entries.add(new RepositoryEntry(
+          new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/", null));
       return entries;
     }
 
-    public List<RepositoryEntry> findDirectories(final String fromPath) throws CacheException {
+    public List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath)
+        throws CacheException {
+
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<LogMessage> find(final String queryString) throws CacheException {
+    public List<LogMessage> find(final String instanceName, final String queryString) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public SVNLogEntry getRevision(final long revision) throws CacheException {
+    public SVNLogEntry getRevision(final String instanceName, final long revision) throws CacheException {
       return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

@@ -91,7 +91,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
 
     try {
       response.getWriter().write(XMLDocumentHelper.getAsString(XMLDocumentHelper.createXML(
-          repositoryService.getRevision(repository, headRevision, instanceConfiguration.isCacheUsed()), datePattern),
+          repositoryService.getRevision(repository, headRevision), datePattern),
           encoding));
     } catch (IOException ioex) {
       logger.warn(ioex);

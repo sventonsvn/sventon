@@ -10,57 +10,61 @@ import org.tmatesoft.svn.core.*;
 
 import java.util.*;
 
-public class CacheImplTest extends TestCase {
+public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntry() throws Exception {
+    final String instanceName = "testCache";
     final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache("testCache", entryCache);
+    cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
 
-    final CacheImpl cache = new CacheImpl();
+    final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(4, cache.findEntry("java").size());
+    assertEquals(4, cache.findEntry(instanceName, "java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
+    final String instanceName = "testCache";
     final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache("testCache", entryCache);
+    cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
 
-    final CacheImpl cache = new CacheImpl();
+    final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(1, cache.findEntry("html", "/trunk/src/").size());
+    assertEquals(1, cache.findEntry(instanceName, "html", "/trunk/src/").size());
   }
 
   public void testFindEntryWithLimit() throws Exception {
+    final String instanceName = "testCache";
     final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache("testCache", entryCache);
+    cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
 
-    final CacheImpl cache = new CacheImpl();
+    final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(2, cache.findEntry("java", "/", 2).size());
+    assertEquals(2, cache.findEntry(instanceName, "java", "/", 2).size());
 
-    assertEquals(4, cache.findEntry("java", "/", null).size());
-    assertEquals(4, cache.findEntry("java", "/", 8).size());
-    assertEquals(4, cache.findEntry("java", "/", 0).size());
-    assertEquals(1, cache.findEntry("java", "/", 1).size());
+    assertEquals(4, cache.findEntry(instanceName, "java", "/", null).size());
+    assertEquals(4, cache.findEntry(instanceName, "java", "/", 8).size());
+    assertEquals(4, cache.findEntry(instanceName, "java", "/", 0).size());
+    assertEquals(1, cache.findEntry(instanceName, "java", "/", 1).size());
   }
 
   public void testFindDirectories() throws Exception {
+    final String instanceName = "testCache";
     final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache("testCache", entryCache);
+    cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
 
-    final CacheImpl cache = new CacheImpl();
+    final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(3, cache.findDirectories("/").size());
+    assertEquals(3, cache.findDirectories(instanceName, "/").size());
 
-    assertEquals(1, cache.findDirectories("/trunk/").size());
+    assertEquals(1, cache.findDirectories(instanceName, "/trunk/").size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

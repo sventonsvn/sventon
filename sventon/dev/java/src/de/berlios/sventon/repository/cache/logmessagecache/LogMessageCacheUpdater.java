@@ -12,9 +12,10 @@
 package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.AbstractRevisionObserver;
-import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RevisionUpdate;
+import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -22,30 +23,39 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.List;
 
 /**
- * Class responsible for updating the log message cache.
+ * Class responsible for updating one or more log message cache instances.
  *
  * @author jesper@user.berlios.de
  */
 public class LogMessageCacheUpdater extends AbstractRevisionObserver {
 
   /**
-   * The logging instance.
+   * The static logging instance.
    */
-  private final Log logger = LogFactory.getLog(getClass());
+  private static final Log logger = LogFactory.getLog(LogMessageCacheUpdater.class);
 
   /**
-   * The cache instance.
+   * The cache manager instance.
    */
-  private LogMessageCache logMessageCache;
+  private final LogMessageCacheManager logMessageCacheManager;
 
   /**
    * Constructor.
    *
-   * @param logMessageCache The cache instance.
+   * @param logMessageCacheManager The cache manager instance.
+   * @param configuration          ApplicationConfiguration instance.
    */
-  public LogMessageCacheUpdater(final LogMessageCache logMessageCache) {
-    logger.info("Starting");
-    this.logMessageCache = logMessageCache;
+  public LogMessageCacheUpdater(final LogMessageCacheManager logMessageCacheManager,
+                                final ApplicationConfiguration configuration) {
+    this.logMessageCacheManager = logMessageCacheManager;
+    for (final String instanceName : configuration.getInstanceNames()) {
+      logger.debug("Initializing cache instance: " + instanceName);
+      try {
+        this.logMessageCacheManager.getCache(instanceName);
+      } catch (CacheException ce) {
+        logger.warn("Unable to initialize instance");
+      }
+    }
   }
 
   /**
@@ -56,6 +66,18 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
+    for (final LogMessageCache logMessageCache : logMessageCacheManager.getCaches().values()) {
+      updateInternal(logMessageCache, revisions);
+    }
+  }
+
+  /**
+   * Internal update method. Made protected for testing purposes only.
+   *
+   * @param logMessageCache Cache instance
+   * @param revisions       Revisions
+   */
+  protected static void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         logMessageCache.add(new LogMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));

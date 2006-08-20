@@ -37,7 +37,7 @@
   </bean>
 
   <!-- property placeholder post-processor -->
-  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" />
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
   <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
     <property name="SVNConfigurationPath">
@@ -45,7 +45,7 @@
     </property>
   </bean>
 
-  <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator" >
+  <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
     <constructor-arg index="0">
       <value>/sventon.properties</value>
     </constructor-arg>
@@ -63,8 +63,8 @@
   </bean>
 
   <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
-    <property name="cache">
-      <ref local="cacheBean"/>
+    <property name="cacheGateway">
+      <ref local="cacheGatewayBean"/>
     </property>
   </bean>
 
@@ -72,8 +72,8 @@
     <property name="configuration">
       <ref local="configuration"/>
     </property>
-    <property name="cache">
-      <ref local="cacheBean"/>
+    <property name="cacheGateway">
+      <ref local="cacheGatewayBean"/>
     </property>
     <property name="revisionObservable">
       <ref local="revisionObservable"/>
@@ -171,7 +171,8 @@
     </property>
   </bean>
 
-  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController">
+  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -243,7 +244,8 @@
     </property>
   </bean>
 
-  <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController" parent="abstractController">
+  <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController"
+        parent="abstractController">
     <property name="validator">
       <ref local="svnBaseCommandValidator"/>
     </property>
@@ -357,9 +359,10 @@
     </property>
   </bean>
 
-  <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager" destroy-method="shutdown">
+  <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
+        destroy-method="shutdown">
     <constructor-arg index="0">
-      <value>sventon/cache/objectcache</value>
+      <ref local="sventonCacheDir"/>
     </constructor-arg>
     <constructor-arg index="1">
       <value>10000</value>
@@ -407,12 +410,12 @@
 
   <!-- Gateway class for accessing the caches -->
   <!-- Bean configuration -->
-  <bean id="cacheBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="cacheGatewayBean" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="proxyInterfaces">
-      <value>de.berlios.sventon.repository.cache.Cache</value>
+      <value>de.berlios.sventon.repository.cache.CacheGateway</value>
     </property>
     <property name="target">
-      <ref local="cache"/>
+      <ref local="cacheGateway"/>
     </property>
     <property name="interceptorNames">
       <list>
@@ -438,7 +441,7 @@
     </property>
   </bean>
 
-  <bean id="cache" class="de.berlios.sventon.repository.cache.CacheImpl">
+  <bean id="cacheGateway" class="de.berlios.sventon.repository.cache.CacheGatewayImpl">
     <property name="entryCacheManager">
       <ref local="entryCacheManager"/>
     </property>
@@ -479,25 +482,31 @@
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
-    <constructor-arg>
+    <constructor-arg index="0">
       <ref local="revisionCacheManager"/>
+    </constructor-arg>
+    <constructor-arg index="1">
+      <ref local="configuration"/>
     </constructor-arg>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
-    <constructor-arg>
+    <constructor-arg index="0">
       <ref local="entryCacheManager"/>
     </constructor-arg>
-    <property name="configuration">
+    <constructor-arg index="1">
       <ref local="configuration"/>
-    </property>
+    </constructor-arg>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="logMessageCacheUpdater" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheUpdater">
-    <constructor-arg>
+    <constructor-arg index="0">
       <ref local="logMessageCacheManager"/>
+    </constructor-arg>
+    <constructor-arg index="1">
+      <ref local="configuration"/>
     </constructor-arg>
   </bean>
 
@@ -510,7 +519,8 @@
     </constructor-arg>
   </bean>
 
-  <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager" destroy-method="shutdown">
+  <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager"
+        destroy-method="shutdown">
     <constructor-arg>
       <ref local="sventonCacheDir"/>
     </constructor-arg>
@@ -590,7 +600,8 @@
     <property name="targetMethod" value="update"/>
   </bean>
 
-  <bean id="exportFileCleanerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  <bean id="exportFileCleanerJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
     <property name="targetObject" ref="exportFileCleaner"/>
     <property name="targetMethod" value="clean"/>
   </bean>

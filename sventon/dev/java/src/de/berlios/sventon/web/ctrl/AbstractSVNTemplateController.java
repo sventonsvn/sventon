@@ -15,7 +15,7 @@ import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
-import de.berlios.sventon.repository.cache.Cache;
+import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.logging.Log;
@@ -114,7 +114,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /**
    * Gateway class for accessing the caches.
    */
-  private Cache cache;
+  private CacheGateway cacheGateway;
 
   /**
    * The observable instance. Used to check whether it's buzy updating or not.
@@ -174,7 +174,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
-        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision, instanceConfiguration.isCacheUsed()));
+        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", instanceConfiguration.isCacheUsed());
@@ -319,12 +319,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
 
   /**
-   * Sets the cache instance.
+   * Sets the cache gateway instance.
    *
-   * @param cache The instance.
+   * @param cacheGateway The cache gateway instance.
    */
-  public void setCache(final Cache cache) {
-    this.cache = cache;
+  public void setCacheGateway(final CacheGateway cacheGateway) {
+    this.cacheGateway = cacheGateway;
   }
 
   /**
@@ -332,8 +332,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return The instance.
    */
-  public Cache getCache() {
-    return cache;
+  public CacheGateway getCache() {
+    return cacheGateway;
   }
 
   /**

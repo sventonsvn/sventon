@@ -32,11 +32,10 @@ public interface RepositoryService {
    *
    * @param repository The repository
    * @param revision   Revision number
-   * @param useCache   If <code>true</code> the revision will be fetched from the cache.
    * @return The revision log entry
    * @throws SVNException if subversion error
    */
-  SVNLogEntry getRevision(final SVNRepository repository, final long revision, final boolean useCache) throws SVNException;
+  SVNLogEntry getRevision(final SVNRepository repository, final long revision) throws SVNException;
 
   /**
    * Gets revision details for a specifica revision number and path.

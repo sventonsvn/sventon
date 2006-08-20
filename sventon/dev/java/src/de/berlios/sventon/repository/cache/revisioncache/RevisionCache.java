@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache.revisioncache;
 
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.Cache;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 /**
@@ -19,7 +20,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
  *
  * @author jesper@users.berlios.de
  */
-public interface RevisionCache {
+public interface RevisionCache extends Cache {
 
   /**
    * Gets a revision by number.

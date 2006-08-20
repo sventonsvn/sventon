@@ -12,29 +12,16 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.cache.CacheException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import de.berlios.sventon.repository.cache.CacheManager;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 /**
  * Handles EntryCache instances.
  *
  * @author jesper@users.berlios.de
  */
-public class EntryCacheManager {
-
-  /**
-   * Logger for this class and subclasses
-   */
-  protected final Log logger = LogFactory.getLog(getClass());
-
-  /**
-   * The cache instances.
-   */
-  final Map<String, EntryCache> caches = new HashMap<String, EntryCache>();
+public class EntryCacheManager extends CacheManager<EntryCache> {
 
   /**
    * Root directory for cache files.
@@ -52,54 +39,17 @@ public class EntryCacheManager {
   }
 
   /**
-   * Gets a cache by name. If cache does not exist yet, it will be created
-   * using the default settings.
-   *
-   * @param cacheName Name of cache to get
-   * @return The cache instance.
-   */
-  public EntryCache getCache(final String cacheName) throws CacheException {
-    logger.debug("Getting cache: " + cacheName);
-    EntryCache entryCache = caches.get(cacheName);
-    if (entryCache == null) {
-      entryCache = addCache(cacheName, createCache(cacheName));
-    }
-    return entryCache;
-  }
-
-  /**
    * Creates a new cache instance using given name and default settings.
    *
    * @param cacheName Name of cache instance.
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  private EntryCache createCache(final String cacheName) throws CacheException {
+  protected EntryCache createCache(final String cacheName) throws CacheException {
     logger.debug("Creating cache: " + cacheName);
-    return new DiskCache(rootDirectory);
+    return new DiskCache(new File(rootDirectory, cacheName));
   }
 
-  /**
-   * For test purposes only.
-   * Adds a cache instance to the manager's list.
-   *
-   * @param cacheName  Name of cache
-   * @param entryCache Cache instance
-   * @return The added cache instance
-   */
-  public EntryCache addCache(final String cacheName, final EntryCache entryCache) {
-    logger.debug("Adding cache: " + cacheName);
-    return caches.put(cacheName, entryCache);
-  }
-
-  /**
-   * Gets all cache instances.
-   *
-   * @return Cache instances.
-   */
-  public Map<String, EntryCache> getCaches() {
-    return Collections.unmodifiableMap(caches);
-  }
 
   /**
    * Shuts all the caches down.
@@ -107,8 +57,8 @@ public class EntryCacheManager {
    * @throws CacheException if unable to shutdown caches.
    */
   public void shutdown() throws CacheException {
-    for (final EntryCache entryCache : caches.values()) {
-      entryCache.shutdown();
+    for (final EntryCache cache : caches.values()) {
+      cache.shutdown();
     }
   }
 }

@@ -44,7 +44,7 @@ public class SearchLogsController extends AbstractSVNTemplateController implemen
 
     logger.debug("Searching logMessages for: " + searchString);
 
-    final List<LogMessage> logMessages = getCache().find(searchString);
+    final List<LogMessage> logMessages = getCache().find(svnCommand.getName(), searchString);
     Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
     final Map<String, Object> model = new HashMap<String, Object>();
