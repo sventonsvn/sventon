@@ -157,8 +157,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     try {
       final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration,
-          configuration.getSVNConfigurationPath());
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       final long headRevision = getHeadRevision(repository);

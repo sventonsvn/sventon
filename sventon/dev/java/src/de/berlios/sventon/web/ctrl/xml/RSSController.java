@@ -82,8 +82,7 @@ public class RSSController extends AbstractController {
     }
 
     final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName),
-            configuration.getSVNConfigurationPath());
+        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     if (repository == null) {
       String errorMessage = "Unable to connect to repository!";

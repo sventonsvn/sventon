@@ -2,7 +2,6 @@ package de.berlios.sventon.repository;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import de.berlios.sventon.config.ApplicationConfigurationTest;
 
 public class AllTests {
 
@@ -14,7 +13,6 @@ public class AllTests {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
     suite.addTestSuite(LogMessageComparatorTest.class);
     suite.addTestSuite(RevisionObservableImplTest.class);
-    suite.addTestSuite(ApplicationConfigurationTest.class);
     suite.addTestSuite(RepositoryEntryTest.class);
     suite.addTestSuite(RepositoryEntryComparatorTest.class);
     return suite;

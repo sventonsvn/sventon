@@ -11,11 +11,9 @@
  */
 package de.berlios.sventon.config;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -40,11 +38,6 @@ public class ApplicationConfiguration {
   private boolean configured;
 
   /**
-   * Path to the Subversion configuration libraries
-   */
-  private String SVNConfigurationPath;
-
-  /**
    * Map of instance names and configuration.
    */
   private Map<String, InstanceConfiguration> instanceConfigurations = new HashMap<String, InstanceConfiguration>();
@@ -53,36 +46,6 @@ public class ApplicationConfiguration {
    * Configures and initializes the repository.
    */
   public ApplicationConfiguration() {
-  }
-
-  /**
-   * Set SVN configuration path, this is a directory where Subversion
-   * configuration is stored. The user running the servlet container running
-   * sventon needs read and write access to this directory.
-   *
-   * @return SVN configuration path.
-   */
-  public String getSVNConfigurationPath() {
-    return SVNConfigurationPath;
-  }
-
-  /**
-   * Get SVN configuration path.
-   *
-   * @param configurationPath ApplicationConfiguration path.
-   * @throws IllegalArgumentException if argument is not a directory.
-   *                                  <code>Null</code> or empty will be ignored.
-   */
-  public void setSVNConfigurationPath(final String configurationPath) {
-    if (StringUtils.isEmpty(configurationPath)) {
-      return;
-    }
-
-    if (!new File(configurationPath).isDirectory()) {
-      throw new IllegalArgumentException("Given path, [" + configurationPath + "] is not a directory");
-    }
-    logger.debug("Setting config path to: " + configurationPath);
-    SVNConfigurationPath = configurationPath;
   }
 
   /**
