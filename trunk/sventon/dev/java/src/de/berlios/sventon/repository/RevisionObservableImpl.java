@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.cache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.service.RepositoryService;

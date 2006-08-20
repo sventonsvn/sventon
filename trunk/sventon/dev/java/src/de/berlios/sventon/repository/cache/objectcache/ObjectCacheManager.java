@@ -1,6 +1,8 @@
-package de.berlios.sventon.cache;
+package de.berlios.sventon.repository.cache.objectcache;
 
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -357,7 +357,7 @@
     </property>
   </bean>
 
-  <bean id="objectCacheManager" class="de.berlios.sventon.cache.ObjectCacheManager" destroy-method="shutdown">
+  <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager" destroy-method="shutdown">
     <constructor-arg index="0">
       <value>sventon/cache/objectcache</value>
     </constructor-arg>

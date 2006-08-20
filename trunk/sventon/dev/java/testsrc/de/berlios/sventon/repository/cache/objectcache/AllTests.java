@@ -1,4 +1,4 @@
-package de.berlios.sventon.cache;
+package de.berlios.sventon.repository.cache.objectcache;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

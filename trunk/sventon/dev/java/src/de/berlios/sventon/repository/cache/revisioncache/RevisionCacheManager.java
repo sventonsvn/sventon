@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.revisioncache;
 
-import de.berlios.sventon.cache.ObjectCacheManager;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

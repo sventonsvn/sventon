@@ -1,7 +1,7 @@
 package de.berlios.sventon.repository.cache.revisioncache;
 
-import de.berlios.sventon.cache.ObjectCache;
-import de.berlios.sventon.cache.ObjectCacheImpl;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import de.berlios.sventon.repository.RevisionUpdate;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNLogEntry;

@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.cache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
