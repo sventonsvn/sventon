@@ -16,9 +16,8 @@ public class RevisionCacheUpdaterTest extends TestCase {
   }
 
   public void testUpdate() throws Exception {
-    final RevisionCacheImpl cache = new RevisionCacheImpl();
     final ObjectCache objectCache = createMemoryCache();
-    cache.setObjectCache(objectCache);
+    final RevisionCacheImpl cache = new RevisionCacheImpl(objectCache);
     final RevisionCacheUpdater cacheUpdater = new RevisionCacheUpdater(cache);
 
     try {

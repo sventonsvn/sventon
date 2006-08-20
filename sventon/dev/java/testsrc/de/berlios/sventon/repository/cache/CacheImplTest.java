@@ -4,6 +4,7 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
+import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -12,29 +13,35 @@ import java.util.*;
 public class CacheImplTest extends TestCase {
 
   public void testFindEntry() throws Exception {
+    final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
+    cacheManager.addCache("testCache", entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheImpl cache = new CacheImpl();
-    cache.setEntryCache(entryCache);
+    cache.setEntryCacheManager(cacheManager);
     assertEquals(4, cache.findEntry("java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
+    final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
+    cacheManager.addCache("testCache", entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheImpl cache = new CacheImpl();
-    cache.setEntryCache(entryCache);
+    cache.setEntryCacheManager(cacheManager);
     assertEquals(1, cache.findEntry("html", "/trunk/src/").size());
   }
 
   public void testFindEntryWithLimit() throws Exception {
+    final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
+    cacheManager.addCache("testCache", entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheImpl cache = new CacheImpl();
-    cache.setEntryCache(entryCache);
+    cache.setEntryCacheManager(cacheManager);
     assertEquals(2, cache.findEntry("java", "/", 2).size());
 
     assertEquals(4, cache.findEntry("java", "/", null).size());
@@ -44,11 +51,13 @@ public class CacheImplTest extends TestCase {
   }
 
   public void testFindDirectories() throws Exception {
+    final EntryCacheManager cacheManager = new EntryCacheManager("/");
     final EntryCache entryCache = new MemoryCache();
+    cacheManager.addCache("testCache", entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheImpl cache = new CacheImpl();
-    cache.setEntryCache(entryCache);
+    cache.setEntryCacheManager(cacheManager);
     assertEquals(3, cache.findDirectories("/").size());
 
     assertEquals(1, cache.findDirectories("/trunk/").size());

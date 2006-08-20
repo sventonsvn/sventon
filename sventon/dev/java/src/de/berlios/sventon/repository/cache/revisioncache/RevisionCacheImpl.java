@@ -25,15 +25,9 @@ public class RevisionCacheImpl implements RevisionCache {
   /**
    * Object cache instance.
    */
-  private ObjectCache objectCache;
+  private final ObjectCache objectCache;
 
-
-  /**
-   * Sets the object cache instance.
-   *
-   * @param objectCache The cache instance.
-   */
-  public void setObjectCache(final ObjectCache objectCache) {
+  public RevisionCacheImpl(final ObjectCache objectCache) {
     this.objectCache = objectCache;
   }
 

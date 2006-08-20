@@ -16,8 +16,7 @@ public class RevisionCacheImplTest extends TestCase {
 
   public void testGetAndAdd() throws Exception {
     final ObjectCache cache = createMemoryCache();
-    final RevisionCacheImpl revisionCache = new RevisionCacheImpl();
-    revisionCache.setObjectCache(cache);
+    final RevisionCacheImpl revisionCache = new RevisionCacheImpl(cache);
     try {
       assertNull(revisionCache.get(1));
 

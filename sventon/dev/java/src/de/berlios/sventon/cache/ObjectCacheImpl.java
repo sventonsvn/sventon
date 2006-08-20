@@ -11,10 +11,10 @@
  */
 package de.berlios.sventon.cache;
 
+import de.berlios.sventon.repository.cache.CacheException;
 import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.Element;
 import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -60,7 +60,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    * @param diskPersistent      If true, cache will be stored on disk
    * @param diskExpiryThreadIntervalSeconds
    *                            Expiry thread interval
-   * @throws Exception if unable to create cache.
+   * @throws CacheException if unable to create cache.
    */
   public ObjectCacheImpl(final String cacheName,
                          final int maxElementsInMemory,
@@ -69,15 +69,15 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final int timeToLiveSeconds,
                          final int timeToIdleSeconds,
                          final boolean diskPersistent,
-                         final int diskExpiryThreadIntervalSeconds) throws Exception {
+                         final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
       // Initialize cache using failsafe configuration
       cacheManager = new CacheManager(getClass().getResource("/ehcache-failsafe.xml"));
       cache = new Cache(cacheName, maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds,
           timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds);
       cacheManager.addCache(cache);
-    } catch (CacheException ce) {
-      throw new Exception("Unable to create cache instance", ce);
+    } catch (net.sf.ehcache.CacheException ce) {
+      throw new CacheException("Unable to create cache instance", ce);
     }
   }
 
@@ -103,7 +103,7 @@ public final class ObjectCacheImpl implements ObjectCache {
     Element element = null;
     try {
       element = cache.get(key);
-    } catch (CacheException ce) {
+    } catch (net.sf.ehcache.CacheException ce) {
       // Nothing to do
     }
     return element != null ? element.getValue() : null;
@@ -126,11 +126,11 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * {@inheritDoc]
    */
-  public void shutdown() throws Exception {
+  public void shutdown() throws CacheException {
     try {
       cacheManager.shutdown();
-    } catch (CacheException ce) {
-      throw new Exception("Unable to shutdown cache instance", ce);
+    } catch (net.sf.ehcache.CacheException ce) {
+      throw new CacheException("Unable to shutdown cache instance", ce);
     }
   }
 

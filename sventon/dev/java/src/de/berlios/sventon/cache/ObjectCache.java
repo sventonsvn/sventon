@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.cache;
 
+import de.berlios.sventon.repository.cache.CacheException;
+
 /**
  * Interface to be implemented by sventon object cache class.
  *
@@ -53,7 +55,7 @@ public interface ObjectCache {
   /**
    * Shuts the cache down.
    *
-   * @throws Exception if unable to shutdown cache.
+   * @throws CacheException if unable to shutdown cache.
    */
-  void shutdown() throws Exception;
+  void shutdown() throws CacheException;
 }
