@@ -14,7 +14,6 @@ package de.berlios.sventon.repository.cache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,15 +69,6 @@ public abstract class CacheManager<T> {
   public T addCache(final String cacheName, final T cache) {
     caches.put(cacheName, cache);
     return cache;
-  }
-
-  /**
-   * Gets all cache instances.
-   *
-   * @return Cache instances.
-   */
-  public Map<String, T> getCaches() {
-    return Collections.unmodifiableMap(caches);
   }
 
 }
