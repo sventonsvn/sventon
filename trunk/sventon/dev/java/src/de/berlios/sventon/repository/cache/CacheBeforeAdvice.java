@@ -17,7 +17,8 @@ import org.springframework.aop.MethodBeforeAdvice;
 import java.lang.reflect.Method;
 
 /**
- * Before advice that checks if the cache needs to be updated.
+ * Before advice that checks if the cache needs to be updated before any method
+ * of class {@link CacheImpl} is execuded.
  *
  * @author jesper@users.berlios.de
  */
@@ -40,7 +41,7 @@ public class CacheBeforeAdvice implements MethodBeforeAdvice {
   /**
    * {@inheritDoc]
    */
-  public void before(Method method, Object[] args, Object target) throws Throwable {
+  public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     revisionObservable.update();
   }
 }
