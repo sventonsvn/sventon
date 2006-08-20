@@ -85,8 +85,8 @@ function doSearch(formName) {
 }
 
 // function to handle flatten submissions
-function doFlatten(url) {
-  var flattenURL = 'flatten.svn?path='
+function doFlatten(url, instanceName) {
+  var flattenURL = 'flatten.svn?name=' + instanceName + '&path='
   var result = true;
   if (url == '/') {
     result = flatteningWarning();

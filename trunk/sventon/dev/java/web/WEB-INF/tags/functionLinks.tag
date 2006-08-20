@@ -86,13 +86,13 @@
       <c:when test="${useCache}">
         <c:choose>
           <c:when test="${isUpdating}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.isupdating.tooltip"/>" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" disabled title="<spring:message code="flatten.button.isupdating.tooltip"/>" />
           </c:when>
           <c:when test="${!isHead}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" disabled title="<spring:message code="flatten.button.disabled.tooltip"/>" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" disabled title="<spring:message code="flatten.button.disabled.tooltip"/>" />
           </c:when>
           <c:otherwise>
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}');" title="<spring:message code="flatten.button.tooltip"/>" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" title="<spring:message code="flatten.button.tooltip"/>" />
           </c:otherwise>
         </c:choose>
       </c:when>
