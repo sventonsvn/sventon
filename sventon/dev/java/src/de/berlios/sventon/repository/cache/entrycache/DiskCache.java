@@ -78,8 +78,8 @@ public class DiskCache extends EntryCache {
         inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
         setCachedRevision(inputStream.readLong());
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
-        logger.debug("Cached revision is: " + getCachedRevision());
         logger.debug("Number of loaded cached entries: " + getSize());
+        logger.debug("Revision: " + getCachedRevision());
       } catch (Exception ex) {
         throw new CacheException("Unable to read entryCache file", ex);
       }

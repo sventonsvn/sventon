@@ -86,22 +86,21 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
     logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s)");
+    if (configuration == null) {
+      logger.warn("Method setConfiguration() has not yet been called!");
+    }
 
-    for (final EntryCache entryCache : entryCacheManager.getCaches().values()) {
-      try {
-        if (configuration == null) {
-          logger.warn("Method setConfiguration() has not yet been called!");
-        }
-        final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
-            configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()),
-            configuration.getSVNConfigurationPath());
+    try {
+      final EntryCache entryCache = entryCacheManager.getCache(revisionUpdate.getInstanceName());
 
-        updateInternal(entryCache, repository, revisionUpdate);
-      } catch (SVNException svne) {
-        logger.warn("Could not establish repository connection for instance ["
-            + revisionUpdate.getInstanceName() + "]", svne);
-        return;
-      }
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
+          configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()),
+          configuration.getSVNConfigurationPath());
+
+      updateInternal(entryCache, repository, revisionUpdate);
+    } catch (final Exception ex) {
+      logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+      return;
     }
   }
 
@@ -120,7 +119,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     final long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
-      logger.info("Starting initial population");
+      logger.info("Starting initial cache population");
       try {
         addDirectories(entryCache, repository, "/", lastRevision);
         entryCache.setCachedRevision(lastRevision);
@@ -140,7 +139,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
       for (final SVNLogEntry logEntry : revisions) {
         try {
           long revision = logEntry.getRevision();
-          logger.debug("Applying changes from revision [" + revision + "] to cache");
+          logger.debug("Applying changes in revision [" + revision + "] to cache");
 
           final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
           final List<String> latestPathsList = new ArrayList<String>(map.keySet());

@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -224,8 +223,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     try {
       locksArray = repository.getLocks(path);
-      logger.debug("Locks found: " + Arrays.asList(locksArray));
       for (SVNLock lock : locksArray) {
+        logger.debug("Lock found: " + lock);
         locks.put(lock.getPath(), lock);
       }
     } catch (SVNException svne) {
