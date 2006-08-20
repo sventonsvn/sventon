@@ -26,12 +26,6 @@
   <!-- Makes sure the directories are created -->
   <bean class="java.io.File" init-method="mkdirs">
     <constructor-arg>
-      <ref local="sventonCacheDir"/>
-    </constructor-arg>
-  </bean>
-
-  <bean class="java.io.File" init-method="mkdirs">
-    <constructor-arg>
       <ref local="sventonExportDir"/>
     </constructor-arg>
   </bean>
@@ -256,8 +250,8 @@
     <property name="imageUtil">
       <ref local="imageUtil"/>
     </property>
-    <property name="objectCache">
-      <ref local="objectCache"/>
+    <property name="objectCacheManager">
+      <ref local="objectCacheManager"/>
     </property>
     <property name="imageFormatName">
       <value>png</value>
@@ -363,7 +357,7 @@
     </property>
   </bean>
 
-  <bean id="objectCache" class="de.berlios.sventon.cache.ObjectCacheImpl" destroy-method="shutdown">
+  <bean id="objectCacheManager" class="de.berlios.sventon.cache.ObjectCacheManager" destroy-method="shutdown">
     <constructor-arg index="0">
       <value>sventon/cache/objectcache</value>
     </constructor-arg>
@@ -445,14 +439,14 @@
   </bean>
 
   <bean id="cache" class="de.berlios.sventon.repository.cache.CacheImpl">
-    <property name="entryCache">
-      <ref local="entryCache"/>
+    <property name="entryCacheManager">
+      <ref local="entryCacheManager"/>
     </property>
-    <property name="logMessageCache">
-      <ref local="logMessageCache"/>
+    <property name="logMessageCacheManager">
+      <ref local="logMessageCacheManager"/>
     </property>
-    <property name="revisionCache">
-      <ref local="revisionCache"/>
+    <property name="revisionCacheManager">
+      <ref local="revisionCacheManager"/>
     </property>
   </bean>
 
@@ -464,8 +458,8 @@
     <property name="configuration">
       <ref local="configuration"/>
     </property>
-    <property name="objectCache">
-      <ref local="objectCache"/>
+    <property name="objectCacheManager">
+      <ref local="objectCacheManager"/>
     </property>
     <property name="repositoryService">
       <ref local="repositoryService"/>
@@ -486,55 +480,46 @@
   <!-- Updater class for applying repository changes to cache -->
   <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
     <constructor-arg>
-      <ref local="revisionCache"/>
+      <ref local="revisionCacheManager"/>
     </constructor-arg>
-  </bean>
-
-  <!-- The revisionCache implementation class -->
-  <bean id="revisionCache" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheImpl">
-    <property name="objectCache">
-      <ref local="objectCache"/>
-    </property>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
     <constructor-arg>
-      <ref local="entryCache"/>
+      <ref local="entryCacheManager"/>
     </constructor-arg>
     <property name="configuration">
       <ref local="configuration"/>
     </property>
   </bean>
 
-  <!-- The entryCache implementation class -->
-  <bean id="entryCache" class="de.berlios.sventon.repository.cache.entrycache.DiskCache" destroy-method="shutdown">
-    <constructor-arg>
-      <ref local="sventonCacheDir"/>
-    </constructor-arg>
-  </bean>
-
   <!-- Updater class for applying repository changes to cache -->
   <bean id="logMessageCacheUpdater" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheUpdater">
     <constructor-arg>
-      <ref local="logMessageCache"/>
+      <ref local="logMessageCacheManager"/>
     </constructor-arg>
   </bean>
 
-  <!-- The logMessageCache implementation class -->
-  <bean id="logMessageCache" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheImpl">
-    <constructor-arg>
-      <ref local="luceneDirectory"/>
-    </constructor-arg>
-  </bean>
-
-  <bean id="luceneDirectory" class="de.berlios.sventon.repository.cache.logmessagecache.LuceneDirectoryBean">
-    <property name="diskPersistent">
-      <value>true</value>
-    </property>
-    <property name="path">
+  <bean id="revisionCacheManager" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager">
+    <constructor-arg index="0">
       <ref local="sventonCacheDir"/>
-    </property>
+    </constructor-arg>
+    <constructor-arg index="1">
+      <ref local="objectCacheManager"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager" destroy-method="shutdown">
+    <constructor-arg>
+      <ref local="sventonCacheDir"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="logMessageCacheManager" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager">
+    <constructor-arg>
+      <ref local="sventonCacheDir"/>
+    </constructor-arg>
   </bean>
 
   <bean id="exportFileCleaner" class="de.berlios.sventon.repository.export.ExportFileCleaner">
