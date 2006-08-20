@@ -124,7 +124,8 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       try {
         Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
         if (lastUpdatedRevision == null) {
-          logger.info("No record about previously fetched revisions exists - fetching all revisions");
+          logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
+              + instanceName);
           lastUpdatedRevision = 0L;
         }
 
@@ -132,7 +133,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
 
         if (headRevision > lastUpdatedRevision) {
           logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
-          logger.debug("Reading [" + logEntries.size() + "] revision(s)");
+          logger.debug("Reading [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
           setChanged();
           logger.debug("Notifying observers");
           notifyObservers(new RevisionUpdate(instanceName, logEntries));
@@ -164,7 +165,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
         try {
           repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration, configuration.getSVNConfigurationPath());
           final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-          logger.debug("Updating instance [" + instanceConfiguration.getInstanceName() + "]");
           update(instanceConfiguration.getInstanceName(), repository, objectCache);
         } catch (final Exception ex) {
           logger.warn("Unable to establish repository connection", ex);

@@ -69,8 +69,7 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final boolean diskPersistent,
                          final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
-      // Initialize cache using failsafe configuration
-      cacheManager = new CacheManager(getClass().getResource("/ehcache-failsafe.xml"));
+      cacheManager = CacheManager.create();
       cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
       cacheManager.addCache(cache);

@@ -65,7 +65,8 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
-    logger.info("Observer got [" + revisions.size() + "] updated revision(s)");
+    logger.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: "
+        + revisionUpdate.getInstanceName());
 
     try {
       final LogMessageCache logMessageCache = logMessageCacheManager.getCache(revisionUpdate.getInstanceName());
