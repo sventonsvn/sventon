@@ -39,11 +39,7 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
-    <property name="SVNConfigurationPath">
-      <ref local="sventonDir"/>
-    </property>
-  </bean>
+  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration"/>
 
   <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
     <constructor-arg index="0">
@@ -56,11 +52,7 @@
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>
 
-  <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator">
-    <property name="configPath">
-      <ref local="sventonDir"/>
-    </property>
-  </bean>
+  <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator"/>
 
   <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
     <property name="cacheGateway">

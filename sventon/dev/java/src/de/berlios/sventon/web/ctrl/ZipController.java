@@ -30,6 +30,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Controller used when downloading files or directories as a zip file.
@@ -39,6 +42,8 @@ import java.util.List;
 public class ZipController extends AbstractSVNTemplateController implements Controller {
 
   public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
+
+  public static final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
   /**
    * Directory where to export the files to be zipped.
@@ -72,7 +77,7 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
       logger.debug("Using export directory: " + tempExportDirectory);
       getRepositoryService().export(repository, targets, revision.getNumber(), tempExportDirectory);
 
-      final File zipFile = createZipFile(tempExportDirectory);
+      final File zipFile = createZipFile(svnCommand.getName(), tempExportDirectory, new Date());
       logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
       new ZipUtils().zipDir(zipFile, tempExportDirectory);
 
@@ -95,7 +100,15 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
     return null;
   }
 
-  private File createZipFile(final File tempDirectory) {
-    return new File(tempDirectory.getParentFile(), tempDirectory.getName() + ".zip");
+  /**
+   * Creates a file using the name format <code>[instanceName][yyyyMMddHHmmssSSS].zip</code>.
+   *
+   * @param instanceName  Instance name
+   * @param tempDirectory Temporary export directory
+   * @param now           Current date
+   * @return New file.
+   */
+  protected File createZipFile(final String instanceName, final File tempDirectory, final Date now) {
+    return new File(tempDirectory.getParentFile(), instanceName + "-" + dateFormat.format(now) + ".zip");
   }
 }
