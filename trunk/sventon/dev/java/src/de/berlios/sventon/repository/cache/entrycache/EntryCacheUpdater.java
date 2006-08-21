@@ -174,6 +174,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           logger.error("Unable to update entryCache", svnex);
         }
       }
+      logger.debug("Update completed");
     }
   }
 

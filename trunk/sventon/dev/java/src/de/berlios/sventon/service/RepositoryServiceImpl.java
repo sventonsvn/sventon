@@ -11,12 +11,12 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.export.ExportEditor;
 import de.berlios.sventon.repository.export.ExportReporterBaton;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.model.TextFile;
+import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -146,14 +146,15 @@ public class RepositoryServiceImpl implements RepositoryService {
         } else if (nodeKind == SVNNodeKind.DIR) {
           logger.debug("Exporting directory [" + target + "] revision [" + exportRevision + "]");
           entryToExport.mkdirs();
-          // The update method does not accept a path, only a single file or dir
-          // Temporarily changing repository location.
+          // The update method does not accept a full path, only a single file or dir leaf
+          logger.debug("Original repository location: " + repository.getLocation());
           final SVNURL originalLocation = repository.getLocation();
           repository.setLocation(SVNURL.parseURIDecoded(originalLocation.toDecodedString()
               + PathUtil.getPathNoLeaf(target)), false);
+          logger.debug("Temporarily changing repository location to: " + repository.getLocation());
           // Do the export
-          repository.update(exportRevision, target, true, reporterBaton, new ExportEditor(entryToExport.getParentFile()));
-          // Reset the repository's original location
+          repository.update(exportRevision, PathUtil.getTarget(target), true, reporterBaton, new ExportEditor(entryToExport.getParentFile()));
+          logger.debug("Resetting repository location");
           repository.setLocation(originalLocation, false);
         } else {
           throw new IllegalArgumentException("Target [" + target + "] does not exist in revision [" + exportRevision + "]");
