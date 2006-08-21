@@ -16,6 +16,7 @@ public class AllTests {
     suite.addTestSuite(GetControllerTest.class);
     suite.addTestSuite(ShowFileControllerTest.class);
     suite.addTestSuite(ShowThumbnailsControllerTest.class);
+    suite.addTestSuite(ZipControllerTest.class);
     return suite;
   }
 
