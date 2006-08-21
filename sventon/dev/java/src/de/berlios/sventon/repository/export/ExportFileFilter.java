@@ -19,8 +19,8 @@ import java.io.File;
  */
 public class ExportFileFilter implements FilenameFilter {
 
-  public boolean accept(File dir, String name) {
-    return name.matches("sventon-[0-9]+\\.zip");
+  public boolean accept(final File dir, final String name) {
+    return name.matches("[a-z0-9]+-[0-9]{17}\\.zip");
   }
 
 }
