@@ -28,11 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Controller used when downloading files or directories as a zip file.
@@ -93,7 +93,7 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
       FileUtils.close(output);
 
       boolean result = FileUtils.deleteDir(tempExportDirectory);
-      logger.debug("Cleanup ok: " + result);
+      logger.debug("Cleanup of temporary directory ok: " + result);
     }
 
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.

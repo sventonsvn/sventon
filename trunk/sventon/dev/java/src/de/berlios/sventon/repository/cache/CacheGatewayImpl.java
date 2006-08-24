@@ -14,17 +14,18 @@ package de.berlios.sventon.repository.cache;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
-import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
-import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
+import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCache;
-import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
+import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCache;
+import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Gateway class used to access the caches.
@@ -82,7 +83,7 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern("/" + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
+    return cache.findByPattern(Pattern.compile("/" + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -91,7 +92,11 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(".*" + startDir + pattern.getPattern(), RepositoryEntry.Kind.any, null);
+    String rootDir = startDir;
+    if (rootDir.endsWith("/")) {
+      rootDir = rootDir.substring(0, rootDir.length() - 1);
+    }
+    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -100,7 +105,7 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, null);
+    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, null);
   }
 
   /**
@@ -109,7 +114,7 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir, final Integer limit) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(startDir + ".*?" + searchString + ".*?", RepositoryEntry.Kind.any, limit);
+    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, limit);
   }
 
   /**
@@ -118,7 +123,7 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(fromPath + ".*?", dir, null);
+    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), dir, null);
   }
 
   /**
