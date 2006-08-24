@@ -15,8 +15,8 @@ import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.export.ExportEditor;
 import de.berlios.sventon.repository.export.ExportReporterBaton;
-import de.berlios.sventon.web.model.TextFile;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.web.model.TextFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -136,11 +136,14 @@ public class RepositoryServiceImpl implements RepositoryService {
           final OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(entryToExport));
           final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
           logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
-          final Map properties = new HashMap();
+          final Map<String, String> properties = new HashMap<String, String>();
           getFile(repository, target, exportRevision, outStream, properties);
-          final TextFile textFile = new TextFile(outStream.toString(), properties,
-              repository.getLocation().toDecodedString(), target);
-          fileOutputStream.write(textFile.getContent().getBytes());
+          if (SVNProperty.isTextMimeType(properties.get(SVNProperty.MIME_TYPE))) {
+            final TextFile textFile = new TextFile(outStream.toString(), properties, repository.getLocation().toDecodedString(), target);
+            fileOutputStream.write(textFile.getContent().getBytes());
+          } else {
+            fileOutputStream.write(outStream.toByteArray());
+          }
           fileOutputStream.flush();
           fileOutputStream.close();
         } else if (nodeKind == SVNNodeKind.DIR) {
