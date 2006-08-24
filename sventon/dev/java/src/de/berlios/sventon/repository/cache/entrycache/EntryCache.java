@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Contains a cached set of the repository entries for a specific revision and URL.
@@ -155,7 +157,7 @@ public abstract class EntryCache implements Cache {
    * @return List of entries.
    * @throws CacheException if error
    */
-  public synchronized List<RepositoryEntry> findByPattern(final String pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
+  public synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + pattern + "] of kind [" + kind + "] with limit [" + limit + "]");
     }
@@ -163,7 +165,8 @@ public abstract class EntryCache implements Cache {
     final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     for (final RepositoryEntry entry : cachedEntries) {
-      if (entry.getFullEntryName().matches(pattern) && (entry.getKind() == kind || kind == any)) {
+      final Matcher matcher = pattern.matcher(entry.getFullEntryName());
+      if (matcher.matches() && (entry.getKind() == kind || kind == any)) {
         result.add(entry);
         if (limit != null && ++count == limit) {
           break;

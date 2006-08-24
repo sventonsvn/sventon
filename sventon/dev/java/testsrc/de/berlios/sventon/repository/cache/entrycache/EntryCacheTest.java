@@ -9,6 +9,7 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class EntryCacheTest extends TestCase {
 
@@ -71,18 +72,18 @@ public class EntryCacheTest extends TestCase {
     cache.add(getEntryTemplateList());
     assertEquals(11, cache.getSize());
 
-    assertEquals(5, cache.findByPattern(".*[12].*", any, null).size());
-    assertEquals(5, cache.findByPattern(".*[12].*", file, null).size());
-    assertEquals(0, cache.findByPattern(".*[12].*", dir, null).size());
+    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), any, null).size());
+    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), file, null).size());
+    assertEquals(0, cache.findByPattern(Pattern.compile(".*[12].*"), dir, null).size());
 
-    assertEquals(5, cache.findByPattern(".*trunk.*", any, null).size());
-    assertEquals(2, cache.findByPattern(".*trunk.*", dir, null).size());
+    assertEquals(5, cache.findByPattern(Pattern.compile(".*trunk.*"), any, null).size());
+    assertEquals(2, cache.findByPattern(Pattern.compile(".*trunk.*"), dir, null).size());
 
-    assertEquals(3, cache.findByPattern(".*", dir, null).size());
+    assertEquals(3, cache.findByPattern(Pattern.compile(".*"), dir, null).size());
 
-    assertEquals(1, cache.findByPattern(".*/trunk/src/.*", file, null).size());
+    assertEquals(1, cache.findByPattern(Pattern.compile(".*/trunk/src/.*"), file, null).size());
 
-    assertEquals(0, cache.findByPattern(".*/TrUnK/sRc/.*", file, null).size());
+    assertEquals(1, cache.findByPattern(Pattern.compile(".*/TrUnK/sRc/.*", Pattern.CASE_INSENSITIVE), file, null).size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

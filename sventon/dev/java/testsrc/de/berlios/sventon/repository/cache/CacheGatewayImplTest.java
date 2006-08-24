@@ -21,7 +21,7 @@ public class CacheGatewayImplTest extends TestCase {
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(4, cache.findEntry(instanceName, "java").size());
+    assertEquals(5, cache.findEntry(instanceName, "java").size());
   }
 
   public void testFindEntryInPath() throws Exception {
@@ -47,10 +47,23 @@ public class CacheGatewayImplTest extends TestCase {
     cache.setEntryCacheManager(cacheManager);
     assertEquals(2, cache.findEntry(instanceName, "java", "/", 2).size());
 
-    assertEquals(4, cache.findEntry(instanceName, "java", "/", null).size());
-    assertEquals(4, cache.findEntry(instanceName, "java", "/", 8).size());
-    assertEquals(4, cache.findEntry(instanceName, "java", "/", 0).size());
+    assertEquals(5, cache.findEntry(instanceName, "java", "/", null).size());
+    assertEquals(5, cache.findEntry(instanceName, "java", "/", 8).size());
+    assertEquals(5, cache.findEntry(instanceName, "java", "/", 0).size());
     assertEquals(1, cache.findEntry(instanceName, "java", "/", 1).size());
+  }
+
+  public void testFindEntryByCamelCase() throws Exception {
+    final String instanceName = "testCache";
+    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCache entryCache = new MemoryCache();
+    cacheManager.addCache(instanceName, entryCache);
+    entryCache.add(getEntryTemplateList());
+
+    final CacheGatewayImpl cache = new CacheGatewayImpl();
+    cache.setEntryCacheManager(cacheManager);
+    final CamelCasePattern ccPattern = new CamelCasePattern("DF");
+    assertEquals(2, cache.findEntryByCamelCase(instanceName, ccPattern, "/trunk/").size());
   }
 
   public void testFindDirectories() throws Exception {
@@ -78,6 +91,7 @@ public class CacheGatewayImplTest extends TestCase {
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/trunk/src/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1_in_trunk.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"), "/trunk/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/", null));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, "TestDirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/", null));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/", null));
     return entries;
