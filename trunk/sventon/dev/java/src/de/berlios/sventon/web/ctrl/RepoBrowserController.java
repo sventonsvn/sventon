@@ -21,6 +21,7 @@ import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNLock;
+import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -58,7 +59,8 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
 
     logger.debug("Getting directory contents for: " + completePath);
     final HashMap properties = new HashMap();
-    final Collection entries = repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
+    final Collection<SVNDirEntry> entries =
+        repository.getDir(completePath, revision.getNumber(), properties, (Collection) null);
 
     final FileExtensionList fileExtensionList = new FileExtensionList(entries);
     logger.debug("Existing extensions in dir: " + fileExtensionList.getExtensions());
