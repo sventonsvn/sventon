@@ -42,7 +42,7 @@
 <b>Q:</b> What do I need to run sventon?
 </a>
 <br/>
-<b>A:</b> <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a> or higher and a servlet container like <a href="http://jakarta.apache.org/tomcat/">Tomcat 5.5</a>.
+<b>A:</b> <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a> or higher and a servlet container like <a href="http://jakarta.apache.org/tomcat/">Tomcat 5.5</a>. Note that Tomcat version 5.5.12 and newer includes a Java 5 compliant JSP compiler, which simplifies set-up further.
 </p>
 
 <p>
@@ -219,7 +219,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
-<b>A:</b> Unfortunately no, not that we know of. Please have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
+<b>A:</b> Although we unfortunately have no official demo version running, you should be able to find several installations doing a <a href="http://www.google.com/search?q=svn+sventon">Google search</a>. Note that new sventon versions are release regularily, the instances showing up in the search may not be running the latest version. Also, have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
 
 <p>
