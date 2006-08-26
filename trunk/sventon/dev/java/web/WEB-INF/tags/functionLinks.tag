@@ -139,6 +139,7 @@
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
     <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" title="<spring:message code="unifieddiff.button.tooltip" />" onclick="javascript:parent.location='${unifiedDiffUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="javascript:toggleWrap();"/>
   </c:when>
 
   <c:when test="${pageName == 'showUnifiedDiff'}">

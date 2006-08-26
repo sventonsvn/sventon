@@ -48,7 +48,7 @@
             <jsp:useBean id="leftLines" type="java.util.ArrayList" />
             <jsp:useBean id="rightLines" type="java.util.ArrayList" />
 
-            <table class="sventonDiffTable" cellspacing="0">
+            <table id="diffTable" class="sventonDiffTable" cellspacing="0">
               <tr>
                 <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
                 <th>&nbsp;</th>

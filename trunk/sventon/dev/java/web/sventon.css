@@ -289,7 +289,6 @@ input.btn {
   background-color: inherit;
   font-family: verdana, sans-serif;
   font-size: 9px;
-  white-space: pre;
 }
 
 .srcChg {
@@ -297,7 +296,6 @@ input.btn {
   background-color: #ffbebe;
   font-family: verdana, sans-serif;
   font-size: 9px;
-  white-space: pre;
 }
 
 .srcAdd {
@@ -305,7 +303,6 @@ input.btn {
   background-color: #beffbe;
   font-family: verdana, sans-serif;
   font-size: 9px;
-  white-space: pre;
 }
 
 .srcDel {
@@ -313,5 +310,4 @@ input.btn {
   background-color: #bebeff;
   font-family: verdana, sans-serif;
   font-size: 9px;
-  white-space: pre;
 }

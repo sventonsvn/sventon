@@ -233,3 +233,18 @@ function getCheckedCount(formName) {
   }
   return checkedEntriesCount;
 }
+
+// Toggles line wrap mode between normal and nowrap
+function toggleWrap() {
+  var tags = document.getElementById('diffTable').getElementsByTagName('td'); //[".src", ".srcChg", ".scrAdd", ".srcDel"]);
+  for (var i = 0; i < tags.length; i++) {
+    var cssName = tags[i].className;
+    if (cssName == 'src' || cssName == 'srcChg' || cssName == 'srcAdd' || cssName == 'srcDel') {
+      if (tags[i].style.whiteSpace == '') {
+        tags[i].style.whiteSpace = 'nowrap';
+      } else {
+        tags[i].style.whiteSpace = '';
+      }
+    }
+  }
+}
