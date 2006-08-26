@@ -83,7 +83,7 @@
             </c:otherwise>
           </c:choose>
 
-          <c:set var="sortModeArrow" value="${command.sortMode eq 'ASC' ? '&uArr;' : '&dArr;'}"/>
+          <c:set var="sortModeArrow" value="${command.sortMode eq 'ASC' ? '&uarr;' : '&darr;'}"/>
           <c:set var="opositeSortType" value="${command.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
 
           <th><a href="${sortUrl}&sortType=NAME&sortMode=${opositeSortType}" style="color: #000000;">
