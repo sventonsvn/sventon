@@ -12,6 +12,8 @@
 package de.berlios.sventon.util;
 
 import de.schlichtherle.io.ArchiveDetector;
+import de.schlichtherle.io.DefaultArchiveDetector;
+import de.schlichtherle.io.archive.zip.JarDriver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -30,6 +32,11 @@ public final class ZipUtils {
    * Logger for this class and subclasses.
    */
   protected final Log logger = LogFactory.getLog(getClass());
+
+  public ZipUtils() {
+    de.schlichtherle.io.File.setDefaultArchiveDetector(
+        new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", new JarDriver()));    
+  }
 
   /**
    * Zips the given directory recursively.
