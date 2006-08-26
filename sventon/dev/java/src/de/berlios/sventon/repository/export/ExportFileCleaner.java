@@ -17,6 +17,10 @@ import org.apache.commons.logging.LogFactory;
 import java.io.File;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Date;
+import java.text.ParseException;
+
+import de.berlios.sventon.web.ctrl.ZipController;
 
 /**
  * Cleans the export directory from temporary files.
@@ -83,8 +87,13 @@ public class ExportFileCleaner {
   protected boolean isOld(final String filename) {
     Matcher matcher = digitPattern.matcher(filename);
     matcher.find();
-    long filenameMillis = Long.parseLong(matcher.group());
-    return System.currentTimeMillis() - filenameMillis > timeThreshold;
+    try {
+      final Date fileDate = ZipController.dateFormat.parse(matcher.group());
+      return System.currentTimeMillis() - fileDate.getTime() > timeThreshold;
+    } catch (ParseException pe) {
+      logger.warn("Unable to parse date part of filename: " + filename);
+      return false;
+    }
   }
 
 }
