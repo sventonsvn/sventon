@@ -118,13 +118,13 @@
         <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
       </c:when>
       <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" title="<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>" />
       </c:otherwise>
     </c:choose>
   </c:when>
 
   <c:when test="${pageName == 'showRevInfo'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" title="<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>" />
   </c:when>
 
   <c:when test="${pageName == 'showDiff'}">
@@ -163,11 +163,11 @@
   </c:when>
 
   <c:when test="${pageName == 'showThumbs'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" title="<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>" />
   </c:when>
 
   <c:when test="${pageName == 'showLock'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" title="<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>" />
   </c:when>
 
   <c:otherwise>
