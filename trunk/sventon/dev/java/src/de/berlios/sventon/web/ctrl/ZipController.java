@@ -11,9 +11,9 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.FileUtils;
-import de.berlios.sventon.util.ZipUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
@@ -28,10 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,10 +40,8 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
 
   public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
 
-  public static final DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-
   /**
-   * Directory where to export the files to be zipped.
+   * Root of temporary directory where export will be made.
    */
   private String exportDir;
 
@@ -70,45 +65,27 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
     InputStream fileInputStream = null;
 
     final List<String> targets = Arrays.asList(RequestUtils.getStringParameters(request, "entry"));
-    final File tempExportDirectory = FileUtils.createTempDir(exportDir);
+    final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
 
     try {
-      // Export selected files/directories into java.io.tmpdir + generated UID-named dir
-      logger.debug("Using export directory: " + tempExportDirectory);
-      getRepositoryService().export(repository, targets, revision.getNumber(), tempExportDirectory);
-
-      final File zipFile = createZipFile(svnCommand.getName(), tempExportDirectory, new Date());
-      logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
-      new ZipUtils().zipDir(zipFile, tempExportDirectory);
-
+      logger.debug("Using export directory: " + exportDirectory);
+      getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
+      final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
       response.setContentType(DEFAULT_CONTENT_TYPE);
       response.setHeader("Content-disposition", "attachment; filename=\""
-          + EncodingUtils.encodeFilename(zipFile.getName(), request) + "\"");
+          + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
 
-      fileInputStream = new FileInputStream(zipFile);
+      fileInputStream = new FileInputStream(compressedFile);
       FileUtils.writeStream(fileInputStream, output);
     } finally {
       FileUtils.close(fileInputStream);
       FileUtils.close(output);
-
-      boolean result = FileUtils.deleteDir(tempExportDirectory);
-      logger.debug("Cleanup of temporary directory ok: " + result);
+      logger.debug("Cleanup of temporary directory ok: " + exportDirectory.delete());
     }
 
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
     return null;
   }
 
-  /**
-   * Creates a file using the name format <code>[instanceName][yyyyMMddHHmmssSSS].zip</code>.
-   *
-   * @param instanceName  Instance name
-   * @param tempDirectory Temporary export directory
-   * @param now           Current date
-   * @return New file.
-   */
-  protected File createZipFile(final String instanceName, final File tempDirectory, final Date now) {
-    return new File(tempDirectory.getParentFile(), instanceName + "-" + dateFormat.format(now) + ".zip");
-  }
 }

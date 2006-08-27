@@ -21,36 +21,6 @@ import java.io.*;
  */
 public final class FileUtils {
 
-  /**
-   * Deletes a directory recursively.
-   *
-   * @param dir Directory to delete
-   * @return True if directory was successfully deleted.
-   */
-  public static boolean deleteDir(final File dir) {
-    if (dir.isDirectory()) {
-      for (String child : dir.list()) {
-        final boolean success = FileUtils.deleteDir(new File(dir, child));
-        if (!success) {
-          return false;
-        }
-      }
-    }
-    return dir.delete();
-  }
-
-  /**
-   * Creates a temporary sub directory to given parent directory.
-   * The directory name will be in the format <code>sventon-[currentTimeMillis]</code>.
-   *
-   * @param parentDir Parent directory
-   * @return The temporary directory
-   */
-  public static synchronized File createTempDir(final String parentDir) {
-    final File tempDir = new File(parentDir, "sventon-" + System.currentTimeMillis());
-    tempDir.mkdirs();
-    return tempDir;
-  }
 
   /**
    * Reads the given input stream and writes the buffered contents to the output.

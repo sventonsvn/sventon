@@ -11,11 +11,11 @@
  */
 package de.berlios.sventon.service;
 
+import de.berlios.sventon.repository.export.ExportDirectory;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +90,13 @@ public interface RepositoryService {
   /**
    * Exports given list of target entries to the given destination export directory.
    *
-   * @param repository The repository
-   * @param targets    Targets to export.
-   * @param revision   Revision to export
-   * @param exportDir  Destination directory
+   * @param repository      The repository
+   * @param targets         Targets to export.
+   * @param revision        Revision to export
+   * @param exportDirectory Destination directory
    */
-  void export(final SVNRepository repository, final List<String> targets, final long revision, final File exportDir)
-      throws SVNException;
+  void export(final SVNRepository repository, final List<String> targets, final long revision,
+              final ExportDirectory exportDirectory) throws SVNException;
 
   /**
    * Gets a file from the repository.
