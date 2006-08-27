@@ -64,7 +64,9 @@ public class ConfigCommandValidator implements Validator {
     // Validate 'repository instance name'
     final String instanceName = command.getName();
     if (instanceName != null) {
-      if (!instanceName.matches("[a-z0-9]+")) {
+      try {
+        new InstanceConfiguration().setInstanceName(instanceName);
+      } catch (IllegalArgumentException iae) {
         final String msg = "Name must be in lower case a-z and/or 0-9";
         logger.warn(msg);
         errors.rejectValue("name", "config.error.illegal-name", msg);

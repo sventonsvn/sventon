@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.repository.export;
 
+import de.berlios.sventon.config.InstanceConfiguration;
+
 import java.io.FilenameFilter;
 import java.io.File;
 
@@ -20,7 +22,7 @@ import java.io.File;
 public class ExportFileFilter implements FilenameFilter {
 
   public boolean accept(final File dir, final String name) {
-    return name.matches("[a-z0-9]+-[0-9]{17}\\.zip");
+    return name.matches(InstanceConfiguration.INSTANCE_NAME_PATTERN + "-[0-9]{17}\\.zip");
   }
 
 }
