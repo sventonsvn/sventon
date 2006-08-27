@@ -11,8 +11,9 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(ExportFileCleanerTest.class);
+    suite.addTestSuite(ExportDirectoryTest.class);
     suite.addTestSuite(ExportFileFilterTest.class);
+    suite.addTestSuite(TemporaryFileCleanerTest.class);
     return suite;
   }
 

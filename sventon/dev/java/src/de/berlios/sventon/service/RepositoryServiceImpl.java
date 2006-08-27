@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.export.ExportEditor;
 import de.berlios.sventon.repository.export.ExportReporterBaton;
+import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.model.TextFile;
 import org.apache.commons.logging.Log;
@@ -119,7 +120,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public void export(final SVNRepository repository, final List<String> targets, final long revision,
-                     final File exportDir) throws SVNException {
+                     final ExportDirectory exportDirectory) throws SVNException {
 
     long exportRevision = revision;
     if (exportRevision == -1) {
@@ -130,7 +131,7 @@ public class RepositoryServiceImpl implements RepositoryService {
     try {
       for (final String target : targets) {
         final SVNNodeKind nodeKind = repository.checkPath(target, exportRevision);
-        final File entryToExport = new File(exportDir, target);
+        final File entryToExport = new File(exportDirectory.getFile(), target);
         if (nodeKind == SVNNodeKind.FILE) {
           entryToExport.getParentFile().mkdirs();
           final OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(entryToExport));

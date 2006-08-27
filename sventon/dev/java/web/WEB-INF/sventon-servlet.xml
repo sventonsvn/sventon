@@ -524,7 +524,7 @@
     </constructor-arg>
   </bean>
 
-  <bean id="exportFileCleaner" class="de.berlios.sventon.repository.export.ExportFileCleaner">
+  <bean id="tempFileCleaner" class="de.berlios.sventon.repository.export.TemporaryFileCleaner">
     <property name="exportRootDir">
       <ref local="sventonExportDir"/>
     </property>
@@ -566,7 +566,7 @@
     <property name="triggers">
       <list>
         <ref local="cacheUpdateTrigger"/>
-        <ref local="exportFileCleanerTrigger"/>
+        <ref local="tempFileCleanerTrigger"/>
       </list>
     </property>
   </bean>
@@ -579,9 +579,9 @@
     <property name="repeatInterval" value="600000"/>
   </bean>
 
-  <bean id="exportFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+  <bean id="tempFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail">
-      <ref local="exportFileCleanerJobDetail"/>
+      <ref local="tempFileCleanerJobDetail"/>
     </property>
     <property name="startDelay" value="300000"/>
     <property name="repeatInterval" value="600000"/>
@@ -592,9 +592,9 @@
     <property name="targetMethod" value="update"/>
   </bean>
 
-  <bean id="exportFileCleanerJobDetail"
+  <bean id="tempFileCleanerJobDetail"
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-    <property name="targetObject" ref="exportFileCleaner"/>
+    <property name="targetObject" ref="tempFileCleaner"/>
     <property name="targetMethod" value="clean"/>
   </bean>
 

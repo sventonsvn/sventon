@@ -15,19 +15,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.Date;
 import java.text.ParseException;
-
-import de.berlios.sventon.web.ctrl.ZipController;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Cleans the export directory from temporary files.
+ * Temporary export file cleaner.
  *
  * @author jesper@users.berlios.de
  */
-public class ExportFileCleaner {
+public class TemporaryFileCleaner {
 
   /**
    * The logging instance.
@@ -71,7 +69,7 @@ public class ExportFileCleaner {
    */
   public void clean() {
     for (final File file : exportRootDir.listFiles(new ExportFileFilter())) {
-      if (isOld(file.getName())) {
+      if (isOld(file)) {
         logger.debug("Deleting tempfile [" + file.getAbsolutePath() + "]");
         file.delete();
       }
@@ -81,17 +79,17 @@ public class ExportFileCleaner {
   /**
    * Returns true if this file is old enough to be deleted
    *
-   * @param filename Filename
+   * @param tempFile Temporary file
    * @return True if file is old enough, according to the threshold value.
    */
-  protected boolean isOld(final String filename) {
-    Matcher matcher = digitPattern.matcher(filename);
+  protected boolean isOld(final File tempFile) {
+    final Matcher matcher = digitPattern.matcher(tempFile.getName());
     matcher.find();
     try {
-      final Date fileDate = ZipController.dateFormat.parse(matcher.group());
+      final Date fileDate = ExportDirectory.DATE_FORMAT.parse(matcher.group());
       return System.currentTimeMillis() - fileDate.getTime() > timeThreshold;
     } catch (ParseException pe) {
-      logger.warn("Unable to parse date part of filename: " + filename);
+      logger.warn("Unable to parse date part of filename: " + tempFile.getName());
       return false;
     }
   }
