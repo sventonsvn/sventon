@@ -38,6 +38,11 @@ public class InstanceConfiguration {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
+   * Instance name regex pattern.
+   */
+  public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
+
+  /**
    * Name of sventon intance.
    */
   private String instanceName;
@@ -198,9 +203,17 @@ public class InstanceConfiguration {
    * Sets the name of this sventon instance configuration.
    *
    * @param instanceName Name
+   * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
    */
   public void setInstanceName(final String instanceName) {
-    this.instanceName = instanceName;
+    if (instanceName == null) {
+      throw new IllegalArgumentException("Instance name cannot be null");
+    }
+    if (!instanceName.matches(INSTANCE_NAME_PATTERN)) {
+      throw new IllegalArgumentException("Name must be in lower case a-z and/or 0-9");
+    } else {
+      this.instanceName = instanceName;
+    }
   }
 
   /**
