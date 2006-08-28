@@ -64,6 +64,7 @@ public class ExportDirectory {
     this.instanceName = instanceName;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());
     exportDirectory.mkdirs();
+    exportDirectory.deleteOnExit();
   }
 
   /**
