@@ -127,4 +127,11 @@ public class ExportDirectory {
     return dir.delete();
   }
 
+
+  public String toString() {
+    return "ExportDirectory{" +
+        "exportDirectory=" + exportDirectory +
+        ", instanceName='" + instanceName + '\'' +
+        '}';
+  }
 }

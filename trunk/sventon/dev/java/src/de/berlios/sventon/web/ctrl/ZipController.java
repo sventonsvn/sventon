@@ -68,7 +68,7 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
     final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
 
     try {
-      logger.debug("Using export directory: " + exportDirectory);
+      logger.debug(exportDirectory);
       getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
       final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
