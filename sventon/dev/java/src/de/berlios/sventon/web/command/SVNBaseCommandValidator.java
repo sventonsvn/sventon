@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import de.berlios.sventon.web.command.SVNBaseCommand;
 
 /**
  * SVNBaseCommandValidator.
@@ -29,11 +28,11 @@ public class SVNBaseCommandValidator implements Validator {
    */
   protected final Log logger = LogFactory.getLog(getClass());
 
-  public boolean supports(Class clazz) {
+  public boolean supports(final Class clazz) {
     return clazz.equals(SVNBaseCommand.class);
   }
 
-  public void validate(Object obj, Errors errors) {
+  public void validate(final Object obj, final Errors errors) {
     final SVNBaseCommand command = (SVNBaseCommand) obj;
     final String revision = command.getRevision();
 

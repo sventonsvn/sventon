@@ -15,11 +15,11 @@ import javax.servlet.ServletOutputStream;
 import java.io.*;
 
 /**
- * File and directory utility class.
+ * Utility class for streams.
  *
  * @author jesper@users.berlios.de
  */
-public final class FileUtils {
+public final class StreamUtils {
 
 
   /**
