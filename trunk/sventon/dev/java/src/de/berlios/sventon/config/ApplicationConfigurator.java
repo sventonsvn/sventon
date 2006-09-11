@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.config;
 
-import de.berlios.sventon.util.FileUtils;
+import de.berlios.sventon.util.StreamUtils;
 import de.berlios.sventon.logging.SVNLog4JAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,7 +70,7 @@ public class ApplicationConfigurator {
         initConfiguration(is, configuration);
       }
     } finally {
-      FileUtils.close(is);
+      StreamUtils.close(is);
     }
   }
 

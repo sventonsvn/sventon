@@ -99,7 +99,6 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     final List<SVNLogEntry> logEntries =
         getRepositoryService().getRevisions(repository, revNumber, 0, targetPath, pageSize);
 
-    final SVNNodeKind nodeKind = repository.checkPath(path, revision.getNumber());
     String pathAtRevision = targetPath;
 
     for (SVNLogEntry logEntry : logEntries) {
@@ -127,7 +126,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     model.put("logEntriesPage", logEntryBundles);
     model.put("pageSize", pageSize);
-    model.put("isFile", nodeKind == SVNNodeKind.FILE);
+    model.put("isFile", repository.checkPath(path, revision.getNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
     return new ModelAndView("showlog", model);
   }
