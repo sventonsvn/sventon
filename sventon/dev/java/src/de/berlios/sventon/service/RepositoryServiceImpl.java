@@ -13,18 +13,16 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
-import de.berlios.sventon.repository.export.ExportEditor;
-import de.berlios.sventon.repository.export.ExportReporterBaton;
 import de.berlios.sventon.repository.export.ExportDirectory;
-import de.berlios.sventon.util.PathUtil;
-import de.berlios.sventon.web.model.TextFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.ISVNReporterBaton;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.io.*;
+import java.io.OutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -126,47 +124,12 @@ public class RepositoryServiceImpl implements RepositoryService {
     if (exportRevision == -1) {
       exportRevision = repository.getLatestRevision();
     }
-    final ISVNReporterBaton reporterBaton = new ExportReporterBaton(exportRevision);
-
-    try {
-      for (final String target : targets) {
-        final SVNNodeKind nodeKind = repository.checkPath(target, exportRevision);
-        final File entryToExport = new File(exportDirectory.getFile(), target);
-        if (nodeKind == SVNNodeKind.FILE) {
-          entryToExport.getParentFile().mkdirs();
-          final OutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(entryToExport));
-          final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-          logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
-          final Map<String, String> properties = new HashMap<String, String>();
-          getFile(repository, target, exportRevision, outStream, properties);
-          if (SVNProperty.isTextMimeType(properties.get(SVNProperty.MIME_TYPE))) {
-            final TextFile textFile = new TextFile(outStream.toString(), properties, repository.getLocation().toDecodedString(), target);
-            fileOutputStream.write(textFile.getContent().getBytes());
-          } else {
-            fileOutputStream.write(outStream.toByteArray());
-          }
-          fileOutputStream.flush();
-          fileOutputStream.close();
-        } else if (nodeKind == SVNNodeKind.DIR) {
-          logger.debug("Exporting directory [" + target + "] revision [" + exportRevision + "]");
-          entryToExport.mkdirs();
-          // The update method does not accept a full path, only a single file or dir leaf
-          logger.debug("Original repository location: " + repository.getLocation());
-          final SVNURL originalLocation = repository.getLocation();
-          repository.setLocation(SVNURL.parseURIDecoded(originalLocation.toDecodedString()
-              + PathUtil.getPathNoLeaf(target)), false);
-          logger.debug("Temporarily changing repository location to: " + repository.getLocation());
-          // Do the export
-          repository.update(exportRevision, PathUtil.getTarget(target), true, reporterBaton, new ExportEditor(entryToExport.getParentFile()));
-          logger.debug("Resetting repository location");
-          repository.setLocation(originalLocation, false);
-        } else {
-          throw new IllegalArgumentException("Target [" + target + "] does not exist in revision [" + exportRevision + "]");
-        }
-      }
-    } catch (final IOException ioex) {
-      logger.warn(ioex);
-      throw new RuntimeException(ioex);
+    for (final String target : targets) {
+      logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
+      final File entryToExport = new File(exportDirectory.getFile(), target);
+      SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
+          SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + target), entryToExport,
+          SVNRevision.create(exportRevision), SVNRevision.create(exportRevision), null, true, true);
     }
   }
 
@@ -222,4 +185,3 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
 }
-
