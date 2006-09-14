@@ -25,13 +25,13 @@
     <tr>
       <c:choose>
         <c:when test="${hasProperties}">
-          <td>${title} - <b>${target}</b>&nbsp;
+          <td>${title} - ${target}&nbsp;
             <a class="sventonHeader"
                href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');"
                 >[<span id="propertiesLink">show</span> properties]</a></td>
         </c:when>
         <c:otherwise>
-          <td>${title} - <b>${target}</b></td>
+          <td>${title} - ${target}</td>
         </c:otherwise>
       </c:choose>
     </tr>
