@@ -13,9 +13,9 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.EncodingUtils;
-import de.berlios.sventon.util.StreamUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -79,10 +79,10 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
           + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
 
       fileInputStream = new FileInputStream(compressedFile);
-      StreamUtils.writeStream(fileInputStream, output);
+      IOUtils.copy(fileInputStream, output);
     } finally {
-      StreamUtils.close(fileInputStream);
-      StreamUtils.close(output);
+      IOUtils.closeQuietly(fileInputStream);
+      IOUtils.closeQuietly(output);
       logger.debug("Cleanup of temporary directory ok: " + exportDirectory.delete());
     }
 
