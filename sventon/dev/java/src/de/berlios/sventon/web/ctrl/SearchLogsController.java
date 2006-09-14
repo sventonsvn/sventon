@@ -54,6 +54,6 @@ public class SearchLogsController extends AbstractSVNTemplateController implemen
     model.put("searchString", searchString);
     model.put("startDir", startDir);
     model.put("isLogSearch", true);  // Indicates that path should be shown in browser view.
-    return new ModelAndView("repobrowser", model);
+    return new ModelAndView("searchLogsResult", model);
   }
 }

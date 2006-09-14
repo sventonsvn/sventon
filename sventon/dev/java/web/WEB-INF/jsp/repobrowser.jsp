@@ -24,29 +24,24 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
   <p>
-    <table class="sventonHeader"><tr><td>
-
-  <c:choose>
-    <c:when test="${isLogSearch}">Search result for - <b>${searchString}</b></c:when>
-    <c:when test="${isEntrySearch}">Search result for - <b>${searchString}</b> (directory '${startDir}' and below)</c:when>
-    <c:when test="${isFlatten}">Flattened structure - <b>${command.target}</b> (and below)</c:when>
-    <c:otherwise>Repository Browser - <b>${command.target}</b></c:otherwise>
-  </c:choose>
-
-  <c:if test="${!empty properties}">
-    <a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
-  </c:if>
-    </td></tr></table>
-    <%@ include file="/WEB-INF/jspf/entryPropertiesTable.jspf"%>
+    <c:choose>
+      <c:when test="${isEntrySearch}">
+        <ui:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
+      </c:when>
+      <c:when test="${isFlatten}">
+        <ui:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/>
+      </c:when>
+      <c:otherwise>
+        <ui:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/>
+      </c:otherwise>
+    </c:choose>
   </p>
 
   <br/>
   <ui:functionLinks pageName="repobrowse"/> 
 
-  <c:choose>
-    <c:when test="${!isLogSearch}">
-      <div id="entriesDiv" class="sventonEntriesDiv">
-        <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
+  <div id="entriesDiv" class="sventonEntriesDiv">
+    <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
       <!-- Needed by ASVNTC -->
       <input type="hidden" name="path" value="${command.path}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
@@ -206,50 +201,14 @@
         <tr>
           <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
           <td>
-            <select class="sventonSelect" name="actionSelect">
-              <option class="sventonSelectOption">Actions...</option>
-              <option value="diff">&nbsp;&nbsp;Diff entries</option>
-              <c:if test="${isZipDownloadsAllowed}">
-                <option value="zip">&nbsp;&nbsp;Download as zip</option>
-              </c:if>
-              <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
-            </select><input type="submit" class="btn" value="go!"/>
+            <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
           </td>
           <td colspan="5"></td>
         </tr>
       </table>
     </form>
-      </div>
-    </c:when>
-    <c:otherwise>
-      <div id="logMessagesDiv" class="sventonEntriesDiv">
-        <table class="sventonEntriesTable">
-          <tr>
-            <th>Revision</th>
-            <th>Log Message</th>
-          </tr>
-          <%
-            int hitCount = 0;
-          %>
-          <c:forEach items="${logMessages}" var="logMessage">
-            <c:url value="revinfo.svn" var="showRevInfoUrl">
-              <c:param name="revision" value="${logMessage.revision}" />
-              <c:param name="name" value="${command.name}" />
-            </c:url>
-            <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-              <td><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
-              <td>${logMessage.message}</td>
-            </tr>
-            <% hitCount++; %>
-          </c:forEach>
-          <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-            <td><b>Total: <%=hitCount%> hits</b></td>
-            <td></td>
-          </tr>
-        </table>
-      </div>
-    </c:otherwise>
-  </c:choose>
+  </div>
+
 
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
