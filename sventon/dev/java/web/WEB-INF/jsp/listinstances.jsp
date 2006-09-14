@@ -11,15 +11,15 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf" %>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/nonrsshead.jspf" %>
+    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
     <title>Repository instances</title>
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
+    <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 
     <h1>Repository instances</h1>
 
@@ -35,6 +35,6 @@
         </c:forEach>
       </ol>
     </p>
-  <%@ include file="/WEB-INF/jspf/foot.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

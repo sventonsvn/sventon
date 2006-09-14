@@ -11,27 +11,25 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
     <title>Revision information details</title>
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader"><tr><td>Revision information</td></tr></table>
-    </p>
+    <p><ui:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
 
     <br/>
     <ui:functionLinks pageName="showRevInfo"/>
 
     <ui:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

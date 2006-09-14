@@ -11,28 +11,22 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 <%@ page import="de.berlios.sventon.diff.DiffAction"%>
 <%@ page import="de.berlios.sventon.diff.SourceLine"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
-    <title>Diff view</title>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+    <title>Diff View</title>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader">
-        <tr>
-          <td>Diff view - <b>${command.target}</b></td>
-        </tr>
-      </table>
-    </p>
-
+    <p><ui:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
+    
     <br/>
     <ui:functionLinks pageName="showDiff"/>
 
@@ -90,7 +84,7 @@
       </c:otherwise>
     </c:choose>
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

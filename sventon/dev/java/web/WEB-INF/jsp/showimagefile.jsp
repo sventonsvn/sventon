@@ -11,25 +11,18 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
-    <title>Show file - ${command.target}</title>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+    <title>Show Image File - ${command.target}</title>
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader">
-        <tr>
-          <td>Show File - <b>${command.target}</b>&nbsp;<a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
-        </tr>
-      </table>
-      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
-    </p>
+    <p><ui:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/></p>
 
     <br/>
     <ui:functionLinks pageName="showImageFile"/>
@@ -53,7 +46,7 @@
     </p>
 
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

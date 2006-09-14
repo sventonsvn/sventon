@@ -12,7 +12,7 @@
  */
 %>
 <%@ page import="java.util.*"%>
-<%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
+<%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
 <table class="sventonTopTable" border="0">

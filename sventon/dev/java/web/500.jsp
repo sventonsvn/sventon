@@ -12,7 +12,7 @@
  */
 %>
 <%@ page isErrorPage="true"%>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <%!
    final org.apache.commons.logging.Log logger = 
@@ -22,10 +22,10 @@
 <html>
   <head>
     <title>Application Error</title>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
   </head>
   <body>
-  <%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
+  <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 
   <h1>An unhandled internal application error has occured</h1>
   <p/>
@@ -37,6 +37,6 @@
   The error has been logged. If this error persists please ask the administator of 
   this sventon installation to file a bug report at <a href="http://sventon.berlios.de">http://sventon.berlios.de</a>.
   
-  <%@ include file="/WEB-INF/jspf/foot.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

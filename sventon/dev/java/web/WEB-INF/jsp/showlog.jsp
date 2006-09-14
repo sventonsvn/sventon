@@ -11,26 +11,20 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 <%@ page import="de.berlios.sventon.web.model.LogEntryActionType"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
-    <title>Logs view - ${command.target}</title>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+    <title>Logs View - ${command.target}</title>
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader">
-        <tr>
-          <td>Log Messages - <b>${command.target}</b>&nbsp;</td>
-        </tr>
-      </table>
-    </p>
+    <p><ui:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/></p>
 
     <br/>
     <ui:functionLinks pageName="showLog"/>
@@ -167,7 +161,7 @@
       </table>
     </form>
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

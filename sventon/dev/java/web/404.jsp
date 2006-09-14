@@ -11,7 +11,7 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <%!
    final org.apache.commons.logging.Log logger = 
@@ -21,10 +21,10 @@
 <html>
   <head>
     <title>404 page not found</title>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
   </head>
   <body>
-  <%@ include file="/WEB-INF/jspf/sventonbar.jspf"%>
+  <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 
   <h1>The requested view does not exist</h1>
   <p/>
@@ -33,6 +33,6 @@
   %>
   
   Go to <a href="<%= request.getContextPath() %>/index.jsp">sventon start page</a>
-  <%@ include file="/WEB-INF/jspf/foot.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>
