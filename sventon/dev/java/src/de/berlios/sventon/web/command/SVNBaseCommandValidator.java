@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
@@ -34,6 +36,23 @@ public class SVNBaseCommandValidator implements Validator {
 
   public void validate(final Object obj, final Errors errors) {
     final SVNBaseCommand command = (SVNBaseCommand) obj;
+
+    if (command.getSortType() != null) {
+      try {
+        RepositoryEntryComparator.SortType.valueOf(command.getSortType());
+      } catch (IllegalArgumentException iae) {
+        errors.rejectValue("revision", "browse.error.illegal-sortType", "Not a valid sort type");
+      }
+    }
+
+    if (command.getSortMode() != null) {
+      try {
+        RepositoryEntrySorter.SortMode.valueOf(command.getSortMode());
+      } catch (IllegalArgumentException iae) {
+        errors.rejectValue("revision", "browse.error.illegal-sortMode", "Not a valid sort mode");
+      }
+    }
+
     final String revision = command.getRevision();
 
     if (revision == null) {

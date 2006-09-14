@@ -15,15 +15,19 @@ import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionObservable;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
@@ -33,6 +37,7 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
@@ -44,7 +49,8 @@ import java.util.Map;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}</code>.
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest,
+ * HttpServletResponse, BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -55,13 +61,15 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
+ * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, UserContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, HttpServletRequest, HttpServletResponse, BindException)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest, HttpServletResponse,
+ * BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -162,7 +170,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       final long headRevision = getHeadRevision(repository);
 
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, request, response, exception);
+      final UserContext userContext = getUserContext(request);
+      parseAndUpdateSortParameters(request, userContext);
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, exception);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
@@ -193,6 +203,50 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
+  }
+
+  /**
+   * Parses sort mode and type parameters from the request instance and
+   * updates the <code>UserContext</code> instance.
+   *
+   * @param request     The request.
+   * @param userContext The UserContext instance to update.
+   */
+  protected void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
+    final String sortType = RequestUtils.getStringParameter(request, "sortType", null);
+    final String sortMode = RequestUtils.getStringParameter(request, "sortMode", null);
+
+    if (sortType != null) {
+      userContext.setSortType(RepositoryEntryComparator.SortType.valueOf(sortType));
+    } else if (userContext.getSortType() == null) {
+      userContext.setSortType(RepositoryEntryComparator.SortType.NAME);
+    }
+
+    if (sortMode != null) {
+      userContext.setSortMode(RepositoryEntrySorter.SortMode.valueOf(sortMode));
+    } else if (userContext.getSortMode() == null) {
+      userContext.setSortMode(RepositoryEntrySorter.SortMode.ASC);
+    }
+  }
+
+  /**
+   * Gets the UserContext instance from the user's HTTPSession.
+   * If session does not exist, it will be created. If the attribute
+   * <code>userContext</code> does not exists, a new instance will be
+   * created and added to the session.
+   *
+   * @param request The HTTP request.
+   * @return The UserContext instance.
+   * @see UserContext
+   */
+  protected UserContext getUserContext(final HttpServletRequest request) {
+    final HttpSession session = request.getSession(true);
+    UserContext userContext = (UserContext) session.getAttribute("userContext");
+    if (userContext == null) {
+      userContext = new UserContext();
+      session.setAttribute("userContext", userContext);
+    }
+    return userContext;
   }
 
   /**
@@ -296,24 +350,28 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * controller. This is where the actual work takes place. See class
    * documentation for info on workflow and on how all this works together.
    *
-   * @param repository Reference to the repository, prepared with authentication
-   *                   if applicable.
-   * @param svnCommand Command (basically request parameters submitted in user
-   *                   request)
-   * @param revision   SVN type revision.
-   * @param request    Servlet request.
-   * @param response   Servlet response.
-   * @param exception  BindException, could be used by the subclass to add error
-   *                   messages to the exception.
+   * @param repository  Reference to the repository, prepared with authentication
+   *                    if applicable.
+   * @param svnCommand  Command (basically request parameters submitted in user
+   *                    request)
+   * @param revision    SVN type revision.
+   * @param userContext The user's context instance.
+   * @param request     Servlet request.
+   * @param response    Servlet response.
+   * @param exception   BindException, could be used by the subclass to add error
+   *                    messages to the exception.
    * @return Model and view to render.
    * @throws de.berlios.sventon.SventonException
    *                   Thrown if a sventon error occurs.
    * @throws Exception Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
-                                            SVNBaseCommand svnCommand, SVNRevision revision,
-                                            HttpServletRequest request, HttpServletResponse response,
-                                            BindException exception) throws Exception;
+                                            final SVNBaseCommand svnCommand,
+                                            final SVNRevision revision,
+                                            final UserContext userContext,
+                                            final HttpServletRequest request,
+                                            final HttpServletResponse response,
+                                            final BindException exception) throws Exception;
 
 
   /**

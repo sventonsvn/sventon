@@ -11,9 +11,10 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
+import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -34,8 +35,9 @@ public class FlattenController extends AbstractSVNTemplateController implements 
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
     
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
@@ -52,7 +54,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(entries);
+    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
 
     model.put("svndir", entries);
     model.put("isFlatten", true);  // Indicates that path should be shown in browser view.

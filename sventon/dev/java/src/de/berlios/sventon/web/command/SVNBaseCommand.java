@@ -11,12 +11,10 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.repository.RepositoryEntryComparator;
-import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.util.PathUtil;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SVNBaseCommand.
@@ -49,12 +47,12 @@ public class SVNBaseCommand {
   /**
    * The sort type.
    */
-  private RepositoryEntryComparator.SortType sortType = RepositoryEntryComparator.SortType.NAME;
+  private String sortType;
 
   /**
    * Sort mode.
    */
-  private RepositoryEntrySorter.SortMode sortMode = RepositoryEntrySorter.SortMode.ASC;
+  private String sortMode;
 
   /**
    * Gets the path.
@@ -147,7 +145,7 @@ public class SVNBaseCommand {
    *
    * @return Sort type
    */
-  public RepositoryEntryComparator.SortType getSortType() {
+  public String getSortType() {
     return sortType;
   }
 
@@ -156,7 +154,7 @@ public class SVNBaseCommand {
    *
    * @param sortType Sort type
    */
-  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
+  public void setSortType(final String sortType) {
     if (sortType != null) {
       this.sortType = sortType;
     }
@@ -167,7 +165,7 @@ public class SVNBaseCommand {
    *
    * @return Sort mode
    */
-  public RepositoryEntrySorter.SortMode getSortMode() {
+  public String getSortMode() {
     return sortMode;
   }
 
@@ -176,7 +174,7 @@ public class SVNBaseCommand {
    *
    * @param sortMode Sort mode
    */
-  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
+  public void setSortMode(final String sortMode) {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
@@ -226,11 +224,13 @@ public class SVNBaseCommand {
     if (o == null || getClass() != o.getClass()) return false;
 
     final SVNBaseCommand that = (SVNBaseCommand) o;
+
     if (name != null ? !name.equals(that.name) : that.name != null) return false;
     if (path != null ? !path.equals(that.path) : that.path != null) return false;
     if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
-    if (sortMode != that.sortMode) return false;
-    if (sortType != that.sortType) return false;
+    if (sortMode != null ? !sortMode.equals(that.sortMode) : that.sortMode != null) return false;
+    if (sortType != null ? !sortType.equals(that.sortType) : that.sortType != null) return false;
+
     return true;
   }
 
@@ -250,8 +250,8 @@ public class SVNBaseCommand {
         "path='" + path + '\'' +
         ", revision='" + revision + '\'' +
         ", name='" + name + '\'' +
-        ", sortType=" + sortType +
-        ", sortMode=" + sortMode +
+        ", sortType='" + sortType + '\'' +
+        ", sortMode='" + sortMode + '\'' +
         '}';
   }
 }

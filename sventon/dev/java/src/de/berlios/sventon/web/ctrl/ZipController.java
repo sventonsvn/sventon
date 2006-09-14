@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.StreamUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,8 +59,9 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     ServletOutputStream output = null;
     InputStream fileInputStream = null;
