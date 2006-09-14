@@ -17,6 +17,7 @@ import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -61,8 +62,9 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     logger.debug("Getting file as 'thumbnail'");
 

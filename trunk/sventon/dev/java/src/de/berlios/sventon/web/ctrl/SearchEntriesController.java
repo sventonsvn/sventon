@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.cache.CamelCasePattern;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,8 +38,9 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     final String searchString = RequestUtils.getStringParameter(request, "searchString");
     final String startDir = RequestUtils.getStringParameter(request, "startDir");
@@ -55,7 +57,8 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
       entries.addAll(getCache().findEntry(svnCommand.getName(), searchString, startDir));
     }
 
-    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(entries);
+    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
+
     model.put("svndir", entries);
     model.put("searchString", searchString);
     model.put("startDir", startDir);

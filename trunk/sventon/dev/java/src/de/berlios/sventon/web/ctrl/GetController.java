@@ -15,6 +15,7 @@ import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -57,8 +58,9 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     final String displayType = RequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, null);
 

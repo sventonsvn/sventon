@@ -15,13 +15,14 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.FileExtensionList;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.support.FileExtensionFilter;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -42,8 +43,9 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
 
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     final String filterExtension = RequestUtils.getStringParameter(request, "filterExtension", "all");
 
@@ -73,7 +75,7 @@ public class RepoBrowserController extends AbstractSVNTemplateController impleme
       directoryListing = fileExtensionFilter.filter(RepositoryEntry.createEntryCollection(entries, completePath, locks));
     }
 
-    new RepositoryEntrySorter(svnCommand.getSortType(), svnCommand.getSortMode()).sort(directoryListing);
+    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(directoryListing);
 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();

@@ -17,6 +17,7 @@ import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.config.InstanceConfiguration;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
@@ -43,8 +44,9 @@ public class DiffController extends AbstractSVNTemplateController implements Con
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     final String[] entries = RequestUtils.getStringParameters(request, "entry");
     logger.debug("Diffing file content for: " + svnCommand);

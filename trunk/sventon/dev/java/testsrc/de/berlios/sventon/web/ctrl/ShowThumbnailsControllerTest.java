@@ -1,16 +1,14 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.web.ctrl.GetController;
-import de.berlios.sventon.web.ctrl.ShowThumbnailsController;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +37,8 @@ public class ShowThumbnailsControllerTest extends TestCase {
 
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
-    final ModelAndView modelAndView = controller.svnHandle(new TestRepository(), command, SVNRevision.HEAD, req, null, null);
+    final ModelAndView modelAndView = controller.svnHandle(new TestRepository(),
+        command, SVNRevision.HEAD, null, req, null, null);
 
     Map model = modelAndView.getModel();
     List entries = (List) model.get("thumbnailentries");

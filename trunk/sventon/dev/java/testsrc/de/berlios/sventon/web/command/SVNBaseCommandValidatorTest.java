@@ -2,8 +2,6 @@ package de.berlios.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.command.SVNBaseCommandValidator;
 
 public class SVNBaseCommandValidatorTest extends TestCase {
 
@@ -62,6 +60,35 @@ public class SVNBaseCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("browse.error.illegal-revision" ,exception.getFieldError("revision").getCode());
+
+    exception = new BindException(command, "test2");
+    command.setRevision("1");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
+
+    exception = new BindException(command, "test2");
+    command.setSortMode("");
+    command.setSortType("");
+    validator.validate(command, exception);
+    assertEquals(2, exception.getAllErrors().size());
+
+    exception = new BindException(command, "test2");
+    command.setSortMode(null);
+    command.setSortType(null);
+    validator.validate(command, exception);
+    assertEquals(2, exception.getAllErrors().size());
+
+    exception = new BindException(command, "test2");
+    command.setSortMode("ABC");
+    command.setSortType("ABC");
+    validator.validate(command, exception);
+    assertEquals(2, exception.getAllErrors().size());
+
+    exception = new BindException(command, "test2");
+    command.setSortMode("DESC");
+    command.setSortType("SIZE");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
 
   }
 

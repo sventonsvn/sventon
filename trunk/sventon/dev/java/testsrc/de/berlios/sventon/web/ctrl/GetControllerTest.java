@@ -30,7 +30,7 @@ public class GetControllerTest extends TestCase {
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
     MockHttpServletResponse res = new MockHttpServletResponse();
-    modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, req, res, null);
+    modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, null, req, res, null);
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
@@ -48,7 +48,7 @@ public class GetControllerTest extends TestCase {
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, (String) null);
 
     MockHttpServletResponse res = new MockHttpServletResponse();
-    modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, req, res, null);
+    modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, null, req, res, null);
 
     assertNull(modelAndView);
 

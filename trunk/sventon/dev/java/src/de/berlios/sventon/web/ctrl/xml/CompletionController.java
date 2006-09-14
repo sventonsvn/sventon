@@ -14,6 +14,7 @@ package de.berlios.sventon.web.ctrl.xml;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
+import de.berlios.sventon.web.model.UserContext;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
@@ -49,8 +50,9 @@ public class CompletionController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final HttpServletRequest request,
-                                   final HttpServletResponse response, final BindException exception) throws Exception {
+                                   final SVNRevision revision, final UserContext userContext,
+                                   final HttpServletRequest request, final HttpServletResponse response,
+                                   final BindException exception) throws Exception {
 
     final List<RepositoryEntry> entries =
         Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);

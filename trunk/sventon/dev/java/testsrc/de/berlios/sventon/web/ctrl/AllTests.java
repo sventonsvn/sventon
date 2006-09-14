@@ -11,6 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
+    suite.addTestSuite(AbstractSVNTemplateControllerTest.class);
     suite.addTestSuite(ConfigurationControllerTest.class);
     suite.addTestSuite(ConfigurationSubmissionControllerTest.class);
     suite.addTestSuite(GetControllerTest.class);

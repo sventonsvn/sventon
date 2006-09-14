@@ -44,7 +44,7 @@ public class CompletionControllerTest extends TestCase {
     request.addParameter("startDir", "/");
 
     MockHttpServletResponse response = new MockHttpServletResponse();
-    ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, request, response, null);
+    ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, null, request, response, null);
 
     assertEquals(XML_RESPONSE, response.getContentAsString().trim());
 
@@ -69,7 +69,7 @@ public class CompletionControllerTest extends TestCase {
   class TestCacheGatewayImpl implements CacheGateway {
 
     public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return null;
     }
 
     public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern,
@@ -98,15 +98,15 @@ public class CompletionControllerTest extends TestCase {
     public List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath)
         throws CacheException {
 
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return null;
     }
 
     public List<LogMessage> find(final String instanceName, final String queryString) throws CacheException {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return null;
     }
 
     public SVNLogEntry getRevision(final String instanceName, final long revision) throws CacheException {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return null;
     }
 
   }
