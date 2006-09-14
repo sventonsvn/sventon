@@ -37,7 +37,7 @@
               </c:if>
             </td>
             <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"/></spring:bind></td>
-            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" id="goToPath" type="text" name="path" value="${status.value}" /></spring:bind></td>
+            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${status.value}" /></spring:bind></td>
             <td><input type="hidden" name="name" value="${command.name}"><input type="submit" class="btn" value="go!"/></td>
           </tr>
         </table>
@@ -47,7 +47,7 @@
   <tr>
     <td style="white-space: nowrap;" colspan="2">
       <c:if test="${!empty latestCommitInfo}">
-        <div id="latestCommitInfoDiv" ${param.showlatestinfo == null || param.showlatestinfo == 'false' ? 'style="display:none"' : ''}" >
+        <div id="latestCommitInfoDiv" ${param.showlatestinfo == null || param.showlatestinfo == 'false' ? 'style="display:none"' : ''} >
           <ui:revisionInfo details="${latestCommitInfo}" keepVisible="true" linkToHead="true" />
         </div>
       </c:if>
