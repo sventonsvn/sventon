@@ -11,10 +11,10 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf" %>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/nonrsshead.jspf" %>
+    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
     <title><fmt:message key="${errorHeadingKey}"/></title>
   </head>
 

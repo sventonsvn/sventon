@@ -11,17 +11,16 @@
   * ====================================================================
   */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf" %>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/nonrsshead.jspf" %>
+    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
     <title>Logged out</title>
   </head>
 
   <body>
-
-    <%@ include file="/WEB-INF/jspf/sventonbar.jspf" %>
+    <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf" %>
     <p>
 The session has been cleared.
     </p>

@@ -11,26 +11,19 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
     <title>Blame - ${command.target}</title>
     <link rel="stylesheet" type="text/css" href="jhighlight.css" >
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader">
-        <tr>
-          <td>Blame - <b>${command.target}</b>&nbsp;<a href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a></td>
-        </tr>
-      </table>
-      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
-    </p>
+    <p><ui:currentTargetHeader title="Blame" target="${command.target}" hasProperties="true"/></p>
   
     <br/>
     <ui:functionLinks pageName="showBlame"/>
@@ -67,7 +60,7 @@
 </table>
 -->
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

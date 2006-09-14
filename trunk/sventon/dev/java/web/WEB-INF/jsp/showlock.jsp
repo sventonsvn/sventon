@@ -11,25 +11,18 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
-    <title>Show locks - ${command.target}</title>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+    <title>Show Locks - ${command.target}</title>
   </head>
 
   <body>
-    <%@ include file="/WEB-INF/jspf/top.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p>
-      <table class="sventonHeader">
-        <tr>
-          <td>Show locks - <b>${command.target}</b>&nbsp;</td>
-        </tr>
-      </table>
-      <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
-    </p>
+    <p><ui:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/></p>
 
     <br/>
     <ui:functionLinks pageName="showLock"/>
@@ -75,7 +68,7 @@
     </table>
 
     <br>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

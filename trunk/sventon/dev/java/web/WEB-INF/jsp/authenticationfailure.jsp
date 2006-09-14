@@ -11,11 +11,11 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/nonrsshead.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
     <title>sventon repository browser</title>
   </head>
   <body>
@@ -30,6 +30,6 @@
       Peruse sventon log for further information.
     </p>
 
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

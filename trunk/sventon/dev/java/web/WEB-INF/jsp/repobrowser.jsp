@@ -11,17 +11,17 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/include.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
   <head>
-    <%@ include file="/WEB-INF/jspf/head.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
     <title>sventon repository browser - ${url}</title>
   </head>
 <body>
-  <%@ include file="/WEB-INF/jspf/top.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
   <p>
     <table class="sventonHeader"><tr><td>
@@ -37,7 +37,7 @@
     <a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">[<span id="propertiesLink">show</span> properties]</a>
   </c:if>
     </td></tr></table>
-    <%@ include file="/WEB-INF/jspf/sventonheader.jspf"%>
+    <%@ include file="/WEB-INF/jspf/entryPropertiesTable.jspf"%>
   </p>
 
   <br/>
@@ -253,7 +253,7 @@
 
 <br>
 <script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
-<%@ include file="/WEB-INF/jspf/rss.jspf"%>
-<%@ include file="/WEB-INF/jspf/foot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>
