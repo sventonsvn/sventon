@@ -1,7 +1,7 @@
 package de.berlios.sventon.config;
 
-import de.berlios.sventon.util.StreamUtils;
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.Properties;
@@ -51,8 +51,8 @@ public class ApplicationConfiguratorTest extends TestCase {
       assertFalse(defaultSVN.isCacheUsed());
       assertFalse(defaultSVN.isZippedDownloadsAllowed());
     } finally {
-      StreamUtils.close(is);
-      StreamUtils.close(os);
+      IOUtils.closeQuietly(is);
+      IOUtils.closeQuietly(os);
       if (tempConfigFile != null) {
         tempConfigFile.delete();
       }

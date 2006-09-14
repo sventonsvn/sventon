@@ -11,14 +11,14 @@
  */
 package de.berlios.sventon.config;
 
-import de.berlios.sventon.util.StreamUtils;
 import de.berlios.sventon.logging.SVNLog4JAdapter;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.util.SVNDebugLog;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
+import org.tmatesoft.svn.util.SVNDebugLog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,7 +70,7 @@ public class ApplicationConfigurator {
         initConfiguration(is, configuration);
       }
     } finally {
-      StreamUtils.close(is);
+      IOUtils.closeQuietly(is);
     }
   }
 

@@ -37,6 +37,7 @@ public class PathUtilTest extends TestCase {
     assertEquals("", PathUtil.getFileExtension("trunk/src/File"));
     assertEquals("htpasswd", PathUtil.getFileExtension("trunk/src/.htpasswd"));
     assertEquals("", PathUtil.getFileExtension(null));
+    assertEquals("", PathUtil.getFileExtension("trunk/src.test/htpasswd"));
   }
 
 }
