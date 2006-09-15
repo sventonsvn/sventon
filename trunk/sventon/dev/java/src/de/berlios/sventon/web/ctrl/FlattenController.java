@@ -58,6 +58,6 @@ public class FlattenController extends AbstractSVNTemplateController implements 
 
     model.put("svndir", entries);
     model.put("isFlatten", true);  // Indicates that path should be shown in browser view.
-    return new ModelAndView("repobrowser", model);
+    return new ModelAndView("flattenDirResult", model);
   }
 }

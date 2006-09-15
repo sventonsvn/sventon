@@ -23,7 +23,7 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p><ui:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/></p>
+  <p><ui:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/></p>
 
   <br/>
   <ui:functionLinks pageName="repobrowse"/> 
@@ -35,7 +35,7 @@
       <input type="hidden" name="revision" value="${command.revision}"/>
       <input type="hidden" name="name" value="${command.name}"/>
 
-      <c:url value="repobrowser.svn" var="sortUrl">
+      <c:url value="flatten.svn" var="sortUrl">
         <c:param name="path" value="${command.path}" />
         <c:param name="revision" value="${command.revision}" />
         <c:param name="name" value="${command.name}" />
@@ -47,29 +47,6 @@
           int rowCount = 0;
           long totalSize = 0;
     %>
-
-        <c:if test="${!empty command.pathNoLeaf}">
-          <c:url value="repobrowser.svn" var="backUrl">
-            <c:param name="path" value="${command.pathNoLeaf}" />
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
-
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-            <td class="sventonCol1"></td>
-            <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
-            <td class="sventonCol3">
-              <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      <% rowCount++; %>
-        </c:if>
-
         <c:forEach items="${svndir}" var="entry">
           <jsp:useBean id="entry" type="RepositoryEntry" />
           <c:url value="repobrowser.svn" var="viewUrl">
@@ -95,12 +72,14 @@
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
-              <a href="${viewUrl}">${entry.name}</a>
+              <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
             </td>
         <% } else { %>
             <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
             <td class="sventonCol3">
-              <a href="${showFileUrl}">${entry.name}</a>
+              <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                ${entry.friendlyFullEntryName}
+              </a>
             </td>
         <% } %>
             <td class="sventonCol4" align="center">

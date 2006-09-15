@@ -35,40 +35,16 @@
       <input type="hidden" name="revision" value="${command.revision}"/>
       <input type="hidden" name="name" value="${command.name}"/>
 
+      <c:url value="searchentries.svn" var="sortUrl">
+        <c:param name="path" value="${command.path}" />
+        <c:param name="revision" value="${command.revision}" />
+        <c:param name="name" value="${command.name}" />
+        <c:param name="searchString" value="${searchString}" />
+        <c:param name="startDir" value="${startDir}" />
+      </c:url>
+
       <table class="sventonEntriesTable">
-        <tr>
-          <th></th>
-          <th></th>
-
-          <c:url value="searchentries.svn" var="sortUrl">
-            <c:param name="path" value="${command.path}" />
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
-            <c:param name="searchString" value="${searchString}" />
-            <c:param name="startDir" value="${startDir}" />
-          </c:url>
-
-          <jsp:useBean id="userContext" scope="session" class="de.berlios.sventon.web.model.UserContext" />
-          <c:set var="sortModeArrow" value="${userContext.sortMode eq 'ASC' ? 'icon_up.gif;' : 'icon_down.gif'}"/>
-          <c:set var="opositeSortType" value="${userContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
-
-          <th><a href="${sortUrl}&sortType=NAME&sortMode=${opositeSortType}" style="color: #000000;">
-              <c:if test="${userContext.sortType eq 'NAME'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>File</a>
-          </th>
-          <th></th>
-          <th><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
-            <c:if test="${userContext.sortType eq 'SIZE'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Size (bytes)</a>
-          </th>
-          <th><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
-            <c:if test="${userContext.sortType eq 'REVISION'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Revision</a>
-          </th>
-          <th><a href="${sortUrl}&sortType=AUTHOR&sortMode=${opositeSortType}" style="color: #000000;">
-            <c:if test="${userContext.sortType eq 'AUTHOR'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Author</a>
-          </th>
-          <th><a href="${sortUrl}&sortType=DATE&sortMode=${opositeSortType}" style="color: #000000;">
-            <c:if test="${userContext.sortType eq 'DATE'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Date</a>
-          </th>
-        </tr>
+        <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
     <%
           int rowCount = 0;
           long totalSize = 0;
