@@ -23,19 +23,7 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p>
-    <c:choose>
-      <c:when test="${isEntrySearch}">
-        <ui:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
-      </c:when>
-      <c:when test="${isFlatten}">
-        <ui:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/>
-      </c:when>
-      <c:otherwise>
-        <ui:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/>
-      </c:otherwise>
-    </c:choose>
-  </p>
+  <p><ui:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/></p>
 
   <br/>
   <ui:functionLinks pageName="repobrowse"/> 
@@ -52,31 +40,13 @@
           <th></th>
           <th></th>
 
-          <c:choose>
-            <c:when test="${isEntrySearch}">
-              <c:url value="searchentries.svn" var="sortUrl">
-                <c:param name="path" value="${command.path}" />
-                <c:param name="revision" value="${command.revision}" />
-                <c:param name="name" value="${command.name}" />
-                <c:param name="searchString" value="${searchString}" />
-                <c:param name="startDir" value="${startDir}" />
-              </c:url>
-            </c:when>
-            <c:when test="${isFlatten}">
-              <c:url value="flatten.svn" var="sortUrl">
-                <c:param name="path" value="${command.path}" />
-                <c:param name="revision" value="${command.revision}" />
-                <c:param name="name" value="${command.name}" />
-              </c:url>
-            </c:when>
-            <c:otherwise>
-              <c:url value="repobrowser.svn" var="sortUrl">
-                <c:param name="path" value="${command.path}" />
-                <c:param name="revision" value="${command.revision}" />
-                <c:param name="name" value="${command.name}" />
-              </c:url>
-            </c:otherwise>
-          </c:choose>
+          <c:url value="searchentries.svn" var="sortUrl">
+            <c:param name="path" value="${command.path}" />
+            <c:param name="revision" value="${command.revision}" />
+            <c:param name="name" value="${command.name}" />
+            <c:param name="searchString" value="${searchString}" />
+            <c:param name="startDir" value="${startDir}" />
+          </c:url>
 
           <jsp:useBean id="userContext" scope="session" class="de.berlios.sventon.web.model.UserContext" />
           <c:set var="sortModeArrow" value="${userContext.sortMode eq 'ASC' ? 'icon_up.gif;' : 'icon_down.gif'}"/>
@@ -103,29 +73,6 @@
           int rowCount = 0;
           long totalSize = 0;
     %>
-
-        <c:if test="${!empty command.pathNoLeaf && !isFlatten}">
-          <c:url value="repobrowser.svn" var="backUrl">
-            <c:param name="path" value="${command.pathNoLeaf}" />
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
-
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-            <td class="sventonCol1"></td>
-            <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
-            <td class="sventonCol3">
-              <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      <% rowCount++; %>
-        </c:if>
-
         <c:forEach items="${svndir}" var="entry">
           <jsp:useBean id="entry" type="RepositoryEntry" />
           <c:url value="repobrowser.svn" var="viewUrl">
@@ -151,29 +98,15 @@
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
-              <c:choose>
-                <c:when test="${isEntrySearch || isFlatten}">
-                  <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
-                </c:when>
-                <c:otherwise>
-                  <a href="${viewUrl}">${entry.name}</a>
-                </c:otherwise>
-              </c:choose>
+              <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
             </td>
         <% } else { %>
             <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
             <td class="sventonCol3">
-              <c:choose>
-                <c:when test="${isEntrySearch || isFlatten}">
-                  <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+              <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
-                  </a>
-                </c:when>
-                <c:otherwise>
-                  <a href="${showFileUrl}">${entry.name}</a>
-                </c:otherwise>
-              </c:choose>
-              </td>
+              </a>
+            </td>
         <% } %>
             <td class="sventonCol4" align="center">
               <c:if test="${!empty entry.lock}">
