@@ -26,7 +26,7 @@
   <p><ui:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/></p>
 
   <br/>
-  <ui:functionLinks pageName="repobrowse"/> 
+  <ui:functionLinks pageName="repobrowser"/> 
 
   <div id="entriesDiv" class="sventonEntriesDiv">
     <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
