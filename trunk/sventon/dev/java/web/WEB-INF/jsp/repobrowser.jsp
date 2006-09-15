@@ -49,25 +49,8 @@
     %>
 
         <c:if test="${!empty command.pathNoLeaf}">
-          <c:url value="repobrowser.svn" var="backUrl">
-            <c:param name="path" value="${command.pathNoLeaf}" />
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
-
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-            <td class="sventonCol1"></td>
-            <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
-            <td class="sventonCol3">
-              <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      <% rowCount++; %>
+          <%@ include file="/WEB-INF/jspf/parentDirLinkTableRow.jspf"%>
+          <% rowCount++; %>
         </c:if>
 
         <c:forEach items="${svndir}" var="entry">
