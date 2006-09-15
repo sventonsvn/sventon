@@ -25,9 +25,6 @@
 
   <p>
     <c:choose>
-      <c:when test="${isEntrySearch}">
-        <ui:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
-      </c:when>
       <c:when test="${isFlatten}">
         <ui:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/>
       </c:when>
@@ -53,15 +50,6 @@
           <th></th>
 
           <c:choose>
-            <c:when test="${isEntrySearch}">
-              <c:url value="searchentries.svn" var="sortUrl">
-                <c:param name="path" value="${command.path}" />
-                <c:param name="revision" value="${command.revision}" />
-                <c:param name="name" value="${command.name}" />
-                <c:param name="searchString" value="${searchString}" />
-                <c:param name="startDir" value="${startDir}" />
-              </c:url>
-            </c:when>
             <c:when test="${isFlatten}">
               <c:url value="flatten.svn" var="sortUrl">
                 <c:param name="path" value="${command.path}" />
@@ -152,7 +140,7 @@
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
               <c:choose>
-                <c:when test="${isEntrySearch || isFlatten}">
+                <c:when test="${isFlatten}">
                   <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
                 </c:when>
                 <c:otherwise>
@@ -164,7 +152,7 @@
             <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
             <td class="sventonCol3">
               <c:choose>
-                <c:when test="${isEntrySearch || isFlatten}">
+                <c:when test="${isFlatten}">
                   <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                   </a>
