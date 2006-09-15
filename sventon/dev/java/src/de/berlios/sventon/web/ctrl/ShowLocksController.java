@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class ShowLockController extends AbstractSVNTemplateController implements Controller {
+public class ShowLocksController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -46,7 +46,7 @@ public class ShowLockController extends AbstractSVNTemplateController implements
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("currentLocks", getLocks(repository, svnCommand.getPath()).values());
-    return new ModelAndView("showlock", model);
+    return new ModelAndView("showlocks", model);
   }
 
 }
