@@ -46,7 +46,7 @@ public class ShowLocksController extends AbstractSVNTemplateController implement
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("currentLocks", getLocks(repository, svnCommand.getPath()).values());
-    return new ModelAndView("showlocks", model);
+    return new ModelAndView("showLocks", model);
   }
 
 }
