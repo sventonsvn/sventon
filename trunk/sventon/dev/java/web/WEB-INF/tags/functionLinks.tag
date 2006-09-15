@@ -28,7 +28,7 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showLockLinkUrl" value="showlock.svn">
+<c:url var="showLockLinkUrl" value="showlocks.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />

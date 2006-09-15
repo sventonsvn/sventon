@@ -72,7 +72,7 @@
 
   <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
   <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
-  <bean id="showLockController" class="de.berlios.sventon.web.ctrl.ShowLockController" parent="abstractController"/>
+  <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
   <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
   <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
   <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
@@ -164,7 +164,7 @@
         <prop key="/unifieddiff.svn">unifiedDiffController</prop>
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
-        <prop key="/showlock.svn">showLockController</prop>
+        <prop key="/showlocks.svn">showLocksController</prop>
         <prop key="/zip.svn">zipController</prop>
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
