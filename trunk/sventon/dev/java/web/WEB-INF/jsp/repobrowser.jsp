@@ -26,7 +26,7 @@
   <p><ui:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/></p>
 
   <br/>
-  <ui:functionLinks pageName="repobrowse"/> 
+  <ui:functionLinks pageName="repobrowser"/> 
 
   <div id="entriesDiv" class="sventonEntriesDiv">
     <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
