@@ -52,7 +52,7 @@
   </div>
 
 <br>
-<script language="JavaScript" type="text/javascript" src="wz_tooltip.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
