@@ -22,10 +22,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/></p>
 
     <br/>
-    <ui:functionLinks pageName="showLock"/>
+    <sventon:functionLinks pageName="showLock"/>
 
     <table class="sventonEntriesTable" border="0">
       <tr>

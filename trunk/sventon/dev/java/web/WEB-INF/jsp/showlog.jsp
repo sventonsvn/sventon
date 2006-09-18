@@ -14,6 +14,7 @@
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 <%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
 <%@ page import="de.berlios.sventon.web.model.LogEntryActionType"%>
+<%@ page import="java.util.*"%>
 
 <html>
   <head>
@@ -24,10 +25,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/></p>
 
     <br/>
-    <ui:functionLinks pageName="showLog"/>
+    <sventon:functionLinks pageName="showLog"/>
 
     <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">
 
@@ -35,6 +36,9 @@
       <input type="hidden" name="path" value="${command.path}${entry.name}"/>
       <input type="hidden" name="revision" value="${command.revision}"/>
       <input type="hidden" name="name" value="${command.name}"/>
+
+      <c:set var="command" value="${command}"/>
+      <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
 
       <table class="sventonLogEntriesTable">
         <tr>
@@ -91,8 +95,7 @@
 
                 <jsp:useBean id="changedPaths" type="java.util.Map" />
                 <%
-                  final Set paths = changedPaths.keySet();
-                  final List pathsList = new java.util.ArrayList(paths);
+                  final List pathsList = new ArrayList(changedPaths.keySet());
                   Collections.sort(pathsList);
                   final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {

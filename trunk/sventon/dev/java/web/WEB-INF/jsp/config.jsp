@@ -20,7 +20,7 @@
   </head>
 
   <body>
-    <p><ui:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/></p>
 
     <br/>
       <p>
@@ -139,9 +139,7 @@
         </table>
       </p>
 
-    <script language="JavaScript">
-      document.configForm.name.focus();
-    </script>
+    <script language="JavaScript" type="text/javascript">document.configForm.name.focus();</script>
 
   <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>

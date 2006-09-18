@@ -23,10 +23,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/></p>
 
     <br/>
-    <ui:functionLinks pageName="showThumbs"/>
+    <sventon:functionLinks pageName="showThumbs"/>
 
     <br/>
 

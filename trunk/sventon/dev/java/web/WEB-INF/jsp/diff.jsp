@@ -25,10 +25,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
     
     <br/>
-    <ui:functionLinks pageName="showDiff"/>
+    <sventon:functionLinks pageName="showDiff"/>
 
     <c:choose>
       <c:when test="${!empty diffException}">

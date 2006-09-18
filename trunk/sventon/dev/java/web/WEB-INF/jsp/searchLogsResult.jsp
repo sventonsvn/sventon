@@ -21,10 +21,10 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p><ui:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/></p>
+  <p><sventon:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/></p>
 
   <br/>
-  <ui:functionLinks pageName="repobrowser"/>
+  <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="logMessagesDiv" class="sventonEntriesDiv">
     <table class="sventonEntriesTable">

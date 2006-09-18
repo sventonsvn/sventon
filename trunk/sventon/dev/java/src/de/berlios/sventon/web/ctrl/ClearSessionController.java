@@ -32,7 +32,7 @@ public class ClearSessionController extends AbstractController {
     if (session != null) {
       session.invalidate();
     }
-    return new ModelAndView("sessionclear");
+    return new ModelAndView("clearSession");
   }
 
 }

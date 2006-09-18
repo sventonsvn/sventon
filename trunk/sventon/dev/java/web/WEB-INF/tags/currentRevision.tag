@@ -11,13 +11,19 @@
   * ====================================================================
   */
 %>
-<%@ page session="true" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
-<%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ attribute name="command" required="true" type="de.berlios.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="revisionNumber" required="true" type="java.lang.String" %>
+
+Rev:
+<c:choose>
+  <c:when test="${!empty revisionNumber}">
+      ${command.revision} (${revisionNumber})
+  </c:when>
+  <c:otherwise>
+      <a class="exclamationText" href="revinfo.svn?revision=${command.revision}&name=${command.name}">${command.revision}</a>
+  </c:otherwise>
+</c:choose>
+
