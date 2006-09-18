@@ -28,26 +28,24 @@
 
   <div id="logMessagesDiv" class="sventonEntriesDiv">
     <table class="sventonEntriesTable">
+      <c:set var="rowCount" value="0"/>
       <tr>
         <th>Revision</th>
         <th>Log Message</th>
       </tr>
-      <%
-        int hitCount = 0;
-      %>
       <c:forEach items="${logMessages}" var="logMessage">
         <c:url value="revinfo.svn" var="showRevInfoUrl">
           <c:param name="revision" value="${logMessage.revision}" />
           <c:param name="name" value="${command.name}" />
         </c:url>
-        <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
           <td>${logMessage.message}</td>
         </tr>
-        <% hitCount++; %>
+        <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
-      <tr class="<%if (hitCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-        <td><b>Total: <%=hitCount%> hits</b></td>
+      <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+        <td><b>Total: ${rowCount} hits</b></td>
         <td></td>
       </tr>
     </table>

@@ -13,6 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="java.util.*" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
@@ -23,10 +24,11 @@
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
+<% application.setAttribute("br", "\n"); %>
 <table class="sventonLatestCommitInfoTable">
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
   <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
-  <tr><td><b>Message:</b></td><td>${details.message}</td></tr>
+  <tr><td valign="top"><b>Message:</b></td><td>${fn:replace(details.message, br, '<br/>')}</td></tr>
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
   <tr><td colspan="2" valign="top"><b>Changed paths:</b></td></tr>
   <c:set var="latestChangedPaths" value="${details.changedPaths}" />
