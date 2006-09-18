@@ -26,7 +26,7 @@
   <p><sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/></p>
 
   <br/>
-  <sventon:functionLinks pageName="repobrowser"/> 
+  <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">
     <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
@@ -45,8 +45,8 @@
 
       <table class="sventonEntriesTable">
         <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
+        <c:set var="rowCount" value="0"/>
     <%
-          int rowCount = 0;
           long totalSize = 0;
     %>
         <c:forEach items="${svndir}" var="entry">
@@ -70,12 +70,14 @@
           totalSize += entry.getSize();
         %>
 
-        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">
-              <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">${entry.friendlyFullEntryName}</a>
+              <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                ${entry.friendlyFullEntryName}
+              </a>
             </td>
         <% } else { %>
             <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
@@ -91,16 +93,22 @@
               </c:if>
             </td>
             <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
-            <td class="sventonCol6"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${entry.revision}</a></td>
+            <td class="sventonCol6">
+              <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
+                ${entry.revision}
+              </a>
+            </td>
             <td class="sventonCol7">${entry.author}</td>
-            <td class="sventonCol8"><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
+            <td class="sventonCol8">
+              <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
+            </td>
           </tr>
-      <% rowCount++; %>
+          <c:set var="rowCount" value="${rowCount + 1}"/>
         </c:forEach>
 
-        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td colspan="2" align="right"><b>Total:</b></td>
-          <td><b><%=rowCount%> entries</b></td>
+          <td><b>${rowCount} entries</b></td>
           <td></td>
           <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
           <td></td>

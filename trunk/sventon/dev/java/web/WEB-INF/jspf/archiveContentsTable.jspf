@@ -15,6 +15,7 @@
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 
 <table class="sventonEntriesTable">
+  <c:set var="rowCount" value="0"/>
   <tr>
     <th></th>
     <th>Name</th>
@@ -24,7 +25,6 @@
     <th>CRC</th>
   </tr>
   <%
-    int rowCount = 0;
     long totalOrigSize = 0;
     long totalCompSize = 0;
     %>
@@ -32,7 +32,7 @@
     <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
     <jsp:useBean id="entryDate" class="java.util.Date" />
 
-    <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+    <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <%
         entryDate = new Date(zipEntry.getTime());
         totalOrigSize += zipEntry.getSize();
@@ -52,12 +52,12 @@
       <td class="sventonColNoWrap"><fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/></td>
       <td>${zipEntry.crc}</td>
     </tr>
-    <% rowCount++; %>
+    <c:set var="rowCount" value="${rowCount + 1}"/>
   </c:forEach>
 
-  <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+  <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
     <td align="right"><b>Total:</b></td>
-    <td><b><%=rowCount%> entries</b></td>
+    <td><b>${rowCount} entries</b></td>
     <td align="right" title="<%=totalOrigSize%>&nbsp;bytes"><b><%if (totalOrigSize != 0) out.print(ByteFormatter.format(totalOrigSize, request.getLocale()));%></b></td>
     <td align="right" title="<%=totalCompSize%>&nbsp;bytes"><b><%if (totalCompSize != 0) out.print(ByteFormatter.format(totalCompSize, request.getLocale()));%></b></td>
     <td>&nbsp;</td>

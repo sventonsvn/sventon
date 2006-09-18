@@ -41,6 +41,7 @@
       <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
 
       <table class="sventonLogEntriesTable">
+        <c:set var="rowCount" value="0"/>
         <tr>
           <c:if test="${isFile}">
             <th style="width: 55px">&nbsp;</th>
@@ -51,7 +52,7 @@
           <th>Author</th>
           <th>Date</th>
         </tr>
-        <% int rowCount = 0; %>
+
         <c:set var="nextPath" value=""/>
         <c:set var="nextRev" value=""/>
 
@@ -67,7 +68,7 @@
 
           <jsp:useBean id="entry" type="de.berlios.sventon.web.model.LogEntryBundle" />
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+          <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
             <c:choose>
               <c:when test="${isFile}">
                 <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
@@ -77,12 +78,12 @@
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
-            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry<%=rowCount%>'); changeLessMoreDisplay('hdr<%=rowCount%>');">[<span id="hdr<%=rowCount%>">more</span>]</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
-          <tr id="logInfoEntry<%=rowCount%>" style="display:none" class="sventonEntryLogInfo">
+          <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
             <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
               <table width="100%">
                 <tr>
@@ -136,7 +137,7 @@
               </table>
             </td>
           </tr>
-          <% rowCount++; %>
+          <c:set var="rowCount" value="${rowCount + 1}"/>
         </c:forEach>
         <c:url value="showlog.svn" var="showNextLogUrl">
           <c:param name="nextPath" value="${nextPath}" />

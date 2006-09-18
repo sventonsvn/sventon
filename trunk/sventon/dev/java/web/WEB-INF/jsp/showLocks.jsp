@@ -28,6 +28,7 @@
     <sventon:functionLinks pageName="showLock"/>
 
     <table class="sventonEntriesTable" border="0">
+      <c:set var="rowCount" value="0"/>
       <tr>
         <th></th>
         <th>Name</th>
@@ -36,7 +37,6 @@
         <th>Created</th>
         <th>Expires</th>
       </tr>
-      <% int rowCount = 0; %>
       <c:forEach items="${currentLocks}" var="lock">
         <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
 
@@ -46,7 +46,7 @@
           <c:param name="name" value="${command.name}" />
         </c:url>
 
-        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td><img src="images/icon_file.gif" alt="file"/></td>
           <td><a href="${showUrl}">${lock.path}</a></td>
           <td>${lock.owner}</td>
@@ -54,12 +54,12 @@
           <td><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td>
           <td><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td>
         </tr>
-    <% rowCount++; %>
+        <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
 
-      <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+      <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td>&nbsp;</td>
-        <td><b>Total: <%=rowCount%> entries</b></td>
+        <td><b>Total: ${rowCount} entries</b></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
