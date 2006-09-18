@@ -22,12 +22,12 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
+    <p><sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
 
     <br/>
-    <ui:functionLinks pageName="showRevInfo"/>
+    <sventon:functionLinks pageName="showRevInfo"/>
 
-    <ui:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+    <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
     <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

@@ -11,7 +11,6 @@
  * ====================================================================
  */
 %>
-<%@ page import="java.util.*"%>
 <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
@@ -48,43 +47,15 @@
     <td style="white-space: nowrap;" colspan="2">
       <c:if test="${!empty latestCommitInfo}">
         <div id="latestCommitInfoDiv" ${param.showlatestinfo == null || param.showlatestinfo == 'false' ? 'style="display:none"' : ''} >
-          <ui:revisionInfo details="${latestCommitInfo}" keepVisible="true" linkToHead="true" />
+          <sventon:revisionInfo details="${latestCommitInfo}" keepVisible="true" linkToHead="true" />
         </div>
       </c:if>
     </td>
   </tr>
-  <c:set var="command" value="${command}"/>
-  <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
   <tr>
     <td class="sventonHeadlines" colspan="2">
-    <c:choose>
-      <c:when test="${!empty numrevision}">
-          Rev: ${command.revision} (${numrevision})
-      </c:when>
-      <c:otherwise>
-          Rev: <a class="exclamationText" href="revinfo.svn?revision=${command.revision}&name=${command.name}">${command.revision}</a>
-      </c:otherwise>
-    </c:choose>
-     - <a href="repobrowser.svn?path=/&revision=${command.revision}&name=${command.name}">
-      ${url} </a> /
-      <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
-        <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
-        <c:choose>
-          <c:when test="${hasErrors}">
-            ${pathSegment}
-          </c:when>
-          <c:otherwise>
-          <c:url value="repobrowser.svn" var="pathUrl">
-            <c:param name="path" value="/${accuPath}" />
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
-          <a href="${pathUrl}">${pathSegment}</a>
-      </c:otherwise>
-        </c:choose>
-         /
-      </c:forTokens>
-      ${command.target}
+      <sventon:currentRevision command="${command}" revisionNumber="${numrevision}"/> -
+      <sventon:clickableUrl command="${command}" url="${url}"/>
     </td>
   </tr>
 </table>

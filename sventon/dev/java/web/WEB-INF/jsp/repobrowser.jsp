@@ -23,10 +23,10 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p><ui:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/></p>
+  <p><sventon:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/></p>
 
   <br/>
-  <ui:functionLinks pageName="repobrowser"/> 
+  <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">
     <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
@@ -70,11 +70,13 @@
             <c:param name="name" value="${command.name}" />
           </c:url>
 
-          <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
-      <%
+          <%
             totalSize += entry.getSize();
-      %>
-            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
+          %>
+
+        <tr class="<%if (rowCount % 2 == 0) out.print("sventonEntryEven"); else out.print("sventonEntryOdd");%>">
+          <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
+
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
             <td class="sventonCol3">

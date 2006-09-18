@@ -22,10 +22,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/></p>
+    <p><sventon:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/></p>
 
     <br/>
-    <ui:functionLinks pageName="showArchiveFile"/>
+    <sventon:functionLinks pageName="showArchiveFile"/>
 
     <%@ include file="/WEB-INF/jspf/archiveContentsTable.jspf"%>
 

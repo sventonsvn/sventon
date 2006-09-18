@@ -23,10 +23,10 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><ui:currentTargetHeader title="Blame" target="${command.target}" hasProperties="true"/></p>
+    <p><sventon:currentTargetHeader title="Blame" target="${command.target}" hasProperties="true"/></p>
   
     <br/>
-    <ui:functionLinks pageName="showBlame"/>
+    <sventon:functionLinks pageName="showBlame"/>
   
     <p>
       <br/>

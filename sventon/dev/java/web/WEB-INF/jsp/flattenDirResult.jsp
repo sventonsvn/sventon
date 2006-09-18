@@ -22,10 +22,10 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p><ui:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/></p>
+  <p><sventon:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/></p>
 
   <br/>
-  <ui:functionLinks pageName="repobrowser"/> 
+  <sventon:functionLinks pageName="repobrowser"/> 
 
   <div id="entriesDiv" class="sventonEntriesDiv">
     <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
