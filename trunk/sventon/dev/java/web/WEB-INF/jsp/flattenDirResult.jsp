@@ -68,11 +68,7 @@
                   ${entry.friendlyFullEntryName}
                 </a>
               </td>
-              <td class="sventonCol4" align="center">
-                <c:if test="${!empty entry.lock}">
-                  <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${entry.lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${entry.lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${entry.lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img alt="Lock" border="0" src="images/lock.gif"></span>
-                </c:if>
-              </td>
+              <td class="sventonCol4"></td>
               <td class="sventonCol5"></td>
               <td class="sventonCol6">
                 <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
