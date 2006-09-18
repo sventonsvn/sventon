@@ -12,8 +12,6 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.diff.DiffAction"%>
-<%@ page import="de.berlios.sventon.diff.SourceLine"%>
 
 <html>
   <head>
@@ -44,38 +42,46 @@
 
             <table id="diffTable" class="sventonDiffTable" cellspacing="0">
               <tr>
-                <th><a href="#diff0"><img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/></a></th>
+                <th>
+                  <a href="#diff0">
+                    <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
+                  </a>
+                </th>
                 <th>&nbsp;</th>
                 <th width="50%">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
                 <th>&nbsp;</th>
                 <th width="50%">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
               </tr>
-              <%
-                int diffCount = 0;
-                for (int i = 0; i < leftLines.size(); i++) {
-              %>
-              <tr>
-                <%
-                  SourceLine line = (SourceLine) leftLines.get(i);
-                %>
-                <td>
-                  <% if (DiffAction.UNCHANGED != line.getAction()) { %>
-                    <a name="diff<%=diffCount%>"/><a href="#diff<%=++diffCount%>">
-                      <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
-                    </a>
-                  <%}%>
-                </td>
-                <td><b><%= line.getAction().getSymbol() %></b></td>
-                <td class="<%= line.getAction().getCSSClass() %>"><span title="<%= line.getAction().getDescription() %>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></span></td>
-                <% line = (SourceLine) rightLines.get(i); %>
-                <td><b><%= line.getAction().getSymbol() %></b></td>
-                <td class="<%= line.getAction().getCSSClass() %>"><span title="<%= line.getAction().getDescription() %>"><% if ("".equals(line.getLine())) out.print("&nbsp;"); else out.print(line.getLine());%></span></td>
-              </tr>
-              <%
-                }
-              %>
+              <c:set var="diffCount" value="0"/>
+              <c:set var="lineCount" value="0"/>
+              <c:forEach items="${leftLines}" var="line">
+                <tr>
+                  <td>
+                    <c:if test="${'Unchanged' != line.action.description}">
+                      <a name="diff${diffCount}"/>
+                      <c:set var="diffCount" value="${diffCount + 1}"/>
+                      <a href="#diff${diffCount}">
+                        <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
+                      </a>
+                    </c:if>
+                  </td>
+                  <td><b>${line.action.symbol}</b></td>
+                  <td class="${line.action.CSSClass}">
+                    <span title="${line.action.description}">
+                      ${line.line eq '' ? '&nbsp;' : line.line}
+                    </span>
+                  </td>
+                  <td><b>${righLines[lineCount].action.symbol}</b></td>
+                  <td class="${rightLines[lineCount].action.CSSClass}">
+                    <span title="${rightLines[lineCount].action.description}">
+                      ${rightLines[lineCount].line eq '' ? '&nbsp;' : rightLines[lineCount].line}
+                    </span>
+                  </td>
+                </tr>
+                <c:set var="lineCount" value="${lineCount + 1}"/>
+              </c:forEach>
             </table>
-            <a name="diff<%=diffCount%>"/>
+            <a name="diff${diffCount}"/>
           </c:when>
           <c:otherwise>
             <p><b>One or both files selected for diff is in binary format.</b></p>
