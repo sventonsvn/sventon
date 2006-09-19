@@ -26,10 +26,10 @@
 
 <% application.setAttribute("br", "\n"); %>
 <table class="sventonLatestCommitInfoTable">
-  <tr><td><b>User:</b></td><td>${details.author}</td></tr>
-  <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
-  <tr><td valign="top"><b>Message:</b></td><td>${fn:replace(details.message, br, '<br/>')}</td></tr>
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
+  <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
+  <tr><td><b>User:</b></td><td>${details.author}</td></tr>
+  <tr><td valign="top"><b>Message:</b></td><td>${fn:replace(details.message, br, '<br/>')}</td></tr>
   <tr><td colspan="2" valign="top"><b>Changed paths:</b></td></tr>
   <c:set var="latestChangedPaths" value="${details.changedPaths}" />
   <jsp:useBean id="latestChangedPaths" type="java.util.Map" />

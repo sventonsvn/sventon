@@ -26,6 +26,7 @@
   <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
+  <% pageContext.setAttribute("br", "\n"); %>
   <div id="logMessagesDiv" class="sventonEntriesDiv">
     <table class="sventonEntriesTable">
       <c:set var="rowCount" value="0"/>
@@ -39,13 +40,13 @@
           <c:param name="name" value="${command.name}" />
         </c:url>
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <td><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
-          <td>${logMessage.message}</td>
+          <td valign="top"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
+          <td>${fn:replace(logMessage.message, br, '<br/>')}</td>
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td><b>Total: ${rowCount} hits</b></td>
+        <td><b>Total:&nbsp;${rowCount}&nbsp;hits</b></td>
         <td></td>
       </tr>
     </table>
