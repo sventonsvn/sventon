@@ -219,7 +219,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     if (sortType != null) {
       userContext.setSortType(RepositoryEntryComparator.SortType.valueOf(sortType));
     } else if (userContext.getSortType() == null) {
-      userContext.setSortType(RepositoryEntryComparator.SortType.NAME);
+      userContext.setSortType(RepositoryEntryComparator.SortType.FULL_NAME);
     }
 
     if (sortMode != null) {
