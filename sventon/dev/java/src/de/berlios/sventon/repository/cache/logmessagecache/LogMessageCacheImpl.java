@@ -95,7 +95,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
    * {@inheritDoc}
    */
   public synchronized List<LogMessage> find(final String queryString) throws CacheException {
-    final List<LogMessage> result = new ArrayList<LogMessage>();;
+    final List<LogMessage> result = new ArrayList<LogMessage>();
     Searcher searcher = null;
     try {
       logger.debug("Searching for: [" + queryString + "]");
@@ -103,8 +103,9 @@ public class LogMessageCacheImpl implements LogMessageCache {
       searcher = getIndexSearcher();
       final Hits hits = searcher.search(query);
 
+//TODO: Add span tags 'searchHit'
       final Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter(), new QueryScorer(query));
-      highlighter.setTextFragmenter(new SimpleFragmenter(20));
+      highlighter.setTextFragmenter(new NullFragmenter());
       highlighter.setEncoder(new SimpleHTMLEncoder());
 
       final int hitCount = hits.length();
@@ -114,11 +115,9 @@ public class LogMessageCacheImpl implements LogMessageCache {
         for (int i = 0; i < hitCount; i++) {
           final Document document = hits.doc(i);
           final String content = document.get("content");
-          final int maxNumFragmentsRequired = 100;
-          final String fragmentSeparator = "...";
           final TokenStream tokenStream = new StandardAnalyzer().tokenStream("content", new StringReader(content));
-          result.add(new LogMessage(Long.parseLong(document.get("revision")),
-              highlighter.getBestFragments(tokenStream, content, maxNumFragmentsRequired, fragmentSeparator)));
+          final String highlightedContent = highlighter.getBestFragment(tokenStream, content);
+          result.add(new LogMessage(Long.parseLong(document.get("revision")), highlightedContent));
         }
       }
     } catch (Exception ex) {
