@@ -13,6 +13,7 @@ package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.diff.DiffException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.*;
 
@@ -25,8 +26,8 @@ import java.util.*;
  */
 public class DiffCommand {
 
-  private final long fromRevision;
-  private final long toRevision;
+  private final SVNRevision fromRevision;
+  private final SVNRevision toRevision;
   private final String fromPath;
   private final String toPath;
 
@@ -59,11 +60,11 @@ public class DiffCommand {
 
       if (toPathAndRevision.length == 1 && fromPathAndRevision.length == 1) {
         // Assume HEAD revision
-        toRevision = -1;
-        fromRevision = -1;
+        toRevision = SVNRevision.HEAD;
+        fromRevision = SVNRevision.HEAD;
       } else {
-        toRevision = Long.parseLong(toPathAndRevision[1]);
-        fromRevision = Long.parseLong(fromPathAndRevision[1]);
+        toRevision = SVNRevision.parse(toPathAndRevision[1]);
+        fromRevision = SVNRevision.parse(fromPathAndRevision[1]);
       }
     } catch (Exception ex) {
       throw new DiffException("Unable to diff. Unable to parse revision and path.", ex);
@@ -93,11 +94,11 @@ public class DiffCommand {
     // Grab the latest..
     final SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();
     this.toPath = toRevision.getPath();
-    this.toRevision = toRevision.getRevision();
+    this.toRevision = SVNRevision.create(toRevision.getRevision());
     // ..and the previous one...
     final SVNFileRevision fromRevision = (SVNFileRevision) revisionIterator.next();
     this.fromPath = fromRevision.getPath();
-    this.fromRevision = fromRevision.getRevision();
+    this.fromRevision = SVNRevision.create(fromRevision.getRevision());
   }
 
   /**
@@ -114,7 +115,7 @@ public class DiffCommand {
    *
    * @return The revision.
    */
-  public long getFromRevision() {
+  public SVNRevision getFromRevision() {
     return fromRevision;
   }
 
@@ -132,7 +133,7 @@ public class DiffCommand {
    *
    * @return The revision.
    */
-  public long getToRevision() {
+  public SVNRevision getToRevision() {
     return toRevision;
   }
 

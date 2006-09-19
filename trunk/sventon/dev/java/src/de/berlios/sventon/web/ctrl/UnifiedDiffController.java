@@ -89,8 +89,10 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
     final RawTextFile leftFile;
     final RawTextFile rightFile;
 
-    final boolean isLeftFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision());
-    final boolean isRightFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision());
+    final boolean isLeftFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getFromPath(),
+        diffCommand.getFromRevision().getNumber());
+    final boolean isRightFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getToPath(),
+        diffCommand.getToRevision().getNumber());
 
     if (isLeftFileTextType || isRightFileTextType) {
       model.put("isBinary", false);
@@ -98,7 +100,8 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
       // Get content of oldest file (left).
       logger.debug("Getting file content for (from) revision "
           + diffCommand.getFromRevision() + ", path: " + diffCommand.getFromPath());
-      getRepositoryService().getFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision(), outStream);
+      getRepositoryService().getFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(),
+          outStream);
       leftFile = new RawTextFile(outStream.toString(), true);
 
       // Re-initialize stream
@@ -108,7 +111,8 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
       logger.debug("Getting file content for (to) revision "
           + diffCommand.getToRevision() + ", path: " + diffCommand.getToPath());
 
-      getRepositoryService().getFile(repository, diffCommand.getToPath(), diffCommand.getToRevision(), outStream);
+      getRepositoryService().getFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(),
+          outStream);
       rightFile = new RawTextFile(outStream.toString(), true);
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();

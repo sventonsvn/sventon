@@ -1,15 +1,14 @@
 package de.berlios.sventon.web.command;
 
-import junit.framework.TestCase;
 import de.berlios.sventon.diff.DiffException;
-import de.berlios.sventon.web.command.DiffCommand;
+import junit.framework.TestCase;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 public class DiffCommandTest extends TestCase {
 
   public void testDiffCommandNull() throws Exception {
-    DiffCommand diffCommand;
     try {
-      diffCommand = new DiffCommand((String[]) null);
+      new DiffCommand((String[]) null);
       fail("Should have thrown an IAE");
     }
     catch (IllegalArgumentException ex) {
@@ -23,8 +22,8 @@ public class DiffCommandTest extends TestCase {
         "/bug/code/try2/OrderDetailModel.java;;90"};
 
     DiffCommand diffCommand = new DiffCommand(params);
-    assertEquals(91, diffCommand.getToRevision());
-    assertEquals(90, diffCommand.getFromRevision());
+    assertEquals(91, diffCommand.getToRevision().getNumber());
+    assertEquals(90, diffCommand.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getToPath());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
@@ -36,8 +35,8 @@ public class DiffCommandTest extends TestCase {
 
     // If no revision is given, assume HEAD
     DiffCommand diffCommand = new DiffCommand(params);
-    assertEquals(-1, diffCommand.getToRevision());
-    assertEquals(-1, diffCommand.getFromRevision());
+    assertEquals(SVNRevision.HEAD, diffCommand.getToRevision());
+    assertEquals(SVNRevision.HEAD, diffCommand.getFromRevision());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getToPath());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
@@ -48,8 +47,8 @@ public class DiffCommandTest extends TestCase {
         "/bug/code/try2/OrderDetailModel.java;;90"};
 
     DiffCommand diffCommand = new DiffCommand(params);
-    assertEquals(91, diffCommand.getToRevision());
-    assertEquals(90, diffCommand.getFromRevision());
+    assertEquals(91, diffCommand.getToRevision().getNumber());
+    assertEquals(90, diffCommand.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetail.java", diffCommand.getToPath());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
@@ -60,9 +59,8 @@ public class DiffCommandTest extends TestCase {
         "/bug/code/try2/OrderDetail.java;;91",
         "/bug/code/try2/OrderDetailModel.java;;90"};
 
-    DiffCommand diffCommand;
     try {
-      diffCommand = new DiffCommand(params);
+      new DiffCommand(params);
       fail("Should throw IllegalArgumentException");
     }
     catch (IllegalArgumentException ex) {
@@ -75,14 +73,10 @@ public class DiffCommandTest extends TestCase {
         "/bug/code/try2/OrderDetail.java##91",
         "/bug/code/try2/OrderDetailModel.java##90"};
 
-    DiffCommand diffCommand;
     try {
-      diffCommand = new DiffCommand(params);
-
+      new DiffCommand(params);
       //fail("Should throw DiffException");
-
       //TODO: Fix the error above. Temp disable for now.
-
     }
     catch (DiffException ex) {
       // expected
