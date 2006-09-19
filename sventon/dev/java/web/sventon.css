@@ -85,6 +85,7 @@ input.btn {
   border-right: black solid 2px;
   border-bottom: black solid 2px;
   padding: 0px;
+  white-space: pre-wrap;  
 }
 
 .sventonSelect {
@@ -146,6 +147,11 @@ input.btn {
   border: 0px;
 }
 
+.sventonFileEntryTableRow {
+  color: #14233D;
+  background-color: #E2E4E6;
+}
+
 .sventonEntryOdd {
   color: #14233D;
   background-color: #AFC4D2;
@@ -194,12 +200,12 @@ input.btn {
 
 .sventonCol1 {
   width: 10px;
-  text-align: right;
+  margin-left: auto; margin-right: 0px;
 }
 
 .sventonCol2 {
   width: 10px;
-  text-align: right;
+  margin-left: auto; margin-right: 0px;
 }
 
 .sventonCol3 {
@@ -289,6 +295,7 @@ input.btn {
   background-color: inherit;
   font-family: verdana, sans-serif;
   font-size: 9px;
+  white-space: pre-wrap;
 }
 
 .srcChg {

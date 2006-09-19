@@ -12,17 +12,14 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RepositoryEntrySorter;
+import de.berlios.sventon.repository.RepositoryEntryKindFilter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.FileExtensionList;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.web.support.FileExtensionFilter;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -31,15 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * RepoBrowserController.
+ * ListFilesController.
  *
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class RepoBrowserController extends ListDirectoryContentsController implements Controller {
+public class ListFilesController extends ListDirectoryContentsController implements Controller {
 
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
@@ -51,34 +47,18 @@ public class RepoBrowserController extends ListDirectoryContentsController imple
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();
-
-    final String filterExtension = RequestUtils.getStringParameter(request, "filterExtension", "all");
-    logger.debug("filterExtension: " + filterExtension);
-
     final Collection<SVNDirEntry> entries = (Collection<SVNDirEntry>) model.get("svndir");
-    final FileExtensionList fileExtensionList = new FileExtensionList(entries);
-    final Set<String> extensions = fileExtensionList.getExtensions();
-    logger.debug("Existing extensions in dir: " + extensions);
 
-    final String completePath = svnCommand.getPath();
-    final Map<String, SVNLock> locks = getLocks(repository, completePath);
+    final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
+    final List<RepositoryEntry> directoryListing = entryFilter.filter(RepositoryEntry.createEntryCollection(
+        entries, svnCommand.getPath()));
 
-    final List<RepositoryEntry> directoryListing;
-    if ("all".equals(filterExtension)) {
-      directoryListing = RepositoryEntry.createEntryCollection(entries, completePath, locks);
-    } else {
-      final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter(filterExtension);
-      directoryListing = fileExtensionFilter.filter(RepositoryEntry.createEntryCollection(entries, completePath, locks));
-    }
-
-    logger.debug("Sort params: " + userContext.getSortType().name() + ", " + userContext.getSortMode());
-    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(directoryListing);
+    final int rowNumber = RequestUtils.getIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
     model.put("svndir", directoryListing);
-    model.put("existingExtensions", extensions);
-    model.put("filterExtension", filterExtension);
-    modelAndView.setViewName("repobrowser");
+    model.put("rowNumber", rowNumber);
+    modelAndView.setViewName("ajax/listFiles");
     return modelAndView;
   }
 }
