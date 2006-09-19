@@ -50,19 +50,18 @@
               <c:param name="revision" value="${command.revision}" />
               <c:param name="name" value="${command.name}" />
             </c:url>
-            <c:url value="showfile.svn" var="showFileUrl">
-              <c:param name="path" value="${entry.fullEntryName}" />
-              <c:param name="revision" value="${command.revision}" />
-              <c:param name="name" value="${command.name}" />
-            </c:url>
             <c:url value="revinfo.svn" var="showRevInfoUrl">
               <c:param name="revision" value="${entry.revision}" />
               <c:param name="name" value="${command.name}" />
             </c:url>
 
-            <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+            <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
               <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
-              <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
+              <td class="sventonCol2">
+                <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="listfiles.link.tooltip"/>')">
+                  <img src="images/icon_dir.gif" border="0"/>
+                </a>
+              </td>
               <td class="sventonCol3">
                 <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                   ${entry.friendlyFullEntryName}

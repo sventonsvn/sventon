@@ -12,12 +12,12 @@
 
 // function to toggle the entry checkboxes
 function toggleEntryFields(formName) {
-	for ( var i = 0 ; i < formName.length ; i++ ) {
-		fieldObj = formName.elements[i];
-		if ( fieldObj.type == 'checkbox' ) {
-			fieldObj.checked = ( fieldObj.checked ) ? false : true ;
-		}
-	}
+  for (var i = 0; i < formName.length; i++) {
+    fieldObj = formName.elements[i];
+    if (fieldObj.type == 'checkbox') {
+      fieldObj.checked = ( fieldObj.checked ) ? false : true;
+    }
+  }
 }
 
 // function to handle action submissions in repo browser view
@@ -37,7 +37,7 @@ function doAction(formName) {
       formName.action = 'showthumbs.svn'
       return true;
     }
-  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff' ) {
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(formName) != 2)
     {
@@ -47,7 +47,7 @@ function doAction(formName) {
       formName.action = 'diff.svn'
       return true;
     }
-  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip' ) {
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip') {
     // One or more entries must be checked
     if (getCheckedCount(formName) < 1) {
       return false
@@ -167,15 +167,15 @@ function verifyCheckBox(checkbox) {
   var count = 0;
   var first = null;
   var form = checkbox.form;
-  for (i = 0 ; i < form.entry.length ; i++) {
+  for (i = 0; i < form.entry.length; i++) {
     if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
       if (first == null && form.entry[i] != checkbox) {
         first = form.entry[i];
       }
-     count += 1;
+      count += 1;
     }
   }
-  
+
   if (count > 2) {
     first.checked = false;
     count -= 1;
@@ -201,14 +201,14 @@ function getCheckedValue(radioObj) {
   }
   var radioLength = radioObj.length;
   if (radioLength == undefined) {
-    if(radioObj.checked) {
+    if (radioObj.checked) {
       return radioObj.value;
     } else {
       return "";
     }
   }
   for (var i = 0; i < radioLength; i++) {
-    if(radioObj[i].checked) {
+    if (radioObj[i].checked) {
       return radioObj[i].value;
     }
   }
@@ -236,7 +236,8 @@ function getCheckedCount(formName) {
 
 // Toggles line wrap mode between normal and nowrap
 function toggleWrap() {
-  var tags = document.getElementById('diffTable').getElementsByTagName('td'); //[".src", ".srcChg", ".scrAdd", ".srcDel"]);
+  var tags = document.getElementById('diffTable').getElementsByTagName('td');
+  //[".src", ".srcChg", ".scrAdd", ".srcDel"]);
   for (var i = 0; i < tags.length; i++) {
     var cssName = tags[i].className;
     if (cssName == 'src' || cssName == 'srcChg' || cssName == 'srcAdd' || cssName == 'srcDel') {
@@ -247,4 +248,28 @@ function toggleWrap() {
       }
     }
   }
+}
+
+// Requests directory contents in given path
+function listFiles(rowNumber, path, name) {
+  var elements = document.getElementsByClassName('expandedDir' + rowNumber);
+  if (elements.length > 0) {
+    // Files are already listed - hide them instead
+    for (var i = 0; i < elements.length; i++) {
+      Element.remove(elements[i])
+    }
+  } else {
+    // Do the ajax call
+    var url = 'listfiles.ajax';
+    var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
+    var elementId = 'dir' + rowNumber;
+    var ajax = new Ajax.Updater({success: elementId}, url,
+      {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After });
+  }
+  return false;
+}
+
+// General ajax error alert method
+function reportAjaxError(request) {
+  alert('An error occured during page request.');
 }

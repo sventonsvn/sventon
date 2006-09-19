@@ -74,7 +74,21 @@ public final class RepositoryEntry implements Serializable {
    *
    * @param entries  Collection of SVNDirEntry.
    * @param basePath Base repository path for the entries.
-   * @param locks    Map of active locks. Provide an empty Map to ignore locking details.
+   * @return The collection of entries.
+   */
+  public static List<RepositoryEntry> createEntryCollection(final Collection<SVNDirEntry> entries,
+                                                            final String basePath) {
+
+    return createEntryCollection(entries, basePath, new HashMap<String, SVNLock>());
+  }
+
+  /**
+   * Creates a collection of <code>RepositoryEntry</code> objects based
+   * on given collection of <code>SVNDirEntry</code> instances.
+   *
+   * @param entries  Collection of SVNDirEntry.
+   * @param basePath Base repository path for the entries.
+   * @param locks    Map of active locks.
    * @return The collection of entries.
    */
   public static List<RepositoryEntry> createEntryCollection(final Collection<SVNDirEntry> entries,

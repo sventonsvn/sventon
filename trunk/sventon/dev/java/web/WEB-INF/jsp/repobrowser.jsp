@@ -75,15 +75,21 @@
           %>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
+          <td class="sventonCol1">
+            <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
+          </td>
 
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
-            <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
+            <td class="sventonCol2">
+              <img src="images/icon_dir.gif" alt="dir"/>
+            </td>
             <td class="sventonCol3">
               <a href="${viewUrl}">${entry.name}</a>
             </td>
         <% } else { %>
-            <td class="sventonCol2"><img src="images/icon_file.gif" alt="file" /></td>
+            <td class="sventonCol2">
+              <img src="images/icon_file.gif" alt="file"/>
+            </td>
             <td class="sventonCol3">
               <a href="${showFileUrl}">${entry.name}</a>
             </td>

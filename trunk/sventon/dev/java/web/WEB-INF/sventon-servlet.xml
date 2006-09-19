@@ -72,6 +72,7 @@
 
   <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
   <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
+  <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ListFilesController" parent="abstractController"/>
   <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
   <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
   <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
@@ -170,6 +171,8 @@
         <prop key="/rss.xml">rssController</prop>
         <prop key="/compl.xml">completionController</prop>
         <prop key="/latest.xml">latestInfoController</prop>
+        <!-- url mappings for ajax controllers -->
+        <prop key="/listfiles.ajax">listFilesController</prop>
       </props>
     </property>
   </bean>

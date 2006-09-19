@@ -21,6 +21,11 @@
     <servlet-name>sventon</servlet-name>
     <url-pattern>*.xml</url-pattern>
   </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>sventon</servlet-name>
+    <url-pattern>*.ajax</url-pattern>
+  </servlet-mapping>
   
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>

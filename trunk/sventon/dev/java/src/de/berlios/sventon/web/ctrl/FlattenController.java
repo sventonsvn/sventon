@@ -54,6 +54,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
 
+    logger.debug("Sort params: " + userContext.getSortType().name() + ", " + userContext.getSortMode());
     new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
 
     model.put("svndir", entries);
