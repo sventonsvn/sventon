@@ -35,7 +35,7 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
     assertNull(userContext.getSortType());
     ctrl.parseAndUpdateSortParameters(request, userContext);
     assertEquals("ASC", userContext.getSortMode().toString());
-    assertEquals("NAME", userContext.getSortType().toString());
+    assertEquals("FULL_NAME", userContext.getSortType().toString());
 
     request.addParameter("sortType", "SIZE");
     request.addParameter("sortMode", "DESC");
