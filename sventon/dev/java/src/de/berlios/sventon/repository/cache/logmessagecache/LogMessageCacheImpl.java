@@ -103,8 +103,8 @@ public class LogMessageCacheImpl implements LogMessageCache {
       searcher = getIndexSearcher();
       final Hits hits = searcher.search(query);
 
-//TODO: Add span tags 'searchHit'
-      final Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter(), new QueryScorer(query));
+      final SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span class=\"searchHit\">", "</span>");
+      final Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
       highlighter.setTextFragmenter(new NullFragmenter());
       highlighter.setEncoder(new SimpleHTMLEncoder());
 
