@@ -318,3 +318,8 @@ input.btn {
   font-family: verdana, sans-serif;
   font-size: 9px;
 }
+
+.searchHit {
+  background-color: #ffff00;
+  font-weight: bold;
+}

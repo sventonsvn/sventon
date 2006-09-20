@@ -22,7 +22,7 @@ public class LogMessageCacheTest extends TestCase {
 
     List<LogMessage> logMessages = cache.find("123");
     assertEquals(1, logMessages.size());
-    assertEquals("First message <B>123</B>.", logMessages.get(0).getMessage());
+    assertEquals("First message <span class=\"searchHit\">123</span>.", logMessages.get(0).getMessage());
 
     cache.add(new LogMessage(124, "This is a log message for revision 124."));
     assertEquals(2, cache.getSize());
@@ -35,25 +35,25 @@ public class LogMessageCacheTest extends TestCase {
     cache.add(new LogMessage(126, "This is a log message for revision 126.......")); // punctuation will be trimmed
     assertEquals(4, cache.getSize());
     logMessages = cache.find("126");
-    assertEquals("This is a log message for revision <B>126</B>.......", logMessages.get(0).getMessage());
+    assertEquals("This is a log message for revision <span class=\"searchHit\">126</span>.......", logMessages.get(0).getMessage());
 
     cache.add(new LogMessage(127, "Testing brackets (must work)"));
     assertEquals(5, cache.getSize());
     logMessages = cache.find("brackets");
     assertEquals(1, logMessages.size());
-    assertEquals("Testing <B>brackets</B> (must work)", logMessages.get(0).getMessage());
+    assertEquals("Testing <span class=\"searchHit\">brackets</span> (must work)", logMessages.get(0).getMessage());
 
     cache.add(new LogMessage(128, "Testing brackets (must work)"));
     assertEquals(6, cache.getSize());
     logMessages = cache.find("work");
     assertEquals(2, logMessages.size());
-    assertEquals("Testing brackets (must <B>work</B>)", logMessages.get(1).getMessage());
+    assertEquals("Testing brackets (must <span class=\"searchHit\">work</span>)", logMessages.get(1).getMessage());
 
     cache.add(new LogMessage(129, "Lite svenska tecken, å ä ö!"));
     assertEquals(7, cache.getSize());
     logMessages = cache.find("svenska");
     assertEquals(1, logMessages.size());
-    assertEquals("Lite <B>svenska</B> tecken, &#229; &#228; &#246;!", logMessages.get(0).getMessage());
+    assertEquals("Lite <span class=\"searchHit\">svenska</span> tecken, &#229; &#228; &#246;!", logMessages.get(0).getMessage());
 
     logMessages = cache.find("message");
     assertEquals(4, logMessages.size());
@@ -63,7 +63,7 @@ public class LogMessageCacheTest extends TestCase {
 
     logMessages = cache.find("log");
     assertEquals(4, logMessages.size());
-    assertEquals("&lt;This is a &lt;code&gt;<B>log</B>&lt;/code&gt; message for &amp;amp; revision 130.......", logMessages.get(3).getMessage());
+    assertEquals("&lt;This is a &lt;code&gt;<span class=\"searchHit\">log</span>&lt;/code&gt; message for &amp;amp; revision 130.......", logMessages.get(3).getMessage());
 
     cache.add(new LogMessage(131, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
         "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took " +
@@ -73,8 +73,8 @@ public class LogMessageCacheTest extends TestCase {
         "publishing software like Aldus PageMaker including versions of Lorem Ipsum."));
     assertEquals(9, cache.getSize());
     logMessages = cache.find("dummy");
-    assertEquals("Lorem Ipsum is simply <B>dummy</B> text of the printing and typesetting industry. " +
-        "Lorem Ipsum has been the industry's standard <B>dummy</B> text ever since the 1500s, when an unknown printer took " +
+    assertEquals("Lorem Ipsum is simply <span class=\"searchHit\">dummy</span> text of the printing and typesetting industry. " +
+        "Lorem Ipsum has been the industry's standard <span class=\"searchHit\">dummy</span> text ever since the 1500s, when an unknown printer took " +
         "a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, " +
         "but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the " +
         "1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop " +
