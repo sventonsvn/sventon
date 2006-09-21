@@ -14,6 +14,7 @@ package de.berlios.sventon.service;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.export.ExportDirectory;
+import de.berlios.sventon.web.model.RawTextFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -23,6 +24,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.io.OutputStream;
 import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,6 +133,17 @@ public class RepositoryServiceImpl implements RepositoryService {
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + target), entryToExport,
           SVNRevision.create(exportRevision), SVNRevision.create(exportRevision), null, true, true);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
+
+    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    getFile(repository, path, revision, outStream);
+    return new RawTextFile(outStream.toString(), true);
   }
 
   /**

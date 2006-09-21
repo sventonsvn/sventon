@@ -38,42 +38,29 @@ public class UnifiedDiffController extends DiffController implements Controller 
    * {@inheritDoc}
    */
   protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand,
-                                               InstanceConfiguration configuration) throws DiffException, SVNException {
+                                             InstanceConfiguration configuration) throws DiffException, SVNException {
 
-    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final Map<String, Object> model = new HashMap<String, Object>();
-    final RawTextFile leftFile;
-    final RawTextFile rightFile;
 
     final boolean isLeftFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getFromPath(),
         diffCommand.getFromRevision().getNumber());
     final boolean isRightFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getToPath(),
         diffCommand.getToRevision().getNumber());
 
+    logger.debug(diffCommand);
+
     if (isLeftFileTextType || isRightFileTextType) {
       model.put("isBinary", false);
 
-      // Get content of oldest file (left).
-      logger.debug("Getting file content for (from) revision "
-          + diffCommand.getFromRevision() + ", path: " + diffCommand.getFromPath());
-      getRepositoryService().getFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(),
-          outStream);
-      leftFile = new RawTextFile(outStream.toString(), true);
-
-      // Re-initialize stream
-      outStream = new ByteArrayOutputStream();
-
-      // Get content of newest file (right).
-      logger.debug("Getting file content for (to) revision "
-          + diffCommand.getToRevision() + ", path: " + diffCommand.getToPath());
-
-      getRepositoryService().getFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(),
-          outStream);
-      rightFile = new RawTextFile(outStream.toString(), true);
+      final RawTextFile leftFile = getRepositoryService().getTextFile(
+          repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
+      final RawTextFile rightFile = getRepositoryService().getTextFile(
+          repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
       final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
           new ByteArrayInputStream(rightFile.getContent().getBytes()), DiffCreator.ENCODING);
+
       try {
         diffProducer.doUniDiff(diffResult);
       } catch (final IOException ioex) {
