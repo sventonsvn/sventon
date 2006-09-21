@@ -77,19 +77,21 @@ public final class KeywordHandler {
   /**
    * Substitutes keywords in content.
    *
-   * @param content The content
+   * @param content  The content
+   * @param encoding Encoding to use.
    * @return Content with substituted keywords.
    */
-  public String substitute(String content) throws UnsupportedEncodingException {
+  public String substitute(final String content, final String encoding) throws UnsupportedEncodingException {
     logger.debug("Substituting keywords");
+    String substitutedContent = content;
     for (String keyword : keywordsMap.keySet()) {
-      final String value = new String(keywordsMap.get(keyword), "UTF-8");
+      final String value = new String(keywordsMap.get(keyword), encoding);
       logger.debug(keyword + "=" + value);
       final Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
-      content = keywordPattern.matcher(content).replaceAll("\\$"
+      substitutedContent = keywordPattern.matcher(substitutedContent).replaceAll("\\$"
           + keyword + ": " + value + " \\$");
     }
-    return content;
+    return substitutedContent;
   }
 
 }

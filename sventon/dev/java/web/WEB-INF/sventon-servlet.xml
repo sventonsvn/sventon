@@ -79,9 +79,18 @@
   <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
-  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
-  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
-  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
+
+  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController">
+    <property name="viewName" value="diff"/>
+  </bean>
+
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController">
+    <property name="viewName" value="diff"/>
+  </bean>
+
+  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController">
+    <property name="viewName" value="unifieddiff"/>
+  </bean>
 
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
@@ -96,6 +105,7 @@
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
     <property name="colorer" ref="colorer"/>
     <property name="imageUtil" ref="imageUtil"/>
+    <property name="encoding" ref="defaultEncoding"/>
   </bean>
 
   <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController"

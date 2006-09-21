@@ -68,7 +68,7 @@ public class DiffPreviousController extends DiffController {
       model.put("diffException", dex.getMessage());
     }
 
-    return new ModelAndView("diff", model);
+    return new ModelAndView(getViewName(), model);
   }
 
 }
