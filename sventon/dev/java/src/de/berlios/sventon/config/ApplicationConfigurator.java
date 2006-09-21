@@ -121,14 +121,7 @@ public class ApplicationConfigurator {
 
     for (final String instanceName : instanceNameSet) {
       logger.info("Configuring instance: " + instanceName);
-      final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-      instanceConfiguration.setInstanceName(instanceName);
-      instanceConfiguration.setRepositoryRoot((String) props.get(instanceName + ".root"));
-      instanceConfiguration.setConfiguredUID((String) props.get(instanceName + ".uid"));
-      instanceConfiguration.setConfiguredPWD((String) props.get(instanceName + ".pwd"));
-      instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) props.get(instanceName + ".useCache")));
-      instanceConfiguration.setZippedDownloadsAllowed(Boolean.parseBoolean((String) props.get(instanceName + ".allowZipDownloads")));
-      configuration.addInstanceConfiguration(instanceConfiguration);
+      configuration.addInstanceConfiguration(InstanceConfiguration.create(instanceName, props));
     }
 
     if (configuration.getInstanceCount() > 0) {
