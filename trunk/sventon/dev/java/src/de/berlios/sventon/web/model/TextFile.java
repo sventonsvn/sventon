@@ -30,13 +30,15 @@ public class TextFile extends RawTextFile {
    * @param properties    The file properties
    * @param repositoryURL The repository root URL
    * @param path          The target path
+   * @param encoding      Encoding
    */
-  public TextFile(final String content, final Map properties, final String repositoryURL, final String path)
+  public TextFile(final String content, final Map properties, final String repositoryURL, final String path,
+                  final String encoding)
       throws IOException {
 
     super(content);
     final KeywordHandler keywordHandler = new KeywordHandler(properties, repositoryURL + path);
-    this.content = keywordHandler.substitute(content);
+    this.content = keywordHandler.substitute(content, encoding);
 
     model.put("fileContent", this.content);
     model.put("isRawFormat", false);

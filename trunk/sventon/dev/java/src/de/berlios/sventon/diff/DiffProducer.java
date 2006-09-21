@@ -35,24 +35,21 @@ public class DiffProducer {
   private InputStream right;
 
   /**
-   * Character encoding. Default set to UTF-8.
+   * Character encoding.
    */
-  //TODO: Move to Spring XML
-  private String encoding = "UTF-8";
+  private final String encoding;
 
   /**
    * Constructor.
    *
    * @param left     The left (old) InputStream.
    * @param right    The right (new) InputStream.
-   * @param encoding Encoding to use. If <code>null</code>, UTF-8 will be used.
+   * @param encoding Encoding to use.
    */
   public DiffProducer(final InputStream left, final InputStream right, final String encoding) {
     this.left = left;
     this.right = right;
-    if (encoding != null) {
-      this.encoding = encoding;
-    }
+    this.encoding = encoding;
   }
 
   /**

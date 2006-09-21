@@ -1,5 +1,7 @@
 package de.berlios.sventon.diff;
 
+import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
+import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -57,17 +59,17 @@ public class DiffProducerTest extends TestCase {
     Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffSegment action = actions.next();
     assertSame(DiffAction.CHANGED, action.getAction());
-    assertEquals(2, action.getLeftLineIntervalStart());
-    assertEquals(2, action.getLeftLineIntervalEnd());
-    assertEquals(2, action.getRightLineIntervalStart());
-    assertEquals(2, action.getRightLineIntervalEnd());
+    assertEquals(2, action.getLineIntervalStart(LEFT));
+    assertEquals(2, action.getLineIntervalEnd(LEFT));
+    assertEquals(2, action.getLineIntervalStart(RIGHT));
+    assertEquals(2, action.getLineIntervalEnd(RIGHT));
     assertEquals("DiffSegment: CHANGED, left: 2-2, right: 2-2", action.toString());
     action = actions.next();
     assertSame(DiffAction.ADDED, action.getAction());
-    assertEquals(8, action.getLeftLineIntervalStart());
-    assertEquals(8, action.getLeftLineIntervalEnd());
-    assertEquals(8, action.getRightLineIntervalStart());
-    assertEquals(12, action.getRightLineIntervalEnd());
+    assertEquals(8, action.getLineIntervalStart(LEFT));
+    assertEquals(8, action.getLineIntervalEnd(LEFT));
+    assertEquals(8, action.getLineIntervalStart(RIGHT));
+    assertEquals(12, action.getLineIntervalEnd(RIGHT));
     assertEquals("DiffSegment: ADDED, left: 8-8, right: 8-12", action.toString());
   }
 
@@ -140,24 +142,24 @@ public class DiffProducerTest extends TestCase {
     Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffSegment action = actions.next();
     assertSame(DiffAction.ADDED, action.getAction());
-    assertEquals(2, action.getLeftLineIntervalStart());
-    assertEquals(2, action.getLeftLineIntervalEnd());
-    assertEquals(2, action.getRightLineIntervalStart());
-    assertEquals(8, action.getRightLineIntervalEnd());
+    assertEquals(2, action.getLineIntervalStart(LEFT));
+    assertEquals(2, action.getLineIntervalEnd(LEFT));
+    assertEquals(2, action.getLineIntervalStart(RIGHT));
+    assertEquals(8, action.getLineIntervalEnd(RIGHT));
     assertEquals("DiffSegment: ADDED, left: 2-2, right: 2-8", action.toString());
     action = actions.next();
     assertSame(DiffAction.CHANGED, action.getAction());
-    assertEquals(10, action.getLeftLineIntervalStart());
-    assertEquals(12, action.getLeftLineIntervalEnd());
-    assertEquals(3, action.getRightLineIntervalStart());
-    assertEquals(4, action.getRightLineIntervalEnd());
+    assertEquals(10, action.getLineIntervalStart(LEFT));
+    assertEquals(12, action.getLineIntervalEnd(LEFT));
+    assertEquals(3, action.getLineIntervalStart(RIGHT));
+    assertEquals(4, action.getLineIntervalEnd(RIGHT));
     assertEquals("DiffSegment: CHANGED, left: 10-12, right: 3-4", action.toString());
     action = actions.next();
     assertSame(DiffAction.ADDED, action.getAction());
-    assertEquals(10, action.getLeftLineIntervalStart());
-    assertEquals(10, action.getLeftLineIntervalEnd());
-    assertEquals(18, action.getRightLineIntervalStart());
-    assertEquals(22, action.getRightLineIntervalEnd());
+    assertEquals(10, action.getLineIntervalStart(LEFT));
+    assertEquals(10, action.getLineIntervalEnd(LEFT));
+    assertEquals(18, action.getLineIntervalStart(RIGHT));
+    assertEquals(22, action.getLineIntervalEnd(RIGHT));
     assertEquals("DiffSegment: ADDED, left: 10-10, right: 18-22", action.toString());
   }
 

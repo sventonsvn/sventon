@@ -16,7 +16,8 @@ public class HTMLDecoratedTextFileTest extends TestCase {
       }
     };
     final String content = "test file content";
-    final HTMLDecoratedTextFile file = new HTMLDecoratedTextFile(content, new HashMap(), "http://localhost/", "/test.file", colorer);
+    final HTMLDecoratedTextFile file = new HTMLDecoratedTextFile(content, new HashMap(), "http://localhost/",
+        "/test.file", "UTF-8", colorer);
     final Map<String, Object> model = file.getModel();
     assertFalse((Boolean) model.get("isRawFormat"));
     assertEquals("<span class=\"sventonLineNo\">    1:&nbsp;</span>" + content, file.getContent());

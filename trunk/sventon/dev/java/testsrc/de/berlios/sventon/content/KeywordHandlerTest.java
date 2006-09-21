@@ -28,14 +28,14 @@ public class KeywordHandlerTest extends TestCase {
     sb.append(" return \"$Rev$\";\n");
     sb.append("}\n");
 
-    String result = handler.substitute(sb.toString());
+    String result = handler.substitute(sb.toString(), "UTF-8");
     assertTrue(result.indexOf("file.dat") > -1);
     assertTrue(result.indexOf("$Rev: 33 $") > -1);
   }
 
   public void testComputeKeywordsNull() throws Exception {
     Map<String, String> keywordsMap = new HashMap<String, String>();
-    assertEquals("No change", new KeywordHandler(keywordsMap, null).substitute("No change"));
+    assertEquals("No change", new KeywordHandler(keywordsMap, null).substitute("No change", "UTF-8"));
   }
 
 }

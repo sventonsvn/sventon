@@ -11,6 +11,9 @@
  */
 package de.berlios.sventon.diff;
 
+import java.util.Map;
+import java.util.HashMap;
+
 /**
  * Diff segment bean. Represents one result segment produced by
  * {@link de.berlios.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
@@ -19,37 +22,27 @@ package de.berlios.sventon.diff;
  */
 public class DiffSegment {
 
+  public enum Side {
+    LEFT, RIGHT;
+
+    public Side opposite() {
+      return this == LEFT ? RIGHT : LEFT;
+    }
+  }
+
   private DiffAction action;
 
-  /**
-   * Left interval line start.
-   */
-  private int leftLineIntervalStart;
+  private Map<Side, Interval> segmentSides = new HashMap<Side, Interval>(2);
 
-  /**
-   * Left interval line end.
-   */
-  private int leftLineIntervalEnd;
 
-  /**
-   * Right interval line start.
-   */
-  private int rightLineIntervalStart;
-
-  /**
-   * Right interval line end.
-   */
-  private int rightLineIntervalEnd;
-  
-  
   /**
    * Constructor.
    *
-   * @param action The diff action
-   * @param leftLineIntervalStart Left interval start line
-   * @param leftLineIntervalEnd Left interval end line
+   * @param action                 The diff action
+   * @param leftLineIntervalStart  Left interval start line
+   * @param leftLineIntervalEnd    Left interval end line
    * @param rightLineIntervalStart Right interval start line
-   * @param rightLineIntervalEnd Right interval end line
+   * @param rightLineIntervalEnd   Right interval end line
    */
   public DiffSegment(final DiffAction action,
                      final int leftLineIntervalStart,
@@ -58,10 +51,8 @@ public class DiffSegment {
                      final int rightLineIntervalEnd) {
 
     this.action = action;
-    this.leftLineIntervalStart = leftLineIntervalStart;
-    this.leftLineIntervalEnd = leftLineIntervalEnd;
-    this.rightLineIntervalStart = rightLineIntervalStart;
-    this.rightLineIntervalEnd = rightLineIntervalEnd;
+    segmentSides.put(Side.LEFT, new Interval(leftLineIntervalStart, leftLineIntervalEnd));
+    segmentSides.put(Side.RIGHT, new Interval(rightLineIntervalStart, rightLineIntervalEnd));
   }
 
   /**
@@ -73,40 +64,12 @@ public class DiffSegment {
     return action;
   }
 
-  /**
-   * Gets diff interval start line.
-   *
-   * @return The start line
-   */
-  public int getLeftLineIntervalStart() {
-    return leftLineIntervalStart;
+  public int getLineIntervalStart(final Side side) {
+    return segmentSides.get(side).getStart();
   }
 
-  /**
-   * Gets diff interval end line.
-   *
-   * @return The end line
-   */
-  public int getLeftLineIntervalEnd() {
-    return leftLineIntervalEnd;
-  }
-
-  /**
-   * Gets diff interval start line.
-   *
-   * @return The start line
-   */
-  public int getRightLineIntervalStart() {
-    return rightLineIntervalStart;
-  }
-
-  /**
-   * Gets diff interval end line.
-   *
-   * @return The end line
-   */
-  public int getRightLineIntervalEnd() {
-    return rightLineIntervalEnd;
+  public int getLineIntervalEnd(final Side side) {
+    return segmentSides.get(side).getEnd();
   }
 
   /**
@@ -114,7 +77,7 @@ public class DiffSegment {
    */
   public String toString() {
     return "DiffSegment: " + action
-        + ", left: " + leftLineIntervalStart + "-" + leftLineIntervalEnd
-        + ", right: " + rightLineIntervalStart + "-" + rightLineIntervalEnd;
+        + ", left: " + segmentSides.get(Side.LEFT)
+        + ", right: " + segmentSides.get(Side.RIGHT);
   }
 }

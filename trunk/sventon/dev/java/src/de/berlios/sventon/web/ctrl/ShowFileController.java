@@ -61,6 +61,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   private static final String FORMAT_REQUEST_PARAMETER = "format";
 
+  /**
+   * Character encoding to use.
+   */
+  private String encoding;
+
 
   /**
    * {@inheritDoc}
@@ -88,7 +93,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
         model.putAll(new RawTextFile(outStream.toString(), true).getModel());
       } else {
         model.putAll(new HTMLDecoratedTextFile(outStream.toString(), properties,
-            repository.getLocation().toDecodedString(), svnCommand.getPath(), colorer).getModel());
+            repository.getLocation().toDecodedString(), svnCommand.getPath(), encoding, colorer).getModel());
       }
       return new ModelAndView("showtextfile", model);
     } else {
@@ -117,6 +122,15 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   public void setColorer(final Colorer colorer) {
     this.colorer = colorer;
+  }
+
+  /**
+   * Sets the character encoding to use.
+   *
+   * @param encoding Character encoding
+   */
+  public void setEncoding(final String encoding) {
+    this.encoding = encoding;
   }
 
   /**
