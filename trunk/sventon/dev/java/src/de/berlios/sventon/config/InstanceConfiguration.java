@@ -16,6 +16,8 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
+import java.util.Properties;
+
 /**
  * Sventon application configuration class holding configuration parameters
  * and repository connection information.
@@ -83,6 +85,25 @@ public class InstanceConfiguration {
    * Constructor.
    */
   public InstanceConfiguration() {
+  }
+
+  /**
+   * Creates an instance using given name and properties.
+   *
+   * @param instanceName Instance name
+   * @param properties   Properties
+   * @return The InstanceConfiguration
+   */
+  public static InstanceConfiguration create(final String instanceName, final Properties properties) {
+    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+    instanceConfiguration.setInstanceName(instanceName);
+    instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + ".root"));
+    instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + ".uid"));
+    instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + ".pwd"));
+    instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + ".useCache")));
+    instanceConfiguration.setZippedDownloadsAllowed(
+        Boolean.parseBoolean((String) properties.get(instanceName + ".allowZipDownloads")));
+    return instanceConfiguration;
   }
 
   /**

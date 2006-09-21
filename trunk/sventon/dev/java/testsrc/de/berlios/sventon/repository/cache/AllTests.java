@@ -11,6 +11,7 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
+    suite.addTestSuite(CacheBeforeAdviceTest.class);
     suite.addTestSuite(CacheGatewayImplTest.class);
     suite.addTestSuite(CamelCasePatternTest.class);
     return suite;
