@@ -138,7 +138,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  protected RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
+  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -184,7 +184,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
     final Map properties = new HashMap();
-    repository.getFile(path, revision, properties, null);
+    getFileProperties(repository, path, revision, properties);
     return (String) properties.get(SVNProperty.CHECKSUM);
   }
 
