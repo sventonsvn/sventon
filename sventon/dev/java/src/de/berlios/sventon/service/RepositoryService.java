@@ -12,6 +12,7 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.export.ExportDirectory;
+import de.berlios.sventon.web.model.RawTextFile;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -94,9 +95,22 @@ public interface RepositoryService {
    * @param targets         Targets to export.
    * @param revision        Revision to export
    * @param exportDirectory Destination directory
+   * @throws SVNException if a subversion error occur
    */
   void export(final SVNRepository repository, final List<String> targets, final long revision,
               final ExportDirectory exportDirectory) throws SVNException;
+
+  /**
+   * Gets a file from the repository as a raw text file.
+   *
+   * @param repository The repository
+   * @param path       Path
+   * @param revision   Revision
+   * @return The text file instance
+   * @throws SVNException if a subversion error occur
+   */
+  RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
+      throws SVNException;
 
   /**
    * Gets a file from the repository.
