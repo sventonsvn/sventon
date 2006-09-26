@@ -54,7 +54,7 @@ public abstract class CacheManager<T> {
    *
    * @param cacheName Name of cache instance.
    * @return The created cache instance.
-   * @throws de.berlios.sventon.repository.cache.CacheException if unable to create cache.
+   * @throws CacheException if unable to create cache.
    */
   protected abstract T createCache(final String cacheName) throws CacheException;
 
@@ -62,8 +62,8 @@ public abstract class CacheManager<T> {
    * For test purposes only.
    * Adds a cache instance to the manager's list.
    *
-   * @param cacheName  Name of cache
-   * @param cache Cache instance
+   * @param cacheName Name of cache
+   * @param cache     Cache instance
    * @return The added cache instance
    */
   public T addCache(final String cacheName, final T cache) {

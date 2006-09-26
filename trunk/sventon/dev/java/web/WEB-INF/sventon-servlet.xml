@@ -301,7 +301,8 @@
   </bean>
 
   <bean id="logMessageCacheManager" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager">
-    <constructor-arg ref="sventonCacheDir"/>
+    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
   </bean>
 
   <bean id="tempFileCleaner" class="de.berlios.sventon.repository.export.TemporaryFileCleaner">

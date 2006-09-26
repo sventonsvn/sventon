@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class LogMessageCacheTest extends TestCase {
     final String tempDir = System.getProperty("java.io.tmpdir") + "sventonCacheTest";
     final Directory directory = FSDirectory.getDirectory(tempDir, true);
 
-    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory);
+    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
 
     cache.add(new LogMessage(123, "First message 123."));
 
@@ -86,7 +87,7 @@ public class LogMessageCacheTest extends TestCase {
 
   public void testAddEmptyAndNull() throws Exception {
     final Directory directory = new RAMDirectory();
-    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory);
+    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
 
     cache.add(new LogMessage(123, ""));
     assertEquals(1, cache.getSize());
