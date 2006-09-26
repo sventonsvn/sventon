@@ -15,8 +15,8 @@ import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheManager;
 import org.apache.lucene.store.FSDirectory;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Handles LogMessageCache instances.
@@ -28,14 +28,25 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
   /**
    * Directory where to store cache files.
    */
-  private String directory;
+  private final String directory;
+
+  /**
+   * Lucene Analyzer to use.
+   *
+   * @see org.apache.lucene.analysis.Analyzer
+   */
+  private final String analyzerClassName;
 
   /**
    * Constructor.
+   *
+   * @param rootDirectory     Root directory to use.
+   * @param analyzerClassName Analyzer to use.
    */
-  public LogMessageCacheManager(final String rootDirectory) {
+  public LogMessageCacheManager(final String rootDirectory, final String analyzerClassName) {
     logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
     this.directory = rootDirectory;
+    this.analyzerClassName = analyzerClassName;
   }
 
   /**
@@ -43,7 +54,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
    *
    * @param cacheName Name of cache instance.
    * @return The created cache instance.
-   * @throws CacheException if unable to create cache.
+   * @throws CacheException if unable to create cache or unable to load analyzer.
    */
   protected LogMessageCache createCache(final String cacheName) throws CacheException {
     logger.debug("Creating cache: " + cacheName);
@@ -55,7 +66,16 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
     } catch (IOException ioex) {
       throw new CacheException("Unable to create LogMessageCache instance", ioex);
     }
-    return new LogMessageCacheImpl(fsDirectory);
+
+    final Class<?> analyzer;
+    try {
+      logger.debug("Loading analyzer [" + analyzerClassName + "]");
+      analyzer = Class.forName(analyzerClassName);
+    } catch (ClassNotFoundException cnfe) {
+      throw new CacheException("Unable to load analyzer [" + analyzerClassName + "]");
+    }
+    //noinspection unchecked
+    return new LogMessageCacheImpl(fsDirectory, (Class) analyzer);
   }
 
 }

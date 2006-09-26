@@ -16,7 +16,7 @@ import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -50,25 +50,34 @@ public class LogMessageCacheImpl implements LogMessageCache {
   /**
    * The <i>lucene</i> directory.
    */
-  private Directory directory;
+  private final Directory directory;
+
+  /**
+   * Lucene Analyzer to use.
+   *
+   * @see org.apache.lucene.analysis.Analyzer
+   */
+  private final Class<? extends Analyzer> analyzer;
 
   /**
    * Constructor.
    * Initializes the log message cache.
    *
    * @param directory The <i>lucene</i> directory.
+   * @param analyzer  Analyzer to use.
    */
-  public LogMessageCacheImpl(final Directory directory) throws CacheException {
+  public LogMessageCacheImpl(final Directory directory, final Class<? extends Analyzer> analyzer) throws CacheException {
     logger.debug("Initializing cache");
+    this.analyzer = analyzer;
 
     IndexWriter writer = null;
     try {
       if (!IndexReader.indexExists(directory)) {
-        writer = new IndexWriter(directory, new StandardAnalyzer(), true);
+        writer = new IndexWriter(directory, analyzer.newInstance(), true);
         writer.close();
       }
       this.directory = directory;
-    } catch (IOException ioex) {
+    } catch (Exception ioex) {
       throw new CacheException("Unable to startup lucene index", ioex);
     } finally {
       if (writer != null) {
@@ -99,7 +108,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
     Searcher searcher = null;
     try {
       logger.debug("Searching for: [" + queryString + "]");
-      final Query query = new QueryParser("content", new StandardAnalyzer()).parse(queryString);
+      final Query query = new QueryParser("content", analyzer.newInstance()).parse(queryString);
       searcher = getIndexSearcher();
       final Hits hits = searcher.search(query);
 
@@ -115,7 +124,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
         for (int i = 0; i < hitCount; i++) {
           final Document document = hits.doc(i);
           final String content = document.get("content");
-          final TokenStream tokenStream = new StandardAnalyzer().tokenStream("content", new StringReader(content));
+          final TokenStream tokenStream = analyzer.newInstance().tokenStream("content", new StringReader(content));
           final String highlightedContent = highlighter.getBestFragment(tokenStream, content);
           result.add(new LogMessage(Long.parseLong(document.get("revision")), highlightedContent));
         }
@@ -141,13 +150,13 @@ public class LogMessageCacheImpl implements LogMessageCache {
     IndexWriter writer = null;
 
     try {
-      writer = new IndexWriter(directory, new StandardAnalyzer(), false);
+      writer = new IndexWriter(directory, analyzer.newInstance(), false);
       final Document document = new Document();
       document.add(new Field("revision", String.valueOf(logMessage.getRevision()), Field.Store.YES, Field.Index.NO));
       document.add(new Field("content", logMessage.getMessage() == null ? "" :
           logMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
       writer.addDocument(document);
-    } catch (IOException ioex) {
+    } catch (Exception ioex) {
       throw new CacheException("Unable to add content to lucene cache", ioex);
     } finally {
       if (writer != null) {
@@ -175,10 +184,10 @@ public class LogMessageCacheImpl implements LogMessageCache {
     IndexWriter writer = null;
 
     try {
-      writer = new IndexWriter(directory, new StandardAnalyzer(), false);
+      writer = new IndexWriter(directory, analyzer.newInstance(), false);
       count = writer.docCount();
       writer.close();
-    } catch (IOException ioex) {
+    } catch (Exception ioex) {
       throw new CacheException("Unable to get lucene cache size", ioex);
     } finally {
       if (writer != null) {

@@ -3,6 +3,7 @@ package de.berlios.sventon.repository.cache.logmessagecache;
 import junit.framework.TestCase;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
@@ -12,7 +13,7 @@ public class LogMessageCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
     final Directory directory = new RAMDirectory();
-    final LogMessageCache cache = new LogMessageCacheImpl(directory);
+    final LogMessageCache cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     final Map<String, SVNLogEntryPath> changedPaths1 = new HashMap<String, SVNLogEntryPath>();
