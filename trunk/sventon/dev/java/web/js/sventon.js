@@ -31,9 +31,7 @@ function doAction(formName) {
   // Check which action to execute
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) < 1) {
-      return false
-    } else {
+    if (getCheckedCount(formName) > 1) {
       formName.action = 'showthumbs.svn'
       return true;
     }
@@ -41,18 +39,15 @@ function doAction(formName) {
     // Exactly two entries must be checked
     if (getCheckedCount(formName) != 2)
     {
-      alert('Two entries must be selected');
-      return false;
-    } else {
       formName.action = 'diff.svn'
       return true;
-    }
-  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'zip') {
-    // One or more entries must be checked
-    if (getCheckedCount(formName) < 1) {
-      return false
     } else {
-      formName.action = 'zip.svn'
+      alert('Two entries must be selected');
+    }
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'export') {
+    // One or more entries must be checked
+    if (getCheckedCount(formName) > 1) {
+      formName.action = 'export.svn'
       return true;
     }
   }
@@ -106,7 +101,6 @@ function toggleDivVisibility(theId) {
   } else {
     object.style.visibility = 'visible';
   }
-  return;
 }
 
 // function to hide/show extended revision log information
@@ -117,8 +111,6 @@ function toggleElementVisibility(theId) {
   } else {
     object.style.display = '';
   }
-
-  return;
 }
 
 // function to change link text between 'more' and 'less' on log entry rows
@@ -129,7 +121,6 @@ function changeLessMoreDisplay(theId) {
   } else {
     object.innerHTML = 'more';
   }
-  return
 }
 
 // function to change link text between 'show' and 'hide'
@@ -140,7 +131,6 @@ function changeHideShowDisplay(theId) {
   } else {
     object.innerHTML = 'show';
   }
-  return
 }
 
 // function to handle diff submissions
@@ -155,11 +145,7 @@ function doDiff(formName) {
   }
 
   // Two boxes must be checked else no action is taken.
-  if (checkedEntry != '2') {
-    return false;
-  } else {
-    return true
-  }
+  return checkedEntry != 2;
 }
 
 // function to verify that not more than two checkboxes are checked.
@@ -273,5 +259,5 @@ function listFiles(rowNumber, path, name) {
 
 // General ajax error alert method
 function reportAjaxError(request) {
-  alert('An error occured during page request.');
+  alert('An error occured during asynchronous request.');
 }

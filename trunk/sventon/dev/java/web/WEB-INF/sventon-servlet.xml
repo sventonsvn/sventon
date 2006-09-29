@@ -125,8 +125,9 @@
     <property name="maxThumbnailSize" value="200"/>
   </bean>
 
-  <bean id="zipController" class="de.berlios.sventon.web.ctrl.ZipController" parent="abstractController">
+  <bean id="exportController" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
     <property name="exportDir" ref="sventonExportDir"/>
+    <property name="contentType" value="application/octet-stream"/>
   </bean>
 
   <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">
@@ -176,7 +177,7 @@
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
         <prop key="/showlocks.svn">showLocksController</prop>
-        <prop key="/zip.svn">zipController</prop>
+        <prop key="/export.svn">exportController</prop>
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
         <prop key="/compl.xml">completionController</prop>
