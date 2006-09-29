@@ -258,13 +258,15 @@ function listFiles(rowNumber, path, name) {
     for (var i = 0; i < elements.length; i++) {
       Element.remove(elements[i])
     }
+    document.getElementById('dirIcon' + rowNumber).src = 'images/icon_dir_plus.gif';
   } else {
     // Do the ajax call
     var url = 'listfiles.ajax';
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
-      {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After });
+      {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
+    document.getElementById('dirIcon' + rowNumber).src = 'images/icon_dir_minus.gif';
   }
   return false;
 }
