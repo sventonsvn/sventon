@@ -15,7 +15,7 @@
   <option class="sventonSelectOption">Actions...</option>
   <option value="diff">&nbsp;&nbsp;Diff entries</option>
   <c:if test="${isZipDownloadsAllowed}">
-    <option value="zip">&nbsp;&nbsp;Download as zip</option>
+    <option value="export">&nbsp;&nbsp;Download as zip</option>
   </c:if>
   <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
 </select>

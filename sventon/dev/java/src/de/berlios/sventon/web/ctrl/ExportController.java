@@ -33,18 +33,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Controller used when downloading files or directories as a zip file.
+ * Controller for exporting and downloading files or directories as a zip file.
  *
  * @author jesper@users.berlios.de
  */
-public class ZipController extends AbstractSVNTemplateController implements Controller {
-
-  public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
+public class ExportController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Root of temporary directory where export will be made.
    */
   private String exportDir;
+
+  /**
+   * Response stream content type. Default set to <code>application/octet-stream</code>.
+   */
+  private String contentType = "application/octet-stream";
 
   /**
    * Sets the export dir to use when exporting files to be zipped from the repository
@@ -74,7 +77,7 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
       getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
       final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
-      response.setContentType(DEFAULT_CONTENT_TYPE);
+      response.setContentType(contentType);
       response.setHeader("Content-disposition", "attachment; filename=\""
           + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
 
@@ -88,6 +91,15 @@ public class ZipController extends AbstractSVNTemplateController implements Cont
 
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
     return null;
+  }
+
+  /**
+   * Sets the content type used when writing the stream to the response.
+   *
+   * @param contentType Content type to use.
+   */
+  public void setContentType(final String contentType) {
+    this.contentType = contentType;
   }
 
 }
