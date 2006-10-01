@@ -31,6 +31,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller for exporting and downloading files or directories as a zip file.
@@ -66,8 +68,9 @@ public class ExportController extends AbstractSVNTemplateController implements C
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    ServletOutputStream output = null;
+    final Map<String, Object> model = new HashMap<String, Object>();
     InputStream fileInputStream = null;
+    ServletOutputStream output = null;
 
     final List<String> targets = Arrays.asList(RequestUtils.getStringParameters(request, "entry"));
     final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
@@ -78,19 +81,37 @@ public class ExportController extends AbstractSVNTemplateController implements C
       final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
       response.setContentType(contentType);
-      response.setHeader("Content-disposition", "attachment; filename=\""
-          + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
-
+      addHeaders(request, response, compressedFile);
       fileInputStream = new FileInputStream(compressedFile);
+
+      //Temporary slow-down for testing purposes only
+      logger.debug("Sleeping...");
+      Thread.sleep(5000);
+
       IOUtils.copy(fileInputStream, output);
+
+      //logger.debug("Adding data to model");
+      //model.put("downloadLink", compressedFile.getName());
+
     } finally {
       IOUtils.closeQuietly(fileInputStream);
       IOUtils.closeQuietly(output);
       logger.debug("Cleanup of temporary directory ok: " + exportDirectory.delete());
     }
-
-    //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
+    //return new ModelAndView("ajax/downloadExport", model);
     return null;
+  }
+
+  /**
+   * Adds the response header.
+   *
+   * @param request        Request
+   * @param response       Response
+   * @param compressedFile Name of file to write to the response
+   */
+  private void addHeaders(HttpServletRequest request, HttpServletResponse response, File compressedFile) {
+    response.setHeader("Content-disposition", "attachment; filename=\""
+        + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
   }
 
   /**

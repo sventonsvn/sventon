@@ -31,13 +31,13 @@ function doAction(formName) {
   // Check which action to execute
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 1) {
+    if (getCheckedCount(formName) > 0) {
       formName.action = 'showthumbs.svn'
       return true;
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff') {
     // Exactly two entries must be checked
-    if (getCheckedCount(formName) != 2)
+    if (getCheckedCount(formName) == 2)
     {
       formName.action = 'diff.svn'
       return true;
@@ -46,12 +46,44 @@ function doAction(formName) {
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'export') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 1) {
-      formName.action = 'export.svn'
-      return true;
+    if (getCheckedCount(formName) > 0) {
+
+      var elementId = getDownloadDiv();
+
+//      Element.update(elementId, '<span class=\"downloadStatus\">exporting...</span>');
+
+
+
+      // Do the ajax call
+
+      var url = 'export.ajax';
+      var params = Form.serialize(formName);
+
+      var elem = window.frames['downloadFrame'].document.getElementById('downloadFrameElement');
+      alert(elem);
+
+      var ajax = new Ajax.Updater(elem, url, {
+        method:'post',
+        postBody: params,
+        onComplete: exportComplete,
+        onFailure: reportAjaxError});
+      return false;
+
     }
   }
   return false;
+}
+
+// Resets the download status div.
+// Automatically called when export is complete.
+function exportComplete() {
+  var elementId = getDownloadDiv();
+  Element.update(elementId, '');
+}
+
+// Gets the download status div element
+function getDownloadDiv() {
+  return document.getElementById('downloadStatusDiv');
 }
 
 // sets the value of the revision input text field to 'HEAD'
@@ -251,7 +283,7 @@ function listFiles(rowNumber, path, name) {
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
-      {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
+    {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
     document.getElementById('dirIcon' + rowNumber).src = 'images/icon_dir_minus.gif';
   }
   return false;

@@ -11,6 +11,16 @@
  * ====================================================================
  */
 %>
-<p>
-sventon @VERSION@ build rev @REVISION@
-</p>
+<iframe name="downloadFrame">
+  <html>
+    <body>
+      <span id="downloadFrameElement">test</span>
+    </body>
+  </html>
+</iframe>
+<table border="0" width="100%">
+  <tr>
+    <td>sventon @VERSION@ build rev @REVISION@</td>
+    <td align="right"><div id="downloadStatusDiv"></div></td>
+  </tr>
+</table>

@@ -189,6 +189,13 @@ input.btn {
   font-size: 10px;
 }
 
+.downloadStatus {
+  color: #ffffff;
+  background-color: #ff0000;
+  border: 1px solid black;
+  font-weight: bold;
+}
+
 .sventonColNoWrap {
   white-space: nowrap;
 }
