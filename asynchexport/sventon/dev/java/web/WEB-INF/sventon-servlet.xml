@@ -177,13 +177,13 @@
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
         <prop key="/showlocks.svn">showLocksController</prop>
-        <prop key="/export.svn">exportController</prop>
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
         <prop key="/compl.xml">completionController</prop>
         <prop key="/latest.xml">latestInfoController</prop>
         <!-- url mappings for ajax controllers -->
         <prop key="/listfiles.ajax">listFilesController</prop>
+        <prop key="/export.ajax">exportController</prop>
       </props>
     </property>
   </bean>
