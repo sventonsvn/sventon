@@ -94,7 +94,7 @@ public class SVNBaseCommand {
    * @param revision The revision to set.
    */
   public void setRevision(final String revision) {
-    if (revision != null && "HEAD".equalsIgnoreCase(revision)) {
+    if (revision != null && "HEAD".equalsIgnoreCase(revision.trim())) {
       this.revision = "HEAD";
     } else {
       this.revision = revision;

@@ -49,6 +49,11 @@ public class SVNBaseCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
+    command.setRevision("head ");
+
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
+
     command.setRevision("HEad");
 
     validator.validate(command, exception);
