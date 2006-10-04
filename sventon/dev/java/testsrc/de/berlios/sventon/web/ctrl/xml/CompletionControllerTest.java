@@ -87,11 +87,11 @@ public class CompletionControllerTest extends TestCase {
 
       final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
       entries.add(new RepositoryEntry(
-          new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/", null));
+          new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/"));
       entries.add(new RepositoryEntry(
-          new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/", null));
+          new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/"));
       entries.add(new RepositoryEntry(
-          new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/", null));
+          new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/"));
       return entries;
     }
 

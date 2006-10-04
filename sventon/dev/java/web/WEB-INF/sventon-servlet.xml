@@ -283,6 +283,7 @@
   <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
     <constructor-arg index="0" ref="entryCacheManager"/>
     <constructor-arg index="1" ref="configuration"/>
+    <constructor-arg index="2" ref="repositoryService"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->

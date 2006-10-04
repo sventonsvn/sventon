@@ -51,7 +51,7 @@ public class GoToController extends AbstractSVNTemplateController implements Con
                                    final BindException exception) throws Exception {
 
     final String redirectUrl;
-    final SVNNodeKind kind = repository.checkPath(svnCommand.getPath(), revision.getNumber());
+    final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), revision.getNumber());
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {

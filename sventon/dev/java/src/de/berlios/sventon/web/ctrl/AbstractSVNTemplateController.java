@@ -13,10 +13,10 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
-import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
+import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
@@ -24,13 +24,11 @@ import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -168,7 +166,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
-      final long headRevision = getHeadRevision(repository);
+      final long headRevision = repositoryService.getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
@@ -248,43 +246,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       session.setAttribute("userContext", userContext);
     }
     return userContext;
-  }
-
-  /**
-   * Gets the latest (HEAD) revision
-   *
-   * @param repository Repository
-   * @return Head revision
-   * @throws SVNException if subversion error
-   */
-  protected synchronized long getHeadRevision(final SVNRepository repository) throws SVNException {
-    return repository.getLatestRevision();
-  }
-
-  /**
-   * Gets the repository locks, recursively.
-   *
-   * @param repository The repository
-   * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
-   * @return Lock info
-   */
-  protected Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException {
-    final String path = startPath == null ? "/" : startPath;
-    logger.debug("Getting lock info for path [" + path + "] and below");
-
-    final Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
-    SVNLock[] locksArray = null;
-
-    try {
-      locksArray = repository.getLocks(path);
-      for (SVNLock lock : locksArray) {
-        logger.debug("Lock found: " + lock);
-        locks.put(lock.getPath(), lock);
-      }
-    } catch (SVNException svne) {
-      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
-    }
-    return locks;
   }
 
   /**

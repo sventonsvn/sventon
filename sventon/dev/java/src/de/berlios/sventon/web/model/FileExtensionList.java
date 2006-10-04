@@ -11,10 +11,10 @@
  */
 package de.berlios.sventon.web.model;
 
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.util.PathUtil;
-import org.tmatesoft.svn.core.SVNDirEntry;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,10 +36,10 @@ public class FileExtensionList {
    * Blank (non-existing) extensions will be ignored, i.e. the set will
    * not in any case contain an empty-string entry.
    *
-   * @param entries Collection of entries.
+   * @param entries List of entries.
    */
-  public FileExtensionList(final Collection<SVNDirEntry> entries) {
-    for (final SVNDirEntry entry : entries) {
+  public FileExtensionList(final List<RepositoryEntry> entries) {
+    for (final RepositoryEntry entry : entries) {
       final String fileExtension = PathUtil.getFileExtension(entry.getName()).toLowerCase();
       if (!"".equals(fileExtension)) {
         existingExtensions.add(fileExtension);
