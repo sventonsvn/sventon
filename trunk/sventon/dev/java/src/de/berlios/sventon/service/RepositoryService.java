@@ -11,11 +11,15 @@
  */
 package de.berlios.sventon.service;
 
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.model.RawTextFile;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -171,4 +175,65 @@ public interface RepositoryService {
    */
   String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
+  /**
+   * Gets the latest (HEAD) repository revision.
+   *
+   * @param repository The repository
+   * @return The HEAD revision.
+   * @throws SVNException if a subversion error occur
+   */
+  long getLatestRevision(final SVNRepository repository) throws SVNException;
+
+  /**
+   * Gets the node type for given path (with or without leaf).
+   *
+   * @param repository The repository
+   * @param path       The path, with or without leaf.
+   * @param revision   The revision
+   * @return The node kind
+   * @throws SVNException if a subversion error occur
+   */
+  SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision) throws SVNException;
+
+  /**
+   * Gets the repository locks recursively, starting from given path.
+   *
+   * @param repository The repository
+   * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
+   * @return Map containing path
+   */
+  Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException;
+
+  /**
+   * @param repository      The repository
+   * @param path            The entry path
+   * @param revision        The revision
+   * @param properties      The entry properties
+   * @return List of entries
+   * @throws SVNException if a subversion error occur
+   */
+  List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
+                             final Map properties) throws SVNException;
+
+  /**
+   * Gets an entry from the subversion repository.
+   *
+   * @param repository      The repository
+   * @param path            The entry path
+   * @param revision        The entry revision
+   * @return Entry
+   * @throws SVNException if a subversion error occur
+   */
+  RepositoryEntry getEntry(final SVNRepository repository, final String path, final long revision) throws SVNException;
+
+  /**
+   * Gets the revisions for a specific entry.
+   *
+   * @param repository
+   * @param path
+   * @param revision
+   * @return
+   * @throws SVNException
+   */
+  List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision) throws SVNException;
 }

@@ -86,7 +86,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
       return null;
     }
 
-    final long headRevision = repository.getLatestRevision();
+    final long headRevision = repositoryService.getLatestRevision(repository);
     logger.debug("Latest revision is: " + headRevision);
 
     try {

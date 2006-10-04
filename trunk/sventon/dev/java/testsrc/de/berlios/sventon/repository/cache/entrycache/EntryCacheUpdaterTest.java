@@ -2,6 +2,8 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.RevisionUpdate;
+import de.berlios.sventon.service.RepositoryServiceImpl;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -31,7 +33,8 @@ public class EntryCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, entryCache.getSize());
-    EntryCacheUpdater.updateInternal(entryCache, new TestRepository(), new RevisionUpdate("defaultsvn", logEntries));
+    new EntryCacheUpdater(null, new ApplicationConfiguration(), new RepositoryServiceImpl()).updateInternal(entryCache,
+        new TestRepository(), new RevisionUpdate("defaultsvn", logEntries));
     //TODO: Fix this test - all repository.info()-calls returns the same value now.
     assertEquals(1, entryCache.getSize());
   }

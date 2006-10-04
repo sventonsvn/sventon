@@ -1,7 +1,6 @@
 package de.berlios.sventon.web.support;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.web.support.FileExtensionFilter;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -14,9 +13,9 @@ public class FileExtensionFilterTest extends TestCase {
   public void testFilter() throws Exception {
 
     final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/", null));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/", null));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.GIF", SVNNodeKind.FILE, 0, false, 0, null, null), "/", null));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.GIF", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
 
     List<RepositoryEntry> filteredList;
     filteredList = new FileExtensionFilter("jpg").filter(list);
@@ -26,14 +25,14 @@ public class FileExtensionFilterTest extends TestCase {
     assertEquals(1, filteredList.size());
 
     try {
-      filteredList = new FileExtensionFilter(null).filter(list);
+      new FileExtensionFilter(null).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      filteredList = new FileExtensionFilter("").filter(list);
+      new FileExtensionFilter("").filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected

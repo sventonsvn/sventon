@@ -92,7 +92,7 @@ public class RSSController extends AbstractController {
     }
 
     try {
-      final long headRevision = repository.getLatestRevision();
+      final long headRevision = repositoryService.getLatestRevision(repository);
       logger.debug("Producing feed for revision: " + headRevision);
 
       final List<SVNLogEntry> logEntries = repositoryService.getRevisions(repository, headRevision,

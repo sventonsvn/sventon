@@ -60,8 +60,10 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
     logger.debug("Sort params: " + userContext.getSortType().name() + ", " + userContext.getSortMode());
     new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
 
+    logger.debug("Adding data to model");
     model.put("svndir", entries);
     model.put("searchString", searchString);
+    model.put("locks", getRepositoryService().getLocks(repository, svnCommand.getPath()));
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("searchEntriesResult", model);

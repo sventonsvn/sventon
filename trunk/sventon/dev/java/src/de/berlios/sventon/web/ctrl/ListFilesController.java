@@ -47,11 +47,10 @@ public class ListFilesController extends ListDirectoryContentsController impleme
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();
-    final Collection<SVNDirEntry> entries = (Collection<SVNDirEntry>) model.get("svndir");
+    final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
 
     final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
-    final List<RepositoryEntry> directoryListing = entryFilter.filter(RepositoryEntry.createEntryCollection(
-        entries, svnCommand.getPath()));
+    final List<RepositoryEntry> directoryListing = entryFilter.filter(entries);
 
     final int rowNumber = RequestUtils.getIntParameter(request, "rowNumber");
 

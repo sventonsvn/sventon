@@ -21,17 +21,14 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * RepoBrowserController.
@@ -55,28 +52,20 @@ public class RepoBrowserController extends ListDirectoryContentsController imple
     final String filterExtension = RequestUtils.getStringParameter(request, "filterExtension", "all");
     logger.debug("filterExtension: " + filterExtension);
 
-    final Collection<SVNDirEntry> entries = (Collection<SVNDirEntry>) model.get("svndir");
-    final FileExtensionList fileExtensionList = new FileExtensionList(entries);
-    final Set<String> extensions = fileExtensionList.getExtensions();
-    logger.debug("Existing extensions in dir: " + extensions);
+    List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
 
-    final String completePath = svnCommand.getPath();
-    final Map<String, SVNLock> locks = getLocks(repository, completePath);
-
-    final List<RepositoryEntry> directoryListing;
-    if ("all".equals(filterExtension)) {
-      directoryListing = RepositoryEntry.createEntryCollection(entries, completePath, locks);
-    } else {
+    if (!"all".equals(filterExtension)) {
       final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter(filterExtension);
-      directoryListing = fileExtensionFilter.filter(RepositoryEntry.createEntryCollection(entries, completePath, locks));
+      entries = fileExtensionFilter.filter(entries);
     }
 
     logger.debug("Sort params: " + userContext.getSortType().name() + ", " + userContext.getSortMode());
-    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(directoryListing);
+    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");
-    model.put("svndir", directoryListing);
-    model.put("existingExtensions", extensions);
+    model.put("svndir", entries);
+    model.put("locks", getRepositoryService().getLocks(repository, svnCommand.getPath()));
+    model.put("existingExtensions", new FileExtensionList(entries).getExtensions());
     model.put("filterExtension", filterExtension);
     modelAndView.setViewName("repobrowser");
     return modelAndView;

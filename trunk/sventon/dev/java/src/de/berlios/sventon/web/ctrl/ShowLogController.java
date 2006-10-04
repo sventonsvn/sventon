@@ -79,11 +79,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     if (nextPathParam == null || nextRevParam == null) {
       targetPath = path;
-      revNumber = revision == HEAD ? getHeadRevision(repository) : revision.getNumber();
+      revNumber = revision == HEAD ? getRepositoryService().getLatestRevision(repository) : revision.getNumber();
     } else {
       targetPath = nextPathParam;
       if ("HEAD".equals(nextRevParam)) {
-        revNumber = getHeadRevision(repository);
+        revNumber = getRepositoryService().getLatestRevision(repository);
       } else {
         try {
           revNumber = Long.parseLong(nextRevParam);
@@ -103,7 +103,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     String pathAtRevision = targetPath;
 
-    for (SVNLogEntry logEntry : logEntries) {
+    for (final SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
       final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
       final Set<String> changedPaths = allChangedPaths.keySet();
@@ -128,7 +128,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     model.put("logEntriesPage", logEntryBundles);
     model.put("pageSize", pageSize);
-    model.put("isFile", repository.checkPath(path, revision.getNumber()) == SVNNodeKind.FILE);
+    model.put("isFile", getRepositoryService().getNodeKind(repository, path, revision.getNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
     return new ModelAndView("showlog", model);
   }

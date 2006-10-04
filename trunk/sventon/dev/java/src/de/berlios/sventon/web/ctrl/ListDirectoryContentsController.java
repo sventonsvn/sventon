@@ -1,18 +1,18 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,8 +44,8 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
 
     logger.debug("Getting directory contents for: " + completePath);
     final HashMap properties = new HashMap();
-    final Collection<SVNDirEntry> entries = repository.getDir(completePath, revision.getNumber(), properties,
-        (Collection) null);
+    final List<RepositoryEntry> entries = getRepositoryService().list(
+        repository, completePath, revision.getNumber(), properties);
 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();

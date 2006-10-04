@@ -52,11 +52,12 @@ public class DiffPreviousController extends DiffController {
 
     try {
       //TODO: Solve this issue in a better way?
-      if (SVNNodeKind.NONE == repository.checkPath(svnCommand.getPath(), commitRev)) {
+      if (SVNNodeKind.NONE == getRepositoryService().getNodeKind(repository, svnCommand.getPath(), commitRev)) {
         throw new DiffException("Entry has no history in current branch");
       }
-      //noinspection unchecked
-      final List<SVNFileRevision> revisions = (List) repository.getFileRevisions(svnCommand.getPath(), null, 0, commitRev);
+      final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(repository, svnCommand.getPath(),
+          commitRev);
+
       final DiffCommand diffCommand = new DiffCommand(revisions);
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);

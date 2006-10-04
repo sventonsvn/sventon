@@ -113,10 +113,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @param objectCache  ObjectCache instance to read/write information about last observed revisions.
    */
   protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache) {
-    if (!configuration.isConfigured()) {
-      // Silently return. sventon has not yet been configured.
-      return;
-    } else {
+    if (configuration.isConfigured()) {
       updating = true;
 
       final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -129,7 +126,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
           lastUpdatedRevision = 0L;
         }
 
-        final long headRevision = repository.getLatestRevision();
+        final long headRevision = repositoryService.getLatestRevision(repository);
 
         if (headRevision > lastUpdatedRevision) {
           logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
@@ -153,21 +150,18 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public synchronized void update() {
-    if (!configuration.isConfigured()) {
-      // Silently return. sventon has not yet been configured.
-      return;
-    }
-
-    for (final String instanceName : configuration.getInstanceNames()) {
-      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
-      if (instanceConfiguration.isCacheUsed()) {
-        SVNRepository repository = null;
-        try {
-          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
-          final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-          update(instanceConfiguration.getInstanceName(), repository, objectCache);
-        } catch (final Exception ex) {
-          logger.warn("Unable to establish repository connection", ex);
+    if (configuration.isConfigured()) {
+      for (final String instanceName : configuration.getInstanceNames()) {
+        final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
+        if (instanceConfiguration.isCacheUsed()) {
+          SVNRepository repository;
+          try {
+            repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+            final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
+            update(instanceConfiguration.getInstanceName(), repository, objectCache);
+          } catch (final Exception ex) {
+            logger.warn("Unable to establish repository connection", ex);
+          }
         }
       }
     }

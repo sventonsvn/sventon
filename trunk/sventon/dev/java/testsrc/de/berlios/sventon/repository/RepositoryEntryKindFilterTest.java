@@ -12,28 +12,28 @@ public class RepositoryEntryKindFilterTest extends TestCase {
   public void testFilter() throws Exception {
 
     final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/", null));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.DIR, 0, false, 0, null, null), "/", null));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk", SVNNodeKind.DIR, 0, false, 0, null, null), "/", null));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
 
     List<RepositoryEntry> filteredList;
 
     try {
-      filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.none).filter(list);
+      new RepositoryEntryKindFilter(RepositoryEntry.Kind.none).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.any).filter(list);
+      new RepositoryEntryKindFilter(RepositoryEntry.Kind.any).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.unknown).filter(list);
+      new RepositoryEntryKindFilter(RepositoryEntry.Kind.unknown).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
@@ -46,7 +46,7 @@ public class RepositoryEntryKindFilterTest extends TestCase {
     assertEquals(1, filteredList.size());
 
     try {
-      filteredList = new RepositoryEntryKindFilter(null).filter(list);
+      new RepositoryEntryKindFilter(null).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected

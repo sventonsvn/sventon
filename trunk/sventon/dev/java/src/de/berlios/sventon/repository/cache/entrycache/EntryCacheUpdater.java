@@ -14,17 +14,22 @@ package de.berlios.sventon.repository.cache.entrycache;
 import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.model.LogEntryActionType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class responsible for updating one or more entry cache instances.
@@ -49,14 +54,21 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   private ApplicationConfiguration configuration;
 
   /**
+   * Service used for repository access.
+   */
+  private RepositoryService repositoryService;
+
+  /**
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
    * @param configuration     ApplicationConfiguration instance.
    */
-  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final ApplicationConfiguration configuration) {
+  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final ApplicationConfiguration configuration,
+                           final RepositoryService repositoryService) {
     logger.info("Starting");
     this.entryCacheManager = entryCacheManager;
+    this.repositoryService = repositoryService;
     this.configuration = configuration;
     for (final String instanceName : configuration.getInstanceNames()) {
       logger.debug("Initializing cache instance: " + instanceName);
@@ -101,7 +113,6 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
-      return;
     }
   }
 
@@ -111,7 +122,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param entryCache     EntryCache instance
    * @param revisionUpdate Update
    */
-  protected static void updateInternal(final EntryCache entryCache, final SVNRepository repository,
+  protected void updateInternal(final EntryCache entryCache, final SVNRepository repository,
                                        final RevisionUpdate revisionUpdate) {
 
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
@@ -142,6 +153,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           long revision = logEntry.getRevision();
           logger.debug("Applying changes in revision [" + revision + "] to cache");
 
+          //noinspection unchecked
           final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
           final List<String> latestPathsList = new ArrayList<String>(map.keySet());
           // Sort the entries to apply changes in right order
@@ -189,12 +201,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @throws org.tmatesoft.svn.core.SVNException
    *          if subversion error occur.
    */
-  private static void doEntryCacheModify(final EntryCache entryCache, final SVNRepository repository,
+  private void doEntryCacheModify(final EntryCache entryCache, final SVNRepository repository,
                                          final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     entryCache.removeByName(logEntryPath.getPath(), false);
-    entryCache.add(new RepositoryEntry(repository.info(logEntryPath.getPath(), revision),
-        PathUtil.getPathPart(logEntryPath.getPath()), null));
+    entryCache.add(repositoryService.getEntry(repository, logEntryPath.getPath(), revision));
   }
 
   /**
@@ -206,7 +217,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private static void doEntryCacheReplace(final EntryCache entryCache, final SVNRepository repository,
+  private void doEntryCacheReplace(final EntryCache entryCache, final SVNRepository repository,
                                           final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     doEntryCacheModify(entryCache, repository, logEntryPath, revision);
@@ -221,12 +232,12 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private static void doEntryCacheDelete(final EntryCache entryCache, final SVNRepository repository,
+  private void doEntryCacheDelete(final EntryCache entryCache, final SVNRepository repository,
                                          final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if deleted entry was a file or directory
-    final SVNDirEntry deletedEntry = repository.info(logEntryPath.getPath(), revision - 1);
-    if (RepositoryEntry.Kind.valueOf(deletedEntry.getKind().toString()) == RepositoryEntry.Kind.dir) {
+    final RepositoryEntry deletedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision - 1);
+    if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
       // Directory node deleted
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
       entryCache.removeByName(logEntryPath.getPath(), true);
@@ -245,26 +256,25 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private static void doEntryCacheAdd(final EntryCache entryCache, final SVNRepository repository,
+  private void doEntryCacheAdd(final EntryCache entryCache, final SVNRepository repository,
                                       final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if added entry was a file or directory
-    final SVNDirEntry addedEntry = repository.info(logEntryPath.getPath(), revision);
+    final RepositoryEntry addedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision);
 
     // If the entry is a directory and a copyPath exists, the entry is
     // a moved or copied directory (branch). In that case we have to recursively
     // add the entry. If entry is a directory but does not have a copyPath
     // the contents will be added one by one as single entries.
-    if (RepositoryEntry.Kind.valueOf(addedEntry.getKind().toString()) == RepositoryEntry.Kind.dir
-        && logEntryPath.getCopyPath() != null) {
+    if (addedEntry.getKind() == RepositoryEntry.Kind.dir && logEntryPath.getCopyPath() != null) {
       // Directory node added
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
-      entryCache.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+      entryCache.add(addedEntry);
       // Add directory contents
       addDirectories(entryCache, repository, logEntryPath.getPath() + "/", revision);
     } else {
       // Single entry added
-      entryCache.add(new RepositoryEntry(addedEntry, PathUtil.getPathPart(logEntryPath.getPath()), null));
+      entryCache.add(addedEntry);
     }
   }
 
@@ -275,22 +285,18 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param entryCache The cache instance.
    * @param repository Repository
    * @param path       The path to add.
-   * @throws org.tmatesoft.svn.core.SVNException
-   *          if a Subversion error occurs.
+   * @throws SVNException if a Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
-  private static void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
+  private void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
                                      final long revision) throws SVNException {
 
-    final List<SVNDirEntry> entriesList = Collections.checkedList(new ArrayList<SVNDirEntry>(), SVNDirEntry.class);
-
-    entriesList.addAll(repository.getDir(path, revision, null, (Collection) null));
-    for (final SVNDirEntry entry : entriesList) {
-      final RepositoryEntry newEntry = new RepositoryEntry(entry, path, null);
-      if (!entryCache.add(newEntry)) {
-        logger.warn("Unable to add already existing entry to cache: " + newEntry.toString());
+    final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
+    for (final RepositoryEntry entry : entriesList) {
+      if (!entryCache.add(entry)) {
+        logger.warn("Unable to add already existing entry to cache: " + entry.toString());
       }
-      if (entry.getKind() == SVNNodeKind.DIR) {
+      if (entry.getKind() == RepositoryEntry.Kind.dir) {
         addDirectories(entryCache, repository, path + entry.getName() + "/", revision);
       }
     }
