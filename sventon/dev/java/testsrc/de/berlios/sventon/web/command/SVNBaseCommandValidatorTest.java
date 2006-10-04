@@ -40,22 +40,22 @@ public class SVNBaseCommandValidatorTest extends TestCase {
     //accepted by the validator in any other form than HEAD, but other case variations
     //are automatically converted when set using the setRevision method on SVNBaseCommand
     command.setRevision("HEAD");
-
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     command.setRevision("head");
-
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     command.setRevision("head ");
-
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     command.setRevision("HEad");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
 
+    command.setRevision(" 123 ");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
