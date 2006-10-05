@@ -31,8 +31,9 @@
   <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration"/>
 
   <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
-    <constructor-arg index="0" value="/sventon.properties"/>
-    <constructor-arg index="1" ref="configuration"/>
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="/sventon.properties"/>
+    <constructor-arg index="2" ref="configuration"/>
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>

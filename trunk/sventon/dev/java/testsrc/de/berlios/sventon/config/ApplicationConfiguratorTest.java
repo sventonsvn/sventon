@@ -11,7 +11,7 @@ public class ApplicationConfiguratorTest extends TestCase {
   public void testApplicationConfigurator() throws Exception {
 
     try {
-      new ApplicationConfigurator((String) null, null);
+      new ApplicationConfigurator(null, null, null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException iae) {
       // exptected

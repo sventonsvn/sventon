@@ -21,7 +21,6 @@ package de.berlios.sventon;
 public final class Version {
 
   private static final String VERSION = "@VERSION@";
-
   private static final String REVISION = "@REVISION@";
 
   /**
