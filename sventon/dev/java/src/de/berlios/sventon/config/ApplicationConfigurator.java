@@ -12,6 +12,7 @@
 package de.berlios.sventon.config;
 
 import de.berlios.sventon.logging.SVNLog4JAdapter;
+import de.berlios.sventon.Version;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -94,7 +95,8 @@ public class ApplicationConfigurator {
 
   private void initApplication() {
     SVNDebugLog.setLogger(new SVNLog4JAdapter("sventon.javasvn"));
-    logger.info("Initializing sventon application");
+    logger.info("Initializing sventon version "
+        + Version.getVersion() + " (revision " + Version.getRevision() + ")");
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
     FSRepositoryFactory.setup();
