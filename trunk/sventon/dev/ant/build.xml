@@ -58,8 +58,8 @@
     <copy todir="${bindist.dir}/licenses">
       <fileset dir="${srcdist.dir}/sventon/licenses"/>
     </copy>
-    <replace file="${svnroot.dir}/web/WEB-INF/jspf/foot.jspf" token="@VERSION@" value="${svn.release.version}"/>
-    <replace file="${svnroot.dir}/web/WEB-INF/jspf/foot.jspf" token="@REVISION@" value="${svn.release.revision}"/>
+    <replace file="${svnroot.dir}/src/de/berlios/sventon/Version.java" token="@VERSION@" value="${svn.release.version}"/>
+    <replace file="${svnroot.dir}/src/de/berlios/sventon/Version.java" token="@REVISION@" value="${svn.release.revision}"/>
   </target>
 
   <target name="svnExport" depends="init">
