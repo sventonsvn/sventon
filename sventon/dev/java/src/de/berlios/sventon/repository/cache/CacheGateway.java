@@ -38,7 +38,8 @@ public interface CacheGateway {
    * Searches the cached entries for given string CamelCase name.
    *
    * @param instanceName Cache instance name
-   * @param pattern CamelCase pattern to search for
+   * @param pattern      CamelCase pattern to search for
+   * @param startDir     Directory where to start search
    * @return List of entries
    * @throws CacheException if error
    */
@@ -71,7 +72,7 @@ public interface CacheGateway {
    * Searches the cached entries for all directories below given start dir.
    *
    * @param instanceName Cache instance name
-   * @param fromPath Start path
+   * @param fromPath     Start path
    * @return List of entries
    * @throws CacheException if error
    */
@@ -81,7 +82,7 @@ public interface CacheGateway {
    * Searches the cached log messages for given string.
    *
    * @param instanceName Cache instance name
-   * @param queryString String to search for.
+   * @param queryString  String to search for.
    * @return List of log messages.
    * @throws CacheException if error
    */

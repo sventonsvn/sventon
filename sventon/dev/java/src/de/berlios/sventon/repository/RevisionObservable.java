@@ -22,8 +22,14 @@ public interface RevisionObservable {
    * Updates the observable. For each configured repository instance, polls the repository
    * and looks for new revisions to fetch and publish to registered observers.
    */
-  void update();
+  void updateAll();
 
+  /**
+   * Updates the observable for a single configured repository instance, polls the repository
+   * and looks for new revisions to fetch and publish to registered observers.
+   */
+  void update(final String instanceName);
+  
   /**
    * Checks whether the observable is updating.
    *
