@@ -21,8 +21,7 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -48,28 +47,29 @@ public class ApplicationConfigurator {
   /**
    * Constructor.
    *
+   * @param configurationDir  Configuration root directory.
    * @param configurationFile Path and file name of sventon configuration file.
    * @param configuration     Application configuration instance to populate.
    * @throws IOException if IO error occur
    */
-  public ApplicationConfigurator(final String configurationFile, final ApplicationConfiguration configuration)
+  public ApplicationConfigurator(final String configurationDir, final String configurationFile,
+                                 final ApplicationConfiguration configuration)
       throws IOException {
 
-    if (configurationFile == null || configuration == null) {
+    if (configurationDir == null || configurationFile == null || configuration == null) {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
 
     initApplication();
 
     InputStream is = null;
+    final File configFile = new File(configurationDir, configurationFile);
     try {
-      is = getClass().getResourceAsStream(configurationFile);
-      if (is == null) {
-        // No configuration property file exist. Application not configured yet.
-        logger.info("No instance has been configured yet. Access sventon web application for setup");
-      } else {
-        initConfiguration(is, configuration);
-      }
+      is = new FileInputStream(configFile);
+      initConfiguration(is, configuration);
+    } catch (FileNotFoundException fnfe) {
+      logger.debug("Configuration file [" + configFile.getAbsolutePath() + "] was not found");
+      logger.info("No instance has been configured yet. Access sventon web application for setup");
     } finally {
       IOUtils.closeQuietly(is);
     }
@@ -107,7 +107,8 @@ public class ApplicationConfigurator {
    * Reads given input stream and populates the global application configuration
    * with all instance configuration parameters.
    *
-   * @param input InputStream
+   * @param input         InputStream
+   * @param configuration The configuration instance
    * @throws IOException if IO error occurs.
    */
   private void initConfiguration(final InputStream input, final ApplicationConfiguration configuration) throws IOException {

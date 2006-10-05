@@ -29,6 +29,7 @@ import java.util.Properties;
  * This class is preferably configured using Spring.
  *
  * @author patrikfr@user.berlios.de
+ * @author jesper@users.berlios.de
  * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
  * @see <a href="http://www.springframework">Spring framework</a>
  */
