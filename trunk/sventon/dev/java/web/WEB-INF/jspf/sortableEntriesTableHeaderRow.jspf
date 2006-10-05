@@ -20,7 +20,7 @@
   <c:set var="opositeSortType" value="${userContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
 
   <th><a href="${sortUrl}&sortType=FULL_NAME&sortMode=${opositeSortType}" style="color: #000000;">
-      <c:if test="${userContext.sortType eq 'FULL_NAME'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>File</a>
+      <c:if test="${userContext.sortType eq 'FULL_NAME'}"><img border="0" alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Name</a>
   </th>
   <th></th>
   <th><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
