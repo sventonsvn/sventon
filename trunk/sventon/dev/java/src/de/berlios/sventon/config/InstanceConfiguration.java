@@ -82,6 +82,12 @@ public class InstanceConfiguration {
    */
   private boolean zipDownloadsAllowed;
 
+  public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
+  public static final String PROPERTY_KEY_USERNAME = ".uid";
+  public static final String PROPERTY_KEY_PASSWORD = ".pwd";
+  public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
+  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
+
   /**
    * Constructor.
    */
@@ -98,12 +104,12 @@ public class InstanceConfiguration {
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setInstanceName(instanceName);
-    instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + ".root"));
-    instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + ".uid"));
-    instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + ".pwd"));
-    instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + ".useCache")));
+    instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
+    instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
+    instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
+    instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(instanceName + ".allowZipDownloads")));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     return instanceConfiguration;
   }
 

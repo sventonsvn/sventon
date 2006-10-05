@@ -47,23 +47,19 @@ public class ApplicationConfigurator {
   /**
    * Constructor.
    *
-   * @param configurationDir  Configuration root directory.
-   * @param configurationFile Path and file name of sventon configuration file.
-   * @param configuration     Application configuration instance to populate.
+   * @param configuration Application configuration instance to populate.
    * @throws IOException if IO error occur
    */
-  public ApplicationConfigurator(final String configurationDir, final String configurationFile,
-                                 final ApplicationConfiguration configuration)
-      throws IOException {
+  public ApplicationConfigurator(final ApplicationConfiguration configuration) throws IOException {
 
-    if (configurationDir == null || configurationFile == null || configuration == null) {
+    if (configuration == null) {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
 
     initApplication();
 
     InputStream is = null;
-    final File configFile = new File(configurationDir, configurationFile);
+    final File configFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
     try {
       is = new FileInputStream(configFile);
       initConfiguration(is, configuration);

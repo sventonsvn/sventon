@@ -8,6 +8,10 @@
     <constructor-arg value="${java.io.tmpdir}/sventon/"/>
   </bean>
 
+  <bean id="sventonConfigFile" class="java.lang.String">
+    <constructor-arg value="sventon.properties"/>
+  </bean>
+
   <bean id="sventonCacheDir" class="java.lang.String">
     <constructor-arg value="${java.io.tmpdir}/sventon/cache/"/>
   </bean>
@@ -28,12 +32,13 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration"/>
+  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" ref="sventonConfigFile"/>
+  </bean>
 
   <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
-    <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" value="/sventon.properties"/>
-    <constructor-arg index="2" ref="configuration"/>
+    <constructor-arg index="0" ref="configuration"/>
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>

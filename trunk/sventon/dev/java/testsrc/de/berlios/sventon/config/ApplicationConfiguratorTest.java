@@ -11,7 +11,7 @@ public class ApplicationConfiguratorTest extends TestCase {
   public void testApplicationConfigurator() throws Exception {
 
     try {
-      new ApplicationConfigurator(null, null, null);
+      new ApplicationConfigurator(null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException iae) {
       // exptected
@@ -24,16 +24,15 @@ public class ApplicationConfiguratorTest extends TestCase {
     props.put("defaultsvn.useCache", "false");
     props.put("defaultsvn.allowZipDownloads", "false");
 
-    final ApplicationConfiguration configuration = new ApplicationConfiguration();
+    final ApplicationConfiguration configuration = new ApplicationConfiguration(System.getProperty("java.io.tmpdir"),
+        "sventon-config-test.tmp");
     assertEquals(0, configuration.getInstanceCount());
     assertFalse(configuration.isConfigured());
 
-    File tempConfigFile = null;
+    final File tempConfigFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
     OutputStream os = null;
     InputStream is = null;
     try {
-      tempConfigFile = File.createTempFile("sventon-test", ".tmp");
-
       os = new FileOutputStream(tempConfigFile);
       props.store(os, null);
 
