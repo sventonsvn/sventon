@@ -13,6 +13,8 @@ package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.repository.RevisionObservable;
 import org.springframework.aop.MethodBeforeAdvice;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Method;
 
@@ -23,6 +25,11 @@ import java.lang.reflect.Method;
  * @author jesper@users.berlios.de
  */
 public class CacheBeforeAdvice implements MethodBeforeAdvice {
+
+  /**
+   * The logging instance.
+   */
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The Observable. Used to trigger cache updates.
@@ -42,6 +49,8 @@ public class CacheBeforeAdvice implements MethodBeforeAdvice {
    * {@inheritDoc]
    */
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
-    revisionObservable.update();
+    final String instanceName = (String) args[0];
+    logger.debug("Updating cache for instance: " + instanceName);
+    revisionObservable.update(instanceName);
   }
 }

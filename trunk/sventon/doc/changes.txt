@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[677] Added: Feature #2751 - Update the caches one by one.
 [651] Added: Feature #2670 - Possibility to expand flattened dirs.
 [611] Added: Feature #1570 - Support for multiple repositories.
 [600] Fixed: Bug #8371 - Misspelled revision parameter in logs view.

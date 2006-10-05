@@ -10,15 +10,19 @@ public class CacheBeforeAdviceTest extends TestCase {
 
     final TestObservable revisionObservable = new TestObservable();
     cacheBeforeAdvice.setRevisionObservable(revisionObservable);
-    cacheBeforeAdvice.before(null, null, null);
+    cacheBeforeAdvice.before(null, new Object[]{"instance1"}, null);
     assertTrue(revisionObservable.called);
   }
 
   private static class TestObservable implements RevisionObservable {
     public boolean called = false;
 
-    public void update() {
+    public void updateAll() {
+    }
+
+    public void update(final String instanceName) {
       called = true;
+      assertEquals("instance1", instanceName);
     }
 
     public boolean isUpdating() {

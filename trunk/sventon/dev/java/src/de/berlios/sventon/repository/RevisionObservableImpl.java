@@ -149,20 +149,31 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    *
    * @throws RuntimeException if a subversion error occurs.
    */
-  public synchronized void update() {
+  public synchronized void update(final String instanceName) {
+    if (configuration.isConfigured()) {
+      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
+      if (instanceConfiguration.isCacheUsed()) {
+        SVNRepository repository;
+        try {
+          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+          final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
+          update(instanceConfiguration.getInstanceName(), repository, objectCache);
+        } catch (final Exception ex) {
+          logger.warn("Unable to establish repository connection", ex);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @throws RuntimeException if a subversion error occurs.
+   */
+  public synchronized void updateAll() {
     if (configuration.isConfigured()) {
       for (final String instanceName : configuration.getInstanceNames()) {
-        final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
-        if (instanceConfiguration.isCacheUsed()) {
-          SVNRepository repository;
-          try {
-            repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
-            final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-            update(instanceConfiguration.getInstanceName(), repository, objectCache);
-          } catch (final Exception ex) {
-            logger.warn("Unable to establish repository connection", ex);
-          }
-        }
+        update(instanceName);
       }
     }
   }
