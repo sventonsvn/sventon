@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import static de.berlios.sventon.config.InstanceConfiguration.*;
 
 /**
  * Controller for persisting application configuration.
@@ -52,13 +53,6 @@ public class ConfigurationSubmissionController extends AbstractController {
    * Logger for this class and subclasses.
    */
   private final Log logger = LogFactory.getLog(getClass());
-
-  public static final String SVENTON_PROPERTIES = "sventon.properties";
-  public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
-  public static final String PROPERTY_KEY_USERNAME = ".uid";
-  public static final String PROPERTY_KEY_PASSWORD = ".pwd";
-  public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
-  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
 
   /**
    * Sets application configuration.
@@ -90,8 +84,7 @@ public class ConfigurationSubmissionController extends AbstractController {
       throw new IllegalStateException("No instance has been configured!");
     }
 
-    final String classPath = getServletContext().getRealPath("/WEB-INF/classes");
-    final File propertyFile = new File(classPath + System.getProperty("file.separator") + SVENTON_PROPERTIES);
+    final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
     logger.debug("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
     final FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);

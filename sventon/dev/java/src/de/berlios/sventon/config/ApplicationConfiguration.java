@@ -38,14 +38,32 @@ public class ApplicationConfiguration {
   private boolean configured;
 
   /**
+   * Application configuration directory.
+   */
+  private String configurationDirectory;
+
+  /**
+   * Application configuration file name.
+   */
+  private String configurationFilename;
+
+  /**
    * Map of instance names and configuration.
    */
   private Map<String, InstanceConfiguration> instanceConfigurations = new HashMap<String, InstanceConfiguration>();
 
   /**
    * Configures and initializes the repository.
+   *
+   * @param configurationDirectory Configuration root directory.
+   * @param configurationFilename  Path and file name of sventon configuration file.
    */
-  public ApplicationConfiguration() {
+  public ApplicationConfiguration(final String configurationDirectory, final String configurationFilename) {
+    if (configurationDirectory == null || configurationFilename == null) {
+      throw new IllegalArgumentException("Parameters cannot be null");
+    }
+    this.configurationDirectory = configurationDirectory;
+    this.configurationFilename = configurationFilename;
   }
 
   /**
@@ -108,4 +126,21 @@ public class ApplicationConfiguration {
     return instanceConfigurations.size();
   }
 
+  /**
+   * Gets the configuration directory.
+   *
+   * @return The directory
+   */
+  public String getConfigurationDirectory() {
+    return configurationDirectory;
+  }
+
+  /**
+   * Gets the configuration filename.
+   *
+   * @return The filename
+   */
+  public String getConfigurationFilename() {
+    return configurationFilename;
+  }
 }

@@ -17,7 +17,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
+    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration("dir", "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setInstanceName("defaultsvn");
     instanceConfiguration.setCacheUsed(true);
@@ -38,6 +38,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     }
   }
 
+  @SuppressWarnings({"unchecked"})
   public void update(Observable o, Object arg) {
     assertEquals(1, ((List<SVNLogEntry>) arg).size());
   }
