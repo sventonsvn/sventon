@@ -34,8 +34,10 @@ public final class ZipUtils {
   protected final Log logger = LogFactory.getLog(getClass());
 
   public ZipUtils() {
+    //This line is a hack handles UTF-8 chars. But these are garbeled in Windows.
+    //TODO what about other OS:es? TEST
     de.schlichtherle.io.File.setDefaultArchiveDetector(
-        new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", new JarDriver()));    
+        new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", new JarDriver()));
   }
 
   /**
@@ -49,7 +51,7 @@ public final class ZipUtils {
     logger.debug("Zipping directory: " + directory.getAbsolutePath());
     final de.schlichtherle.io.File file = new de.schlichtherle.io.File(zipFile);
     file.archiveCopyAllFrom(new de.schlichtherle.io.File(directory), ArchiveDetector.NULL);
-    de.schlichtherle.io.File.umount();  // TODO: Is this the way to do it? Why is the method static?
+    de.schlichtherle.io.File.umount();  // TODO: Is this the way to do it? Why is the method static? Is this thread safe?
   }
 
 }
