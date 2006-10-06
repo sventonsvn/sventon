@@ -11,23 +11,30 @@
  */
 package de.berlios.sventon.service;
 
+import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.export.ExportDirectory;
-import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.web.model.ImageMetadata;
+import de.berlios.sventon.web.model.RawTextFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
-import java.io.OutputStream;
-import java.io.File;
+import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -266,6 +273,9 @@ public class RepositoryServiceImpl implements RepositoryService {
     return repositoryEntry;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
@@ -276,6 +286,42 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     logger.debug("PERF: getFileRevisions(): " + (System.currentTimeMillis() - start));
     return svnFileRevisions;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache,
+                                         final String path, final long revision,
+                                         final URL fullSizeImageUrl, final String imageFormatName,
+                                         final int maxThumbnailSize, final OutputStream out) throws SVNException {
+
+    // Check if the thumbnail exists on the cache
+    final String checksum = getFileChecksum(repository, path, revision);
+    final ObjectCacheKey cacheKey = new ObjectCacheKey(path, checksum);
+    logger.debug("Using cachekey: " + cacheKey);
+    final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
+
+    try {
+      if (thumbnailData != null) {
+        // Writing cached thumbnail image to output stream
+        out.write(thumbnailData);
+      } else {
+        // Thumbnail was not in the cache - create it.
+        logger.debug("Getting full size image from url: " + fullSizeImageUrl);
+        final ImageScaler imageScaler = new ImageScaler(ImageIO.read(fullSizeImageUrl));
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, baos);
+
+        // Putting created thumbnail image into the cache.
+        logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+        objectCache.put(cacheKey, baos.toByteArray());
+        out.write(baos.toByteArray());
+      }
+    } catch (final IOException ioex) {
+      logger.warn("Unable to get thumbnail for: " + path, ioex);
+    }
+    return null;  //TODO: Return instance of ImageMetadata
   }
 
   /**

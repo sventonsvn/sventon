@@ -12,8 +12,10 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.web.model.ImageMetadata;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -24,6 +26,7 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.net.URL;
 
 /**
  * Service class for accessing the subversion repository.
@@ -205,10 +208,10 @@ public interface RepositoryService {
   Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException;
 
   /**
-   * @param repository      The repository
-   * @param path            The entry path
-   * @param revision        The revision
-   * @param properties      The entry properties
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The revision
+   * @param properties The entry properties
    * @return List of entries
    * @throws SVNException if a subversion error occur
    */
@@ -218,9 +221,9 @@ public interface RepositoryService {
   /**
    * Gets an entry from the subversion repository.
    *
-   * @param repository      The repository
-   * @param path            The entry path
-   * @param revision        The entry revision
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The entry revision
    * @return Entry
    * @throws SVNException if a subversion error occur
    */
@@ -232,8 +235,13 @@ public interface RepositoryService {
    * @param repository
    * @param path
    * @param revision
-   * @return
+   * @return List of file revisions
    * @throws SVNException
    */
   List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision) throws SVNException;
+
+  ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache, final String path,
+                                  final long revision, final URL fullSizeImageUrl, final String imageFormatName,
+                                  final int maxThumbnailSize, final OutputStream out) throws SVNException;
+
 }

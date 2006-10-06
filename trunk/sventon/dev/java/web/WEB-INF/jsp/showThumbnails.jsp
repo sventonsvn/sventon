@@ -30,27 +30,29 @@
 
     <br/>
 
-    <c:forEach items="${thumbnailentries}" var="entry">
-
-      <c:url value="get.svn" var="downloadUrl" >
-        <c:param name="revision" value="${command.revision}" />
-        <c:param name="path" value="${entry}" />
-        <c:param name="name" value="${command.name}" />
-        <c:param name="disp" value="inline" />
-      </c:url>
-  
-      <c:url value="getthumb.svn" var="getThumbUrl" >
-        <c:param name="revision" value="${command.revision}" />
-        <c:param name="path" value="${entry}" />
-        <c:param name="name" value="${command.name}" />
-
-      </c:url>
-
-      <p>
-        <b>${entry}</b><br/>
-        <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
-      </p>
-    </c:forEach>
+    <table border="1">
+      <c:forEach items="${thumbnailentries}" var="entry">
+        <tr height="160px">
+          <c:url value="get.svn" var="downloadUrl" >
+            <c:param name="revision" value="${command.revision}" />
+            <c:param name="path" value="${entry}" />
+            <c:param name="name" value="${command.name}" />
+            <c:param name="disp" value="inline" />
+          </c:url>
+          <c:url value="getthumb.svn" var="getThumbUrl" >
+            <c:param name="revision" value="${command.revision}" />
+            <c:param name="path" value="${entry}" />
+            <c:param name="name" value="${command.name}" />
+          </c:url>
+          <td valign="top">
+            File: <b>${entry}</b>
+          </td>
+          <td width="210px" style="text-align:center;">
+            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
+          </td>
+        </tr>
+      </c:forEach>
+    </table>
 
     <br>
 
