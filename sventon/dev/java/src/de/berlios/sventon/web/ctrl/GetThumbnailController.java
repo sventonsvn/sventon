@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
@@ -69,7 +70,6 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     logger.debug("Getting file as 'thumbnail'");
 
     final ServletOutputStream output = response.getOutputStream();
-    final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
 
     if (!imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
@@ -77,33 +77,13 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
     }
 
     response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
-
-    // Check if the thumbnail exists on the cache
-    final String checksum = getRepositoryService().getFileChecksum(repository, svnCommand.getPath(), revision.getNumber());
-    final String cacheKey = svnCommand.getName() + checksum + svnCommand.getPath();
-    logger.debug("Using cachekey: " + cacheKey);
-    final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
-    if (thumbnailData != null) {
-      // Writing cached thumbnail image to ServletOutputStream
-      output.write(thumbnailData);
-    } else {
-      // Thumbnail was not in the cache.
-      // Create the thumbnail.
-      final URL url = new URL(getFullSizeImageURL(request));
-      logger.debug("Getting full size image from url: " + url);
-      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(url));
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, baos);
-      response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
-
-      // Putting created thumbnail image into the cache.
-      logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
-      objectCache.put(cacheKey, baos.toByteArray());
-      // Write thumbnail to ServletOutputStream.
-      output.write(baos.toByteArray());
-      output.flush();
-      output.close();
-    }
+    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+    final URL fullSizeImageUrl = new URL(getFullSizeImageURL(request));
+    final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
+    getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), revision.getNumber(),
+        fullSizeImageUrl, imageFormatName, maxThumbnailSize, output);
+    output.flush();
+    output.close();
     return null;
   }
 
