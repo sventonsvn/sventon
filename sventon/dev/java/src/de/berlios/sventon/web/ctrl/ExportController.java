@@ -17,7 +17,7 @@ import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -69,7 +69,7 @@ public class ExportController extends AbstractSVNTemplateController implements C
     ServletOutputStream output = null;
     InputStream fileInputStream = null;
 
-    final List<String> targets = Arrays.asList(RequestUtils.getStringParameters(request, "entry"));
+    final List<String> targets = Arrays.asList(ServletRequestUtils.getStringParameters(request, "entry"));
     final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
 
     try {

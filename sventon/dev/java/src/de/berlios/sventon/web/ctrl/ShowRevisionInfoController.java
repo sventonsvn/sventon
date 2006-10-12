@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -46,7 +46,7 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
 
     final long revNumber;
     try {
-      revNumber = RequestUtils.getLongParameter(request, "revision");
+      revNumber = ServletRequestUtils.getLongParameter(request, "revision");
     } catch (final ServletRequestBindingException ex) {
       exception.reject("goto.command.invalidpath", "Invalid revision");
       return prepareExceptionModelAndView(exception, svnCommand);

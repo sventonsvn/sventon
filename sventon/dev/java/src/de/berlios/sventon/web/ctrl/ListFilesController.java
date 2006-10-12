@@ -16,16 +16,14 @@ import de.berlios.sventon.repository.RepositoryEntryKindFilter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.RequestUtils;
-import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +50,7 @@ public class ListFilesController extends ListDirectoryContentsController impleme
     final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
     final List<RepositoryEntry> directoryListing = entryFilter.filter(entries);
 
-    final int rowNumber = RequestUtils.getIntParameter(request, "rowNumber");
+    final int rowNumber = ServletRequestUtils.getIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
     model.put("svndir", directoryListing);

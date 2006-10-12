@@ -24,7 +24,7 @@ import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -212,8 +212,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param userContext The UserContext instance to update.
    */
   protected void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
-    final String sortType = RequestUtils.getStringParameter(request, "sortType", null);
-    final String sortMode = RequestUtils.getStringParameter(request, "sortMode", null);
+    final String sortType = ServletRequestUtils.getStringParameter(request, "sortType", null);
+    final String sortMode = ServletRequestUtils.getStringParameter(request, "sortMode", null);
 
     if (sortType != null) {
       userContext.setSortType(RepositoryEntryComparator.SortType.valueOf(sortType));

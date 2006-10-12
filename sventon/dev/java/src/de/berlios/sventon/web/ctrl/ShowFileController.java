@@ -20,7 +20,7 @@ import de.berlios.sventon.web.model.HTMLDecoratedTextFile;
 import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNProperty;
@@ -77,7 +77,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     logger.debug("Assembling file contents for: " + svnCommand);
 
-    final String formatParameter = RequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
+    final String formatParameter = ServletRequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
     final Map<String, Object> model = new HashMap<String, Object>();
     final HashMap properties = new HashMap();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
