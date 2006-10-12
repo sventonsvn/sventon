@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- Application context definition for sventon DispatcherServlet -->
+<beans default-lazy-init="false">
+
+  <bean id="sventonDir" class="java.lang.String">
+    <constructor-arg value="${java.io.tmpdir}/sventon/"/>
+  </bean>
+
+  <bean id="sventonConfigFile" class="java.lang.String">
+    <constructor-arg value="sventon.properties"/>
+  </bean>
+
+  <bean id="sventonCacheDir" class="java.lang.String">
+    <constructor-arg value="${java.io.tmpdir}/sventon/cache/"/>
+  </bean>
+
+  <bean id="sventonExportDir" class="java.lang.String">
+    <constructor-arg value="${java.io.tmpdir}/sventon/export/"/>
+  </bean>
+
+  <!-- Makes sure the directories are created -->
+  <bean class="java.io.File" init-method="mkdirs">
+    <constructor-arg ref="sventonExportDir"/>
+  </bean>
+
+  <bean id="defaultEncoding" class="java.lang.String">
+    <constructor-arg value="UTF-8"/>
+  </bean>
+
+  <!-- property placeholder post-processor -->
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" ref="sventonConfigFile"/>
+  </bean>
+
+  <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
+    <constructor-arg index="0" ref="configuration"/>
+  </bean>
+
+  <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>
+  <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator"/>
+
+  <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
+    <property name="cacheGateway" ref="cacheGatewayBean"/>
+  </bean>
+
+  <bean id="abstractController" abstract="true">
+    <property name="configuration" ref="configuration"/>
+    <property name="cacheGateway" ref="cacheGatewayBean"/>
+    <property name="revisionObservable" ref="revisionObservable"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="validator" ref="svnBaseCommandValidator"/>
+  </bean>
+
+  <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
+    <property name="configuration" ref="configuration"/>
+    <property name="mimeType" value="application/xml; charset=UTF-8"/>
+    <property name="feedItemCount" value="20"/>
+    <property name="feedGenerator" ref="syndFeedGenerator"/>
+    <property name="repositoryService" ref="repositoryService"/>
+  </bean>
+
+  <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
+    <property name="feedType" value="rss_2.0"/>
+    <property name="logMessageLength" value="40"/>
+  </bean>
+
+  <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
+    <property name="configuration" ref="configuration"/>
+    <property name="encoding" ref="defaultEncoding"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
+  </bean>
+
+  <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
+  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
+  <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ListFilesController" parent="abstractController"/>
+  <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
+  <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
+  <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
+  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
+  <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
+  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
+  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
+  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
+
+  <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
+    <property name="pageSize" value="20"/>
+  </bean>
+
+  <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController"
+        parent="abstractController">
+    <property name="encoding" ref="defaultEncoding"/>
+  </bean>
+
+  <bean id="showFileController" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
+    <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
+    <property name="colorer" ref="colorer"/>
+    <property name="imageUtil" ref="imageUtil"/>
+    <property name="encoding" ref="defaultEncoding"/>
+  </bean>
+
+  <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController"
+        parent="abstractController">
+    <property name="imageUtil" ref="imageUtil"/>
+  </bean>
+
+  <bean id="getController" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
+    <property name="imageUtil" ref="imageUtil"/>
+  </bean>
+
+  <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController"
+        parent="abstractController">
+    <property name="imageUtil" ref="imageUtil"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="imageFormatName" value="png"/>
+    <property name="maxThumbnailSize" value="200"/>
+  </bean>
+
+  <bean id="exportController" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
+    <property name="exportDir" ref="sventonExportDir"/>
+    <property name="contentType" value="application/octet-stream"/>
+  </bean>
+
+  <bean id="listInstancesController" class="de.berlios.sventon.web.ctrl.ListInstancesController">
+    <property name="configuration" ref="configuration"/>
+  </bean>
+
+  <bean id="startController" class="de.berlios.sventon.web.ctrl.StartController">
+    <property name="configuration" ref="configuration"/>
+  </bean>
+
+  <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
+    <property name="configuration" ref="configuration"/>
+    <property name="validator" ref="configCommandValidator"/>
+  </bean>
+
+  <bean id="configurationSubmissionController" class="de.berlios.sventon.web.ctrl.ConfigurationSubmissionController">
+    <property name="configuration" ref="configuration"/>
+    <property name="scheduler" ref="scheduler"/>
+  </bean>
+
+  <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+      <props>
+        <!-- url mappings -->
+        <prop key="/repobrowser.svn">repoBrowserController</prop>
+        <prop key="/showlog.svn">showLogsController</prop>
+        <prop key="/showfile.svn">showFileController</prop>
+        <prop key="/clearsession.svn">clearSessionController</prop>
+        <prop key="/searchentries.svn">searchEntriesController</prop>
+        <prop key="/searchlogs.svn">searchLogsController</prop>
+        <prop key="/flatten.svn">flattenController</prop>
+        <prop key="/get.svn">getController</prop>
+        <prop key="/config.svn">configurationController</prop>
+        <prop key="/submitconfig.svn">configurationSubmissionController</prop>
+        <prop key="/listinstances.svn">listInstancesController</prop>
+        <prop key="/start.svn">startController</prop>
+        <prop key="/getthumb.svn">getThumbnailController</prop>
+        <prop key="/showthumbs.svn">showThumbnailsController</prop>
+        <prop key="/diff.svn">diffController</prop>
+        <prop key="/diffprev.svn">diffPreviousController</prop>
+        <prop key="/unifieddiff.svn">unifiedDiffController</prop>
+        <prop key="/goto.svn">goToController</prop>
+        <prop key="/revinfo.svn">revInfoController</prop>
+        <prop key="/showlocks.svn">showLocksController</prop>
+        <prop key="/export.svn">exportController</prop>
+        <!-- url mappings for xml producers -->
+        <prop key="/rss.xml">rssController</prop>
+        <prop key="/compl.xml">completionController</prop>
+        <prop key="/latest.xml">latestInfoController</prop>
+        <!-- url mappings for ajax controllers -->
+        <prop key="/listfiles.ajax">listFilesController</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
+    <property name="mimeMappings">
+      <props>
+        <prop key="gif">image/gif</prop>
+        <prop key="png">image/png</prop>
+        <prop key="jpg">image/jpg</prop>
+        <prop key="jpe">image/jpg</prop>
+        <prop key="jpeg">image/jpg</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
+        destroy-method="shutdown">
+    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="1" value="10000"/>
+    <constructor-arg index="2" value="true"/>
+    <constructor-arg index="3" value="true"/>
+    <constructor-arg index="4" value="0"/>
+    <constructor-arg index="5" value="0"/>
+    <constructor-arg index="6" value="true"/>
+    <constructor-arg index="7" value="120"/>
+  </bean>
+
+  <!-- temporarily use the reloadable version (makes developing easier) -->
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="/WEB-INF/classes/messages"/>
+    <property name="useCodeAsDefaultMessage" value="true"/>
+    <property name="cacheSeconds" value="0"/>
+  </bean>
+
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+  <!-- Gateway class for accessing the caches -->
+  <!-- Bean configuration -->
+  <bean id="cacheGatewayBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="de.berlios.sventon.repository.cache.CacheGateway"/>
+    <property name="target" ref="cacheGateway"/>
+    <property name="interceptorNames">
+      <list>
+        <value>cacheBeforeAdvisor</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Advisor pointcut definition for before advice -->
+  <bean id="cacheBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="cacheBeforeAdvice"/>
+    <property name="pattern" value=".*"/>
+  </bean>
+
+  <!-- Advice classes -->
+  <bean id="cacheBeforeAdvice" class="de.berlios.sventon.repository.cache.CacheBeforeAdvice">
+    <property name="revisionObservable" ref="revisionObservable"/>
+  </bean>
+
+  <bean id="cacheGateway" class="de.berlios.sventon.repository.cache.CacheGatewayImpl">
+    <property name="entryCacheManager" ref="entryCacheManager"/>
+    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
+    <property name="revisionCacheManager" ref="revisionCacheManager"/>
+  </bean>
+
+  <!-- Monitors the repository and polls for changes -->
+  <bean id="revisionObservable" class="de.berlios.sventon.repository.RevisionObservableImpl">
+    <constructor-arg ref="observerList"/>
+    <property name="configuration" ref="configuration"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="repositoryService" ref="repositoryService"/>
+  </bean>
+
+  <!-- List of RevisionObservers registered to observe repository changes -->
+  <bean id="observerList" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <ref local="entryCacheUpdater"/>
+        <ref local="logMessageCacheUpdater"/>
+        <ref local="revisionCacheUpdater"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
+    <constructor-arg index="0" ref="revisionCacheManager"/>
+    <constructor-arg index="1" ref="configuration"/>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
+    <constructor-arg index="0" ref="entryCacheManager"/>
+    <constructor-arg index="1" ref="configuration"/>
+    <constructor-arg index="2" ref="repositoryService"/>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="logMessageCacheUpdater" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheUpdater">
+    <constructor-arg index="0" ref="logMessageCacheManager"/>
+    <constructor-arg index="1" ref="configuration"/>
+  </bean>
+
+  <bean id="revisionCacheManager" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager">
+    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="1" ref="objectCacheManager"/>
+  </bean>
+
+  <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager"
+        destroy-method="shutdown">
+    <constructor-arg ref="sventonCacheDir"/>
+  </bean>
+
+  <bean id="logMessageCacheManager" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager">
+    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+  </bean>
+
+  <bean id="tempFileCleaner" class="de.berlios.sventon.repository.export.TemporaryFileCleaner">
+    <property name="exportRootDir" ref="sventonExportDir"/>
+    <property name="timeThreshold" value="600000"/>
+  </bean>
+
+  <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
+    <property name="encoding" ref="defaultEncoding"/>
+    <property name="rendererMappings">
+      <map>
+        <entry key="java" value-ref="javaXhtmlRenderer"/>
+        <entry key="beanshell" value-ref="javaXhtmlRenderer"/>
+        <entry key="bsh" value-ref="javaXhtmlRenderer"/>
+        <entry key="html" value-ref="xmlXhtmlRenderer"/>
+        <entry key="htm" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xhtml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="lzx" value-ref="xmlXhtmlRenderer"/>
+        <entry key="cpp" value-ref="cppXhtmlRenderer"/>
+        <entry key="cxx" value-ref="cppXhtmlRenderer"/>
+        <entry key="c++" value-ref="cppXhtmlRenderer"/>
+        <entry key="c" value-ref="cppXhtmlRenderer"/>
+        <entry key="groovy" value-ref="groovyXhtmlRenderer"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer"/>
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer"/>
+  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
+  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
+
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    <property name="triggers">
+      <list>
+        <ref local="cacheUpdateTrigger"/>
+        <ref local="tempFileCleanerTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="cacheUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="cacheUpdateJobDetail"/>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="revisionObservable"/>
+    <property name="targetMethod" value="updateAll"/>
+  </bean>
+
+  <bean id="tempFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="tempFileCleanerJobDetail"/>
+    <property name="startDelay" value="300000"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="tempFileCleanerJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="tempFileCleaner"/>
+    <property name="targetMethod" value="clean"/>
+  </bean>
+
+</beans>
