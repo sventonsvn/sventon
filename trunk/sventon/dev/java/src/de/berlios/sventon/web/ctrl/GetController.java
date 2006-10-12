@@ -16,7 +16,7 @@ import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.validation.BindException;
@@ -62,7 +62,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String displayType = RequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, null);
+    final String displayType = ServletRequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, null);
 
     if (displayType == null) {
       logger.debug("Getting file as 'attachment'");

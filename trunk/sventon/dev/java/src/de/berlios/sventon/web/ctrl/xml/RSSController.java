@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -74,7 +74,7 @@ public class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = RequestUtils.getStringParameter(request, "name", null);
+    final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
 
     if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");

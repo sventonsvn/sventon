@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +68,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    final String repositoryInstanceName = RequestUtils.getStringParameter(request, "name", null);
+    final String repositoryInstanceName = ServletRequestUtils.getStringParameter(request, "name", null);
 
     if (repositoryInstanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");

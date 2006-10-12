@@ -20,7 +20,7 @@ import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -56,8 +56,8 @@ public class CompletionController extends AbstractSVNTemplateController implemen
 
     final List<RepositoryEntry> entries =
         Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
-    final String searchString = RequestUtils.getStringParameter(request, "complete");
-    final String startDir = RequestUtils.getStringParameter(request, "startDir");
+    final String searchString = ServletRequestUtils.getStringParameter(request, "complete");
+    final String startDir = ServletRequestUtils.getStringParameter(request, "startDir");
     logger.debug("Searching cache for [" + searchString + "] starting in [" + startDir + "]");
 
     entries.addAll(getCache().findEntry(svnCommand.getName(), searchString, startDir, 10));

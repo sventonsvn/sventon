@@ -17,7 +17,7 @@ import de.berlios.sventon.repository.cache.CamelCasePattern;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -42,8 +42,8 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String searchString = RequestUtils.getStringParameter(request, "searchString");
-    final String startDir = RequestUtils.getStringParameter(request, "startDir");
+    final String searchString = ServletRequestUtils.getStringParameter(request, "searchString");
+    final String startDir = ServletRequestUtils.getStringParameter(request, "startDir");
 
     final Map<String, Object> model = new HashMap<String, Object>();
 

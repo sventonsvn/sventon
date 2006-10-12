@@ -17,7 +17,7 @@ import de.berlios.sventon.util.ImageUtil;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -48,7 +48,7 @@ public class ShowThumbnailsController extends AbstractSVNTemplateController impl
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entryParameters = RequestUtils.getStringParameters(request, "entry");
+    final String[] entryParameters = ServletRequestUtils.getStringParameters(request, "entry");
 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();

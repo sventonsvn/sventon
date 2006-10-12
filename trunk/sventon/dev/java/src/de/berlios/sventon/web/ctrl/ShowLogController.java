@@ -16,7 +16,7 @@ import de.berlios.sventon.web.model.LogEntryBundle;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -67,8 +67,8 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     String path = svnCommand.getPath();
 
-    final String nextPathParam = RequestUtils.getStringParameter(request, "nextPath", null);
-    final String nextRevParam = RequestUtils.getStringParameter(request, "nextRevision", null);
+    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", null);
+    final String nextRevParam = ServletRequestUtils.getStringParameter(request, "nextRevision", null);
 
     final String targetPath;
     final long revNumber;
