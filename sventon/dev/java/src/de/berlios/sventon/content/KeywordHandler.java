@@ -38,6 +38,7 @@ import java.io.UnsupportedEncodingException;
  * </table>
  *
  * @author jesper@users.berlios.de
+ * @see org.tmatesoft.svn.core.internal.wc.SVNTranslator
  */
 public final class KeywordHandler {
 
@@ -62,11 +63,11 @@ public final class KeywordHandler {
   /**
    * Constructs the instance and computes keyword variables.
    *
-   * @param url The full url to the repository entry
+   * @param properties The subversion entry's properties.
+   * @param url        The full url to the repository entry
    */
   @SuppressWarnings({"unchecked"})
   public KeywordHandler(final Map properties, final String url) {
-
     final String author = (String) properties.get(SVNProperty.LAST_AUTHOR);
     final String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
     final String revision = (String) properties.get(SVNProperty.COMMITTED_REVISION);
@@ -80,6 +81,7 @@ public final class KeywordHandler {
    * @param content  The content
    * @param encoding Encoding to use.
    * @return Content with substituted keywords.
+   * @throws UnsupportedEncodingException if given encoding is unsupported.
    */
   public String substitute(final String content, final String encoding) throws UnsupportedEncodingException {
     logger.debug("Substituting keywords");

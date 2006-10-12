@@ -14,7 +14,7 @@ package de.berlios.sventon.colorer;
 import java.io.IOException;
 
 /**
- * Colorer interface.
+ * Colorer interface. Used for converting source files into colorized <code>HTML</code> code.
  *
  * @author jesper@users.berlios.de
  */
@@ -25,10 +25,11 @@ public interface Colorer {
    *
    * @param content       The contents.
    * @param fileExtension The filename, used to determine formatter.
-   * @return The HTML formatted, colorized, string. If no suitable
+   * @return The <code>HTML</code> formatted, colorized, string. If no suitable
    *         formatter was found for given file extension the content will still
-   *         be formatted with HTML entities to be properly displayed on the web.
+   *         be formatted with <code>HTML</code> entities to be properly displayed on the web.
    *         If given content was <code>null</code> an empty string will be returned.
+   * @throws IOException if unable to colorize content.
    */
   String getColorizedContent(final String content, final String fileExtension) throws IOException;
 }

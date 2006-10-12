@@ -59,7 +59,7 @@ public class JHighlightColorer implements Colorer {
     if (renderer == null) {
       return StringEscapeUtils.escapeXml(content);
     }
-    // Sorry Geert, but we needed to remove the trailing BR-tags
+    // Sorry Geert, but we need to remove the trailing BR-tags
     // and the initial comment, as it messes up the line numbering.
     return renderer.highlight(null, content, encoding, true).substring(73).replace("<br />", "").trim();
   }
