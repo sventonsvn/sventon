@@ -24,8 +24,8 @@ import java.util.Map;
 import java.io.Writer;
 
 /**
- * Class to generate RSS feeds from Subversion log information.
- * Uses the ROME library (https://rome.dev.java.net/)
+ * Class to generate <code>RSS</code> feeds from Subversion log information.
+ * Uses the <a href="https://rome.dev.java.net/">ROME</code> library.
  *
  * @author jesper@users.berlios.de
  */
@@ -63,7 +63,7 @@ public class SyndFeedGenerator implements FeedGenerator {
     SyndContent description;
 
     // One logEntry is one commit (or revision)
-    for (SVNLogEntry logEntry : logEntries) {
+    for (final SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
           + getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength));
@@ -83,7 +83,7 @@ public class SyndFeedGenerator implements FeedGenerator {
       int relocated = 0;
       int deleted = 0;
 
-      for (String entryPath : latestPathsList) {
+      for (final String entryPath : latestPathsList) {
         final LogEntryActionType type = LogEntryActionType.parse(map.get(entryPath).getType());
         switch (type) {
           case ADDED:
@@ -164,7 +164,7 @@ public class SyndFeedGenerator implements FeedGenerator {
   /**
    * Sets the feed type. For available types check ROME documentation.
    *
-   * @param feedType
+   * @param feedType The feed type.
    * @link https://rome.dev.java.net/
    */
   public void setFeedType(final String feedType) {
