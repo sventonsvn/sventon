@@ -17,7 +17,7 @@ import java.util.List;
 import java.io.Writer;
 
 /**
- * Interface to be implemented by feed generators
+ * Interface to be implemented by feed generators.
  *
  * @author jesper@users.berlios.de
  */
@@ -32,6 +32,8 @@ public interface FeedGenerator {
    * @param writer       Writer.
    * @throws Exception if unable to output feed.
    */
-  void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL,
+  void outputFeed(final String instanceName,
+                  final List<SVNLogEntry> logEntries,
+                  final String baseURL,
                   final Writer writer) throws Exception;
 }
