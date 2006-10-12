@@ -15,7 +15,7 @@ function toggleEntryFields(formName) {
   for (var i = 0; i < formName.length; i++) {
     fieldObj = formName.elements[i];
     if (fieldObj.type == 'checkbox') {
-      fieldObj.checked = ( fieldObj.checked ) ? false : true;
+      fieldObj.checked = !fieldObj.checked;
     }
   }
 }
@@ -37,7 +37,7 @@ function doAction(formName) {
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff') {
     // Exactly two entries must be checked
-    if (getCheckedCount(formName) != 2)
+    if (getCheckedCount(formName) == 2)
     {
       formName.action = 'diff.svn'
       return true;
@@ -91,6 +91,7 @@ function doFlatten(url, instanceName) {
   } else {
     return false;
   }
+  return true;
 }
 
 // function to hide/show div layers
@@ -139,13 +140,13 @@ function doDiff(formName) {
   // Check if any entry is checked
   var checkedEntry = 0;
   for (i = 0; i < formName.entry.length; i++) {
-    if (formName.entry[i].type == 'checkbox' && formName.entry[i].checked == true) {
+    if (formName.entry[i].type == 'checkbox' && formName.entry[i].checked) {
       checkedEntry++;
     }
   }
 
   // Two boxes must be checked else no action is taken.
-  return checkedEntry != 2;
+  return checkedEntry == 2;
 }
 
 // function to verify that not more than two checkboxes are checked.
@@ -212,7 +213,7 @@ function getCheckedCount(formName) {
   } else {
     // More than one entry exists - Check how many are checked
     for (i = 0; i < formName.entry.length; i++) {
-      if (formName.entry[i].checked == true) {
+      if (formName.entry[i].checked) {
         checkedEntriesCount++;
       }
     }
