@@ -20,7 +20,7 @@ import java.util.Set;
 
 /**
  * Sventon application configuration class holding instance configuration parameters
- * and repository connection information.
+ * and repository connection information for all configured repository instances.
  *
  * @author patrikfr@user.berlios.de
  * @author jesper@users.berlios.de

@@ -89,6 +89,9 @@ public class ApplicationConfigurator {
     initConfiguration(configurationFileStream, configuration);
   }
 
+  /**
+   * Initializes the logger and the JavaSVN library.
+   */
   private void initApplication() {
     SVNDebugLog.setLogger(new SVNLog4JAdapter("sventon.javasvn"));
     logger.info("Initializing sventon version "
@@ -107,7 +110,9 @@ public class ApplicationConfigurator {
    * @param configuration The configuration instance
    * @throws IOException if IO error occurs.
    */
-  private void initConfiguration(final InputStream input, final ApplicationConfiguration configuration) throws IOException {
+  private void initConfiguration(final InputStream input, final ApplicationConfiguration configuration)
+      throws IOException {
+
     final Set<String> instanceNameSet = new HashSet<String>();
     final Properties props = new Properties();
     props.load(input);

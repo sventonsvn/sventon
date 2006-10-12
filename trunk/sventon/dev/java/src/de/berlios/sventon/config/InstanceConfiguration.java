@@ -20,18 +20,10 @@ import java.util.Properties;
 
 /**
  * Sventon application configuration class holding configuration parameters
- * and repository connection information.
- * <p/>
- * The class also performs JavaSVN initialization, such as setting up logging
- * and repository access. It should be instanciated once (and only once), when
- * the application starts.
- * <p/>
- * This class is preferably configured using Spring.
+ * and repository connection information for a single configured repository instance.
  *
  * @author patrikfr@user.berlios.de
  * @author jesper@users.berlios.de
- * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
- * @see <a href="http://www.springframework">Spring framework</a>
  */
 public class InstanceConfiguration {
 

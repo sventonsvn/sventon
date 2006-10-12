@@ -19,6 +19,8 @@ import java.io.StringReader;
 
 /**
  * Appends line numbers to strings.
+ * The string will be read line by line and line numbers will be appended to the
+ * beginning of each row.
  *
  * @author jesper@users.berlios.de
  */
@@ -58,7 +60,7 @@ public final class LineNumberAppender {
    * Sets the line number offset.
    *
    * @param offset The offset, e.g. an offset of <tt>10</tt> will
-   * append <tt>11</tt> to the first line.
+   *               append <tt>11</tt> to the first line.
    */
   public void setLineNumberOffset(final int offset) {
     this.offset = offset;
@@ -77,6 +79,7 @@ public final class LineNumberAppender {
   /**
    * Sets the character used for line number padding.
    * Defatul character is <tt>space</tt>.
+   *
    * @param character Padding character
    */
   public void setPaddingCharacter(final char character) {
@@ -94,7 +97,7 @@ public final class LineNumberAppender {
     final BufferedReader reader = new BufferedReader(new StringReader(content));
     final StringBuilder sb = new StringBuilder();
     String tempLine;
-    int lineCount = 0 + offset;
+    int lineCount = offset;
     while ((tempLine = reader.readLine()) != null) {
       sb.append(embedStart);
       sb.append(StringUtils.leftPad(String.valueOf(++lineCount), paddingLength, paddingCharacter));
