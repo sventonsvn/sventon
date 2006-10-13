@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -111,6 +112,15 @@ public class DiffCommand {
   }
 
   /**
+   * Gets the from target.
+   *
+   * @return From target, i.e. file name without path.
+   */
+  public String getFromTarget() {
+    return PathUtil.getTarget(fromPath);
+  }
+
+  /**
    * Gets the diff <i>from</i> revision.
    *
    * @return The revision.
@@ -126,6 +136,15 @@ public class DiffCommand {
    */
   public String getToPath() {
     return toPath;
+  }
+
+  /**
+   * Gets the to target.
+   *
+   * @return To target, i.e. file name without path.
+   */
+  public String getToTarget() {
+    return PathUtil.getTarget(toPath);
   }
 
   /**

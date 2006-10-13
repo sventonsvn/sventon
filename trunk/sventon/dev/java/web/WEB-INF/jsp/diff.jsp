@@ -48,9 +48,9 @@
                   </a>
                 </th>
                 <th>&nbsp;</th>
-                <th width="50%">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
+                <th width="50%">${diffCommand.fromTarget} @ revision ${diffCommand.fromRevision}</th>
                 <th>&nbsp;</th>
-                <th width="50%">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
+                <th width="50%">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <c:set var="diffCount" value="0"/>
               <c:set var="lineCount" value="0"/>
