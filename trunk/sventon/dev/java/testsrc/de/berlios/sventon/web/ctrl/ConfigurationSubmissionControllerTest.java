@@ -38,12 +38,8 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     config.setConfigured(false);
     controller.setConfiguration(config);
 
-    try {
-      controller.handleRequestInternal(request, response);
-      fail("Should throw IllegalStateException");
-    } catch (IllegalStateException ise) {
-      // expected
-    }
+    final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("configurationError", modelAndView.getViewName());
   }
 
   public void testHandleRequestInternal() throws Exception {

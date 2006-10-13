@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.config.InstanceConfiguration;
+import static de.berlios.sventon.config.InstanceConfiguration.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -25,11 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-import static de.berlios.sventon.config.InstanceConfiguration.*;
 
 /**
  * Controller for persisting application configuration.
@@ -81,7 +81,8 @@ public class ConfigurationSubmissionController extends AbstractController {
     }
 
     if (configuration.getInstanceCount() == 0) {
-      throw new IllegalStateException("No instance has been configured!");
+      logger.warn("No instance has been configurad and added");
+      return new ModelAndView("configurationError");
     }
 
     final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());

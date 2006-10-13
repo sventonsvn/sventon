@@ -21,7 +21,7 @@
 <html>
   <head>
     <title>404 page not found</title>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
   </head>
   <body>
   <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
