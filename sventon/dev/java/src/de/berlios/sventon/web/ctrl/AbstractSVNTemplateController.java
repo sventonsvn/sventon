@@ -157,6 +157,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
+    if (!configuration.getInstanceNames().contains(svnCommand.getName())) {
+      logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
+      return new ModelAndView(new RedirectView("listinstances.svn"));
+    }
+
     if (exception.hasErrors()) {
       return prepareExceptionModelAndView(exception, svnCommand);
     }
