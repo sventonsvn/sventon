@@ -223,11 +223,11 @@ function getCheckedCount(formName) {
 
 // Toggles line wrap mode between normal and nowrap
 function toggleWrap() {
+  var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
   var tags = document.getElementById('diffTable').getElementsByTagName('td');
-  //[".src", ".srcChg", ".scrAdd", ".srcDel"]);
+
   for (var i = 0; i < tags.length; i++) {
-    var cssName = tags[i].className;
-    if (cssName == 'src' || cssName == 'srcChg' || cssName == 'srcAdd' || cssName == 'srcDel') {
+    if (classNames.contains(tags[i].className)) {
       if (tags[i].style.whiteSpace == '') {
         tags[i].style.whiteSpace = 'nowrap';
       } else {
@@ -252,7 +252,7 @@ function listFiles(rowNumber, path, name) {
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
-      {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
+    {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
     document.getElementById('dirIcon' + rowNumber).src = 'images/icon_dir_minus.gif';
   }
   return false;
@@ -262,3 +262,12 @@ function listFiles(rowNumber, path, name) {
 function reportAjaxError(request) {
   alert('An error occured during asynchronous request.');
 }
+
+Array.prototype.contains = function (element) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == element || element.constructor == String && this[i] == String(element)) {
+      return true;
+    }
+  }
+  return false
+};
