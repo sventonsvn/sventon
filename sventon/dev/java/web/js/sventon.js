@@ -10,6 +10,8 @@
  * ====================================================================
  */
 
+var isAjaxRequestSent = false;
+
 // function to toggle the entry checkboxes
 function toggleEntryFields(formName) {
   for (var i = 0; i < formName.length; i++) {
@@ -238,7 +240,12 @@ function toggleWrap() {
 }
 
 // Requests directory contents in given path
+// Uses the global variable 'isAjaxRequestSent'
 function listFiles(rowNumber, path, name) {
+  if (isAjaxRequestSent) {
+    return false;
+  }
+
   var elements = document.getElementsByClassName('expandedDir' + rowNumber);
   if (elements.length > 0) {
     // Files are already listed - hide them instead
@@ -252,14 +259,24 @@ function listFiles(rowNumber, path, name) {
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
-    {method: 'get', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After});
+    {method: 'get', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
     document.getElementById('dirIcon' + rowNumber).src = 'images/icon_dir_minus.gif';
+    Element.show(document.getElementById('spinner'));
+    isAjaxRequestSent = true;
   }
   return false;
 }
 
 // General ajax error alert method
+function ajaxSuccess(request) {
+  isAjaxRequestSent = false;
+  Element.hide(document.getElementById('spinner'));
+}
+
+// General ajax error alert method
 function reportAjaxError(request) {
+  isAjaxRequestSent = false;
+  Element.hide(document.getElementById('spinner'));
   alert('An error occured during asynchronous request.');
 }
 
