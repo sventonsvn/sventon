@@ -2,10 +2,10 @@
   $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml'); 
 	echo "<ul>\r";
 	foreach ($rss->items as $item) {
-    $created = parse_w3cdtf($item['created']);
+    $published = parse_w3cdtf($item['published']);
 		$title = $item['title'];
 		echo "<li><b>";
-    echo date("Y-m-d", $created);
+    echo date("Y-m-d", $published);
     echo " - $title</b></li>\r";
     $content = $item['atom_content'];
     echo "$content\r<br/>\r";

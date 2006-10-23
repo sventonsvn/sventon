@@ -33,10 +33,10 @@ sventon is really easy to install and you don't have to know anything about Java
 <?php
   $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml'); 
   $item = $rss->items[0];
-  $created = parse_w3cdtf($item['created']);
+  $published = parse_w3cdtf($item['published']);
   $title = $item['title'];
   $content = $item['atom_content'];
-  echo date("Y-m-d", $created);
+  echo date("Y-m-d", $published);
   echo " - $title</b><br/>\r";
   echo "$content\r";
 ?>
