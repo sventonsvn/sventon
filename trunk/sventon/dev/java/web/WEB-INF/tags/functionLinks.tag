@@ -91,6 +91,9 @@
           <c:when test="${!isHead}">
             <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" disabled title="<spring:message code="flatten.button.disabled.tooltip"/>" />
           </c:when>
+          <c:when test="${isFlatten}">
+            <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" title="<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>" />
+          </c:when>
           <c:otherwise>
             <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" title="<spring:message code="flatten.button.tooltip"/>" />
           </c:otherwise>
