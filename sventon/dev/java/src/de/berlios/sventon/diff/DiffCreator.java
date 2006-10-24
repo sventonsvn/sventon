@@ -17,6 +17,7 @@ import static de.berlios.sventon.diff.DiffAction.*;
 import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.berlios.sventon.web.model.RawTextFile;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -66,8 +67,8 @@ public class DiffCreator {
         throw new DiffException("Files are identical.");
       }
 
-      final String leftString = appendKeywords(leftKeywordHandler, leftFile.getContent(), DiffCreator.ENCODING);
-      final String rightString = appendKeywords(rightKeywordHandler, rightFile.getContent(), DiffCreator.ENCODING);
+      final String leftString = replaceLeadingSpaces(appendKeywords(leftKeywordHandler, leftFile.getContent(), DiffCreator.ENCODING));
+      final String rightString = replaceLeadingSpaces(appendKeywords(rightKeywordHandler, rightFile.getContent(), DiffCreator.ENCODING));
       final List<String> leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
       final List<String> rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
       final List<DiffSegment> diffSegments = DiffResultParser.parseNormalDiffResult(diffResultString);
@@ -81,6 +82,36 @@ public class DiffCreator {
     }
 
   }
+
+  /**
+   * Replaces leading spaces with the web safe entity <code>&nbsp;</code>.
+   * TODO: Replace this hack!
+   *
+   * @param content The source input lines
+   * @return Lines with web safe indentation
+   */
+  protected static String replaceLeadingSpaces(final String content) throws IOException {
+    final String br = System.getProperty("line.separator");
+    final BufferedReader reader = new BufferedReader(new StringReader(content));
+    final StringBuilder sb = new StringBuilder();
+    String tempLine;
+    while ((tempLine = reader.readLine()) != null) {
+      if (StringUtils.isEmpty(tempLine.trim())) {
+        sb.append(tempLine);
+      } else {
+        final StringBuffer line = new StringBuffer(tempLine);
+        int index = 0;
+        while (line.charAt(index) == ' ') {
+          line.replace(index, index + 1, "&nbsp;");
+          index += 6;
+        }
+        sb.append(line);
+      }
+      sb.append(br);
+    }
+    return sb.toString();
+  }
+
 
   /**
    * Appends keywords if KeywordHandler is not null.
