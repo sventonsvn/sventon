@@ -1,7 +1,7 @@
 package de.berlios.sventon.diff;
 
-import junit.framework.TestCase;
 import de.berlios.sventon.web.model.RawTextFile;
+import junit.framework.TestCase;
 
 public class DiffCreatorTest extends TestCase {
 
@@ -79,11 +79,11 @@ public class DiffCreatorTest extends TestCase {
             "a\n" +
             "a\n" +
             "a\n" +
-            "u<span class=\"sventonLineNo\">    2:&nbsp;</span> * $Author$\n" +
-            "c<span class=\"sventonLineNo\">    3:&nbsp;</span> * $Revision$\n" +
-            "c<span class=\"sventonLineNo\">    4:&nbsp;</span> * $Date:$\n" +
+            "u<span class=\"sventonLineNo\">    2:&nbsp;</span>&nbsp;* $Author$\n" +
+            "c<span class=\"sventonLineNo\">    3:&nbsp;</span>&nbsp;* $Revision$\n" +
+            "c<span class=\"sventonLineNo\">    4:&nbsp;</span>&nbsp;* $Date:$\n" +
             "c\n" +
-            "u<span class=\"sventonLineNo\">    5:&nbsp;</span> */\n" +
+            "u<span class=\"sventonLineNo\">    5:&nbsp;</span>&nbsp;*/\n" +
             "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Test1\n" +
             "u<span class=\"sventonLineNo\">    7:&nbsp;</span>Another test!\n" +
             "u<span class=\"sventonLineNo\">    8:&nbsp;</span>More!\n" +
@@ -96,25 +96,25 @@ public class DiffCreatorTest extends TestCase {
 
     final String rightResult =
         "u<span class=\"sventonLineNo\">    1:&nbsp;</span>/**\n" +
-            "a<span class=\"sventonLineNo\">    2:&nbsp;</span> * $Id$\n" +
-            "a<span class=\"sventonLineNo\">    3:&nbsp;</span> * $LastChangedDate$\n" +
-            "a<span class=\"sventonLineNo\">    4:&nbsp;</span> * $Date$\n" +
-            "a<span class=\"sventonLineNo\">    5:&nbsp;</span> * $LastChangedRevision$\n" +
-            "a<span class=\"sventonLineNo\">    6:&nbsp;</span> * $Revision$\n" +
-            "a<span class=\"sventonLineNo\">    7:&nbsp;</span> * $Rev$\n" +
-            "a<span class=\"sventonLineNo\">    8:&nbsp;</span> * $LastChangedBy$\n" +
-            "u<span class=\"sventonLineNo\">    9:&nbsp;</span> * $Author$\n" +
-            "c<span class=\"sventonLineNo\">   10:&nbsp;</span> * $HeadURL$\n" +
-            "c<span class=\"sventonLineNo\">   11:&nbsp;</span> * $URL$\n" +
-            "c<span class=\"sventonLineNo\">   12:&nbsp;</span> * $Id$\n" +
-            "u<span class=\"sventonLineNo\">   13:&nbsp;</span> */\n" +
+            "a<span class=\"sventonLineNo\">    2:&nbsp;</span>&nbsp;* $Id$\n" +
+            "a<span class=\"sventonLineNo\">    3:&nbsp;</span>&nbsp;* $LastChangedDate$\n" +
+            "a<span class=\"sventonLineNo\">    4:&nbsp;</span>&nbsp;* $Date$\n" +
+            "a<span class=\"sventonLineNo\">    5:&nbsp;</span>&nbsp;* $LastChangedRevision$\n" +
+            "a<span class=\"sventonLineNo\">    6:&nbsp;</span>&nbsp;* $Revision$\n" +
+            "a<span class=\"sventonLineNo\">    7:&nbsp;</span>&nbsp;* $Rev$\n" +
+            "a<span class=\"sventonLineNo\">    8:&nbsp;</span>&nbsp;* $LastChangedBy$\n" +
+            "u<span class=\"sventonLineNo\">    9:&nbsp;</span>&nbsp;* $Author$\n" +
+            "c<span class=\"sventonLineNo\">   10:&nbsp;</span>&nbsp;* $HeadURL$\n" +
+            "c<span class=\"sventonLineNo\">   11:&nbsp;</span>&nbsp;* $URL$\n" +
+            "c<span class=\"sventonLineNo\">   12:&nbsp;</span>&nbsp;* $Id$\n" +
+            "u<span class=\"sventonLineNo\">   13:&nbsp;</span>&nbsp;*/\n" +
             "u<span class=\"sventonLineNo\">   14:&nbsp;</span>Test1\n" +
             "u<span class=\"sventonLineNo\">   15:&nbsp;</span>Another test!\n" +
             "u<span class=\"sventonLineNo\">   16:&nbsp;</span>More!\n" +
             "u<span class=\"sventonLineNo\">   17:&nbsp;</span>Even more!\n" +
             "a<span class=\"sventonLineNo\">   18:&nbsp;</span>\n" +
             "a<span class=\"sventonLineNo\">   19:&nbsp;</span>public String getRev {\n" +
-            "a<span class=\"sventonLineNo\">   20:&nbsp;</span> return \"$Rev$\";\n" +
+            "a<span class=\"sventonLineNo\">   20:&nbsp;</span>&nbsp;return \"$Rev$\";\n" +
             "a<span class=\"sventonLineNo\">   21:&nbsp;</span>\n" +
             "a<span class=\"sventonLineNo\">   22:&nbsp;</span>}\n";
 
@@ -325,4 +325,21 @@ public class DiffCreatorTest extends TestCase {
     }
 
   }
+
+  public void testReplaceLeadingSpaces() throws Exception {
+    final String br = System.getProperty("line.separator");
+
+    final String line = " one " +
+        br + "  two  " +
+        br + "          " +
+        br + " three  four";
+    final String result = DiffCreator.replaceLeadingSpaces(line);
+
+    final String expected = "&nbsp;one " +
+        br + "&nbsp;&nbsp;two  " +
+        br + "          " +
+        br + "&nbsp;three  four";
+    assertEquals(expected, result.trim());
+  }
+
 }
