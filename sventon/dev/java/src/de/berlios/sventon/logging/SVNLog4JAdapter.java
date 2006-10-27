@@ -13,14 +13,14 @@ package de.berlios.sventon.logging;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.util.SVNDebugLoggerAdapter;
+import org.tmatesoft.svn.util.SVNDebugLogAdapter;
 
 /**
  * Log4J sventon adapter for JavaSVN logging.
  *
  * @author patrikfr@users.berlios.de
  */
-public class SVNLog4JAdapter extends SVNDebugLoggerAdapter {
+public class SVNLog4JAdapter extends SVNDebugLogAdapter {
 
   /**
    * The <tt>Log</tt> instance.

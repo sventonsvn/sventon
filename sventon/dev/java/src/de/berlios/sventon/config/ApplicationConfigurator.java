@@ -93,7 +93,7 @@ public class ApplicationConfigurator {
    * Initializes the logger and the JavaSVN library.
    */
   private void initApplication() {
-    SVNDebugLog.setLogger(new SVNLog4JAdapter("sventon.javasvn"));
+    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.javasvn"));
     logger.info("Initializing sventon version "
         + Version.getVersion() + " (revision " + Version.getRevision() + ")");
     SVNRepositoryFactoryImpl.setup();

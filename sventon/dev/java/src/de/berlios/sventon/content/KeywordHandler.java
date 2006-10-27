@@ -14,7 +14,7 @@ package de.berlios.sventon.content;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNProperty;
-import org.tmatesoft.svn.core.internal.wc.SVNTranslator;
+import org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -38,7 +38,7 @@ import java.io.UnsupportedEncodingException;
  * </table>
  *
  * @author jesper@users.berlios.de
- * @see org.tmatesoft.svn.core.internal.wc.SVNTranslator
+ * @see org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator
  */
 public final class KeywordHandler {
 
