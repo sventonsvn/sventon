@@ -193,6 +193,10 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
+  public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry, boolean recursive, boolean getContents, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
+    throw new UnsupportedOperationException("Not implemented!");
+  }
+
   public void checkout(long revision, String target, boolean recursive, ISVNEditor editor) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }
