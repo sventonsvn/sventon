@@ -1,0 +1,94 @@
+sventon change history
+-----------------------------------------------------------------------------------------
+
+[699] Added: Upgraded to JavaSVN 1.1.0beta5.
+[677] Added: Feature #2751 - Update the caches one by one.
+[651] Added: Feature #2670 - Possibility to expand flattened dirs.
+[611] Added: Feature #1570 - Support for multiple repositories.
+[600] Fixed: Bug #8371 - Misspelled revision parameter in logs view.
+      Fixed: Bug #8370 - Revision parameter forgotten in back-link.
+[594] Added: Feature #2417 - Search result order by.
+[591] Added: Feature #2420 - File extension filtering in repobrowser.
+[590] Added: Feature #1868 - Unified diff view.
+[563] Added: Feature #2259 - Revision info cache.
+[552] Added: Upgraded to JavaSVN 1.1.0beta2.
+[546] Fixed: Redesign of entry cache.
+      Added: Feature #2175 - Commit message cache using Lucene.
+      Added: Upgraded to ehcache 1.2.
+      Added: Upgraded to JavaSVN 1.1.0b.
+
+[582] Release 1.0.0 (2006-07-03)
+[575] Fixed: Bug #7985 - Tooltip text wrap in browser view.
+[573] Fixed: Bug #7983 - View log for a file renders incorrect navigation.
+
+[544] Release 1.0 RC4 (2006-05-28)
+[520] Fixed: Bug #7229 - Latest commit info not shown.
+[519] Fixed: Bug #7230 - Wrong revision in links from 'latest commit info' box.
+
+[513] Release 1.0 RC3 (2006-04-16)
+[509] Fixed: Bug #7136 - The path link contains Chinese still doesn't work.
+[501] Added: Upgraded to JavaSVN 1.0.4.
+[499] Fixed: Bug #7000 - Chinese characters in file name doesn't work.
+
+[496] Release 1.0 RC2 (2006-04-02)
+[477] Added: Possibility to diff entries in browser and search result view.
+[468] Added: Feature #1871 - Possibility to disable index.
+[465] Added: Upgraded to JHighlight 1.0.
+[450] Fixed: Flatten and search buttons are now disabled if not browsing HEAD.
+[449] Fixed: Bug #6705 and #6374.
+[444] Added: Feature #1867 - Raw file view.
+
+[433] Release 1.0 RC1 (2006-02-14)
+[423] Added: Upgraded to JavaSVN 1.0.3.
+[408] Fixed: Renamed 'default-sventon.properties' to 'sventon.properties.
+[398] Fixed: Bug #5662 - Uncaught exceptions causes stack trace on screen
+[397] Added: Feature #1685 - Background index population.
+[394] Added: Upgraded to Spring 1.2.6
+[373] Added: Display of all current locks, recursively.
+[365] Added: Upgraded to JavaSVN 1.0.2.
+[356] Added: File lock display in browser view.
+[350] Fixed: Removed mount point feature (too much pain, not enough gain).
+[348] Added: Latest commit info stays visible when following a link from it.
+[346] Fixed: RSS item layout.
+[344] Added: Repository changes now published as an RSS feed.
+[341] Added: Upgraded to JavaSVN 1.0.1.
+[338] Added: More validation during configuration.
+[336] Fixed: Revision changes are now sorted before applied to index.
+[336] Fixed: Index is not stored to disk if empty.
+
+[334] Release 0.9.2 (2005-12-18)
+[328] Fixed: Bug #5884 - Index update fails when adding or removing directories.
+[328] Added: Index is now written to disk directly after update.
+
+[324] Release 0.9.1 (2005-12-11)
+[318] Added: Default property values to get rid of empty default-sventon.properties.
+[313] Fixed: Bug #5847 - Index update fails when files are removed.
+[311] Fixed: User ended up in the wrong revision if following a link from the log details view.
+
+[309] Release 0.9.0 (2005-12-05)
+[276] Added: Possibility to do CamelCase searches.
+[212] Added: View contents of zip archives (including jar).
+[206] Added: Improve index update strategy.
+[198] Added: Show selected (image) files as thumbnails.
+[174] Added: Diff revisions of same file.
+[171] Added: View all changes in one revision (log entry).
+[157] Added: Serialize index to disk.
+[145] Added: View metadata (e.g. mime types).
+[142] Added: Thumbnail caching using ehcache.
+[141] Added: Keyword expansion when viewing files.
+[132] Added: Simple installation wizard.
+[130] Added: "Show file" should display thumbnail preview of image files.
+[130] Added: Style sheet usage to enable easy customization.
+[113] Added: Possibility to flatten directory structure view.
+[113] Added: Possibility to search for files and directories.
+ [97] Added: Possibility to configure a view only user + pwd to avoid end user authentication.
+ [97] Added: Support for language specific characters and white space in paths (WebDAV).
+ [79] Added: Download file at any given revision.
+ [76] Added: Clickable revision path info for quick navigation in browser.
+ [76] Added: Possibility to navigate in repository by typing path.
+ [76] Added: Browse repository for any given revision.
+ [76] Added: View logs for a file/directory.
+ [76] Added: Basic source code syntax highlighting.
+ [76] Added: View file for any given revision.
+ [76] Added: Browse WebDAV and svnserve repositories (anonymous and authorized login).
+
