@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[705] Release 1.1 RC1 (2006-10-30)
 [699] Added: Upgraded to JavaSVN 1.1.0beta5.
 [677] Added: Feature #2751 - Update the caches one by one.
 [651] Added: Feature #2670 - Possibility to expand flattened dirs.
