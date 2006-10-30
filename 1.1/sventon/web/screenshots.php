@@ -41,7 +41,7 @@
   <tr>
     <th>File view</th>
     <th>File diff</th>
-    <th>&nbsp;</th>
+    <th>Search logs</th>
   </tr>
   <tr>
     <td><a href="http://developer.berlios.de/dbimage.php?id=3249"><img width="150" height="100" alt="File view" src="http://developer.berlios.de/dbimage.php?id=3249"/></a></td>
