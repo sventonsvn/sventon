@@ -2,6 +2,7 @@ sventon change history
 -----------------------------------------------------------------------------------------
 
 [713] Fixed: Bug #9323 - Parse error in oc4j
+[712] Fixed: Bug #9315 - RSS feed.
 
 [705] Release 1.1 RC1 (2006-10-30)
 [699] Added: Upgraded to JavaSVN 1.1.0beta5.
