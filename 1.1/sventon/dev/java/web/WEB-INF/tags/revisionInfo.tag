@@ -35,7 +35,7 @@
   <jsp:useBean id="latestChangedPaths" type="java.util.Map" />
   <c:set var="details" value="${details}" />
   <c:set var="keepVisible" value="${keepVisible}" />
-  <jsp:useBean id="details" type="SVNLogEntry" />
+  <jsp:useBean id="details" type="org.tmatesoft.svn.core.SVNLogEntry" />
 
   <tr><td colspan="2">
       <table border="0">
