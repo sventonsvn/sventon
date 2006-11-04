@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[715] Fixed: Bug #9356 - More than one entry must be selected for zip download
+      Fixed: Bug #9367 - More than one entry must be selected for view thumbnails
 [713] Fixed: Bug #9323 - Parse error in oc4j
 [712] Fixed: Bug #9315 - RSS feed.
 
