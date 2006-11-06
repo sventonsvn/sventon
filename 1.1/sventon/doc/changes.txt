@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[717] Release 1.1 RC2 (2006-11-06)
 [715] Fixed: Bug #9356 - More than one entry must be selected for zip download
       Fixed: Bug #9367 - More than one entry must be selected for view thumbnails
 [713] Fixed: Bug #9323 - Parse error in oc4j
