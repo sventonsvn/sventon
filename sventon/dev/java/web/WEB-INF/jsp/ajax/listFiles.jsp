@@ -19,7 +19,7 @@
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <c:forEach items="${svndir}" var="entry">
-  <jsp:useBean id="entry" type="RepositoryEntry" />
+  <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
 
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${entry.fullEntryName}" />

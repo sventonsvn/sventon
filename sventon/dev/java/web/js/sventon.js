@@ -33,14 +33,13 @@ function doAction(formName) {
   // Check which action to execute
   if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 1) {
+    if (getCheckedCount(formName) > 0) {
       formName.action = 'showthumbs.svn'
       return true;
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff') {
     // Exactly two entries must be checked
-    if (getCheckedCount(formName) == 2)
-    {
+    if (getCheckedCount(formName) == 2) {
       formName.action = 'diff.svn'
       return true;
     } else {
@@ -48,7 +47,7 @@ function doAction(formName) {
     }
   } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'export') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 1) {
+    if (getCheckedCount(formName) > 0) {
       formName.action = 'export.svn'
       return true;
     }

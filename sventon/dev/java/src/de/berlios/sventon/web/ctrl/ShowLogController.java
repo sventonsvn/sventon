@@ -99,7 +99,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
     final List<SVNLogEntry> logEntries =
-        getRepositoryService().getRevisions(repository, revNumber, 0, targetPath, pageSize);
+        getRepositoryService().getRevisions(repository, revNumber, 1, targetPath, pageSize);
 
     String pathAtRevision = targetPath;
 

@@ -22,9 +22,9 @@ Installation:
    on a standard Tomcat 5.5 installation this is in 'webapps'.
 3. Point your browser to http://<host:port>/svn
 4. Enter and submit basic configuration data.
-If the indexing feature has been configured to be active, the background
-indexing process of the file names in the repository HEAD will start at
-this point. If you have a repository with many files (and/or tags or branches),
+If the repository cache has been enabled during setup, the background
+cache/indexing process of the revisions and the files in HEAD will start.
+If you have a repository with many files (and/or tags or branches),
 this can take quite some time. You will be able to use sventon during the
 indexing process, but the search and flatten buttons will be disabled until
 it's done.

@@ -1,6 +1,13 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[717] Release 1.1 RC2 (2006-11-06)
+[715] Fixed: Bug #9356 - More than one entry must be selected for zip download
+      Fixed: Bug #9367 - More than one entry must be selected for view thumbnails
+[713] Fixed: Bug #9323 - Parse error in oc4j
+[712] Fixed: Bug #9315 - RSS feed.
+
+[705] Release 1.1 RC1 (2006-10-30)
 [699] Added: Upgraded to JavaSVN 1.1.0beta5.
 [677] Added: Feature #2751 - Update the caches one by one.
 [651] Added: Feature #2670 - Possibility to expand flattened dirs.
