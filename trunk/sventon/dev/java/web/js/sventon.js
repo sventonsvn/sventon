@@ -135,6 +135,18 @@ function changeHideShowDisplay(theId) {
   }
 }
 
+// function to validate url during instance configuration submisson
+function validateUrl(formName) {
+  var url = formName.repositoryURL.value.toLowerCase();
+  if (url.indexOf('trunk') > -1
+      || url.indexOf('tags') > -1
+      || url.indexOf('branches') > -1) {
+    return confirm('The URL entered must be the root of the repository!\n' +
+                   'Is [' + formName.repositoryURL.value + '] really the subversion root?\n');
+  }
+  return true;
+}
+
 // function to handle diff submissions
 function doDiff(formName) {
 
