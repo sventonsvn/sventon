@@ -53,7 +53,7 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
       try {
         this.logMessageCacheManager.getCache(instanceName);
       } catch (CacheException ce) {
-        logger.warn("Unable to initialize instance");
+        logger.warn("Unable to initialize instance", ce);
       }
     }
   }

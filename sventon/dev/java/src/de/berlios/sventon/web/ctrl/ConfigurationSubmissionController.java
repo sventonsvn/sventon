@@ -81,12 +81,12 @@ public class ConfigurationSubmissionController extends AbstractController {
     }
 
     if (configuration.getInstanceCount() == 0) {
-      logger.warn("No instance has been configurad and added");
+      logger.warn("No instance has been configured and added");
       return new ModelAndView("configurationError");
     }
 
     final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
-    logger.debug("Storing configuration properties in: " + propertyFile.getAbsolutePath());
+    logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
     final FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
 
@@ -106,6 +106,7 @@ public class ConfigurationSubmissionController extends AbstractController {
       logger.warn(sx);
     }
 
+    logger.info("Configuration done!");
     return new ModelAndView(new RedirectView("start.svn"));
   }
 
