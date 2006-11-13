@@ -50,7 +50,7 @@
           long totalSize = 0;
     %>
         <c:forEach items="${svndir}" var="entry">
-          <jsp:useBean id="entry" type="RepositoryEntry" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
           <c:url value="repobrowser.svn" var="viewUrl">
             <c:param name="path" value="${entry.fullEntryName}" />
             <c:param name="revision" value="${command.revision}" />

@@ -1,18 +1,18 @@
-Upgrading sventon to a newer version
+Upgrading sventon from version 1.0 or earlier
 
-The sventon configuration settings are stored in the file
-svn/WEB-INF/classes/sventon.properties.
+The sventon configuration settings was stored in the file
+svn/WEB-INF/classes/sventon.properties in older versions.
 
-The easiest way to upgrade sventon is to replace the old svn.war
-file and walk through the configuration screen again.
+From version 1.1, the configuration files are stored in a 
+sub folder below the Servlet container's temporary directory.
 
-Another way is to make a backup copy of the configuration file
-svn/WEB-INF/classes/sventon.properties, replace the old
-svn.war with the new one to trigger a redeploy, and then add the
-backed up sventon.properties to the svn/WEB-INF/classes directory again.
+Upgrade sventon by replacing the old svn.war file and walk
+through the configuration screen again. The format of the
+file sventon.properties has changed and cannot be copied
+directly from an older sventon installation.
 
-The disk persistent cache file format has changed since the last version.
-A complete repository recache is necessary.
+The disk persistent cache file format has changed since the
+last version. A complete repository recache is necessary.
 
 Support
 See http://sventon.berlios.de

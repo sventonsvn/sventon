@@ -75,7 +75,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
       try {
         this.entryCacheManager.getCache(instanceName);
       } catch (CacheException ce) {
-        logger.warn("Unable to initialize instance");
+        logger.warn("Unable to initialize instance", ce);
       }
     }
   }
