@@ -6,7 +6,7 @@ import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
@@ -35,7 +35,7 @@ public abstract class AbstractDiffController extends AbstractSVNTemplateControll
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entries = RequestUtils.getStringParameters(request, "entry");
+    final String[] entries = ServletRequestUtils.getStringParameters(request, "entry");
     logger.debug("Diffing file content for: " + svnCommand);
     final Map<String, Object> model = new HashMap<String, Object>();
 
