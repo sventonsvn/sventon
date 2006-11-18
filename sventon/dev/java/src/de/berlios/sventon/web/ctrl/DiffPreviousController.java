@@ -11,13 +11,13 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.diff.DiffException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -45,7 +45,7 @@ public class DiffPreviousController extends DiffController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long commitRev = RequestUtils.getLongParameter(request, "commitrev");
+    final long commitRev = ServletRequestUtils.getLongParameter(request, "commitrev");
     logger.debug("Diffing file contents for: " + svnCommand);
     logger.debug("committed-rev: " + commitRev);
     final Map<String, Object> model = new HashMap<String, Object>();
