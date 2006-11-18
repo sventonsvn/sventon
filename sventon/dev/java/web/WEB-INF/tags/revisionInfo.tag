@@ -25,7 +25,7 @@
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
 <% application.setAttribute("br", "\n"); %>
-<table class="sventonLatestCommitInfoTable">
+<table class="sventonLatestCommitInfoTable" border="0">
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
   <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
@@ -42,8 +42,6 @@
         <tr>
           <th>Action</th>
           <th>Path</th>
-          <th>Copy From Path</th>
-          <th>Revision</th>
         </tr>
       <%
         final List latestPathsList = new ArrayList(latestChangedPaths.keySet());
@@ -74,14 +72,16 @@
 
         <td><i><%= actionType %></i></td>
         <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
-        <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
+        <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a>
         <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-        <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
-        <% } else { %>
-        <td><%= logEntryPath.getPath() %></td>
+        <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a>
+        <% } else if (LogEntryActionType.DELETED == actionType) { %>
+        <td><strike><%= logEntryPath.getPath() %></strike>
         <% } %>
-        <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
-        <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
+        <% if (logEntryPath.getCopyPath() != null) { %>
+          <br/><b>Copy from</b> <%=logEntryPath.getCopyPath()%> @ <%=Long.toString(logEntryPath.getCopyRevision())%>
+        <% } %>
+        </td>
       </tr>
       <%
         }
