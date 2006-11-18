@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[724] Added: Feature #2887 - Customizable RSS body.
 [720] Added: Feature #2853 - Warn if repository url is not root.
 
 [717] Release 1.1 RC2 (2006-11-06)

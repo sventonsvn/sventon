@@ -67,6 +67,7 @@
   <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
     <property name="feedType" value="rss_2.0"/>
     <property name="logMessageLength" value="40"/>
+    <property name="bodyTemplateFile" value="/rsstemplate.html"/>
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
