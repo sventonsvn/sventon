@@ -18,7 +18,8 @@
   <li><a href="#q17">What license do you use?</a></li>
   <li><a href="#q18">Why did you start this project?</a></li>
   <li><a href="#q19">Is there a publicly running version of Sventon that I can try?</a></li>
-  <li><a href="#q20">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q20">Can I change the layout of the RSS feed?</a></li>
+  <li><a href="#q21">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -224,6 +225,14 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q20">
+<b>Q:</b> Can I change the layout of the RSS feed?
+</a>
+<br/>
+<b>A:</b> Yes. It's template based, and the default template file is called <code>rsstemplate.html</code> and is located in <code>WEB-INF/classes</code>. Edit it the way you want it.
+</p>
+
+<p>
+<a name="q21">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
