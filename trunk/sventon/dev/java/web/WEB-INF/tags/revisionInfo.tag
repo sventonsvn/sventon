@@ -61,20 +61,30 @@
           </c:if>
         </c:url>
 
-        <c:url value="diff.svn" var="diffUrl">
-          <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-          <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
-          <c:param name="name" value="${command.name}" />
-          <c:if test="${keepVisible}">
-            <c:param name="showlatestinfo" value="true" />
-          </c:if>
-        </c:url>
-
-        <td><i><%= actionType %></i></td>
+        <td valign="top"><i><%= actionType %></i></td>
         <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
         <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a>
         <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-        <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a>
+
+        <%
+          String entry1 = logEntryPath.getPath() + ";;" + details.getRevision();
+          String entry2 = logEntryPath.getPath() + ";;" + (details.getRevision() - 1);
+        %>
+
+          <c:url value="diff.svn" var="diffUrl">
+            <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+            <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
+            <c:param name="name" value="${command.name}" />
+            <c:param name="entry" value="<%= entry1 %>"/>
+            <c:param name="entry" value="<%= entry2 %>"/>
+            <c:if test="${keepVisible}">
+              <c:param name="showlatestinfo" value="true" />
+            </c:if>
+          </c:url>
+
+
+
+        <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath() %></a>
         <% } else if (LogEntryActionType.DELETED == actionType) { %>
         <td><strike><%= logEntryPath.getPath() %></strike>
         <% } %>
