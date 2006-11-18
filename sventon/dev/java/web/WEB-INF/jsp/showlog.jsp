@@ -111,7 +111,7 @@
                     <c:param name="name" value="${command.name}" />
                   </c:url>
 
-                  <td><i><%= actionType %></i></td>
+                  <td valign="top"><i><%= actionType %></i></td>
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
@@ -130,8 +130,8 @@
                   </c:url>
 
                   <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
-                  <% } else { %>
-                  <td><%= logEntryPath.getPath() %></td>
+                  <% } else if (LogEntryActionType.DELETED == actionType) { %>
+                  <td><strike><%= logEntryPath.getPath() %></strike></td>
                   <% } %>
                   <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
                   <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
