@@ -78,8 +78,8 @@
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
-            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">[<span id="hdr${rowCount}">more</span>]</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}'); return false;">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
