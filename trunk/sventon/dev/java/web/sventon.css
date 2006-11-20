@@ -8,6 +8,8 @@ body {
   color: #14233D;
   background-color: #ffffff;
   font-weight: normal;
+  margin: 8px;
+  padding: 0px;
 }
 
 th {
@@ -23,7 +25,11 @@ td {
   font-size: 10px;
 }
 
-a:link, a:visited, a:hover, a:active {
+p {
+  margin: 10px 0px;
+}
+
+a:link, a:visited, a:active {
   font-family: verdana, sans-serif;
   font-size: 10px;
   color: #0041BA;
@@ -39,11 +45,11 @@ a:hover {
   text-decoration: underline;
 }
 
-a.exclamationText {
+exclamationText {
   color: #ff0000;  
 }
 
-a.sventonHeader {
+a.sventonHeaderLink:link, a.sventonHeaderLink:visited, a.sventonHeaderLink:active, a.sventonHeaderLink:hover {
   color: #FEAE02;
   border: none;
 }
@@ -115,7 +121,6 @@ input.btn {
   background-color: #4B6E87;
   border: 1px solid black;
   width: 100%;
-  
 }
 
 .sventonRevision {
