@@ -24,7 +24,6 @@
 
     <p><sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/></p>
 
-    <br/>
     <sventon:functionLinks pageName="showBinaryFile"/>
 
     <p>File is in binary format.</p>

@@ -24,7 +24,6 @@
 
   <p><sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/></p>
 
-  <br/>
   <sventon:functionLinks pageName="showUnifiedDiff"/>
 
   <c:choose>

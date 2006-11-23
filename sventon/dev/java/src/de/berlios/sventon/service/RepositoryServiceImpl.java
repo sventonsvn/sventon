@@ -216,6 +216,18 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
+  public List<SVNLogEntry> getLatestRevisions(final SVNRepository repository, long revisionCount) throws SVNException {
+    final long headRevision = repository.getLatestRevision();
+    long toRevision = headRevision - revisionCount;
+    if (toRevision < 1) {
+      toRevision = 1;
+    }
+    return getRevisions(repository, headRevision, toRevision, "/", revisionCount);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision) throws SVNException {
     final long start = System.currentTimeMillis();
     final SVNNodeKind svnNodeKind = repository.checkPath(path, revision);

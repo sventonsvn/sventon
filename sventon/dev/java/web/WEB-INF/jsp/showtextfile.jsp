@@ -25,7 +25,6 @@
 
     <p><sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/></p>
 
-    <br/>
     <sventon:functionLinks pageName="showTextFile"/>
 
 <pre class="codeBlock"><c:out value="${fileContent}" escapeXml="false"/></pre>

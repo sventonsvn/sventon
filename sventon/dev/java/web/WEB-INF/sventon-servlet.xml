@@ -54,6 +54,7 @@
     <property name="revisionObservable" ref="revisionObservable"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
+    <property name="maxRevisionsCount" value="10"/>
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
@@ -102,6 +103,8 @@
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
   </bean>
+
+  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
 
   <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController"
         parent="abstractController">
@@ -186,6 +189,7 @@
         <prop key="/latest.xml">latestInfoController</prop>
         <!-- url mappings for ajax controllers -->
         <prop key="/listfiles.ajax">listFilesController</prop>
+        <prop key="/latestrevisions.ajax">latestRevisionsController</prop>
       </props>
     </property>
   </bean>

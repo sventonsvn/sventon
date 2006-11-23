@@ -16,8 +16,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
-<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
-
 <c:forEach items="${svndir}" var="entry">
   <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
 

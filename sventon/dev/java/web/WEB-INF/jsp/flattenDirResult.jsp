@@ -24,7 +24,6 @@
 
   <p><sventon:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/></p>
 
-  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">
