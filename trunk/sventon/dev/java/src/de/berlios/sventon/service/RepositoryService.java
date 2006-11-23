@@ -188,6 +188,16 @@ public interface RepositoryService {
   long getLatestRevision(final SVNRepository repository) throws SVNException;
 
   /**
+   * Gets the latest repository revisions.
+   *
+   * @param repository    The repository
+   * @param revisionCount Number of revisions to fetch
+   * @return The revisions.
+   * @throws SVNException if a subversion error occur
+   */
+  List<SVNLogEntry> getLatestRevisions(SVNRepository repository, final long revisionCount) throws SVNException;
+
+  /**
    * Gets the node type for given path (with or without leaf).
    *
    * @param repository The repository

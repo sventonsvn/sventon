@@ -25,7 +25,6 @@
 
   <p><sventon:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/></p>
 
-  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">

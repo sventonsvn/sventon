@@ -33,6 +33,11 @@ public class UserContext {
   private RepositoryEntrySorter.SortMode sortMode;
 
   /**
+   * Revisions display count. Default set to 1.
+   */
+  private int latestRevisionsDisplayCount = 1;
+
+  /**
    * Gets the sort type, i.e. the field to sort on.
    *
    * @return Sort type
@@ -70,6 +75,24 @@ public class UserContext {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
+  }
+
+  /**
+   * Sets how many revisions that should be displayed in the <i>latest commit info</i> DIV.
+   *
+   * @param latestRevisionsDisplayCount Count
+   */
+  public void setLatestRevisionsDisplayCount(final int latestRevisionsDisplayCount) {
+    this.latestRevisionsDisplayCount = latestRevisionsDisplayCount;
+  }
+
+  /**
+   * Gets number of revisions that should be displayed in the <i>latest commit info</i> DIV.
+   *
+   * @return Count
+   */
+  public int getLatestRevisionsDisplayCount() {
+    return latestRevisionsDisplayCount;
   }
 
 }

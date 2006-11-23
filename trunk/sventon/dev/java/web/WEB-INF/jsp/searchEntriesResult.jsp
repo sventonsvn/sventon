@@ -25,7 +25,6 @@
 
   <p><sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/></p>
 
-  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">

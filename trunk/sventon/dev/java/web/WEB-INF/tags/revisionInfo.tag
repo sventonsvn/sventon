@@ -25,7 +25,7 @@
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
 <% application.setAttribute("br", "\n"); %>
-<table class="sventonLatestCommitInfoTable" border="0">
+<table border="0">
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
   <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
@@ -57,7 +57,7 @@
           <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
           <c:param name="name" value="${command.name}" />
           <c:if test="${keepVisible}">
-            <c:param name="showlatestinfo" value="true" />
+            <c:param name="showlatestrevinfo" value="true" />
           </c:if>
         </c:url>
 
@@ -78,7 +78,7 @@
             <c:param name="entry" value="<%= entry1 %>"/>
             <c:param name="entry" value="<%= entry2 %>"/>
             <c:if test="${keepVisible}">
-              <c:param name="showlatestinfo" value="true" />
+              <c:param name="showlatestrevinfo" value="true" />
             </c:if>
           </c:url>
 

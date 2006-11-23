@@ -24,7 +24,6 @@
 
     <p><sventon:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/></p>
 
-    <br/>
     <sventon:functionLinks pageName="showLock"/>
 
     <table class="sventonEntriesTable" border="0">

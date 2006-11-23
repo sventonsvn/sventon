@@ -25,7 +25,6 @@
 
     <p><sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/></p>
 
-    <br/>
     <sventon:functionLinks pageName="showThumbs"/>
 
     <br/>

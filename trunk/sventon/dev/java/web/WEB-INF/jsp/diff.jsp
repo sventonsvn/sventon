@@ -25,7 +25,6 @@
 
     <p><sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
     
-    <br/>
     <sventon:functionLinks pageName="showDiff"/>
 
     <c:choose>

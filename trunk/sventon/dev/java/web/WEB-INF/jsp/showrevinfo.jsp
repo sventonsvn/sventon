@@ -24,7 +24,6 @@
 
     <p><sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
 
-    <br/>
     <sventon:functionLinks pageName="showRevInfo"/>
 
     <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
