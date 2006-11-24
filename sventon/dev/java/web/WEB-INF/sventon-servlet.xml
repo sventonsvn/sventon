@@ -87,6 +87,7 @@
   <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
+  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
 
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController">
     <property name="viewName" value="diff"/>
@@ -103,8 +104,6 @@
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
   </bean>
-
-  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
 
   <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController"
         parent="abstractController">
@@ -158,6 +157,10 @@
     <property name="scheduler" ref="scheduler"/>
   </bean>
 
+  <bean id="getStaticContentController" class="de.berlios.sventon.web.ctrl.GetStaticContentController">
+    <property name="path" value="WEB-INF/static"/>
+  </bean>
+
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
@@ -190,6 +193,7 @@
         <!-- url mappings for ajax controllers -->
         <prop key="/listfiles.ajax">listFilesController</prop>
         <prop key="/latestrevisions.ajax">latestRevisionsController</prop>
+        <prop key="/static.ajax">getStaticContentController</prop>
       </props>
     </property>
   </bean>
