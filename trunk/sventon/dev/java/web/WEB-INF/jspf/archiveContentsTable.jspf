@@ -11,7 +11,6 @@
  * ====================================================================
  */
 %>
-<%@ page import="java.util.Date"%>
 <%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 
 <table class="sventonEntriesTable">
@@ -34,7 +33,7 @@
 
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <%
-        entryDate = new Date(zipEntry.getTime());
+        entryDate = new java.util.Date(zipEntry.getTime());
         totalOrigSize += zipEntry.getSize();
         totalCompSize += zipEntry.getCompressedSize();
       %>

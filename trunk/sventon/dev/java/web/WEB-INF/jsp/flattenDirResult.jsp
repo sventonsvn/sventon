@@ -12,7 +12,6 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
   <head>

@@ -16,7 +16,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="java.util.*" %>
-<%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntryPath" %>
 <%@ tag import="de.berlios.sventon.web.model.LogEntryActionType"%>
 
