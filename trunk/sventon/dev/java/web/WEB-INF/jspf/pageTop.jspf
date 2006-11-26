@@ -19,7 +19,7 @@
     <td valign="bottom" colspan="1"><a href="#" onclick="javascript:isLatestRevisionsVisible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', '${userContext.latestRevisionsDisplayCount}');">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     <td align="right">
     <form name="gotoForm" method="post" action="goto.svn">
-        <table class="sventonRepositoryFunctionsTable" border="0">
+        <table class="sventonRepositoryFunctionsTable">
           <tr>
             <td>&nbsp;</td>
             <td><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
@@ -44,7 +44,7 @@
     </td>
   </tr>
   <tr>
-    <td style="white-space: nowrap;" colspan="2">
+    <td colspan="2">
       <div id="latestCommitInfoDiv" ${param.showlatestrevinfo == null || param.showlatestrevinfo == 'false' ? 'style="display:none"' : ''} >
         <%@ include file="/WEB-INF/jsp/ajax/latestRevisions.jsp"%>
       </div>
