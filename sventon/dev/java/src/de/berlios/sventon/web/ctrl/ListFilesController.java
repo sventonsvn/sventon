@@ -46,15 +46,11 @@ public class ListFilesController extends ListDirectoryContentsController impleme
 
     final Map<String, Object> model = modelAndView.getModel();
     final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
-
     final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
-    final List<RepositoryEntry> directoryListing = entryFilter.filter(entries);
-
-    final int rowNumber = ServletRequestUtils.getIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
-    model.put("svndir", directoryListing);
-    model.put("rowNumber", rowNumber);
+    model.put("svndir", entryFilter.filter(entries));
+    model.put("rowNumber", ServletRequestUtils.getIntParameter(request, "rowNumber"));
     modelAndView.setViewName("ajax/listFiles");
     return modelAndView;
   }

@@ -26,7 +26,13 @@
 
     <sventon:functionLinks pageName="showRevInfo"/>
 
-    <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+    <table class="sventonLatestCommitInfoTable">
+      <tr>
+        <td>
+          <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+        </td>
+      </tr>
+    </table>
     <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
