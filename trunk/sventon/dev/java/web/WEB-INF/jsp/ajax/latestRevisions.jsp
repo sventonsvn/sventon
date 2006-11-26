@@ -24,9 +24,9 @@
 <table class="sventonLatestCommitInfoTable" border="0">
   <tr>
     <td>
-<c:forEach var="revision" items="${revisions}">
-  <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="true" />
-</c:forEach>
+      <c:forEach var="revision" items="${revisions}">
+        <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="${revision.revision == headRevision ? 'true' : 'false'}" />
+      </c:forEach>
     </td>
   </tr>
 </table>
