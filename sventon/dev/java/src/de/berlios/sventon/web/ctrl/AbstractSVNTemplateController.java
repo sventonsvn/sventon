@@ -198,6 +198,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", configuration.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
+        model.put("headRevision", headRevision);
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
