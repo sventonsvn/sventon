@@ -16,3 +16,6 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml?name=${command.name}">
 <script language="javascript" src="<%= request.getContextPath() %>/js/sventon.js" type="text/javascript" ></script>
 <script language="javascript" src="<%= request.getContextPath() %>/js/prototype.js" type="text/javascript" ></script>
+<!--[if lt IE 7.]>
+<script defer type="text/javascript" src="<%= request.getContextPath() %>/js/pngfix.js"></script>
+<![endif]-->
