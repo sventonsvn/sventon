@@ -246,6 +246,26 @@ function reportAjaxError(request) {
   alert('An error occured during asynchronous request.');
 }
 
+function showHideHelp(helpDiv, id) {
+  if (isAjaxRequestSent) {
+    return false;
+  }
+
+  if (helpDiv.style.display == '') {
+    Element.hide(helpDiv);
+  } else {
+    // Do the ajax call
+    var url = 'static.ajax';
+    var urlParams = 'id=' + id;
+
+    var ajax = new Ajax.Updater({success: $(helpDiv)}, url,
+    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+    Element.show('spinner');
+    Element.show(helpDiv);
+    isAjaxRequestSent = true;
+  }
+}
+
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================

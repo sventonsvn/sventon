@@ -275,13 +275,13 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RepositoryEntry getEntry(final SVNRepository repository, final String path, final long revision)
+  public RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
     final long start = System.currentTimeMillis();
     final RepositoryEntry repositoryEntry =
         new RepositoryEntry(repository.info(path, revision), PathUtil.getPathPart(path));
-    logger.debug("PERF: getEntry(): " + (System.currentTimeMillis() - start));
+    logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
     return repositoryEntry;
   }
 

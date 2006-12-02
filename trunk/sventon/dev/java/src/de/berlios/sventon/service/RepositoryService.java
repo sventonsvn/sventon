@@ -229,7 +229,7 @@ public interface RepositoryService {
                              final Map properties) throws SVNException;
 
   /**
-   * Gets an entry from the subversion repository.
+   * Gets entry info from the subversion repository.
    *
    * @param repository The repository
    * @param path       The entry path
@@ -237,7 +237,7 @@ public interface RepositoryService {
    * @return Entry
    * @throws SVNException if a subversion error occur
    */
-  RepositoryEntry getEntry(final SVNRepository repository, final String path, final long revision) throws SVNException;
+  RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
    * Gets the revisions for a specific entry.
