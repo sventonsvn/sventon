@@ -38,7 +38,9 @@ public class GetStaticContentController extends AbstractController {
 
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final String filename = ServletRequestUtils.getRequiredStringParameter(request, "id");
-    final InputStream is = getServletContext().getResourceAsStream(new File(path, filename + ".html").getPath());
+    final File file = new File(path, filename + ".html");
+    logger.debug("Getting static content from: " + file.getAbsolutePath());
+    final InputStream is = getServletContext().getResourceAsStream(file.getPath());
 
     OutputStream out = null;
     if (is != null) {

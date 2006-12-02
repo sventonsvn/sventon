@@ -186,6 +186,8 @@
         <label for="entrySearch">entries</label>
         <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages">
         <label for="logSearch">logs</label>
+        <a href="#" onclick="javascript:showHideHelp($('searchHelp'), 'search_help'); return false;">[?]</a>
+        <div id="searchHelp" class="helpDiv" style="display: none;"></div>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
         <c:choose>

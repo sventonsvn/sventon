@@ -327,3 +327,19 @@ input.btn {
   background-color: #ffff00;
   font-weight: bold;
 }
+
+.helpDiv {
+  text-align: justify;
+  border: 1px solid black;
+  background-color: #eeee00;
+  position: absolute;
+  padding: 5px;
+  white-space: normal;
+  min-width: 160px;
+  max-width: 40%;
+}
+
+a.helpDivCloseLink {
+  color: #000000;
+  text-decoration: none;
+}
