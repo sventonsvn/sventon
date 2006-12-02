@@ -57,7 +57,7 @@
               <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
               <td class="sventonCol2">
                 <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="listfiles.link.tooltip"/>')">
-                  <img src="images/icon_dir_plus.gif" id="dirIcon${rowCount}" border="0"/>
+                  <img src="images/icon_dir_plus.gif" id="dirIcon${rowCount}" />
                 </a>
               </td>
               <td class="sventonCol3">

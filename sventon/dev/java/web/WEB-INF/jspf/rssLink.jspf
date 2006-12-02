@@ -12,5 +12,5 @@
  */
 %>
 <p>
-  <a href="rss.xml?name=${command.name}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" border="0"/></a>
+  <a href="rss.xml?name=${command.name}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" /></a>
 </p>

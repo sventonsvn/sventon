@@ -40,7 +40,7 @@
 
     <p>
       <a href="${showUrl}&disp=inline">
-        <img src="${getThumbUrl}" alt="Thumbnail" border="0"/>
+        <img src="${getThumbUrl}" alt="Thumbnail"/>
       </a>
     </p>
 
