@@ -29,6 +29,10 @@ p {
   margin: 10px 0px;
 }
 
+img {
+  border:none;
+}
+
 a:link, a:visited, a:active {
   font-family: verdana, sans-serif;
   font-size: 10px;

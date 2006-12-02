@@ -47,7 +47,7 @@
             File: <b>${entry}</b>
           </td>
           <td width="210px" style="text-align:center;">
-            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
+            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" /></a>
           </td>
         </tr>
       </c:forEach>
