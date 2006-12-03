@@ -339,8 +339,10 @@ input.btn {
   position: absolute;
   padding: 5px;
   white-space: normal;
-  min-width: 160px;
-  max-width: 40%;
+  min-width: 250px;
+  max-width: 250px;
+  left: 300px;
+  top: 250px;
 }
 
 a.helpDivCloseLink {
