@@ -13,11 +13,6 @@ public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
     final EntryCache entryCache = new MemoryCache();
-    //final EntryCacheManager cacheManager = new EntryCacheManager("/");
-    //cacheManager.addCache("testCache", entryCache);
-    //final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(cacheManager);
-    //cacheUpdater.setRepository(new TestRepository());
-
     assertEquals(0, entryCache.getSize());
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();

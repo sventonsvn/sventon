@@ -66,13 +66,9 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   private RepositoryService repositoryService;
 
   /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
+   * Maximum number of revisions to get each update.
    */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
-  }
+  private int maxRevisionCountPerUpdate;
 
   /**
    * Constructor.
@@ -85,6 +81,26 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
     for (final RevisionObserver revisionObserver : observers) {
       addObserver(revisionObserver);
     }
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
+
+  /**
+   * Sets the maximum number of revisions to get (and update) each time.
+   * If will hopefully decrease the memory consumption during cache loading
+   * on big repositories.
+   *
+   * @param count Max revisions per update.
+   */
+  public void setMaxRevisionCountPerUpdate(final int count) {
+    this.maxRevisionCountPerUpdate = count;
   }
 
   /**
@@ -116,8 +132,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
     if (configuration.isConfigured()) {
       updating = true;
 
-      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-
       try {
         Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
         if (lastUpdatedRevision == null) {
@@ -128,13 +142,37 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
 
         final long headRevision = repositoryService.getLatestRevision(repository);
 
+        // Sanity check
+        if (headRevision < lastUpdatedRevision) {
+          final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached" +
+              " revision. The repository URL has probably been changed. Delete all cache files from the temp directory" +
+              " and restart sventon.";
+          logger.error(errorMessage);
+          throw new RuntimeException(errorMessage);
+        }
+
         if (headRevision > lastUpdatedRevision) {
-          logEntries.addAll(repositoryService.getRevisions(repository, lastUpdatedRevision + 1, headRevision));
-          logger.debug("Reading [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
-          setChanged();
-          logger.debug("Notifying observers");
-          notifyObservers(new RevisionUpdate(instanceName, logEntries));
-          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, headRevision);
+          long numberOfRevisionsLeftToFetch = headRevision - lastUpdatedRevision;
+          logger.debug("About to fetch [" + numberOfRevisionsLeftToFetch + "] revisions");
+
+          do {
+            long fromRevision = lastUpdatedRevision + 1;
+            long toRevision = numberOfRevisionsLeftToFetch > maxRevisionCountPerUpdate ?
+                lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+
+            final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+            logEntries.addAll(repositoryService.getRevisions(repository, fromRevision, toRevision));
+            logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
+            setChanged();
+            logger.debug("Notifying observers about revisions [" + fromRevision + "-" + toRevision + "]");
+            notifyObservers(new RevisionUpdate(instanceName, logEntries));
+
+            lastUpdatedRevision = toRevision;
+            logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
+            objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, lastUpdatedRevision);
+
+            numberOfRevisionsLeftToFetch -= logEntries.size();
+          } while (numberOfRevisionsLeftToFetch > 0);
         }
       } catch (SVNException svnex) {
         throw new RuntimeException(svnex);

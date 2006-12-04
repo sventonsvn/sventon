@@ -70,6 +70,7 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
     try {
       final RevisionCache revisionCache = revisionCacheManager.getCache(revisionUpdate.getInstanceName());
       updateInternal(revisionCache, revisions);
+      revisionCache.flush();
     } catch (final CacheException ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
       return;

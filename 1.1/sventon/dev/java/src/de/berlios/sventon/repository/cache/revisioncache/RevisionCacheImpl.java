@@ -49,6 +49,13 @@ public class RevisionCacheImpl implements RevisionCache {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void flush() {
+    objectCache.flush();
+  }
+
+  /**
    * Class used as revision cache key.
    */
   private static class CacheKey {

@@ -54,6 +54,11 @@ public interface ObjectCache extends Cache {
   long getMissCount();
 
   /**
+   * Flushes the cache to disk. Only applies to <tt>DiskStore</tt> implementations.
+   */
+  void flush();
+
+  /**
    * Shuts the cache down.
    *
    * @throws CacheException if unable to shutdown cache.

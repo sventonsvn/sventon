@@ -261,6 +261,7 @@
     <property name="configuration" ref="configuration"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="repositoryService" ref="repositoryService"/>
+    <property name="maxRevisionCountPerUpdate" value="500"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
