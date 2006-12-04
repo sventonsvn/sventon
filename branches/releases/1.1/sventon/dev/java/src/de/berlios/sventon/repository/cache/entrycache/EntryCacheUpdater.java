@@ -111,6 +111,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()));
 
       updateInternal(entryCache, repository, revisionUpdate);
+      entryCache.flush();
     } catch (final Exception ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
     }
@@ -123,7 +124,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate Update
    */
   protected void updateInternal(final EntryCache entryCache, final SVNRepository repository,
-                                       final RevisionUpdate revisionUpdate) {
+                                final RevisionUpdate revisionUpdate) {
 
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     final int revisionCount = revisions.size();
@@ -141,6 +142,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
       logger.info("Cache population done");
     } else {
       // Initial population has already been performed - only apply changes for now.
+
       if (lastRevision < entryCache.getCachedRevision()) {
         throw new IllegalStateException("Revision [" + lastRevision + "] is older than last cached revision ["
             + entryCache.getCachedRevision() + "]. Has the repository URL changed? Delete all cache files to "
@@ -202,7 +204,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    *          if subversion error occur.
    */
   private void doEntryCacheModify(final EntryCache entryCache, final SVNRepository repository,
-                                         final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+                                  final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     entryCache.removeByName(logEntryPath.getPath(), false);
     entryCache.add(repositoryService.getEntry(repository, logEntryPath.getPath(), revision));
@@ -218,7 +220,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheReplace(final EntryCache entryCache, final SVNRepository repository,
-                                          final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+                                   final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     doEntryCacheModify(entryCache, repository, logEntryPath, revision);
   }
@@ -233,7 +235,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheDelete(final EntryCache entryCache, final SVNRepository repository,
-                                         final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+                                  final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if deleted entry was a file or directory
     final RepositoryEntry deletedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision - 1);
@@ -257,7 +259,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheAdd(final EntryCache entryCache, final SVNRepository repository,
-                                      final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+                               final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if added entry was a file or directory
     final RepositoryEntry addedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision);
@@ -289,7 +291,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    */
   @SuppressWarnings("unchecked")
   private void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
-                                     final long revision) throws SVNException {
+                              final long revision) throws SVNException {
 
     final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
     for (final RepositoryEntry entry : entriesList) {

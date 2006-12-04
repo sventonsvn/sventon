@@ -55,6 +55,13 @@ public abstract class EntryCache implements Cache {
   public abstract void shutdown() throws CacheException;
 
   /**
+   * Flushes the cache. Will only have effect on disk persistent caches.
+   *
+   * @throws CacheException
+   */
+  public abstract void flush() throws CacheException;
+
+  /**
    * Sets the entries.
    *
    * @param entries Entries

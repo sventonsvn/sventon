@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[738] Added: Feature #2854 - Improve initial cache loading.
+
 [717] Release 1.1 RC2 (2006-11-06)
 [715] Fixed: Bug #9356 - More than one entry must be selected for zip download
       Fixed: Bug #9367 - More than one entry must be selected for view thumbnails
