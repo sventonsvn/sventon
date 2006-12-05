@@ -261,7 +261,7 @@ function listFiles(rowNumber, path, name) {
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
-    {method: 'get', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
+    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
     iconElement.src = 'images/icon_dir_minus.gif';
     iconElement.className = 'minus';
     Element.show(document.getElementById('spinner'));
