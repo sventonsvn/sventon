@@ -46,7 +46,7 @@
         </c:url>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <td><img src="images/icon_file.gif" alt="file"/></td>
+          <td><img src="images/icon_file.png" alt="file"/></td>
           <td><a href="${showUrl}">${lock.path}</a></td>
           <td>${lock.owner}</td>
           <td>${lock.comment}</td>

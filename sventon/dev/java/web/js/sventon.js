@@ -177,7 +177,7 @@ function listFiles(rowNumber, path, name) {
     for (var i = 0; i < elements.length; i++) {
       Element.remove(elements[i])
     }
-    iconElement.src = 'images/icon_dir_plus.gif';
+    iconElement.src = 'images/icon_folder_go.png';
     iconElement.className = 'plus';
   } else {
     // Do the ajax call
@@ -186,7 +186,7 @@ function listFiles(rowNumber, path, name) {
     var elementId = 'dir' + rowNumber;
     var ajax = new Ajax.Updater({success: elementId}, url,
     {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
-    iconElement.src = 'images/icon_dir_minus.gif';
+    iconElement.src = 'images/icon_folder.png';
     iconElement.className = 'minus';
     Element.show('spinner');
     isAjaxRequestSent = true;

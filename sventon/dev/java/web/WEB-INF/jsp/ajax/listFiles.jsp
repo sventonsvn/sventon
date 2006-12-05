@@ -34,7 +34,7 @@
       <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
     </td>
     <td class="sventonCol2">
-      <img src="images/icon_file.gif" alt="file"/>
+      <img src="images/icon_file.png" alt="file"/>
     </td>
     <td class="sventonCol3">
       <a href="${showFileUrl}">${entry.name}</a>
