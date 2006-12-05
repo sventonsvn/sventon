@@ -80,14 +80,14 @@
 
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2">
-              <img src="images/icon_dir.gif" alt="dir"/>
+              <img src="images/icon_folder.png" alt="dir"/>
             </td>
             <td class="sventonCol3">
               <a href="${viewUrl}">${entry.name}</a>
             </td>
         <% } else { %>
             <td class="sventonCol2">
-              <img src="images/icon_file.gif" alt="file"/>
+              <img src="images/icon_file.png" alt="file"/>
             </td>
             <td class="sventonCol3">
               <a href="${showFileUrl}">${entry.name}</a>
