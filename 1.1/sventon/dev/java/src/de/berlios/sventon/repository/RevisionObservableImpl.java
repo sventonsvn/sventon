@@ -164,7 +164,15 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
             logEntries.addAll(repositoryService.getRevisions(repository, fromRevision, toRevision));
             logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
             setChanged();
-            logger.debug("Notifying observers about revisions [" + fromRevision + "-" + toRevision + "]");
+            final StringBuffer notification = new StringBuffer();
+            notification.append("Notifying observers about [");
+            notification.append(logEntries.size());
+            notification.append("] revisions [");
+            notification.append(fromRevision);
+            notification.append("-");
+            notification.append(toRevision);
+            notification.append("]");
+            logger.info(notification.toString());
             notifyObservers(new RevisionUpdate(instanceName, logEntries));
 
             lastUpdatedRevision = toRevision;
@@ -209,7 +217,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public synchronized void updateAll() {
-    if (configuration.isConfigured()) {
+    if (configuration.isConfigured() && !isUpdating()) {
       for (final String instanceName : configuration.getInstanceNames()) {
         update(instanceName);
       }
