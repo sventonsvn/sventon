@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[739] Fixed: Bug #9518 - IE cache problem - show files in flatten view.
 [738] Added: Feature #2854 - Improve initial cache loading.
 
 [717] Release 1.1 RC2 (2006-11-06)
