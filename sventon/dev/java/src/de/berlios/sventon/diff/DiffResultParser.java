@@ -11,6 +11,9 @@
  */
 package de.berlios.sventon.diff;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -39,6 +42,11 @@ public class DiffResultParser {
    * </pre>
    */
   public static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)");
+
+  /**
+   * Logger for this class and subclasses.
+   */
+  private static final Log LOGGER = LogFactory.getLog(DiffResultParser.class);
 
   /**
    * Private constructor.
@@ -77,8 +85,7 @@ public class DiffResultParser {
         }
       }
     } catch (IOException ioex) {
-      //TODO: Log this - unable to read given string input.
-      ioex.printStackTrace();
+      LOGGER.warn(ioex);
     }
     return diffActions;
   }
