@@ -11,10 +11,10 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(AllTests.class.getPackage().getName());
-    suite.addTestSuite(DiffCreatorTest.class);
     suite.addTestSuite(DiffActionTest.class);
     suite.addTestSuite(DiffProducerTest.class);
     suite.addTestSuite(DiffResultParserTest.class);
+    suite.addTestSuite(SideBySideDiffCreatorTest.class);
     return suite;
   }
 

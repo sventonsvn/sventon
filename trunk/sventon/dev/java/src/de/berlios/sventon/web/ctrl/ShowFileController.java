@@ -79,11 +79,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     final String formatParameter = ServletRequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
     final Map<String, Object> model = new HashMap<String, Object>();
-    final HashMap properties = new HashMap();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    final Map properties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
 
-    getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber(), properties);
     logger.debug(properties);
+
     model.put("properties", properties);
     model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
