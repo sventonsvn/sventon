@@ -1,3 +1,4 @@
+<%@ page import="de.berlios.sventon.web.model.SideBySideDiffRow"%>
 <%
 /*
  * ====================================================================
@@ -11,7 +12,7 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 
 <html>
   <head>
@@ -28,16 +29,17 @@
     <sventon:functionLinks pageName="showDiff"/>
 
     <c:choose>
-      <c:when test="${!empty diffException}">
-        <p><b>${diffException}</b></p>
+      <c:when test="${isIdentical}">
+        <p><b><spring:message code="diff.error.identical"/></b></p>
+      </c:when>
+      <c:when test="${isMissingHistory}">
+        <p><b><spring:message code="diff.error.no-history"/></b></p>
       </c:when>
       <c:otherwise>
         <c:choose>
           <c:when test="${!isBinary}">
-            <c:set var="leftLines" value="${leftFileContent}" />
-            <c:set var="rightLines" value="${rightFileContent}" />
-            <jsp:useBean id="leftLines" type="java.util.ArrayList" />
-            <jsp:useBean id="rightLines" type="java.util.ArrayList" />
+            <c:set var="diffResult" value="${diffResult}" />
+            <jsp:useBean id="diffResult" type="java.util.ArrayList" />
 
             <table id="diffTable" class="sventonDiffTable" cellspacing="0">
               <tr>
@@ -52,11 +54,11 @@
                 <th width="50%">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <c:set var="diffCount" value="0"/>
-              <c:set var="lineCount" value="0"/>
-              <c:forEach items="${leftLines}" var="line">
+              <c:forEach items="${diffResult}" var="row">
+                <jsp:useBean id="row" type="de.berlios.sventon.web.model.SideBySideDiffRow"/>
                 <tr>
                   <td>
-                    <c:if test="${'Unchanged' != line.action.description}">
+                    <c:if test="${!row.isUnchanged}">
                       <a name="diff${diffCount}"/>
                       <c:set var="diffCount" value="${diffCount + 1}"/>
                       <a href="#diff${diffCount}">
@@ -64,26 +66,32 @@
                       </a>
                     </c:if>
                   </td>
-                  <td><b>${line.action.symbol}</b></td>
-                  <td class="${line.action.CSSClass}">
-                    <span title="${line.action.description}">
-                      ${line.line eq '' ? '&nbsp;' : line.line}
+
+                  <td><b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b></td>
+                  <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
+                    <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
+                      <%
+                        String line = row.getSide(SideBySideDiffRow.Side.LEFT).getLine();
+                        out.print("".equals(line) ? "&nbsp;" : line);
+                      %>
                     </span>
                   </td>
-                  <td><b>${righLines[lineCount].action.symbol}</b></td>
-                  <td class="${rightLines[lineCount].action.CSSClass}">
-                    <span title="${rightLines[lineCount].action.description}">
-                      ${rightLines[lineCount].line eq '' ? '&nbsp;' : rightLines[lineCount].line}
+                  <td><b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b></td>
+                  <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
+                    <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
+                      <%
+                        line = row.getSide(SideBySideDiffRow.Side.RIGHT).getLine();
+                        out.print("".equals(line) ? "&nbsp;" : line);
+                      %>
                     </span>
                   </td>
                 </tr>
-                <c:set var="lineCount" value="${lineCount + 1}"/>
               </c:forEach>
             </table>
             <a name="diff${diffCount}"/>
           </c:when>
           <c:otherwise>
-            <p><b>One or both files selected for diff is in binary format.</b></p>
+            <p><b><spring:message code="diff.error.binary"/></b></p>
           </c:otherwise>
         </c:choose>
       </c:otherwise>
