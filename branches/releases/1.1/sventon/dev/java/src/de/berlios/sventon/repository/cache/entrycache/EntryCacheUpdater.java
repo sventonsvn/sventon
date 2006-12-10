@@ -128,11 +128,12 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     final int revisionCount = revisions.size();
     final long firstRevision = revisions.get(0).getRevision();
-    final long lastRevision = revisions.get(revisionCount - 1).getRevision();
+    long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
-      logger.info("Starting initial population of cache: " + revisionUpdate.getInstanceName());
+      logger.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getInstanceName());
       try {
+        lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision);
         entryCache.setCachedRevision(lastRevision);
       } catch (SVNException svnex) {
@@ -142,53 +143,50 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     } else {
       // Initial population has already been performed - only apply changes for now.
 
-      if (lastRevision < entryCache.getCachedRevision()) {
-        throw new IllegalStateException("Revision [" + lastRevision + "] is older than last cached revision ["
-            + entryCache.getCachedRevision() + "]. Has the repository URL changed? Delete all cache files to "
-            + "trigger a complete cache rebuild");
-      }
+      if (lastRevision > entryCache.getCachedRevision()) {
 
-      // One logEntry is one commit (or revision)
-      for (final SVNLogEntry logEntry : revisions) {
-        try {
-          long revision = logEntry.getRevision();
-          logger.debug("Applying changes in revision [" + revision + "] to cache");
+        // One logEntry is one commit (or revision)
+        for (final SVNLogEntry logEntry : revisions) {
+          try {
+            long revision = logEntry.getRevision();
+            logger.debug("Applying changes in revision [" + revision + "] to cache");
 
-          //noinspection unchecked
-          final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-          final List<String> latestPathsList = new ArrayList<String>(map.keySet());
-          // Sort the entries to apply changes in right order
-          Collections.sort(latestPathsList);
+            //noinspection unchecked
+            final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
+            final List<String> latestPathsList = new ArrayList<String>(map.keySet());
+            // Sort the entries to apply changes in right order
+            Collections.sort(latestPathsList);
 
-          for (final String entryPath : latestPathsList) {
-            final SVNLogEntryPath logEntryPath = map.get(entryPath);
-            switch (LogEntryActionType.parse(logEntryPath.getType())) {
-              case ADDED:
-                logger.debug("Adding entry to cache: " + logEntryPath.getPath());
-                doEntryCacheAdd(entryCache, repository, logEntryPath, revision);
-                break;
-              case DELETED:
-                logger.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
-                doEntryCacheDelete(entryCache, repository, logEntryPath, revision);
-                break;
-              case REPLACED:
-                logger.debug("Replacing entry in cache: " + logEntryPath.getPath());
-                doEntryCacheReplace(entryCache, repository, logEntryPath, revision);
-                break;
-              case MODIFIED:
-                logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
-                doEntryCacheModify(entryCache, repository, logEntryPath, revision);
-                break;
-              default :
-                throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+            for (final String entryPath : latestPathsList) {
+              final SVNLogEntryPath logEntryPath = map.get(entryPath);
+              switch (LogEntryActionType.parse(logEntryPath.getType())) {
+                case ADDED:
+                  logger.debug("Adding entry to cache: " + logEntryPath.getPath());
+                  doEntryCacheAdd(entryCache, repository, logEntryPath, revision);
+                  break;
+                case DELETED:
+                  logger.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
+                  doEntryCacheDelete(entryCache, repository, logEntryPath, revision);
+                  break;
+                case REPLACED:
+                  logger.debug("Replacing entry in cache: " + logEntryPath.getPath());
+                  doEntryCacheReplace(entryCache, repository, logEntryPath, revision);
+                  break;
+                case MODIFIED:
+                  logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
+                  doEntryCacheModify(entryCache, repository, logEntryPath, revision);
+                  break;
+                default :
+                  throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+              }
             }
+          } catch (SVNException svnex) {
+            logger.error("Unable to update entryCache", svnex);
           }
-        } catch (SVNException svnex) {
-          logger.error("Unable to update entryCache", svnex);
         }
+        entryCache.setCachedRevision(lastRevision);
+        logger.debug("Update completed");
       }
-      entryCache.setCachedRevision(lastRevision);
-      logger.debug("Update completed");
     }
   }
 
