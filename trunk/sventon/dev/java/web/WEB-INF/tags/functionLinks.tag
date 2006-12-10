@@ -72,6 +72,7 @@
       </c:url>
       <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" title="<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
     </c:if>
+    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showImageFile' || pageName == 'showBinaryFile' || pageName == 'showArchiveFile'}">
