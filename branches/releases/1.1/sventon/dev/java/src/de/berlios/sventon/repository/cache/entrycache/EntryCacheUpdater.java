@@ -111,7 +111,6 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()));
 
       updateInternal(entryCache, repository, revisionUpdate);
-      entryCache.flush();
     } catch (final Exception ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
     }
