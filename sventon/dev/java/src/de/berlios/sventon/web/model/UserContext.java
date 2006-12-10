@@ -38,6 +38,11 @@ public class UserContext {
   private int latestRevisionsDisplayCount = 1;
 
   /**
+   * The user chosen charset.
+   */
+  private String charset;
+
+  /**
    * Gets the sort type, i.e. the field to sort on.
    *
    * @return Sort type
@@ -93,6 +98,24 @@ public class UserContext {
    */
   public int getLatestRevisionsDisplayCount() {
     return latestRevisionsDisplayCount;
+  }
+
+  /**
+   * Gets the user's charset.
+   *
+   * @return Charset
+   */
+  public String getCharset() {
+    return charset;
+  }
+
+  /**
+   * Sets the user's charset.
+   *
+   * @param charset Charset
+   */
+  public void setCharset(final String charset) {
+    this.charset = charset;
   }
 
 }

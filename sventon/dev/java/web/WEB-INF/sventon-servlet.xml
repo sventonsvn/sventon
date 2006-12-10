@@ -55,6 +55,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
     <property name="maxRevisionsCount" value="10"/>
+    <property name="availableCharsets" ref="availableCharsets"/>
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
@@ -188,6 +189,8 @@
       </props>
     </property>
   </bean>
+
+  <bean id="availableCharsets" class="de.berlios.sventon.web.model.AvailableCharsets"/>
 
   <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
     <property name="mimeMappings">
