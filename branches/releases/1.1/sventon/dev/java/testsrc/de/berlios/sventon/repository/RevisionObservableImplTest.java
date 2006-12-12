@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
+import java.io.File;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
@@ -17,7 +18,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration("dir", "filename");
+    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File("dir"), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setInstanceName("defaultsvn");
     instanceConfiguration.setCacheUsed(true);

@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.io.File;
 
 /**
  * Sventon application configuration class holding instance configuration parameters
@@ -40,7 +41,7 @@ public class ApplicationConfiguration {
   /**
    * Application configuration directory.
    */
-  private String configurationDirectory;
+  private File configurationDirectory;
 
   /**
    * Application configuration file name.
@@ -55,14 +56,17 @@ public class ApplicationConfiguration {
   /**
    * Configures and initializes the repository.
    *
-   * @param configurationDirectory Configuration root directory.
+   * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist.
    * @param configurationFilename  Path and file name of sventon configuration file.
    */
-  public ApplicationConfiguration(final String configurationDirectory, final String configurationFilename) {
+  public ApplicationConfiguration(final File configurationDirectory, final String configurationFilename) {
     if (configurationDirectory == null || configurationFilename == null) {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
     this.configurationDirectory = configurationDirectory;
+    if (!this.configurationDirectory.exists() && !this.configurationDirectory.mkdirs()) {
+      throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());
+    }
     this.configurationFilename = configurationFilename;
   }
 
@@ -131,7 +135,7 @@ public class ApplicationConfiguration {
    *
    * @return The directory
    */
-  public String getConfigurationDirectory() {
+  public File getConfigurationDirectory() {
     return configurationDirectory;
   }
 

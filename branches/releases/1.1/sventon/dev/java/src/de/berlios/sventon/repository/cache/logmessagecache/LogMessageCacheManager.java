@@ -28,7 +28,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
   /**
    * Directory where to store cache files.
    */
-  private final String directory;
+  private final File rootDirectory;
 
   /**
    * Lucene Analyzer to use.
@@ -43,9 +43,9 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
    * @param rootDirectory     Root directory to use.
    * @param analyzerClassName Analyzer to use.
    */
-  public LogMessageCacheManager(final String rootDirectory, final String analyzerClassName) {
+  public LogMessageCacheManager(final File rootDirectory, final String analyzerClassName) {
     logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
-    this.directory = rootDirectory;
+    this.rootDirectory = rootDirectory;
     this.analyzerClassName = analyzerClassName;
   }
 
@@ -60,7 +60,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
     logger.debug("Creating cache: " + cacheName);
     final FSDirectory fsDirectory;
     try {
-      final File cachePath = new File(directory, cacheName);
+      final File cachePath = new File(rootDirectory, cacheName);
       cachePath.mkdirs();
       fsDirectory = FSDirectory.getDirectory(cachePath, false);
     } catch (IOException ioex) {
