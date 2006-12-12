@@ -13,12 +13,14 @@ import java.io.File;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
+  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
+
   private ObjectCache createMemoryCache() throws Exception {
     return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
-    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File("dir"), "filename");
+    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setInstanceName("defaultsvn");
     instanceConfiguration.setCacheUsed(true);
