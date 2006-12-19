@@ -23,6 +23,7 @@
 
   <p><sventon:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/></p>
 
+  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <% pageContext.setAttribute("br", "\n"); %>

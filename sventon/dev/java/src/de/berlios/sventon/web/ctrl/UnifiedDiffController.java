@@ -11,21 +11,19 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.diff.DiffCreator;
+import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.diff.DiffProducer;
 import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.diff.IllegalFileFormatException;
-import de.berlios.sventon.diff.IdenticalFilesException;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
+import de.berlios.sventon.web.model.RawTextFile;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.apache.commons.lang.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,40 +32,53 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class UnifiedDiffController extends AbstractSVNTemplateController implements Controller {
+public class UnifiedDiffController extends DiffController implements Controller {
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
-                                   final HttpServletRequest request, final HttpServletResponse response,
-                                   final BindException exception) throws Exception {
+  protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand,
+                                             InstanceConfiguration configuration) throws DiffException, SVNException {
 
-    final String[] entries = ServletRequestUtils.getStringParameters(request, "entry");
-    logger.debug("Diffing file (unified): " + StringUtils.join(entries, ","));
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    final DiffCommand diffCommand = new DiffCommand(entries);
-    model.put("diffCommand", diffCommand);
-    logger.debug("Using: " + diffCommand);
+    final boolean isLeftFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getFromPath(),
+        diffCommand.getFromRevision().getNumber());
+    final boolean isRightFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getToPath(),
+        diffCommand.getToRevision().getNumber());
 
-    try {
-      final String diffResult = getRepositoryService().diffUnified(
-          repository, diffCommand, "UTF-8", getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+    logger.debug(diffCommand);
 
-      model.put("diffResult", diffResult);
-      model.put("isIdentical", false);
+    if (isLeftFileTextType || isRightFileTextType) {
       model.put("isBinary", false);
-    } catch (final IdenticalFilesException ife) {
-      logger.debug("Files are identical");
-      model.put("isIdentical", true);
-    } catch (final IllegalFileFormatException iffe) {
-      logger.info("Binary file(s) detected", iffe);
-      model.put("isBinary", true);  // Indicates that one or both files are in binary format.
-    }
 
-    return new ModelAndView("unifieddiff", model);
+      final RawTextFile leftFile = getRepositoryService().getTextFile(
+          repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
+      final RawTextFile rightFile = getRepositoryService().getTextFile(
+          repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
+
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
+          new ByteArrayInputStream(rightFile.getContent().getBytes()), DiffCreator.ENCODING);
+
+      try {
+        diffProducer.doUniDiff(diffResult);
+      } catch (final IOException ioex) {
+        throw new DiffException("Unable to procude unified diff");
+      }
+
+      final String diffResultString = diffResult.toString();
+      if ("".equals(diffResultString)) {
+        throw new DiffException("Files are identical.");
+      }
+
+      model.put("diffResult", diffResultString);
+    } else {
+      model.put("isBinary", true);  // Indicates that the file is in binary format.
+      logger.info("One or both files selected for diff is in binary format. "
+          + "Diff will not be performed");
+    }
+    return model;
   }
 
 }

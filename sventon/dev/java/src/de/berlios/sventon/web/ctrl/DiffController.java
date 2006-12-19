@@ -11,65 +11,82 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.diff.IdenticalFilesException;
-import de.berlios.sventon.diff.IllegalFileFormatException;
+import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.content.KeywordHandler;
+import de.berlios.sventon.diff.DiffCreator;
+import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
+import de.berlios.sventon.web.model.RawTextFile;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 /**
- * The DiffController generates a Side-by-side diff between two repository entries.
+ * The DiffController generates a diff between two repository entries.
  *
  * @author jesper@users.berlios.de
  */
-public class DiffController extends AbstractSVNTemplateController implements Controller {
+public class DiffController extends AbstractDiffController implements Controller {
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
-                                   final HttpServletRequest request, final HttpServletResponse response,
-                                   final BindException exception) throws Exception {
+  protected Map<String, Object> diffInternal(final SVNRepository repository, final DiffCommand diffCommand,
+                                             InstanceConfiguration configuration) throws DiffException, SVNException {
 
-    final String[] entries = ServletRequestUtils.getStringParameters(request, "entry");
-    logger.debug("Diffing file (side-by-side): " + StringUtils.join(entries, ","));
+    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final Map<String, Object> model = new HashMap<String, Object>();
+    final RawTextFile leftFile;
+    final RawTextFile rightFile;
 
-    final DiffCommand diffCommand = new DiffCommand(entries);
-    model.put("diffCommand", diffCommand);
-    logger.debug("Using: " + diffCommand);
+    final HashMap fromFileProperties = new HashMap();
+    final HashMap toFileProperties = new HashMap();
 
-    try {
-      final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
-          repository, diffCommand, "UTF-8", getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+    final boolean isLeftFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getFromPath(),
+        diffCommand.getFromRevision().getNumber());
+    final boolean isRightFileTextType = getRepositoryService().isTextFile(repository, diffCommand.getToPath(),
+        diffCommand.getToRevision().getNumber());
 
-      model.put("diffResult", diffResult);
-      model.put("isIdentical", false);
+    if (isLeftFileTextType || isRightFileTextType) {
       model.put("isBinary", false);
-    } catch (final IdenticalFilesException ife) {
-      logger.debug("Files are identical");
-      model.put("isIdentical", true);
-    } catch (final IllegalFileFormatException iffe) {
-      logger.info("Binary file(s) detected", iffe);
-      model.put("isBinary", true);  // Indicates that one or both files are in binary format.
-    }
 
-    return new ModelAndView("diff", model);
+      // Get content of oldest file (left).
+      logger.debug("Getting file content for (from) revision "
+          + diffCommand.getFromRevision() + ", path: " + diffCommand.getFromPath());
+
+      getRepositoryService().getFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(),
+          outStream);
+      leftFile = new RawTextFile(outStream.toString(), true);
+
+      // Re-initialize stream
+      outStream = new ByteArrayOutputStream();
+
+      // Get content of newest file (right).
+      logger.debug("Getting file content for (to) revision "
+          + diffCommand.getToRevision() + ", path: " + diffCommand.getToPath());
+
+      getRepositoryService().getFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(),
+          outStream);
+      rightFile = new RawTextFile(outStream.toString(), true);
+
+      final KeywordHandler fromFileKeywordHandler = new KeywordHandler(fromFileProperties,
+          configuration.getUrl() + diffCommand.getFromPath());
+      final KeywordHandler toFileKeywordHandler = new KeywordHandler(toFileProperties,
+          configuration.getUrl() + diffCommand.getToPath());
+
+      final DiffCreator differ = new DiffCreator(leftFile, fromFileKeywordHandler, rightFile, toFileKeywordHandler);
+      model.put("leftFileContent", differ.getLeft());
+      model.put("rightFileContent", differ.getRight());
+    } else {
+      model.put("isBinary", true);  // Indicates that the file is in binary format.
+      logger.info("One or both files selected for diff is in binary format. "
+          + "Diff will not be performed");
+    }
+    return model;
   }
 
 }

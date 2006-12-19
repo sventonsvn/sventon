@@ -12,25 +12,32 @@
 
 var isAjaxRequestSent = false;
 
+// function to toggle the entry checkboxes
+function toggleEntryFields(formName) {
+  for (var i = 0; i < formName.length; i++) {
+    fieldObj = formName.elements[i];
+    if (fieldObj.type == 'checkbox') {
+      fieldObj.checked = !fieldObj.checked;
+    }
+  }
+}
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
 
-  var selectedValue = formName.actionSelect.options[formName.actionSelect.selectedIndex].value;
-
   // If no option value is selected, no action is taken.
-  if (selectedValue == '') {
+  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == '') {
     return false;
   }
 
   // Check which action to execute
-  if (selectedValue == 'thumb') {
+  if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'thumb') {
     // One or more entries must be checked
     if (getCheckedCount(formName) > 0) {
       formName.action = 'showthumbs.svn'
       return true;
     }
-  } else if (selectedValue == 'diff') {
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(formName) == 2) {
       formName.action = 'diff.svn'
@@ -38,7 +45,7 @@ function doAction(formName) {
     } else {
       alert('Two entries must be selected');
     }
-  } else if (selectedValue == 'export') {
+  } else if (formName.actionSelect.options[formName.actionSelect.selectedIndex].value == 'export') {
     // One or more entries must be checked
     if (getCheckedCount(formName) > 0) {
       formName.action = 'export.svn'
@@ -50,7 +57,7 @@ function doAction(formName) {
 
 // sets the value of the revision input text field to 'HEAD'
 function setHeadRevision() {
-  $('revisionInput').value = 'HEAD'
+  document.getElementById('revisionInput').value = 'HEAD'
 }
 
 // function to handle search submission
@@ -88,16 +95,44 @@ function doFlatten(url, instanceName) {
   return true;
 }
 
-// function to validate url during instance configuration submisson
-function validateUrl(formName) {
-  var url = formName.repositoryURL.value.toLowerCase();
-  if (url.indexOf('trunk') > -1
-      || url.indexOf('tags') > -1
-      || url.indexOf('branches') > -1) {
-    return confirm('The URL entered must be the root of the repository!\n' +
-                   'Is [' + formName.repositoryURL.value + '] really the subversion root?\n');
+// function to hide/show div layers
+function toggleDivVisibility(theId) {
+  var object = document.getElementById(theId);
+  if (object.style.visibility == 'visible') {
+    object.style.visibility = 'hidden';
+  } else {
+    object.style.visibility = 'visible';
   }
-  return true;
+}
+
+// function to hide/show extended revision log information
+function toggleElementVisibility(theId) {
+  var object = document.getElementById(theId);
+  if (object.style.display == '') {
+    object.style.display = 'none';
+  } else {
+    object.style.display = '';
+  }
+}
+
+// function to change link text between 'more' and 'less' on log entry rows
+function changeLessMoreDisplay(theId) {
+  var object = document.getElementById(theId);
+  if (object.innerHTML == 'more') {
+    object.innerHTML = 'less';
+  } else {
+    object.innerHTML = 'more';
+  }
+}
+
+// function to change link text between 'show' and 'hide'
+function changeHideShowDisplay(theId) {
+  var object = document.getElementById(theId);
+  if (object.innerHTML == 'show') {
+    object.innerHTML = 'hide';
+  } else {
+    object.innerHTML = 'show';
+  }
 }
 
 // function to handle diff submissions
@@ -146,149 +181,6 @@ function searchWarning() {
   return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
 }
 
-// Toggles line wrap mode between normal and nowrap
-function toggleWrap() {
-  var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
-  var tags = $('diffTable').getElementsByTagName('td');
-
-  for (var i = 0; i < tags.length; i++) {
-    if (classNames.contains(tags[i].className)) {
-      if (tags[i].style.whiteSpace == '') {
-        tags[i].style.whiteSpace = 'nowrap';
-      } else {
-        tags[i].style.whiteSpace = '';
-      }
-    }
-  }
-}
-
-// Requests directory contents in given path
-// Uses the global variable 'isAjaxRequestSent'
-function listFiles(rowNumber, path, name) {
-  if (isAjaxRequestSent) {
-    return false;
-  }
-
-  var iconElement = $('dirIcon' + rowNumber);
-
-  if (iconElement.className == 'minus') {
-    // Files are already listed - hide them instead
-    var elements = document.getElementsByClassName('expandedDir' + rowNumber);
-    for (var i = 0; i < elements.length; i++) {
-      Element.remove(elements[i])
-    }
-    iconElement.src = 'images/icon_folder_go.png';
-    iconElement.className = 'plus';
-  } else {
-    // Do the ajax call
-    var url = 'listfiles.ajax';
-    var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
-    var elementId = 'dir' + rowNumber;
-    var ajax = new Ajax.Updater({success: elementId}, url,
-    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
-    iconElement.src = 'images/icon_folder.png';
-    iconElement.className = 'minus';
-    Element.show('spinner');
-    isAjaxRequestSent = true;
-  }
-  return false;
-}
-
-function hideLatestRevisions() {
-  if (isLatestRevisionsVisible()) {
-    var infoDiv = $('latestCommitInfoDiv');
-    // Hide details
-    Element.hide(infoDiv);
-    Element.update(infoDiv, '');
-    toggleInnerHTML('latestCommitLink', 'show', 'hide');
-  }
-}
-
-function isLatestRevisionsVisible() {
-  return $('latestCommitInfoDiv').style.display == '';
-}
-
-// Requests the N latest revisions
-// Uses the global variable 'isAjaxRequestSent'
-function getLatestRevisions(name, count) {
-  if (isAjaxRequestSent) {
-    return false;
-  }
-
-  // Do the ajax call
-  var url = 'latestrevisions.ajax';
-  var urlParams = 'path=/&revision=head&name=' + name + "&revcount=" + count;
-
-  var ajax = new Ajax.Updater({success: $('latestCommitInfoDiv')}, url,
-  {method: 'post', parameters: urlParams, onSuccess: showLatestRevisionsDiv, onFailure: reportAjaxError});
-  Element.show('spinner');
-  isAjaxRequestSent = true;
-  return false;
-}
-
-// Function called when ajax request in 'getLatestRevisions' is finished.
-function showLatestRevisionsDiv(request) {
-  Element.show('latestCommitInfoDiv');
-  Element.update('latestCommitLink', 'hide');
-  ajaxSuccess(request)
-}
-
-// General ajax success method
-function ajaxSuccess(request) {
-  isAjaxRequestSent = false;
-  Element.hide('spinner');
-}
-
-// General ajax error alert method
-function reportAjaxError(request) {
-  isAjaxRequestSent = false;
-  Element.hide('spinner');
-  alert('An error occured during asynchronous request.');
-}
-
-function showHideHelp(helpDiv, id) {
-  if (isAjaxRequestSent) {
-    return false;
-  }
-
-  if (helpDiv.style.display == '') {
-    Element.hide(helpDiv);
-  } else {
-    // Do the ajax call
-    var url = 'static.ajax';
-    var urlParams = 'id=' + id;
-
-    var ajax = new Ajax.Updater({success: $(helpDiv)}, url,
-    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError});
-    Element.show('spinner');
-    Element.show(helpDiv);
-    isAjaxRequestSent = true;
-  }
-}
-
-// ===============================================================================================
-// Utility functions
-// ===============================================================================================
-
-function toggleInnerHTML(id, text1, text2) {
-  var object = $(id);
-  if (object.innerHTML == text1) {
-    object.innerHTML = text2;
-  } else {
-    object.innerHTML = text1;
-  }
-}
-
-// function to toggle the entry checkboxes
-function toggleEntryFields(formName) {
-  for (var i = 0; i < formName.length; i++) {
-    fieldObj = formName.elements[i];
-    if (fieldObj.type == 'checkbox') {
-      fieldObj.checked = !fieldObj.checked;
-    }
-  }
-}
-
 // returns the value of the radio button that is checked
 // returns an empty string if none are checked, or there are no radio buttons
 function getCheckedValue(radioObj) {
@@ -330,9 +222,66 @@ function getCheckedCount(formName) {
   return checkedEntriesCount;
 }
 
-// ===============================================================================================
-// Extensions
-// ===============================================================================================
+// Toggles line wrap mode between normal and nowrap
+function toggleWrap() {
+  var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
+  var tags = document.getElementById('diffTable').getElementsByTagName('td');
+
+  for (var i = 0; i < tags.length; i++) {
+    if (classNames.contains(tags[i].className)) {
+      if (tags[i].style.whiteSpace == '') {
+        tags[i].style.whiteSpace = 'nowrap';
+      } else {
+        tags[i].style.whiteSpace = '';
+      }
+    }
+  }
+}
+
+// Requests directory contents in given path
+// Uses the global variable 'isAjaxRequestSent'
+function listFiles(rowNumber, path, name) {
+  if (isAjaxRequestSent) {
+    return false;
+  }
+
+  var iconElement = document.getElementById('dirIcon' + rowNumber);
+
+  if (iconElement.className == 'minus') {
+    // Files are already listed - hide them instead
+    var elements = document.getElementsByClassName('expandedDir' + rowNumber);
+    for (var i = 0; i < elements.length; i++) {
+      Element.remove(elements[i])
+    }
+    iconElement.src = 'images/icon_dir_plus.gif';
+    iconElement.className = 'plus';
+  } else {
+    // Do the ajax call
+    var url = 'listfiles.ajax';
+    var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
+    var elementId = 'dir' + rowNumber;
+    var ajax = new Ajax.Updater({success: elementId}, url,
+    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
+    iconElement.src = 'images/icon_dir_minus.gif';
+    iconElement.className = 'minus';
+    Element.show(document.getElementById('spinner'));
+    isAjaxRequestSent = true;
+  }
+  return false;
+}
+
+// General ajax error alert method
+function ajaxSuccess(request) {
+  isAjaxRequestSent = false;
+  Element.hide(document.getElementById('spinner'));
+}
+
+// General ajax error alert method
+function reportAjaxError(request) {
+  isAjaxRequestSent = false;
+  Element.hide(document.getElementById('spinner'));
+  alert('An error occured during asynchronous request.');
+}
 
 Array.prototype.contains = function (element) {
   for (var i = 0; i < this.length; i++) {

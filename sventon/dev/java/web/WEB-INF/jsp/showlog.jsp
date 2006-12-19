@@ -27,6 +27,7 @@
 
     <p><sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showLog"/>
 
     <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">
@@ -77,8 +78,8 @@
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
-            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
+            <td><a href="#" onclick="toggleElementVisibility('logInfoEntry${rowCount}'); changeLessMoreDisplay('hdr${rowCount}');">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
@@ -110,7 +111,7 @@
                     <c:param name="name" value="${command.name}" />
                   </c:url>
 
-                  <td valign="top"><i><%= actionType %></i></td>
+                  <td><i><%= actionType %></i></td>
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
                   <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
@@ -129,8 +130,8 @@
                   </c:url>
 
                   <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
-                  <% } else if (LogEntryActionType.DELETED == actionType) { %>
-                  <td><strike><%= logEntryPath.getPath() %></strike></td>
+                  <% } else { %>
+                  <td><%= logEntryPath.getPath() %></td>
                   <% } %>
                   <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
                   <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>

@@ -24,6 +24,7 @@
 
     <p><sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showImageFile"/>
 
     <c:url value="get.svn" var="showUrl">
@@ -40,7 +41,7 @@
 
     <p>
       <a href="${showUrl}&disp=inline">
-        <img src="${getThumbUrl}" alt="Thumbnail"/>
+        <img src="${getThumbUrl}" alt="Thumbnail" border="0"/>
       </a>
     </p>
 

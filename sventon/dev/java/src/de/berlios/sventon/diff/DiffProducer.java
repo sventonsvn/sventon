@@ -22,7 +22,7 @@ import java.util.HashMap;
  *
  * @author jesper@users.berlios.de
  */
-public final class DiffProducer {
+public class DiffProducer {
 
   /**
    * Left (old) input.

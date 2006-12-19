@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.io.*;
+import java.io.Writer;
 
 /**
  * Class to generate <code>RSS</code> feeds from Subversion log information.
@@ -41,22 +41,6 @@ public class SyndFeedGenerator implements FeedGenerator {
    */
   private int logMessageLength = 40;
 
-  public static final String LOG_MESSAGE_KEY = "@LOG_MESSAGE@";
-  public static final String ADDED_COUNT_KEY = "@ADDED_COUNT@";
-  public static final String MODIFIED_COUNT_KEY = "@MODIFIED_COUNT@";
-  public static final String REPLACED_COUNT_KEY = "@REPLACED_COUNT@";
-  public static final String DELETED_COUNT_KEY = "@DELETED_COUNT@";
-
-  /**
-   * Cached rss HTML body template.
-   */
-  private String bodyTemplate = null;
-
-  /**
-   * The rss body template file. Default set to <tt>rsstemplate.html</tt> in classpath root.
-   */
-  private String bodyTemplateFile = "/rsstemplate.html";
-
   /**
    * {@inheritDoc}
    */
@@ -72,9 +56,7 @@ public class SyndFeedGenerator implements FeedGenerator {
     new SyndFeedOutput().output(feed, writer);
   }
 
-  private List createEntries(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL)
-      throws IOException {
-
+  private List createEntries(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL) {
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
     SyndEntry entry;
@@ -98,7 +80,7 @@ public class SyndFeedGenerator implements FeedGenerator {
 
       int added = 0;
       int modified = 0;
-      int replaced = 0;
+      int relocated = 0;
       int deleted = 0;
 
       for (final String entryPath : latestPathsList) {
@@ -111,7 +93,7 @@ public class SyndFeedGenerator implements FeedGenerator {
             modified++;
             break;
           case REPLACED:
-            replaced++;
+            relocated++;
             break;
           case DELETED:
             deleted++;
@@ -119,45 +101,48 @@ public class SyndFeedGenerator implements FeedGenerator {
         }
       }
 
-      String itemBody = getBodyTemplate();
-      itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, logEntry.getMessage());
-      itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, String.valueOf(added));
-      itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, String.valueOf(modified));
-      itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, String.valueOf(replaced));
-      itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, String.valueOf(deleted));
+      final StringBuilder sb = new StringBuilder();
+      sb.append("<table border=\"0\">");
+      sb.append("<tr colspan=\"2\">");
+      sb.append("<td>");
+      sb.append(logEntry.getMessage());
+      sb.append("</td>");
+      sb.append("</tr>");
+      sb.append("<tr>");
+      sb.append("<td><b>Action</b></td>");
+      sb.append("<td><b>Count</b></td>");
 
-      description.setValue(itemBody);
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.ADDED);
+      sb.append("</td><td>");
+      sb.append(added);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.MODIFIED);
+      sb.append("</td><td>");
+      sb.append(modified);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.REPLACED);
+      sb.append("</td><td>");
+      sb.append(relocated);
+      sb.append("</td></tr>");
+
+      sb.append("<tr><td>");
+      sb.append(LogEntryActionType.DELETED);
+      sb.append("</td><td>");
+      sb.append(deleted);
+      sb.append("</td></tr>");
+
+      sb.append("</table>");
+
+      description.setValue(sb.toString());
       entry.setDescription(description);
       entries.add(entry);
     }
     return entries;
-  }
-
-  /**
-   * Gets the rss item HTML body template.
-   *
-   * @return The template.
-   * @throws IOException if unable to load template.
-   */
-  protected String getBodyTemplate() throws IOException {
-    if (bodyTemplate == null) {
-      final StringBuilder sb = new StringBuilder();
-      final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
-      if (is == null) {
-        throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
-      }
-      final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-      try {
-        String line;
-        while ((line = reader.readLine()) != null) {
-          sb.append(line);
-        }
-      } finally {
-        reader.close();
-      }
-      bodyTemplate = sb.toString();
-    }
-    return bodyTemplate;
   }
 
   /**
@@ -174,15 +159,6 @@ public class SyndFeedGenerator implements FeedGenerator {
       return StringUtils.abbreviate(message, length);
     }
 
-  }
-
-  /**
-   * Sets the file that should be used as the rss item body template.
-   *
-   * @param bodyTemplateFile Template file.
-   */
-  public void setBodyTemplateFile(final String bodyTemplateFile) {
-    this.bodyTemplateFile = bodyTemplateFile;
   }
 
   /**

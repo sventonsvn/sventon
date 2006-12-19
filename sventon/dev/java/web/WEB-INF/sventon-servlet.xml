@@ -4,25 +4,23 @@
 <!-- Application context definition for sventon DispatcherServlet -->
 <beans default-lazy-init="false">
 
-  <bean id="sventonDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/"/>
-  </bean>
-
   <bean id="sventonConfigFile" class="java.lang.String">
     <constructor-arg value="sventon.properties"/>
   </bean>
 
-  <bean id="sventonCacheDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/cache/"/>
+  <bean id="sventonDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" value="${java.io.tmpdir}"/>
+    <constructor-arg index="1" value="sventon"/>
   </bean>
 
-  <bean id="sventonExportDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/export/"/>
+  <bean id="sventonCacheDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="cache"/>
   </bean>
 
-  <!-- Makes sure the directories are created -->
-  <bean class="java.io.File" init-method="mkdirs">
-    <constructor-arg ref="sventonExportDir"/>
+  <bean id="sventonExportDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="export"/>
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -54,8 +52,6 @@
     <property name="revisionObservable" ref="revisionObservable"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
-    <property name="maxRevisionsCount" value="10"/>
-    <property name="availableCharsets" ref="availableCharsets"/>
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
@@ -69,7 +65,6 @@
   <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
     <property name="feedType" value="rss_2.0"/>
     <property name="logMessageLength" value="40"/>
-    <property name="bodyTemplateFile" value="/rsstemplate.html"/>
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
@@ -88,10 +83,18 @@
   <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
-  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
-  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
-  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
-  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
+
+  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController">
+    <property name="viewName" value="diff"/>
+  </bean>
+
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController">
+    <property name="viewName" value="diff"/>
+  </bean>
+
+  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController">
+    <property name="viewName" value="unifieddiff"/>
+  </bean>
 
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
@@ -149,10 +152,6 @@
     <property name="scheduler" ref="scheduler"/>
   </bean>
 
-  <bean id="getStaticContentController" class="de.berlios.sventon.web.ctrl.GetStaticContentController">
-    <property name="path" value="WEB-INF/static"/>
-  </bean>
-
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
       <props>
@@ -184,13 +183,9 @@
         <prop key="/latest.xml">latestInfoController</prop>
         <!-- url mappings for ajax controllers -->
         <prop key="/listfiles.ajax">listFilesController</prop>
-        <prop key="/latestrevisions.ajax">latestRevisionsController</prop>
-        <prop key="/static.ajax">getStaticContentController</prop>
       </props>
     </property>
   </bean>
-
-  <bean id="availableCharsets" class="de.berlios.sventon.web.model.AvailableCharsets"/>
 
   <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
     <property name="mimeMappings">
@@ -207,7 +202,7 @@
   <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
         destroy-method="shutdown">
     <constructor-arg index="0" ref="sventonCacheDir"/>
-    <constructor-arg index="1" value="10000"/>
+    <constructor-arg index="1" value="1000"/>
     <constructor-arg index="2" value="true"/>
     <constructor-arg index="3" value="true"/>
     <constructor-arg index="4" value="0"/>
@@ -264,6 +259,7 @@
     <property name="configuration" ref="configuration"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="repositoryService" ref="repositoryService"/>
+    <property name="maxRevisionCountPerUpdate" value="500"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
@@ -297,8 +293,7 @@
   </bean>
 
   <bean id="revisionCacheManager" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager">
-    <constructor-arg index="0" ref="sventonCacheDir"/>
-    <constructor-arg index="1" ref="objectCacheManager"/>
+    <constructor-arg index="0" ref="objectCacheManager"/>
   </bean>
 
   <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager"

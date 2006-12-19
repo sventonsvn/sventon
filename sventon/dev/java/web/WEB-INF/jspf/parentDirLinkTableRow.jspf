@@ -19,7 +19,7 @@
 
 <tr class="sventonEntryEven">
   <td class="sventonCol1"></td>
-  <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir" /></td>
+  <td class="sventonCol2"><img src="images/icon_dir.gif" alt="dir" /></td>
   <td class="sventonCol3">
     <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
   </td>

@@ -16,6 +16,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
+<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
+
 <c:forEach items="${svndir}" var="entry">
   <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
 
@@ -34,7 +36,7 @@
       <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
     </td>
     <td class="sventonCol2">
-      <img src="images/icon_file.png" alt="file"/>
+      <img src="images/icon_file.gif" alt="file"/>
     </td>
     <td class="sventonCol3">
       <a href="${showFileUrl}">${entry.name}</a>

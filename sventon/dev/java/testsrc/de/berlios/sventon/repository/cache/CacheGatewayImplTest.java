@@ -9,12 +9,13 @@ import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
+import java.io.File;
 
 public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntry() throws Exception {
     final String instanceName = "testCache";
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
@@ -26,7 +27,7 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryInPath() throws Exception {
     final String instanceName = "testCache";
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
@@ -38,7 +39,7 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryWithLimit() throws Exception {
     final String instanceName = "testCache";
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
@@ -55,7 +56,7 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryByCamelCase() throws Exception {
     final String instanceName = "testCache";
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());
@@ -68,7 +69,7 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindDirectories() throws Exception {
     final String instanceName = "testCache";
-    final EntryCacheManager cacheManager = new EntryCacheManager("/");
+    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(instanceName, entryCache);
     entryCache.add(getEntryTemplateList());

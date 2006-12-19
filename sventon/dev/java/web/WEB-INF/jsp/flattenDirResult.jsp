@@ -12,6 +12,7 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
+<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
   <head>
@@ -23,6 +24,7 @@
 
   <p><sventon:currentTargetHeader title="Flattened structure" target="${command.target} (and below)" hasProperties="false"/></p>
 
+  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">
@@ -57,7 +59,7 @@
               <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
               <td class="sventonCol2">
                 <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="listfiles.link.tooltip"/>')">
-                  <img src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
+                  <img src="images/icon_dir_plus.gif" id="dirIcon${rowCount}" border="0"/>
                 </a>
               </td>
               <td class="sventonCol3">

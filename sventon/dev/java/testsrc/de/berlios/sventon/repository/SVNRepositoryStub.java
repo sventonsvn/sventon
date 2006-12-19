@@ -76,9 +76,6 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  /**
-   * @deprecated
-   */
   public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry, boolean recursive, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }

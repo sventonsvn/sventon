@@ -24,11 +24,12 @@
 
   <p><sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/></p>
 
+  <br/>
   <sventon:functionLinks pageName="showUnifiedDiff"/>
 
   <c:choose>
-    <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical"/></b></p>
+    <c:when test="${!empty diffException}">
+      <p><b>${diffException}</b></p>
     </c:when>
     <c:otherwise>
       <c:choose>
@@ -42,7 +43,7 @@
           <pre class="codeBlock"><c:out value="${diffResult}" escapeXml="false"/></pre>
         </c:when>
         <c:otherwise>
-          <p><b><spring:message code="diff.error.binary"/></b></p>
+          <p><b>One or both files selected for diff is in binary format.</b></p>
         </c:otherwise>
       </c:choose>
     </c:otherwise>

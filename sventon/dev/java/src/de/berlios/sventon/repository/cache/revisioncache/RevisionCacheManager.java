@@ -23,23 +23,15 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 public class RevisionCacheManager extends CacheManager<RevisionCache> {
 
   /**
-   * Root directory for cache files.
-   */
-  private String rootDirectory;
-
-  /**
    * Object cache manager instance.
    */
   private ObjectCacheManager objectCacheManager;
 
   /**
    * Constructor.
-   *
-   * @param rootDirectory Directory where to store cache files.
    */
-  public RevisionCacheManager(final String rootDirectory, final ObjectCacheManager objectCacheManager) {
-    logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
-    this.rootDirectory = rootDirectory;
+  public RevisionCacheManager(final ObjectCacheManager objectCacheManager) {
+    logger.debug("Starting cache manager.");
     this.objectCacheManager = objectCacheManager;
   }
 

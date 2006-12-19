@@ -24,15 +24,10 @@
 
     <p><sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showRevInfo"/>
 
-    <table class="sventonLatestCommitInfoTable">
-      <tr>
-        <td>
-          <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
-        </td>
-      </tr>
-    </table>
+    <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
     <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

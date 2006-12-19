@@ -24,6 +24,7 @@
 
     <p><sventon:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showLock"/>
 
     <table class="sventonEntriesTable" border="0">
@@ -46,7 +47,7 @@
         </c:url>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <td><img src="images/icon_file.png" alt="file"/></td>
+          <td><img src="images/icon_file.gif" alt="file"/></td>
           <td><a href="${showUrl}">${lock.path}</a></td>
           <td>${lock.owner}</td>
           <td>${lock.comment}</td>

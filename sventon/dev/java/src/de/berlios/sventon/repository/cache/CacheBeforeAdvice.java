@@ -46,7 +46,7 @@ public class CacheBeforeAdvice implements MethodBeforeAdvice {
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     final String instanceName = (String) args[0];

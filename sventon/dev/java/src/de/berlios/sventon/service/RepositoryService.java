@@ -16,10 +16,6 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.ImageMetadata;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
-import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.config.InstanceConfiguration;
-import de.berlios.sventon.diff.DiffException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -154,10 +150,11 @@ public interface RepositoryService {
    * @param repository The repository
    * @param path       Target of target to get properties for
    * @param revision   The revision
-   * @return Map populated with the file's properties
+   * @param properties The map to be populated with the file's properties
    * @throws SVNException if a subversion error occur
    */
-  Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
+  void getFileProperties(final SVNRepository repository, final String path, final long revision, final Map properties)
+      throws SVNException;
 
   /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
@@ -191,16 +188,6 @@ public interface RepositoryService {
   long getLatestRevision(final SVNRepository repository) throws SVNException;
 
   /**
-   * Gets the latest repository revisions.
-   *
-   * @param repository    The repository
-   * @param revisionCount Number of revisions to fetch
-   * @return The revisions.
-   * @throws SVNException if a subversion error occur
-   */
-  List<SVNLogEntry> getLatestRevisions(SVNRepository repository, final long revisionCount) throws SVNException;
-
-  /**
    * Gets the node type for given path (with or without leaf).
    *
    * @param repository The repository
@@ -232,7 +219,7 @@ public interface RepositoryService {
                              final Map properties) throws SVNException;
 
   /**
-   * Gets entry info from the subversion repository.
+   * Gets an entry from the subversion repository.
    *
    * @param repository The repository
    * @param path       The entry path
@@ -240,7 +227,7 @@ public interface RepositoryService {
    * @return Entry
    * @throws SVNException if a subversion error occur
    */
-  RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision) throws SVNException;
+  RepositoryEntry getEntry(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
    * Gets the revisions for a specific entry.
@@ -256,29 +243,5 @@ public interface RepositoryService {
   ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache, final String path,
                                   final long revision, final URL fullSizeImageUrl, final String imageFormatName,
                                   final int maxThumbnailSize, final OutputStream out) throws SVNException;
-
-  /**
-   * @param repository
-   * @param diffCommand
-   * @param charset
-   * @param configuration
-   * @return
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException
-   */
-  List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                                final InstanceConfiguration configuration) throws SVNException, DiffException;
-
-  /**
-   * @param repository
-   * @param diffCommand
-   * @param charset
-   * @param configuration
-   * @return
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException
-   */
-  String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                     final InstanceConfiguration configuration) throws SVNException, DiffException;
 
 }

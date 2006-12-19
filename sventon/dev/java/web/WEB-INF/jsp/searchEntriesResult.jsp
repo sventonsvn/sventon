@@ -25,6 +25,7 @@
 
   <p><sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/></p>
 
+  <br/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <div id="entriesDiv" class="sventonEntriesDiv">
@@ -75,7 +76,7 @@
           </td>
         <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
             <td class="sventonCol2">
-              <img src="images/icon_folder.png" alt="dir"/>
+              <img src="images/icon_dir.gif" alt="dir"/>
             </td>
             <td class="sventonCol3">
               <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
@@ -84,7 +85,7 @@
             </td>
         <% } else { %>
             <td class="sventonCol2">
-              <img src="images/icon_file.png" alt="file"/>
+              <img src="images/icon_file.gif" alt="file"/>
             </td>
             <td class="sventonCol3">
               <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
@@ -95,7 +96,7 @@
             <td class="sventonCol4" align="center">
               <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
               <c:if test="${!empty lock}">
-                <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
+                <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img border="0" src="images/lock.gif"></span>
               </c:if>
             </td>
             <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>

@@ -25,6 +25,7 @@
 
     <p><sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showThumbs"/>
 
     <br/>
@@ -47,7 +48,7 @@
             File: <b>${entry}</b>
           </td>
           <td width="210px" style="text-align:center;">
-            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" /></a>
+            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
           </td>
         </tr>
       </c:forEach>

@@ -21,7 +21,6 @@ import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.web.model.AvailableCharsets;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -138,16 +137,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private RepositoryService repositoryService;
 
   /**
-   * Maximum number of revisions, default set to 10.
-   */
-  private int maxRevisionsCount = 10;
-
-  /**
-   * Cached available charsets.
-   */
-  private AvailableCharsets availableCharsets;
-
-  /**
    * Constructor.
    */
   protected AbstractSVNTemplateController() {
@@ -181,14 +170,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
-      final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       final long headRevision = repositoryService.getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
-      parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
-      parseAndUpdateCharsetParameter(request, userContext);
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, exception);
 
       // It's ok for svnHandle to return null in cases like GetController.
@@ -199,21 +185,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
+        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", configuration.getInstanceNames());
-        model.put("maxRevisionsCount", getMaxRevisionsCount());
-        model.put("headRevision", headRevision);
-        model.put("charsets", availableCharsets.getCharsets());
-
-        if (showLatestRevInfo) {
-          logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", repositoryService.getLatestRevisions(repository,
-              userContext.getLatestRevisionsDisplayCount()));
-        }
-
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -230,39 +207,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-  }
-
-  /**
-   * Parses the parameter controlling what charset to use.
-   *
-   * @param request     The request.
-   * @param userContext The UserContext instance to update.
-   */
-  private void parseAndUpdateCharsetParameter(final HttpServletRequest request, final UserContext userContext) {
-    final String charset = ServletRequestUtils.getStringParameter(request, "charset", null);
-    if (charset != null) {
-      userContext.setCharset(charset);
-    } else if (userContext.getCharset() == null) {
-      userContext.setCharset("UTF-8");
-    }
-  }
-
-  /**
-   * Parses the parameter controlling how many revisions should be displayed in the
-   * <i>latest commit info</i> DIV.
-   *
-   * @param request     The request.
-   * @param userContext The UserContext instance to update.
-   */
-  private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request, final UserContext userContext) {
-    final int latestRevisionsDisplayCount = ServletRequestUtils.getIntParameter(request, "revcount", 0);
-    if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
-      if (latestRevisionsDisplayCount > 0) {
-        userContext.setLatestRevisionsDisplayCount(latestRevisionsDisplayCount);
-      }
-    } else {
-      throw new IllegalArgumentException("Illegal revision count: " + latestRevisionsDisplayCount);
-    }
   }
 
   /**
@@ -460,32 +404,4 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     return repositoryService;
   }
 
-  /**
-   * Sets the maximum number of revisions.
-   *
-   * @param maxRevisionsCount Max count.
-   */
-  public void setMaxRevisionsCount(final int maxRevisionsCount) {
-    this.maxRevisionsCount = maxRevisionsCount;
-  }
-
-  /**
-   * Gets the maximum number of revisions a user can choose to display
-   * in the <i>latest commit info</i> DIV.
-   *
-   * @return Count
-   */
-  protected int getMaxRevisionsCount() {
-    return maxRevisionsCount;
-  }
-
-  /**
-   * Sets the available charsets.
-   *
-   * @param availableCharsets Charsets
-   */
-  public void setAvailableCharsets(final AvailableCharsets availableCharsets) {
-    this.availableCharsets = availableCharsets;
-  }
-  
 }

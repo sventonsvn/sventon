@@ -72,7 +72,6 @@
       </c:url>
       <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" title="<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
     </c:if>
-    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showImageFile' || pageName == 'showBinaryFile' || pageName == 'showArchiveFile'}">
@@ -182,13 +181,11 @@
     </td>
     <c:if test="${useCache}">
       <td align="right" style="white-space: nowrap;">
-        <div id="searchHelp" class="helpDiv" style="display: none;"></div>
         <spring:message code="search.text"/>
         <input type="radio" id="entrySearch" name="searchMode" class="rdo" checked value="entries"/>
         <label for="entrySearch">entries</label>
         <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages">
         <label for="logSearch">logs</label>
-        <a href="#" onclick="javascript:showHideHelp($('searchHelp'), 'search_help'); return false;"><img style="vertical-align:bottom;" src="images/icon_help.png" alt="Search help"/></a>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
         <c:choose>

@@ -28,7 +28,6 @@ public interface RevisionCache extends Cache {
    * @param revision Revision number of revision to get.
    * @return The revision info
    * @throws CacheException if error.
-   *
    */
   SVNLogEntry get(final long revision) throws CacheException;
 
@@ -40,4 +39,8 @@ public interface RevisionCache extends Cache {
    */
   void add(final SVNLogEntry logEntry) throws CacheException;
 
+  /**
+   * Flush cache to disk.
+   */
+  void flush();
 }

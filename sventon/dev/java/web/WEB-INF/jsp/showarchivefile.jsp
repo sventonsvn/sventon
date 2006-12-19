@@ -24,6 +24,7 @@
 
     <p><sventon:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/></p>
 
+    <br/>
     <sventon:functionLinks pageName="showArchiveFile"/>
 
     <%@ include file="/WEB-INF/jspf/archiveContentsTable.jspf"%>
