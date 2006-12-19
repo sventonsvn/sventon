@@ -26,7 +26,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
   /**
    * Root directory for cache files.
    */
-  private final String rootDirectory;
+  private final File rootDirectory;
   private final int maxElementsInMemory;
   private final boolean overflowToDisk;
   private final boolean eternal;
@@ -48,7 +48,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @param diskExpiryThreadIntervalSeconds
    *                            Expiry thread interval
    */
-  public ObjectCacheManager(final String rootDirectory,
+  public ObjectCacheManager(final File rootDirectory,
                             final int maxElementsInMemory,
                             final boolean overflowToDisk,
                             final boolean eternal,

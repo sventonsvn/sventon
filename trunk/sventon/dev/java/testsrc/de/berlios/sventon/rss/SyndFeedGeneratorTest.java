@@ -32,8 +32,8 @@ public class SyndFeedGeneratorTest extends TestCase {
     changedPaths.put("/anotherfile4.def", new SVNLogEntryPath("/file4.def", 'R', "/file44.def", 1));
     logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another log message."));
 
-    File tempFile = File.createTempFile("sventon-rss-test", null);
-    PrintWriter pw = new PrintWriter(tempFile);
+    final File tempFile = File.createTempFile("sventon-rss-test", null);
+    final PrintWriter pw = new PrintWriter(tempFile);
     generator.outputFeed("defaultsvn", logEntries, "http://localhost:8888/svn/", pw);
     pw.flush();
     pw.close();

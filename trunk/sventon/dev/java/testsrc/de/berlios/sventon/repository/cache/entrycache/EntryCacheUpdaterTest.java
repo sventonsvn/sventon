@@ -8,16 +8,14 @@ import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
+import java.io.File;
 
 public class EntryCacheUpdaterTest extends TestCase {
 
+  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
+
   public void testUpdate() throws Exception {
     final EntryCache entryCache = new MemoryCache();
-    //final EntryCacheManager cacheManager = new EntryCacheManager("/");
-    //cacheManager.addCache("testCache", entryCache);
-    //final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(cacheManager);
-    //cacheUpdater.setRepository(new TestRepository());
-
     assertEquals(0, entryCache.getSize());
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -33,7 +31,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, entryCache.getSize());
-    new EntryCacheUpdater(null, new ApplicationConfiguration("dir", "filename"), new RepositoryServiceImpl()).updateInternal(entryCache,
+    new EntryCacheUpdater(null, new ApplicationConfiguration(new File(TEMPDIR), "filename"), new RepositoryServiceImpl()).updateInternal(entryCache,
         new TestRepository(), new RevisionUpdate("defaultsvn", logEntries));
     //TODO: Fix this test - all repository.info()-calls returns the same value now.
     assertEquals(1, entryCache.getSize());

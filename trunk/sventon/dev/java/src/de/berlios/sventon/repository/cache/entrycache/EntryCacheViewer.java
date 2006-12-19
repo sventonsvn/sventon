@@ -39,11 +39,9 @@ public class EntryCacheViewer {
 
     ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(args[0]));
     final long cachedRevision = inputStream.readLong();
-    final String repositoryURL = (String) inputStream.readObject();
     final Set<RepositoryEntry> entries = (Set<RepositoryEntry>) inputStream.readObject();
 
     System.out.println("Number of cached entries: " + entries.size());
-    System.out.println("Repository URL: " + repositoryURL);
     System.out.println("Cached revision: " + cachedRevision);
     System.out.println("--------------------------------------------------------");
 

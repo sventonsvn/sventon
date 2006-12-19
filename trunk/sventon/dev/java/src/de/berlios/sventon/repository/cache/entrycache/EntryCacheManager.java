@@ -26,14 +26,14 @@ public class EntryCacheManager extends CacheManager<EntryCache> {
   /**
    * Root directory for cache files.
    */
-  private String rootDirectory;
+  private File rootDirectory;
 
   /**
    * Constructor.
    *
    * @param rootDirectory Directory where to store cache files.
    */
-  public EntryCacheManager(final String rootDirectory) {
+  public EntryCacheManager(final File rootDirectory) {
     logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
     this.rootDirectory = rootDirectory;
   }

@@ -17,8 +17,8 @@ import de.berlios.sventon.repository.cache.CacheException;
 
 import java.io.*;
 import java.util.Collections;
-import java.util.TreeSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Disk persistend repository entry cache.
@@ -59,11 +59,11 @@ public class DiskCache extends EntryCache {
    * @throws CacheException if unable to load cache file.
    */
   public DiskCache(final File cacheDirectory) throws CacheException {
-      logger.info("Initializing DiskCache");
-      logger.debug("Using directory: " + cacheDirectory.getAbsolutePath());
-      cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
-      cacheDirectory.mkdirs();
-      load();
+    logger.info("Initializing DiskCache");
+    logger.debug("Using directory: " + cacheDirectory.getAbsolutePath());
+    cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
+    cacheDirectory.mkdirs();
+    load();
   }
 
   /**
@@ -92,19 +92,31 @@ public class DiskCache extends EntryCache {
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public synchronized void shutdown() throws CacheException {
     logger.info("Shutting down");
+    flush();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void flush() throws CacheException {
     if (getSize() > 0) {
-      logger.info("Saving entryCache to disk, " + cacheFile.getAbsolutePath());
+      final File tempCacheFile = new File(cacheFile.getAbsolutePath() + ".tmp");
+      logger.info("Saving entryCache to disk, " + tempCacheFile);
       final ObjectOutputStream out;
       try {
-        out = new ObjectOutputStream(new FileOutputStream(cacheFile));
+        // Write to a temp file first, to keep the old file just in case.
+        out = new ObjectOutputStream(new FileOutputStream(tempCacheFile));
         out.writeLong(getCachedRevision());
         out.writeObject(getCachedEntries());
         out.flush();
         out.close();
+        logger.debug("Deleting old cache file: " + cacheFile.delete());
+        logger.info("Renaming tempfile [" + tempCacheFile.getName() + "] to [" + cacheFile.getName() + "] - " +
+            tempCacheFile.renameTo(cacheFile));
       } catch (IOException ioex) {
         throw new CacheException("Unable to store entryCache to disk", ioex);
       }

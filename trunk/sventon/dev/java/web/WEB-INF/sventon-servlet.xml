@@ -4,25 +4,23 @@
 <!-- Application context definition for sventon DispatcherServlet -->
 <beans default-lazy-init="false">
 
-  <bean id="sventonDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/"/>
-  </bean>
-
   <bean id="sventonConfigFile" class="java.lang.String">
     <constructor-arg value="sventon.properties"/>
   </bean>
 
-  <bean id="sventonCacheDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/cache/"/>
+  <bean id="sventonDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" value="${java.io.tmpdir}"/>
+    <constructor-arg index="1" value="sventon"/>
   </bean>
 
-  <bean id="sventonExportDir" class="java.lang.String">
-    <constructor-arg value="${java.io.tmpdir}/sventon/export/"/>
+  <bean id="sventonCacheDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="cache"/>
   </bean>
 
-  <!-- Makes sure the directories are created -->
-  <bean class="java.io.File" init-method="mkdirs">
-    <constructor-arg ref="sventonExportDir"/>
+  <bean id="sventonExportDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="export"/>
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -207,7 +205,7 @@
   <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
         destroy-method="shutdown">
     <constructor-arg index="0" ref="sventonCacheDir"/>
-    <constructor-arg index="1" value="10000"/>
+    <constructor-arg index="1" value="1000"/>
     <constructor-arg index="2" value="true"/>
     <constructor-arg index="3" value="true"/>
     <constructor-arg index="4" value="0"/>
@@ -264,6 +262,7 @@
     <property name="configuration" ref="configuration"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="repositoryService" ref="repositoryService"/>
+    <property name="maxRevisionCountPerUpdate" value="500"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
@@ -297,8 +296,7 @@
   </bean>
 
   <bean id="revisionCacheManager" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager">
-    <constructor-arg index="0" ref="sventonCacheDir"/>
-    <constructor-arg index="1" ref="objectCacheManager"/>
+    <constructor-arg index="0" ref="objectCacheManager"/>
   </bean>
 
   <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager"

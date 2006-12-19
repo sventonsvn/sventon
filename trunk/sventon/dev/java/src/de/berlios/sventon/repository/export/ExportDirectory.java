@@ -60,7 +60,7 @@ public class ExportDirectory {
    * @param instanceName Instance name
    * @param parentDir    Parent dir
    */
-  public ExportDirectory(final String instanceName, final String parentDir) {
+  public ExportDirectory(final String instanceName, final File parentDir) {
     this.instanceName = instanceName;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());
     exportDirectory.mkdirs();
