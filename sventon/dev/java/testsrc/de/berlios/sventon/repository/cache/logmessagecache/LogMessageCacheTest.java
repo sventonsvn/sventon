@@ -2,20 +2,19 @@ package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.LogMessage;
 import junit.framework.TestCase;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.util.List;
 
 public class LogMessageCacheTest extends TestCase {
 
   public void testAdd() throws Exception {
-    //final Directory directory = new RAMDirectory();
+    final Directory directory = new RAMDirectory();
 
-    final String tempDir = System.getProperty("java.io.tmpdir") + "sventonCacheTest";
-    final Directory directory = FSDirectory.getDirectory(tempDir, true);
+    //final String tempDir = System.getProperty("java.io.tmpdir") + "sventonCacheTest";
+    //final Directory directory = FSDirectory.getDirectory(tempDir, true);
 
     final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
 

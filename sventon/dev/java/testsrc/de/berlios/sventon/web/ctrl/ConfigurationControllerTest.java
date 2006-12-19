@@ -11,14 +11,17 @@ import de.berlios.sventon.web.command.ConfigCommand;
 
 import java.util.Map;
 import java.util.Set;
+import java.io.File;
 
 public class ConfigurationControllerTest extends TestCase {
+
+  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
   public void testShowFormNonConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setConfiguration(new ApplicationConfiguration("dir", "filename"));
+    ctrl.setConfiguration(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
     assertEquals("config", modelAndView.getViewName());
@@ -28,7 +31,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ApplicationConfiguration config = new ApplicationConfiguration("dir", "filename");
+    ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     config.setConfigured(true);
     ctrl.setConfiguration(config);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
@@ -40,7 +43,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ApplicationConfiguration config = new ApplicationConfiguration("dir", "filename");
+    ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     config.setConfigured(true);
     ctrl.setConfiguration(config);
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
@@ -52,7 +55,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setConfiguration(new ApplicationConfiguration("dir", "filename"));
+    ctrl.setConfiguration(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
     final ConfigCommand command = new ConfigCommand();
     final BindException exception = new BindException(command, "test");
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
@@ -65,7 +68,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final ApplicationConfiguration configuration = new ApplicationConfiguration("dir", "filename");
+    final ApplicationConfiguration configuration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     assertEquals(0, configuration.getInstanceCount());
     assertFalse(configuration.isConfigured());
     ctrl.setConfiguration(configuration);

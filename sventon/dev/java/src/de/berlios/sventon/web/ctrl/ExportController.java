@@ -42,7 +42,7 @@ public class ExportController extends AbstractSVNTemplateController implements C
   /**
    * Root of temporary directory where export will be made.
    */
-  private String exportDir;
+  private File exportDir;
 
   /**
    * Response stream content type. Default set to <code>application/octet-stream</code>.
@@ -54,7 +54,7 @@ public class ExportController extends AbstractSVNTemplateController implements C
    *
    * @param exportDir The directory
    */
-  public void setExportDir(final String exportDir) {
+  public void setExportDir(final File exportDir) {
     this.exportDir = exportDir;
   }
 

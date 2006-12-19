@@ -24,7 +24,7 @@ public class ApplicationConfiguratorTest extends TestCase {
     props.put("defaultsvn.useCache", "false");
     props.put("defaultsvn.allowZipDownloads", "false");
 
-    final ApplicationConfiguration configuration = new ApplicationConfiguration(System.getProperty("java.io.tmpdir"),
+    final ApplicationConfiguration configuration = new ApplicationConfiguration(new File(System.getProperty("java.io.tmpdir")),
         "sventon-config-test.tmp");
     assertEquals(0, configuration.getInstanceCount());
     assertFalse(configuration.isConfigured());

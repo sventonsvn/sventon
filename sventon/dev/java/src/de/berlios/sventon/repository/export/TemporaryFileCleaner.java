@@ -41,8 +41,8 @@ public class TemporaryFileCleaner {
    *
    * @param exportRootDir Directory
    */
-  public void setExportRootDir(final String exportRootDir) {
-    this.exportRootDir = new File(exportRootDir);
+  public void setExportRootDir(final File exportRootDir) {
+    this.exportRootDir = exportRootDir;
     if (!this.exportRootDir.exists()) {
       throw new IllegalArgumentException("Directory does not exist: " + exportRootDir);
     }

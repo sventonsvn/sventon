@@ -79,7 +79,7 @@ public final class ObjectCacheImpl implements ObjectCache {
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public void put(final Object cacheKey, final Object value) {
     if (cacheKey == null) {
@@ -90,7 +90,7 @@ public final class ObjectCacheImpl implements ObjectCache {
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public Object get(final Object cacheKey) {
     if (cacheKey == null) {
@@ -107,21 +107,28 @@ public final class ObjectCacheImpl implements ObjectCache {
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public long getHitCount() {
     return cache.getHitCount();
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
    */
   public long getMissCount() {
     return cache.getMissCountNotFound();
   }
 
   /**
-   * {@inheritDoc]
+   * {@inheritDoc}
+   */
+  public void flush() {
+    cache.flush();
+  }
+
+  /**
+   * {@inheritDoc}
    */
   public void shutdown() throws CacheException {
     try {
