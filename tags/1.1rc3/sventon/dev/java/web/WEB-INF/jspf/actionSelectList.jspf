@@ -1,0 +1,21 @@
+<%
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://sventon.berlios.de.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
+%>
+<select class="sventonSelect" name="actionSelect">
+  <option class="sventonSelectOption">Actions...</option>
+  <option value="diff">&nbsp;&nbsp;Diff entries</option>
+  <c:if test="${isZipDownloadsAllowed}">
+    <option value="export">&nbsp;&nbsp;Download as zip</option>
+  </c:if>
+  <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
+</select>
