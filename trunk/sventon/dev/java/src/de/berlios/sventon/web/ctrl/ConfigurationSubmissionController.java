@@ -88,14 +88,19 @@ public class ConfigurationSubmissionController extends AbstractController {
     final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
     logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
-    final FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
-
-    for (final Properties properties : getConfigurationAsProperties(configuration)) {
-      logger.debug("Storing: " + properties);
-      properties.store(fileOutputStream, null);
-      fileOutputStream.flush();
+    FileOutputStream fileOutputStream = null;
+    try {
+      fileOutputStream = new FileOutputStream(propertyFile);
+      for (final Properties properties : getConfigurationAsProperties(configuration)) {
+        logger.debug("Storing: " + properties);
+        properties.store(fileOutputStream, null);
+        fileOutputStream.flush();
+      }
+    } finally {
+      if (fileOutputStream != null) {
+        fileOutputStream.close();
+      }
     }
-    fileOutputStream.close();
 
     configuration.setConfigured(true);
 

@@ -34,7 +34,7 @@ public class GetControllerTest extends TestCase {
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
-    assertTrue(((String)res.getHeader("Content-disposition")).startsWith("inline"));
+    assertTrue(((String) res.getHeader("Content-disposition")).startsWith("inline"));
   }
 
   public void testSvnHandleGetFileAsAttachment() throws Exception {
@@ -53,7 +53,7 @@ public class GetControllerTest extends TestCase {
     assertNull(modelAndView);
 
     assertEquals("application/octet-stream", res.getContentType());
-    assertTrue(((String)res.getHeader("Content-disposition")).startsWith("attachment"));
+    assertTrue(((String) res.getHeader("Content-disposition")).startsWith("attachment"));
   }
 
   private ImageUtil getImageUtil() {
@@ -68,7 +68,8 @@ public class GetControllerTest extends TestCase {
     return imageUtil;
   }
 
-  class TestRepository extends SVNRepositoryStub {
+  static class TestRepository extends SVNRepositoryStub {
+
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

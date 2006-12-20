@@ -121,8 +121,8 @@ public class InstanceConfiguration {
 
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
-    } catch (SVNException ex) {
-      logger.warn("Unable to parse URL [" + repositoryRoot + "]");
+    } catch (final SVNException ex) {
+      logger.warn("Unable to parse URL [" + repositoryRoot + "]", ex);
     }
   }
 

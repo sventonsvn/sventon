@@ -29,7 +29,7 @@ import java.io.*;
  *
  * @author jesper@users.berlios.de
  */
-public class SyndFeedGenerator implements FeedGenerator {
+public final class SyndFeedGenerator implements FeedGenerator {
 
   /**
    * The generated feed type, default set to <tt>rss_2.0</tt>.
@@ -142,18 +142,21 @@ public class SyndFeedGenerator implements FeedGenerator {
   protected String getBodyTemplate() throws IOException {
     if (bodyTemplate == null) {
       final StringBuilder sb = new StringBuilder();
-      final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
+      final InputStream is = Class.class.getResourceAsStream(bodyTemplateFile);
       if (is == null) {
         throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
       }
-      final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+      BufferedReader reader = null;
       try {
+        reader = new BufferedReader(new InputStreamReader(is));
         String line;
         while ((line = reader.readLine()) != null) {
           sb.append(line);
         }
       } finally {
-        reader.close();
+        if (reader != null) {
+          reader.close();
+        }
       }
       bodyTemplate = sb.toString();
     }

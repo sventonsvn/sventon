@@ -52,9 +52,7 @@ public class ApplicationConfiguratorTest extends TestCase {
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
-      if (tempConfigFile != null) {
-        tempConfigFile.delete();
-      }
+      tempConfigFile.delete();
     }
 
   }

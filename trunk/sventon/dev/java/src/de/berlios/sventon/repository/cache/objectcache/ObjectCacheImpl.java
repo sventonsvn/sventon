@@ -42,7 +42,7 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * Logger for this class and subclasses
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Constructor.
