@@ -52,8 +52,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void update(final RevisionUpdate revisionUpdate) {
   }
 
-  class TestRepository extends SVNRepositoryStub {
+  static class TestRepository extends SVNRepositoryStub {
     private boolean firstTime = true;
+
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

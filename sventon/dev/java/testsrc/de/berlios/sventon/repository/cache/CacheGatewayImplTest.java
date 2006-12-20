@@ -98,7 +98,7 @@ public class CacheGatewayImplTest extends TestCase {
     return entries;
   }
 
-  class TestRepository extends SVNRepositoryStub {
+  static class TestRepository extends SVNRepositoryStub {
 
     private HashMap<String, Collection> repositoryEntries = new HashMap<String, Collection>();
     private List<SVNLogEntry> logEntriesForPopulation = new ArrayList<SVNLogEntry>();

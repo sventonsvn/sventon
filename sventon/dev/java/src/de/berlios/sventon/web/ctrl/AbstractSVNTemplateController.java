@@ -20,10 +20,8 @@ import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.AvailableCharsets;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -128,11 +126,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private RevisionObservable revisionObservable;
 
   /**
-   * Logger for this class and subclasses.
-   */
-  protected final Log logger = LogFactory.getLog(getClass());
-
-  /**
    * The repository service instance.
    */
   private RepositoryService repositoryService;
@@ -158,7 +151,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * {@inheritDoc}
    */
   public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response, Object command,
-                             final BindException exception) {
+                             final BindException errors) {
 
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
@@ -173,8 +166,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
 
-    if (exception.hasErrors()) {
-      return prepareExceptionModelAndView(exception, svnCommand);
+    if (errors.hasErrors()) {
+      return prepareExceptionModelAndView(errors, svnCommand);
     }
 
     try {
@@ -189,7 +182,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       parseAndUpdateSortParameters(request, userContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
       parseAndUpdateCharsetParameter(request, userContext);
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, exception);
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
@@ -223,11 +216,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       logger.error("Exception", ex);
       Throwable cause = ex.getCause();
       if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
-        exception.reject("error.message.no-route-to-host");
+        errors.reject("error.message.no-route-to-host");
       } else {
-        exception.reject(null, ex.getMessage());
+        errors.reject(null, ex.getMessage());
       }
-      return prepareExceptionModelAndView(exception, svnCommand);
+      return prepareExceptionModelAndView(errors, svnCommand);
     }
 
   }
@@ -487,5 +480,5 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   public void setAvailableCharsets(final AvailableCharsets availableCharsets) {
     this.availableCharsets = availableCharsets;
   }
-  
+
 }

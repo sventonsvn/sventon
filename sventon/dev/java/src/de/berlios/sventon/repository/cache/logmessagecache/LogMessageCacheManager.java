@@ -71,8 +71,8 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
     try {
       logger.debug("Loading analyzer [" + analyzerClassName + "]");
       analyzer = Class.forName(analyzerClassName);
-    } catch (ClassNotFoundException cnfe) {
-      throw new CacheException("Unable to load analyzer [" + analyzerClassName + "]");
+    } catch (final ClassNotFoundException cnfe) {
+      throw new CacheException("Unable to load analyzer [" + analyzerClassName + "]", cnfe);
     }
     //noinspection unchecked
     return new LogMessageCacheImpl(fsDirectory, (Class) analyzer);

@@ -37,7 +37,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     assertEquals(1, entryCache.getSize());
   }
 
-  class TestRepository extends SVNRepositoryStub {
+  static class TestRepository extends SVNRepositoryStub {
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

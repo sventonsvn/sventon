@@ -88,8 +88,8 @@ public class TemporaryFileCleaner {
     try {
       final Date fileDate = ExportDirectory.DATE_FORMAT.parse(matcher.group());
       return System.currentTimeMillis() - fileDate.getTime() > timeThreshold;
-    } catch (ParseException pe) {
-      logger.warn("Unable to parse date part of filename: " + tempFile.getName());
+    } catch (final ParseException pe) {
+      logger.warn("Unable to parse date part of filename: " + tempFile.getName(), pe);
       return false;
     }
   }

@@ -31,7 +31,7 @@ public final class ZipUtils {
   /**
    * Logger for this class and subclasses.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   public ZipUtils() {
     //This line is a hack handles UTF-8 chars. But these are garbeled in Windows.
