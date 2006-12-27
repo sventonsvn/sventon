@@ -184,7 +184,7 @@ public final class RepositoryEntry implements Serializable {
    * @return the creation date
    */
   public Date getDate() {
-    return entryCreatedDate;
+    return (Date) entryCreatedDate.clone();
   }
 
   /**
