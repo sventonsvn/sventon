@@ -18,12 +18,14 @@ public class SyndFeedGeneratorTest extends TestCase {
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths;
 
+    final String logMessage = "&lt; &gt; / &amp; ' ; \\";
+
     changedPaths = new HashMap<String, SVNLogEntryPath>();
     changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
     changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
     changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "A log message."));
+    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), logMessage));
 
     changedPaths = new HashMap<String, SVNLogEntryPath>();
     changedPaths.put("/anotherfile1.java", new SVNLogEntryPath("/file1.java", 'M', null, 2));

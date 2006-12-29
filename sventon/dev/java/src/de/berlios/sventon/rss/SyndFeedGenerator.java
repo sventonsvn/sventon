@@ -14,14 +14,17 @@ package de.berlios.sventon.rss;
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.web.model.LogEntryActionType;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.apache.commons.lang.StringUtils;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.io.*;
+import java.util.regex.Matcher;
 
 /**
  * Class to generate <code>RSS</code> feeds from Subversion log information.
@@ -40,6 +43,11 @@ public final class SyndFeedGenerator implements FeedGenerator {
    * Number of characters in the abbreviated log message, default set to 40.
    */
   private int logMessageLength = 40;
+
+  /**
+   * Logging instance.
+   */
+  protected final Log logger = LogFactory.getLog(getClass());
 
   public static final String LOG_MESSAGE_KEY = "@LOG_MESSAGE@";
   public static final String ADDED_COUNT_KEY = "@ADDED_COUNT@";
@@ -79,6 +87,8 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
     SyndEntry entry;
     SyndContent description;
+
+    logger.debug("Generating [" + logEntries.size() + "] RSS feed items for instance [" + instanceName + "]");
 
     // One logEntry is one commit (or revision)
     for (final SVNLogEntry logEntry : logEntries) {
@@ -120,11 +130,11 @@ public final class SyndFeedGenerator implements FeedGenerator {
       }
 
       String itemBody = getBodyTemplate();
-      itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, logEntry.getMessage());
-      itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, String.valueOf(added));
-      itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, String.valueOf(modified));
-      itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, String.valueOf(replaced));
-      itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, String.valueOf(deleted));
+      itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(logEntry.getMessage()));
+      itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
+      itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
+      itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
+      itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
 
       description.setValue(itemBody);
       entry.setDescription(description);
@@ -142,7 +152,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
   protected String getBodyTemplate() throws IOException {
     if (bodyTemplate == null) {
       final StringBuilder sb = new StringBuilder();
-      final InputStream is = Class.class.getResourceAsStream(bodyTemplateFile);
+      final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
       if (is == null) {
         throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
       }
