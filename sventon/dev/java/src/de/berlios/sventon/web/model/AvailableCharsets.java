@@ -21,16 +21,34 @@ import java.util.TreeSet;
  * @author jesper@users.berlios.de
  */
 public class AvailableCharsets {
+
+  /**
+   * Cached available character sets.
+   */
   private Set<String> charsets;
 
+  /**
+   * Constructor.
+   */
   public AvailableCharsets() {
     this.charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
   }
 
+  /**
+   * Gets the character sets available in the JVM.
+   *
+   * @return Available charsets.
+   */
   public Set<String> getCharsets() {
     return charsets;
   }
 
+  /**
+   * Checks if given character set is supported by the JVM.
+   *
+   * @param charset Charset
+   * @return <tt>true</tt> if character set is supported by the JVM.
+   */
   public boolean isSupported(final String charset) {
     return charsets.contains(charset);
   }
