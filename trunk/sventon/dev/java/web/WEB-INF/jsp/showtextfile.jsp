@@ -23,8 +23,7 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/></p>
-
+    <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
     <sventon:functionLinks pageName="showTextFile"/>
 
 <pre class="codeBlock"><c:out value="${fileContent}" escapeXml="false"/></pre>

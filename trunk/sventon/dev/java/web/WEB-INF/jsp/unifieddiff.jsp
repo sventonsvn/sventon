@@ -22,8 +22,7 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 
-  <p><sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/></p>
-
+  <sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/>
   <sventon:functionLinks pageName="showUnifiedDiff"/>
 
   <c:choose>

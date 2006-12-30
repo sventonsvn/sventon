@@ -22,8 +22,7 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/></p>
-
+    <sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/>
     <sventon:functionLinks pageName="showImageFile"/>
 
     <c:url value="get.svn" var="showUrl">

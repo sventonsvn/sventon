@@ -21,35 +21,33 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <p><sventon:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/></p>
-
+  <sventon:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/>
   <sventon:functionLinks pageName="repobrowser"/>
 
   <% pageContext.setAttribute("br", "\n"); %>
-  <div id="logMessagesDiv" class="sventonEntriesDiv">
-    <table class="sventonEntriesTable">
-      <c:set var="rowCount" value="0"/>
-      <tr>
-        <th>Revision</th>
-        <th>Log Message</th>
-      </tr>
-      <c:forEach items="${logMessages}" var="logMessage">
-        <c:url value="revinfo.svn" var="showRevInfoUrl">
-          <c:param name="revision" value="${logMessage.revision}" />
-          <c:param name="name" value="${command.name}" />
-        </c:url>
-        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <td valign="top"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
-          <td>${fn:replace(logMessage.message, br, '<br/>')}</td>
-        </tr>
-        <c:set var="rowCount" value="${rowCount + 1}"/>
-      </c:forEach>
+
+  <table class="sventonEntriesTable">
+    <c:set var="rowCount" value="0"/>
+    <tr>
+      <th>Revision</th>
+      <th>Log Message</th>
+    </tr>
+    <c:forEach items="${logMessages}" var="logMessage">
+      <c:url value="revinfo.svn" var="showRevInfoUrl">
+        <c:param name="revision" value="${logMessage.revision}" />
+        <c:param name="name" value="${command.name}" />
+      </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td><b>Total:&nbsp;${rowCount}&nbsp;hits</b></td>
-        <td></td>
+        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
+        <td>${fn:replace(logMessage.message, br, '<br/>')}</td>
       </tr>
-    </table>
-  </div>
+      <c:set var="rowCount" value="${rowCount + 1}"/>
+    </c:forEach>
+    <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+      <td><b>Total:&nbsp;${rowCount}&nbsp;hits</b></td>
+      <td></td>
+    </tr>
+  </table>
 
 <br>
 <script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>

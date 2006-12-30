@@ -25,6 +25,11 @@ td {
   font-size: 10px;
 }
 
+form {
+  margin: 0;
+  padding: 0;
+}
+
 p {
   margin: 10px 0px;
 }
@@ -244,9 +249,6 @@ input.btn {
   white-space: nowrap;
 }
 
-.sventonEntriesDiv {
-}
-
 .sventonTopTable {
   width: 100%;
 }
@@ -280,9 +282,6 @@ input.btn {
   text-decoration: none;
   font-style: italic;
   font-weight: bold;	
-}
-
-.sventonBlameTable {
 }
 
 .sventonFunctionLinksTable {

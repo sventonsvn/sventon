@@ -22,8 +22,7 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
-
+    <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
     <sventon:functionLinks pageName="showRevInfo"/>
 
     <table class="sventonLatestCommitInfoTable">

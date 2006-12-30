@@ -144,6 +144,7 @@
     </c:url>
     <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" title="<spring:message code="unifieddiff.button.tooltip" />" onclick="javascript:parent.location='${unifiedDiffUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="javascript:toggleWrap();"/>
+    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showUnifiedDiff'}">
@@ -158,12 +159,7 @@
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
     <input type="button" class="btn" value="<spring:message code="diff.button.text"/>" title="<spring:message code="diff.button.tooltip" />" onclick="javascript:parent.location='${diffUrl}';"/>
-  </c:when>
-
-  <c:when test="${pageName == 'showBlame'}">
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showThumbs'}">
