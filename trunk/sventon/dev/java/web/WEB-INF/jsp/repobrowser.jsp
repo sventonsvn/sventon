@@ -112,7 +112,7 @@
       </c:forEach>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td colspan="2" align="right"><b>Total:</b></td>
+        <td colspan="2" class="sventonCol1" align="right"><b>Total:</b></td>
         <td><b>${rowCount} entries</b></td>
         <td></td>
         <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
@@ -122,7 +122,7 @@
       </tr>
 
       <tr>
-        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
+        <td colspan="2" class="sventonCol1"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
         <td>
           <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
         </td>
