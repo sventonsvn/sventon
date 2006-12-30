@@ -25,8 +25,7 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/></p>
-
+    <sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/>
     <sventon:functionLinks pageName="showLog"/>
 
     <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">

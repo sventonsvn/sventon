@@ -24,8 +24,7 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <p><sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
-    
+    <sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/>
     <sventon:functionLinks pageName="showDiff"/>
 
     <c:choose>
