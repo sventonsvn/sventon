@@ -95,16 +95,10 @@
     <property name="pageSize" value="20"/>
   </bean>
 
-  <bean id="completionController" class="de.berlios.sventon.web.ctrl.xml.CompletionController"
-        parent="abstractController">
-    <property name="encoding" ref="defaultEncoding"/>
-  </bean>
-
   <bean id="showFileController" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
     <property name="colorer" ref="colorer"/>
     <property name="imageUtil" ref="imageUtil"/>
-    <property name="encoding" ref="defaultEncoding"/>
   </bean>
 
   <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController"
@@ -178,7 +172,6 @@
         <prop key="/export.svn">exportController</prop>
         <!-- url mappings for xml producers -->
         <prop key="/rss.xml">rssController</prop>
-        <prop key="/compl.xml">completionController</prop>
         <prop key="/latest.xml">latestInfoController</prop>
         <!-- url mappings for ajax controllers -->
         <prop key="/listfiles.ajax">listFilesController</prop>
@@ -188,7 +181,9 @@
     </property>
   </bean>
 
-  <bean id="availableCharsets" class="de.berlios.sventon.web.model.AvailableCharsets"/>
+  <bean id="availableCharsets" class="de.berlios.sventon.web.model.AvailableCharsets">
+    <constructor-arg ref="defaultEncoding"/>
+  </bean>
 
   <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
     <property name="mimeMappings">
@@ -315,7 +310,6 @@
   </bean>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
-    <property name="encoding" ref="defaultEncoding"/>
     <property name="rendererMappings">
       <map>
         <entry key="java" value-ref="javaXhtmlRenderer"/>

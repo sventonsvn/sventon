@@ -29,12 +29,6 @@ public class JHighlightColorer implements Colorer {
 
   private final Log logger = LogFactory.getLog(getClass());
 
-  /**
-   * The encoding, default set to <code>UTF-8</code>.
-   * <p/>
-   */
-  private String encoding = "UTF-8";
-
   private Properties rendererMappings;
 
   /**
@@ -46,7 +40,7 @@ public class JHighlightColorer implements Colorer {
   /**
    * {@inheritDoc}
    */
-  public String getColorizedContent(final String content, final String fileExtension) throws IOException {
+  public String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException {
 
     logger.debug("Colorizing content, file extension: " + fileExtension);
 
@@ -86,15 +80,6 @@ public class JHighlightColorer implements Colorer {
    */
   public void setRendererMappings(Properties rendererMappings) {
     this.rendererMappings = rendererMappings;
-  }
-
-  /**
-   * Sets the encoding.
-   *
-   * @param encoding The encoding.
-   */
-  public void setEncoding(final String encoding) {
-    this.encoding = encoding;
   }
 
 }

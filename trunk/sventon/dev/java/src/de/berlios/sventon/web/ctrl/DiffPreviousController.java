@@ -65,8 +65,8 @@ public class DiffPreviousController extends AbstractSVNTemplateController implem
       logger.debug("Using: " + diffCommand);
 
       try {
-        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
-            repository, diffCommand, "UTF-8", getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
+            userContext.getCharset(), getConfiguration().getInstanceConfiguration(svnCommand.getName()));
 
         model.put("diffResult", diffResult);
         model.put("isIdentical", false);

@@ -236,7 +236,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     if (charset != null) {
       userContext.setCharset(charset);
     } else if (userContext.getCharset() == null) {
-      userContext.setCharset("UTF-8");
+      userContext.setCharset(availableCharsets.getDefaultCharset());
     }
   }
 

@@ -61,11 +61,6 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   private static final String FORMAT_REQUEST_PARAMETER = "format";
 
-  /**
-   * Character encoding to use.
-   */
-  private String encoding;
-
 
   /**
    * {@inheritDoc}
@@ -84,16 +79,19 @@ public class ShowFileController extends AbstractSVNTemplateController implements
 
     logger.debug(properties);
 
+    final String charset = userContext.getCharset();
+    logger.debug("Using charset encoding: " + charset);
+
     model.put("properties", properties);
     model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
       if ("raw".equals(formatParameter)) {
-        model.putAll(new RawTextFile(outStream.toString(), true).getModel());
+        model.putAll(new RawTextFile(outStream.toString(charset), true).getModel());
       } else {
-        model.putAll(new HTMLDecoratedTextFile(outStream.toString(), properties,
-            repository.getLocation().toDecodedString(), svnCommand.getPath(), encoding, colorer).getModel());
+        model.putAll(new HTMLDecoratedTextFile(outStream.toString(charset), properties,
+            repository.getLocation().toDecodedString(), svnCommand.getPath(), charset, colorer).getModel());
       }
       return new ModelAndView("showtextfile", model);
     } else {
@@ -122,15 +120,6 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   public void setColorer(final Colorer colorer) {
     this.colorer = colorer;
-  }
-
-  /**
-   * Sets the character encoding to use.
-   *
-   * @param encoding Character encoding
-   */
-  public void setEncoding(final String encoding) {
-    this.encoding = encoding;
   }
 
   /**

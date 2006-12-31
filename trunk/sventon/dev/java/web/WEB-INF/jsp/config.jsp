@@ -20,7 +20,7 @@
   </head>
 
   <body>
-    <p><sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/></p>
+    <sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
 
     <br/>
       <p>
@@ -99,7 +99,7 @@
                 By default, the temporary files created by sventon, including the <b>sventon.log</b> file will be stored in <b><%=System.getProperty("java.io.tmpdir")%></b>.<br>
                 Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
                 <br/>
-                If this sventon instance will be used with Tomcat in a non-ISO-8859-1 environment, making fully use of Subversion's
+                If this sventon instance will be used with Tomcat in a non-US-ASCII environment, making fully use of Subversion's
                 UTF-8 support, modifications must be made to the Coyote HTTP/1.1 connector: In server.xml, either set attribute
                 <code>URIEncoding="UTF-8"</code> and/or set <code>useBodyEncodingForURI="true"</code>.
               </td>

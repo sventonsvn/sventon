@@ -11,15 +11,17 @@
  */
 package de.berlios.sventon.util;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.mail.internet.MimeUtility;
-import java.net.URLEncoder;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Encoding/decoding utility function class.
  */
 public final class EncodingUtils {
+
+  private static final String DEFAULT_CHARSET = "UTF-8";
 
   /**
    * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
@@ -34,9 +36,9 @@ public final class EncodingUtils {
     String codedFilename = null;
     try {
       if (null != userAgent && -1 != userAgent.indexOf("MSIE")) {
-        codedFilename = URLEncoder.encode(filename, "UTF-8");
+        codedFilename = URLEncoder.encode(filename, DEFAULT_CHARSET);
       } else if (null != userAgent && -1 != userAgent.indexOf("Mozilla")) {
-        codedFilename = MimeUtility.encodeText(filename, "UTF-8", "B");
+        codedFilename = MimeUtility.encodeText(filename, DEFAULT_CHARSET, "B");
       }
     } catch (UnsupportedEncodingException uee) {
       // Silently ignore

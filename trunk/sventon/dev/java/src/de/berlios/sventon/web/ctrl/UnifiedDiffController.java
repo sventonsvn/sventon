@@ -53,8 +53,8 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
     logger.debug("Using: " + diffCommand);
 
     try {
-      final String diffResult = getRepositoryService().diffUnified(
-          repository, diffCommand, "UTF-8", getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+      final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userContext.getCharset(),
+          getConfiguration().getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);

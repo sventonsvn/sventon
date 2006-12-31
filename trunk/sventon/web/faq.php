@@ -176,11 +176,11 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q14">
-<b>Q:</b> Does sventon support non-Latin 1 charsets?
+<b>Q:</b> Does sventon support non-US-ASCII charsets?
 </a>
 <br/>
 <b>A:</b> Yes, hopefully. It is of course hard to test all possible combinations, so please report issues if you find any.
-<br/>For Tomcat to work correctly with non-Latin 1 charsets, the Tomcat connector attribute <code>URIEncoding</code> should be set to <code>UTF-8</code>, or alternatively the attribute <code>useBodyEncodingForURI</code> should be set to <code>true</code>.
+<br/>For Tomcat to work correctly with non-US-ASCII charsets, the Tomcat connector attribute <code>URIEncoding</code> should be set to <code>UTF-8</code>, or alternatively the attribute <code>useBodyEncodingForURI</code> should be set to <code>true</code>.
 </p>
 
 <p>

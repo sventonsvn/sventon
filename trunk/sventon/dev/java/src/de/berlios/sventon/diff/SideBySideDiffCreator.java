@@ -36,9 +36,6 @@ import java.util.List;
  */
 public final class SideBySideDiffCreator {
 
-  //TODO: Move to sventon-servlet.xml
-  public static final String ENCODING = "UTF-8";
-
   private final List<String> leftSourceLines;
   private final List<String> rightSourceLines;
 
@@ -47,12 +44,14 @@ public final class SideBySideDiffCreator {
    *
    * @param fromFile
    * @param fromKeywordHandler
+   * @param fromFileCharset
    * @param toFile
    * @param toKeywordHandler
+   * @param toFileCharset
    * @throws IOException
    */
-  public SideBySideDiffCreator(final RawTextFile fromFile, final KeywordHandler fromKeywordHandler,
-                               final RawTextFile toFile, final KeywordHandler toKeywordHandler)
+  public SideBySideDiffCreator(final RawTextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
+                               final RawTextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
 
     final LineNumberAppender lineNumberAppender = new LineNumberAppender();
@@ -60,8 +59,8 @@ public final class SideBySideDiffCreator {
     lineNumberAppender.setEmbedEnd(":&nbsp;</span>");
     lineNumberAppender.setPadding(5);
 
-    final String leftString = replaceLeadingSpaces(appendKeywords(fromKeywordHandler, fromFile.getContent(), ENCODING));
-    final String rightString = replaceLeadingSpaces(appendKeywords(toKeywordHandler, toFile.getContent(), ENCODING));
+    final String leftString = replaceLeadingSpaces(appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
+    final String rightString = replaceLeadingSpaces(appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
 
     leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
     rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
@@ -125,8 +124,7 @@ public final class SideBySideDiffCreator {
    * @param content        Content to apply keywords to
    * @param encoding       Encoding to use.
    * @return New content
-   * @throws java.io.UnsupportedEncodingException
-   *          if UTF-8 is not supported
+   * @throws UnsupportedEncodingException if given charset encoding is unsupported
    */
   private String appendKeywords(final KeywordHandler keywordHandler, final String content, final String encoding)
       throws UnsupportedEncodingException {

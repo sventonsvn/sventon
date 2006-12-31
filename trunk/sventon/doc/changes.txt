@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[763] Fixed: Bug #7106 - View files with different encoding.
+[763] Fixed: Bug #9847 - Directories should not be possible to diff.
 [729] Added: Feature #2884 - N Latest Commit Infos.
 [729] Added: Feature #2748 - Revision details ajaxified.
 [724] Added: Feature #2887 - Customizable RSS body.
