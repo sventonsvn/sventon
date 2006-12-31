@@ -11,26 +11,27 @@
  */
 package de.berlios.sventon.service;
 
+import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
-import de.berlios.sventon.web.model.RawTextFile;
-import de.berlios.sventon.web.model.ImageMetadata;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
 import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.config.InstanceConfiguration;
-import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.web.model.ImageMetadata;
+import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * Service class for accessing the subversion repository.
@@ -117,11 +118,13 @@ public interface RepositoryService {
    * @param repository The repository
    * @param path       Path
    * @param revision   Revision
+   * @param charset    Charset encoding to use
    * @return The text file instance
-   * @throws SVNException if a subversion error occur
+   * @throws SVNException                 if a subversion error occur
+   * @throws UnsupportedEncodingException if given charset encoding is invalid
    */
-  RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
-      throws SVNException;
+  RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
+      throws SVNException, UnsupportedEncodingException;
 
   /**
    * Gets a file from the repository.
@@ -266,8 +269,9 @@ public interface RepositoryService {
    * @throws SVNException  if a subversion error occur
    * @throws DiffException
    */
-  List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                                final InstanceConfiguration configuration) throws SVNException, DiffException;
+  List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
+                                         final String charset, final InstanceConfiguration configuration)
+      throws SVNException, DiffException;
 
   /**
    * @param repository
@@ -279,6 +283,7 @@ public interface RepositoryService {
    * @throws DiffException
    */
   String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                     final InstanceConfiguration configuration) throws SVNException, DiffException;
+                     final InstanceConfiguration configuration)
+      throws SVNException, DiffException;
 
 }

@@ -160,12 +160,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
-      throws SVNException {
+  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
+      throws SVNException, UnsupportedEncodingException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFile(repository, path, revision, outStream);
-    return new RawTextFile(outStream.toString(), true);
+    return new RawTextFile(outStream.toString(charset), true);
   }
 
   /**
@@ -348,26 +348,28 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                                       final InstanceConfiguration configuration) throws SVNException, DiffException {
+                                                final InstanceConfiguration configuration) throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand);
-
-    final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-    final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-    final Map leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-    final Map rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
-    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
-    final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
+    assertFileEntries(repository, diffCommand);
 
     String diffResultString;
     SideBySideDiffCreator sideBySideDiffCreator;
+
     try {
+      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+
+      final Map leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
+      final Map rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
+
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
+      final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
+      final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
+
       diffProducer.doNormalDiff(diffResult);
-      diffResultString = diffResult.toString();
+      diffResultString = diffResult.toString(charset);
 
       if ("".equals(diffResultString)) {
         throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
@@ -378,7 +380,8 @@ public class RepositoryServiceImpl implements RepositoryService {
       final KeywordHandler toFileKeywordHandler =
           new KeywordHandler(rightFileProperties, configuration.getUrl() + diffCommand.getToPath());
 
-      sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, rightFile, toFileKeywordHandler);
+      sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, charset, rightFile,
+          toFileKeywordHandler, charset);
 
     } catch (IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
@@ -391,31 +394,35 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                            final InstanceConfiguration configuration) throws SVNException, DiffException {
+                            final InstanceConfiguration configuration)
+      throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand);
+    assertFileEntries(repository, diffCommand);
 
-    final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-    final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-    final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
-        new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
+    String diffResultString;
 
     try {
+      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
+          new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
+
       diffProducer.doUniDiff(diffResult);
+
+      diffResultString = diffResult.toString(charset);
+      if ("".equals(diffResultString)) {
+        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+      }
+
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
     }
 
-    final String diffResultString = diffResult.toString();
-    if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
-    }
-
     return diffResultString;
   }
-
 
   private void assertNotBinary(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException,
       IllegalFileFormatException {
@@ -429,6 +436,19 @@ public class RepositoryServiceImpl implements RepositoryService {
       throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getFromPath());
     } else if (!isRightFileTextType) {
       throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getToPath());
+    }
+  }
+
+  private void assertFileEntries(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException, DiffException {
+    final SVNNodeKind entry1 = getNodeKind(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
+    final SVNNodeKind entry2 = getNodeKind(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
+
+    final String message = "Only files can be diffed. [";
+    if (SVNNodeKind.FILE != entry1) {
+      throw new DiffException(message + diffCommand.getFromPath() + "] is a directory");
+    }
+    if (SVNNodeKind.FILE != entry2) {
+      throw new DiffException(message + diffCommand.getToPath() + "] is a directory");
     }
   }
 

@@ -4,12 +4,15 @@ import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.diff.SourceLine;
+import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.SideBySideDiffRow;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.ISVNSession;
 
 import java.io.OutputStream;
@@ -51,6 +54,10 @@ public class RepositoryServiceImplTest extends TestCase {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
         return 0;
       }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
+      }
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
@@ -80,6 +87,10 @@ public class RepositoryServiceImplTest extends TestCase {
           }
         }
         return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
       }
     };
 
@@ -118,6 +129,10 @@ public class RepositoryServiceImplTest extends TestCase {
           }
         }
         return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
       }
     };
 
@@ -160,6 +175,10 @@ public class RepositoryServiceImplTest extends TestCase {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
         return 0;
       }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
+      }
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
@@ -177,6 +196,39 @@ public class RepositoryServiceImplTest extends TestCase {
     }
   }
 
+  public void testDiffSideBySideDirectories() throws Exception {
+    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+        final String fileContents = "test file contents";
+        if (contents != null) {
+          try {
+            contents.write(fileContents.getBytes());
+          } catch (IOException e) {
+            throw new RuntimeException("FAILED!");
+          }
+        }
+        return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.DIR;
+      }
+    };
+
+    final RepositoryService service = new RepositoryServiceImpl();
+    final InstanceConfiguration configuration = new InstanceConfiguration();
+
+    final DiffCommand diffCommand = new DiffCommand(new String[]{
+        "/bug/code/try1;;91",
+        "/bug/code/try2;;90"});
+
+    try {
+      service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+      fail("Binary files cannot be diffed");
+    } catch (DiffException e) {
+      // expected
+    }
+  }
 
   public void testDiffSideBySideIdenticalFiles2() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
@@ -190,6 +242,10 @@ public class RepositoryServiceImplTest extends TestCase {
           }
         }
         return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
       }
     };
 
@@ -427,6 +483,10 @@ public class RepositoryServiceImplTest extends TestCase {
         }
       }
       return 0;
+    }
+
+    public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+      return SVNNodeKind.FILE;
     }
 
   }

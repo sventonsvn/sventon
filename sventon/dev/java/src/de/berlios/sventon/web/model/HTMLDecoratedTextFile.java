@@ -45,8 +45,8 @@ public class HTMLDecoratedTextFile extends TextFile {
     appender.setEmbedStart("<span class=\"sventonLineNo\">");
     appender.setEmbedEnd(":&nbsp;</span>");
     appender.setPadding(5);
-    this.content = appender.appendTo(colorer.getColorizedContent(this.content,
-        PathUtil.getFileExtension(PathUtil.getTarget(path))));
+    this.content = appender.appendTo(colorer.getColorizedContent(this.content, PathUtil.getFileExtension(
+        PathUtil.getTarget(path)), encoding));
 
     model.put("fileContent", this.content);
     model.put("isRawFormat", false);

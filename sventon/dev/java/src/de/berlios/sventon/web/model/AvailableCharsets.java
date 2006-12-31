@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.model;
 
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -28,10 +29,19 @@ public class AvailableCharsets {
   private Set<String> charsets;
 
   /**
+   * Default charset.
+   */
+  private String defaultCharset;
+
+  /**
    * Constructor.
    */
-  public AvailableCharsets() {
+  public AvailableCharsets(final String defaultCharset) {
     this.charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
+    if (!isSupported(defaultCharset)) {
+      throw new UnsupportedCharsetException(defaultCharset);
+    }
+    this.defaultCharset = defaultCharset;
   }
 
   /**
@@ -52,4 +62,14 @@ public class AvailableCharsets {
   public boolean isSupported(final String charset) {
     return charsets.contains(charset);
   }
+
+  /**
+   * Gets the default charset.
+   *
+   * @return Charset.
+   */
+  public String getDefaultCharset() {
+    return defaultCharset;
+  }
+
 }

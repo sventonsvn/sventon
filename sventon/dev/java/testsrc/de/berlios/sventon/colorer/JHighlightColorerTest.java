@@ -7,35 +7,36 @@ import junit.framework.TestCase;
 import java.util.Properties;
 
 public class JHighlightColorerTest extends TestCase {
+  private static final String ENCODING = "UTF-8";
 
   public void testGetColorizedContent() throws Exception {
     Colorer colorer = getColorer();
 
     // Should produce colorized java code
     assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\"></span>",
-                 (colorer.getColorizedContent("public class HelloWorld", "java")));
+                 (colorer.getColorizedContent("public class HelloWorld", "java", ENCODING)));
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld",
-                 (colorer.getColorizedContent("public class HelloWorld", "testing")));
+                 (colorer.getColorizedContent("public class HelloWorld", "testing", ENCODING)));
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld",
-                 (colorer.getColorizedContent("public class HelloWorld", "")));
+                 (colorer.getColorizedContent("public class HelloWorld", "", ENCODING)));
 
     try {
       assertEquals("public class HelloWorld",
-                   (colorer.getColorizedContent("public class HelloWorld", null)));
+                   (colorer.getColorizedContent("public class HelloWorld", null, ENCODING)));
       fail("If filename is null, IAE is expected.");
     } catch (IllegalArgumentException iae) { /* expected */ }
 
     try {
       assertEquals("public class HelloWorld",
-                   (colorer.getColorizedContent(null, null)));
+                   (colorer.getColorizedContent(null, null, ENCODING)));
       fail("If content is null, IAE is expected.");
     } catch (IllegalArgumentException iae) { /* expected */ }
 
-    assertEquals("", colorer.getColorizedContent(null, "java"));
+    assertEquals("", colorer.getColorizedContent(null, "java", ENCODING));
   }
 
   public void testGetRenderer() throws Exception {
