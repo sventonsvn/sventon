@@ -31,7 +31,7 @@ import java.io.IOException;
 public class GetStaticContentController extends AbstractController {
 
   /**
-   * Path to static content.
+   * Path to static content, from context root.
    */
   private String path;
 
@@ -39,7 +39,7 @@ public class GetStaticContentController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final String filename = ServletRequestUtils.getRequiredStringParameter(request, "id");
     final File file = new File(path, filename + ".html");
-    logger.debug("Getting static content from: " + file.getAbsolutePath());
+    logger.debug("Getting static content from: " + file.getPath());
     final InputStream is = getServletContext().getResourceAsStream(file.getPath());
 
     OutputStream out = null;

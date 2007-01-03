@@ -142,7 +142,7 @@
   </bean>
 
   <bean id="getStaticContentController" class="de.berlios.sventon.web.ctrl.GetStaticContentController">
-    <property name="path" value="WEB-INF/static"/>
+    <property name="path" value="/WEB-INF/static"/>
   </bean>
 
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
