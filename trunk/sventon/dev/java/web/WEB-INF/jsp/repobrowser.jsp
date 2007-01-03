@@ -12,7 +12,6 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.util.ByteFormatter"%>
 <%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
@@ -41,9 +40,7 @@
     <table class="sventonEntriesTable">
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
       <c:set var="rowCount" value="0"/>
-  <%
-        long totalSize = 0;
-  %>
+      <c:set var="totalSize" value="0"/>
 
       <c:if test="${!empty command.pathNoLeaf}">
         <%@ include file="/WEB-INF/jspf/parentDirLinkTableRow.jspf"%>
@@ -67,9 +64,7 @@
           <c:param name="name" value="${command.name}" />
         </c:url>
 
-        <%
-          totalSize += entry.getSize();
-        %>
+        <c:set var="totalSize" value="${totalSize + entry.size}"/>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td class="sventonCol1">
@@ -115,7 +110,7 @@
         <td colspan="2" class="sventonCol1" align="right"><b>Total:</b></td>
         <td><b>${rowCount} entries</b></td>
         <td></td>
-        <td align="right" title="<%=totalSize%>&nbsp;bytes"><b><%if (totalSize != 0) out.print(ByteFormatter.format(totalSize, request.getLocale()));%></b></td>
+        <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
         <td></td>
         <td></td>
         <td></td>

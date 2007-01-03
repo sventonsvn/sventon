@@ -21,7 +21,7 @@
     <option ${userContext.latestRevisionsDisplayCount == i ? 'selected' : ''} value="${i}">${i}</option>
   </c:forEach>
 </select>
-<table class="sventonLatestCommitInfoTable" border="0">
+<table class="sventonLatestCommitInfoTable">
   <tr>
     <td>
       <c:forEach var="revision" items="${revisions}">
