@@ -12,7 +12,6 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.repository.RepositoryEntry"%>
 
 <html>
   <head>
@@ -62,36 +61,39 @@
 
         <c:set var="totalSize" value="${totalSize + entry.size}"/>
 
-      <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td class="sventonCol1">
-          <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
-        </td>
-      <% if (RepositoryEntry.Kind.dir == entry.getKind()) { %>
-          <td class="sventonCol2">
-            <img src="images/icon_folder.png" alt="dir"/>
+        <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+          <td class="sventonCol1">
+            <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
           </td>
-          <td class="sventonCol3">
-            <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-              ${entry.friendlyFullEntryName}
-            </a>
-          </td>
-      <% } else { %>
-          <td class="sventonCol2">
-            <img src="images/icon_file.png" alt="file"/>
-          </td>
-          <td class="sventonCol3">
-            <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-              ${entry.friendlyFullEntryName}
-            </a>
-          </td>
-      <% } %>
+          <c:choose>
+            <c:when test="${'dir' eq entry.kind}">
+              <td class="sventonCol2">
+                <img src="images/icon_folder.png" alt="dir"/>
+              </td>
+              <td class="sventonCol3">
+                <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                ${entry.friendlyFullEntryName}
+                </a>
+              </td>
+            </c:when>
+            <c:otherwise>
+              <td class="sventonCol2">
+                <img src="images/icon_file.png" alt="file"/>
+              </td>
+              <td class="sventonCol3">
+                <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                ${entry.friendlyFullEntryName}
+                </a>
+              </td>
+            </c:otherwise>
+          </c:choose>
           <td class="sventonCol4" align="center">
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
               <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
             </c:if>
           </td>
-          <td class="sventonCol5"><% if (RepositoryEntry.Kind.file == entry.getKind()) { %>${entry.size}<% } %></td>
+          <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>
           <td class="sventonCol6">
             <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
               ${entry.revision}
@@ -114,7 +116,6 @@
         <td></td>
         <td></td>
       </tr>
-
       <tr>
         <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
         <td>
@@ -124,7 +125,6 @@
       </tr>
     </table>
   </form>
-
 
 <br>
 <script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
