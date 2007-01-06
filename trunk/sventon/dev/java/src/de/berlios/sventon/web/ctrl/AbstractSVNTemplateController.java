@@ -181,6 +181,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   protected AbstractSVNTemplateController() {
     setCommandClass(SVNBaseCommand.class);
+    setCacheSeconds(0); // Tell Spring to generate no-cache headers.
   }
 
   /**
