@@ -141,6 +141,42 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private AvailableCharsets availableCharsets;
 
   /**
+   * Mode for searching entries.
+   */
+  public static final String ENTRIES_SEARCH_MODE = "entries";
+
+  /**
+   * Mode for searching log messages.
+   */
+  public static final String LOGMESSAGES_SEARCH_MODE = "logMessages";
+
+  /**
+   * Request parameter controlling charset.
+   */
+  private static final String CHARSET_REQUEST_PARAMETER = "charset";
+
+  /**
+   * Request parameter controlling search mode.
+   */
+  private static final String SEARCH_MODE_REQUEST_PARAMETER = "searchMode";
+
+  /**
+   * Request parameter controlling revision count.
+   */
+  private static final String REVISION_COUNT_REQUEST_PARAMETER = "revcount";
+
+  /**
+   * Request parameter controlling entries sort type.
+   */
+  private static final String SORT_TYPE_REQUEST_PARAMETER = "sortType";
+
+  /**
+   * Request parameter controlling entries sort mode.
+   */
+  private static final String SORT_MODE_REQUEST_PARAMETER = "sortMode";
+
+
+  /**
    * Constructor.
    */
   protected AbstractSVNTemplateController() {
@@ -182,6 +218,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       parseAndUpdateSortParameters(request, userContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
       parseAndUpdateCharsetParameter(request, userContext);
+      parseAndUpdateSearchModeParameter(request, userContext);
       final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetController.
@@ -232,11 +269,26 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param userContext The UserContext instance to update.
    */
   private void parseAndUpdateCharsetParameter(final HttpServletRequest request, final UserContext userContext) {
-    final String charset = ServletRequestUtils.getStringParameter(request, "charset", null);
+    final String charset = ServletRequestUtils.getStringParameter(request, CHARSET_REQUEST_PARAMETER, null);
     if (charset != null) {
       userContext.setCharset(charset);
     } else if (userContext.getCharset() == null) {
       userContext.setCharset(availableCharsets.getDefaultCharset());
+    }
+  }
+
+  /**
+   * Parses the parameter controlling what search mode to use.
+   *
+   * @param request     The request.
+   * @param userContext The UserContext instance to update.
+   */
+  private void parseAndUpdateSearchModeParameter(final HttpServletRequest request, final UserContext userContext) {
+    final String searchMode = ServletRequestUtils.getStringParameter(request, SEARCH_MODE_REQUEST_PARAMETER, null);
+    if (searchMode != null) {
+      userContext.setSearchMode(searchMode);
+    } else if (userContext.getSearchMode() == null) {
+      userContext.setSearchMode(ENTRIES_SEARCH_MODE);
     }
   }
 
@@ -248,7 +300,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param userContext The UserContext instance to update.
    */
   private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request, final UserContext userContext) {
-    final int latestRevisionsDisplayCount = ServletRequestUtils.getIntParameter(request, "revcount", 0);
+    final int latestRevisionsDisplayCount = ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
     if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
       if (latestRevisionsDisplayCount > 0) {
         userContext.setLatestRevisionsDisplayCount(latestRevisionsDisplayCount);
@@ -266,8 +318,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param userContext The UserContext instance to update.
    */
   protected void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
-    final String sortType = ServletRequestUtils.getStringParameter(request, "sortType", null);
-    final String sortMode = ServletRequestUtils.getStringParameter(request, "sortMode", null);
+    final String sortType = ServletRequestUtils.getStringParameter(request, SORT_TYPE_REQUEST_PARAMETER, null);
+    final String sortMode = ServletRequestUtils.getStringParameter(request, SORT_MODE_REQUEST_PARAMETER, null);
 
     if (sortType != null) {
       userContext.setSortType(RepositoryEntryComparator.SortType.valueOf(sortType));

@@ -43,6 +43,13 @@ public class UserContext {
   private String charset;
 
   /**
+   * Search mode.
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   */
+  private String searchMode;
+
+  /**
    * Gets the sort type, i.e. the field to sort on.
    *
    * @return Sort type
@@ -116,6 +123,28 @@ public class UserContext {
    */
   public void setCharset(final String charset) {
     this.charset = charset;
+  }
+
+  /**
+   * Gets the user's search mode.
+   *
+   * @return Search mode
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   */
+  public String getSearchMode() {
+    return searchMode;
+  }
+
+  /**
+   * Sets the user's search mode.
+   *
+   * @param searchMode Search mode
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
+   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   */
+  public void setSearchMode(String searchMode) {
+    this.searchMode = searchMode;
   }
 
 }

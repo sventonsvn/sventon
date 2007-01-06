@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[766] Added: Feature #3013 - Store state of search mode radio button.
 [763] Fixed: Bug #7106 - View files with different encoding.
 [763] Fixed: Bug #9847 - Directories should not be possible to diff.
 [729] Added: Feature #2884 - N Latest Commit Infos.
