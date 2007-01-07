@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
 
 import java.util.Map;
@@ -37,6 +38,23 @@ public class ConfigurationControllerTest extends TestCase {
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
     assertEquals(null, modelAndView.getViewName());
+  }
+
+  //Test what happens if an instance is partially configured and the config view is invoked
+  //this could happen if one started to configure sventon and then called repobrowser.svn.
+  public void testShowFormConfiguredII() throws Exception {
+    final MockHttpServletRequest request = new MockHttpServletRequest();
+    final MockHttpServletResponse response = new MockHttpServletResponse();
+    final ConfigurationController ctrl = new ConfigurationController();
+    final InstanceConfiguration instanceConfig = new InstanceConfiguration();
+    instanceConfig.setInstanceName("firstinsance");
+    ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
+    config.setConfigured(false);
+    config.addInstanceConfiguration(instanceConfig);
+    ctrl.setConfiguration(config);
+    final ModelAndView modelAndView = ctrl.showForm(request, response, null);
+    assertNotNull(modelAndView);
+    assertEquals("confirmAddConfig", modelAndView.getViewName());
   }
 
   public void testProcessFormSubmissionConfigured() throws Exception {
@@ -78,7 +96,7 @@ public class ConfigurationControllerTest extends TestCase {
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals("config", modelAndView.getViewName());
+    assertEquals("confirmAddConfig", modelAndView.getViewName());
     assertEquals(1, configuration.getInstanceCount());
     assertFalse(configuration.isConfigured());
     final Map model = modelAndView.getModel();

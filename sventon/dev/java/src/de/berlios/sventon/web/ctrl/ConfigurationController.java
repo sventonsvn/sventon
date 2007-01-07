@@ -67,16 +67,21 @@ public class ConfigurationController extends AbstractFormController {
       throws IOException {
 
     logger.debug("showForm() started");
-    logger.info("sventon configuration ok: " + configuration.isConfigured());
+    logger.info("sventon configured: " + configuration.isConfigured());
     if (configuration.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
+    } else if (configuration.getInstanceNames().size() > 0 && request.getParameter("addnew") == null) {
+      final Map<String, Object> model = new HashMap<String, Object>();
+      model.put("addedInstances", configuration.getInstanceNames());
+      return new ModelAndView("confirmAddConfig", model);
     } else {
       final Map<String, Object> model = new HashMap<String, Object>();
       final ConfigCommand configCommand = new ConfigCommand();
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
+      model.put("addedInstances", configuration.getInstanceNames());
       logger.debug("Displaying the config page");
       return new ModelAndView("config", model);
     }
@@ -101,6 +106,9 @@ public class ConfigurationController extends AbstractFormController {
       //noinspection unchecked
       model.putAll(errors.getModel());
       model.put("command", confCommand);
+      model.put("addedInstances", configuration.getInstanceNames());
+      return new ModelAndView("config", model);
+
     } else {
       final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
       instanceConfiguration.setInstanceName(confCommand.getName());
@@ -111,9 +119,10 @@ public class ConfigurationController extends AbstractFormController {
       instanceConfiguration.setZippedDownloadsAllowed(confCommand.isZippedDownloadsAllowed());
       configuration.addInstanceConfiguration(instanceConfiguration);
       model.put("addedInstances", configuration.getInstanceNames());
+      model.put("latestAddedInstance", confCommand.getName());
+      return new ModelAndView("confirmAddConfig", model);
     }
-    model.put("command", new ConfigCommand());
-    return new ModelAndView("config", model);
+
   }
 
 }
