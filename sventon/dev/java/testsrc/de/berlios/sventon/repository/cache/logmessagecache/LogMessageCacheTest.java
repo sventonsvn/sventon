@@ -49,7 +49,7 @@ public class LogMessageCacheTest extends TestCase {
     assertEquals(2, logMessages.size());
     assertEquals("Testing brackets (must <span class=\"searchHit\">work</span>)", logMessages.get(1).getMessage());
 
-    cache.add(new LogMessage(129, "Lite svenska tecken, å ä ö!"));
+    cache.add(new LogMessage(129, "Lite svenska tecken, \u00E5 \u00E4 \u00F6!"));
     assertEquals(7, cache.getSize());
     logMessages = cache.find("svenska");
     assertEquals(1, logMessages.size());
