@@ -130,17 +130,17 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="https://developer.berlios.de/mail/?group_id=3670">[mailinglist]</a>
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <a href="https://developer.berlios.de/forum/?group_id=3670">[forum]</a>
+                <a href="http://groups-beta.google.com/group/sventon-support/">[forum and mailinglist]</a>
               </td>
             </tr>
             <tr>
               <td align="right">
                 <a href="https://developer.berlios.de/projects/sventon/">[project page]</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="right">
+                <a href="http://svn.sventon.org/">[demo]</a>
               </td>
             </tr>
           </table>
