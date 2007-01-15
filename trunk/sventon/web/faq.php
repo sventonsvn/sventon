@@ -220,7 +220,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
-<b>A:</b> Although we unfortunately have no official demo version running, you should be able to find several installations doing a <a href="http://www.google.com/search?q=svn+sventon">Google search</a>. Note that new sventon versions are release regularily, the instances showing up in the search may not be running the latest version. Also, have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
+<b>A:</b> <a href="http://svn.sventon.org/">Yes, there is!</a> Also, have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
 
 <p>
