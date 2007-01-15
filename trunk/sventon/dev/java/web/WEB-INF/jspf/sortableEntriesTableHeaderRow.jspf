@@ -15,7 +15,7 @@
   <th></th>
   <th></th>
 
-  <c:set var="sortModeArrow" value="${userContext.sortMode eq 'ASC' ? 'icon_arrow_up.png;' : 'icon_arrow_down.png'}"/>
+  <c:set var="sortModeArrow" value="${userContext.sortMode eq 'ASC' ? 'icon_arrow_up.png' : 'icon_arrow_down.png'}"/>
   <c:set var="opositeSortType" value="${userContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
 
   <th><a href="${sortUrl}&sortType=FULL_NAME&sortMode=${opositeSortType}" style="color: #000000;">
