@@ -130,17 +130,17 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="http://developer.berlios.de/mail/?group_id=3670">[mailinglist]</a>
+                <a href="https://developer.berlios.de/mail/?group_id=3670">[mailinglist]</a>
               </td>
             </tr>
             <tr>
               <td align="right">
-                <a href="http://developer.berlios.de/forum/?group_id=3670">[forum]</a>
+                <a href="https://developer.berlios.de/forum/?group_id=3670">[forum]</a>
               </td>
             </tr>
             <tr>
               <td align="right">
-                <a href="http://developer.berlios.de/projects/sventon/">[project page]</a>
+                <a href="https://developer.berlios.de/projects/sventon/">[project page]</a>
               </td>
             </tr>
           </table>
@@ -159,7 +159,7 @@
           	</a>
           <br/>
           <br/>
-          <a href="http://developer.berlios.de" title="BerliOS Developer">
+          <a href="https://developer.berlios.de" title="BerliOS Developer">
             <img src="http://developer.berlios.de/bslogo.php?group_id=3670" width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
           </a>
           <br/>
@@ -173,7 +173,7 @@
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
 <script type="text/javascript">
-_uacct = "UA-206174-2";
+_uacct = "UA-206174-3";
 urchinTracker();
 </script>
 </body>
