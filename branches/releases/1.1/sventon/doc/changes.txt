@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[778] Added: Feature #3069 - Flushing of caches.
+
 [754] Release 1.1 RC3 (2006-12-19)
 [750] Fixed: Bug #9485 - Temp path (creation) error in JBoss.
 [739] Fixed: Bug #9518 - IE cache problem - show files in flatten view.

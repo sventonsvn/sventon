@@ -32,7 +32,7 @@ public class EntryCacheUpdaterTest extends TestCase {
 
     assertEquals(0, entryCache.getSize());
     new EntryCacheUpdater(null, new ApplicationConfiguration(new File(TEMPDIR), "filename"), new RepositoryServiceImpl()).updateInternal(entryCache,
-        new TestRepository(), new RevisionUpdate("defaultsvn", logEntries));
+        new TestRepository(), new RevisionUpdate("defaultsvn", logEntries, false));
     //TODO: Fix this test - all repository.info()-calls returns the same value now.
     assertEquals(1, entryCache.getSize());
   }

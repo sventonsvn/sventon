@@ -28,9 +28,10 @@ public interface RevisionObservable {
    * Updates the observable for a single configured repository instance, polls the repository
    * and looks for new revisions to fetch and publish to registered observers.
    *
-   * @param instanceName Instance name
+   * @param instanceName     Instance name
+   * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  void update(final String instanceName);
+  void update(final String instanceName, boolean flushAfterUpdate);
 
   /**
    * Checks whether the observable is updating.

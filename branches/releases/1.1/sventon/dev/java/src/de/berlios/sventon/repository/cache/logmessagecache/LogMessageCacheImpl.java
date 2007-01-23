@@ -77,13 +77,13 @@ public class LogMessageCacheImpl implements LogMessageCache {
         writer.close();
       }
       this.directory = directory;
-    } catch (Exception ioex) {
+    } catch (final Exception ioex) {
       throw new CacheException("Unable to startup lucene index", ioex);
     } finally {
       if (writer != null) {
         try {
           writer.close();
-        } catch (IOException ioex) {
+        } catch (final IOException ioex) {
           throw new CacheException("Unable to startup lucene index", ioex);
         }
       }
@@ -129,13 +129,13 @@ public class LogMessageCacheImpl implements LogMessageCache {
           result.add(new LogMessage(Long.parseLong(document.get("revision")), highlightedContent));
         }
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new CacheException("Unable to perform lucene search", ex);
     } finally {
       if (searcher != null) {
         try {
           searcher.close();
-        } catch (IOException ioex) {
+        } catch (final IOException ioex) {
           throw new CacheException("Unable to close lucene searcher", ioex);
         }
       }
@@ -156,19 +156,19 @@ public class LogMessageCacheImpl implements LogMessageCache {
       document.add(new Field("content", logMessage.getMessage() == null ? "" :
           logMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
       writer.addDocument(document);
-    } catch (Exception ioex) {
+    } catch (final Exception ioex) {
       throw new CacheException("Unable to add content to lucene cache", ioex);
     } finally {
       if (writer != null) {
         // Optimize and close the writer to finish building the index
         try {
           writer.optimize();
-        } catch (IOException ioex) {
+        } catch (final IOException ioex) {
           throw new CacheException("Unable to optimize lucene index", ioex);
         } finally {
           try {
             writer.close();
-          } catch (IOException ioex) {
+          } catch (final IOException ioex) {
             throw new CacheException("Unable to close lucene index", ioex);
           }
         }
@@ -187,14 +187,14 @@ public class LogMessageCacheImpl implements LogMessageCache {
       writer = new IndexWriter(directory, analyzer.newInstance(), false);
       count = writer.docCount();
       writer.close();
-    } catch (Exception ioex) {
+    } catch (final Exception ioex) {
       throw new CacheException("Unable to get lucene cache size", ioex);
     } finally {
       if (writer != null) {
         // Close the writer
         try {
           writer.close();
-        } catch (IOException ioex) {
+        } catch (final IOException ioex) {
           throw new CacheException("Unable to close lucene index", ioex);
         }
       }
