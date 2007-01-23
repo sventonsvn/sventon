@@ -86,6 +86,7 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         revisionCache.add(svnLogEntry);
+        revisionCache.flush();
       }
     } catch (CacheException ce) {
       logger.error("Unable to update revisionCache", ce);

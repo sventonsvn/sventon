@@ -37,7 +37,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setConfiguration(applicationConfiguration);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());
-      revisionObservable.update("defaultsvn", new TestRepository(), cache);
+      revisionObservable.update("defaultsvn", new TestRepository(), cache, false);
     } finally {
       cache.shutdown();
     }

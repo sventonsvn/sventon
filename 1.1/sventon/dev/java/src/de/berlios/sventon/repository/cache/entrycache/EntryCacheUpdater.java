@@ -185,6 +185,15 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           }
         }
         entryCache.setCachedRevision(lastRevision);
+
+        if (revisionUpdate.isFlushAfterUpdate()) {
+          try {
+            entryCache.flush();
+          } catch (final CacheException ce) {
+            logger.error("Unable to flush cache", ce);
+          }
+        }
+
         logger.debug("Update completed");
       }
     }

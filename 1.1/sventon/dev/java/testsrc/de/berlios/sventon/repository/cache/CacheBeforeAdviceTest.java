@@ -20,7 +20,7 @@ public class CacheBeforeAdviceTest extends TestCase {
     public void updateAll() {
     }
 
-    public void update(final String instanceName) {
+    public void update(final String instanceName, final boolean flushAfterUpdate) {
       called = true;
       assertEquals("instance1", instanceName);
     }

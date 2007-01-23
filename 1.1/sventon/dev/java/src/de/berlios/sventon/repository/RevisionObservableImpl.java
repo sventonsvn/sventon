@@ -124,11 +124,13 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   /**
    * Update.
    *
-   * @param instanceName The instance name.
-   * @param repository   Repository to use for update.
-   * @param objectCache  ObjectCache instance to read/write information about last observed revisions.
+   * @param instanceName     The instance name.
+   * @param repository       Repository to use for update.
+   * @param objectCache      ObjectCache instance to read/write information about last observed revisions.
+   * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache) {
+  protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache,
+                        final boolean flushAfterUpdate) {
     if (configuration.isConfigured()) {
       updating = true;
 
@@ -173,7 +175,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
             notification.append(toRevision);
             notification.append("]");
             logger.info(notification.toString());
-            notifyObservers(new RevisionUpdate(instanceName, logEntries));
+            notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate));
 
             lastUpdatedRevision = toRevision;
             logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
@@ -195,7 +197,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    *
    * @throws RuntimeException if a subversion error occurs.
    */
-  public synchronized void update(final String instanceName) {
+  public synchronized void update(final String instanceName, final boolean flushAfterUpdate) {
     if (configuration.isConfigured()) {
       final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
       if (instanceConfiguration.isCacheUsed()) {
@@ -203,7 +205,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
         try {
           repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
           final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-          update(instanceConfiguration.getInstanceName(), repository, objectCache);
+          update(instanceConfiguration.getInstanceName(), repository, objectCache, flushAfterUpdate);
         } catch (final Exception ex) {
           logger.warn("Unable to establish repository connection", ex);
         }
@@ -219,7 +221,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   public synchronized void updateAll() {
     if (configuration.isConfigured() && !isUpdating()) {
       for (final String instanceName : configuration.getInstanceNames()) {
-        update(instanceName);
+        update(instanceName, true);
       }
     }
   }
