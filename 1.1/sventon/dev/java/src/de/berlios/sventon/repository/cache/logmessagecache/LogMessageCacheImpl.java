@@ -15,8 +15,8 @@ import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -200,6 +200,20 @@ public class LogMessageCacheImpl implements LogMessageCache {
       }
     }
     return count;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void clear() throws CacheException {
+    logger.debug("Clearing log message cache");
+    IndexWriter writer = null;
+    try {
+      writer = new IndexWriter(directory, analyzer.newInstance(), true);
+      writer.close();
+    } catch (Exception ex) {
+      throw new CacheException("Unable to close lucene index", ex);
+    }
   }
 
 }

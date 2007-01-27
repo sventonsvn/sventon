@@ -133,6 +133,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     if (revisionCount > 0 && firstRevision == 1) {
       logger.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getInstanceName());
       try {
+        entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision);
         entryCache.setCachedRevision(lastRevision);
