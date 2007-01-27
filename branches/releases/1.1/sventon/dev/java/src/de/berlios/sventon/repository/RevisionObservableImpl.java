@@ -136,9 +136,12 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
 
       try {
         Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
+        boolean clearCacheBeforeUpdate = false;
+
         if (lastUpdatedRevision == null) {
           logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
               + instanceName);
+          clearCacheBeforeUpdate = true;
           lastUpdatedRevision = 0L;
         }
 
@@ -175,7 +178,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
             notification.append(toRevision);
             notification.append("]");
             logger.info(notification.toString());
-            notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate));
+            notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
 
             lastUpdatedRevision = toRevision;
             logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);

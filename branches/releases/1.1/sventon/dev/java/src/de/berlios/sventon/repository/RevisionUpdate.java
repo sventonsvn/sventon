@@ -27,18 +27,22 @@ public class RevisionUpdate {
   private final String instanceName;
   private final List<SVNLogEntry> logEntries;
   private boolean flushAfterUpdate;
+  private boolean clearCacheBeforeUpdate;
 
   /**
    * Constructor.
    *
-   * @param instanceName     Instance name
-   * @param logEntries       The new log entries
-   * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
+   * @param instanceName           Instance name
+   * @param logEntries             The new log entries
+   * @param flushAfterUpdate       If <tt>true</tt>, caches will be flushed after update.
+   * @param clearCacheBeforeUpdate Clear cache before update, to make sure we don't get duplicates.
    */
-  public RevisionUpdate(final String instanceName, final List<SVNLogEntry> logEntries, final boolean flushAfterUpdate) {
+  public RevisionUpdate(final String instanceName, final List<SVNLogEntry> logEntries, final boolean flushAfterUpdate,
+                        final boolean clearCacheBeforeUpdate) {
     this.instanceName = instanceName;
     this.logEntries = logEntries;
     this.flushAfterUpdate = flushAfterUpdate;
+    this.clearCacheBeforeUpdate = clearCacheBeforeUpdate;
   }
 
   /**
@@ -66,6 +70,15 @@ public class RevisionUpdate {
    */
   public boolean isFlushAfterUpdate() {
     return flushAfterUpdate;
+  }
+
+  /**
+   * Gets the clearCacheBeforeUpdate status.
+   *
+   * @return If <tt>true</tt>, caches must be cleared before update.
+   */
+  public boolean isClearCacheBeforeUpdate() {
+    return clearCacheBeforeUpdate;
   }
 
 }

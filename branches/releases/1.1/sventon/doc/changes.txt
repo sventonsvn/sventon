@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[779] Fixed: Bug #10132 - Cache does not survive SIGKILL.
 [778] Added: Feature #3069 - Flushing of caches.
 
 [754] Release 1.1 RC3 (2006-12-19)
