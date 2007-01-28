@@ -48,10 +48,20 @@ public class RepoBrowserController extends ListDirectoryContentsController imple
 
     final Map<String, Object> model = modelAndView.getModel();
 
+    final boolean bypassEmpty = ServletRequestUtils.getBooleanParameter(request, "bypassEmpty", false);
     final String filterExtension = ServletRequestUtils.getStringParameter(request, "filterExtension", "all");
     logger.debug("filterExtension: " + filterExtension);
 
     List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
+
+    if (bypassEmpty && entries.size() == 1) {
+      final RepositoryEntry entry = entries.get(0);
+      if (RepositoryEntry.Kind.dir == entry.getKind()) {
+        logger.debug("Bypassing empty directory: " + svnCommand.getPath());
+        svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
+        return svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
+      }
+    }
 
     if (!"all".equals(filterExtension)) {
       final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter(filterExtension);

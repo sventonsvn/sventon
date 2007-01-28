@@ -72,7 +72,7 @@
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">
               <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"/></td>
-              <td class="sventonCol3"><a href="${viewUrl}">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="${viewUrl}&bypassEmpty=true">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
               <td class="sventonCol2"><img src="images/icon_file.png" alt="file"/></td>
