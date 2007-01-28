@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -86,6 +86,7 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         revisionCache.add(svnLogEntry);
+        revisionCache.flush();
       }
     } catch (CacheException ce) {
       logger.error("Unable to update revisionCache", ce);

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -14,13 +14,10 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
-import de.berlios.sventon.diff.IdenticalFilesException;
-import de.berlios.sventon.diff.IllegalFileFormatException;
+import de.berlios.sventon.diff.DiffException;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.bind.RequestUtils;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -33,12 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The DiffPreviousController generates a Side-by-side diff between a given entry
+ * The DiffPreviousController generates a diff between a given entry
  * and its previous entry in history.
  *
  * @author jesper@users.berlios.de
  */
-public class DiffPreviousController extends AbstractSVNTemplateController implements Controller {
+public class DiffPreviousController extends DiffController {
 
   /**
    * {@inheritDoc}
@@ -48,39 +45,31 @@ public class DiffPreviousController extends AbstractSVNTemplateController implem
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long commitRev = ServletRequestUtils.getLongParameter(request, "commitrev");
-    logger.debug("Diffing file (previous): " + svnCommand);
+    final long commitRev = RequestUtils.getLongParameter(request, "commitrev");
+    logger.debug("Diffing file contents for: " + svnCommand);
     logger.debug("committed-rev: " + commitRev);
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    //TODO: Solve this issue in a better way?
-    if (SVNNodeKind.NONE == getRepositoryService().getNodeKind(repository, svnCommand.getPath(), commitRev)) {
-      model.put("isMissingHistory", true);
-    } else {
-      final List<SVNFileRevision> revisions =
-          getRepositoryService().getFileRevisions(repository, svnCommand.getPath(), commitRev);
+    try {
+      //TODO: Solve this issue in a better way?
+      if (SVNNodeKind.NONE == getRepositoryService().getNodeKind(repository, svnCommand.getPath(), commitRev)) {
+        throw new DiffException("Entry has no history in current branch");
+      }
+      final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(repository, svnCommand.getPath(),
+          commitRev);
 
       final DiffCommand diffCommand = new DiffCommand(revisions);
       model.put("diffCommand", diffCommand);
       logger.debug("Using: " + diffCommand);
 
-      try {
-        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-            userContext.getCharset(), getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+      model.putAll(diffInternal(repository, diffCommand,
+          getConfiguration().getInstanceConfiguration(svnCommand.getName())));
 
-        model.put("diffResult", diffResult);
-        model.put("isIdentical", false);
-        model.put("isBinary", false);
-      } catch (final IdenticalFilesException ife) {
-        logger.debug("Files are identical");
-        model.put("isIdentical", true);
-      } catch (final IllegalFileFormatException iffe) {
-        logger.info("Binary file(s) detected", iffe);
-        model.put("isBinary", true);  // Indicates that one or both files are in binary format.
-      }
+    } catch (DiffException dex) {
+      model.put("diffException", dex.getMessage());
     }
 
-    return new ModelAndView("diff", model);
+    return new ModelAndView(getViewName(), model);
   }
 
 }

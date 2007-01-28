@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -13,7 +13,6 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,12 +35,6 @@ public class ListInstancesController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    // If application config is not ok - redirect to config.jsp
-    if (!configuration.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to 'config.svn'");
-      return new ModelAndView(new RedirectView("config.svn"));
-    }
-    
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("instanceNames", configuration.getInstanceNames());
     return new ModelAndView("listinstances", model);

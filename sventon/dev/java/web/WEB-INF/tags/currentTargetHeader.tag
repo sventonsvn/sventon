@@ -1,7 +1,7 @@
 <%
   /*
   * ====================================================================
-  * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+  * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
   *
   * This software is licensed as described in the file LICENSE, which
   * you should have received as part of this distribution. The terms
@@ -25,7 +25,7 @@
       <c:choose>
         <c:when test="${hasProperties}">
           <td>${title} - ${target}&nbsp;
-            <a class="sventonHeaderLink" href="#" onclick="javascript:Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', 'show', 'hide'); return false;">
+            <a class="sventonHeader" href="javascript:toggleElementVisibility('propertiesDiv'); changeHideShowDisplay('propertiesLink');">
               [<span id="propertiesLink">show</span> properties]
             </a>
           </td>

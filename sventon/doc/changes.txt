@@ -1,13 +1,9 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[766] Added: Feature #3013 - Store state of search mode radio button.
-[763] Fixed: Bug #7106 - View files with different encoding.
-[763] Fixed: Bug #9847 - Directories should not be possible to diff.
-[729] Added: Feature #2884 - N Latest Commit Infos.
-[729] Added: Feature #2748 - Revision details ajaxified.
-[724] Added: Feature #2887 - Customizable RSS body.
-[720] Added: Feature #2853 - Warn if repository url is not root.
+[782] Release 1.1 RC4 (2007-01-28)
+[779] Fixed: Bug #10132 - Cache does not survive SIGKILL.
+[778] Added: Feature #3069 - Flushing of caches.
 
 [754] Release 1.1 RC3 (2006-12-19)
 [750] Fixed: Bug #9485 - Temp path (creation) error in JBoss.
@@ -15,9 +11,9 @@ sventon change history
 [738] Added: Feature #2854 - Improve initial cache loading.
 
 [717] Release 1.1 RC2 (2006-11-06)
-[715] Fixed: Bug #9356 - More than one entry must be selected for zip download.
-      Fixed: Bug #9367 - More than one entry must be selected for view thumbnails.
-[713] Fixed: Bug #9323 - Parse error in oc4j.
+[715] Fixed: Bug #9356 - More than one entry must be selected for zip download
+      Fixed: Bug #9367 - More than one entry must be selected for view thumbnails
+[713] Fixed: Bug #9323 - Parse error in oc4j
 [712] Fixed: Bug #9315 - RSS feed.
 
 [705] Release 1.1 RC1 (2006-10-30)

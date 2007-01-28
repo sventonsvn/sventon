@@ -29,7 +29,7 @@ this can take quite some time. You will be able to use sventon during the
 indexing process, but the search and flatten buttons will be disabled until
 it's done.
 
-For non-US-ASCII charsets to work correctly with Tomcat, the Tomcat connector
+For non-Latin 1 charsets to work correctly with Tomcat, the Tomcat connector 
 attribute "URIEncoding" should be set to "UTF-8", or alternatively the attribute 
 "useBodyEncodingForURI" should be set to "true"
 

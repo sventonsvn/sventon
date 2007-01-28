@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -30,7 +30,6 @@ public interface LogMessageCache extends Cache {
    * @param queryString Index query string.
    * @return List of log messages.
    * @throws CacheException if error.
-   *
    */
   List<LogMessage> find(final String queryString) throws CacheException;
 
@@ -51,4 +50,10 @@ public interface LogMessageCache extends Cache {
    */
   int getSize() throws CacheException;
 
+  /**
+   * Clears the entire cache.
+   *
+   * @throws CacheException if unable to clear cache.
+   */
+  void clear() throws CacheException;
 }

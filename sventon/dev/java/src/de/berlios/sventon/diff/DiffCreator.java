@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -17,74 +17,70 @@ import static de.berlios.sventon.diff.DiffAction.*;
 import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.berlios.sventon.web.model.RawTextFile;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates side by side diff result instances.
- * Creates diff results by parsing diff produced by
- * {@link de.berlios.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
+ * Diff creator.
  *
  * @author jesper@users.berlios.de
  */
-public final class SideBySideDiffCreator {
+public class DiffCreator {
 
-  private final List<String> leftSourceLines;
-  private final List<String> rightSourceLines;
+  private String diffResultString = "";
+  private final List<SourceLine> leftLinesList;
+  private final List<SourceLine> rightLinesList;
+
+  //TODO: Move to sventon-servlet.xml
+  public static final String ENCODING = "UTF-8";
 
   /**
    * Constructor.
    *
-   * @param fromFile
-   * @param fromKeywordHandler
-   * @param fromFileCharset
-   * @param toFile
-   * @param toKeywordHandler
-   * @param toFileCharset
-   * @throws IOException
+   * @param leftFile            Left (old/from) string content to diff.
+   * @param leftKeywordHandler  Left file's keyword handler.
+   * @param rightFile           Right (new/to) string content to diff.
+   * @param rightKeywordHandler Right file's keyword handler.
+   * @throws DiffException if IO error occurs.
    */
-  public SideBySideDiffCreator(final RawTextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
-                               final RawTextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
-      throws IOException {
+  public DiffCreator(final RawTextFile leftFile, final KeywordHandler leftKeywordHandler,
+                     final RawTextFile rightFile, final KeywordHandler rightKeywordHandler) throws DiffException {
 
     final LineNumberAppender lineNumberAppender = new LineNumberAppender();
     lineNumberAppender.setEmbedStart("<span class=\"sventonLineNo\">");
     lineNumberAppender.setEmbedEnd(":&nbsp;</span>");
     lineNumberAppender.setPadding(5);
 
-    final String leftString = replaceLeadingSpaces(appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
-    final String rightString = replaceLeadingSpaces(appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
+    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
+    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
 
-    leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
-    rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
+    try {
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, DiffCreator.ENCODING);
+      diffProducer.doNormalDiff(diffResult);
+      diffResultString = diffResult.toString();
 
-  }
+      if ("".equals(diffResultString)) {
+        throw new DiffException("Files are identical.");
+      }
 
-  /**
-   * Parses the diff result and creates a side by side object instance as representation.
-   *
-   * @param diffResult The <tt>NORMAL</tt> diff result string.
-   * @return The side-by-side representation.
-   */
-  public List<SideBySideDiffRow> createFromDiffResult(final String diffResult) {
-    final List<DiffSegment> diffSegments = DiffResultParser.parseNormalDiffResult(diffResult);
-    final List<SourceLine> leftLinesList = process(LEFT, leftSourceLines, diffSegments);
-    final List<SourceLine> rightLinesList = process(RIGHT, rightSourceLines, diffSegments);
-    assertEqualListSize(diffResult, leftLinesList, rightLinesList);
+      final String leftString = replaceLeadingSpaces(appendKeywords(leftKeywordHandler, leftFile.getContent(), DiffCreator.ENCODING));
+      final String rightString = replaceLeadingSpaces(appendKeywords(rightKeywordHandler, rightFile.getContent(), DiffCreator.ENCODING));
+      final List<String> leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
+      final List<String> rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
+      final List<DiffSegment> diffSegments = DiffResultParser.parseNormalDiffResult(diffResultString);
 
-    final List<SideBySideDiffRow> diff = new ArrayList<SideBySideDiffRow>();
+      leftLinesList = process(LEFT, leftSourceLines, diffSegments);
+      rightLinesList = process(RIGHT, rightSourceLines, diffSegments);
+      assertEqualListSize(leftLinesList, rightLinesList);
 
-    for (int i = 0; i < leftLinesList.size(); i++) {
-      diff.add(new SideBySideDiffRow(i + 1, leftLinesList.get(i), rightLinesList.get(i)));
+    } catch (IOException ioex) {
+      throw new DiffException("Unable to produce diff.");
     }
-    return diff;
+
   }
 
   /**
@@ -124,7 +120,7 @@ public final class SideBySideDiffCreator {
    * @param content        Content to apply keywords to
    * @param encoding       Encoding to use.
    * @return New content
-   * @throws UnsupportedEncodingException if given charset encoding is unsupported
+   * @throws UnsupportedEncodingException if UTF-8 is not supported
    */
   private String appendKeywords(final KeywordHandler keywordHandler, final String content, final String encoding)
       throws UnsupportedEncodingException {
@@ -139,18 +135,17 @@ public final class SideBySideDiffCreator {
   /**
    * Asserts that given lists have the same number of elements.
    *
-   * @param diffResult Diff result string
    * @param firstList  First list
    * @param secondList Second list
    * @throws RuntimeException if list size does not match.
    */
-  private void assertEqualListSize(final String diffResult, final List<?> firstList, final List<?> secondList) {
+  private void assertEqualListSize(final List<?> firstList, final List<?> secondList) {
     if (firstList.size() != secondList.size()) {
       final StringBuilder sb = new StringBuilder("Error while applying diff result!");
       sb.append("\nLine diff count: ");
       sb.append(firstList.size() - secondList.size());
       sb.append("\nDiffresult:\n");
-      sb.append(diffResult);
+      sb.append(diffResultString);
       sb.append("\nLeft:\n");
       sb.append(firstList);
       sb.append("\nRight:\n");
@@ -177,7 +172,7 @@ public final class SideBySideDiffCreator {
   }
 
   /**
-   * Process given list of source lines.
+   * Process given sourcelines
    *
    * @param side         Side to process
    * @param sourceLines  Sourcelines
@@ -291,4 +286,32 @@ public final class SideBySideDiffCreator {
     }
     return newOffset;
   }
+
+  /**
+   * Gets the diff result string.
+   *
+   * @return The result string
+   */
+  public String getDiffResultString() {
+    return diffResultString;
+  }
+
+  /**
+   * Gets the left lines.
+   *
+   * @return The list containing the left lines
+   */
+  public List<SourceLine> getLeft() {
+    return leftLinesList;
+  }
+
+  /**
+   * Gets the right lines.
+   *
+   * @return The list containing the right lines
+   */
+  public List<SourceLine> getRight() {
+    return rightLinesList;
+  }
+
 }

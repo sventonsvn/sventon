@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -46,11 +46,15 @@ public class ListFilesController extends ListDirectoryContentsController impleme
 
     final Map<String, Object> model = modelAndView.getModel();
     final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
+
     final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
+    final List<RepositoryEntry> directoryListing = entryFilter.filter(entries);
+
+    final int rowNumber = ServletRequestUtils.getIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
-    model.put("svndir", entryFilter.filter(entries));
-    model.put("rowNumber", ServletRequestUtils.getIntParameter(request, "rowNumber"));
+    model.put("svndir", directoryListing);
+    model.put("rowNumber", rowNumber);
     modelAndView.setViewName("ajax/listFiles");
     return modelAndView;
   }

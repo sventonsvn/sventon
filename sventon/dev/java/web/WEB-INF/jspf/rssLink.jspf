@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -12,5 +12,5 @@
  */
 %>
 <p>
-  <a href="rss.xml?name=${command.name}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" /></a>
+  <a href="rss.xml?name=${command.name}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon" border="0"/></a>
 </p>

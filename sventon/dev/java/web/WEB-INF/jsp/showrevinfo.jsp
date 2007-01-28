@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -22,16 +22,12 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
+    <p><sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/></p>
+
+    <br/>
     <sventon:functionLinks pageName="showRevInfo"/>
 
-    <table class="sventonLatestCommitInfoTable">
-      <tr>
-        <td>
-          <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
-        </td>
-      </tr>
-    </table>
+    <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
     <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

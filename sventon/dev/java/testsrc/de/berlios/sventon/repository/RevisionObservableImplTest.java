@@ -37,7 +37,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setConfiguration(applicationConfiguration);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating());
-      revisionObservable.update("defaultsvn", new TestRepository(), cache);
+      revisionObservable.update("defaultsvn", new TestRepository(), cache, false);
     } finally {
       cache.shutdown();
     }
@@ -52,9 +52,8 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void update(final RevisionUpdate revisionUpdate) {
   }
 
-  static class TestRepository extends SVNRepositoryStub {
+  class TestRepository extends SVNRepositoryStub {
     private boolean firstTime = true;
-
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

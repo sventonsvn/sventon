@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -10,9 +10,6 @@
  * ====================================================================
  */
 package de.berlios.sventon.diff;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +39,6 @@ public class DiffResultParser {
    * </pre>
    */
   public static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)");
-
-  /**
-   * Logger for this class and subclasses.
-   */
-  private static final Log LOGGER = LogFactory.getLog(DiffResultParser.class);
 
   /**
    * Private constructor.
@@ -85,7 +77,8 @@ public class DiffResultParser {
         }
       }
     } catch (IOException ioex) {
-      LOGGER.warn(ioex);
+      //TODO: Log this - unable to read given string input.
+      ioex.printStackTrace();
     }
     return diffActions;
   }

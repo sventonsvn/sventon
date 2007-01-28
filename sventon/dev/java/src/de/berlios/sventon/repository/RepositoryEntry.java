@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -184,7 +184,7 @@ public final class RepositoryEntry implements Serializable {
    * @return the creation date
    */
   public Date getDate() {
-    return (Date) entryCreatedDate.clone();
+    return entryCreatedDate;
   }
 
   /**

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -31,23 +31,6 @@ public class UserContext {
    * Sort mode.
    */
   private RepositoryEntrySorter.SortMode sortMode;
-
-  /**
-   * Revisions display count. Default set to 1.
-   */
-  private int latestRevisionsDisplayCount = 1;
-
-  /**
-   * The user chosen charset.
-   */
-  private String charset;
-
-  /**
-   * Search mode.
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
-   */
-  private String searchMode;
 
   /**
    * Gets the sort type, i.e. the field to sort on.
@@ -87,64 +70,6 @@ public class UserContext {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
-  }
-
-  /**
-   * Sets how many revisions that should be displayed in the <i>latest commit info</i> DIV.
-   *
-   * @param latestRevisionsDisplayCount Count
-   */
-  public void setLatestRevisionsDisplayCount(final int latestRevisionsDisplayCount) {
-    this.latestRevisionsDisplayCount = latestRevisionsDisplayCount;
-  }
-
-  /**
-   * Gets number of revisions that should be displayed in the <i>latest commit info</i> DIV.
-   *
-   * @return Count
-   */
-  public int getLatestRevisionsDisplayCount() {
-    return latestRevisionsDisplayCount;
-  }
-
-  /**
-   * Gets the user's charset.
-   *
-   * @return Charset
-   */
-  public String getCharset() {
-    return charset;
-  }
-
-  /**
-   * Sets the user's charset.
-   *
-   * @param charset Charset
-   */
-  public void setCharset(final String charset) {
-    this.charset = charset;
-  }
-
-  /**
-   * Gets the user's search mode.
-   *
-   * @return Search mode
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
-   */
-  public String getSearchMode() {
-    return searchMode;
-  }
-
-  /**
-   * Sets the user's search mode.
-   *
-   * @param searchMode Search mode
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
-   */
-  public void setSearchMode(String searchMode) {
-    this.searchMode = searchMode;
   }
 
 }

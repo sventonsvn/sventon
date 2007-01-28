@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -20,8 +20,9 @@ import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.AvailableCharsets;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -126,69 +127,27 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private RevisionObservable revisionObservable;
 
   /**
+   * Logger for this class and subclasses.
+   */
+  protected final Log logger = LogFactory.getLog(getClass());
+
+  /**
    * The repository service instance.
    */
   private RepositoryService repositoryService;
-
-  /**
-   * Maximum number of revisions, default set to 10.
-   */
-  private int maxRevisionsCount = 10;
-
-  /**
-   * Cached available charsets.
-   */
-  private AvailableCharsets availableCharsets;
-
-  /**
-   * Mode for searching entries.
-   */
-  public static final String ENTRIES_SEARCH_MODE = "entries";
-
-  /**
-   * Mode for searching log messages.
-   */
-  public static final String LOGMESSAGES_SEARCH_MODE = "logMessages";
-
-  /**
-   * Request parameter controlling charset.
-   */
-  private static final String CHARSET_REQUEST_PARAMETER = "charset";
-
-  /**
-   * Request parameter controlling search mode.
-   */
-  private static final String SEARCH_MODE_REQUEST_PARAMETER = "searchMode";
-
-  /**
-   * Request parameter controlling revision count.
-   */
-  private static final String REVISION_COUNT_REQUEST_PARAMETER = "revcount";
-
-  /**
-   * Request parameter controlling entries sort type.
-   */
-  private static final String SORT_TYPE_REQUEST_PARAMETER = "sortType";
-
-  /**
-   * Request parameter controlling entries sort mode.
-   */
-  private static final String SORT_MODE_REQUEST_PARAMETER = "sortMode";
-
 
   /**
    * Constructor.
    */
   protected AbstractSVNTemplateController() {
     setCommandClass(SVNBaseCommand.class);
-    setCacheSeconds(0); // Tell Spring to generate no-cache headers.
   }
 
   /**
    * {@inheritDoc}
    */
   public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response, Object command,
-                             final BindException errors) {
+                             final BindException exception) {
 
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
@@ -203,24 +162,20 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
 
-    if (errors.hasErrors()) {
-      return prepareExceptionModelAndView(errors, svnCommand);
+    if (exception.hasErrors()) {
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
     try {
       final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
-      final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
       final long headRevision = repositoryService.getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
-      parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
-      parseAndUpdateCharsetParameter(request, userContext);
-      parseAndUpdateSearchModeParameter(request, userContext);
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, errors);
+      final ModelAndView modelAndView = svnHandle(repository, svnCommand, requestedRevision, userContext, request, response, exception);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
@@ -230,21 +185,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("command", svnCommand); // This is for the form to work
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
+        model.put("latestCommitInfo", repositoryService.getRevision(repository, headRevision));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating());
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", configuration.getInstanceNames());
-        model.put("maxRevisionsCount", getMaxRevisionsCount());
-        model.put("headRevision", headRevision);
-        model.put("charsets", availableCharsets.getCharsets());
-
-        if (showLatestRevInfo) {
-          logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", repositoryService.getLatestRevisions(repository,
-              userContext.getLatestRevisionsDisplayCount()));
-        }
-
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -254,61 +200,13 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       logger.error("Exception", ex);
       Throwable cause = ex.getCause();
       if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
-        errors.reject("error.message.no-route-to-host");
+        exception.reject("error.message.no-route-to-host");
       } else {
-        errors.reject(null, ex.getMessage());
+        exception.reject(null, ex.getMessage());
       }
-      return prepareExceptionModelAndView(errors, svnCommand);
+      return prepareExceptionModelAndView(exception, svnCommand);
     }
 
-  }
-
-  /**
-   * Parses the parameter controlling what charset to use.
-   *
-   * @param request     The request.
-   * @param userContext The UserContext instance to update.
-   */
-  private void parseAndUpdateCharsetParameter(final HttpServletRequest request, final UserContext userContext) {
-    final String charset = ServletRequestUtils.getStringParameter(request, CHARSET_REQUEST_PARAMETER, null);
-    if (charset != null) {
-      userContext.setCharset(charset);
-    } else if (userContext.getCharset() == null) {
-      userContext.setCharset(availableCharsets.getDefaultCharset());
-    }
-  }
-
-  /**
-   * Parses the parameter controlling what search mode to use.
-   *
-   * @param request     The request.
-   * @param userContext The UserContext instance to update.
-   */
-  private void parseAndUpdateSearchModeParameter(final HttpServletRequest request, final UserContext userContext) {
-    final String searchMode = ServletRequestUtils.getStringParameter(request, SEARCH_MODE_REQUEST_PARAMETER, null);
-    if (searchMode != null) {
-      userContext.setSearchMode(searchMode);
-    } else if (userContext.getSearchMode() == null) {
-      userContext.setSearchMode(ENTRIES_SEARCH_MODE);
-    }
-  }
-
-  /**
-   * Parses the parameter controlling how many revisions should be displayed in the
-   * <i>latest commit info</i> DIV.
-   *
-   * @param request     The request.
-   * @param userContext The UserContext instance to update.
-   */
-  private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request, final UserContext userContext) {
-    final int latestRevisionsDisplayCount = ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
-    if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
-      if (latestRevisionsDisplayCount > 0) {
-        userContext.setLatestRevisionsDisplayCount(latestRevisionsDisplayCount);
-      }
-    } else {
-      throw new IllegalArgumentException("Illegal revision count: " + latestRevisionsDisplayCount);
-    }
   }
 
   /**
@@ -319,8 +217,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param userContext The UserContext instance to update.
    */
   protected void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
-    final String sortType = ServletRequestUtils.getStringParameter(request, SORT_TYPE_REQUEST_PARAMETER, null);
-    final String sortMode = ServletRequestUtils.getStringParameter(request, SORT_MODE_REQUEST_PARAMETER, null);
+    final String sortType = ServletRequestUtils.getStringParameter(request, "sortType", null);
+    final String sortMode = ServletRequestUtils.getStringParameter(request, "sortMode", null);
 
     if (sortType != null) {
       userContext.setSortType(RepositoryEntryComparator.SortType.valueOf(sortType));
@@ -504,34 +402,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public RepositoryService getRepositoryService() {
     return repositoryService;
-  }
-
-  /**
-   * Sets the maximum number of revisions.
-   *
-   * @param maxRevisionsCount Max count.
-   */
-  public void setMaxRevisionsCount(final int maxRevisionsCount) {
-    this.maxRevisionsCount = maxRevisionsCount;
-  }
-
-  /**
-   * Gets the maximum number of revisions a user can choose to display
-   * in the <i>latest commit info</i> DIV.
-   *
-   * @return Count
-   */
-  protected int getMaxRevisionsCount() {
-    return maxRevisionsCount;
-  }
-
-  /**
-   * Sets the available charsets.
-   *
-   * @param availableCharsets Charsets
-   */
-  public void setAvailableCharsets(final AvailableCharsets availableCharsets) {
-    this.availableCharsets = availableCharsets;
   }
 
 }

@@ -60,13 +60,13 @@ public class CompletionControllerTest extends TestCase {
     }
   }
 
-  static class TestRepository extends SVNRepositoryStub {
+  class TestRepository extends SVNRepositoryStub {
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }
   }
 
-  static class TestCacheGatewayImpl implements CacheGateway {
+  class TestCacheGatewayImpl implements CacheGateway {
 
     public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
       return null;

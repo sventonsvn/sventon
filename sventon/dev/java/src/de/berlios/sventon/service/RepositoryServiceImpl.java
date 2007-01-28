@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -11,9 +11,6 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.config.InstanceConfiguration;
-import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.diff.*;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
@@ -22,10 +19,8 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
-import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.ImageMetadata;
 import de.berlios.sventon.web.model.RawTextFile;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -35,7 +30,10 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -55,15 +53,6 @@ public class RepositoryServiceImpl implements RepositoryService {
    * The cache instance.
    */
   private CacheGateway cacheGateway;
-
-  /**
-   * Sets the cache gateway instance.
-   *
-   * @param cacheGateway Cache gateway instance
-   */
-  public void setCacheGateway(final CacheGateway cacheGateway) {
-    this.cacheGateway = cacheGateway;
-  }
 
   /**
    * {@inheritDoc}
@@ -160,12 +149,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
-      throws SVNException, UnsupportedEncodingException {
+  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFile(repository, path, revision, outStream);
-    return new RawTextFile(outStream.toString(charset), true);
+    return new RawTextFile(outStream.toString(), true);
   }
 
   /**
@@ -189,26 +178,29 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    final Map props = new HashMap();
+  public void getFileProperties(final SVNRepository repository, final String path, final long revision,
+                                final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
-    repository.getFile(path, revision, props, null);
+    repository.getFile(path, revision, properties, null);
     logger.debug("PERF: getFileProperties(): " + (System.currentTimeMillis() - start));
-    return props;
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return SVNProperty.isTextMimeType((String) getFileProperties(repository, path, revision).get(SVNProperty.MIME_TYPE));
+    final Map properties = new HashMap();
+    getFileProperties(repository, path, revision, properties);
+    return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
   }
 
   /**
    * {@inheritDoc}
    */
   public String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return (String) getFileProperties(repository, path, revision).get(SVNProperty.CHECKSUM);
+    final Map properties = new HashMap();
+    getFileProperties(repository, path, revision, properties);
+    return (String) properties.get(SVNProperty.CHECKSUM);
   }
 
   /**
@@ -219,18 +211,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     final long revision = repository.getLatestRevision();
     logger.debug("PERF: getLatestRevision(): " + (System.currentTimeMillis() - start));
     return revision;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<SVNLogEntry> getLatestRevisions(final SVNRepository repository, long revisionCount) throws SVNException {
-    final long headRevision = repository.getLatestRevision();
-    long toRevision = headRevision - revisionCount;
-    if (toRevision < 1) {
-      toRevision = 1;
-    }
-    return getRevisions(repository, headRevision, toRevision, "/", revisionCount);
   }
 
   /**
@@ -283,13 +263,13 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
+  public RepositoryEntry getEntry(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
     final long start = System.currentTimeMillis();
     final RepositoryEntry repositoryEntry =
         new RepositoryEntry(repository.info(path, revision), PathUtil.getPathPart(path));
-    logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
+    logger.debug("PERF: getEntry(): " + (System.currentTimeMillis() - start));
     return repositoryEntry;
   }
 
@@ -345,111 +325,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the cache gateway instance.
+   *
+   * @param cacheGateway Cache gateway instance
    */
-  public List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                                                final InstanceConfiguration configuration) throws SVNException, DiffException {
-
-    assertNotBinary(repository, diffCommand);
-    assertFileEntries(repository, diffCommand);
-
-    String diffResultString;
-    SideBySideDiffCreator sideBySideDiffCreator;
-
-    try {
-      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
-
-      final Map leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-      final Map rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
-      final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
-      final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
-
-      diffProducer.doNormalDiff(diffResult);
-      diffResultString = diffResult.toString(charset);
-
-      if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
-      }
-
-      final KeywordHandler fromFileKeywordHandler =
-          new KeywordHandler(leftFileProperties, configuration.getUrl() + diffCommand.getFromPath());
-      final KeywordHandler toFileKeywordHandler =
-          new KeywordHandler(rightFileProperties, configuration.getUrl() + diffCommand.getToPath());
-
-      sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, charset, rightFile,
-          toFileKeywordHandler, charset);
-
-    } catch (IOException ioex) {
-      throw new DiffException("Unable to produce unified diff", ioex);
-    }
-
-    return sideBySideDiffCreator.createFromDiffResult(diffResultString);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                            final InstanceConfiguration configuration)
-      throws SVNException, DiffException {
-
-    assertNotBinary(repository, diffCommand);
-    assertFileEntries(repository, diffCommand);
-
-    String diffResultString;
-
-    try {
-      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
-
-      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
-          new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
-
-      diffProducer.doUniDiff(diffResult);
-
-      diffResultString = diffResult.toString(charset);
-      if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
-      }
-
-    } catch (final IOException ioex) {
-      throw new DiffException("Unable to produce unified diff", ioex);
-    }
-
-    return diffResultString;
-  }
-
-  private void assertNotBinary(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException,
-      IllegalFileFormatException {
-
-    final boolean isLeftFileTextType = isTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-    final boolean isRightFileTextType = isTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-    if (!isLeftFileTextType && !isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary files: " + diffCommand.getFromPath() + ", " + diffCommand.getToPath());
-    } else if (!isLeftFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getFromPath());
-    } else if (!isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getToPath());
-    }
-  }
-
-  private void assertFileEntries(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException, DiffException {
-    final SVNNodeKind entry1 = getNodeKind(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-    final SVNNodeKind entry2 = getNodeKind(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-
-    final String message = "Only files can be diffed. [";
-    if (SVNNodeKind.FILE != entry1) {
-      throw new DiffException(message + diffCommand.getFromPath() + "] is a directory");
-    }
-    if (SVNNodeKind.FILE != entry2) {
-      throw new DiffException(message + diffCommand.getToPath() + "] is a directory");
-    }
+  public void setCacheGateway(final CacheGateway cacheGateway) {
+    this.cacheGateway = cacheGateway;
   }
 
 }

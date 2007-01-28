@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -16,6 +16,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="java.util.*" %>
+<%@ tag import="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNLogEntryPath" %>
 <%@ tag import="de.berlios.sventon.web.model.LogEntryActionType"%>
 
@@ -24,7 +25,7 @@
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
 <% application.setAttribute("br", "\n"); %>
-<table border="0">
+<table class="sventonLatestCommitInfoTable">
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
   <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
@@ -41,6 +42,8 @@
         <tr>
           <th>Action</th>
           <th>Path</th>
+          <th>Copy From Path</th>
+          <th>Revision</th>
         </tr>
       <%
         final List latestPathsList = new ArrayList(latestChangedPaths.keySet());
@@ -56,41 +59,29 @@
           <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
           <c:param name="name" value="${command.name}" />
           <c:if test="${keepVisible}">
-            <c:param name="showlatestrevinfo" value="true" />
+            <c:param name="showlatestinfo" value="true" />
           </c:if>
         </c:url>
 
-        <td valign="top"><i><%= actionType %></i></td>
+        <c:url value="diff.svn" var="diffUrl">
+          <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+          <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
+          <c:param name="name" value="${command.name}" />
+          <c:if test="${keepVisible}">
+            <c:param name="showlatestinfo" value="true" />
+          </c:if>
+        </c:url>
+
+        <td><i><%= actionType %></i></td>
         <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
-        <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a>
+        <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath() %></a></td>
         <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-
-        <%
-          String entry1 = logEntryPath.getPath() + ";;" + details.getRevision();
-          String entry2 = logEntryPath.getPath() + ";;" + (details.getRevision() - 1);
-        %>
-
-          <c:url value="diff.svn" var="diffUrl">
-            <c:param name="path" value="<%= logEntryPath.getPath() %>" />
-            <c:param name="revision" value="${linkToHead ? 'head' : details.revision}" />
-            <c:param name="name" value="${command.name}" />
-            <c:param name="entry" value="<%= entry1 %>"/>
-            <c:param name="entry" value="<%= entry2 %>"/>
-            <c:if test="${keepVisible}">
-              <c:param name="showlatestrevinfo" value="true" />
-            </c:if>
-          </c:url>
-
-
-
-        <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath() %></a>
-        <% } else if (LogEntryActionType.DELETED == actionType) { %>
-        <td><strike><%= logEntryPath.getPath() %></strike>
+        <td><a href="${diffUrl}&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() %>&entry=<%= logEntryPath.getPath() %>;;<%= details.getRevision() - 1 %>" title="Diff with previous version"><%= logEntryPath.getPath() %></a></td>
+        <% } else { %>
+        <td><%= logEntryPath.getPath() %></td>
         <% } %>
-        <% if (logEntryPath.getCopyPath() != null) { %>
-          <br/><b>Copy from</b> <%=logEntryPath.getCopyPath()%> @ <%=Long.toString(logEntryPath.getCopyRevision())%>
-        <% } %>
-        </td>
+        <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
+        <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
       </tr>
       <%
         }
