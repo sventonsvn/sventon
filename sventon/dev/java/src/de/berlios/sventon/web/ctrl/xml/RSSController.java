@@ -81,15 +81,15 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
-
-    if (repository == null) {
+    if (!configuration.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
+
+    final SVNRepository repository =
+        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     try {
       final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(repository, feedItemCount);
