@@ -78,7 +78,7 @@
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">
-                <img src="images/icon_file.png" alt="file"/>
+                <sventon-ui:fileTypeIcon filename="${entry.name}"/>
               </td>
               <td class="sventonCol3">
                 <a href="${showFileUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
