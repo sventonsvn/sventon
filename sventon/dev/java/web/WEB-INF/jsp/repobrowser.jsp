@@ -75,7 +75,7 @@
               <td class="sventonCol3"><a href="${viewUrl}&bypassEmpty=true">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
-              <td class="sventonCol2"><img src="images/icon_file.png" alt="file"/></td>
+              <td class="sventonCol2"><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
               <td class="sventonCol3"><a href="${showFileUrl}">${entry.name}</a></td>
             </c:otherwise>
           </c:choose>

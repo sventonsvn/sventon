@@ -42,4 +42,17 @@
     </attribute>
   </tag>
 
+  <tag>
+    <name>fileTypeIcon</name>
+    <tag-class>de.berlios.sventon.web.tags.FileTypeIconTag</tag-class>
+    <body-content>JSP</body-content>
+
+    <description>Tag that returns appropriate file type icon for given file extension.</description>
+    <attribute>
+      <name>filename</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
 </taglib>
