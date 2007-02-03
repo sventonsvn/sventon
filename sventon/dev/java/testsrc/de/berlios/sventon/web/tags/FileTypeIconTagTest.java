@@ -7,12 +7,17 @@ import java.util.Properties;
 public class FileTypeIconTagTest extends TestCase {
 
   public void testCreateImageTag() throws Exception {
-
     final Properties mappings = new Properties();
     mappings.put("txt", "images/icon_txt.png");
 
-    assertEquals("<img src=\"images/icon_file.png\" alt=\"\"/>", FileTypeIconTag.createImageTag(null, mappings));
+    try {
+      FileTypeIconTag.createImageTag(null, mappings);
+      fail("Should throw IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // expected
+    }
     assertEquals("<img src=\"images/icon_file.png\" alt=\"\"/>", FileTypeIconTag.createImageTag("", mappings));
     assertEquals("<img src=\"images/icon_txt.png\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.txt", mappings));
+    assertEquals("<img src=\"images/icon_txt.png\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.TXT", mappings));
   }
 }

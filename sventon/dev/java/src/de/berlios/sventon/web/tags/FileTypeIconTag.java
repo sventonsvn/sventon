@@ -95,7 +95,11 @@ public final class FileTypeIconTag extends TagSupport {
    * @return <code>IMG</code> tag.
    */
   protected static String createImageTag(final String filename, final Properties mappings) {
-    final String extension = PathUtil.getFileExtension(filename);
+    if (filename == null) {
+      throw new IllegalArgumentException("Filename was null");
+    }
+
+    final String extension = PathUtil.getFileExtension(filename.toLowerCase());
     String icon = (String) mappings.get(extension);
     if (icon == null) {
       icon = "images/icon_file.png";
@@ -109,11 +113,13 @@ public final class FileTypeIconTag extends TagSupport {
     return sb.toString();
   }
 
+  /**
+   * Sets the filename.
+   *
+   * @param filename Filename
+   */
   public void setFilename(final String filename) {
-    if (filename == null) {
-      throw new IllegalArgumentException("Filename was null");
-    }
-    this.filename = filename.toLowerCase();
+    this.filename = filename;
   }
 
 }
