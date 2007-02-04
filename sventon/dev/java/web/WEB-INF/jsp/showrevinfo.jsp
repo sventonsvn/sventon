@@ -33,7 +33,26 @@
       </tr>
     </table>
     <br>
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+
+    <c:url value="revinfo.svn" var="showPrevRevInfoUrl">
+      <c:param name="revision" value="${command.revision - 1}" />
+      <c:param name="name" value="${command.name}" />
+    </c:url>
+
+    <c:url value="revinfo.svn" var="showNextRevInfoUrl">
+      <c:param name="revision" value="${command.revision + 1}" />
+      <c:param name="name" value="${command.name}" />
+    </c:url>
+
+    <c:if test="${command.revision - 1 gt 0}">
+      <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revinfo.previousrev"/>"/></a>
+    </c:if>
+
+    <c:if test="${!(command.revision + 1 gt headRevision)}">
+      <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Previous revision" title="<spring:message code="revinfo.nextrev"/>"/></a>
+    </c:if>
+
+    <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

@@ -1,7 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[785] Added: Feature #3108 - Display file type icons
+[788] Added: Feature #3018 - Add next/previous in revinfo view.
+[785] Added: Feature #3108 - Display file type icons.
 [784] Added: Feature #3030 - Bypass empty middle directories.
 [766] Added: Feature #3013 - Store state of search mode radio button.
 [763] Fixed: Bug #7106 - View files with different encoding.
