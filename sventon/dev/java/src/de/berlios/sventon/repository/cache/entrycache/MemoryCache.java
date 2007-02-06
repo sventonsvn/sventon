@@ -40,7 +40,7 @@ public class MemoryCache extends EntryCache {
   /**
    * {@inheritDoc}
    */
-  public synchronized void shutdown() {
+  public void shutdown() {
     logger.info("Shutting down");
     // Nothing to do.
   }

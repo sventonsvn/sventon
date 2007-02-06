@@ -212,11 +212,11 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  protected synchronized void lock() {
+  protected void lock() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  protected synchronized void unlock() {
+  protected void unlock() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
