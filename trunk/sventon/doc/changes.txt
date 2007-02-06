@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[789] Fixed: Bug #10253 - Caches for all instances are locked during update.
 [788] Added: Feature #3018 - Add next/previous in revinfo view.
 [785] Added: Feature #3108 - Display file type icons.
 [784] Added: Feature #3030 - Bypass empty middle directories.

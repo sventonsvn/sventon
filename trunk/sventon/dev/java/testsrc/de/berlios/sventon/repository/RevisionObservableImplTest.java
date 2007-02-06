@@ -22,7 +22,8 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void testUpdate() throws Exception {
     final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-    instanceConfiguration.setInstanceName("defaultsvn");
+    final String instanceName = "defaultsvn";
+    instanceConfiguration.setInstanceName(instanceName);
     instanceConfiguration.setCacheUsed(true);
     applicationConfiguration.addInstanceConfiguration(instanceConfiguration);
     applicationConfiguration.setConfigured(true);
@@ -36,8 +37,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setMaxRevisionCountPerUpdate(3);
       revisionObservable.setConfiguration(applicationConfiguration);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
-      assertFalse(revisionObservable.isUpdating());
-      revisionObservable.update("defaultsvn", new TestRepository(), cache, false);
+      assertFalse(revisionObservable.isUpdating(instanceName));
+      revisionObservable.update(instanceName, new TestRepository(), cache, false);
+      assertFalse(revisionObservable.isUpdating(instanceName));
     } finally {
       cache.shutdown();
     }

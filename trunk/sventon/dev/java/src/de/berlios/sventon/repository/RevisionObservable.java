@@ -34,10 +34,11 @@ public interface RevisionObservable {
   void update(final String instanceName, boolean flushAfterUpdate);
 
   /**
-   * Checks whether the observable is updating.
+   * Checks whether the observable is updating given instance.
    *
+   * @param instanceName The instance name.
    * @return True if the observable is buzy updating, false if not.
    */
-  boolean isUpdating();
+  boolean isUpdating(final String instanceName);
 
 }

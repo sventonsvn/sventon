@@ -231,7 +231,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isUpdating", revisionObservable.isUpdating());
+        model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", configuration.getInstanceNames());
