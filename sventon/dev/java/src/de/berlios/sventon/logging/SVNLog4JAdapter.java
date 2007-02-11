@@ -22,60 +22,52 @@ import org.tmatesoft.svn.util.SVNDebugLogAdapter;
  */
 public class SVNLog4JAdapter extends SVNDebugLogAdapter {
 
-  /**
-   * The <tt>Log</tt> instance.
-   */
-  private final Log logger;
+    /**
+     * The <tt>Log</tt> instance.
+     */
+    private final Log logger;
 
-  /**
-   * Constructor.
-   *
-   * @param namespace Logging name space to use.
-   */
-  public SVNLog4JAdapter(final String namespace) {
-    logger = LogFactory.getLog(namespace);
-  }
+    /**
+     * Constructor.
+     *
+     * @param namespace Logging name space to use.
+     */
+    public SVNLog4JAdapter(final String namespace) {
+        logger = LogFactory.getLog(namespace);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isErrorEnabled() {
-    return logger.isErrorEnabled();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public void log(String message, byte[] data) {
+        logger.debug(message + "\n" + new String(data));
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isFineEnabled() {
-    return logger.isDebugEnabled();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public void logInfo(String message) {
+        logger.info(message);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isInfoEnabled() {
-    return logger.isInfoEnabled();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public void logError(String message) {
+        logger.error(message);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void logError(final String message, final Throwable th) {
-    logger.error(message, th);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public void logInfo(Throwable th) {
+        logger.info(th);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void logFine(String message) {
-    logger.debug(message);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void logInfo(String message) {
-    logger.info(message);
-  }
-
+    /**
+     * {@inheritDoc}
+     */
+    public void logError(Throwable th) {
+        logger.error(th);
+    }
 }
