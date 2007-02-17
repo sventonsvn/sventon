@@ -135,12 +135,7 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="https://developer.berlios.de/projects/sventon/">[project page]</a>
-              </td>
-            </tr>
-            <tr>
-              <td align="right">
-                <a href="http://svn.sventon.org/">[demo]</a>
+                <a href="http://developer.berlios.de/projects/sventon/">[project page]</a>
               </td>
             </tr>
           </table>
@@ -159,7 +154,7 @@
           	</a>
           <br/>
           <br/>
-          <a href="https://developer.berlios.de" title="BerliOS Developer">
+          <a href="http://developer.berlios.de" title="BerliOS Developer">
             <img src="http://developer.berlios.de/bslogo.php?group_id=3670" width="124px" height="32px" border="0" alt="BerliOS Developer Logo">
           </a>
           <br/>
