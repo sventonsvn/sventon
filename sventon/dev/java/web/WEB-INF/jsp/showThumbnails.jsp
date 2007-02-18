@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -23,7 +23,9 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/>
+    <p><sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/></p>
+
+    <br/>
     <sventon:functionLinks pageName="showThumbs"/>
 
     <br/>
@@ -46,7 +48,7 @@
             File: <b>${entry}</b>
           </td>
           <td width="210px" style="text-align:center;">
-            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" /></a>
+            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" border="0"/></a>
           </td>
         </tr>
       </c:forEach>

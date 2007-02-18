@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -88,19 +88,14 @@ public class ConfigurationSubmissionController extends AbstractController {
     final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
     logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
-    FileOutputStream fileOutputStream = null;
-    try {
-      fileOutputStream = new FileOutputStream(propertyFile);
-      for (final Properties properties : getConfigurationAsProperties(configuration)) {
-        logger.debug("Storing: " + properties);
-        properties.store(fileOutputStream, null);
-        fileOutputStream.flush();
-      }
-    } finally {
-      if (fileOutputStream != null) {
-        fileOutputStream.close();
-      }
+    final FileOutputStream fileOutputStream = new FileOutputStream(propertyFile);
+
+    for (final Properties properties : getConfigurationAsProperties(configuration)) {
+      logger.debug("Storing: " + properties);
+      properties.store(fileOutputStream, null);
+      fileOutputStream.flush();
     }
+    fileOutputStream.close();
 
     configuration.setConfigured(true);
 

@@ -26,7 +26,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     mimeMappings.setProperty("jpeg", "image/jpg");
     mimeMappings.setProperty("gif", "image/gif");
     mimeMappings.setProperty("png", "image/png");
-
+    
     final ImageUtil imageUtil = new ImageUtil();
     imageUtil.setMimeMappings(mimeMappings);
     controller.setImageUtil(imageUtil);
@@ -46,7 +46,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     assertEquals(2, entries.size());
   }
 
-  static class TestRepository extends SVNRepositoryStub {
+  class TestRepository extends SVNRepositoryStub {
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

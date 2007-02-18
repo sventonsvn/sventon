@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -29,6 +29,12 @@ public class JHighlightColorer implements Colorer {
 
   private final Log logger = LogFactory.getLog(getClass());
 
+  /**
+   * The encoding, default set to <code>UTF-8</code>.
+   * <p/>
+   */
+  private String encoding = "UTF-8";
+
   private Properties rendererMappings;
 
   /**
@@ -40,7 +46,7 @@ public class JHighlightColorer implements Colorer {
   /**
    * {@inheritDoc}
    */
-  public String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException {
+  public String getColorizedContent(final String content, final String fileExtension) throws IOException {
 
     logger.debug("Colorizing content, file extension: " + fileExtension);
 
@@ -80,6 +86,15 @@ public class JHighlightColorer implements Colorer {
    */
   public void setRendererMappings(Properties rendererMappings) {
     this.rendererMappings = rendererMappings;
+  }
+
+  /**
+   * Sets the encoding.
+   *
+   * @param encoding The encoding.
+   */
+  public void setEncoding(final String encoding) {
+    this.encoding = encoding;
   }
 
 }

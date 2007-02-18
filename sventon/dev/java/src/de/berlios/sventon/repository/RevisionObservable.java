@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -34,11 +34,10 @@ public interface RevisionObservable {
   void update(final String instanceName, boolean flushAfterUpdate);
 
   /**
-   * Checks whether the observable is updating given instance.
+   * Checks whether the observable is updating.
    *
-   * @param instanceName The instance name.
    * @return True if the observable is buzy updating, false if not.
    */
-  boolean isUpdating(final String instanceName);
+  boolean isUpdating();
 
 }

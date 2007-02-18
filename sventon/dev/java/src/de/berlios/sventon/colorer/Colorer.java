@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -25,12 +25,11 @@ public interface Colorer {
    *
    * @param content       The contents.
    * @param fileExtension The filename, used to determine formatter.
-   * @param encoding      Encoding
    * @return The <code>HTML</code> formatted, colorized, string. If no suitable
    *         formatter was found for given file extension the content will still
    *         be formatted with <code>HTML</code> entities to be properly displayed on the web.
    *         If given content was <code>null</code> an empty string will be returned.
    * @throws IOException if unable to colorize content.
    */
-  String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException;
+  String getColorizedContent(final String content, final String fileExtension) throws IOException;
 }

@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -72,7 +72,6 @@
       </c:url>
       <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" title="<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>" onclick="javascript:parent.location='${diffPreviousUrl}';"/>
     </c:if>
-    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showImageFile' || pageName == 'showBinaryFile' || pageName == 'showArchiveFile'}">
@@ -144,7 +143,6 @@
     </c:url>
     <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" title="<spring:message code="unifieddiff.button.tooltip" />" onclick="javascript:parent.location='${unifiedDiffUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="javascript:toggleWrap();"/>
-    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showUnifiedDiff'}">
@@ -159,7 +157,12 @@
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
     <input type="button" class="btn" value="<spring:message code="diff.button.text"/>" title="<spring:message code="diff.button.tooltip" />" onclick="javascript:parent.location='${diffUrl}';"/>
-    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
+  </c:when>
+
+  <c:when test="${pageName == 'showBlame'}">
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
   </c:when>
 
   <c:when test="${pageName == 'showThumbs'}">
@@ -178,13 +181,11 @@
     </td>
     <c:if test="${useCache}">
       <td align="right" style="white-space: nowrap;">
-        <div id="searchHelp" class="helpDiv" style="display: none;"></div>
         <spring:message code="search.text"/>
-        <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${userContext.searchMode eq 'entries' ? 'checked' : ''}/>
+        <input type="radio" id="entrySearch" name="searchMode" class="rdo" checked value="entries"/>
         <label for="entrySearch">entries</label>
-        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userContext.searchMode eq 'logMessages' ? 'checked' : ''}>
+        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages">
         <label for="logSearch">logs</label>
-        <a href="#" onclick="javascript:showHideHelp($('searchHelp'), 'search_help'); return false;"><img style="vertical-align:bottom;" src="images/icon_help.png" alt="Search help"/></a>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
         <c:choose>

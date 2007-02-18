@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -40,7 +40,7 @@ public class MemoryCache extends EntryCache {
   /**
    * {@inheritDoc}
    */
-  public void shutdown() {
+  public synchronized void shutdown() {
     logger.info("Shutting down");
     // Nothing to do.
   }

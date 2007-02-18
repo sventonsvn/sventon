@@ -1,7 +1,7 @@
 <%
   /*
   * ====================================================================
-  * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+  * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
   *
   * This software is licensed as described in the file LICENSE, which
   * you should have received as part of this distribution. The terms
@@ -22,12 +22,14 @@
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 
-  <sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/>
+  <p><sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" hasProperties="false"/></p>
+
+  <br/>
   <sventon:functionLinks pageName="showUnifiedDiff"/>
 
   <c:choose>
-    <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical"/></b></p>
+    <c:when test="${!empty diffException}">
+      <p><b>${diffException}</b></p>
     </c:when>
     <c:otherwise>
       <c:choose>
@@ -41,7 +43,7 @@
           <pre class="codeBlock"><c:out value="${diffResult}" escapeXml="false"/></pre>
         </c:when>
         <c:otherwise>
-          <p><b><spring:message code="diff.error.binary"/></b></p>
+          <p><b>One or both files selected for diff is in binary format.</b></p>
         </c:otherwise>
       </c:choose>
     </c:otherwise>

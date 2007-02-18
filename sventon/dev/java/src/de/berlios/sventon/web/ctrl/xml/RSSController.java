@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -92,7 +92,15 @@ public class RSSController extends AbstractController {
         RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     try {
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(repository, feedItemCount);
+      final long headRevision = repositoryService.getLatestRevision(repository);
+      logger.debug("Producing feed for revision: " + headRevision);
+
+      long toRevision = headRevision - feedItemCount;
+      if (toRevision < 1) {
+        toRevision = 1;
+      }
+
+      final List<SVNLogEntry> logEntries = repositoryService.getRevisions(repository, headRevision, toRevision, feedItemCount);
       logger.debug("Outputting feed");
       feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {

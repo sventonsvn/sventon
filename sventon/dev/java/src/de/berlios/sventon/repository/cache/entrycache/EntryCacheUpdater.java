@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -214,7 +214,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
                                   final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     entryCache.removeByName(logEntryPath.getPath(), false);
-    entryCache.add(repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision));
+    entryCache.add(repositoryService.getEntry(repository, logEntryPath.getPath(), revision));
   }
 
   /**
@@ -245,7 +245,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
                                   final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if deleted entry was a file or directory
-    final RepositoryEntry deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision - 1);
+    final RepositoryEntry deletedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision - 1);
     if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
       // Directory node deleted
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
@@ -269,7 +269,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
                                final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
 
     // Have to find out if added entry was a file or directory
-    final RepositoryEntry addedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision);
+    final RepositoryEntry addedEntry = repositoryService.getEntry(repository, logEntryPath.getPath(), revision);
 
     // If the entry is a directory and a copyPath exists, the entry is
     // a moved or copied directory (branch). In that case we have to recursively

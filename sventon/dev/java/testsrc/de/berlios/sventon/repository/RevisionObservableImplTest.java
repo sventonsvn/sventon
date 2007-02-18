@@ -22,8 +22,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void testUpdate() throws Exception {
     final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-    final String instanceName = "defaultsvn";
-    instanceConfiguration.setInstanceName(instanceName);
+    instanceConfiguration.setInstanceName("defaultsvn");
     instanceConfiguration.setCacheUsed(true);
     applicationConfiguration.addInstanceConfiguration(instanceConfiguration);
     applicationConfiguration.setConfigured(true);
@@ -37,9 +36,8 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setMaxRevisionCountPerUpdate(3);
       revisionObservable.setConfiguration(applicationConfiguration);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
-      assertFalse(revisionObservable.isUpdating(instanceName));
-      revisionObservable.update(instanceName, new TestRepository(), cache, false);
-      assertFalse(revisionObservable.isUpdating(instanceName));
+      assertFalse(revisionObservable.isUpdating());
+      revisionObservable.update("defaultsvn", new TestRepository(), cache, false);
     } finally {
       cache.shutdown();
     }
@@ -54,9 +52,8 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void update(final RevisionUpdate revisionUpdate) {
   }
 
-  static class TestRepository extends SVNRepositoryStub {
+  class TestRepository extends SVNRepositoryStub {
     private boolean firstTime = true;
-
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }

@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -76,9 +76,6 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  /**
-   * @deprecated
-   */
   public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry, boolean recursive, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }
@@ -212,11 +209,11 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  protected void lock() {
+  protected synchronized void lock() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  protected void unlock() {
+  protected synchronized void unlock() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 

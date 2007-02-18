@@ -1,8 +1,7 @@
-<%@ page import="de.berlios.sventon.web.model.SideBySideDiffRow"%>
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -12,7 +11,7 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
   <head>
@@ -24,27 +23,28 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/>
+    <p><sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/></p>
+    
+    <br/>
     <sventon:functionLinks pageName="showDiff"/>
 
     <c:choose>
-      <c:when test="${isIdentical}">
-        <p><b><spring:message code="diff.error.identical"/></b></p>
-      </c:when>
-      <c:when test="${isMissingHistory}">
-        <p><b><spring:message code="diff.error.no-history"/></b></p>
+      <c:when test="${!empty diffException}">
+        <p><b>${diffException}</b></p>
       </c:when>
       <c:otherwise>
         <c:choose>
           <c:when test="${!isBinary}">
-            <c:set var="diffResult" value="${diffResult}" />
-            <jsp:useBean id="diffResult" type="java.util.ArrayList" />
+            <c:set var="leftLines" value="${leftFileContent}" />
+            <c:set var="rightLines" value="${rightFileContent}" />
+            <jsp:useBean id="leftLines" type="java.util.ArrayList" />
+            <jsp:useBean id="rightLines" type="java.util.ArrayList" />
 
             <table id="diffTable" class="sventonDiffTable" cellspacing="0">
               <tr>
                 <th>
                   <a href="#diff0">
-                    <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff"/>
+                    <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
                   </a>
                 </th>
                 <th>&nbsp;</th>
@@ -53,44 +53,38 @@
                 <th width="50%">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <c:set var="diffCount" value="0"/>
-              <c:forEach items="${diffResult}" var="row">
-                <jsp:useBean id="row" type="de.berlios.sventon.web.model.SideBySideDiffRow"/>
+              <c:set var="lineCount" value="0"/>
+              <c:forEach items="${leftLines}" var="line">
                 <tr>
                   <td>
-                    <c:if test="${!row.isUnchanged}">
+                    <c:if test="${'Unchanged' != line.action.description}">
                       <a name="diff${diffCount}"/>
                       <c:set var="diffCount" value="${diffCount + 1}"/>
                       <a href="#diff${diffCount}">
-                        <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff"/>
+                        <img src="images/icon_nextdiff.gif" border="0" alt="Next diff" title="Next diff"/>
                       </a>
                     </c:if>
                   </td>
-
-                  <td><b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b></td>
-                  <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
-                    <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
-                      <%
-                        String line = row.getSide(SideBySideDiffRow.Side.LEFT).getLine();
-                        out.print("".equals(line) ? "&nbsp;" : line);
-                      %>
+                  <td><b>${line.action.symbol}</b></td>
+                  <td class="${line.action.CSSClass}">
+                    <span title="${line.action.description}">
+                      ${line.line eq '' ? '&nbsp;' : line.line}
                     </span>
                   </td>
-                  <td><b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b></td>
-                  <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
-                    <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
-                      <%
-                        line = row.getSide(SideBySideDiffRow.Side.RIGHT).getLine();
-                        out.print("".equals(line) ? "&nbsp;" : line);
-                      %>
+                  <td><b>${righLines[lineCount].action.symbol}</b></td>
+                  <td class="${rightLines[lineCount].action.CSSClass}">
+                    <span title="${rightLines[lineCount].action.description}">
+                      ${rightLines[lineCount].line eq '' ? '&nbsp;' : rightLines[lineCount].line}
                     </span>
                   </td>
                 </tr>
+                <c:set var="lineCount" value="${lineCount + 1}"/>
               </c:forEach>
             </table>
             <a name="diff${diffCount}"/>
           </c:when>
           <c:otherwise>
-            <p><b><spring:message code="diff.error.binary"/></b></p>
+            <p><b>One or both files selected for diff is in binary format.</b></p>
           </c:otherwise>
         </c:choose>
       </c:otherwise>

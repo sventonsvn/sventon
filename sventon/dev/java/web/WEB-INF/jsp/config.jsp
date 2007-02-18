@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -20,12 +20,12 @@
   </head>
 
   <body>
-    <sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
+    <p><sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/></p>
 
     <br/>
       <p>
         <table width="700" border="0">
-          <form name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
+          <form name="configForm" method="post" action="config.svn">
             <tr>
               <td valign="top" align="right" style="white-space: nowrap;">Enter repository name:</td>
               <td valign="top">
@@ -95,6 +95,16 @@
             </tr>
             <tr><td>&nbsp;</td></tr>
             <tr>
+              <td colspan="3">
+                By default, the temporary files created by sventon, including the <b>sventon.log</b> file will be stored in <b><%=System.getProperty("java.io.tmpdir")%></b>.<br>
+                Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
+                <br/>
+                If this sventon instance will be used with Tomcat in a non-ISO-8859-1 environment, making fully use of Subversion's
+                UTF-8 support, modifications must be made to the Coyote HTTP/1.1 connector: In server.xml, either set attribute
+                <code>URIEncoding="UTF-8"</code> and/or set <code>useBodyEncodingForURI="true"</code>.
+              </td>
+            </tr>
+            <tr>
               <td colspan="2">
                 <spring:hasBindErrors name="command">
                   <span class="exclamationText">
@@ -112,15 +122,6 @@
             </tr>
           </form>
           <c:if test="${fn:length(addedInstances) > 0}">
-          <form action="config.svn">
-            <tr>
-              <td>
-              <input type="submit" value="cancel" class="btn"/>
-              </td>
-            </tr>
-          </form>
-          </c:if>
-          <c:if test="${fn:length(addedInstances) > 0}">
             <tr>
               <td><b>Added instances</b></td>
             </tr>
@@ -128,6 +129,13 @@
             <tr><td>${instance}</td></tr>
             </c:forEach>
           </c:if>
+          <tr>
+            <td colspan="2" align="right">
+              <form action="submitconfig.svn">
+                <input type="submit" value="submit configuration" class="btn">
+              </form>
+            </td>
+          </tr>
         </table>
       </p>
 

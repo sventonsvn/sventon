@@ -8,8 +8,6 @@ body {
   color: #14233D;
   background-color: #ffffff;
   font-weight: normal;
-  margin: 8px;
-  padding: 0px;
 }
 
 th {
@@ -25,20 +23,7 @@ td {
   font-size: 10px;
 }
 
-form {
-  margin: 0;
-  padding: 0;
-}
-
-p {
-  margin: 10px 0px;
-}
-
-img {
-  border:none;
-}
-
-a:link, a:visited, a:active {
+a:link, a:visited, a:hover, a:active {
   font-family: verdana, sans-serif;
   font-size: 10px;
   color: #0041BA;
@@ -54,11 +39,11 @@ a:hover {
   text-decoration: underline;
 }
 
-exclamationText {
+a.exclamationText {
   color: #ff0000;  
 }
 
-a.sventonHeaderLink:link, a.sventonHeaderLink:visited, a.sventonHeaderLink:active, a.sventonHeaderLink:hover {
+a.sventonHeader:link, a.sventonHeader:visited, a.sventonHeader:active, a.sventonHeader:hover {
   color: #FEAE02;
   border: none;
 }
@@ -130,6 +115,7 @@ input.btn {
   background-color: #4B6E87;
   border: 1px solid black;
   width: 100%;
+  
 }
 
 .sventonRevision {
@@ -249,6 +235,9 @@ input.btn {
   white-space: nowrap;
 }
 
+.sventonEntriesDiv {
+}
+
 .sventonTopTable {
   width: 100%;
 }
@@ -282,6 +271,9 @@ input.btn {
   text-decoration: none;
   font-style: italic;
   font-weight: bold;	
+}
+
+.sventonBlameTable {
 }
 
 .sventonFunctionLinksTable {
@@ -329,22 +321,4 @@ input.btn {
 .searchHit {
   background-color: #ffff00;
   font-weight: bold;
-}
-
-.helpDiv {
-  text-align: justify;
-  border: 1px solid black;
-  background-color: #eeee00;
-  position: absolute;
-  padding: 5px;
-  white-space: normal;
-  min-width: 250px;
-  max-width: 250px;
-  left: 300px;
-  top: 250px;
-}
-
-a.helpDivCloseLink {
-  color: #000000;
-  text-decoration: none;
 }

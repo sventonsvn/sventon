@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -12,5 +12,5 @@
  */
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/sventon.css">
-<script language="javascript" src="${pageContext.request.contextPath}/js/sventon.js" type="text/javascript" ></script>
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/sventon.css">
+<script language="javascript" src="<%= request.getContextPath() %>/js/sventon.js" type="text/javascript" ></script>

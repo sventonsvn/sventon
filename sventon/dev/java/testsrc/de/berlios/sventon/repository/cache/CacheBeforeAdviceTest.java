@@ -25,7 +25,7 @@ public class CacheBeforeAdviceTest extends TestCase {
       assertEquals("instance1", instanceName);
     }
 
-    public boolean isUpdating(final String instanceName) {
+    public boolean isUpdating() {
       return false;
     }
   }

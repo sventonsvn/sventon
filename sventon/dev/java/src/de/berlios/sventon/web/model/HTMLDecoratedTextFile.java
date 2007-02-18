@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -45,8 +45,8 @@ public class HTMLDecoratedTextFile extends TextFile {
     appender.setEmbedStart("<span class=\"sventonLineNo\">");
     appender.setEmbedEnd(":&nbsp;</span>");
     appender.setPadding(5);
-    this.content = appender.appendTo(colorer.getColorizedContent(this.content, PathUtil.getFileExtension(
-        PathUtil.getTarget(path)), encoding));
+    this.content = appender.appendTo(colorer.getColorizedContent(this.content,
+        PathUtil.getFileExtension(PathUtil.getTarget(path))));
 
     model.put("fileContent", this.content);
     model.put("isRawFormat", false);

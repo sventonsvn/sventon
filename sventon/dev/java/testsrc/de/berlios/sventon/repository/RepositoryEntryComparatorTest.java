@@ -14,6 +14,18 @@ import java.util.List;
 
 public class RepositoryEntryComparatorTest extends TestCase {
 
+  public RepositoryEntryComparatorTest(String arg0) {
+    super(arg0);
+  }
+
+  protected void setUp() throws Exception {
+    super.setUp();
+  }
+
+  protected void tearDown() throws Exception {
+    super.tearDown();
+  }
+
   public void testCompare() throws Exception {
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry(null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12)
@@ -101,7 +113,7 @@ public class RepositoryEntryComparatorTest extends TestCase {
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);
-
+    
     Collections.sort(entries, new RepositoryEntryComparator(NAME, false));
     assertSame(e1, entries.get(1));
     assertSame(e2, entries.get(0));

@@ -1,7 +1,7 @@
 <%
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -23,7 +23,9 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
+    <p><sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/></p>
+
+    <br/>
     <sventon:functionLinks pageName="showTextFile"/>
 
 <pre class="codeBlock"><c:out value="${fileContent}" escapeXml="false"/></pre>

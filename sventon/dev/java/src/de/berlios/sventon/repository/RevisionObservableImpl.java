@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2006 Sventon Project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -22,7 +22,9 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 
 /**
  * Class to monitor repository changes.
@@ -45,10 +47,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   private ApplicationConfiguration configuration;
 
-  /**
-   * Map to keep track of instances being updated.
-   */
-  private Set<String> updating = Collections.synchronizedSet(new HashSet<String>());
+  private boolean updating = false;
 
   /**
    * Object cache manager instance.
@@ -132,68 +131,68 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache,
                         final boolean flushAfterUpdate) {
+    if (configuration.isConfigured()) {
+      updating = true;
 
-    updating.add(instanceName);
+      try {
+        Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
+        boolean clearCacheBeforeUpdate = false;
 
-    try {
-      Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
-      boolean clearCacheBeforeUpdate = false;
+        if (lastUpdatedRevision == null) {
+          logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
+              + instanceName);
+          clearCacheBeforeUpdate = true;
+          lastUpdatedRevision = 0L;
+        }
 
-      if (lastUpdatedRevision == null) {
-        logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
-            + instanceName);
-        clearCacheBeforeUpdate = true;
-        lastUpdatedRevision = 0L;
+        final long headRevision = repositoryService.getLatestRevision(repository);
+
+        // Sanity check
+        if (headRevision < lastUpdatedRevision) {
+          final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached" +
+              " revision. The repository URL has probably been changed. Delete all cache files from the temp directory" +
+              " and restart sventon.";
+          logger.error(errorMessage);
+          throw new RuntimeException(errorMessage);
+        }
+
+        if (headRevision > lastUpdatedRevision) {
+          long numberOfRevisionsLeftToFetch = headRevision - lastUpdatedRevision;
+          logger.debug("About to fetch [" + numberOfRevisionsLeftToFetch + "] revisions");
+
+          do {
+            long fromRevision = lastUpdatedRevision + 1;
+            long toRevision = numberOfRevisionsLeftToFetch > maxRevisionCountPerUpdate ?
+                lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+
+            final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+            logEntries.addAll(repositoryService.getRevisions(repository, fromRevision, toRevision));
+            logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
+            setChanged();
+            final StringBuffer notification = new StringBuffer();
+            notification.append("Notifying observers about [");
+            notification.append(logEntries.size());
+            notification.append("] revisions [");
+            notification.append(fromRevision);
+            notification.append("-");
+            notification.append(toRevision);
+            notification.append("]");
+            logger.info(notification.toString());
+            notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
+
+            lastUpdatedRevision = toRevision;
+            logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
+            objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, lastUpdatedRevision);
+
+            numberOfRevisionsLeftToFetch -= logEntries.size();
+          } while (numberOfRevisionsLeftToFetch > 0);
+        }
+      } catch (SVNException svnex) {
+        throw new RuntimeException(svnex);
+      } finally {
+        updating = false;
       }
-
-      final long headRevision = repositoryService.getLatestRevision(repository);
-
-      // Sanity check
-      if (headRevision < lastUpdatedRevision) {
-        final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached" +
-            " revision. The repository URL has probably been changed. Delete all cache files from the temp directory" +
-            " and restart sventon.";
-        logger.error(errorMessage);
-        throw new RuntimeException(errorMessage);
-      }
-
-      if (headRevision > lastUpdatedRevision) {
-        long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
-        logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions");
-
-        do {
-          long fromRevision = lastUpdatedRevision + 1;
-          long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate ?
-              lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
-
-          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisions(repository, fromRevision, toRevision));
-          logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
-          setChanged();
-          final StringBuffer notification = new StringBuffer();
-          notification.append("Notifying observers about [");
-          notification.append(logEntries.size());
-          notification.append("] revisions [");
-          notification.append(fromRevision);
-          notification.append("-");
-          notification.append(toRevision);
-          notification.append("]");
-          logger.info(notification.toString());
-          notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
-
-          lastUpdatedRevision = toRevision;
-          logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
-          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, lastUpdatedRevision);
-
-          revisionsLeftToFetchCount -= logEntries.size();
-        } while (revisionsLeftToFetchCount > 0);
-      }
-    } catch (SVNException svnex) {
-      throw new RuntimeException(svnex);
-    } finally {
-      updating.remove(instanceName);
     }
-
   }
 
   /**
@@ -201,19 +200,17 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    *
    * @throws RuntimeException if a subversion error occurs.
    */
-  public void update(final String instanceName, final boolean flushAfterUpdate) {
+  public synchronized void update(final String instanceName, final boolean flushAfterUpdate) {
     if (configuration.isConfigured()) {
       final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
       if (instanceConfiguration.isCacheUsed()) {
-        synchronized (instanceConfiguration) {
-          SVNRepository repository;
-          try {
-            repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
-            final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-            update(instanceConfiguration.getInstanceName(), repository, objectCache, flushAfterUpdate);
-          } catch (final Exception ex) {
-            logger.warn("Unable to establish repository connection", ex);
-          }
+        SVNRepository repository;
+        try {
+          repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+          final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
+          update(instanceConfiguration.getInstanceName(), repository, objectCache, flushAfterUpdate);
+        } catch (final Exception ex) {
+          logger.warn("Unable to establish repository connection", ex);
         }
       }
     }
@@ -224,12 +221,10 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    *
    * @throws RuntimeException if a subversion error occurs.
    */
-  public void updateAll() {
-    if (configuration.isConfigured()) {
+  public synchronized void updateAll() {
+    if (configuration.isConfigured() && !isUpdating()) {
       for (final String instanceName : configuration.getInstanceNames()) {
-        if (!isUpdating(instanceName)) {
-          update(instanceName, true);
-        }
+        update(instanceName, true);
       }
     }
   }
@@ -237,8 +232,8 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   /**
    * {@inheritDoc}
    */
-  public boolean isUpdating(final String instanceName) {
-    return updating.contains(instanceName);
+  public boolean isUpdating() {
+    return updating;
   }
 
 }
