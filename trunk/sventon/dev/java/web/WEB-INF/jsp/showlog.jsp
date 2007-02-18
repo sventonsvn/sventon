@@ -82,16 +82,13 @@
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
-              <table width="100%">
+            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="4">
+              <table width="100%" border="0">
                 <tr>
                   <th>Action</th>
                   <th>Path</th>
-                  <th>Copy From Path</th>
-                  <th>Revision</th>
                 </tr>
                 <c:set var="changedPaths" value="${entry.svnLogEntry.changedPaths}" />
-
                 <jsp:useBean id="changedPaths" type="java.util.Map" />
                 <%
                   final List pathsList = new ArrayList(changedPaths.keySet());
@@ -109,9 +106,19 @@
                     <c:param name="name" value="${command.name}" />
                   </c:url>
 
-                  <td valign="top"><i><%= actionType %></i></td>
+                  <c:url value="goto.svn" var="goToCopyUrl">
+                    <c:param name="path" value="<%= logEntryPath.getCopyPath() %>" />
+                    <c:param name="revision" value="<%= String.valueOf(logEntryPath.getCopyRevision()) %>"/>
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
+                  <c:url value="revinfo.svn" var="showRevInfoCopyUrl">
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
+                  <td valign="top" width="1"><i><%= actionType %></i></td>
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
-                  <td><a href="${goToUrl}" title="Show file"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+                  <td><a href="${goToUrl}" title="Show"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
 
                   <%
@@ -127,12 +134,14 @@
                     <c:param name="entry" value="<%= entry2 %>"/>
                   </c:url>
 
-                  <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a></td>
+                  <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a>
                   <% } else if (LogEntryActionType.DELETED == actionType) { %>
-                  <td><strike><%= logEntryPath.getPath() %></strike></td>
+                  <td><strike><%= logEntryPath.getPath() %></strike>
                   <% } %>
-                  <td><%= logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath() %></td>
-                  <td><%= logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()) %></td>
+                  <% if (logEntryPath.getCopyPath() != null) { %>
+                    <br/><b>Copy from</b> <a href="${goToCopyUrl}" title="Show"><%=logEntryPath.getCopyPath()%></a> @ <a href="${showRevInfoCopyUrl}&revision=<%=logEntryPath.getCopyRevision()%>"><%=Long.toString(logEntryPath.getCopyRevision())%></a>
+                  <% } %>
+                  </td>
                 </tr>
               <%
                 }
@@ -159,12 +168,6 @@
             </tr>
           </c:when>
         </c:choose>
-        <tr>
-          <td colspan="2">
-            <c:if test="${isFile}"><input type="submit" class="btn" value="diff"/></c:if>
-          </td>
-          <td colspan="3">&nbsp;</td>
-        </tr>
       </table>
     </form>
     <br>
