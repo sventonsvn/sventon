@@ -69,8 +69,8 @@
       <arg value="${svn.repository.url}"/>
       <classpath>
         <pathelement location="../java/web/WEB-INF/lib/ganymed.jar"/>
-        <pathelement location="../java/web/WEB-INF/lib/javasvn.jar"/>
-        <pathelement location="../java/toolslib/javasvn-cli.jar"/>
+        <pathelement location="../java/web/WEB-INF/lib/svnkit.jar"/>
+        <pathelement location="../java/toolslib/svnkit-cli.jar"/>
       </classpath>
     </java>
   </target>
