@@ -204,6 +204,10 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
+  public void replay(long lowRevision, long revision, boolean sendDeltas, ISVNEditor editor) throws SVNException {
+    throw new UnsupportedOperationException("Not implemented!");
+  }
+
   public ISVNEditor getCommitEditor(String logMessage, final ISVNWorkspaceMediator mediator) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }

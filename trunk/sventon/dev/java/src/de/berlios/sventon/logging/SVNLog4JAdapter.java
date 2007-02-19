@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.util.SVNDebugLogAdapter;
 
 /**
- * Log4J sventon adapter for JavaSVN logging.
+ * Log4J sventon adapter for SVNKit logging.
  *
  * @author patrikfr@users.berlios.de
  */

@@ -30,12 +30,12 @@ import java.util.Set;
  * Application configurator class.
  * Reads given configuration file and initializes sventon.
  * <p/>
- * The class also performs JavaSVN initialization, such as setting up logging
+ * The class also performs SVNKit initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
  * the application starts.
  *
  * @author jesper@users.berlios.de
- * @see <a href="http://tmate.org/svn">TMate JavaSVN</a>
+ * @see <a href="http://www.svnkit.com">SVNKit</a>
  */
 public class ApplicationConfigurator {
 
@@ -90,10 +90,10 @@ public class ApplicationConfigurator {
   }
 
   /**
-   * Initializes the logger and the JavaSVN library.
+   * Initializes the logger and the SVNKit library.
    */
   private void initApplication() {
-    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.javasvn"));
+    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
     logger.info("Initializing sventon version "
         + Version.getVersion() + " (revision " + Version.getRevision() + ")");
     SVNRepositoryFactoryImpl.setup();
