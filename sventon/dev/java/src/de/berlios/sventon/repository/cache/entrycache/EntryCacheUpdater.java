@@ -63,6 +63,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    *
    * @param entryCacheManager The EntryCacheManager instance.
    * @param configuration     ApplicationConfiguration instance.
+   * @param repositoryService RepositoryService instance.
    */
   public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final ApplicationConfiguration configuration,
                            final RepositoryService repositoryService) {
@@ -120,6 +121,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * Internal update method. Made protected for testing reasons only.
    *
    * @param entryCache     EntryCache instance
+   * @param repository     Repository instance
    * @param revisionUpdate Update
    */
   protected void updateInternal(final EntryCache entryCache, final SVNRepository repository,
@@ -177,7 +179,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
                   logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
                   doEntryCacheModify(entryCache, repository, logEntryPath, revision);
                   break;
-                default :
+                default:
                   throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
               }
             }
@@ -294,6 +296,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param entryCache The cache instance.
    * @param repository Repository
    * @param path       The path to add.
+   * @param revision   Revision
    * @throws SVNException if a Subversion error occurs.
    */
   @SuppressWarnings("unchecked")

@@ -72,7 +72,7 @@ public final class KeywordHandler {
     final String date = (String) properties.get(SVNProperty.COMMITTED_DATE);
     final String revision = (String) properties.get(SVNProperty.COMMITTED_REVISION);
     final String keywords = (String) properties.get(SVNProperty.KEYWORDS);
-    keywordsMap = SVNTranslator.computeKeywords(keywords, url, author, date, revision);
+    keywordsMap = SVNTranslator.computeKeywords(keywords, url, author, date, revision, null);
   }
 
   /**
