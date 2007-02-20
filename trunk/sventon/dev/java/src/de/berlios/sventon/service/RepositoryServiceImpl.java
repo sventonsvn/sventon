@@ -12,6 +12,7 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
 import de.berlios.sventon.repository.RepositoryEntry;
@@ -57,6 +58,20 @@ public class RepositoryServiceImpl implements RepositoryService {
   private CacheGateway cacheGateway;
 
   /**
+   * The application configuration instance. Used to check if caching is enabled or not.
+   */
+  private ApplicationConfiguration configuration;
+
+  /**
+   * Sets the application configuration.
+   *
+   * @param configuration Configuration
+   */
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
+  }
+
+  /**
    * Sets the cache gateway instance.
    *
    * @param cacheGateway Cache gateway instance
@@ -68,71 +83,65 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final SVNRepository repository, final long revision) throws SVNException {
-    return getRevision(repository, revision, "/");
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public SVNLogEntry getRevision(final SVNRepository repository, final long revision, final String path) throws SVNException {
+  public SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
+      throws SVNException, CacheException {
     final long start = System.currentTimeMillis();
-    final SVNLogEntry svnLogEntry = (SVNLogEntry) repository.log(
-        new String[]{path}, null, revision, revision, true, false).iterator().next();
+    final SVNLogEntry logEntry;
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
+      logger.debug("Fetching cached revision: " + revision);
+      logEntry = cacheGateway.getRevision(instanceName, revision);
+    } else {
+      logEntry = (SVNLogEntry) repository.log(
+          new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+    }
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
-    return svnLogEntry;
+    return logEntry;
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision)
+  public List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision, final long toRevision)
       throws SVNException {
-    return getRevisions(repository, fromRevision, toRevision, "/", -1);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision,
-                                        final long limit) throws SVNException {
-    return getRevisions(repository, fromRevision, toRevision, "/", limit);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision,
-                                        final String path, final long limit) throws SVNException {
     final long start = System.currentTimeMillis();
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
+    final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
+    repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, -1, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
-        logEntries.add(logEntry);
+        revisions.add(logEntry);
       }
     });
-    logger.debug("PERF: getRevisions(): " + (System.currentTimeMillis() - start));
-    return logEntries;
+    logger.debug("PERF: getRevisionsFromRepository(): " + (System.currentTimeMillis() - start));
+    return revisions;
   }
 
-  private SVNLogEntry getCachedRevision(final String instanceName, final long revision) throws CacheException {
-    return cacheGateway.getRevision(instanceName, revision);
-  }
+  /**
+   * {@inheritDoc}
+   */
+  public List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
+                                        final long fromRevision, final long toRevision, final String path,
+                                        final long limit) throws SVNException, CacheException {
 
-  private List<SVNLogEntry> getCachedRevisions(final String instanceName, final long fromRevision, final long toRevision)
-      throws CacheException {
-
-    //TODO: revisit!
+    final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (fromRevision < toRevision) {
-      for (long revision = fromRevision; revision <= toRevision; revision++) {
-        logEntries.add(cacheGateway.getRevision(instanceName, revision));
-      }
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
+      // To be able to return cached revisions, we first have to get the revision numbers
+      // Doing a logs-call, skipping the details, to get them.
+      final List<Long> revisions = new ArrayList<Long>();
+      repository.log(new String[]{path}, fromRevision, toRevision, false, false, limit, new ISVNLogEntryHandler() {
+        public void handleLogEntry(final SVNLogEntry logEntry) {
+          revisions.add(logEntry.getRevision());
+        }
+      });
+      logger.debug("Fetching cached revisions [" + toRevision + "-" + fromRevision + "]");
+      logEntries.addAll(cacheGateway.getRevisions(instanceName, revisions));
     } else {
-      for (long revision = fromRevision; revision >= toRevision; revision--) {
-        logEntries.add(cacheGateway.getRevision(instanceName, revision));
-      }
+      repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
+        public void handleLogEntry(final SVNLogEntry logEntry) {
+          logEntries.add(logEntry);
+        }
+      });
     }
+    logger.debug("PERF: getRevisions(): " + (System.currentTimeMillis() - start));
     return logEntries;
   }
 
@@ -224,13 +233,14 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getLatestRevisions(final SVNRepository repository, long revisionCount) throws SVNException {
+  public List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
+                                              long revisionCount) throws SVNException, CacheException {
     final long headRevision = repository.getLatestRevision();
     long toRevision = headRevision - revisionCount;
     if (toRevision < 1) {
       toRevision = 1;
     }
-    return getRevisions(repository, headRevision, toRevision, "/", revisionCount);
+    return getRevisions(instanceName, repository, headRevision, toRevision, "/", revisionCount);
   }
 
   /**

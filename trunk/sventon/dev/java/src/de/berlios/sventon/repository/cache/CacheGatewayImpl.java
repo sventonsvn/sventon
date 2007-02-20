@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -142,6 +143,19 @@ public class CacheGatewayImpl implements CacheGateway {
     final RevisionCache cache = revisionCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
     return cache.get(revision);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<SVNLogEntry> getRevisions(final String instanceName, final List<Long> revisions) throws CacheException {
+    final RevisionCache cache = revisionCacheManager.getCache(instanceName);
+    assertCacheExists(cache, instanceName);
+    final List<SVNLogEntry> cachedRevisions = new ArrayList<SVNLogEntry>();
+    for (final Long revision : revisions) {
+      cachedRevisions.add(cache.get(revision));
+    }
+    return cachedRevisions;
   }
 
   private void assertCacheExists(final Cache cache, final String instanceName) throws CacheException {

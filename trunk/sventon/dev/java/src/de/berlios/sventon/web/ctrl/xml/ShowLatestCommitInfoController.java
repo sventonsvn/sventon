@@ -68,14 +68,14 @@ public class ShowLatestCommitInfoController extends AbstractController {
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    final String repositoryInstanceName = ServletRequestUtils.getStringParameter(request, "name", null);
+    final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
 
-    if (repositoryInstanceName == null) {
+    if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
       return null;
     }
 
-    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(repositoryInstanceName);
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
     final SVNRepository repository =
         RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
@@ -91,7 +91,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
 
     try {
       response.getWriter().write(XMLDocumentHelper.getAsString(XMLDocumentHelper.createXML(
-          repositoryService.getRevision(repository, headRevision), datePattern),
+          repositoryService.getRevision(instanceName, repository, headRevision), datePattern),
           encoding));
     } catch (IOException ioex) {
       logger.warn(ioex);

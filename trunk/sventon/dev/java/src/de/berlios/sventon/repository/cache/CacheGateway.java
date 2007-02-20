@@ -97,4 +97,15 @@ public interface CacheGateway {
    * @throws CacheException if error.
    */
   SVNLogEntry getRevision(final String instanceName, final long revision) throws CacheException;
+
+  /**
+   * Gets multiple revisions by number.
+   *
+   * @param instanceName Cache instance name
+   * @param revisions    List of revision numbers to get.
+   * @return List containing the revisions
+   * @throws CacheException if error.
+   */
+  List<SVNLogEntry> getRevisions(final String instanceName, final List<Long> revisions) throws CacheException;
+
 }

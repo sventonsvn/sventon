@@ -167,7 +167,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
               lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisions(repository, fromRevision, toRevision));
+          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
           setChanged();
           final StringBuffer notification = new StringBuffer();
