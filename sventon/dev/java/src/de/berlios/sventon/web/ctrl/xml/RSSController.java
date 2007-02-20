@@ -92,7 +92,7 @@ public class RSSController extends AbstractController {
         RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     try {
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(repository, feedItemCount);
+      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, repository, feedItemCount);
       logger.debug("Outputting feed");
       feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {

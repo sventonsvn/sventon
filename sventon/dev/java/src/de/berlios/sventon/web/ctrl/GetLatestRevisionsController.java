@@ -44,7 +44,8 @@ public class GetLatestRevisionsController extends AbstractSVNTemplateController 
 
     long revisionCount = userContext.getLatestRevisionsDisplayCount();
     logger.debug("Getting [" + revisionCount + "] latest revisions");
-    final List<SVNLogEntry> revisions = getRepositoryService().getLatestRevisions(repository, revisionCount);
+    final List<SVNLogEntry> revisions = getRepositoryService().getLatestRevisions(
+        svnCommand.getName(), repository, revisionCount);
     logger.debug("Got [" + revisions.size() + "] revisions");
 
     logger.debug("Create model");

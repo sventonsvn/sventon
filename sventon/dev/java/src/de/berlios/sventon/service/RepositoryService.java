@@ -15,6 +15,7 @@ import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.ImageMetadata;
@@ -42,63 +43,48 @@ public interface RepositoryService {
 
   /**
    * Gets revision details for a specific revision number.
+   * If caching is enabled in the {@link InstanceConfiguration}, a cached revision will be returned.
    *
-   * @param repository The repository
-   * @param revision   Revision number
-   * @return The revision log entry
-   * @throws SVNException if subversion error
+   * @param instanceName The instance name
+   * @param repository   The repository
+   * @param revision     Revision number
+   * @return The log entry
+   * @throws SVNException   if subversion error
+   * @throws CacheException if unable to get cached revision
    */
-  SVNLogEntry getRevision(final SVNRepository repository, final long revision) throws SVNException;
-
-  /**
-   * Gets revision details for a specifica revision number and path.
-   *
-   * @param repository The repository
-   * @param revision   Revision number
-   * @param path       The repository path
-   * @return The revision log entry
-   * @throws SVNException if subversion error
-   */
-  SVNLogEntry getRevision(final SVNRepository repository, final long revision, final String path) throws SVNException;
+  SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
+      throws SVNException, CacheException;
 
   /**
    * Gets revision details for given revision interval.
+   * This method will do a deep log fetch from the repository.
    *
    * @param repository   The repository
    * @param fromRevision From revision
    * @param toRevision   To revision
-   * @return The revision log entries
+   * @return The log entries
    * @throws SVNException if subversion error
    */
-  List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision)
+  List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision, final long toRevision)
       throws SVNException;
 
   /**
-   * Gets revision details for given revision interval with limit.
-   *
-   * @param repository   The repository
-   * @param fromRevision From revision
-   * @param toRevision   To revision
-   * @param limit        Revision limit
-   * @return The revision log entries
-   * @throws SVNException if subversion error
-   */
-  List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision,
-                                 final long limit) throws SVNException;
-
-  /**
    * Gets revision details for given revision interval and a specific path with limit.
+   * If caching is enabled in the {@link InstanceConfiguration}, cached revisions will be returned.
    *
+   * @param instanceName The instance name
    * @param repository   The repository
    * @param fromRevision From revision
    * @param toRevision   To revision
    * @param path         The repository path
    * @param limit        Revision limit
-   * @return The revision log entries
-   * @throws SVNException if subversion error
+   * @return The log entries
+   * @throws SVNException   if subversion error
+   * @throws CacheException if unable to get cached revision
    */
-  List<SVNLogEntry> getRevisions(final SVNRepository repository, final long fromRevision, final long toRevision,
-                                 final String path, final long limit) throws SVNException;
+  List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
+                                 final long fromRevision, final long toRevision, final String path,
+                                 final long limit) throws SVNException, CacheException;
 
   /**
    * Exports given list of target entries to the given destination export directory.
@@ -196,12 +182,15 @@ public interface RepositoryService {
   /**
    * Gets the latest repository revisions.
    *
+   * @param instanceName  The instance name
    * @param repository    The repository
    * @param revisionCount Number of revisions to fetch
    * @return The revisions.
    * @throws SVNException if a subversion error occur
+   * @throws CacheException if unable to get cached revision
    */
-  List<SVNLogEntry> getLatestRevisions(SVNRepository repository, final long revisionCount) throws SVNException;
+  List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
+                                       final long revisionCount) throws SVNException, CacheException;
 
   /**
    * Gets the node type for given path (with or without leaf).

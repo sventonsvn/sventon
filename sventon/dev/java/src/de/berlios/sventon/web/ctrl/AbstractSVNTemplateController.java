@@ -241,7 +241,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", repositoryService.getLatestRevisions(repository,
+          model.put("revisions", repositoryService.getLatestRevisions(svnCommand.getName(), repository,
               userContext.getLatestRevisionsDisplayCount()));
         }
 

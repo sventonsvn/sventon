@@ -109,5 +109,8 @@ public class CompletionControllerTest extends TestCase {
       return null;
     }
 
+    public List<SVNLogEntry> getRevisions(final String instanceName, final List<Long> revisions) throws CacheException {
+      return null;
+    }
   }
 }

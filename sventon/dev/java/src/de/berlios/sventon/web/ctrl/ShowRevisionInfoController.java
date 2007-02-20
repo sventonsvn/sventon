@@ -53,7 +53,7 @@ public class ShowRevisionInfoController extends AbstractSVNTemplateController im
     }
 
     logger.debug("Getting revision info details for revision: " + revNumber);
-    model.put("revisionInfo", getRepositoryService().getRevision(repository, revNumber));
+    model.put("revisionInfo", getRepositoryService().getRevision(svnCommand.getName(), repository, revNumber));
     return new ModelAndView("showrevinfo", model);
   }
 
