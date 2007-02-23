@@ -27,25 +27,25 @@ cache/indexing process of the revisions and the files in HEAD will start.
 If you have a repository with many files (and/or tags or branches),
 this can take quite some time. You will be able to use sventon during the
 indexing process, but the search and flatten buttons will be disabled until
-it's done.
+indexing is completed.
 
 For non-US-ASCII charsets to work correctly with Tomcat, the Tomcat connector
 attribute "URIEncoding" should be set to "UTF-8", or alternatively the attribute 
 "useBodyEncodingForURI" should be set to "true"
 
 Support
-See http://sventon.berlios.de
+See http://www.sventon.org
 
 Source
 If the sventon source was not included in the download, you can fetch it
-from http://sventon.berlios.de
+from http://www.sventon.org
 
 License
-License files are included in the download, please read them.
+License files are included in the download, read them carefully.
 
 Many thanks to the developers of the libraries that sventon depends on,
 and to the developers of Subversion and TortoiseSVN!
 
 Enjoy!
 
-sventon project - http://sventon.berlios.de
+sventon project - http://www.sventon.org
