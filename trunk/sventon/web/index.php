@@ -130,7 +130,7 @@
             </tr>
             <tr>
               <td align="right">
-                <a href="http://groups-beta.google.com/group/sventon-support/">[forum and mailinglist]</a>
+                <a href="http://groups.google.com/group/sventon-support/">[forum and mailinglist]</a>
               </td>
             </tr>
             <tr>
@@ -150,7 +150,7 @@
           <br/>
           <br/>
           <a href="http://sventonblog.blogspot.com/atom.xml" title="Sventon Atom news feed">
-          	<img src="img/feed-icon-32x32.png" alt="feed icon" border="0">
+          	<img src="img/feed-icon-16x16.png" alt="feed icon" border="0">
           	</a>
           <br/>
           <br/>
