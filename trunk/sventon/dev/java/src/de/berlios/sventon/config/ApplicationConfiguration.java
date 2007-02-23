@@ -56,8 +56,9 @@ public class ApplicationConfiguration {
   /**
    * Configures and initializes the repository.
    *
-   * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist.
-   * @param configurationFilename  Path and file name of sventon configuration file.
+   * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist,
+   * not {@code null} Configuration settings will be stored in this directory.
+   * @param configurationFilename  Path and file name of sventon configuration file, not {@null}
    */
   public ApplicationConfiguration(final File configurationDirectory, final String configurationFilename) {
     if (configurationDirectory == null || configurationFilename == null) {
