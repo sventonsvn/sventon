@@ -54,7 +54,7 @@ sventon is really easy to install and you don't have to know anything about Java
 <p>
   <b>Contact</b>
   <br/>
-  If you have any questions regarding sventon usage or development, use the <a href="http://developer.berlios.de/mail/?group_id=3670">mailing list</a> or <a href="http://developer.berlios.de/forum/?group_id=3670">forum</a>. Please do not write the developers directly in these matters (but <i>do</i> post in the forum, we'll try to answer).
+  If you have any questions regarding sventon usage or development, use the <a href="http://groups.google.com/group/sventon-support/">sventon Google group</a>. Please do not write the developers directly in these matters (but <i>do</i> post in the forum, we'll try to answer).
 </p>
 
 <p>
@@ -64,4 +64,7 @@ sventon is really easy to install and you don't have to know anything about Java
   <i>sventonproject at gmail.com</i><br/>
   <i>patrikfr at users.berlios.de</i><br/>
   <i>jesper at users.berlios.de</i><br/>
+</p>
+<p>
+This site uses Google Analytics and cookies to track visitors.
 </p>
