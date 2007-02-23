@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * Application configurator class.
- * Reads given configuration file and initializes sventon.
+ * Reads given configuration instance and initializes sventon.
  * <p/>
  * The class also performs SVNKit initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
@@ -47,7 +47,7 @@ public class ApplicationConfigurator {
   /**
    * Constructor.
    *
-   * @param configuration Application configuration instance to populate.
+   * @param configuration Application configuration instance to populate, not {@code null}
    * @throws IOException if IO error occur
    */
   public ApplicationConfigurator(final ApplicationConfiguration configuration) throws IOException {
@@ -56,7 +56,7 @@ public class ApplicationConfigurator {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
 
-    initApplication();
+    initSvnSupport();
 
     InputStream is = null;
     final File configFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
@@ -85,14 +85,14 @@ public class ApplicationConfigurator {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
 
-    initApplication();
+    initSvnSupport();
     initConfiguration(configurationFileStream, configuration);
   }
 
   /**
    * Initializes the logger and the SVNKit library.
    */
-  private void initApplication() {
+  private void initSvnSupport() {
     SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
     logger.info("Initializing sventon version "
         + Version.getVersion() + " (revision " + Version.getRevision() + ")");

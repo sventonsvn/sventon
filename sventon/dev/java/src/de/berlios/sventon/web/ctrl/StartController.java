@@ -20,12 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * StartController checks how many instances are configured and
+ * The {@code StartController} is the class that handles all entry point calls to the application, i.e. it handles calls to sventon
+ * where no request parameters are given.
+ * <p/>
+ * {@code StartController} checks how many repository instances are configured and
  * redirects to appropriate page. If only one instance is configured
  * the controller will redirect to the repository browser view.
  * In any other case, the {@link ListInstancesController} will be called
  * so that the user can choose which repository instance to browse.
- * If no instance has been configured user will be redirected to
+ * <p/>
+ * If no repository instance has been configured the user will be redirected to
  * the config page.
  *
  * @author jesper@users.berlios.de
