@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
 import de.berlios.sventon.repository.RepositoryEntry;
@@ -234,13 +234,21 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                              long revisionCount) throws SVNException, CacheException {
+                                              final long revisionCount) throws SVNException, CacheException {
+    return getLatestRevisions(instanceName, "/", repository, revisionCount);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
+                                              final long revisionCount) throws SVNException, CacheException {
     final long headRevision = repository.getLatestRevision();
     long toRevision = headRevision - revisionCount;
     if (toRevision < 1) {
       toRevision = 1;
     }
-    return getRevisions(instanceName, repository, headRevision, toRevision, "/", revisionCount);
+    return getRevisions(instanceName, repository, headRevision, toRevision, path, revisionCount);
   }
 
   /**
