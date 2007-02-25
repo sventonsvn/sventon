@@ -14,8 +14,8 @@ package de.berlios.sventon.service;
 import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.ImageMetadata;
@@ -186,10 +186,24 @@ public interface RepositoryService {
    * @param repository    The repository
    * @param revisionCount Number of revisions to fetch
    * @return The revisions.
-   * @throws SVNException if a subversion error occur
+   * @throws SVNException   if a subversion error occur
    * @throws CacheException if unable to get cached revision
    */
   List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
+                                       final long revisionCount) throws SVNException, CacheException;
+
+  /**
+   * Gets the latest repository revisions.
+   *
+   * @param instanceName  The instance name
+   * @param repository    The repository
+   * @param path          The repository path
+   * @param revisionCount Number of revisions to fetch
+   * @return The revisions.
+   * @throws SVNException   if a subversion error occur
+   * @throws CacheException if unable to get cached revision
+   */
+  List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
                                        final long revisionCount) throws SVNException, CacheException;
 
   /**

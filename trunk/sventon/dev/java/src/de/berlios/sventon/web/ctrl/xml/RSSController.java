@@ -75,6 +75,7 @@ public class RSSController extends AbstractController {
     response.setHeader("Cache-Control", "no-cache");
 
     final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
+    final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
 
     if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
@@ -92,8 +93,8 @@ public class RSSController extends AbstractController {
         RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     try {
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, repository, feedItemCount);
-      logger.debug("Outputting feed");
+      logger.debug("Outputting feed for [" + path + "]");
+      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, path, repository, feedItemCount);
       feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
