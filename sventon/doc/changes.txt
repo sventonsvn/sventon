@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[809] Added: Feature #2939 - Store cache files gzipped.
 [808] Added: Feature #3089 - context sensitive feeds.
 [798] Added: Upgraded to SVNKit 1.1.1.
 [789] Fixed: Bug #10253 - Caches for all instances are locked during update.
