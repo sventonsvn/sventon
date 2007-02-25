@@ -19,6 +19,8 @@ import java.io.*;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Disk persistend repository entry cache.
@@ -72,10 +74,16 @@ public class DiskCache extends EntryCache {
    * @throws CacheException if unable to read cache file.
    */
   private void load() throws CacheException {
-    final ObjectInputStream inputStream;
+    ObjectInputStream inputStream;
     if (cacheFile.exists()) {
       try {
-        inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
+        try {
+          inputStream = new ObjectInputStream(new GZIPInputStream(new FileInputStream(cacheFile)));
+        } catch (IOException ioex) {
+          logger.info("Error while loading gzipped data", ioex);
+          logger.info("Trying to read old data file format");
+          inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
+        }
         setCachedRevision(inputStream.readLong());
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
         logger.debug("Number of loaded cached entries: " + getSize());
@@ -86,8 +94,7 @@ public class DiskCache extends EntryCache {
     } else {
       // No serialized cachefile exsisted - initialize an empty one.
       setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
-          new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)),
-          RepositoryEntry.class));
+          new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)), RepositoryEntry.class));
     }
   }
 
@@ -109,7 +116,7 @@ public class DiskCache extends EntryCache {
       final ObjectOutputStream out;
       try {
         // Write to a temp file first, to keep the old file just in case.
-        out = new ObjectOutputStream(new FileOutputStream(tempCacheFile));
+        out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(tempCacheFile)));
         out.writeLong(getCachedRevision());
         out.writeObject(getCachedEntries());
         out.flush();
