@@ -82,7 +82,7 @@
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="4">
+            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
               <table width="100%" border="0">
                 <tr>
                   <th>Action</th>
