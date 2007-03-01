@@ -6,12 +6,9 @@ import junit.framework.TestCase;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockServletContext;
-import org.springframework.web.context.support.StaticWebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
-import java.util.Properties;
 
 public class ConfigurationSubmissionControllerTest extends TestCase {
 
@@ -48,18 +45,12 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final StaticWebApplicationContext applicationContext = new StaticWebApplicationContext();
-    final MockServletContext servletContext = new MockServletContext() {
-      public String getRealPath(final String string) {
-        return TEMPDIR;
-      }
-    };
-    applicationContext.setServletContext(servletContext);
-    controller.setApplicationContext(applicationContext);
+
     controller.setScheduler(new StdScheduler(null, null) {
       public void triggerJob(final String string, final String string1) {
       }
     });
+    
 
     final ApplicationConfiguration applicationConfiguration =
         new ApplicationConfiguration(new File(TEMPDIR), "tmpconfigfilename");
@@ -83,36 +74,17 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     applicationConfiguration.addInstanceConfiguration(instanceConfiguration2);
     applicationConfiguration.setConfigured(false);
     controller.setConfiguration(applicationConfiguration);
+    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
+    assertFalse(propFile.exists());
+
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
     assertNotNull(modelAndView);
     assertNull(modelAndView.getViewName()); // Will be null as it is a redirect view.
-    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
+
+    //File should now be written
     assertTrue(propFile.exists());
     propFile.delete();
     assertFalse(propFile.exists());
     assertTrue(applicationConfiguration.isConfigured());
-  }
-
-  public void testGetConfigurationAsProperties() throws Exception {
-    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
-    final InstanceConfiguration config1 = new InstanceConfiguration();
-    config1.setInstanceName("test1");
-    config1.setRepositoryRoot("http://repo1");
-    config1.setConfiguredUID("");
-    config1.setConfiguredPWD("");
-
-    final InstanceConfiguration config2 = new InstanceConfiguration();
-    config2.setInstanceName("test2");
-    config2.setRepositoryRoot("http://repo2");
-    config2.setConfiguredUID("");
-    config2.setConfiguredPWD("");
-
-    applicationConfiguration.addInstanceConfiguration(config1);
-    applicationConfiguration.addInstanceConfiguration(config2);
-
-    Properties props = new ConfigurationSubmissionController().getConfigurationAsProperties(applicationConfiguration).get(0);
-    assertEquals(5, props.size());
-    props = new ConfigurationSubmissionController().getConfigurationAsProperties(applicationConfiguration).get(1);
-    assertEquals(5, props.size());
   }
 }

@@ -12,8 +12,6 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
-import static de.berlios.sventon.config.InstanceConfiguration.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -24,12 +22,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * Controller for persisting application configuration.
@@ -85,23 +77,7 @@ public class ConfigurationSubmissionController extends AbstractController {
       return new ModelAndView("configurationError");
     }
 
-    final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
-    logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
-
-    FileOutputStream fileOutputStream = null;
-    try {
-      fileOutputStream = new FileOutputStream(propertyFile);
-      for (final Properties properties : getConfigurationAsProperties(configuration)) {
-        logger.debug("Storing: " + properties);
-        properties.store(fileOutputStream, null);
-        fileOutputStream.flush();
-      }
-    } finally {
-      if (fileOutputStream != null) {
-        fileOutputStream.close();
-      }
-    }
-
+    configuration.storeInstanceConfigurations();
     configuration.setConfigured(true);
 
     try {
@@ -114,29 +90,4 @@ public class ConfigurationSubmissionController extends AbstractController {
     logger.info("Configuration done!");
     return new ModelAndView(new RedirectView("start.svn"));
   }
-
-  /**
-   * Creates and populates a List of <code>Properties</code> instances with relevant configuration values
-   * extracted from given <code>ApplicationConfiguration</code>.
-   *
-   * @param configuration The application configuration
-   * @return List of populated Properties.
-   */
-  protected List<Properties> getConfigurationAsProperties(final ApplicationConfiguration configuration) {
-    final List<Properties> propertyList = new ArrayList<Properties>();
-    final Set<String> instanceNames = configuration.getInstanceNames();
-
-    for (final String instanceName : instanceNames) {
-      final Properties properties = new Properties();
-      final InstanceConfiguration config = configuration.getInstanceConfiguration(instanceName);
-      properties.put(instanceName + PROPERTY_KEY_REPOSITORY_URL, config.getUrl());
-      properties.put(instanceName + PROPERTY_KEY_USERNAME, config.getConfiguredUID());
-      properties.put(instanceName + PROPERTY_KEY_PASSWORD, config.getConfiguredPWD());
-      properties.put(instanceName + PROPERTY_KEY_USE_CACHE, config.isCacheUsed() ? "true" : "false");
-      properties.put(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, config.isZippedDownloadsAllowed() ? "true" : "false");
-      propertyList.add(properties);
-    }
-    return propertyList;
-  }
-
 }
