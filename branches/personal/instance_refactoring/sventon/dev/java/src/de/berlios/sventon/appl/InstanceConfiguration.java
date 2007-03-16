@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.config;
+package de.berlios.sventon.appl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

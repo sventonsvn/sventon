@@ -1,6 +1,6 @@
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.diff.SourceLine;

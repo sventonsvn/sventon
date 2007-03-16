@@ -3,7 +3,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.service.RepositoryServiceImpl;
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 

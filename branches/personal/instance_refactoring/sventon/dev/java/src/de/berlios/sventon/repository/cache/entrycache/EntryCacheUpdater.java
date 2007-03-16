@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;

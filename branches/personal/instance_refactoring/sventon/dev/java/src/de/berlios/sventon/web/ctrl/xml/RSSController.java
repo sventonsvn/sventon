@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;

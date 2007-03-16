@@ -15,7 +15,7 @@ import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
