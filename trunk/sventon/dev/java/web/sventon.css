@@ -9,7 +9,7 @@ body {
   background-color: #ffffff;
   font-weight: normal;
   margin: 8px;
-  padding: 0px;
+  padding: 0;
 }
 
 th {
@@ -31,7 +31,7 @@ form {
 }
 
 p {
-  margin: 10px 0px;
+  margin: 10px 0;
 }
 
 img {
@@ -99,7 +99,7 @@ input.btn {
   border-left: black dotted 1px;
   border-right: black solid 2px;
   border-bottom: black solid 2px;
-  padding: 0px;
+  padding: 0;
   white-space: pre-wrap;  
 }
 
@@ -111,12 +111,12 @@ input.btn {
   border-bottom-width: 1px;
   border-left-width: 1px;
   border-color: #333333 #999999 #999999 #333333;
-  padding-right: 0px;
+  padding-right: 0;
   vertical-align: middle;
 }
 
 .sventonSearchField {
-  padding: 0px
+  padding: 0
 }
 
 .sventonSelectOption {
@@ -127,7 +127,7 @@ input.btn {
 .sventonHeader {
   color: #E2E3E6;
   font-weight: bold;
-  background-color: #4B6E87;
+  background: url("images/gradient_background.png") right;
   border: 1px solid black;
   width: 100%;
 }
@@ -156,9 +156,9 @@ input.btn {
 }
 
 .sventonEntriesTable * TD {
-  padding: 0px;
+  padding: 0;
   padding-right: 5px;
-  border: 0px;
+  border: 0;
 }
 
 .sventonFileEntryTableRow {
@@ -214,12 +214,12 @@ input.btn {
 
 .sventonCol1 {
   width: 10px;
-  margin-left: auto; margin-right: 0px;
+  margin-left: auto; margin-right: 0;
 }
 
 .sventonCol2 {
   width: 10px;
-  margin-left: auto; margin-right: 0px;
+  margin-left: auto; margin-right: 0;
 }
 
 .sventonCol3 {
@@ -269,11 +269,11 @@ input.btn {
 }
 
 .sventonLatestCommitInfoTable * TD {
-  padding: 0px;
+  padding: 0;
 }
 
 .sventonPropertiesTable * TD {
-  padding: 0px;
+  padding: 0;
 }
 
 .sventonLineNo {
