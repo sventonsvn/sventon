@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.config;
+package de.berlios.sventon.appl;
 
 import de.berlios.sventon.Version;
 import de.berlios.sventon.logging.SVNLog4JAdapter;

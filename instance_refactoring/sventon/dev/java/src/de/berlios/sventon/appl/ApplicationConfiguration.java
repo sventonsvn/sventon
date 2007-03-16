@@ -9,9 +9,8 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.config;
+package de.berlios.sventon.appl;
 
-import static de.berlios.sventon.config.InstanceConfiguration.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -159,7 +158,7 @@ public class ApplicationConfiguration {
    * {@code configurationDirectory} and {@code configurationFilename} must be set before calling this method, or bad
    * things will muost certainly happen...
    *
-   * @throws java.io.IOException if IO error occur during file operations.
+   * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()
    */
   public void loadInstanceConfigurations() throws IOException {
@@ -247,11 +246,11 @@ public class ApplicationConfiguration {
     for (final String instanceName : instanceNames) {
       final Properties properties = new Properties();
       final InstanceConfiguration config = getInstanceConfiguration(instanceName);
-      properties.put(instanceName + PROPERTY_KEY_REPOSITORY_URL, config.getUrl());
-      properties.put(instanceName + PROPERTY_KEY_USERNAME, config.getConfiguredUID());
-      properties.put(instanceName + PROPERTY_KEY_PASSWORD, config.getConfiguredPWD());
-      properties.put(instanceName + PROPERTY_KEY_USE_CACHE, config.isCacheUsed() ? "true" : "false");
-      properties.put(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, config.isZippedDownloadsAllowed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, config.getUrl());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME, config.getConfiguredUID());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD, config.getConfiguredPWD());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE, config.isCacheUsed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, config.isZippedDownloadsAllowed() ? "true" : "false");
       propertyList.add(properties);
     }
     return propertyList;

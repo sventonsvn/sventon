@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
 import de.berlios.sventon.repository.RepositoryEntry;

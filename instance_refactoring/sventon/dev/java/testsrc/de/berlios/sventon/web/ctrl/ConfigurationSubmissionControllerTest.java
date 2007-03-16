@@ -1,7 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import junit.framework.TestCase;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;

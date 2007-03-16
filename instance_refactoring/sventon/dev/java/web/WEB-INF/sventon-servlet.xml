@@ -30,12 +30,12 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
+  <bean id="configuration" class="de.berlios.sventon.appl.ApplicationConfiguration">
     <constructor-arg index="0" ref="sventonDir"/>
     <constructor-arg index="1" ref="sventonConfigFile"/>
   </bean>
 
-  <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
+  <bean id="configurator" class="de.berlios.sventon.appl.ApplicationConfigurator">
     <constructor-arg index="0" ref="configuration"/>
   </bean>
 

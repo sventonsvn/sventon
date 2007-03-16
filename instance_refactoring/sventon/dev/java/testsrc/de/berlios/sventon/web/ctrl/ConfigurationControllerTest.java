@@ -6,8 +6,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.ApplicationConfiguration;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
 
 import java.util.Map;

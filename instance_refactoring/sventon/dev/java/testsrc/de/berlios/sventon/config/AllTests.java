@@ -11,9 +11,6 @@ public class AllTests {
 
   public static Test suite() {
     TestSuite suite = new TestSuite(de.berlios.sventon.config.AllTests.class.getPackage().getName());
-    suite.addTestSuite(ApplicationConfiguratorTest.class);
-    suite.addTestSuite(ApplicationConfigurationTest.class);
-    suite.addTestSuite(InstanceConfigurationTest.class);
     return suite;
   }
 
