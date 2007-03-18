@@ -33,6 +33,8 @@ public class Instance {
    */
   private InstanceConfiguration configuration;
 
+  //TODO: Add cache manager instances for all cache types.
+
   /**
    * Constructor.
    *
@@ -79,4 +81,12 @@ public class Instance {
     }
     return instanceName.matches(INSTANCE_NAME_PATTERN);
   }
+
+  /**
+   * Performs a shutdown on this instance.
+   */
+  public void shutdown() {
+    //TODO: Shut down cache managers
+  }
+
 }

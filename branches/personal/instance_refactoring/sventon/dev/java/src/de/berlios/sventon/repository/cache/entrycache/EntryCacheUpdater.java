@@ -82,18 +82,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   }
 
   /**
-   * Updates the cache to HEAD revision.
-   * A Subversion <i>log</i> command will be performed and
-   * the cache will be updated accordingly.
-   * <table>
-   * <tr><th>Type</th><th>Description</th><th>Action</th></tr>
-   * <tr><td>'A'</td><td>Added</td><td>Entry is added</td></tr>
-   * <tr><td>'D'</td><td>Deleted</td><td>Entry is removed</td></tr>
-   * <tr><td>'M'</td><td>Modified</td><td>Entry's details are updated</td></tr>
-   * <tr><td>'R'</td><td>Replaced (means that the object is first deleted, then
-   * another object with the same name is added, all within a single revision)
-   * </td><td>Entry's details are updated</td></tr>
-   * </table>
+   * Updates the cache with the given revisions.
    *
    * @param revisionUpdate The updated revisions.
    */
@@ -106,7 +95,6 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     try {
       final EntryCache entryCache = entryCacheManager.getCache(instanceName);
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName));
-
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
@@ -115,6 +103,16 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
 
   /**
    * Internal update method. Made protected for testing reasons only.
+   *
+   * <table>
+   * <tr><th>Type</th><th>Description</th><th>Action</th></tr>
+   * <tr><td>'A'</td><td>Added</td><td>Entry is added</td></tr>
+   * <tr><td>'D'</td><td>Deleted</td><td>Entry is removed</td></tr>
+   * <tr><td>'M'</td><td>Modified</td><td>Entry's details are updated</td></tr>
+   * <tr><td>'R'</td><td>Replaced (means that the object is first deleted, then
+   * another object with the same name is added, all within a single revision)
+   * </td><td>Entry's details are updated</td></tr>
+   * </table>
    *
    * @param entryCache     EntryCache instance
    * @param repository     Repository instance

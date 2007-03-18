@@ -229,6 +229,15 @@ public class Application {
   }
 
   /**
+   * Performs a shutdown on the application and all its repository instances. 
+   */
+  public void shutdown() {
+    for (final Instance instance : instances.values()) {
+      instance.shutdown();
+    }
+  }
+
+  /**
    * Gets the instance.
    *
    * @return Collection of instances.
