@@ -33,16 +33,6 @@ public class InstanceConfiguration {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Instance name regex pattern.
-   */
-  public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
-
-  /**
-   * Name of sventon intance.
-   */
-  private String instanceName;
-
-  /**
    * The url.
    */
   private String repositoryURL;
@@ -81,12 +71,6 @@ public class InstanceConfiguration {
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
 
   /**
-   * Constructor.
-   */
-  public InstanceConfiguration() {
-  }
-
-  /**
    * Creates an instance using given name and properties.
    *
    * @param instanceName Instance name
@@ -95,7 +79,6 @@ public class InstanceConfiguration {
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-    instanceConfiguration.setInstanceName(instanceName);
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
@@ -217,32 +200,6 @@ public class InstanceConfiguration {
    */
   public boolean isZippedDownloadsAllowed() {
     return this.zipDownloadsAllowed;
-  }
-
-  /**
-   * Sets the name of this sventon instance configuration.
-   *
-   * @param instanceName Name
-   * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
-   */
-  public void setInstanceName(final String instanceName) {
-    if (instanceName == null) {
-      throw new IllegalArgumentException("Instance name cannot be null");
-    }
-    if (!instanceName.matches(INSTANCE_NAME_PATTERN)) {
-      throw new IllegalArgumentException("Name must be in lower case a-z and/or 0-9");
-    } else {
-      this.instanceName = instanceName;
-    }
-  }
-
-  /**
-   * Gets the name of this sventon instance configuration.
-   *
-   * @return Name
-   */
-  public String getInstanceName() {
-    return instanceName;
   }
 
 }

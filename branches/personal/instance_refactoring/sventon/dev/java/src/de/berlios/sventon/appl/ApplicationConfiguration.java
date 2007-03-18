@@ -11,12 +11,7 @@
  */
 package de.berlios.sventon.appl;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.io.*;
-import java.util.*;
+import java.io.File;
 
 /**
  * Sventon application configuration class holding instance configuration parameters
@@ -26,11 +21,6 @@ import java.util.*;
  * @author jesper@users.berlios.de
  */
 public class ApplicationConfiguration {
-
-  /**
-   * The logging instance.
-   */
-  protected final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -46,11 +36,6 @@ public class ApplicationConfiguration {
    * Application configuration file name.
    */
   private String configurationFilename;
-
-  /**
-   * Map of instance names and configuration.
-   */
-  private Map<String, InstanceConfiguration> instanceConfigurations = new HashMap<String, InstanceConfiguration>();
 
   /**
    * Configures and initializes the repository.
@@ -89,48 +74,6 @@ public class ApplicationConfiguration {
   }
 
   /**
-   * Adds an instance configuration to the global application configuration.
-   *
-   * @param configuration The configuration to add.
-   */
-  public void addInstanceConfiguration(final InstanceConfiguration configuration) {
-    instanceConfigurations.put(configuration.getInstanceName(), configuration);
-  }
-
-  /**
-   * Gets a instance configuration by instance name.
-   *
-   * @param instanceName Name of instance.
-   * @return Corresponding instance configuration.
-   * @throws RuntimeException if instance name does not exist.
-   */
-  public InstanceConfiguration getInstanceConfiguration(final String instanceName) {
-    final InstanceConfiguration configuration = instanceConfigurations.get(instanceName);
-    if (configuration == null) {
-      throw new RuntimeException("No instance configuration for name: " + instanceName);
-    }
-    return configuration;
-  }
-
-  /**
-   * Gets a set of the instance names.
-   *
-   * @return Set of names.
-   */
-  public Set<String> getInstanceNames() {
-    return instanceConfigurations.keySet();
-  }
-
-  /**
-   * Returns the number of configured instances.
-   *
-   * @return Number of instances.
-   */
-  public int getInstanceCount() {
-    return instanceConfigurations.size();
-  }
-
-  /**
    * Gets the configuration directory.
    *
    * @return The directory
@@ -148,111 +91,4 @@ public class ApplicationConfiguration {
     return configurationFilename;
   }
 
-  /**
-   * Loads the instance configurations from the file at path {@code configurationDirectory / configurationFilename}
-   * <p/>
-   * If a config file is found an configuration is successful this instance will be marked as configured. If no file is
-   * found initialization will fail silently and the instance will not be marked as configured.
-   * <p/>
-   * It is legal to reload an already configured {@code ApplicationConfiguration] instance.
-   * {@code configurationDirectory} and {@code configurationFilename} must be set before calling this method, or bad
-   * things will muost certainly happen...
-   *
-   * @throws IOException if IO error occur during file operations.
-   * @see #isConfigured()
-   */
-  public void loadInstanceConfigurations() throws IOException {
-    InputStream is = null;
-    final File configFile = new File(getConfigurationDirectory(), getConfigurationFilename());
-    try {
-      is = new FileInputStream(configFile);
-      initConfiguration(is);
-    } catch (FileNotFoundException fnfe) {
-      logger.debug("Configuration file [" + configFile.getAbsolutePath() + "] was not found");
-      logger.info("No instance has been configured yet. Access sventon web application for setup");
-    } finally {
-      IOUtils.closeQuietly(is);
-    }
-
-  }
-
-  /**
-   * Initializes the application configuration.
-   * Reads given input stream and populates the global application configuration
-   * with all instance configuration parameters.
-   *
-   * @param input InputStream
-   * @throws IOException if IO error occurs.
-   */
-  private void initConfiguration(final InputStream input)
-      throws IOException {
-
-    final Set<String> instanceNameSet = new HashSet<String>();
-    final Properties props = new Properties();
-    props.load(input);
-
-    for (final Object object : props.keySet()) {
-      final String key = (String) object;
-      final String instanceName = key.substring(0, key.indexOf("."));
-      instanceNameSet.add(instanceName);
-    }
-
-    for (final String instanceName : instanceNameSet) {
-      logger.info("Configuring instance: " + instanceName);
-      addInstanceConfiguration(InstanceConfiguration.create(instanceName, props));
-    }
-
-    if (getInstanceCount() > 0) {
-      logger.info(getInstanceCount() + " instance(s) configured");
-      setConfigured(true);
-    } else {
-      logger.warn("Configuration property file did exist but did not contain any configuration values");
-    }
-  }
-
-  /**
-   * Store the instance configurations on file at path {@code configurationDirectory / configurationFilename}
-   */
-  public void storeInstanceConfigurations() {
-
-    final File propertyFile = new File(getConfigurationDirectory(), getConfigurationFilename());
-    logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
-
-    FileOutputStream fileOutputStream = null;
-    try {
-      fileOutputStream = new FileOutputStream(propertyFile);
-      for (final Properties properties : getConfigurationAsProperties()) {
-        logger.debug("Storing: " + properties);
-        properties.store(fileOutputStream, null); //This is to get the properites grouped by instance in a file.
-        fileOutputStream.flush();
-      }
-    } catch (IOException ioe) {
-      throw new RuntimeException(ioe);
-    } finally {
-      IOUtils.closeQuietly(fileOutputStream);
-    }
-  }
-
-  /**
-   * Creates and populates a List of <code>Properties</code> instances with relevant configuration values
-   * extracted from given <code>ApplicationConfiguration</code>.
-   *
-   * @return List of populated Properties.
-   */
-  protected List<Properties> getConfigurationAsProperties() {
-    final List<Properties> propertyList = new ArrayList<Properties>();
-    final Set<String> instanceNames = getInstanceNames();
-
-    for (final String instanceName : instanceNames) {
-      final Properties properties = new Properties();
-      final InstanceConfiguration config = getInstanceConfiguration(instanceName);
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, config.getUrl());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME, config.getConfiguredUID());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD, config.getConfiguredPWD());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE, config.isCacheUsed() ? "true" : "false");
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, config.isZippedDownloadsAllowed() ? "true" : "false");
-      propertyList.add(properties);
-    }
-    return propertyList;
-  }
 }
