@@ -67,8 +67,8 @@ public class ConfigurationController extends AbstractFormController {
       throws IOException {
 
     logger.debug("showForm() started");
-    logger.info("sventon configured: " + application.getConfiguration().isConfigured());
-    if (application.getConfiguration().isConfigured()) {
+    logger.info("sventon configured: " + application.isConfigured());
+    if (application.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
@@ -93,8 +93,8 @@ public class ConfigurationController extends AbstractFormController {
 
     logger.debug("processFormSubmission() started");
     final Map<String, Object> model = new HashMap<String, Object>();
-    logger.info("sventon configuration OK: " + application.getConfiguration().isConfigured());
-    if (application.getConfiguration().isConfigured()) {
+    logger.info("sventon configuration OK: " + application.isConfigured());
+    if (application.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));

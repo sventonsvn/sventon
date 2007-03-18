@@ -48,7 +48,7 @@ public class StartController extends AbstractController {
       throws Exception {
 
     final ModelAndView modelAndView;
-    if (!application.getConfiguration().isConfigured()) {
+    if (!application.isConfigured()) {
       modelAndView = new ModelAndView(new RedirectView("config.svn"));
     } else if (application.getInstanceCount() > 1) {
       modelAndView = new ModelAndView(new RedirectView("listinstances.svn"));

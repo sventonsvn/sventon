@@ -194,7 +194,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If application config is not ok - redirect to config.jsp
-    if (!application.getConfiguration().isConfigured()) {
+    if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }

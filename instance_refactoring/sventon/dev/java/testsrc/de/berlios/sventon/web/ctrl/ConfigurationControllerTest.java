@@ -6,7 +6,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import de.berlios.sventon.appl.ApplicationConfiguration;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.web.command.ConfigCommand;
@@ -23,7 +22,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setApplication(new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename")));
+    ctrl.setApplication(new Application(new File(TEMPDIR), "filename"));
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
     assertEquals("config", modelAndView.getViewName());
@@ -33,9 +32,9 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
-    config.setConfigured(true);
-    ctrl.setApplication(new Application(config));
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    application.setConfigured(true);
+    ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
     assertEquals(null, modelAndView.getViewName());
@@ -49,8 +48,8 @@ public class ConfigurationControllerTest extends TestCase {
     final ConfigurationController ctrl = new ConfigurationController();
     final InstanceConfiguration instanceConfig = new InstanceConfiguration();
 
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
-    application.getConfiguration().setConfigured(false);
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    application.setConfigured(false);
     application.addInstance("firstinstance", instanceConfig);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
@@ -62,9 +61,9 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
-    config.setConfigured(true);
-    ctrl.setApplication(new Application(config));
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    application.setConfigured(true);
+    ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
     assertNotNull(modelAndView);
     assertEquals(null, modelAndView.getViewName());
@@ -74,7 +73,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setApplication(new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename")));
+    ctrl.setApplication(new Application(new File(TEMPDIR), "filename"));
     final ConfigCommand command = new ConfigCommand();
     final BindException exception = new BindException(command, "test");
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
@@ -87,9 +86,9 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
+    final Application application = new Application(new File(TEMPDIR), "filename");
     assertEquals(0, application.getInstanceCount());
-    assertFalse(application.getConfiguration().isConfigured());
+    assertFalse(application.isConfigured());
     ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     command.setName("testrepos");
@@ -99,7 +98,7 @@ public class ConfigurationControllerTest extends TestCase {
     assertNotNull(modelAndView);
     assertEquals("confirmAddConfig", modelAndView.getViewName());
     assertEquals(1, application.getInstanceCount());
-    assertFalse(application.getConfiguration().isConfigured());
+    assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
     assertEquals("testrepos", ((Set) model.get("addedInstances")).iterator().next());
   }

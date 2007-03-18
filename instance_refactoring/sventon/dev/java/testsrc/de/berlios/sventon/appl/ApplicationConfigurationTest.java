@@ -11,7 +11,6 @@ public class ApplicationConfigurationTest extends TestCase {
   private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
 
-
   public void testLoadInstanceConfigurations() throws Exception {
     final Properties props = new Properties();
     props.put("defaultsvn.root", "http://localhost");
@@ -20,13 +19,13 @@ public class ApplicationConfigurationTest extends TestCase {
     props.put("defaultsvn.useCache", "false");
     props.put("defaultsvn.allowZipDownloads", "false");
 
-    final Application application = new Application(new ApplicationConfiguration(
-        new File(System.getProperty("java.io.tmpdir")), "sventon-config-test.tmp"));
+    final Application application = new Application(
+        new File(System.getProperty("java.io.tmpdir")), "sventon-config-test.tmp");
     assertEquals(0, application.getInstanceCount());
-    assertFalse(application.getConfiguration().isConfigured());
+    assertFalse(application.isConfigured());
 
-    final File tempConfigFile = new File(application.getConfiguration().getConfigurationDirectory(),
-        application.getConfiguration().getConfigurationFilename());
+    final File tempConfigFile = new File(application.getConfigurationDirectory(),
+        application.getConfigurationFilename());
 
     OutputStream os = null;
     InputStream is = null;
@@ -38,7 +37,7 @@ public class ApplicationConfigurationTest extends TestCase {
       application.loadInstanceConfigurations();
 
       assertEquals(1, application.getInstanceCount());
-      assertTrue(application.getConfiguration().isConfigured());
+      assertTrue(application.isConfigured());
 
       final InstanceConfiguration defaultSVN = application.getInstance("defaultsvn").getConfiguration();
       assertNotNull(defaultSVN);

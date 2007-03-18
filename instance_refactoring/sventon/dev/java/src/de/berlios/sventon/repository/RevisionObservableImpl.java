@@ -202,7 +202,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public void update(final String instanceName, final boolean flushAfterUpdate) {
-    if (application.getConfiguration().isConfigured()) {
+    if (application.isConfigured()) {
       final Instance instance = application.getInstance(instanceName);
       if (instance.getConfiguration().isCacheUsed()) {
         synchronized (instance) {
@@ -225,7 +225,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public void updateAll() {
-    if (application.getConfiguration().isConfigured()) {
+    if (application.isConfigured()) {
       for (final String instanceName : application.getInstanceNames()) {
         if (!isUpdating(instanceName)) {
           update(instanceName, true);

@@ -44,27 +44,45 @@ public class Application {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The application configuration.
-   */
-  private ApplicationConfiguration configuration;
-
-  /**
    * Set of added subversion repository instances.
    */
   private Map<String, Instance> instances = new HashMap<String, Instance>();
 
   /**
+   * Will be <code>true</code> if all parameters are ok.
+   */
+  private boolean configured;
+
+  /**
+   * Application configuration directory.
+   */
+  private File configurationDirectory;
+
+  /**
+   * Application configuration file name.
+   */
+  private String configurationFilename;
+
+
+  /**
    * Constructor.
    *
-   * @param configuration Application configuration instance to populate, not {@code null}
+   * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist,
+   *                               not {@code null} Configuration settings will be stored in this directory.
+   * @param configurationFilename  Path and file name of sventon configuration file, not {@null}
    * @throws IOException if IO error occur
    */
-  public Application(final ApplicationConfiguration configuration) throws IOException {
-    if (configuration == null) {
+  public Application(final File configurationDirectory, final String configurationFilename) throws IOException {
+    if (configurationDirectory == null || configurationFilename == null) {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
+    this.configurationDirectory = configurationDirectory;
+    if (!this.configurationDirectory.exists() && !this.configurationDirectory.mkdirs()) {
+      throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());
+    }
+    this.configurationFilename = configurationFilename;
+
     initSvnSupport();
-    this.configuration = configuration;
     loadInstanceConfigurations();
   }
 
@@ -83,7 +101,7 @@ public class Application {
    */
   protected void loadInstanceConfigurations() throws IOException {
     InputStream is = null;
-    final File configFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
+    final File configFile = new File(configurationDirectory, configurationFilename);
     try {
       is = new FileInputStream(configFile);
       initConfiguration(is);
@@ -100,7 +118,7 @@ public class Application {
    */
   public void storeInstanceConfigurations() {
 
-    final File propertyFile = new File(configuration.getConfigurationDirectory(), configuration.getConfigurationFilename());
+    final File propertyFile = new File(configurationDirectory, configurationFilename);
     logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
     FileOutputStream fileOutputStream = null;
@@ -167,7 +185,7 @@ public class Application {
 
     if (getInstanceCount() > 0) {
       logger.info(getInstanceCount() + " instance(s) configured");
-      configuration.setConfigured(true);
+      configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
     }
@@ -190,18 +208,10 @@ public class Application {
     SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
     logger.info("Initializing sventon version "
         + Version.getVersion() + " (revision " + Version.getRevision() + ")");
+
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
     FSRepositoryFactory.setup();
-  }
-
-  /**
-   * Gets the application configuration.
-   *
-   * @return Configuration
-   */
-  public ApplicationConfiguration getConfiguration() {
-    return configuration;
   }
 
   /**
@@ -243,6 +253,42 @@ public class Application {
    */
   public int getInstanceCount() {
     return instances.size();
+  }
+
+  /**
+   * Gets configuration status.
+   *
+   * @return True if repository is configured ok, false if not.
+   */
+  public boolean isConfigured() {
+    return configured;
+  }
+
+  /**
+   * Sets the configuration status.
+   *
+   * @param configured True to indicate configuration done/ok.
+   */
+  public void setConfigured(final boolean configured) {
+    this.configured = configured;
+  }
+
+  /**
+   * Gets the configuration directory.
+   *
+   * @return The directory
+   */
+  public File getConfigurationDirectory() {
+    return configurationDirectory;
+  }
+
+  /**
+   * Gets the configuration filename.
+   *
+   * @return The filename
+   */
+  public String getConfigurationFilename() {
+    return configurationFilename;
   }
 
 }

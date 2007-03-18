@@ -30,13 +30,9 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="configuration" class="de.berlios.sventon.appl.ApplicationConfiguration">
+  <bean id="application" class="de.berlios.sventon.appl.Application">
     <constructor-arg index="0" ref="sventonDir"/>
     <constructor-arg index="1" ref="sventonConfigFile"/>
-  </bean>
-
-  <bean id="application" class="de.berlios.sventon.appl.Application">
-    <constructor-arg index="0" ref="configuration"/>
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>

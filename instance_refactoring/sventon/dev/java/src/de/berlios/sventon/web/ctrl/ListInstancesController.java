@@ -37,7 +37,7 @@ public class ListInstancesController extends AbstractController {
       throws Exception {
 
     // If application config is not ok - redirect to config.jsp
-    if (!application.getConfiguration().isConfigured()) {
+    if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
