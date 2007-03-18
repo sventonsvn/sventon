@@ -82,7 +82,7 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    if (!application.getConfiguration().isConfigured()) {
+    if (!application.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);

@@ -1,6 +1,5 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.ApplicationConfiguration;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.Application;
 import junit.framework.TestCase;
@@ -19,9 +18,9 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
-    config.setConfigured(true);
-    controller.setApplication(new Application(config));
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    application.setConfigured(true);
+    controller.setApplication(application);
     try {
       controller.handleRequestInternal(request, response);
       fail("Should throw IllegalStateException");
@@ -34,9 +33,9 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
-    config.setConfigured(false);
-    controller.setApplication(new Application(config));
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    application.setConfigured(false);
+    controller.setApplication(application);
 
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
     assertEquals("configurationError", modelAndView.getViewName());
@@ -53,8 +52,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     });
     
 
-    final Application application = new Application(
-        new ApplicationConfiguration(new File(TEMPDIR), "tmpconfigfilename"));
+    final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
@@ -72,7 +70,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
 
     application.addInstance("testrepos1", instanceConfiguration1);
     application.addInstance("testrepos2", instanceConfiguration2);
-    application.getConfiguration().setConfigured(false);
+    application.setConfigured(false);
     controller.setApplication(application);
 
     final File propFile = new File(TEMPDIR, "tmpconfigfilename");
@@ -86,6 +84,6 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     assertTrue(propFile.exists());
     propFile.delete();
     assertFalse(propFile.exists());
-    assertTrue(application.getConfiguration().isConfigured());
+    assertTrue(application.isConfigured());
   }
 }

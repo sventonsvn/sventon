@@ -1,6 +1,5 @@
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.appl.ApplicationConfiguration;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
@@ -21,12 +20,12 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
+    final Application application = new Application(new File(TEMPDIR), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     final String instanceName = "defaultsvn";
     instanceConfiguration.setCacheUsed(true);
     application.addInstance(instanceName, instanceConfiguration);
-    application.getConfiguration().setConfigured(true);
+    application.setConfigured(true);
 
     final ObjectCache cache = createMemoryCache();
 

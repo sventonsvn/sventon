@@ -12,21 +12,21 @@ public class ApplicationTest extends TestCase {
   
   public void testApplication() throws Exception {
     try {
-      new Application(null);
+      new Application(null, null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException iae) {
       // exptected
     }
 
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
-    assertFalse(application.getConfiguration().isConfigured());
+    final Application application = new Application(new File(TEMPDIR), "filename");
+    assertFalse(application.isConfigured());
     assertEquals(0, application.getInstanceCount());
-    assertNotNull(application.getConfiguration().getConfigurationDirectory());
-    assertEquals("filename", application.getConfiguration().getConfigurationFilename());
+    assertNotNull(application.getConfigurationDirectory());
+    assertEquals("filename", application.getConfigurationFilename());
   }
 
   public void testStoreInstanceConfigurations() throws Exception {
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "tmpconfigfilename"));
+    final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
     instanceConfiguration1.setConfiguredUID("user1");
@@ -56,7 +56,7 @@ public class ApplicationTest extends TestCase {
   }
 
   public void testGetConfigurationAsProperties() throws Exception {
-    final Application application = new Application(new ApplicationConfiguration(new File(TEMPDIR), "filename"));
+    final Application application = new Application(new File(TEMPDIR), "filename");
     final InstanceConfiguration config1 = new InstanceConfiguration();
     config1.setRepositoryRoot("http://repo1");
     config1.setConfiguredUID("");

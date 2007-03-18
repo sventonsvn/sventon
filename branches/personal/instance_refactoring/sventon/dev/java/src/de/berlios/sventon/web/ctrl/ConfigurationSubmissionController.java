@@ -68,7 +68,7 @@ public class ConfigurationSubmissionController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    if (application.getConfiguration().isConfigured()) {
+    if (application.isConfigured()) {
       throw new IllegalStateException("sventon is already configured!");
     }
 
@@ -78,7 +78,7 @@ public class ConfigurationSubmissionController extends AbstractController {
     }
 
     application.storeInstanceConfigurations();
-    application.getConfiguration().setConfigured(true);
+    application.setConfigured(true);
 
     try {
       logger.debug("Starting up caches");
