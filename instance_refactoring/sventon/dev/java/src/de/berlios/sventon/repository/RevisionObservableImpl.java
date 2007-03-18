@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.appl.ApplicationConfiguration;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.service.RepositoryService;
@@ -41,9 +41,9 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The global application configuration.
+   * The application.
    */
-  private ApplicationConfiguration configuration;
+  private Application application;
 
   /**
    * Map to keep track of instances being updated.
@@ -105,12 +105,12 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   }
 
   /**
-   * Sets the application configuration.
+   * Sets the application.
    *
-   * @param configuration ApplicationConfiguration
+   * @param application Application
    */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
+  public void setApplication(final Application application) {
+    this.application = application;
   }
 
   /**
@@ -202,15 +202,15 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public void update(final String instanceName, final boolean flushAfterUpdate) {
-    if (configuration.isConfigured()) {
-      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
-      if (instanceConfiguration.isCacheUsed()) {
-        synchronized (instanceConfiguration) {
+    if (application.getConfiguration().isConfigured()) {
+      final Instance instance = application.getInstance(instanceName);
+      if (instance.getConfiguration().isCacheUsed()) {
+        synchronized (instance) {
           SVNRepository repository;
           try {
-            repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+            repository = RepositoryFactory.INSTANCE.getRepository(instance);
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-            update(instanceConfiguration.getInstanceName(), repository, objectCache, flushAfterUpdate);
+            update(instance.getName(), repository, objectCache, flushAfterUpdate);
           } catch (final Exception ex) {
             logger.warn("Unable to establish repository connection", ex);
           }
@@ -225,8 +225,8 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * @throws RuntimeException if a subversion error occurs.
    */
   public void updateAll() {
-    if (configuration.isConfigured()) {
-      for (final String instanceName : configuration.getInstanceNames()) {
+    if (application.getConfiguration().isConfigured()) {
+      for (final String instanceName : application.getInstanceNames()) {
         if (!isUpdating(instanceName)) {
           update(instanceName, true);
         }

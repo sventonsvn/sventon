@@ -19,9 +19,34 @@ package de.berlios.sventon.appl;
 public class Instance {
 
   /**
+   * Instance name regex pattern.
+   */
+  public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
+
+  /**
+   * Name of subversion repository intance.
+   */
+  private String instanceName;
+
+  /**
    * The instance configuration.
    */
   private InstanceConfiguration configuration;
+
+  /**
+   * Constructor.
+   *
+   * @param instanceName  Instance name.
+   * @param configuration Instance configuration
+   * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
+   */
+  public Instance(final String instanceName, final InstanceConfiguration configuration) {
+    if (!isValidName(instanceName)) {
+      throw new IllegalArgumentException("Name must be in lower case a-z and/or 0-9");
+    }
+    this.instanceName = instanceName;
+    this.configuration = configuration;
+  }
 
   /**
    * Gets the instance configuration.
@@ -30,5 +55,28 @@ public class Instance {
    */
   public InstanceConfiguration getConfiguration() {
     return configuration;
+  }
+
+  /**
+   * Gets the name of this instance.
+   *
+   * @return Name
+   */
+  public String getName() {
+    return instanceName;
+  }
+
+  /**
+   * Validates given instance name.
+   *
+   * @param instanceName Instance name to validate.
+   * @return True if valid, false if not.
+   * @throws IllegalArgumentException if given name was null.
+   */
+  public static boolean isValidName(final String instanceName) {
+    if (instanceName == null) {
+      throw new IllegalArgumentException("Instance name cannot be null");
+    }
+    return instanceName.matches(INSTANCE_NAME_PATTERN);
   }
 }

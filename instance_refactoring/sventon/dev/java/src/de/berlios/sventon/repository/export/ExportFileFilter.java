@@ -11,10 +11,10 @@
  */
 package de.berlios.sventon.repository.export;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.Instance;
 
-import java.io.FilenameFilter;
 import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * Filter to match temporary export files using the name format <code>sventon-[millis].zip</code>.
@@ -22,7 +22,7 @@ import java.io.File;
 public class ExportFileFilter implements FilenameFilter {
 
   public boolean accept(final File dir, final String name) {
-    return name.matches(InstanceConfiguration.INSTANCE_NAME_PATTERN + "-[0-9]{17}\\.zip");
+    return name.matches(Instance.INSTANCE_NAME_PATTERN + "-[0-9]{17}\\.zip");
   }
 
 }

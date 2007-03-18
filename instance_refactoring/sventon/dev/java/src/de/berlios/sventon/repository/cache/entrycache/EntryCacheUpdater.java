@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.appl.ApplicationConfiguration;
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;
@@ -49,9 +49,9 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   private final EntryCacheManager entryCacheManager;
 
   /**
-   * Application configuration instance.
+   * The application.
    */
-  private ApplicationConfiguration configuration;
+  private Application application;
 
   /**
    * Service used for repository access.
@@ -62,16 +62,16 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
-   * @param configuration     ApplicationConfiguration instance.
+   * @param application       Application
    * @param repositoryService RepositoryService instance.
    */
-  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final ApplicationConfiguration configuration,
+  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application,
                            final RepositoryService repositoryService) {
     logger.info("Starting");
     this.entryCacheManager = entryCacheManager;
     this.repositoryService = repositoryService;
-    this.configuration = configuration;
-    for (final String instanceName : configuration.getInstanceNames()) {
+    this.application = application;
+    for (final String instanceName : application.getInstanceNames()) {
       logger.debug("Initializing cache instance: " + instanceName);
       try {
         this.entryCacheManager.getCache(instanceName);
@@ -98,18 +98,14 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
-    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
-        + revisionUpdate.getInstanceName());
+    final String instanceName = revisionUpdate.getInstanceName();
 
-    if (configuration == null) {
-      logger.warn("Method setConfiguration() has not yet been called!");
-    }
+    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
+        + instanceName);
 
     try {
-      final EntryCache entryCache = entryCacheManager.getCache(revisionUpdate.getInstanceName());
-
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
-          configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()));
+      final EntryCache entryCache = entryCacheManager.getCache(instanceName);
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName));
 
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {

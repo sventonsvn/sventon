@@ -11,15 +11,14 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.appl.ApplicationConfiguration;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,9 +38,9 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The application configuration.
+   * The application.
    */
-  private ApplicationConfiguration configuration;
+  private Application application;
 
   /**
    * The xml encoding.
@@ -75,9 +74,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
       return null;
     }
 
-    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
-    final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName));
 
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";
@@ -100,12 +97,12 @@ public class ShowLatestCommitInfoController extends AbstractController {
   }
 
   /**
-   * Set application configuration.
+   * Sets the application.
    *
-   * @param configuration ApplicationConfiguration
+   * @param application Application
    */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
+  public void setApplication(final Application application) {
+    this.application = application;
   }
 
   /**

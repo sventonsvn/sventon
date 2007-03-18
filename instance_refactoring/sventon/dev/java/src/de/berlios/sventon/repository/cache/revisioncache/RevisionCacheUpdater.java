@@ -11,10 +11,10 @@
  */
 package de.berlios.sventon.repository.cache.revisioncache;
 
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.appl.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -42,16 +42,16 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
    * Constructor.
    *
    * @param revisionCacheManager The cache manager instance.
-   * @param configuration        ApplicationConfiguration instance.
+   * @param application          Application
    */
   public RevisionCacheUpdater(final RevisionCacheManager revisionCacheManager,
-                              final ApplicationConfiguration configuration) {
+                              final Application application) {
     this.revisionCacheManager = revisionCacheManager;
-    for (final String instanceName : configuration.getInstanceNames()) {
+    for (final String instanceName : application.getInstanceNames()) {
       logger.debug("Initializing cache instance: " + instanceName);
       try {
         this.revisionCacheManager.getCache(instanceName);
-      } catch (CacheException ce) {
+      } catch (final CacheException ce) {
         logger.warn("Unable to initialize instance", ce);
       }
     }
