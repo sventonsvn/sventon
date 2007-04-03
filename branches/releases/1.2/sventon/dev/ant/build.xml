@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<project name="sventon" basedir="." default="dist">
+  <property file="build.properties"/>
+
+  <property name="dist.dir" value="../dist"/>
+  <property name="bindist.dir" value="${dist.dir}/bindist"/>
+  <property name="srcdist.dir" value="${dist.dir}/srcdist"/>
+  <property name="svnroot.dir" value="${srcdist.dir}/sventon/dev/java"/>
+  <property name="output.dir" value="${svnroot.dir}/web/WEB-INF/classes"/>
+
+  <property name="lib.dir" value="${svnroot.dir}/web/WEB-INF/lib"/>
+  <property name="toolslib.dir" value="${svnroot.dir}/toolslib"/>
+
+  <property name="name" value="svn"/>
+
+  <path id="master-classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${toolslib.dir}">
+      <include name="servlet-api.jar"/>
+    </fileset>
+    <pathelement path="${output.dir}"/>
+  </path>
+
+  <target name="dist" depends="createwar, cleanup" description="Create distribution">
+  </target>
+
+  <target name="cleanup" description="Clean up build dir">
+    <delete includeemptydirs="true">
+      <fileset dir="${output.dir}/de"/>
+    </delete>
+  </target>
+
+  <target name="createwar" depends="build" description="Create WAR file">
+    <war destfile="${bindist.dir}/${name}.war" webxml="${svnroot.dir}/web/WEB-INF/web.xml">
+      <fileset dir="${svnroot.dir}/web">
+        <include name="**/*.*"/>
+        <exclude name="**/*Test*"/>
+        <exclude name="**/*Mock*"/>
+        <exclude name="**/*Stub*"/>
+      </fileset>
+    </war>
+  </target>
+
+  <target name="build" depends="prepare" description="Compile main source tree java files">
+    <javac destdir="${output.dir}" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
+      <src path="${svnroot.dir}/src"/>
+      <classpath refid="master-classpath"/>
+    </javac>
+  </target>
+
+  <target name="prepare" depends="svnExport" description="Prepare files for dist creation">
+    <copy todir="${bindist.dir}">
+      <fileset dir="${srcdist.dir}/sventon/doc"/>
+    </copy>
+    <copy todir="${bindist.dir}/licenses">
+      <fileset dir="${srcdist.dir}/sventon/licenses"/>
+    </copy>
+    <replace file="${svnroot.dir}/src/de/berlios/sventon/Version.java" token="@VERSION@" value="${svn.release.version}"/>
+    <replace file="${svnroot.dir}/src/de/berlios/sventon/Version.java" token="@REVISION@" value="${svn.release.revision}"/>
+  </target>
+
+  <target name="svnExport" depends="init">
+    <java classname="org.tmatesoft.svn.cli.SVN" dir="${dist.dir}" fork="true" failonerror="true">
+      <arg value="export"/>
+      <arg value="srcdist"/>
+      <arg value="${svn.repository.url}"/>
+      <classpath>
+        <pathelement location="../java/web/WEB-INF/lib/ganymed.jar"/>
+        <pathelement location="../java/web/WEB-INF/lib/svnkit.jar"/>
+        <pathelement location="../java/toolslib/svnkit-cli.jar"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="init">
+    <input message="About to export svn repository [${svn.repository.url}] - press return key to continue"/>
+    <delete dir="${dist.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${bindist.dir}"/>
+  </target>
+
+</project>
