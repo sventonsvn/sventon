@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[825] Release 1.2 RC1 (2007-04-03)
 [809] Added: Feature #2939 - Store cache files gzipped.
 [808] Added: Feature #3089 - context sensitive feeds.
 [798] Added: Upgraded to SVNKit 1.1.1.

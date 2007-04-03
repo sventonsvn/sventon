@@ -15,4 +15,4 @@ The disk persistent cache file format has changed since the
 last version. A complete repository recache is necessary.
 
 Support
-See http://sventon.berlios.de
+See http://www.sventon.org
