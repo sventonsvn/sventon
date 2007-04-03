@@ -20,7 +20,10 @@
   <li>Image thumbnail preview.</li>
   <li>Diff files between revisions or directories, side-by-side or as unified diff.</li>
   <li>Keyword expansion when viewing or diffing files.</li>
-  <li>Revision details as RSS feeds.</li>
+  <li>Revision details as context sensitive RSS feeds.</li>
+  <li>Customizable RSS layout.</li>
   <li>Display of file lock information.</li>
   <li>Download files and directories as ZIP files.</li>
+  <li>Bypass of empty middle directories for faster navigation.</li>
+  <li>Support for multiple encodings.</li>
 </ul>

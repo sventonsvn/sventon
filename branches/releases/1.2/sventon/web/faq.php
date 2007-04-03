@@ -72,22 +72,13 @@
     <th>Version</th>
   </tr>
   <tr>
-    <td>Win2k</td>
-    <td>1.2.0 (RC 2)</td>
-    <td>Tomcat 5.5.9</td>
-    <td>svn/dav</td>
-    <td>1.5.0_04</td>
-    <td>sventon committer</td>
-    <td>RC4</td>
-  </tr>
-  <tr>
     <td>WinXP</td>
-    <td>1.3.0</td>
+    <td>1.4.2</td>
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>1.0.0</td>
+    <td>1.2 RC1</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
