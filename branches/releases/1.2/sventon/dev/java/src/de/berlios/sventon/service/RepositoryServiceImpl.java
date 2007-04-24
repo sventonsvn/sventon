@@ -305,10 +305,15 @@ public class RepositoryServiceImpl implements RepositoryService {
       throws SVNException {
 
     final long start = System.currentTimeMillis();
-    final RepositoryEntry repositoryEntry =
-        new RepositoryEntry(repository.info(path, revision), PathUtil.getPathPart(path));
-    logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
-    return repositoryEntry;
+    final SVNDirEntry dirEntry = repository.info(path, revision);
+    if (dirEntry != null) {
+      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, PathUtil.getPathPart(path));
+      logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
+      return repositoryEntry;
+    } else {
+      logger.warn("Entry [" + path +"] does not exist in revision [" + revision +"]");
+      return null;
+    }
   }
 
   /**
