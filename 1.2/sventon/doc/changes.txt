@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[829] Fixed: Bug #10920 - Could not update cache instance.
+
 [825] Release 1.2 RC1 (2007-04-03)
 [809] Added: Feature #2939 - Store cache files gzipped.
 [808] Added: Feature #3089 - context sensitive feeds.

@@ -248,6 +248,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
 
     // Have to find out if deleted entry was a file or directory
     final RepositoryEntry deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision - 1);
+    if (deletedEntry == null) {
+      logger.debug("Entry has not yet been added - nothing to remove");
+      return;
+    }
+
     if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
       // Directory node deleted
       logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
