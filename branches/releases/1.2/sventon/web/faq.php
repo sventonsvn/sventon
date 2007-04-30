@@ -104,15 +104,15 @@
 <b>Q:</b> How do I uninstall sventon?
 </a>
 <br/>
-<b>A:</b> Remove the <code>WAR</code> file from the <code>webapps</code> directory and the subdirectory <code>svn</code>. The index file, <code>sventon.idx</code>, will be kept in a directory specified during the initial configuration. Find it and delete it.
+<b>A:</b> Remove the file <code>svn.war</code> from the <code>webapps</code> directory and the subdirectory <code>svn</code>. The configuration and the cache files will be kept in a subdirectory called <code>sventon</code> in the container's <code>temp</code> directory. Find it and delete it.
 </p>
 
 <p>
 <a name="q8">
-<b>Q:</b> How does the indexing work?
+<b>Q:</b> How does the cache/indexing work?
 </a>
 <br/>
-<b>A:</b> The index function, if configured to be active, enables features such as searching and directory flattening. The first time sventon is started the repository <tt>HEAD</tt> will be indexed. This can take a couple of minutes depending on network speed and the number of entries. Each time the search or directory flattening functions are used, the index will be updated if necessary. There's also a scheduled job that triggers regularly and ensures that the index is up-to-date. The polling interval is default set to 10 minutes, but can be customized in <code>WEB-INF/sventon-servlet.xml</code>.<br/>A good reason for disabling the index is if the repository is really large and contains a lot of branches and tags, or if the network connection to it is slow.
+<b>A:</b> The cache/index function, if configured to be active, enables features such as searching, directory flattening and log message search. The first time sventon is started all revisions will be cached aswell as the repository <tt>HEAD</tt>. This can take a couple of minutes depending on network speed and the number of entries. Each time a cache dependant action is triggered, the cache will be updated if necessary. There's also a scheduled job that triggers regularly to ensure that the index is up-to-date. The polling interval is default set to <code>10</code> minutes, but can be customized in <code>WEB-INF/sventon-servlet.xml</code>.<br/>A good reason for disabling the index is if the repository is really large and contains a lot of branches and tags, or if the network connection to it is just too slow.
 </p>
 
 <p>
@@ -120,7 +120,7 @@
 <b>Q:</b> How do I upgrade sventon to a newer version?
 </a>
 <br/>
-<b>A:</b> The easiest way to upgrade sventon is to replace the old <code>svn.war</code> file and walk through the configuration screen again. Another way is to make a backup copy of the configuration file <code>svn/WEB-INF/classes/sventon.properties</code>, replace the old <code>svn.war</code> with the new one to trigger a redeploy, and then add the backed up <code>sventon.properties</code> to the <code>svn/WEB-INF/classes</code> directory again.
+<b>A:</b> Simply replace the old <code>svn.war</code> file. The configuration files are stored in the container's <code>temp</code> directory, so they will be reused automatically.
 </p>
 
 <p>
@@ -162,7 +162,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> Is there a log file for sventon?
 </a>
 <br/>
-<b>A:</b> Yes, it's called <code>sventon.log</code> and is by default written to <code>java.io.tmpdir</code>. Logging can be customized by editing the file <code>WEB-INF/classes/log4j.properties</code>.
+<b>A:</b> Yes, it's called <code>sventon.log</code> and is by default written to the container's <code>temp</code> directory. Logging can be customized by editing the file <code>WEB-INF/classes/log4j.properties</code>.
 </p>
 
 <p>
