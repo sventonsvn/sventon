@@ -151,6 +151,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
 
     try {
       writer = new IndexWriter(directory, analyzer.newInstance(), false);
+
       final Document document = new Document();
       document.add(new Field("revision", String.valueOf(logMessage.getRevision()), Field.Store.YES, Field.Index.NO));
       document.add(new Field("content", logMessage.getMessage() == null ? "" :

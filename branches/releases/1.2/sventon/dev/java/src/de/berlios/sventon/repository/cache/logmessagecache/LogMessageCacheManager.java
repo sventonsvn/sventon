@@ -47,6 +47,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
     logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
     this.rootDirectory = rootDirectory;
     this.analyzerClassName = analyzerClassName;
+    System.setProperty("org.apache.lucene.lockDir", rootDirectory.getAbsolutePath());
   }
 
   /**
