@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.nio.charset.Charset;
 
 /**
  * Represents a temporary export directory.
@@ -70,14 +71,15 @@ public class ExportDirectory {
   /**
    * Compresses the temporary export directory.
    *
+   * @param charset The charset to use for filenames and comments in compressed archive file.
    * @return The <code>File</code> instance of the compressed file.
    * @throws IOException if IO error occurs.
    */
-  public File compress() throws IOException {
+  public File compress(final Charset charset) throws IOException {
     final File zipFile = new File(exportDirectory.getParentFile(), createTempFilename(new Date()));
 
     logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
-    new ZipUtils().zipDir(zipFile, exportDirectory);
+    new ZipUtils(charset).zipDir(zipFile, exportDirectory);
     return zipFile;
   }
 
@@ -127,7 +129,10 @@ public class ExportDirectory {
     return dir.delete();
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String toString() {
     return "ExportDirectory{" +
         "exportDirectory=" + exportDirectory +
