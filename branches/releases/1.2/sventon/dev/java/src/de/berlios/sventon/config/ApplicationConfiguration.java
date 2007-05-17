@@ -51,7 +51,7 @@ public class ApplicationConfiguration {
   /**
    * Map of instance names and configuration.
    */
-  private Map<String, InstanceConfiguration> instanceConfigurations = new HashMap<String, InstanceConfiguration>();
+  private Map<String, InstanceConfiguration> instanceConfigurations = new TreeMap<String, InstanceConfiguration>();
 
   /**
    * Configures and initializes the repository.
