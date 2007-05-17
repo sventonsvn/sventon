@@ -20,6 +20,7 @@
     </fileset>
     <fileset dir="${toolslib.dir}">
       <include name="servlet-api.jar"/>
+      <include name="jsp-api.jar"/>
     </fileset>
     <pathelement path="${output.dir}"/>
   </path>

@@ -122,6 +122,7 @@
   <bean id="exportController" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
     <property name="exportDir" ref="sventonExportDir"/>
     <property name="contentType" value="application/octet-stream"/>
+    <property name="archiveFileCharset" value="cp850"/>
   </bean>
 
   <bean id="listInstancesController" class="de.berlios.sventon.web.ctrl.ListInstancesController">
