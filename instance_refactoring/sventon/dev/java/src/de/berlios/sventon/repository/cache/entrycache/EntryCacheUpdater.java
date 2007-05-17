@@ -71,14 +71,6 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     this.entryCacheManager = entryCacheManager;
     this.repositoryService = repositoryService;
     this.application = application;
-    for (final String instanceName : application.getInstanceNames()) {
-      logger.debug("Initializing cache instance: " + instanceName);
-      try {
-        this.entryCacheManager.getCache(instanceName);
-      } catch (CacheException ce) {
-        logger.warn("Unable to initialize instance", ce);
-      }
-    }
   }
 
   /**

@@ -13,9 +13,14 @@ package de.berlios.sventon.appl;
 
 import de.berlios.sventon.Version;
 import de.berlios.sventon.logging.SVNLog4JAdapter;
+import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
+import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.io.IOUtils;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
@@ -27,9 +32,7 @@ import java.util.*;
 /**
  * Represents the sventon application.
  * <p/>
- * Reads given configuration instance and initializes sventon.
- * <p/>
- * The class also performs SVNKit initialization, such as setting up logging
+ * Initializes sventon and performs SVNKit initialization, such as setting up logging
  * and repository access. It should be instanciated once (and only once), when
  * the application starts.
  *
@@ -46,7 +49,7 @@ public class Application {
   /**
    * Set of added subversion repository instances.
    */
-  private Map<String, Instance> instances = new HashMap<String, Instance>();
+  private Map<String, Instance> instances = new TreeMap<String, Instance>();
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -63,6 +66,10 @@ public class Application {
    */
   private String configurationFilename;
 
+  private EntryCacheManager entryCacheManager;
+  private LogMessageCacheManager logMessageCacheManager;
+  private ObjectCacheManager objectCacheManager;
+  private RevisionCacheManager revisionCacheManager;
 
   /**
    * Constructor.
@@ -81,9 +88,40 @@ public class Application {
       throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());
     }
     this.configurationFilename = configurationFilename;
+  }
 
+  /**
+   * Initializes the sventon application.
+   *
+   * @throws IOException    if unable to load the instance configurations.
+   * @throws CacheException if unable to initalize caches.
+   */
+  public void init() throws IOException, CacheException {
     initSvnSupport();
     loadInstanceConfigurations();
+    initCaches();
+  }
+
+  /**
+   * Initializes the caches by registering the cache enable instances in the cache managers.
+   *
+   * @throws CacheException if unable to register instances in the cache managers.
+   */
+  private void initCaches() throws CacheException {
+    logger.info("Initializing caches");
+    for (final Instance instance : getInstances()) {
+      final String instanceName = instance.getName();
+      if (instance.getConfiguration().isCacheUsed()) {
+        logger.debug("Registering caches for instance: " + instanceName);
+        entryCacheManager.register(instanceName);
+        logMessageCacheManager.register(instanceName);
+        objectCacheManager.register(instanceName);
+        revisionCacheManager.register(instanceName);
+      } else {
+        logger.debug("Caches have not been enabled for instance:" + instanceName);
+      }
+    }
+    logger.info("Caches initialized ok");
   }
 
   /**
@@ -229,7 +267,7 @@ public class Application {
   }
 
   /**
-   * Performs a shutdown on the application and all its repository instances. 
+   * Performs a shutdown on the application and all its repository instances.
    */
   public void shutdown() {
     for (final Instance instance : instances.values()) {
@@ -265,18 +303,18 @@ public class Application {
   }
 
   /**
-   * Gets configuration status.
+   * Gets configuration status of the sventon application.
    *
-   * @return True if repository is configured ok, false if not.
+   * @return True if sventon is configured ok, false if not.
    */
   public boolean isConfigured() {
     return configured;
   }
 
   /**
-   * Sets the configuration status.
+   * Sets the configuration status of the sventon application.
    *
-   * @param configured True to indicate configuration done/ok.
+   * @param configured True to indicate sventon has been configured.
    */
   public void setConfigured(final boolean configured) {
     this.configured = configured;
@@ -300,4 +338,39 @@ public class Application {
     return configurationFilename;
   }
 
+  /**
+   * Sets the cache manager.
+   *
+   * @param entryCacheManager Cache manager.
+   */
+  public void setEntryCacheManager(final EntryCacheManager entryCacheManager) {
+    this.entryCacheManager = entryCacheManager;
+  }
+
+  /**
+   * Sets the cache manager.
+   *
+   * @param logMessageCacheManager Cache manager.
+   */
+  public void setLogMessageCacheManager(final LogMessageCacheManager logMessageCacheManager) {
+    this.logMessageCacheManager = logMessageCacheManager;
+  }
+
+  /**
+   * Sets the cache manager.
+   *
+   * @param objectCacheManager Cache manager.
+   */
+  public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
+    this.objectCacheManager = objectCacheManager;
+  }
+
+  /**
+   * Sets the cache manager.
+   *
+   * @param revisionCacheManager Cache manager.
+   */
+  public void setRevisionCacheManager(final RevisionCacheManager revisionCacheManager) {
+    this.revisionCacheManager = revisionCacheManager;
+  }
 }
