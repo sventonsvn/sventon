@@ -40,13 +40,30 @@ public abstract class CacheManager<T> {
    *
    * @param cacheName Name of cache to get
    * @return The cache instance.
+   * @throws CacheException if cache does not exist.
    */
   public T getCache(final String cacheName) throws CacheException {
     T cache = caches.get(cacheName);
     if (cache == null) {
-      cache = addCache(cacheName, createCache(cacheName));
+      throw new CacheException("Unknown cache instance name: " + cacheName);
     }
     return cache;
+  }
+
+  /**
+   * Registers the instance in the cache manager.
+   * The instance cache will be created if it does not exist.
+   *
+   * @param cacheName Instance name.
+   * @throws CacheException if unable to create cache instance, or if the
+   *                        cache has already been registered.
+   */
+  public void register(final String cacheName) throws CacheException {
+    T cache = caches.get(cacheName);
+    if (cache != null) {
+      throw new IllegalStateException("Cache instance [" + cacheName + "] has already been registered");
+    }
+    addCache(cacheName, createCache(cacheName));
   }
 
   /**
