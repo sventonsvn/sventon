@@ -1,14 +1,14 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.repository.SVNRepositoryStub;
-import de.berlios.sventon.repository.RevisionUpdate;
-import de.berlios.sventon.service.RepositoryServiceImpl;
 import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.repository.RevisionUpdate;
+import de.berlios.sventon.repository.SVNRepositoryStub;
+import de.berlios.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
-import java.util.*;
 import java.io.File;
+import java.util.*;
 
 public class EntryCacheUpdaterTest extends TestCase {
 
@@ -20,30 +20,37 @@ public class EntryCacheUpdaterTest extends TestCase {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     final Map<String, SVNLogEntryPath> changedPaths1 = new HashMap<String, SVNLogEntryPath>();
-    changedPaths1.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    changedPaths1.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
-    changedPaths1.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
-    changedPaths1.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths1, 123, "jesper", new Date(), "Log message for revision 123."));
+    changedPaths1.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, -1));
+    changedPaths1.put("/file2.abc", new SVNLogEntryPath("/file2.abc", 'A', null, -1));
+    changedPaths1.put("/trunk/file3.def", new SVNLogEntryPath("/trunk/file3.def", 'R', null, -1));
+    logEntries.add(new SVNLogEntry(changedPaths1, 123, "author", new Date(), "Log message for revision 123."));
 
     final Map<String, SVNLogEntryPath> changedPaths2 = new HashMap<String, SVNLogEntryPath>();
-    changedPaths2.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
+    changedPaths2.put("/branch", new SVNLogEntryPath("/branch", 'A', "/trunk", 123));
+    changedPaths2.put("/branch/file3.def", new SVNLogEntryPath("/branch/file3.def", 'D', null, -1));
+    logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
 
-    assertEquals(0, entryCache.getSize());
     new EntryCacheUpdater(null, new ApplicationConfiguration(new File(TEMPDIR), "filename"), new RepositoryServiceImpl()).updateInternal(entryCache,
         new TestRepository(), new RevisionUpdate("defaultsvn", logEntries, false, false));
-    //TODO: Fix this test - all repository.info()-calls returns the same value now.
-    assertEquals(1, entryCache.getSize());
+
+    assertEquals(4, entryCache.getSize());
   }
 
-  static class TestRepository extends SVNRepositoryStub {
+
+  private static class TestRepository extends SVNRepositoryStub {
+    private final Map<String, SVNDirEntry> entriesMap = new HashMap<String, SVNDirEntry>();
+
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
+      entriesMap.put("/file1.java#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file1.java"), "file1.java", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/file2.abc#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file2.abc"), "file2.abc", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/trunk#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk"), "trunk", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/trunk/file3.def#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk/file3.def"), "file3.def", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/branch#124", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/branch"), "branch", SVNNodeKind.FILE, 12345, false, 124, new Date(), "author"));
     }
 
-    public SVNDirEntry info(String path, long revision) throws SVNException {
-      return new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
+    public SVNDirEntry info(final String path, final long revision) throws SVNException {
+      return entriesMap.get(path + "#" + revision);
     }
   }
 }

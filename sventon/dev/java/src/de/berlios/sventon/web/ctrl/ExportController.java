@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.nio.charset.Charset;
 
 /**
  * Controller for exporting and downloading files or directories as a zip file.
@@ -48,6 +49,11 @@ public class ExportController extends AbstractSVNTemplateController implements C
    * Response stream content type. Default set to <code>application/octet-stream</code>.
    */
   private String contentType = "application/octet-stream";
+
+  /**
+   * The charset to use for filenames and comments in the archive file.
+   */
+  private Charset archiveFileCharset;
 
   /**
    * Sets the export dir to use when exporting files to be zipped from the repository
@@ -75,7 +81,7 @@ public class ExportController extends AbstractSVNTemplateController implements C
     try {
       logger.debug(exportDirectory);
       getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
-      final File compressedFile = exportDirectory.compress();
+      final File compressedFile = exportDirectory.compress(archiveFileCharset);
       output = response.getOutputStream();
       response.setContentType(contentType);
       response.setHeader("Content-disposition", "attachment; filename=\""
@@ -100,6 +106,17 @@ public class ExportController extends AbstractSVNTemplateController implements C
    */
   public void setContentType(final String contentType) {
     this.contentType = contentType;
+  }
+
+  /**
+   * Sets the archive file charset to use for filenames and comments.
+   *
+   * @param archiveFileCharset Charset
+   * @throws java.nio.charset.UnsupportedCharsetException
+   *          if unsupported charset
+   */
+  public void setArchiveFileCharset(final String archiveFileCharset) {
+    this.archiveFileCharset = Charset.forName(archiveFileCharset);
   }
 
 }
