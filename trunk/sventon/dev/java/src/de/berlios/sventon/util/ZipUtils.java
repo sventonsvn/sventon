@@ -13,12 +13,14 @@ package de.berlios.sventon.util;
 
 import de.schlichtherle.io.ArchiveDetector;
 import de.schlichtherle.io.DefaultArchiveDetector;
-import de.schlichtherle.io.archive.zip.JarDriver;
+import de.schlichtherle.io.archive.spi.ArchiveDriver;
+import de.schlichtherle.io.archive.zip.Zip32Driver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Utility class for handling ZIP actions.
@@ -33,11 +35,19 @@ public final class ZipUtils {
    */
   private final Log logger = LogFactory.getLog(getClass());
 
-  public ZipUtils() {
-    //This line is a hack handles UTF-8 chars. But these are garbeled in Windows.
-    //TODO what about other OS:es? TEST
+  /**
+   * Constructor.
+   *
+   * @param charset Charset to use for file names and comments.
+   */
+  public ZipUtils(final Charset charset) {
+    if (charset == null) {
+      throw new IllegalArgumentException("Charset was null");
+    }
+    logger.debug("Using charset: " + charset.name());
+    final ArchiveDriver driver = new Zip32Driver(charset.name());
     de.schlichtherle.io.File.setDefaultArchiveDetector(
-        new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", new JarDriver()));
+        new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", driver));
   }
 
   /**
@@ -47,7 +57,7 @@ public final class ZipUtils {
    * @param directory The directory to zip.
    * @throws IOException if IO error occurs.
    */
-  public void zipDir(final File zipFile, final File directory) throws IOException {
+  public synchronized void zipDir(final File zipFile, final File directory) throws IOException {
     logger.debug("Zipping directory: " + directory.getAbsolutePath());
     final de.schlichtherle.io.File file = new de.schlichtherle.io.File(zipFile);
     file.archiveCopyAllFrom(new de.schlichtherle.io.File(directory), ArchiveDetector.NULL);

@@ -35,6 +35,8 @@ public class AvailableCharsets {
 
   /**
    * Constructor.
+   *
+   * @param defaultCharset Default charset.
    */
   public AvailableCharsets(final String defaultCharset) {
     this.charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
