@@ -104,11 +104,11 @@ public class Application {
   }
 
   /**
-   * Initializes the caches by registering the cache enable instances in the cache managers.
+   * Initializes the caches by registering the cache enabled instances in the cache managers.
    *
    * @throws CacheException if unable to register instances in the cache managers.
    */
-  private void initCaches() throws CacheException {
+  public void initCaches() throws CacheException {
     logger.info("Initializing caches");
     for (final Instance instance : getInstances()) {
       final String instanceName = instance.getName();

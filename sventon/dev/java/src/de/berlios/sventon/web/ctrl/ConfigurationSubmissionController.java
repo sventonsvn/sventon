@@ -79,6 +79,7 @@ public class ConfigurationSubmissionController extends AbstractController {
 
     application.storeInstanceConfigurations();
     application.setConfigured(true);
+    application.initCaches();
 
     try {
       logger.debug("Starting up caches");
