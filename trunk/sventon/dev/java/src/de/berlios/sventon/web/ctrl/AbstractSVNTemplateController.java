@@ -11,8 +11,9 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
@@ -111,9 +112,9 @@ import java.util.Map;
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   /**
-   * The application configuration instance.
+   * The application.
    */
-  private ApplicationConfiguration configuration = null;
+  private Application application;
 
   /**
    * Gateway class for accessing the caches.
@@ -193,12 +194,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If application config is not ok - redirect to config.jsp
-    if (!configuration.isConfigured()) {
+    if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
-    if (!configuration.getInstanceNames().contains(svnCommand.getName())) {
+    if (!application.getInstanceNames().contains(svnCommand.getName())) {
       logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
@@ -208,8 +209,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+      final Instance instance = application.getInstance(svnCommand.getName());
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instance);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
@@ -228,13 +229,13 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", instanceConfiguration.getUrl());
+        model.put("url", instance.getConfiguration().getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
-        model.put("useCache", instanceConfiguration.isCacheUsed());
-        model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
-        model.put("instanceNames", configuration.getInstanceNames());
+        model.put("useCache", instance.getConfiguration().isCacheUsed());
+        model.put("isZipDownloadsAllowed", instance.getConfiguration().isZippedDownloadsAllowed());
+        model.put("instanceNames", application.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);
         model.put("charsets", availableCharsets.getCharsets());
@@ -380,7 +381,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
-    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
+    final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -462,21 +463,22 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Set application configuration.
+   * Sets the application.
    *
-   * @param configuration ApplicationConfiguration
+   * @param application Application
    */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
+  public void setApplication(final Application application) {
+    this.application = application;
   }
 
   /**
    * Get current application configuration.
    *
+   * @param instanceName Instance name
    * @return ApplicationConfiguration
    */
-  public ApplicationConfiguration getConfiguration() {
-    return configuration;
+  public InstanceConfiguration getInstanceConfiguration(final String instanceName) {
+    return application.getInstance(instanceName).getConfiguration();
   }
 
   /**

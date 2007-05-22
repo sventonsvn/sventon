@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,9 +35,9 @@ import java.util.Map;
 public class ConfigurationController extends AbstractFormController {
 
   /**
-   * Application configuration.
+   * The application.
    */
-  private ApplicationConfiguration configuration;
+  private Application application;
 
   /**
    * Logger for this class and subclasses.
@@ -54,12 +54,12 @@ public class ConfigurationController extends AbstractFormController {
   }
 
   /**
-   * Sets application configuration.
+   * Sets the application.
    *
-   * @param configuration ApplicationConfiguration
+   * @param application Application
    */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
+  public void setApplication(final Application application) {
+    this.application = application;
   }
 
   protected ModelAndView showForm(final HttpServletRequest request,
@@ -67,21 +67,21 @@ public class ConfigurationController extends AbstractFormController {
       throws IOException {
 
     logger.debug("showForm() started");
-    logger.info("sventon configured: " + configuration.isConfigured());
-    if (configuration.isConfigured()) {
+    logger.info("sventon configured: " + application.isConfigured());
+    if (application.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
-    } else if (configuration.getInstanceNames().size() > 0 && request.getParameter("addnew") == null) {
+    } else if (!application.getInstanceNames().isEmpty() && request.getParameter("addnew") == null) {
       final Map<String, Object> model = new HashMap<String, Object>();
-      model.put("addedInstances", configuration.getInstanceNames());
+      model.put("addedInstances", application.getInstanceNames());
       return new ModelAndView("confirmAddConfig", model);
     } else {
       final Map<String, Object> model = new HashMap<String, Object>();
       final ConfigCommand configCommand = new ConfigCommand();
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
-      model.put("addedInstances", configuration.getInstanceNames());
+      model.put("addedInstances", application.getInstanceNames());
       logger.debug("Displaying the config page");
       return new ModelAndView("config", model);
     }
@@ -93,8 +93,8 @@ public class ConfigurationController extends AbstractFormController {
 
     logger.debug("processFormSubmission() started");
     final Map<String, Object> model = new HashMap<String, Object>();
-    logger.info("sventon configuration OK: " + configuration.isConfigured());
-    if (configuration.isConfigured()) {
+    logger.info("sventon configuration OK: " + application.isConfigured());
+    if (application.isConfigured()) {
       // sventon already configured - return to browser view.
       logger.debug("Already configured - returning to browser view");
       return new ModelAndView(new RedirectView("repobrowser.svn"));
@@ -106,19 +106,18 @@ public class ConfigurationController extends AbstractFormController {
       //noinspection unchecked
       model.putAll(errors.getModel());
       model.put("command", confCommand);
-      model.put("addedInstances", configuration.getInstanceNames());
+      model.put("addedInstances", application.getInstanceNames());
       return new ModelAndView("config", model);
 
     } else {
       final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-      instanceConfiguration.setInstanceName(confCommand.getName());
       instanceConfiguration.setRepositoryRoot(confCommand.getRepositoryURL().trim());
       instanceConfiguration.setConfiguredUID(confCommand.getUsername());
       instanceConfiguration.setConfiguredPWD(confCommand.getPassword());
       instanceConfiguration.setCacheUsed(confCommand.isCacheUsed());
       instanceConfiguration.setZippedDownloadsAllowed(confCommand.isZippedDownloadsAllowed());
-      configuration.addInstanceConfiguration(instanceConfiguration);
-      model.put("addedInstances", configuration.getInstanceNames());
+      application.addInstance(confCommand.getName(), instanceConfiguration);
+      model.put("addedInstances", application.getInstanceNames());
       model.put("latestAddedInstance", confCommand.getName());
       return new ModelAndView("confirmAddConfig", model);
     }

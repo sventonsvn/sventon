@@ -30,13 +30,13 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="configuration" class="de.berlios.sventon.config.ApplicationConfiguration">
+  <bean id="application" class="de.berlios.sventon.appl.Application" init-method="init" destroy-method="shutdown">
     <constructor-arg index="0" ref="sventonDir"/>
     <constructor-arg index="1" ref="sventonConfigFile"/>
-  </bean>
-
-  <bean id="configurator" class="de.berlios.sventon.config.ApplicationConfigurator">
-    <constructor-arg index="0" ref="configuration"/>
+    <property name="entryCacheManager" ref="entryCacheManager"/>
+    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="revisionCacheManager" ref="revisionCacheManager"/>
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>
@@ -44,11 +44,11 @@
 
   <bean id="repositoryService" class="de.berlios.sventon.service.RepositoryServiceImpl">
     <property name="cacheGateway" ref="cacheGatewayBean"/>
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
   </bean>
 
   <bean id="abstractController" abstract="true">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
     <property name="revisionObservable" ref="revisionObservable"/>
     <property name="repositoryService" ref="repositoryService"/>
@@ -58,7 +58,7 @@
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="feedItemCount" value="20"/>
     <property name="feedGenerator" ref="syndFeedGenerator"/>
@@ -72,7 +72,7 @@
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="encoding" ref="defaultEncoding"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
@@ -126,20 +126,20 @@
   </bean>
 
   <bean id="listInstancesController" class="de.berlios.sventon.web.ctrl.ListInstancesController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
   </bean>
 
   <bean id="startController" class="de.berlios.sventon.web.ctrl.StartController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
   </bean>
 
   <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="validator" ref="configCommandValidator"/>
   </bean>
 
   <bean id="configurationSubmissionController" class="de.berlios.sventon.web.ctrl.ConfigurationSubmissionController">
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="scheduler" ref="scheduler"/>
   </bean>
 
@@ -256,13 +256,14 @@
   <!-- Monitors the repository and polls for changes -->
   <bean id="revisionObservable" class="de.berlios.sventon.repository.RevisionObservableImpl">
     <constructor-arg ref="observerList"/>
-    <property name="configuration" ref="configuration"/>
+    <property name="application" ref="application"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="maxRevisionCountPerUpdate" value="500"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
+
   <bean id="observerList" class="java.util.ArrayList">
     <constructor-arg>
       <list>
@@ -276,20 +277,18 @@
   <!-- Updater class for applying repository changes to cache -->
   <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
     <constructor-arg index="0" ref="revisionCacheManager"/>
-    <constructor-arg index="1" ref="configuration"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
     <constructor-arg index="0" ref="entryCacheManager"/>
-    <constructor-arg index="1" ref="configuration"/>
+    <constructor-arg index="1" ref="application"/>
     <constructor-arg index="2" ref="repositoryService"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="logMessageCacheUpdater" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheUpdater">
     <constructor-arg index="0" ref="logMessageCacheManager"/>
-    <constructor-arg index="1" ref="configuration"/>
   </bean>
 
   <bean id="revisionCacheManager" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager">

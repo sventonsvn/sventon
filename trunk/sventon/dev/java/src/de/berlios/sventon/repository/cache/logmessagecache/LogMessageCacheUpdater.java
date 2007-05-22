@@ -12,10 +12,9 @@
 package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.repository.AbstractRevisionObserver;
-import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.LogMessage;
+import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -43,19 +42,10 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
    * Constructor.
    *
    * @param logMessageCacheManager The cache manager instance.
-   * @param configuration          ApplicationConfiguration instance.
    */
-  public LogMessageCacheUpdater(final LogMessageCacheManager logMessageCacheManager,
-                                final ApplicationConfiguration configuration) {
+  public LogMessageCacheUpdater(final LogMessageCacheManager logMessageCacheManager) {
+    logger.info("Starting");
     this.logMessageCacheManager = logMessageCacheManager;
-    for (final String instanceName : configuration.getInstanceNames()) {
-      logger.debug("Initializing cache instance: " + instanceName);
-      try {
-        this.logMessageCacheManager.getCache(instanceName);
-      } catch (CacheException ce) {
-        logger.warn("Unable to initialize instance", ce);
-      }
-    }
   }
 
   /**
