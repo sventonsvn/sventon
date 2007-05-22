@@ -1,9 +1,9 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
+import de.berlios.sventon.appl.Application;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -30,8 +30,12 @@ public class EntryCacheUpdaterTest extends TestCase {
     changedPaths2.put("/branch/file3.def", new SVNLogEntryPath("/branch/file3.def", 'D', null, -1));
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
 
-    new EntryCacheUpdater(null, new ApplicationConfiguration(new File(TEMPDIR), "filename"), new RepositoryServiceImpl()).updateInternal(entryCache,
-        new TestRepository(), new RevisionUpdate("defaultsvn", logEntries, false, false));
+    new EntryCacheUpdater(null,
+        new Application(new File(TEMPDIR), "filename"),
+        new RepositoryServiceImpl()).updateInternal(entryCache,
+        new TestRepository(),
+        new RevisionUpdate("defaultsvn", logEntries, false, false));
+
 
     assertEquals(4, entryCache.getSize());
   }

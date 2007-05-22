@@ -1,7 +1,7 @@
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
-import de.berlios.sventon.config.InstanceConfiguration;
+import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
@@ -20,13 +20,12 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration(new File(TEMPDIR), "filename");
+    final Application application = new Application(new File(TEMPDIR), "filename");
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     final String instanceName = "defaultsvn";
-    instanceConfiguration.setInstanceName(instanceName);
     instanceConfiguration.setCacheUsed(true);
-    applicationConfiguration.addInstanceConfiguration(instanceConfiguration);
-    applicationConfiguration.setConfigured(true);
+    application.addInstance(instanceName, instanceConfiguration);
+    application.setConfigured(true);
 
     final ObjectCache cache = createMemoryCache();
 
@@ -35,7 +34,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       observers.add(this);
       final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
       revisionObservable.setMaxRevisionCountPerUpdate(3);
-      revisionObservable.setConfiguration(applicationConfiguration);
+      revisionObservable.setApplication(application);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(revisionObservable.isUpdating(instanceName));
       revisionObservable.update(instanceName, new TestRepository(), cache, false);

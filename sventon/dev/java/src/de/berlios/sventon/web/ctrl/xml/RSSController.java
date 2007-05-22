@@ -11,15 +11,15 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -50,9 +50,9 @@ public class RSSController extends AbstractController {
   private int feedItemCount = 10;
 
   /**
-   * The application configuration.
+   * The application.
    */
-  private ApplicationConfiguration configuration;
+  private Application application;
 
   /**
    * The feed generator.
@@ -82,15 +82,14 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    if (!configuration.isConfigured()) {
+    if (!application.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
 
-    final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName));
 
     try {
       logger.debug("Outputting feed for [" + path + "]");
@@ -124,12 +123,12 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Set application configuration.
+   * Sets the application.
    *
-   * @param configuration ApplicationConfiguration
+   * @param application Application
    */
-  public void setConfiguration(final ApplicationConfiguration configuration) {
-    this.configuration = configuration;
+  public void setApplication(final Application application) {
+    this.application = application;
   }
 
   /**

@@ -54,7 +54,7 @@ public class UnifiedDiffController extends AbstractSVNTemplateController impleme
 
     try {
       final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userContext.getCharset(),
-          getConfiguration().getInstanceConfiguration(svnCommand.getName()));
+          getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);
