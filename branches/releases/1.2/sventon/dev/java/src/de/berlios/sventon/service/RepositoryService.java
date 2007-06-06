@@ -223,6 +223,7 @@ public interface RepositoryService {
    * @param repository The repository
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
    * @return Map containing path
+   * @throws SVNException if a subversion error occur
    */
   Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException;
 
@@ -251,11 +252,11 @@ public interface RepositoryService {
   /**
    * Gets the revisions for a specific entry.
    *
-   * @param repository
-   * @param path
-   * @param revision
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The entry revision
    * @return List of file revisions
-   * @throws SVNException
+   * @throws SVNException if a subversion error occur
    */
   List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
@@ -264,26 +265,26 @@ public interface RepositoryService {
                                   final int maxThumbnailSize, final OutputStream out) throws SVNException;
 
   /**
-   * @param repository
-   * @param diffCommand
-   * @param charset
-   * @param configuration
-   * @return
+   * @param repository    The repository
+   * @param diffCommand   Diffcommand.
+   * @param charset       The charset to use.
+   * @param configuration The instance configuration.
+   * @return Ordered list of diffed rows.
    * @throws SVNException  if a subversion error occur
-   * @throws DiffException
+   * @throws DiffException if unable to produce diff.
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
                                          final String charset, final InstanceConfiguration configuration)
       throws SVNException, DiffException;
 
   /**
-   * @param repository
-   * @param diffCommand
-   * @param charset
-   * @param configuration
-   * @return
+   * @param repository    The repository
+   * @param diffCommand   Diffcommand
+   * @param charset       The charset to use.
+   * @param configuration The instance configuration.
+   * @return The unified diff as a string.
    * @throws SVNException  if a subversion error occur
-   * @throws DiffException
+   * @throws DiffException if unable to produce diff.
    */
   String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
                      final InstanceConfiguration configuration)
