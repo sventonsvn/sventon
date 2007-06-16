@@ -82,12 +82,12 @@
           <td class="sventonCol4" align="center">
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
-              <span onmouseover="this.T_WIDTH=1;return escape('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
+              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
             </c:if>
           </td>
           <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>
           <td class="sventonCol6">
-            <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
+            <a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevinfo.link.tooltip"/>')">
               ${entry.revision}
             </a>
           </td>
