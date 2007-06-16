@@ -11,7 +11,6 @@
  * ====================================================================
  */
 %>
-<script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
 <p>
 sventon <%=de.berlios.sventon.Version.getVersion()%> revision <%=de.berlios.sventon.Version.getRevision()%>
 </p>
