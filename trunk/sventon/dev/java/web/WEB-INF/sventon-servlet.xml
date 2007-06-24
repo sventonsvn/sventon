@@ -88,6 +88,7 @@
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
   <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
+  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.GetLogMessageController" parent="abstractController"/>
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
   <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
   <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
@@ -179,6 +180,7 @@
         <prop key="/listfiles.ajax">listFilesController</prop>
         <prop key="/latestrevisions.ajax">latestRevisionsController</prop>
         <prop key="/static.ajax">getStaticContentController</prop>
+        <prop key="/getmessage.ajax">logMessageController</prop>
       </props>
     </property>
   </bean>

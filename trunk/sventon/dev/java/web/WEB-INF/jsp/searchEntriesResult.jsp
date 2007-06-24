@@ -95,7 +95,7 @@
           </td>
           <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>
           <td class="sventonCol6">
-            <a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevinfo.link.tooltip"/>')">
+            <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}');">
               ${entry.revision}
             </a>
           </td>
