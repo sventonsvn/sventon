@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[843] Added: Feature #3341 - Log message popup div.
+
 [836] Release 1.2 RC2 (2007-05-18)
 [834] Added: Feature #3348 - Fix sort order in the instance list.
 [832] Fixed: Bug #10991 - ZIP download does not support non USASCII.

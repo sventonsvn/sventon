@@ -119,7 +119,7 @@ public class Application {
         objectCacheManager.register(instanceName);
         revisionCacheManager.register(instanceName);
       } else {
-        logger.debug("Caches have not been enabled for instance:" + instanceName);
+        logger.debug("Caches have not been enabled for instance: " + instanceName);
       }
     }
     logger.info("Caches initialized ok");
