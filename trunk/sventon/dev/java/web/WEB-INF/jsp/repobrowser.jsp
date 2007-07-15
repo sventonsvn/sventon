@@ -117,7 +117,13 @@
       </tr>
     </table>
   </form>
-  
+
+  <c:if test="${bypassed}">
+    <script type="text/javascript">
+      new Effect.Highlight($('clickableUrl'), {startcolor: '#ffff00', restorecolor: 'true', duration: 3});
+    </script>
+  </c:if>
+
 <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

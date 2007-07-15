@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[844] Added: Feature #3498 - Visual feedback when skipping directories.
 [843] Added: Feature #3341 - Log message popup div.
 
 [836] Release 1.2 RC2 (2007-05-18)
