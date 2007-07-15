@@ -72,9 +72,9 @@ public class ApplicationTest extends TestCase {
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);
-    assertEquals(5, props.size());
+    assertEquals(6, props.size());
     props = configurations.get(1);
-    assertEquals(5, props.size());
+    assertEquals(6, props.size());
   }
 
 }

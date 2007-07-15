@@ -12,7 +12,6 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
@@ -47,8 +46,8 @@ import java.util.Map;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest,
- * HttpServletResponse, BindException)}</code>.
+ * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,
+ *HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -59,15 +58,15 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, UserContext,
- * HttpServletRequest, HttpServletResponse, BindException)}
+ * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,UserContext,
+ *HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest, HttpServletResponse,
- * BindException)}
+ * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,
+ *BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -209,8 +208,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final Instance instance = application.getInstance(svnCommand.getName());
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instance);
+      final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
@@ -229,12 +228,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", instance.getConfiguration().getUrl());
+        model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
-        model.put("useCache", instance.getConfiguration().isCacheUsed());
-        model.put("isZipDownloadsAllowed", instance.getConfiguration().isZippedDownloadsAllowed());
+        model.put("useCache", instanceConfiguration.isCacheUsed());
+        model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", application.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);

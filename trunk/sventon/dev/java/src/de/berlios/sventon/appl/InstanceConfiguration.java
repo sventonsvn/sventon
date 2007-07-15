@@ -64,11 +64,22 @@ public class InstanceConfiguration {
    */
   private boolean zipDownloadsAllowed;
 
+  /**
+   * Number of items in the generated RSS feed.
+   */
+  private int rssItemsCount = DEFAULT_RSS_ITEMS_COUNT;
+
+  /**
+   * Default number of RSS feed items (20).
+   */
+  public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
+
   public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
   public static final String PROPERTY_KEY_USERNAME = ".uid";
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
+  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
 
   /**
    * Creates an instance using given name and properties.
@@ -82,9 +93,12 @@ public class InstanceConfiguration {
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
-    instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+    instanceConfiguration.setCacheUsed(
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
         Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+    instanceConfiguration.rssItemsCount = Integer.parseInt(
+        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
   }
 
@@ -202,4 +216,12 @@ public class InstanceConfiguration {
     return this.zipDownloadsAllowed;
   }
 
+  /**
+   * Gets the RSS feed items count.
+   *
+   * @return Number of rss feed items generated for this instance.
+   */
+  public int getRssItemsCount() {
+    return rssItemsCount;
+  }
 }

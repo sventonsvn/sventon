@@ -13,6 +13,7 @@ package de.berlios.sventon.repository;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.service.RepositoryService;
@@ -204,11 +205,13 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   public void update(final String instanceName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
       final Instance instance = application.getInstance(instanceName);
-      if (instance.getConfiguration().isCacheUsed()) {
+      final InstanceConfiguration configuration = instance.getConfiguration();
+
+      if (configuration.isCacheUsed()) {
         synchronized (instance) {
           SVNRepository repository;
           try {
-            repository = RepositoryFactory.INSTANCE.getRepository(instance);
+            repository = RepositoryFactory.INSTANCE.getRepository(configuration);
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
             update(instance.getName(), repository, objectCache, flushAfterUpdate);
           } catch (final Exception ex) {
