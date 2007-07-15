@@ -60,7 +60,6 @@
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
     <property name="application" ref="application"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
-    <property name="feedItemCount" value="20"/>
     <property name="feedGenerator" ref="syndFeedGenerator"/>
     <property name="repositoryService" ref="repositoryService"/>
   </bean>

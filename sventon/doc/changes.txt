@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[845] Added: Feature #3477 - Configurable feed sizes.
 [844] Added: Feature #3498 - Visual feedback when skipping directories.
 [843] Added: Feature #3341 - Log message popup div.
 

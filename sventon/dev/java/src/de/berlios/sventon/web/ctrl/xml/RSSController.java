@@ -12,6 +12,8 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
@@ -43,11 +45,6 @@ public class RSSController extends AbstractController {
    * RSS mime type, default set to <tt>application/xml; charset=UTF-8</tt>.
    */
   private String mimeType = "application/xml; charset=UTF-8";
-
-  /**
-   * Number of items in the feed, default set to 10.
-   */
-  private int feedItemCount = 10;
 
   /**
    * The application.
@@ -89,11 +86,13 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName));
+    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
     try {
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, path, repository, feedItemCount);
+      final List<SVNLogEntry> logEntries =
+          repositoryService.getLatestRevisions(instanceName, path, repository, configuration.getRssItemsCount());
       feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
@@ -147,15 +146,6 @@ public class RSSController extends AbstractController {
    */
   public void setFeedGenerator(final FeedGenerator feedGenerator) {
     this.feedGenerator = feedGenerator;
-  }
-
-  /**
-   * Sets the number of items to be included in the feed.
-   *
-   * @param feedItemCount The number of items (revisions).
-   */
-  public void setFeedItemCount(int feedItemCount) {
-    this.feedItemCount = feedItemCount;
   }
 
   /**

@@ -188,11 +188,19 @@ public class Application {
     for (final String instanceName : instanceNames) {
       final Properties properties = new Properties();
       final InstanceConfiguration config = getInstance(instanceName).getConfiguration();
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, config.getUrl());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME, config.getConfiguredUID());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD, config.getConfiguredPWD());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE, config.isCacheUsed() ? "true" : "false");
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, config.isZippedDownloadsAllowed() ? "true" : "false");
+
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
+          config.getUrl());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
+          config.getConfiguredUID());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
+          config.getConfiguredPWD());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
+          config.isCacheUsed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
+          config.isZippedDownloadsAllowed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
+          String.valueOf(config.getRssItemsCount()));
       propertyList.add(properties);
     }
     return propertyList;
