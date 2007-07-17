@@ -18,11 +18,11 @@ import java.util.Date;
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
  * ordering of <code>RepositoryEntry</code> objects.
- * <p>
+ * <p/>
  * The comparator can be configured during construction to tweak sorting behavior.
- * 
+ *
  * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de 
+ * @author jesper@users.berlios.de
  */
 public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
 
@@ -38,14 +38,12 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
 
   /**
    * Create a new comparator for comparing <code>RepositoryEntry</code> objects.
-   * 
-   * @param sortType
-   *          Entry type property to perform the comparisions on. See enum constants
-   *          defined in this class.
-   * @param groupDirs
-   *          <code>true</code> to group directories, this will sort an entry
-   *          of kind <code>SVNNodeKind.DIR</code> before an entries of other
-   *          kinds.
+   *
+   * @param sortType  Entry type property to perform the comparisions on. See enum constants
+   *                  defined in this class.
+   * @param groupDirs <code>true</code> to group directories, this will sort an entry
+   *                  of kind <code>SVNNodeKind.DIR</code> before an entries of other
+   *                  kinds.
    * @throws IllegalArgumentException if given sortType is null.
    */
   public RepositoryEntryComparator(final SortType sortType, final boolean groupDirs) {
@@ -79,21 +77,21 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
 
     // Natural ordering of strings as used below may not always be desirable?
     switch (sortType) {
-    case NAME:
-      return nullSafeCompare(entryName1, entryName2);
-    case AUTHOR:
-      final String author1 = entry1.getAuthor();
-      final String author2 = entry2.getAuthor();
-      final int authCompare = nullSafeCompare(author1, author2);
-      return authCompare == 0 ? nullSafeCompare(entryName1, entryName2) : authCompare;
-    case REVISION:
-      final long revision1 = entry1.getRevision();
-      final long revision2 = entry2.getRevision();
-      if (revision1 == revision2) {
+      case NAME:
         return nullSafeCompare(entryName1, entryName2);
-      } else {
-        return revision1 < revision2 ? -1 : 1;
-      }
+      case AUTHOR:
+        final String author1 = entry1.getAuthor();
+        final String author2 = entry2.getAuthor();
+        final int authCompare = nullSafeCompare(author1, author2);
+        return authCompare == 0 ? nullSafeCompare(entryName1, entryName2) : authCompare;
+      case REVISION:
+        final long revision1 = entry1.getRevision();
+        final long revision2 = entry2.getRevision();
+        if (revision1 == revision2) {
+          return nullSafeCompare(entryName1, entryName2);
+        } else {
+          return revision1 < revision2 ? -1 : 1;
+        }
       case SIZE:
         final long size1 = entry1.getSize();
         final long size2 = entry2.getSize();
@@ -102,17 +100,17 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
         } else {
           return size1 < size2 ? -1 : 1;
         }
-    case DATE:
-      final Date date1 = entry1.getDate();
-      final Date date2 = entry2.getDate();
-      final int dateCompare = nullSafeCompare(date1, date2);
-      return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
-    case FULL_NAME:
-      return nullSafeCompare(entry1.getFullEntryName(), entry2.getFullEntryName()); 
-    case URL:
-      return nullSafeCompare(entry1.getUrl(), entry2.getUrl());
-    default:
-      throw new IllegalStateException("Illegal sort type: " + sortType);
+      case DATE:
+        final Date date1 = entry1.getDate();
+        final Date date2 = entry2.getDate();
+        final int dateCompare = nullSafeCompare(date1, date2);
+        return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
+      case FULL_NAME:
+        return nullSafeCompare(entry1.getFullEntryName(), entry2.getFullEntryName());
+      case URL:
+        return nullSafeCompare(entry1.getUrl(), entry2.getUrl());
+      default:
+        throw new IllegalStateException("Illegal sort type: " + sortType);
     }
   }
 

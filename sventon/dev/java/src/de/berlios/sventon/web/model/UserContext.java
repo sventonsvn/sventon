@@ -44,6 +44,7 @@ public class UserContext {
 
   /**
    * Search mode.
+   *
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
    */
