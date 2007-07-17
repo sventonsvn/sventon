@@ -97,7 +97,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
 
   /**
    * Internal update method. Made protected for testing reasons only.
-   *
+   * <p/>
    * <table>
    * <tr><th>Type</th><th>Description</th><th>Action</th></tr>
    * <tr><td>'A'</td><td>Added</td><td>Entry is added</td></tr>
