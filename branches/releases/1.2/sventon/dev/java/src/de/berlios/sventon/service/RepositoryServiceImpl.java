@@ -91,8 +91,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(instanceName, revision);
     } else {
-      logEntry = (SVNLogEntry) repository.log(
-          new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+      logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
     }
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
     return logEntry;
@@ -105,7 +104,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       throws SVNException {
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, -1, new ISVNLogEntryHandler() {
+    repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
         revisions.add(logEntry);
       }
