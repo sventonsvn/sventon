@@ -16,6 +16,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.tmatesoft.svn.core.SVNDirEntry;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -60,7 +62,7 @@ public final class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
 
-    this.entryPath = entryPath;
+    this.entryPath = entryPath.intern();
     copyEntry(entry);
   }
 
@@ -83,15 +85,14 @@ public final class RepositoryEntry implements Serializable {
   }
 
   private void copyEntry(final SVNDirEntry entry) {
-    this.entryLastAuthor = entry.getAuthor();
+    this.entryLastAuthor = entry.getAuthor() == null ? null : entry.getAuthor().intern();
     this.entryLogMessage = entry.getCommitMessage();
     this.entryCreatedDate = entry.getDate();
     this.entryKind = Kind.valueOf(entry.getKind().toString());
-    this.entryName = entry.getName();
+    this.entryName = entry.getName().intern();
     this.entryFirstRevision = entry.getRevision();
     this.entrySize = entry.getSize();
     this.entryHasProperties = entry.hasProperties();
-    this.url = entry.getURL() == null ? null : entry.getURL().toString();
   }
 
   /**
@@ -116,9 +117,10 @@ public final class RepositoryEntry implements Serializable {
    * Gets the entry url.
    *
    * @return The entry url
+   * @deprecated Throws <tt>UnsupportedOperationException</tt> since sventon 1.2 RC3.
    */
   public String getUrl() {
-    return url;
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -214,6 +216,21 @@ public final class RepositoryEntry implements Serializable {
    */
   public String getCommitMessage() {
     return entryLogMessage;
+  }
+
+  /**
+   * Needed to make sure the fields are interned correctly.
+   *
+   * @param is Input stream.
+   * @throws IOException            if io error
+   * @throws ClassNotFoundException if class not found
+   */
+  private void readObject(final ObjectInputStream is) throws IOException, ClassNotFoundException {
+    is.defaultReadObject();
+    entryPath = entryPath.intern();
+    entryName = entryName.intern();
+    entryLastAuthor = entryLastAuthor == null ? null : entryLastAuthor.intern();
+    url = null;
   }
 
   /**
