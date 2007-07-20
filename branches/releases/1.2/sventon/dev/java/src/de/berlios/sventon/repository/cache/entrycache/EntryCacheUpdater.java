@@ -308,13 +308,16 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   private void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
                               final long revision) throws SVNException {
 
+    logger.debug("Cached entries: " + entryCache.getSize());
     final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
     for (final RepositoryEntry entry : entriesList) {
       if (!entryCache.add(entry)) {
         logger.warn("Unable to add already existing entry to cache: " + entry.toString());
       }
       if (entry.getKind() == RepositoryEntry.Kind.dir) {
-        addDirectories(entryCache, repository, path + entry.getName() + "/", revision);
+        final String pathToAdd = path + entry.getName() + "/";
+        logger.debug("Adding: " + pathToAdd);
+        addDirectories(entryCache, repository, pathToAdd, revision);
       }
     }
   }

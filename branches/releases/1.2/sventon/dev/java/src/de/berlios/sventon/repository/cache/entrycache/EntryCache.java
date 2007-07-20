@@ -13,17 +13,17 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.any;
-import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.Cache;
+import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Set;
-import java.util.List;
-import java.util.Collections;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Contains a cached set of the repository entries for a specific revision and URL.
@@ -161,6 +161,8 @@ public abstract class EntryCache implements Cache {
    * Finds entry names based on given regex pattern.
    *
    * @param pattern Entry name pattern to search for
+   * @param kind    Entry kind
+   * @param limit   Result limit
    * @return List of entries.
    * @throws CacheException if error
    */

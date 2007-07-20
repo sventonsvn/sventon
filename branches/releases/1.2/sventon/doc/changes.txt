@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[847] Fixed: Bug #11595 - EntryCache memory consumption.
 [840] Fixed: Bug #11251 - RSS feed creation error.
 
 [836] Release 1.2 RC2 (2007-05-18)
