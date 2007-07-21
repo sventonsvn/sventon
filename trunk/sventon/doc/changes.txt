@@ -5,6 +5,10 @@ sventon change history
 [844] Added: Feature #3498 - Visual feedback when skipping directories.
 [843] Added: Feature #3341 - Log message popup div.
 
+[848] Fixed: Bug #11430 - Cache functionality doesn't work with file-protocol.
+[847] Fixed: Bug #11595 - EntryCache memory consumption.
+[840] Fixed: Bug #11251 - RSS feed creation error.
+
 [836] Release 1.2 RC2 (2007-05-18)
 [834] Added: Feature #3348 - Fix sort order in the instance list.
 [832] Fixed: Bug #10991 - ZIP download does not support non USASCII.

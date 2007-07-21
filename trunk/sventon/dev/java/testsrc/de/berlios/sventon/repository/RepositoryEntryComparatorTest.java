@@ -63,11 +63,6 @@ public class RepositoryEntryComparatorTest extends TestCase {
     assertSame(e2, entries.get(1));
     assertSame(e3, entries.get(2));
 
-    Collections.sort(entries, new RepositoryEntryComparator(URL, false));
-    assertSame(e1, entries.get(0));
-    assertSame(e2, entries.get(2));
-    assertSame(e3, entries.get(1));
-
     Collections.sort(entries, new RepositoryEntryComparator(SIZE, false));
     assertSame(e1, entries.get(0));
     assertSame(e2, entries.get(1));
@@ -94,7 +89,7 @@ public class RepositoryEntryComparatorTest extends TestCase {
     entries = new ArrayList<RepositoryEntry>();
     e1 = new RepositoryEntry(new SVNDirEntry(null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12).getTime(),
         "patrikfr"), "");
-    e2 = new RepositoryEntry(new SVNDirEntry(null, null, FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
+    e2 = new RepositoryEntry(new SVNDirEntry(null, "", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
         "jesper"), "");
     e3 = new RepositoryEntry(new SVNDirEntry(null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14).getTime(),
         "patrikfr"), "");

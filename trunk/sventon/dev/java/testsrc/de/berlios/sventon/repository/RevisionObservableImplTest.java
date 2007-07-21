@@ -60,7 +60,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }
 
-    public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, long limit, ISVNLogEntryHandler handler) throws SVNException {
+    public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, ISVNLogEntryHandler handler) throws SVNException {
       if (firstTime) {
         handler.handleLogEntry(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 1, "jesper1", new Date(), "Log message for revision 1."));
         handler.handleLogEntry(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 2, "jesper2", new Date(), "Log message for revision 2."));
