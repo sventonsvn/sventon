@@ -91,8 +91,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(instanceName, revision);
     } else {
-      logEntry = (SVNLogEntry) repository.log(
-          new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+      logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
     }
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
     return logEntry;
@@ -105,7 +104,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       throws SVNException {
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, -1, new ISVNLogEntryHandler() {
+    repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
         revisions.add(logEntry);
       }
@@ -244,11 +243,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
                                               final long revisionCount) throws SVNException, CacheException {
     final long headRevision = repository.getLatestRevision();
-    long toRevision = headRevision - revisionCount;
-    if (toRevision < 1) {
-      toRevision = 1;
-    }
-    return getRevisions(instanceName, repository, headRevision, toRevision, path, revisionCount);
+    return getRevisions(instanceName, repository, headRevision, 1, path, revisionCount);
   }
 
   /**
@@ -311,7 +306,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
       return repositoryEntry;
     } else {
-      logger.warn("Entry [" + path +"] does not exist in revision [" + revision +"]");
+      logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
       return null;
     }
   }

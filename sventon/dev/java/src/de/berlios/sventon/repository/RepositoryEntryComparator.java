@@ -29,7 +29,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
   private static final long serialVersionUID = -823291078109887289L;
 
   public enum SortType {
-    NAME, AUTHOR, REVISION, DATE, FULL_NAME, URL, SIZE
+    NAME, AUTHOR, REVISION, DATE, FULL_NAME, SIZE
   }
 
   private boolean groupDirs = false;
@@ -107,8 +107,6 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
         return dateCompare == 0 ? nullSafeCompare(entryName1, entryName2) : dateCompare;
       case FULL_NAME:
         return nullSafeCompare(entry1.getFullEntryName(), entry2.getFullEntryName());
-      case URL:
-        return nullSafeCompare(entry1.getUrl(), entry2.getUrl());
       default:
         throw new IllegalStateException("Illegal sort type: " + sortType);
     }
