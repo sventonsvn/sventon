@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[851] Release 1.2 RC3 (2007-07-21)
 [848] Fixed: Bug #11430 - Cache functionality doesn't work with file-protocol.
 [847] Fixed: Bug #11595 - EntryCache memory consumption.
 [840] Fixed: Bug #11251 - RSS feed creation error.
