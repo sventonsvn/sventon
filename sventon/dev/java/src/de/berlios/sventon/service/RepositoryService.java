@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;

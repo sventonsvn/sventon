@@ -11,8 +11,7 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,7 +64,9 @@ public class ConfigCommandValidator implements Validator {
     // Validate 'repository instance name'
     final String instanceName = command.getName();
     if (instanceName != null) {
-      if (!Instance.isValidName(instanceName)) {
+      try {
+        new InstanceConfiguration().setInstanceName(instanceName);
+      } catch (IllegalArgumentException iae) {
         final String msg = "Name must be in lower case a-z and/or 0-9";
         logger.warn(msg);
         errors.rejectValue("name", "config.error.illegal-name", msg);
@@ -88,6 +89,7 @@ public class ConfigCommandValidator implements Validator {
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
         final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+        instanceConfiguration.setInstanceName("connectiontest");
         instanceConfiguration.setRepositoryRoot(trimmedURL);
         instanceConfiguration.setConfiguredUID(command.getUsername());
         instanceConfiguration.setConfiguredPWD(command.getPassword());
@@ -96,8 +98,7 @@ public class ConfigCommandValidator implements Validator {
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
-          errors.rejectValue("repositoryURL", "config.error.connection-error",
-              "Unable to connect to repository. Check URL, user name and password.");
+          errors.rejectValue("repositoryURL", "config.error.connection-error", "Unable to connect to repository. Check URL, user name and password.");
         }
       }
     }

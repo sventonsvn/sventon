@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
 import de.berlios.sventon.repository.RepositoryEntry;
@@ -58,17 +58,17 @@ public class RepositoryServiceImpl implements RepositoryService {
   private CacheGateway cacheGateway;
 
   /**
-   * The application.
+   * The application configuration instance. Used to check if caching is enabled or not.
    */
-  private Application application;
+  private ApplicationConfiguration configuration;
 
   /**
-   * Sets the application.
+   * Sets the application configuration.
    *
-   * @param application Application
+   * @param configuration Configuration
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
@@ -87,7 +87,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       throws SVNException, CacheException {
     final long start = System.currentTimeMillis();
     final SVNLogEntry logEntry;
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()) {
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(instanceName, revision);
     } else {
@@ -122,7 +122,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()) {
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
       // To be able to return cached revisions, we first have to get the revision numbers
       // Doing a logs-call, skipping the details, to get them.
       final List<Long> revisions = new ArrayList<Long>();

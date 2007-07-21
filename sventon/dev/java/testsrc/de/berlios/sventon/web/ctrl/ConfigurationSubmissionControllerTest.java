@@ -1,7 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import junit.framework.TestCase;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -18,9 +18,9 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
-    application.setConfigured(true);
-    controller.setApplication(application);
+    final ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
+    config.setConfigured(true);
+    controller.setConfiguration(config);
     try {
       controller.handleRequestInternal(request, response);
       fail("Should throw IllegalStateException");
@@ -33,9 +33,9 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
-    application.setConfigured(false);
-    controller.setApplication(application);
+    final ApplicationConfiguration config = new ApplicationConfiguration(new File(TEMPDIR), "filename");
+    config.setConfigured(false);
+    controller.setConfiguration(config);
 
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
     assertEquals("configurationError", modelAndView.getViewName());
@@ -52,9 +52,10 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     });
     
 
-    final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
-
+    final ApplicationConfiguration applicationConfiguration =
+        new ApplicationConfiguration(new File(TEMPDIR), "tmpconfigfilename");
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
+    instanceConfiguration1.setInstanceName("testrepos1");
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
     instanceConfiguration1.setConfiguredUID("user1");
     instanceConfiguration1.setConfiguredPWD("abc123");
@@ -62,17 +63,17 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
     final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
+    instanceConfiguration2.setInstanceName("testrepos2");
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
     instanceConfiguration2.setConfiguredUID("user2");
     instanceConfiguration2.setConfiguredPWD("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance("testrepos1", instanceConfiguration1);
-    application.addInstance("testrepos2", instanceConfiguration2);
-    application.setConfigured(false);
-    controller.setApplication(application);
-
+    applicationConfiguration.addInstanceConfiguration(instanceConfiguration1);
+    applicationConfiguration.addInstanceConfiguration(instanceConfiguration2);
+    applicationConfiguration.setConfigured(false);
+    controller.setConfiguration(applicationConfiguration);
     final File propFile = new File(TEMPDIR, "tmpconfigfilename");
     assertFalse(propFile.exists());
 
@@ -84,6 +85,6 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     assertTrue(propFile.exists());
     propFile.delete();
     assertFalse(propFile.exists());
-    assertTrue(application.isConfigured());
+    assertTrue(applicationConfiguration.isConfigured());
   }
 }

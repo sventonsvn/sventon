@@ -25,6 +25,7 @@
   <sventon:functionLinks pageName="repobrowser"/>
 
   <% pageContext.setAttribute("br", "\n"); %>
+
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>
     <tr>
@@ -37,7 +38,7 @@
         <c:param name="name" value="${command.name}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
+        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
         <td>${fn:replace(logMessage.message, br, '<br/>')}</td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>

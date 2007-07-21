@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ConfigurationSubmissionController extends AbstractController {
 
   /**
-   * The application.
+   * Application configuration.
    */
-  private Application application;
+  private ApplicationConfiguration configuration;
 
   /**
    * The scheduler instance. Used to fire cache update job.
@@ -47,12 +47,12 @@ public class ConfigurationSubmissionController extends AbstractController {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Sets the application.
+   * Sets application configuration.
    *
-   * @param application Application
+   * @param configuration ApplicationConfiguration
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
@@ -68,18 +68,17 @@ public class ConfigurationSubmissionController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    if (application.isConfigured()) {
+    if (configuration.isConfigured()) {
       throw new IllegalStateException("sventon is already configured!");
     }
 
-    if (application.getInstanceCount() == 0) {
+    if (configuration.getInstanceCount() == 0) {
       logger.warn("No instance has been configured and added");
       return new ModelAndView("configurationError");
     }
 
-    application.storeInstanceConfigurations();
-    application.setConfigured(true);
-    application.initCaches();
+    configuration.storeInstanceConfigurations();
+    configuration.setConfigured(true);
 
     try {
       logger.debug("Starting up caches");

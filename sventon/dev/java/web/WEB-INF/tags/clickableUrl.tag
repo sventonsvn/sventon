@@ -17,7 +17,6 @@
 <%@ attribute name="command" required="true" type="de.berlios.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
 
-<span id="clickableUrl">
 <a href="repobrowser.svn?path=/&revision=${command.revision}&name=${command.name}"> ${url} </a> /
   <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
@@ -35,4 +34,3 @@
     /
   </c:forTokens>
 ${command.target}
-</span>

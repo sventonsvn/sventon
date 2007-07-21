@@ -1,4 +1,4 @@
-package de.berlios.sventon.appl;
+package de.berlios.sventon.config;
 
 import junit.framework.TestCase;
 

@@ -13,6 +13,8 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
+import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
@@ -23,9 +25,11 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 
 /**

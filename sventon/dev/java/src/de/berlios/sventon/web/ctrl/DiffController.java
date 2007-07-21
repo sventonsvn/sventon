@@ -56,7 +56,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
 
     try {
       final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-          userContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+          userContext.getCharset(), getConfiguration().getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);

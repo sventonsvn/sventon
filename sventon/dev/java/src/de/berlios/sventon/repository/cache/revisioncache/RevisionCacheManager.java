@@ -29,11 +29,9 @@ public class RevisionCacheManager extends CacheManager<RevisionCache> {
 
   /**
    * Constructor.
-   *
-   * @param objectCacheManager ObjectCacheManager instance.
    */
   public RevisionCacheManager(final ObjectCacheManager objectCacheManager) {
-    logger.debug("Starting cache manager");
+    logger.debug("Starting cache manager.");
     this.objectCacheManager = objectCacheManager;
   }
 

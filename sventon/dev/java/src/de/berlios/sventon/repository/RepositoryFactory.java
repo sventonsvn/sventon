@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.auth.BasicAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -41,8 +41,8 @@ public final class RepositoryFactory {
    * <p/>
    * This method will assign credentials as they are set in the given <code>InstanceConfiguration</code>.
    *
-   * @param configuration The instance configuration.
-   * @return The repository instance.
+   * @param configuration The instance configuration
+   * @return The repository instance
    * @throws SVNException if unable to create repository instance.
    */
   public SVNRepository getRepository(final InstanceConfiguration configuration) throws SVNException {

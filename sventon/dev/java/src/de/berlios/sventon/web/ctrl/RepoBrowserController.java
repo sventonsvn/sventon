@@ -59,10 +59,7 @@ public class RepoBrowserController extends ListDirectoryContentsController imple
       if (RepositoryEntry.Kind.dir == entry.getKind()) {
         logger.debug("Bypassing empty directory: " + svnCommand.getPath());
         svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
-        final ModelAndView bypassedModelAndView =
-            svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
-        bypassedModelAndView.getModel().put("bypassed", true);
-        return bypassedModelAndView;
+        return svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
       }
     }
 

@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.appl;
+package de.berlios.sventon.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +31,16 @@ public class InstanceConfiguration {
    * The logging instance.
    */
   protected final Log logger = LogFactory.getLog(getClass());
+
+  /**
+   * Instance name regex pattern.
+   */
+  public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
+
+  /**
+   * Name of sventon intance.
+   */
+  private String instanceName;
 
   /**
    * The url.
@@ -64,22 +74,17 @@ public class InstanceConfiguration {
    */
   private boolean zipDownloadsAllowed;
 
-  /**
-   * Number of items in the generated RSS feed.
-   */
-  private int rssItemsCount = DEFAULT_RSS_ITEMS_COUNT;
-
-  /**
-   * Default number of RSS feed items (20).
-   */
-  public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
-
   public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
   public static final String PROPERTY_KEY_USERNAME = ".uid";
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
-  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
+
+  /**
+   * Constructor.
+   */
+  public InstanceConfiguration() {
+  }
 
   /**
    * Creates an instance using given name and properties.
@@ -90,15 +95,13 @@ public class InstanceConfiguration {
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+    instanceConfiguration.setInstanceName(instanceName);
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
-    instanceConfiguration.setCacheUsed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+    instanceConfiguration.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
         Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
-    instanceConfiguration.rssItemsCount = Integer.parseInt(
-        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
   }
 
@@ -217,11 +220,29 @@ public class InstanceConfiguration {
   }
 
   /**
-   * Gets the RSS feed items count.
+   * Sets the name of this sventon instance configuration.
    *
-   * @return Number of rss feed items generated for this instance.
+   * @param instanceName Name
+   * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
    */
-  public int getRssItemsCount() {
-    return rssItemsCount;
+  public void setInstanceName(final String instanceName) {
+    if (instanceName == null) {
+      throw new IllegalArgumentException("Instance name cannot be null");
+    }
+    if (!instanceName.matches(INSTANCE_NAME_PATTERN)) {
+      throw new IllegalArgumentException("Name must be in lower case a-z and/or 0-9");
+    } else {
+      this.instanceName = instanceName;
+    }
   }
+
+  /**
+   * Gets the name of this sventon instance configuration.
+   *
+   * @return Name
+   */
+  public String getInstanceName() {
+    return instanceName;
+  }
+
 }

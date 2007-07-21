@@ -11,8 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;
@@ -50,9 +49,9 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   private final EntryCacheManager entryCacheManager;
 
   /**
-   * The application.
+   * Application configuration instance.
    */
-  private Application application;
+  private ApplicationConfiguration configuration;
 
   /**
    * Service used for repository access.
@@ -63,41 +62,29 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
-   * @param application       Application
+   * @param configuration     ApplicationConfiguration instance.
    * @param repositoryService RepositoryService instance.
    */
-  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application,
+  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final ApplicationConfiguration configuration,
                            final RepositoryService repositoryService) {
     logger.info("Starting");
     this.entryCacheManager = entryCacheManager;
     this.repositoryService = repositoryService;
-    this.application = application;
-  }
-
-  /**
-   * Updates the cache with the given revisions.
-   *
-   * @param revisionUpdate The updated revisions.
-   */
-  public void update(final RevisionUpdate revisionUpdate) {
-    final String instanceName = revisionUpdate.getInstanceName();
-
-    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
-        + instanceName);
-
-    try {
-      final EntryCache entryCache = entryCacheManager.getCache(instanceName);
-      final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
-      updateInternal(entryCache, repository, revisionUpdate);
-    } catch (final Exception ex) {
-      logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+    this.configuration = configuration;
+    for (final String instanceName : configuration.getInstanceNames()) {
+      logger.debug("Initializing cache instance: " + instanceName);
+      try {
+        this.entryCacheManager.getCache(instanceName);
+      } catch (CacheException ce) {
+        logger.warn("Unable to initialize instance", ce);
+      }
     }
   }
 
   /**
-   * Internal update method. Made protected for testing reasons only.
-   * <p/>
+   * Updates the cache to HEAD revision.
+   * A Subversion <i>log</i> command will be performed and
+   * the cache will be updated accordingly.
    * <table>
    * <tr><th>Type</th><th>Description</th><th>Action</th></tr>
    * <tr><td>'A'</td><td>Added</td><td>Entry is added</td></tr>
@@ -107,6 +94,31 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * another object with the same name is added, all within a single revision)
    * </td><td>Entry's details are updated</td></tr>
    * </table>
+   *
+   * @param revisionUpdate The updated revisions.
+   */
+  public void update(final RevisionUpdate revisionUpdate) {
+    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
+        + revisionUpdate.getInstanceName());
+
+    if (configuration == null) {
+      logger.warn("Method setConfiguration() has not yet been called!");
+    }
+
+    try {
+      final EntryCache entryCache = entryCacheManager.getCache(revisionUpdate.getInstanceName());
+
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
+          configuration.getInstanceConfiguration(revisionUpdate.getInstanceName()));
+
+      updateInternal(entryCache, repository, revisionUpdate);
+    } catch (final Exception ex) {
+      logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+    }
+  }
+
+  /**
+   * Internal update method. Made protected for testing reasons only.
    *
    * @param entryCache     EntryCache instance
    * @param repository     Repository instance

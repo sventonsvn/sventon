@@ -27,7 +27,6 @@ import java.util.*;
 
 /**
  * Controller used when flatting directory structure.
- *
  * @author jesper@users.berlios.de
  */
 public class FlattenController extends AbstractSVNTemplateController implements Controller {
@@ -39,7 +38,7 @@ public class FlattenController extends AbstractSVNTemplateController implements 
                                    final SVNRevision revision, final UserContext userContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
-
+    
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     // Make sure the path starts with a slash as that is the path structure of the entry cache.

@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
@@ -46,8 +46,8 @@ import java.util.Map;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,
- *HttpServletResponse,BindException)}</code>.
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest,
+ * HttpServletResponse, BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -58,15 +58,15 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,UserContext,
- *HttpServletRequest,HttpServletResponse,BindException)}
+ * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, UserContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,
- *BindException)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest, HttpServletResponse,
+ * BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -111,9 +111,9 @@ import java.util.Map;
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   /**
-   * The application.
+   * The application configuration instance.
    */
-  private Application application;
+  private ApplicationConfiguration configuration = null;
 
   /**
    * Gateway class for accessing the caches.
@@ -193,12 +193,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If application config is not ok - redirect to config.jsp
-    if (!application.isConfigured()) {
+    if (!configuration.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
-    if (!application.getInstanceNames().contains(svnCommand.getName())) {
+    if (!configuration.getInstanceNames().contains(svnCommand.getName())) {
       logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
@@ -208,7 +208,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
@@ -234,7 +234,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
-        model.put("instanceNames", application.getInstanceNames());
+        model.put("instanceNames", configuration.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);
         model.put("charsets", availableCharsets.getCharsets());
@@ -380,7 +380,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
-    final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -462,22 +462,21 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Sets the application.
+   * Set application configuration.
    *
-   * @param application Application
+   * @param configuration ApplicationConfiguration
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
    * Get current application configuration.
    *
-   * @param instanceName Instance name
    * @return ApplicationConfiguration
    */
-  public InstanceConfiguration getInstanceConfiguration(final String instanceName) {
-    return application.getInstance(instanceName).getConfiguration();
+  public ApplicationConfiguration getConfiguration() {
+    return configuration;
   }
 
   /**
