@@ -49,11 +49,46 @@ public class SyndFeedGeneratorTest extends TestCase {
   }
 
   public void testGetAbbreviatedLogMessage() throws Exception {
-    SyndFeedGenerator f = new SyndFeedGenerator();
-    assertEquals("this is...", f.getAbbreviatedLogMessage("this is a message", 10));
-    assertEquals("this is a mes...", f.getAbbreviatedLogMessage("this is a message", 16));
-    assertEquals("this is a message", f.getAbbreviatedLogMessage("this is a message", 17));
-    assertEquals(null, f.getAbbreviatedLogMessage(null, 10));
-    assertEquals("", f.getAbbreviatedLogMessage("", 10));
+    final SyndFeedGenerator generator = new SyndFeedGenerator();
+    assertEquals("this is...", generator.getAbbreviatedLogMessage("this is a message", 10));
+    assertEquals("this is a mes...", generator.getAbbreviatedLogMessage("this is a message", 16));
+    assertEquals("this is a message", generator.getAbbreviatedLogMessage("this is a message", 17));
+    assertEquals(null, generator.getAbbreviatedLogMessage(null, 10));
+    assertEquals("", generator.getAbbreviatedLogMessage("", 10));
+  }
+
+  public void testCreateChangedPathsTable() throws Exception {
+    final String result = "<table border=\"0\">\n" +
+        "  <tr>\n" +
+        "    <th>Action</th>\n" +
+        "    <th>Path</th>\n" +
+        "  </tr>\n" +
+        "  <tr>\n" +
+        "    <td valign=\"top\"><i>Modified</i></td>\n" +
+        "    <td>/file1.java</td>\n" +
+        "  </tr>\n" +
+        "  <tr>\n" +
+        "    <td valign=\"top\"><i>Deleted</i></td>\n" +
+        "    <td>/file2.html</td>\n" +
+        "  </tr>\n" +
+        "  <tr>\n" +
+        "    <td valign=\"top\"><i>Added</i></td>\n" +
+        "    <td>/file3.abc</td>\n" +
+        "  </tr>\n" +
+        "  <tr>\n" +
+        "    <td valign=\"top\"><i>Replaced</i></td>\n" +
+        "    <td>/file4.def</td>\n" +
+        "  </tr>\n" +
+        "</table>";
+
+    final SyndFeedGenerator generator = new SyndFeedGenerator();
+    final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
+    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
+    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
+    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
+    final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
+
+    assertEquals(result, generator.createChangedPathsTable(logEntry));
   }
 }
