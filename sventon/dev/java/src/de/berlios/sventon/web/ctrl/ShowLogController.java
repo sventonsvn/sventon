@@ -31,11 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * ShowLogController. For showing logs. Note, this currently does not work for
- * protocol http/https. <p/> The log entries will be paged if the number of
- * entries exceeds max page siz, {@link #pageSize}. Paged log entries are
- * stored in the user HTTP session using key <code>sventon.logEntryPages</code>.
- * The type of this object is <code>List<List<SVNLogEntry>></code>.
+ * Controller for showing logs.
+ * <p/>
+ * The log entries will be paged if the number of entries exceeds max page size, {@link #pageSize}.
  *
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
