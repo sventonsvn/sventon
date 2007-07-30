@@ -22,6 +22,7 @@ import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -54,6 +55,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
   public static final String MODIFIED_COUNT_KEY = "@MODIFIED_COUNT@";
   public static final String REPLACED_COUNT_KEY = "@REPLACED_COUNT@";
   public static final String DELETED_COUNT_KEY = "@DELETED_COUNT@";
+  public static final String CHANGED_PATHS_KEY = "@CHANGED_PATHS@";
 
   /**
    * Cached rss HTML body template.
@@ -80,8 +82,8 @@ public final class SyndFeedGenerator implements FeedGenerator {
     new SyndFeedOutput().output(feed, writer);
   }
 
-  private List createEntries(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL)
-      throws IOException {
+  private List<SyndEntry> createEntries(final String instanceName, final List<SVNLogEntry> logEntries,
+                                        final String baseURL) throws IOException {
 
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
@@ -101,46 +103,80 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
       description = new SyndContentImpl();
       description.setType("text/html");
-
-      //noinspection unchecked
-      final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-      final List<String> latestPathsList = new ArrayList<String>(map.keySet());
-
-      int added = 0;
-      int modified = 0;
-      int replaced = 0;
-      int deleted = 0;
-
-      for (final String entryPath : latestPathsList) {
-        final LogEntryActionType type = LogEntryActionType.parse(map.get(entryPath).getType());
-        switch (type) {
-          case ADDED:
-            added++;
-            break;
-          case MODIFIED:
-            modified++;
-            break;
-          case REPLACED:
-            replaced++;
-            break;
-          case DELETED:
-            deleted++;
-            break;
-        }
-      }
-
-      String itemBody = getBodyTemplate();
-      itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(logEntry.getMessage()));
-      itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
-      itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
-      itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
-      itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-
-      description.setValue(itemBody);
+      description.setValue(createItemBody(getBodyTemplate(), logEntry));
       entry.setDescription(description);
       entries.add(entry);
     }
     return entries;
+  }
+
+  protected String createItemBody(final String bodyTemplate, final SVNLogEntry logEntry) {
+
+    //noinspection unchecked
+    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
+    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
+
+    String itemBody = bodyTemplate;
+
+    int added = 0;
+    int modified = 0;
+    int replaced = 0;
+    int deleted = 0;
+
+    for (final String entryPath : latestPathsList) {
+      final LogEntryActionType type = LogEntryActionType.parse(latestChangedPaths.get(entryPath).getType());
+      switch (type) {
+        case ADDED:
+          added++;
+          break;
+        case MODIFIED:
+          modified++;
+          break;
+        case REPLACED:
+          replaced++;
+          break;
+        case DELETED:
+          deleted++;
+          break;
+      }
+    }
+
+    itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(logEntry.getMessage()));
+    itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
+    itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
+    itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
+    itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
+    itemBody = itemBody.replaceAll(CHANGED_PATHS_KEY, Matcher.quoteReplacement(createChangedPathsTable(logEntry)));
+    return itemBody;
+  }
+
+  protected String createChangedPathsTable(final SVNLogEntry logEntry) {
+    final StringBuilder sb = new StringBuilder("<table border=\"0\">\n");
+    sb.append("  <tr>\n");
+    sb.append("    <th>Action</th>\n");
+    sb.append("    <th>Path</th>\n");
+    sb.append("  </tr>\n");
+
+    //noinspection unchecked
+    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
+    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
+    Collections.sort(latestPathsList);
+
+    for (final String path : latestPathsList) {
+      final SVNLogEntryPath logEntryPath = latestChangedPaths.get(path);
+      final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+
+      sb.append("  <tr>\n");
+      sb.append("    <td valign=\"top\"><i>");
+      sb.append(actionType);
+      sb.append("</i></td>\n");
+      sb.append("    <td>");
+      sb.append(logEntryPath.getPath());
+      sb.append("</td>\n");
+      sb.append("  </tr>\n");
+    }
+    sb.append("</table>");
+    return sb.toString();
   }
 
   /**
