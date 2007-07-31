@@ -12,7 +12,6 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
@@ -91,34 +90,15 @@ public class RSSController extends AbstractController {
 
     try {
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries =
-          repositoryService.getLatestRevisions(instanceName, path, repository, configuration.getRssItemsCount());
-      feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
+      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, path, repository,
+          configuration.getRssItemsCount());
+      feedGenerator.outputFeed(instanceName, logEntries, request, response);
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
     }
     return null;
-  }
-
-  /**
-   * Gets the full request URL, including scheme, server name,
-   * server port and context path.
-   *
-   * @param request The request.
-   * @return The full URL.
-   */
-  private String getRequestURL(final HttpServletRequest request) {
-    final StringBuilder sb = new StringBuilder();
-    sb.append(request.getScheme());
-    sb.append("://");
-    sb.append(request.getServerName());
-    sb.append(":");
-    sb.append(request.getServerPort());
-    sb.append(request.getContextPath());
-    sb.append("/");
-    return sb.toString();
   }
 
   /**

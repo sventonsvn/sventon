@@ -1,11 +1,14 @@
 package de.berlios.sventon.rss;
 
 import junit.framework.TestCase;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class SyndFeedGeneratorTest extends TestCase {
@@ -36,7 +39,15 @@ public class SyndFeedGeneratorTest extends TestCase {
 
     final File tempFile = File.createTempFile("sventon-rss-test", null);
     final PrintWriter pw = new PrintWriter(tempFile);
-    generator.outputFeed("defaultsvn", logEntries, "http://localhost:8888/svn/", pw);
+
+    final MockHttpServletRequest req = new MockHttpServletRequest("get", "http://localhost:8888/svn/");
+    final MockHttpServletResponse res = new MockHttpServletResponse() {
+      public PrintWriter getWriter() throws UnsupportedEncodingException {
+        return pw;
+      }
+    };
+
+    generator.outputFeed("defaultsvn", logEntries, req, res);
     pw.flush();
     pw.close();
 
@@ -45,7 +56,6 @@ public class SyndFeedGeneratorTest extends TestCase {
     } else {
       throw new Exception("No rss feed file was created in " + System.getProperty("java.io.tmpdir"));
     }
-
   }
 
   public void testGetAbbreviatedLogMessage() throws Exception {
@@ -57,38 +67,9 @@ public class SyndFeedGeneratorTest extends TestCase {
     assertEquals("", generator.getAbbreviatedLogMessage("", 10));
   }
 
-  public void testCreateChangedPathsTable() throws Exception {
-    final String result = "<table border=\"0\">\n" +
-        "  <tr>\n" +
-        "    <th>Action</th>\n" +
-        "    <th>Path</th>\n" +
-        "  </tr>\n" +
-        "  <tr>\n" +
-        "    <td valign=\"top\"><i>Modified</i></td>\n" +
-        "    <td>/file1.java</td>\n" +
-        "  </tr>\n" +
-        "  <tr>\n" +
-        "    <td valign=\"top\"><i>Deleted</i></td>\n" +
-        "    <td>/file2.html</td>\n" +
-        "  </tr>\n" +
-        "  <tr>\n" +
-        "    <td valign=\"top\"><i>Added</i></td>\n" +
-        "    <td>/file3.abc</td>\n" +
-        "  </tr>\n" +
-        "  <tr>\n" +
-        "    <td valign=\"top\"><i>Replaced</i></td>\n" +
-        "    <td>/file4.def</td>\n" +
-        "  </tr>\n" +
-        "</table>";
-
+  public void testAddLogMessage() throws Exception {
     final SyndFeedGenerator generator = new SyndFeedGenerator();
-    final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
-    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
-    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
-
-    assertEquals(result, generator.createChangedPathsTable(logEntry));
+    final SVNLogEntry logEntry = new SVNLogEntry(null, 1, "test", new Date(), "one\ntwo");
+    assertEquals("one<br/>two", generator.addLogMessage(logEntry, SyndFeedGenerator.LOG_MESSAGE_KEY));
   }
 }
