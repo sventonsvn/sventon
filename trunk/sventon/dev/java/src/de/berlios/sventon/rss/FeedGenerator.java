@@ -13,8 +13,9 @@ package de.berlios.sventon.rss;
 
 import org.tmatesoft.svn.core.SVNLogEntry;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.io.Writer;
 
 /**
  * Interface to be implemented by feed generators.
@@ -28,12 +29,12 @@ public interface FeedGenerator {
    *
    * @param instanceName The instance name.
    * @param logEntries   The log entries.
-   * @param baseURL      Base URL used to build anchor links. Must end with a slash (/).
-   * @param writer       Writer.
+   * @param request      Servlet request.
+   * @param response     Servlet response.
    * @throws Exception if unable to output feed.
    */
   void outputFeed(final String instanceName,
                   final List<SVNLogEntry> logEntries,
-                  final String baseURL,
-                  final Writer writer) throws Exception;
+                  final HttpServletRequest request,
+                  final HttpServletResponse response) throws Exception;
 }
