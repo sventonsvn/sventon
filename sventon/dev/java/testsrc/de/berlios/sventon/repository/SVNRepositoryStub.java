@@ -126,7 +126,7 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
-  public void closeSession() throws SVNException {
+  public void closeSession() {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
