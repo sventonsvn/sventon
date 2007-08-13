@@ -20,11 +20,6 @@ th {
   text-align: left;
 }
 
-td {
-  font-family: verdana, sans-serif;
-  font-size: 10px;
-}
-
 form {
   margin: 0;
   padding: 0;
@@ -35,7 +30,7 @@ p {
 }
 
 img {
-  border:none;
+  border: none;
 }
 
 a:link, a:visited, a:active {
@@ -55,7 +50,7 @@ a:hover {
 }
 
 exclamationText {
-  color: #ff0000;  
+  color: #ff0000;
 }
 
 a.sventonHeaderLink:link, a.sventonHeaderLink:visited, a.sventonHeaderLink:active, a.sventonHeaderLink:hover {
@@ -70,10 +65,10 @@ input {
 }
 
 input.btn {
-  border:1px solid;
+  border: 1px solid;
   font-family: verdana, sans-serif;
   font-size: 10px;
-  font-weight:bold;
+  font-weight: bold;
   vertical-align: middle;
 }
 
@@ -82,6 +77,9 @@ input.btn {
 }
 
 .codeBlock {
+  width: 100%;
+  white-space: pre;
+  font-family: monospace;
   font-size: 11px;
   padding: 0.5em;
   color: #000000;
@@ -100,7 +98,7 @@ input.btn {
   border-right: black solid 2px;
   border-bottom: black solid 2px;
   padding: 0;
-  white-space: pre-wrap;  
+  white-space: pre-wrap;
 }
 
 .sventonSelect {
@@ -127,7 +125,7 @@ input.btn {
 .sventonHeader {
   color: #E2E3E6;
   font-weight: bold;
-  background: url("images/gradient_background.png") right;
+  background: url( "images/gradient_background.png" ) right;
   border: 1px solid black;
   width: 100%;
 }
@@ -214,12 +212,14 @@ input.btn {
 
 .sventonCol1 {
   width: 10px;
-  margin-left: auto; margin-right: 0;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .sventonCol2 {
   width: 10px;
-  margin-left: auto; margin-right: 0;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .sventonCol3 {
@@ -278,10 +278,11 @@ input.btn {
 
 .sventonLineNo {
   color: #000000;
-  background-color: inherit;
+  background-color: white;
   text-decoration: none;
-  font-style: italic;
-  font-weight: bold;	
+  text-align: right;
+  width: 30px;
+  border-right: black solid 1px;
 }
 
 .sventonFunctionLinksTable {

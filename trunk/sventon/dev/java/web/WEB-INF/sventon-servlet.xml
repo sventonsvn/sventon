@@ -125,6 +125,10 @@
     <property name="archiveFileCharset" value="cp850"/>
   </bean>
 
+  <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">  	   
+    <property name="colorer" ref="colorer"/>
+  </bean>
+
   <bean id="listInstancesController" class="de.berlios.sventon.web.ctrl.ListInstancesController">
     <property name="application" ref="application"/>
   </bean>
@@ -157,6 +161,7 @@
         <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/searchentries.svn">searchEntriesController</prop>
         <prop key="/searchlogs.svn">searchLogsController</prop>
+        <prop key="/blame.svn">blameController</prop>
         <prop key="/flatten.svn">flattenController</prop>
         <prop key="/get.svn">getController</prop>
         <prop key="/config.svn">configurationController</prop>

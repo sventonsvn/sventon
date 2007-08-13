@@ -13,8 +13,11 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
+import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheGateway;
@@ -25,14 +28,15 @@ import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.ImageMetadata;
-import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNLogClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.imageio.ImageIO;
@@ -168,12 +172,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
-      throws SVNException, UnsupportedEncodingException {
+  public TextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
+      throws SVNException, IOException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFile(repository, path, revision, outStream);
-    return new RawTextFile(outStream.toString(charset), true);
+    return new TextFile(outStream.toString(charset));
   }
 
   /**
@@ -375,8 +379,8 @@ public class RepositoryServiceImpl implements RepositoryService {
     SideBySideDiffCreator sideBySideDiffCreator;
 
     try {
-      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+      final TextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final TextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
 
       final Map leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
       final Map rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
@@ -421,8 +425,8 @@ public class RepositoryServiceImpl implements RepositoryService {
     String diffResultString;
 
     try {
-      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+      final TextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final TextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
       final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
@@ -440,6 +444,48 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
 
     return diffResultString;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
+                                 final String charset, final Colorer colorer) throws SVNException {
+
+    long blameRevision = revision;
+    if (blameRevision == -1) {
+      blameRevision = repository.getLatestRevision();
+    }
+
+    final long start = System.currentTimeMillis();
+
+    logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
+
+    final Map properties = getFileProperties(repository, path, revision);
+    final SVNLogClient logClient = SVNClientManager.newInstance(
+        null, repository.getAuthenticationManager()).getLogClient();
+    final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
+        path, charset, colorer, properties, repository.getLocation().toDecodedString());
+    final ISVNAnnotateHandler handler = new ISVNAnnotateHandler() {
+      public void handleLine(final Date date, final long revision, final String author, final String line) {
+        annotatedTextFile.addRow(date, revision, author, line);
+      }
+    };
+
+    final SVNRevision pegRev = SVNRevision.HEAD;
+    final SVNRevision startRev = SVNRevision.create(0);
+    final SVNRevision endRev = SVNRevision.create(blameRevision);
+
+    logClient.doAnnotate(SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), pegRev, startRev,
+        endRev, false, handler, charset);
+    try {
+      annotatedTextFile.colorize();
+    } catch (IOException ioex) {
+      logger.warn("Unable to colorize [" + path + "]", ioex);
+    }
+
+    logger.debug("PERF: blame(): " + (System.currentTimeMillis() - start));
+    return annotatedTextFile;
   }
 
   private void assertNotBinary(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException,

@@ -16,9 +16,8 @@ import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.ArchiveFile;
-import de.berlios.sventon.web.model.HTMLDecoratedTextFile;
-import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.model.TextFile;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -88,10 +87,13 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
       if ("raw".equals(formatParameter)) {
-        model.putAll(new RawTextFile(outStream.toString(charset), true).getModel());
+        response.setContentType("text/plain"); //TODO: Include charset?
+        response.getOutputStream().write(outStream.toByteArray());
+        return null;
       } else {
-        model.putAll(new HTMLDecoratedTextFile(outStream.toString(charset), properties,
-            repository.getLocation().toDecodedString(), svnCommand.getPath(), charset, colorer).getModel());
+        final TextFile textFile = new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
+            colorer, properties, repository.getLocation().toDecodedString());
+        model.put("file", textFile);
       }
       return new ModelAndView("showtextfile", model);
     } else {
@@ -102,7 +104,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
           matches(archiveFileExtensionPattern)) {
         logger.debug("Binary file as an archive file");
         getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-        model.putAll(new ArchiveFile(outStream.toByteArray()).getModel());
+        model.put("entries", new ArchiveFile(outStream.toByteArray()).getEntries());
         return new ModelAndView("showarchivefile", model);
       } else {
         if (imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
