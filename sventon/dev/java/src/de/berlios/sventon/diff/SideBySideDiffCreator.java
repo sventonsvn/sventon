@@ -16,7 +16,7 @@ import de.berlios.sventon.content.LineNumberAppender;
 import static de.berlios.sventon.diff.DiffAction.*;
 import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
-import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.lang.StringUtils;
 
@@ -50,8 +50,8 @@ public final class SideBySideDiffCreator {
    * @param toFileCharset
    * @throws IOException
    */
-  public SideBySideDiffCreator(final RawTextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
-                               final RawTextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
+  public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
+                               final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
 
     final LineNumberAppender lineNumberAppender = new LineNumberAppender();
@@ -64,7 +64,6 @@ public final class SideBySideDiffCreator {
 
     leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
     rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
-
   }
 
   /**
@@ -93,6 +92,7 @@ public final class SideBySideDiffCreator {
    *
    * @param content The source input lines
    * @return Lines with web safe indentation
+   * @throws IOException if IO error during reading content.
    */
   protected static String replaceLeadingSpaces(final String content) throws IOException {
     final String br = System.getProperty("line.separator");

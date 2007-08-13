@@ -2,10 +2,6 @@ package de.berlios.sventon.web.model;
 
 import junit.framework.TestCase;
 
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-
 public class ArchiveFileTest extends TestCase {
 
   public void testArchiveFile() throws Exception {
@@ -17,16 +13,6 @@ public class ArchiveFileTest extends TestCase {
         0, 0, 0, 0, 0
     };
     final ArchiveFile file = new ArchiveFile(content);
-    Map<String, Object> model = file.getModel();
-    assertEquals(1, model.size());
-    assertEquals(1, ((List<ZipEntry>) model.get("entries")).size());
-    assertNull(model.get("fileContent"));
-
-    try {
-      file.getContent();
-      fail("Should throw UnsupportedOperationException");
-    } catch (UnsupportedOperationException uoe) {
-      // expected
-    }
+    assertEquals(1, file.getEntries().size());
   }
 }

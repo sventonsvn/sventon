@@ -36,6 +36,7 @@ public enum LogEntryActionType {
    * Private constructor.
    *
    * @param action The action
+   * @param code Code
    */
   private LogEntryActionType(final String action, final char code) {
     this.action = action;

@@ -43,6 +43,11 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />
 </c:url>
+<c:url var="blameLinkUrl" value="blame.svn">
+  <c:param name="path" value="${command.path}${entry.name}" />
+  <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
+</c:url>
 
 <form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
 <table class="sventonFunctionLinksTable" border="0">
@@ -53,15 +58,8 @@
   <c:when test="${pageName == 'showTextFile'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
-
-    <c:choose>
-      <c:when test="${!isRawFormat}">
-        <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
-      </c:when>
-      <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-      </c:otherwise>
-    </c:choose>
+    <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="javascript:parent.location='${blameLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
 
     <c:if test="${!empty committedRevision}">
       <c:url value="diffprev.svn" var="diffPreviousUrl">
@@ -162,6 +160,13 @@
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
+  <c:when test="${pageName == 'showBlame'}">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
+  </c:when>
+        
   <c:when test="${pageName == 'showThumbs'}">
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
   </c:when>

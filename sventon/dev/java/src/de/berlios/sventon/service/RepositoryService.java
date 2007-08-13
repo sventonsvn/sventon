@@ -12,14 +12,16 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.model.ImageMetadata;
-import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
@@ -28,8 +30,8 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -106,11 +108,11 @@ public interface RepositoryService {
    * @param revision   Revision
    * @param charset    Charset encoding to use
    * @return The text file instance
-   * @throws SVNException                 if a subversion error occur
-   * @throws UnsupportedEncodingException if given charset encoding is invalid
+   * @throws SVNException if a subversion error occur
+   * @throws IOException  if given charset encoding is invalid
    */
-  RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
-      throws SVNException, UnsupportedEncodingException;
+  TextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
+      throws SVNException, IOException;
 
   /**
    * Gets a file from the repository.
@@ -266,7 +268,7 @@ public interface RepositoryService {
 
   /**
    * @param repository    The repository
-   * @param diffCommand   Diffcommand.
+   * @param diffCommand   DiffCommand.
    * @param charset       The charset to use.
    * @param configuration The instance configuration.
    * @return Ordered list of diffed rows.
@@ -279,7 +281,7 @@ public interface RepositoryService {
 
   /**
    * @param repository    The repository
-   * @param diffCommand   Diffcommand
+   * @param diffCommand   DiffCommand
    * @param charset       The charset to use.
    * @param configuration The instance configuration.
    * @return The unified diff as a string.
@@ -290,4 +292,17 @@ public interface RepositoryService {
                      final InstanceConfiguration configuration)
       throws SVNException, DiffException;
 
+  /**
+   * Blame (annotates) the given file.
+   *
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The entry revision
+   * @param charset    Charset encoding to use
+   * @param colorer    Colorer instance.
+   * @return List of BlameLines
+   * @throws SVNException if a subversion error occur
+   */
+  AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision, final String charset,
+                          final Colorer colorer) throws SVNException;
 }

@@ -46,7 +46,6 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testEncode() throws Exception {
-    assertEquals("%C3%85%C3%84%C3%96", HTMLCreator.encode("ÅÄÖ"));
     assertEquals("%2F", HTMLCreator.encode("/"));
     assertEquals("+", HTMLCreator.encode(" "));
   }

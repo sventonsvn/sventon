@@ -26,7 +26,7 @@ public class AvailableCharsets {
   /**
    * Cached available character sets.
    */
-  private Set<String> charsets;
+  private Set<String> charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
 
   /**
    * Default charset.
@@ -39,7 +39,6 @@ public class AvailableCharsets {
    * @param defaultCharset Default charset.
    */
   public AvailableCharsets(final String defaultCharset) {
-    this.charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
     if (!isSupported(defaultCharset)) {
       throw new UnsupportedCharsetException(defaultCharset);
     }
