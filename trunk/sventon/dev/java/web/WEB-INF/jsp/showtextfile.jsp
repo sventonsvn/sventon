@@ -26,7 +26,7 @@
     <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
     <sventon:functionLinks pageName="showTextFile"/>
 
-    <table id="textFileTable" class="codeBlock" cellspacing="0" cellpadding="0">
+    <table id="textFileTable" class="codeBlock" cellspacing="0">
       <c:forEach items="${file.rows}" var="row">
         <tr>
           <td valign="top" class="sventonLineNo">${row.rowNumber}&nbsp;</td>
