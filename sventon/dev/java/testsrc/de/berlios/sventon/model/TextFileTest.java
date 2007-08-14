@@ -31,7 +31,7 @@ public class TextFileTest extends TestCase {
     assertEquals("<span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span>" +
         "<span class=\"java_type\">Test</span><span class=\"java_plain\">&nbsp;</span>" +
         "<span class=\"java_separator\">{</span><span class=\"java_plain\"></span>" + BR +
-        "<span class=\"java_comment\">//&nbsp;&amp;lt;test&amp;gt;&nbsp;</span>" + BR +
+        "<span class=\"java_comment\">//&nbsp;&lt;test&gt;&nbsp;</span>" + BR +
         "<span class=\"java_separator\">}</span><span class=\"java_plain\"></span>" + BR, textFile.getContent());
   }
 
