@@ -78,7 +78,6 @@ input.btn {
 
 .codeBlock {
   width: 100%;
-  white-space: pre;
   font-family: monospace;
   font-size: 11px;
   padding: 0.5em;
@@ -91,14 +90,13 @@ input.btn {
 }
 
 .sventonDiffTable {
+  padding: 0;
   color: #000000;
   background-color: #E2E4E6;
   border-top: black dotted 1px;
   border-left: black dotted 1px;
   border-right: black solid 2px;
   border-bottom: black solid 2px;
-  padding: 0;
-  white-space: pre-wrap;
 }
 
 .sventonSelect {

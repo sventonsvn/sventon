@@ -14,6 +14,7 @@ package de.berlios.sventon.model;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class TextFile {
     final String[] fileRows = processedContent.split(NL_REGEXP);
     int count = 0;
     for (final String fileRow : fileRows) {
-      rows.add(new TextFileRow(++count, fileRow));
+      rows.add(new TextFileRow(++count, WebUtils.replaceLeadingSpaces(fileRow)));
     }
   }
 
@@ -82,8 +83,7 @@ public class TextFile {
   public String getContent() {
     final StringBuilder sb = new StringBuilder();
     for (final TextFileRow row : rows) {
-      sb.append(row.getContent());
-      sb.append(System.getProperty("line.separator"));
+      sb.append(row.getContent()).append(System.getProperty("line.separator"));
     }
     return sb.toString();
   }
