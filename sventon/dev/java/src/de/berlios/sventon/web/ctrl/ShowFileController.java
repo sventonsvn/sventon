@@ -87,7 +87,7 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
       if ("raw".equals(formatParameter)) {
-        response.setContentType("text/plain"); //TODO: Include charset?
+        response.setContentType("text/plain; charset=\"UTF-8\"");
         response.getOutputStream().write(outStream.toByteArray());
         return null;
       } else {

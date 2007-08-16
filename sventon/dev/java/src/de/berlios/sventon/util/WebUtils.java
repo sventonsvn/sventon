@@ -11,6 +11,9 @@
  */
 package de.berlios.sventon.util;
 
+
+import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -33,6 +36,24 @@ public final class WebUtils {
    */
   public static String nl2br(final String string) {
     return string.replaceAll(NL_REGEXP, "<br/>");
+  }
+
+  /**
+   * Replaces leading spaces with the HTML entity <code>&nbsp;</code>.
+   *
+   * @param str Input string
+   * @return Replaced output string
+   */
+  public static String replaceLeadingSpaces(final String str) {
+    final String nbsp = "&nbsp;";
+
+    String result = StringUtils.trimLeadingWhitespace(str);
+    int removedSpacesCount = str.length() - result.length();
+
+    for (int i = 0; i < removedSpacesCount; i++) {
+      result = nbsp + result;
+    }
+    return result;
   }
 
   /**

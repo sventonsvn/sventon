@@ -88,8 +88,7 @@ public class AnnotatedTextFile {
 
     final StringBuilder sb = new StringBuilder();
     for (final AnnotatedTextFileRow row : rows) {
-      sb.append(row.getContent());
-      sb.append(NEWLINE);
+      sb.append(row.getContent()).append(NEWLINE);
     }
 
     final String processedContent;
@@ -118,8 +117,7 @@ public class AnnotatedTextFile {
   public String getContent() {
     final StringBuilder sb = new StringBuilder();
     for (final AnnotatedTextFileRow row : rows) {
-      sb.append(row.getContent());
-      sb.append(NEWLINE);
+      sb.append(row.getContent()).append(NEWLINE);
     }
     return sb.toString();
   }
