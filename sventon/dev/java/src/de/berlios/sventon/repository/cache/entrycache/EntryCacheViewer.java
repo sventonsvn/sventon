@@ -19,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Simple viewer utility for the sventon entry cache file.
@@ -29,7 +30,7 @@ public class EntryCacheViewer {
 
   public static void main(String[] args) throws Exception {
 
-    System.out.println("Sventon revision cache viewer");
+    System.out.println("Sventon entry cache viewer");
     if (args.length == 0) {
       System.out.println("Syntax: EntryCacheViewer [cache file]");
       return;
@@ -37,8 +38,10 @@ public class EntryCacheViewer {
 
     System.out.println("Viewing cache file: " + args[0]);
 
-    ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(args[0]));
+    final ObjectInputStream inputStream = new ObjectInputStream(new GZIPInputStream(new FileInputStream(args[0])));
     final long cachedRevision = inputStream.readLong();
+
+    //noinspection unchecked
     final Set<RepositoryEntry> entries = (Set<RepositoryEntry>) inputStream.readObject();
 
     System.out.println("Number of cached entries: " + entries.size());
