@@ -13,9 +13,9 @@ package de.berlios.sventon.web.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -29,7 +29,7 @@ public class ArchiveFile {
   /**
    * The archive entries.
    */
-  private final Set<ZipEntry> archiveEntries = new TreeSet<ZipEntry>();
+  private final List<ZipEntry> archiveEntries = new ArrayList<ZipEntry>();
 
   /**
    * Constructor.
@@ -51,8 +51,8 @@ public class ArchiveFile {
    *
    * @return Entries.
    */
-  public Set<ZipEntry> getEntries() {
-    return Collections.unmodifiableSet(archiveEntries);
+  public List<ZipEntry> getEntries() {
+    return Collections.unmodifiableList(archiveEntries);
   }
 
   /**
