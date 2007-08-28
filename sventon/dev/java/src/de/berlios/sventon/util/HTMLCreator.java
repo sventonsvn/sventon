@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.util;
 
-import de.berlios.sventon.web.model.LogEntryActionType;
+import de.berlios.sventon.model.LogEntryActionType;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
@@ -89,63 +89,48 @@ public final class HTMLCreator {
       final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
 
       sb.append("  <tr>\n");
-      sb.append("    <td valign=\"top\"><i>");
-      sb.append(actionType);
-      sb.append("</i></td>\n");
+      sb.append("    <td valign=\"top\"><i>").append(actionType).append("</i></td>\n");
+
       sb.append("    <td>");
 
       switch (actionType) {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
-          sb.append("<a href=\"");
-          sb.append(response.encodeURL(createGoToUrl(
+          sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
               baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead)));
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
-          sb.append("\" title=\"Show\">");
-          sb.append(logEntryPath.getPath());
-          sb.append("</a>");
+          sb.append("\" title=\"Show\">").append(logEntryPath.getPath()).append("</a>");
           break;
         case MODIFIED:
           // diffUrl
-          sb.append("<a href=\"");
-          sb.append(response.encodeURL(createDiffUrl(
+          sb.append("<a href=\"").append(response.encodeURL(createDiffUrl(
               baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead)));
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
-          sb.append("\" title=\"Diff with previous version\">");
-          sb.append(logEntryPath.getPath());
-          sb.append("</a>");
+          sb.append("\" title=\"Diff with previous version\">").append(logEntryPath.getPath()).append("</a>");
           break;
         case DELETED:
           // strike
-          sb.append("<strike>");
-          sb.append(logEntryPath.getPath());
-          sb.append("</strike>");
+          sb.append("<strike>").append(logEntryPath.getPath()).append("</strike>");
           break;
       }
 
       if (logEntryPath.getCopyPath() != null) {
         sb.append("<br/><b>Copy from</b> ");
-        sb.append("<a href=\"");
-        sb.append(response.encodeURL(createGoToUrl(
+        sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
             baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), instanceName, linkToHead)));
         if (showLatestRevInfo) {
           sb.append("&showlatestrevinfo=true");
         }
-        sb.append("\" title=\"Show\">");
-        sb.append(logEntryPath.getCopyPath());
-        sb.append("</a>");
-        sb.append(" @ ");
-        sb.append("<a href=\"");
-        sb.append(response.encodeURL(createRevInfoUrl(
+        sb.append("\" title=\"Show\">").append(logEntryPath.getCopyPath()).append("</a>").append(" @ ");
+        sb.append("<a href=\"").append(response.encodeURL(createRevInfoUrl(
             baseURL, logEntryPath.getCopyRevision(), instanceName)));
         sb.append("\">");
-        sb.append(logEntryPath.getCopyRevision());
-        sb.append("</a>");
+        sb.append(logEntryPath.getCopyRevision()).append("</a>");
       }
       sb.append("</td>\n");
       sb.append("  </tr>\n");
@@ -169,12 +154,9 @@ public final class HTMLCreator {
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(GOTO_URL);
-    sb.append("?path=");
-    sb.append(encode(path));
-    sb.append("&revision=");
-    sb.append(linkToHead ? "head" : revision);
-    sb.append("&name=");
-    sb.append(encode(instanceName));
+    sb.append("?path=").append(encode(path));
+    sb.append("&revision=").append(linkToHead ? "head" : revision);
+    sb.append("&name=").append(encode(instanceName));
     return sb.toString();
   }
 
@@ -196,16 +178,11 @@ public final class HTMLCreator {
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(DIFF_URL);
-    sb.append("?path=");
-    sb.append(encode(path));
-    sb.append("&revision=");
-    sb.append(linkToHead ? "head" : revision);
-    sb.append("&name=");
-    sb.append(encode(instanceName));
-    sb.append("&entry=");
-    sb.append(encode(entry1));
-    sb.append("&entry=");
-    sb.append(encode(entry2));
+    sb.append("?path=").append(encode(path));
+    sb.append("&revision=").append(linkToHead ? "head" : revision);
+    sb.append("&name=").append(encode(instanceName));
+    sb.append("&entry=").append(encode(entry1));
+    sb.append("&entry=").append(encode(entry2));
     return sb.toString();
   }
 
@@ -220,10 +197,8 @@ public final class HTMLCreator {
   protected static String createRevInfoUrl(final String baseURL, final long revision, final String instanceName) {
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(REV_INFO_URL);
-    sb.append("?revision=");
-    sb.append(encode(String.valueOf(revision)));
-    sb.append("&name=");
-    sb.append(encode(instanceName));
+    sb.append("?revision=").append(encode(String.valueOf(revision)));
+    sb.append("&name=").append(encode(instanceName));
     return sb.toString();
   }
 
