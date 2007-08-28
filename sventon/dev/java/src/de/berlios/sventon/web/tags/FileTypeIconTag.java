@@ -25,6 +25,7 @@ public final class FileTypeIconTag extends TagSupport {
   /**
    * {@inheritDoc}
    */
+  @Override
   public int doStartTag() throws JspException {
     try {
       assertMappingsLoaded();

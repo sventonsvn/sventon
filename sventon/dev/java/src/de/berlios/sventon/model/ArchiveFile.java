@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.model;
+package de.berlios.sventon.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

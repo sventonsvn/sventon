@@ -13,13 +13,13 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.repository.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.service.RepositoryService;
-import de.berlios.sventon.web.model.LogEntryActionType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;

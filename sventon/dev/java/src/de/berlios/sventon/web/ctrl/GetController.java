@@ -15,7 +15,7 @@ import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.UserContext;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;

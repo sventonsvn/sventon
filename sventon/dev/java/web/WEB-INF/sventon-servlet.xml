@@ -189,7 +189,7 @@
     </property>
   </bean>
 
-  <bean id="availableCharsets" class="de.berlios.sventon.web.model.AvailableCharsets">
+  <bean id="availableCharsets" class="de.berlios.sventon.model.AvailableCharsets">
     <constructor-arg ref="defaultEncoding"/>
   </bean>
 

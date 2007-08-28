@@ -12,8 +12,8 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.LogEntryBundle;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.model.LogEntryBundle;
+import de.berlios.sventon.web.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
