@@ -36,7 +36,7 @@
 
       <c:forEach items="${annotatedFile.unmodifiableRows}" var="row">
         <tr>
-          <td valign="top" style="text-align:right;" title="${row.date}">${row.revision}</td>
+          <td valign="top" style="text-align:right;" title="<fmt:formatDate type="both" value="${row.date}" dateStyle="short" timeStyle="short"/>">${row.revision}</td>
           <td valign="top">${row.author}</td>
           <td valign="top" class="sventonLineNo">${row.rowNumber}</td>
           <td valign="top">${row.content}</td>
