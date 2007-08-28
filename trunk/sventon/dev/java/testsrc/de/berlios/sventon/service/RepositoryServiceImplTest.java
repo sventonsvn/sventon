@@ -7,7 +7,7 @@ import de.berlios.sventon.diff.SourceLine;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
+import de.berlios.sventon.model.SideBySideDiffRow;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;

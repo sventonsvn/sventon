@@ -32,6 +32,7 @@ public class ByteFormatterTag extends TagSupport {
   /**
    * {@inheritDoc} 
    */
+  @Override
   public int doStartTag() throws JspException {
     if (size > 0) {
       try {

@@ -41,7 +41,6 @@ public class FileExtensionFilter {
     if (filterExtension == null || "".equals(filterExtension)) {
       throw new IllegalArgumentException("Illegal file extension: " + filterExtension);
     }
-
     this.filterExtension = filterExtension;
   }
 

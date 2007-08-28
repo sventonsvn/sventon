@@ -16,8 +16,8 @@ import de.berlios.sventon.content.LineNumberAppender;
 import static de.berlios.sventon.diff.DiffAction.*;
 import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
+import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
-import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;

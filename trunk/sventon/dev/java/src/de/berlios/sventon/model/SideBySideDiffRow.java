@@ -9,12 +9,12 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.model;
+package de.berlios.sventon.model;
 
 import de.berlios.sventon.diff.SourceLine;
 
 /**
- * Created by IntelliJ IDEA.
+ * Represents a row in a side-by-side diff view.
  *
  * @author jesper@users.berlios.de
  */
@@ -41,15 +41,32 @@ public class SideBySideDiffRow {
     this.right = right;
   }
 
+  /**
+   * Gets the row number.
+   *
+   * @return Row number.
+   */
   public int getRowNumber() {
     return rowNumber;
   }
 
+  /**
+   * Gets either of the the row's sides.
+   *
+   * @param side Side to get
+   * @return The row side.
+   */
   public SourceLine getSide(final Side side) {
     return (side == Side.LEFT ? left : right);
   }
 
+  /**
+   * Checks if row is marked as unchanged.
+   *
+   * @return <tt>true</tt> if row is unchanged.
+   */
   public boolean getIsUnchanged() {
     return 'u' == left.getAction().getCode();
   }
+
 }

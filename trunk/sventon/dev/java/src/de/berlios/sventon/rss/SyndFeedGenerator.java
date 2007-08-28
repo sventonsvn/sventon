@@ -13,9 +13,9 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
+import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
-import de.berlios.sventon.web.model.LogEntryActionType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

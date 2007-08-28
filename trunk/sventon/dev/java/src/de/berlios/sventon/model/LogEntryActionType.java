@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.model;
+package de.berlios.sventon.model;
 
 /**
  * Type enum for log entry actions.

@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.model;
+package de.berlios.sventon.web;
 
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
@@ -144,7 +144,7 @@ public class UserContext {
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
    */
-  public void setSearchMode(String searchMode) {
+  public void setSearchMode(final String searchMode) {
     this.searchMode = searchMode;
   }
 

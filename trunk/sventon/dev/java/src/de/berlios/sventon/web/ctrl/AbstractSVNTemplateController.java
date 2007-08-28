@@ -20,8 +20,8 @@ import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.AvailableCharsets;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.model.AvailableCharsets;
+import de.berlios.sventon.web.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,7 +58,7 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,UserContext,
+ * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,de.berlios.sventon.web.UserContext,
  *HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.

@@ -12,9 +12,9 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
-<%@ page import="de.berlios.sventon.web.model.LogEntryActionType"%>
 <%@ page import="java.util.*"%>
+<%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
+<%@ page import="de.berlios.sventon.model.LogEntryActionType" %>
 
 <html>
   <head>
@@ -64,7 +64,7 @@
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
-          <jsp:useBean id="entry" type="de.berlios.sventon.web.model.LogEntryBundle" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.model.LogEntryBundle" />
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
             <c:choose>
@@ -96,7 +96,7 @@
                   final Iterator i = pathsList.iterator();
                   while (i.hasNext()) {
                     final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) changedPaths.get(i.next());
-                    final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+                    final LogEntryActionType actionType = de.berlios.sventon.model.LogEntryActionType.parse(logEntryPath.getType());
                 %>
                 <tr>
 
