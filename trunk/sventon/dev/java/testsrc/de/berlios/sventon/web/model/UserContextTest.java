@@ -1,4 +1,4 @@
-package de.berlios.sventon.web;
+package de.berlios.sventon.web.model;
 
 import junit.framework.TestCase;
 

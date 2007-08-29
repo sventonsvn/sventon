@@ -16,7 +16,7 @@ import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.model.ArchiveFile;
-import de.berlios.sventon.web.UserContext;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.model.TextFile;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
