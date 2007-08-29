@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.web.UserContext;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
