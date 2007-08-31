@@ -15,7 +15,6 @@ import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
-import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -56,11 +55,6 @@ public class RSSController extends AbstractController {
   private FeedGenerator feedGenerator;
 
   /**
-   * The repository service instance.
-   */
-  private RepositoryService repositoryService;
-
-  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -90,8 +84,8 @@ public class RSSController extends AbstractController {
 
     try {
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, path, repository,
-          configuration.getRssItemsCount());
+      final List<SVNLogEntry> logEntries = application.getRepositoryService().getLatestRevisions(
+          instanceName, path, repository, configuration.getRssItemsCount());
       feedGenerator.outputFeed(instanceName, logEntries, request, response);
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
@@ -126,15 +120,6 @@ public class RSSController extends AbstractController {
    */
   public void setFeedGenerator(final FeedGenerator feedGenerator) {
     this.feedGenerator = feedGenerator;
-  }
-
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
   }
 
 }

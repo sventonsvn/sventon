@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.repository.cache;
 
-import de.berlios.sventon.repository.RevisionObservable;
+import de.berlios.sventon.appl.RevisionObservable;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

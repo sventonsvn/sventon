@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository;
+package de.berlios.sventon.appl;
 
 /**
  * Interface to be implemented by repository change monitor classes.
@@ -32,13 +32,5 @@ public interface RevisionObservable {
    * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
   void update(final String instanceName, boolean flushAfterUpdate);
-
-  /**
-   * Checks whether the observable is updating given instance.
-   *
-   * @param instanceName The instance name.
-   * @return True if the observable is buzy updating, false if not.
-   */
-  boolean isUpdating(final String instanceName);
 
 }

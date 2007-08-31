@@ -11,18 +11,16 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
 import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.ImageMetadata;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
-import de.berlios.sventon.model.ImageMetadata;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.CacheException;
-import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.export.ExportDirectory;
@@ -57,46 +55,14 @@ public class RepositoryServiceImpl implements RepositoryService {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The cache instance.
-   */
-  private CacheGateway cacheGateway;
-
-  /**
-   * The application.
-   */
-  private Application application;
-
-  /**
-   * Sets the application.
-   *
-   * @param application Application
-   */
-  public void setApplication(final Application application) {
-    this.application = application;
-  }
-
-  /**
-   * Sets the cache gateway instance.
-   *
-   * @param cacheGateway Cache gateway instance
-   */
-  public void setCacheGateway(final CacheGateway cacheGateway) {
-    this.cacheGateway = cacheGateway;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
-      throws SVNException, CacheException {
+      throws SVNException, SventonException {
+
     final long start = System.currentTimeMillis();
     final SVNLogEntry logEntry;
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()) {
-      logger.debug("Fetching cached revision: " + revision);
-      logEntry = cacheGateway.getRevision(instanceName, revision);
-    } else {
-      logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
-    }
+    logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
     return logEntry;
   }
@@ -106,6 +72,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision, final long toRevision)
       throws SVNException {
+
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
@@ -122,28 +89,15 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
-                                        final long limit) throws SVNException, CacheException {
+                                        final long limit) throws SVNException, SventonException {
 
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()) {
-      // To be able to return cached revisions, we first have to get the revision numbers
-      // Doing a logs-call, skipping the details, to get them.
-      final List<Long> revisions = new ArrayList<Long>();
-      repository.log(new String[]{path}, fromRevision, toRevision, false, false, limit, new ISVNLogEntryHandler() {
-        public void handleLogEntry(final SVNLogEntry logEntry) {
-          revisions.add(logEntry.getRevision());
-        }
-      });
-      logger.debug("Fetching cached revisions [" + toRevision + "-" + fromRevision + "]");
-      logEntries.addAll(cacheGateway.getRevisions(instanceName, revisions));
-    } else {
-      repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
-        public void handleLogEntry(final SVNLogEntry logEntry) {
-          logEntries.add(logEntry);
-        }
-      });
-    }
+    repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
+      public void handleLogEntry(final SVNLogEntry logEntry) {
+        logEntries.add(logEntry);
+      }
+    });
     logger.debug("PERF: getRevisions(): " + (System.currentTimeMillis() - start));
     return logEntries;
   }
@@ -237,7 +191,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, CacheException {
+                                              final long revisionCount) throws SVNException, SventonException {
     return getLatestRevisions(instanceName, "/", repository, revisionCount);
   }
 
@@ -245,7 +199,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, CacheException {
+                                              final long revisionCount) throws SVNException, SventonException {
     final long headRevision = repository.getLatestRevision();
     return getRevisions(instanceName, repository, headRevision, 1, path, revisionCount);
   }

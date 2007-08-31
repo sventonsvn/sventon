@@ -11,18 +11,18 @@
  */
 package de.berlios.sventon.service;
 
+import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.ImageMetadata;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
-import de.berlios.sventon.model.ImageMetadata;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -51,11 +51,11 @@ public interface RepositoryService {
    * @param repository   The repository
    * @param revision     Revision number
    * @return The log entry
-   * @throws SVNException   if subversion error
-   * @throws CacheException if unable to get cached revision
+   * @throws SVNException     if subversion error
+   * @throws SventonException if a sventon specific error occurs
    */
   SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
-      throws SVNException, CacheException;
+      throws SVNException, SventonException;
 
   /**
    * Gets revision details for given revision interval.
@@ -81,12 +81,12 @@ public interface RepositoryService {
    * @param path         The repository path
    * @param limit        Revision limit
    * @return The log entries
-   * @throws SVNException   if subversion error
-   * @throws CacheException if unable to get cached revision
+   * @throws SVNException     if subversion error
+   * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
                                  final long fromRevision, final long toRevision, final String path,
-                                 final long limit) throws SVNException, CacheException;
+                                 final long limit) throws SVNException, SventonException;
 
   /**
    * Exports given list of target entries to the given destination export directory.
@@ -188,11 +188,11 @@ public interface RepositoryService {
    * @param repository    The repository
    * @param revisionCount Number of revisions to fetch
    * @return The revisions.
-   * @throws SVNException   if a subversion error occur
-   * @throws CacheException if unable to get cached revision
+   * @throws SVNException     if a subversion error occur
+   * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                       final long revisionCount) throws SVNException, CacheException;
+                                       final long revisionCount) throws SVNException, SventonException;
 
   /**
    * Gets the latest repository revisions.
@@ -202,11 +202,11 @@ public interface RepositoryService {
    * @param path          The repository path
    * @param revisionCount Number of revisions to fetch
    * @return The revisions.
-   * @throws SVNException   if a subversion error occur
-   * @throws CacheException if unable to get cached revision
+   * @throws SVNException     if a subversion error occur
+   * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
-                                       final long revisionCount) throws SVNException, CacheException;
+                                       final long revisionCount) throws SVNException, SventonException;
 
   /**
    * Gets the node type for given path (with or without leaf).
@@ -262,6 +262,20 @@ public interface RepositoryService {
    */
   List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
+  /**
+   * Gets a thumbnail image from given full size image url.
+   *
+   * @param repository       The repository
+   * @param objectCache      Cache instance
+   * @param path             The entry path
+   * @param revision         The entry revision
+   * @param fullSizeImageUrl Image URL
+   * @param imageFormatName  Format name
+   * @param maxThumbnailSize Size
+   * @param out              Destination output stream
+   * @return null
+   * @throws SVNException if a subversion error occur
+   */
   ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache, final String path,
                                   final long revision, final URL fullSizeImageUrl, final String imageFormatName,
                                   final int maxThumbnailSize, final OutputStream out) throws SVNException;

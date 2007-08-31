@@ -1,15 +1,14 @@
-package de.berlios.sventon.repository;
+package de.berlios.sventon.appl;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
-import java.util.*;
 import java.io.File;
+import java.util.*;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
@@ -26,6 +25,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     instanceConfiguration.setCacheUsed(true);
     application.addInstance(instanceName, instanceConfiguration);
     application.setConfigured(true);
+    application.setRepositoryService(new RepositoryServiceImpl());
 
     final ObjectCache cache = createMemoryCache();
 
@@ -35,10 +35,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
       revisionObservable.setMaxRevisionCountPerUpdate(3);
       revisionObservable.setApplication(application);
-      revisionObservable.setRepositoryService(new RepositoryServiceImpl());
-      assertFalse(revisionObservable.isUpdating(instanceName));
+      assertFalse(application.getInstance(instanceName).isUpdatingCache());
       revisionObservable.update(instanceName, new TestRepository(), cache, false);
-      assertFalse(revisionObservable.isUpdating(instanceName));
+      assertFalse(application.getInstance(instanceName).isUpdatingCache());
     } finally {
       cache.shutdown();
     }

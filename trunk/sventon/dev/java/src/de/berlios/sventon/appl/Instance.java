@@ -34,6 +34,11 @@ public class Instance {
   private InstanceConfiguration configuration;
 
   /**
+   * Flag that indicates if the cache is being updated.
+   */
+  private boolean updatingCache;
+
+  /**
    * Constructor.
    *
    * @param instanceName  Instance name.
@@ -84,6 +89,26 @@ public class Instance {
    * Performs a shutdown on this instance.
    */
   public void shutdown() {
+  }
+
+  /**
+   * Checks if this instance's cache is being updated.
+   *
+   * @return <tt>true</tt> if cache is being updated.
+   */
+  public boolean isUpdatingCache() {
+    return updatingCache;
+  }
+
+  /**
+   * Sets the cache updating status.
+   * <p/>
+   * Note: This method is package protected by design.
+   *
+   * @param updatingCache True or false.
+   */
+  void setUpdatingCache(final boolean updatingCache) {
+    this.updatingCache = updatingCache;
   }
 
 }

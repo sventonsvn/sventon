@@ -53,11 +53,6 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private String datePattern;
 
   /**
-   * The repository service instance.
-   */
-  private RepositoryService repositoryService;
-
-  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -68,6 +63,7 @@ public class ShowLatestCommitInfoController extends AbstractController {
     response.setHeader("Cache-Control", "no-cache");
 
     final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
+    final RepositoryService repositoryService = application.getRepositoryService();
 
     if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
@@ -124,12 +120,4 @@ public class ShowLatestCommitInfoController extends AbstractController {
     this.datePattern = datePattern;
   }
 
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
-  }
 }

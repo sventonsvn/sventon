@@ -11,9 +11,9 @@
  */
 package de.berlios.sventon.repository.cache.logmessagecache;
 
-import de.berlios.sventon.repository.AbstractRevisionObserver;
+import de.berlios.sventon.appl.AbstractRevisionObserver;
 import de.berlios.sventon.repository.LogMessage;
-import de.berlios.sventon.repository.RevisionUpdate;
+import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,7 +66,6 @@ public class LogMessageCacheUpdater extends AbstractRevisionObserver {
       updateInternal(logMessageCache, revisions);
     } catch (final CacheException ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
-      return;
     }
   }
 
