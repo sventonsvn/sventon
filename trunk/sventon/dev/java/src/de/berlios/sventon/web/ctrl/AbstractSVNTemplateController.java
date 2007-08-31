@@ -38,6 +38,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -187,7 +188,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
-    if (!application.getInstanceNames().contains(svnCommand.getName())) {
+    final Set<String> instanceNames = application.getInstanceNames();
+    if (svnCommand.getName() == null || !instanceNames.contains(svnCommand.getName())) {
       logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
