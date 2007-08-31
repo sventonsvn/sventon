@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -203,7 +204,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
-      final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
+      final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand, repository);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
@@ -387,18 +388,22 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * <p/>
    * The given <code>SVNBaseCommand</code> instance will be updated with key
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
-   * <p/>
-   * TODO: This (could perhaps) be a suitable place to also handle conversion of
-   * date to revision to expand possible user input to handle calendar
-   * intervals.
    *
    * @param svnCommand Command object.
+   * @param repository Repository instance.
    * @return The converted SVN revision.
    */
-  private SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand) {
+  protected SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand, final SVNRepository repository)
+      throws SVNException {
+
     if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
         && !"HEAD".equals(svnCommand.getRevision())) {
-      return SVNRevision.parse(svnCommand.getRevision());
+      SVNRevision revision = SVNRevision.parse(svnCommand.getRevision());
+      if (revision.getNumber() == -1 && revision.getDate() != null) {
+        revision = SVNRevision.create(repository.getDatedRevision(revision.getDate()));
+        svnCommand.setRevision(String.valueOf(revision.getNumber()));
+      }
+      return revision;
     } else {
       svnCommand.setRevision("HEAD");
       return HEAD;
