@@ -9,28 +9,23 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository;
+package de.berlios.sventon.appl;
 
-import java.util.Observable;
+import java.util.Observer;
 
 /**
- * RevisionObserver. Abstract class to be extended by
+ * RevisionObserver. Interface to be implemented by
  * observers interested in getting published repository changes.
  *
  * @author jesper@user.berlios.de
  */
-public abstract class AbstractRevisionObserver implements RevisionObserver {
+public interface RevisionObserver extends Observer {
 
   /**
    * Called to update the observer.
    *
-   * @param observable   The observable.
-   * @param arg          Argument object.
+   * @param revisionUpdate The updated revisions.
    */
-  public void update(final Observable observable, final Object arg) {
-    if (observable != null && observable instanceof RevisionObservableImpl) {
-      update((RevisionUpdate) arg);
-    }
-  }
+  void update(final RevisionUpdate revisionUpdate);
 
 }

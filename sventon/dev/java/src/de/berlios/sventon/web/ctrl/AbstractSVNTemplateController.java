@@ -13,14 +13,13 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.model.AvailableCharsets;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.model.AvailableCharsets;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -121,16 +120,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private CacheGateway cacheGateway;
 
   /**
-   * The observable instance. Used to check whether it's buzy updating or not.
-   */
-  private RevisionObservable revisionObservable;
-
-  /**
-   * The repository service instance.
-   */
-  private RepositoryService repositoryService;
-
-  /**
    * Maximum number of revisions, default set to 10.
    */
   private int maxRevisionsCount = 10;
@@ -213,7 +202,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
-      final long headRevision = repositoryService.getLatestRevision(repository);
+      final long headRevision = getRepositoryService().getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
@@ -231,7 +220,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
+        model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", application.getInstanceNames());
@@ -241,7 +230,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", repositoryService.getLatestRevisions(svnCommand.getName(), repository,
+          model.put("revisions", getRepositoryService().getLatestRevisions(svnCommand.getName(), repository,
               userContext.getLatestRevisionsDisplayCount()));
         }
 
@@ -252,7 +241,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return forwardToAuthenticationFailureView(svnae);
     } catch (Exception ex) {
       logger.error("Exception", ex);
-      Throwable cause = ex.getCause();
+      final Throwable cause = ex.getCause();
       if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
         errors.reject("error.message.no-route-to-host");
       } else {
@@ -481,30 +470,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Sets the observable. Needed to trigger cache updates.
-   *
-   * @param revisionObservable The observable
-   */
-  public void setRevisionObservable(final RevisionObservable revisionObservable) {
-    this.revisionObservable = revisionObservable;
-  }
-
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
-  }
-
-  /**
    * Gets the repository service instance.
    *
    * @return Repository service
    */
   public RepositoryService getRepositoryService() {
-    return repositoryService;
+    return application.getRepositoryService();
   }
 
   /**

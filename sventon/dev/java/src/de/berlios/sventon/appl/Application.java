@@ -18,6 +18,7 @@ import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,6 +72,11 @@ public class Application {
   private LogMessageCacheManager logMessageCacheManager;
   private ObjectCacheManager objectCacheManager;
   private RevisionCacheManager revisionCacheManager;
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * Constructor.
@@ -381,5 +387,23 @@ public class Application {
    */
   public void setRevisionCacheManager(final RevisionCacheManager revisionCacheManager) {
     this.revisionCacheManager = revisionCacheManager;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
+
+  /**
+   * Gets the repository service.
+   *
+   * @return Service.
+   */
+  public RepositoryService getRepositoryService() {
+    return repositoryService;
   }
 }

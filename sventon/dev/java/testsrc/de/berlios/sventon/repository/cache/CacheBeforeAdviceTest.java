@@ -1,6 +1,6 @@
 package de.berlios.sventon.repository.cache;
 
-import de.berlios.sventon.repository.RevisionObservable;
+import de.berlios.sventon.appl.RevisionObservable;
 import junit.framework.TestCase;
 
 public class CacheBeforeAdviceTest extends TestCase {

@@ -9,21 +9,20 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.repository;
+package de.berlios.sventon.appl;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
-import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 
 /**
  * Class to monitor repository changes.
@@ -47,11 +46,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   private Application application;
 
   /**
-   * Map to keep track of instances being updated.
-   */
-  private Set<String> updating = Collections.synchronizedSet(new HashSet<String>());
-
-  /**
    * Object cache manager instance.
    * Used to get/put info regarding repository URL and last observed revision.
    */
@@ -61,11 +55,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    * Object cache key, <code>lastCachedLogRevision</code>
    */
   private static final String LAST_UPDATED_LOG_REVISION_CACHE_KEY = "lastCachedLogRevision";
-
-  /**
-   * The repository service instance.
-   */
-  private RepositoryService repositoryService;
 
   /**
    * Maximum number of revisions to get each update.
@@ -83,15 +72,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
     for (final RevisionObserver revisionObserver : observers) {
       addObserver(revisionObserver);
     }
-  }
-
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
   }
 
   /**
@@ -134,8 +114,6 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
   protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache,
                         final boolean flushAfterUpdate) {
 
-    updating.add(instanceName);
-
     try {
       Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
       boolean clearCacheBeforeUpdate = false;
@@ -147,7 +125,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
         lastUpdatedRevision = 0L;
       }
 
-      final long headRevision = repositoryService.getLatestRevision(repository);
+      final long headRevision = application.getRepositoryService().getLatestRevision(repository);
 
       // Sanity check
       if (headRevision < lastUpdatedRevision) {
@@ -168,7 +146,8 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
               lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
+          logEntries.addAll(application.getRepositoryService().getRevisionsFromRepository(
+              repository, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
           setChanged();
           final StringBuffer notification = new StringBuffer();
@@ -191,10 +170,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       }
     } catch (SVNException svnex) {
       throw new RuntimeException(svnex);
-    } finally {
-      updating.remove(instanceName);
     }
-
   }
 
   /**
@@ -207,15 +183,18 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       final Instance instance = application.getInstance(instanceName);
       final InstanceConfiguration configuration = instance.getConfiguration();
 
-      if (configuration.isCacheUsed()) {
-        synchronized (instance) {
+      if (configuration.isCacheUsed() && !instance.isUpdatingCache()) {
+        synchronized (instanceName) {
+          instance.setUpdatingCache(true);
           SVNRepository repository;
           try {
             repository = RepositoryFactory.INSTANCE.getRepository(configuration);
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-            update(instance.getName(), repository, objectCache, flushAfterUpdate);
+            update(instanceName, repository, objectCache, flushAfterUpdate);
           } catch (final Exception ex) {
             logger.warn("Unable to establish repository connection", ex);
+          } finally {
+            instance.setUpdatingCache(false);
           }
         }
       }
@@ -229,19 +208,10 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
    */
   public void updateAll() {
     if (application.isConfigured()) {
-      for (final String instanceName : application.getInstanceNames()) {
-        if (!isUpdating(instanceName)) {
-          update(instanceName, true);
-        }
+      for (final Instance instance : application.getInstances()) {
+        update(instance.getName(), true);
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isUpdating(final String instanceName) {
-    return updating.contains(instanceName);
   }
 
 }
