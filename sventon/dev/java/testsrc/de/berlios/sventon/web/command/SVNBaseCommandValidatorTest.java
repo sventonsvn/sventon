@@ -59,9 +59,12 @@ public class SVNBaseCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    //Other non numerical revisions are however not allowed
-    command.setRevision("TEST");
+    command.setRevision("{2007-01-01}");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
 
+    //Other non numerical revisions are however not allowed
+    command.setRevision("2007-01-01");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("browse.error.illegal-revision" ,exception.getFieldError("revision").getCode());

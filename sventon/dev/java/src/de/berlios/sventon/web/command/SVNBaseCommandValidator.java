@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * SVNBaseCommandValidator.
@@ -41,7 +42,7 @@ public class SVNBaseCommandValidator implements Validator {
       try {
         RepositoryEntryComparator.SortType.valueOf(command.getSortType());
       } catch (IllegalArgumentException iae) {
-        errors.rejectValue("revision", "browse.error.illegal-sortType", "Not a valid sort type");
+        errors.rejectValue("sortType", "browse.error.illegal-sortType", "Not a valid sort type");
       }
     }
 
@@ -49,7 +50,7 @@ public class SVNBaseCommandValidator implements Validator {
       try {
         RepositoryEntrySorter.SortMode.valueOf(command.getSortMode());
       } catch (IllegalArgumentException iae) {
-        errors.rejectValue("revision", "browse.error.illegal-sortMode", "Not a valid sort mode");
+        errors.rejectValue("sortMode", "browse.error.illegal-sortMode", "Not a valid sort mode");
       }
     }
 
@@ -58,9 +59,9 @@ public class SVNBaseCommandValidator implements Validator {
     if (revision == null) {
       return;
     } else if (!"HEAD".equals(revision) && !"".equals(revision)) {
-      try {
-        Long.parseLong(revision);
-      } catch (NumberFormatException nfe) {
+      final SVNRevision parsedRevision = SVNRevision.parse(revision);
+      if (parsedRevision == SVNRevision.UNDEFINED) {
+        command.setRevision("HEAD");
         errors.rejectValue("revision", "browse.error.illegal-revision", "Not a valid revision");
       }
     }
