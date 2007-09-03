@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.PathUtil;
+import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
@@ -72,15 +73,22 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
       return null;
     }
 
-    response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
-    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+    prepareResponse(response, svnCommand);
+
     final URL fullSizeImageUrl = new URL(getFullSizeImageURL(request));
     final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
+
     getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), revision.getNumber(),
         fullSizeImageUrl, imageFormatName, maxThumbnailSize, output);
+
     output.flush();
     output.close();
     return null;
+  }
+
+  protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
+    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
+    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
   }
 
   private String getFullSizeImageURL(final HttpServletRequest request) {

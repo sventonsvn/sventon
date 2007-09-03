@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.model.LogEntryBundle;
+import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -93,11 +93,13 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     }
 
     final List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
+    final long toRevision = 1;
 
-    logger.debug("Assembling logs data");
+    logger.debug("Assembling logs data revision [" + revNumber + " - " + toRevision + "] limit: " + pageSize);
+
     // TODO: Safer parsing would be nice.
     final List<SVNLogEntry> logEntries =
-        getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, 1, targetPath, pageSize);
+        getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, toRevision, targetPath, pageSize);
 
     String pathAtRevision = targetPath;
 
