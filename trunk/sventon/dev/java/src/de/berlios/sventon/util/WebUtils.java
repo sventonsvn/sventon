@@ -23,6 +23,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class WebUtils {
 
+  public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+  public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain; charset=\"UTF-8\"";
+
+  /**
+   * Content disposition Response header.
+   */
+  public static final String CONTENT_DISPOSITION_HEADER = "Content-disposition";
+
   public static final String NL_REGEXP = "(\r\n|\r|\n|\n\r)";
 
   private WebUtils() {

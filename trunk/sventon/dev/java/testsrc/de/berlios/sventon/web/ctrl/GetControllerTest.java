@@ -4,6 +4,7 @@ import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
 import de.berlios.sventon.util.ImageUtil;
+import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -40,7 +41,7 @@ public class GetControllerTest extends TestCase {
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
-    assertTrue(((String) res.getHeader("Content-disposition")).startsWith("inline"));
+    assertTrue(((String) res.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("inline"));
   }
 
   public void testSvnHandleGetFileAsAttachment() throws Exception {
@@ -59,8 +60,8 @@ public class GetControllerTest extends TestCase {
 
     assertNull(modelAndView);
 
-    assertEquals("application/octet-stream", res.getContentType());
-    assertTrue(((String) res.getHeader("Content-disposition")).startsWith("attachment"));
+    assertEquals(WebUtils.APPLICATION_OCTET_STREAM, res.getContentType());
+    assertTrue(((String) res.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("attachment"));
   }
 
   private ImageUtil getImageUtil() {
