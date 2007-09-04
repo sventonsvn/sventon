@@ -106,6 +106,12 @@
                     <c:param name="name" value="${command.name}" />
                   </c:url>
 
+                  <c:url value="goto.svn" var="goToPrevRevUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${entry.svnLogEntry.revision - 1}" />
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
                   <c:url value="goto.svn" var="goToCopyUrl">
                     <c:param name="path" value="<%= logEntryPath.getCopyPath() %>" />
                     <c:param name="revision" value="<%= String.valueOf(logEntryPath.getCopyRevision()) %>"/>
@@ -136,7 +142,7 @@
 
                   <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a>
                   <% } else if (LogEntryActionType.DELETED == actionType) { %>
-                  <td><strike><%= logEntryPath.getPath() %></strike>
+                  <td><a href="${goToPrevRevUrl}" title="Show previous revision"><strike><%= logEntryPath.getPath() %></strike></a>
                   <% } %>
                   <% if (logEntryPath.getCopyPath() != null) { %>
                     <br/><b>Copy from</b> <a href="${goToCopyUrl}" title="Show"><%=logEntryPath.getCopyPath()%></a> @ <a href="${showRevInfoCopyUrl}&revision=<%=logEntryPath.getCopyRevision()%>"><%=Long.toString(logEntryPath.getCopyRevision())%></a>
