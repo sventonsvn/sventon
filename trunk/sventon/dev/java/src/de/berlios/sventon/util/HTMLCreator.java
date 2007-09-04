@@ -115,7 +115,9 @@ public final class HTMLCreator {
           break;
         case DELETED:
           // strike
-          sb.append("<strike>").append(logEntryPath.getPath()).append("</strike>");
+          sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
+              baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, instanceName, false)));
+          sb.append("\" title=\"Show previous revision\"><strike>").append(logEntryPath.getPath()).append("</strike></a>");
           break;
       }
 
