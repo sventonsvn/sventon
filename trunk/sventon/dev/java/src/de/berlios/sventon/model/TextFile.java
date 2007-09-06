@@ -13,8 +13,8 @@ package de.berlios.sventon.model;
 
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.WebUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
@@ -65,8 +65,7 @@ public class TextFile {
       processedContent = content;
     }
 
-    processedContent = colorer.getColorizedContent(processedContent,
-        PathUtil.getFileExtension(PathUtil.getTarget(path)), encoding);
+    processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
 
     final String[] fileRows = processedContent.split(NL_REGEXP);
     int count = 0;

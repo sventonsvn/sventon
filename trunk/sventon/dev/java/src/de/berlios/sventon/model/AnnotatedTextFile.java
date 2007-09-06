@@ -13,7 +13,7 @@ package de.berlios.sventon.model;
 
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -99,8 +99,8 @@ public class AnnotatedTextFile {
       processedContent = sb.toString();
     }
 
-    final String colorizedContent = colorer.getColorizedContent(processedContent,
-        PathUtil.getFileExtension(PathUtil.getTarget(path)), encoding);
+    final String colorizedContent = colorer.getColorizedContent(
+        processedContent, FilenameUtils.getExtension(path), encoding);
 
     final String[] fileRows = colorizedContent.split(TextFile.NL_REGEXP);
     int count = 0;

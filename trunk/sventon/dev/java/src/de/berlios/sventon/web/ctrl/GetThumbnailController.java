@@ -14,10 +14,10 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -68,7 +68,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
     final ServletOutputStream output = response.getOutputStream();
 
-    if (!imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+    if (!imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()))) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
       return null;
     }
@@ -88,7 +88,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
   protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
-    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+    response.setContentType(imageUtil.getContentType(FilenameUtils.getExtension(svnCommand.getPath())));
   }
 
   private String getFullSizeImageURL(final HttpServletRequest request) {
