@@ -43,25 +43,6 @@ public final class PathUtil {
   }
 
   /**
-   * Gets the file extension.
-   *
-   * @param fullpath Path
-   * @return The file extension if any. Empty string otherwise.
-   *         If <tt>fullpath</tt> is null an empty string will be returned.
-   */
-  public static String getFileExtension(final String fullpath) {
-    if (fullpath == null) {
-      return "";
-    }
-
-    String fileExtension = "";
-    if (getTarget(fullpath).lastIndexOf(".") > -1) {
-      fileExtension = getTarget(fullpath).substring(getTarget(fullpath).lastIndexOf(".") + 1);
-    }
-    return fileExtension;
-  }
-
-  /**
    * Gets the path, excluding the target leaf.
    * <p/>
    * The returned string will have a final "/". If the path info is empty or null, ""

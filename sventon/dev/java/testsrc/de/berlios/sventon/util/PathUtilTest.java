@@ -32,12 +32,4 @@ public class PathUtilTest extends TestCase {
     assertEquals("", PathUtil.getPathNoLeaf(null));
   }
 
-  public void testGetFileExtension() throws Exception {
-    assertEquals("java", PathUtil.getFileExtension("trunk/src/File.java"));
-    assertEquals("", PathUtil.getFileExtension("trunk/src/File"));
-    assertEquals("htpasswd", PathUtil.getFileExtension("trunk/src/.htpasswd"));
-    assertEquals("", PathUtil.getFileExtension(null));
-    assertEquals("", PathUtil.getFileExtension("trunk/src.test/htpasswd"));
-  }
-
 }

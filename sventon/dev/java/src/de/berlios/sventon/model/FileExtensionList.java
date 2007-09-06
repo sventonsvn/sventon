@@ -12,7 +12,7 @@
 package de.berlios.sventon.model;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.io.FilenameUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -40,7 +40,7 @@ public class FileExtensionList {
    */
   public FileExtensionList(final List<RepositoryEntry> entries) {
     for (final RepositoryEntry entry : entries) {
-      final String fileExtension = PathUtil.getFileExtension(entry.getName()).toLowerCase();
+      final String fileExtension = FilenameUtils.getExtension(entry.getName()).toLowerCase();
       if (!"".equals(fileExtension)) {
         existingExtensions.add(fileExtension);
       }

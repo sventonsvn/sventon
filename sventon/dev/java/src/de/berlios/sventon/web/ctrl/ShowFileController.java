@@ -15,10 +15,10 @@ import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.model.ArchiveFile;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -125,11 +125,11 @@ public class ShowFileController extends AbstractSVNTemplateController implements
   }
 
   protected boolean isImageFile(final SVNBaseCommand svnCommand) {
-    return imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()));
+    return imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()));
   }
 
   protected boolean isArchiveFile(final SVNBaseCommand svnCommand) {
-    return PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
+    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
   }
 
   /**

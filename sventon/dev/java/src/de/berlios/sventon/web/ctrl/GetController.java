@@ -13,10 +13,10 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,7 +70,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     } else if (DISPLAY_TYPE_INLINE.equals(displayType)) {
       logger.debug("Getting file as 'inline'");
 
-      if (imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+      if (imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()))) {
         getAsInlineImage(repository, svnCommand, revision, request, response);
       } else {
         logger.warn("File [" + svnCommand.getTarget() + "] is not an image file - unable to display it 'inline'");
@@ -84,7 +84,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
   private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final ServletOutputStream output = response.getOutputStream();
-    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
+    response.setContentType(imageUtil.getContentType(FilenameUtils.getExtension(svnCommand.getPath())));
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
     getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);

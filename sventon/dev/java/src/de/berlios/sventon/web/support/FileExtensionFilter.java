@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.support;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.io.FilenameUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class FileExtensionFilter {
     final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     for (final RepositoryEntry entry : entries) {
-      final String fileExtension = PathUtil.getFileExtension(entry.getName()).toLowerCase();
+      final String fileExtension = FilenameUtils.getExtension(entry.getName()).toLowerCase();
       if (filterExtension.equals(fileExtension)) {
         dir.add(entry);
       }

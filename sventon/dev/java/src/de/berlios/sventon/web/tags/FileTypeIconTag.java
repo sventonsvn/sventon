@@ -1,6 +1,6 @@
 package de.berlios.sventon.web.tags;
 
-import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -58,7 +58,7 @@ public final class FileTypeIconTag extends TagSupport {
       throw new IllegalArgumentException("Filename was null");
     }
 
-    final String extension = PathUtil.getFileExtension(filename.toLowerCase());
+    final String extension = FilenameUtils.getExtension(filename.toLowerCase());
     String icon = (String) mappings.get(extension);
     if (icon == null) {
       icon = "images/icon_file.png";
