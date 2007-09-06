@@ -12,6 +12,7 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <html>
   <head>
@@ -90,7 +91,8 @@
           <td class="sventonCol4" align="center">
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
-              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td>${lock.owner}</td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
+              <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
+              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
             </c:if>
           </td>
           <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>
