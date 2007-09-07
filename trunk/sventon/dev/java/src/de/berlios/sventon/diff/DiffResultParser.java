@@ -16,11 +16,9 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.StringReader;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 /**
  * Diff result parser.
@@ -67,12 +65,10 @@ public class DiffResultParser {
     int leftEnd;
     int rightStart;
     int rightEnd;
-    final BufferedReader reader = new BufferedReader(new StringReader(normalDiffResult));
-
-    String tempLine;
+    final Scanner scanner = new Scanner(normalDiffResult);
     try {
-      while ((tempLine = reader.readLine()) != null) {
-        final Matcher matcher = DIFF_PATTERN.matcher(tempLine);
+      while (scanner.hasNextLine()) {
+        final Matcher matcher = DIFF_PATTERN.matcher(scanner.nextLine());
         if (matcher.matches()) {
           leftStart = Integer.parseInt(matcher.group(1));
           leftEnd = "".equals(matcher.group(2))
@@ -84,8 +80,8 @@ public class DiffResultParser {
               leftStart, leftEnd, rightStart, rightEnd));
         }
       }
-    } catch (IOException ioex) {
-      LOGGER.warn(ioex);
+    } finally {
+      scanner.close();
     }
     return diffActions;
   }

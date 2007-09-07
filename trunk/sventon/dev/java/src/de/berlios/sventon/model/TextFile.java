@@ -25,7 +25,6 @@ import java.util.Map;
 
 public class TextFile {
 
-  public static final String NL_REGEXP = "(\r\n|\r|\n|\n\r)";
   private final List<TextFileRow> rows = new ArrayList<TextFileRow>();
 
   /**
@@ -67,7 +66,7 @@ public class TextFile {
 
     processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
 
-    final String[] fileRows = processedContent.split(NL_REGEXP);
+    final String[] fileRows = processedContent.split(WebUtils.NL_REGEXP);
     int count = 0;
     for (final String fileRow : fileRows) {
       rows.add(new TextFileRow(++count, WebUtils.replaceLeadingSpaces(fileRow)));

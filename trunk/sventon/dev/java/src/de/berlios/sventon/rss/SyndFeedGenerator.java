@@ -24,10 +24,13 @@ import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**
@@ -229,17 +232,13 @@ public final class SyndFeedGenerator implements FeedGenerator {
       if (is == null) {
         throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
       }
-      BufferedReader reader = null;
+      final Scanner scanner = new Scanner(is);
       try {
-        reader = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = reader.readLine()) != null) {
-          sb.append(line);
+        while (scanner.hasNextLine()) {
+          sb.append(scanner.nextLine());
         }
       } finally {
-        if (reader != null) {
-          reader.close();
-        }
+        scanner.close();
       }
       bodyTemplate = sb.toString();
     }

@@ -18,14 +18,13 @@ import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
-import org.apache.commons.lang.StringUtils;
+import de.berlios.sventon.util.WebUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Creates side by side diff result instances.
@@ -42,13 +41,13 @@ public final class SideBySideDiffCreator {
   /**
    * Constructor.
    *
-   * @param fromFile
-   * @param fromKeywordHandler
-   * @param fromFileCharset
-   * @param toFile
-   * @param toKeywordHandler
-   * @param toFileCharset
-   * @throws IOException
+   * @param fromFile           From file
+   * @param fromKeywordHandler Keyword handler
+   * @param fromFileCharset    Charset
+   * @param toFile             To file
+   * @param toKeywordHandler   Keyword handler
+   * @param toFileCharset      Charset
+   * @throws IOException if IO error
    */
   public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
                                final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
@@ -59,8 +58,11 @@ public final class SideBySideDiffCreator {
     lineNumberAppender.setEmbedEnd(":&nbsp;</span>");
     lineNumberAppender.setPadding(5);
 
-    final String leftString = replaceLeadingSpaces(appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
-    final String rightString = replaceLeadingSpaces(appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
+    final String leftString = WebUtils.replaceLeadingSpaces(
+        appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
+
+    final String rightString = WebUtils.replaceLeadingSpaces(
+        appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
 
     leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
     rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
@@ -85,37 +87,6 @@ public final class SideBySideDiffCreator {
     }
     return diff;
   }
-
-  /**
-   * Replaces leading spaces with the web safe entity <code>&nbsp;</code>.
-   * TODO: Replace this hack!
-   *
-   * @param content The source input lines
-   * @return Lines with web safe indentation
-   * @throws IOException if IO error during reading content.
-   */
-  protected static String replaceLeadingSpaces(final String content) throws IOException {
-    final String br = System.getProperty("line.separator");
-    final BufferedReader reader = new BufferedReader(new StringReader(content));
-    final StringBuilder sb = new StringBuilder();
-    String tempLine;
-    while ((tempLine = reader.readLine()) != null) {
-      if (StringUtils.isEmpty(tempLine.trim())) {
-        sb.append(tempLine);
-      } else {
-        final StringBuffer line = new StringBuffer(tempLine);
-        int index = 0;
-        while (line.charAt(index) == ' ') {
-          line.replace(index, index + 1, "&nbsp;");
-          index += 6;
-        }
-        sb.append(line);
-      }
-      sb.append(br);
-    }
-    return sb.toString();
-  }
-
 
   /**
    * Appends keywords if KeywordHandler is not null.
@@ -168,10 +139,13 @@ public final class SideBySideDiffCreator {
    */
   private List<String> toLinesList(final String string) throws IOException {
     final List<String> lines = new ArrayList<String>();
-    final BufferedReader reader = new BufferedReader(new StringReader(string));
-    String tempLine;
-    while ((tempLine = reader.readLine()) != null) {
-      lines.add(tempLine);
+    final Scanner scanner = new Scanner(string);
+    try {
+      while (scanner.hasNextLine()) {
+        lines.add(scanner.nextLine());
+      }
+    } finally {
+      scanner.close();
     }
     return lines;
   }

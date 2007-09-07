@@ -12,7 +12,7 @@
 package de.berlios.sventon.util;
 
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,8 +31,13 @@ public final class WebUtils {
    */
   public static final String CONTENT_DISPOSITION_HEADER = "Content-disposition";
 
+  public static final String BR = System.getProperty("line.separator");
+  public static final String NBSP = "&nbsp;";
   public static final String NL_REGEXP = "(\r\n|\r|\n|\n\r)";
 
+  /**
+   * Private constructor to prevent instantiation.
+   */
   private WebUtils() {
   }
 
@@ -49,19 +54,32 @@ public final class WebUtils {
   /**
    * Replaces leading spaces with the HTML entity <code>&nbsp;</code>.
    *
-   * @param str Input string
-   * @return Replaced output string
+   * @param str Input string. Can be one or more lines.
+   * @return Replaced output string.
    */
   public static String replaceLeadingSpaces(final String str) {
-    final String nbsp = "&nbsp;";
-
-    String result = StringUtils.trimLeadingWhitespace(str);
-    int removedSpacesCount = str.length() - result.length();
-
-    for (int i = 0; i < removedSpacesCount; i++) {
-      result = nbsp + result;
+    if (StringUtils.isEmpty(str)) {
+      return str;
     }
-    return result;
+
+    final StringBuilder sb = new StringBuilder();
+    final String[] lines = str.split(NL_REGEXP);
+
+    for (final String line : lines) {
+      if (!StringUtils.isWhitespace(line)) {
+        String result = org.springframework.util.StringUtils.trimLeadingWhitespace(line);
+
+        int removedSpacesCount = line.length() - result.length();
+        for (int i = 0; i < removedSpacesCount; i++) {
+          result = NBSP + result;
+        }
+        sb.append(result).append(BR);
+      } else {
+        sb.append(line).append(BR);
+      }
+
+    }
+    return sb.toString().trim();
   }
 
   /**
