@@ -11,15 +11,15 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -45,14 +45,24 @@ public class RSSController extends AbstractController {
   private String mimeType = "application/xml; charset=UTF-8";
 
   /**
-   * The application.
+   * Number of items in the feed, default set to 10.
    */
-  private Application application;
+  private int feedItemCount = 10;
+
+  /**
+   * The application configuration.
+   */
+  private ApplicationConfiguration configuration;
 
   /**
    * The feed generator.
    */
   private FeedGenerator feedGenerator;
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * {@inheritDoc}
@@ -72,21 +82,20 @@ public class RSSController extends AbstractController {
       return null;
     }
 
-    if (!application.isConfigured()) {
+    if (!configuration.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
 
-    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final SVNRepository repository =
+        RepositoryFactory.INSTANCE.getRepository(configuration.getInstanceConfiguration(instanceName));
 
     try {
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries = application.getRepositoryService().getLatestRevisions(
-          instanceName, path, repository, configuration.getRssItemsCount());
-      feedGenerator.outputFeed(instanceName, logEntries, request, response);
+      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(instanceName, path, repository, feedItemCount);
+      feedGenerator.outputFeed(instanceName, logEntries, getRequestURL(request), response.getWriter());
     } catch (Exception ex) {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
@@ -96,12 +105,31 @@ public class RSSController extends AbstractController {
   }
 
   /**
-   * Sets the application.
+   * Gets the full request URL, including scheme, server name,
+   * server port and context path.
    *
-   * @param application Application
+   * @param request The request.
+   * @return The full URL.
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  private String getRequestURL(final HttpServletRequest request) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append(request.getScheme());
+    sb.append("://");
+    sb.append(request.getServerName());
+    sb.append(":");
+    sb.append(request.getServerPort());
+    sb.append(request.getContextPath());
+    sb.append("/");
+    return sb.toString();
+  }
+
+  /**
+   * Set application configuration.
+   *
+   * @param configuration ApplicationConfiguration
+   */
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
@@ -120,6 +148,24 @@ public class RSSController extends AbstractController {
    */
   public void setFeedGenerator(final FeedGenerator feedGenerator) {
     this.feedGenerator = feedGenerator;
+  }
+
+  /**
+   * Sets the number of items to be included in the feed.
+   *
+   * @param feedItemCount The number of items (revisions).
+   */
+  public void setFeedItemCount(int feedItemCount) {
+    this.feedItemCount = feedItemCount;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
 }

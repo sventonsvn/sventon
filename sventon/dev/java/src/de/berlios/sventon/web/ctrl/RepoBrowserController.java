@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.model.FileExtensionList;
+import de.berlios.sventon.web.model.FileExtensionList;
 import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.support.FileExtensionFilter;
 import org.springframework.validation.BindException;
@@ -59,10 +59,7 @@ public class RepoBrowserController extends ListDirectoryContentsController imple
       if (RepositoryEntry.Kind.dir == entry.getKind()) {
         logger.debug("Bypassing empty directory: " + svnCommand.getPath());
         svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
-        final ModelAndView bypassedModelAndView =
-            svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
-        bypassedModelAndView.getModel().put("bypassed", true);
-        return bypassedModelAndView;
+        return svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
       }
     }
 

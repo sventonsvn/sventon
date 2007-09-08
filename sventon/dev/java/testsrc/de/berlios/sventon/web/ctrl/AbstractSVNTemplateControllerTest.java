@@ -1,19 +1,16 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.repository.SVNRepositoryStub;
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
 import junit.framework.TestCase;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.tmatesoft.svn.core.SVNException;
+import org.springframework.validation.BindException;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 public class AbstractSVNTemplateControllerTest extends TestCase {
 
@@ -45,24 +42,7 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
     ctrl.parseAndUpdateSortParameters(request, userContext);
     assertEquals("DESC", userContext.getSortMode().toString());
     assertEquals("SIZE", userContext.getSortType().toString());
-  }
 
-  public void testConvertAndUpdateRevision() throws Exception {
-    final AbstractSVNTemplateController ctrl = new TestController();
-
-    final SVNBaseCommand command = new SVNBaseCommand();
-    command.setRevision("head");
-    assertEquals(SVNRevision.HEAD, ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("");
-    assertEquals(SVNRevision.HEAD, ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("123");
-    assertEquals(SVNRevision.create(123), ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("{2007-01-01}");
-    assertEquals(SVNRevision.create(321), ctrl.convertAndUpdateRevision(command, new SVNRepositoryStub(null, null) {
-      public long getDatedRevision(Date date) throws SVNException {
-        return 321;
-      }
-    }));
   }
 
   private static class TestController extends AbstractSVNTemplateController {

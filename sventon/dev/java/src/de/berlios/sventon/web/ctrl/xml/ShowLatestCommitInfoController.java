@@ -11,14 +11,15 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +39,9 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The application.
+   * The application configuration.
    */
-  private Application application;
+  private ApplicationConfiguration configuration;
 
   /**
    * The xml encoding.
@@ -53,6 +54,11 @@ public class ShowLatestCommitInfoController extends AbstractController {
   private String datePattern;
 
   /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -63,15 +69,15 @@ public class ShowLatestCommitInfoController extends AbstractController {
     response.setHeader("Cache-Control", "no-cache");
 
     final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
-    final RepositoryService repositoryService = application.getRepositoryService();
 
     if (instanceName == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
       return null;
     }
 
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(instanceName);
     final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName).getConfiguration());
+        RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";
@@ -94,12 +100,12 @@ public class ShowLatestCommitInfoController extends AbstractController {
   }
 
   /**
-   * Sets the application.
+   * Set application configuration.
    *
-   * @param application Application
+   * @param configuration ApplicationConfiguration
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
@@ -120,4 +126,12 @@ public class ShowLatestCommitInfoController extends AbstractController {
     this.datePattern = datePattern;
   }
 
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
 }

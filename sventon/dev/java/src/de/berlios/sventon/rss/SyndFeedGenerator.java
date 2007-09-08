@@ -13,24 +13,17 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
-import de.berlios.sventon.model.LogEntryActionType;
-import de.berlios.sventon.util.HTMLCreator;
-import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.web.model.LogEntryActionType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**
@@ -61,7 +54,6 @@ public final class SyndFeedGenerator implements FeedGenerator {
   public static final String MODIFIED_COUNT_KEY = "@MODIFIED_COUNT@";
   public static final String REPLACED_COUNT_KEY = "@REPLACED_COUNT@";
   public static final String DELETED_COUNT_KEY = "@DELETED_COUNT@";
-  public static final String CHANGED_PATHS_KEY = "@CHANGED_PATHS@";
 
   /**
    * Cached rss HTML body template.
@@ -76,32 +68,20 @@ public final class SyndFeedGenerator implements FeedGenerator {
   /**
    * {@inheritDoc}
    */
-  public void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries,
-                         final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+  public void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL,
+                         final Writer writer) throws Exception {
 
     final SyndFeed feed = new SyndFeedImpl();
-    final String baseURL = WebUtils.extractBaseURLFromRequest(request);
     feed.setTitle("sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
-    feed.setEntries(createEntries(instanceName, logEntries, baseURL, response));
+    feed.setEntries(createEntries(instanceName, logEntries, baseURL));
     feed.setFeedType(feedType);
-    new SyndFeedOutput().output(feed, response.getWriter());
+    new SyndFeedOutput().output(feed, writer);
   }
 
-
-  /**
-   * Create the entries, one for each revision.
-   *
-   * @param instanceName Instance name
-   * @param logEntries   List of log entries (revisions)
-   * @param baseURL      Application base URL
-   * @param response     Response
-   * @return List of RSS feed items
-   * @throws IOException if unable to produce feed items.
-   */
-  private List<SyndEntry> createEntries(final String instanceName, final List<SVNLogEntry> logEntries,
-                                        final String baseURL, final HttpServletResponse response) throws IOException {
+  private List createEntries(final String instanceName, final List<SVNLogEntry> logEntries, final String baseURL)
+      throws IOException {
 
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
@@ -121,102 +101,46 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
       description = new SyndContentImpl();
       description.setType("text/html");
-      description.setValue(createItemBody(getBodyTemplate(), logEntry, baseURL, instanceName, response));
+
+      //noinspection unchecked
+      final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
+      final List<String> latestPathsList = new ArrayList<String>(map.keySet());
+
+      int added = 0;
+      int modified = 0;
+      int replaced = 0;
+      int deleted = 0;
+
+      for (final String entryPath : latestPathsList) {
+        final LogEntryActionType type = LogEntryActionType.parse(map.get(entryPath).getType());
+        switch (type) {
+          case ADDED:
+            added++;
+            break;
+          case MODIFIED:
+            modified++;
+            break;
+          case REPLACED:
+            replaced++;
+            break;
+          case DELETED:
+            deleted++;
+            break;
+        }
+      }
+
+      String itemBody = getBodyTemplate();
+      itemBody = itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(logEntry.getMessage()));
+      itemBody = itemBody.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
+      itemBody = itemBody.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
+      itemBody = itemBody.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
+      itemBody = itemBody.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
+
+      description.setValue(itemBody);
       entry.setDescription(description);
       entries.add(entry);
     }
     return entries;
-  }
-
-  /**
-   * Creates an RSS item body.
-   *
-   * @param bodyTemplate Body template string.
-   * @param logEntry     log entry revision.
-   * @param baseURL      Application base URL.
-   * @param instanceName Instance name
-   * @param response     Response
-   * @return Result
-   */
-  protected String createItemBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
-                                  final String instanceName, final HttpServletResponse response) {
-
-    String itemBody = bodyTemplate;
-    itemBody = addActionCounts(logEntry, itemBody);
-    itemBody = addLogMessage(logEntry, itemBody);
-    itemBody = addChangedPathsTable(logEntry, itemBody, baseURL, instanceName, response);
-    return itemBody;
-  }
-
-  /**
-   * Adds the changed paths table to the item body.
-   *
-   * @param logEntry     Log entry revision.
-   * @param itemBody     String to add the table to.
-   * @param baseURL      Application base URL
-   * @param instanceName Instance name
-   * @param response     Response
-   * @return Result
-   */
-  private String addChangedPathsTable(final SVNLogEntry logEntry, final String itemBody, final String baseURL,
-                                      final String instanceName, final HttpServletResponse response) {
-
-    return itemBody.replaceAll(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, baseURL, instanceName, false, false, response)));
-  }
-
-  /**
-   * Adds the log message to the item body.
-   *
-   * @param logEntry Log entry revision.
-   * @param itemBody String to add details to.
-   * @return Result
-   */
-  protected String addLogMessage(final SVNLogEntry logEntry, final String itemBody) {
-    return itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(WebUtils.nl2br(logEntry.getMessage())));
-  }
-
-  /**
-   * Adds the count details to the item body.
-   *
-   * @param logEntry Log entry revision.
-   * @param itemBody String to add details to.
-   * @return Result
-   */
-  private String addActionCounts(final SVNLogEntry logEntry, final String itemBody) {
-    String str = itemBody;
-
-    int added = 0;
-    int modified = 0;
-    int replaced = 0;
-    int deleted = 0;
-
-    //noinspection unchecked
-    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
-    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
-
-    for (final String entryPath : latestPathsList) {
-      final LogEntryActionType type = LogEntryActionType.parse(latestChangedPaths.get(entryPath).getType());
-      switch (type) {
-        case ADDED:
-          added++;
-          break;
-        case MODIFIED:
-          modified++;
-          break;
-        case REPLACED:
-          replaced++;
-          break;
-        case DELETED:
-          deleted++;
-          break;
-      }
-    }
-    str = str.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
-    str = str.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
-    str = str.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
-    str = str.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-    return str;
   }
 
   /**
@@ -232,13 +156,17 @@ public final class SyndFeedGenerator implements FeedGenerator {
       if (is == null) {
         throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
       }
-      final Scanner scanner = new Scanner(is);
+      BufferedReader reader = null;
       try {
-        while (scanner.hasNextLine()) {
-          sb.append(scanner.nextLine());
+        reader = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = reader.readLine()) != null) {
+          sb.append(line);
         }
       } finally {
-        scanner.close();
+        if (reader != null) {
+          reader.close();
+        }
       }
       bodyTemplate = sb.toString();
     }
@@ -258,6 +186,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
     } else {
       return StringUtils.abbreviate(message, length);
     }
+
   }
 
   /**

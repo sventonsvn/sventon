@@ -13,20 +13,23 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
+import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 
 /**
@@ -68,27 +71,20 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
     final ServletOutputStream output = response.getOutputStream();
 
-    if (!imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()))) {
+    if (!imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
       return null;
     }
 
-    prepareResponse(response, svnCommand);
-
+    response.setHeader("Content-disposition", "inline; filename=\"" + svnCommand.getTarget() + "\"");
+    response.setContentType(imageUtil.getContentType(PathUtil.getFileExtension(svnCommand.getPath())));
     final URL fullSizeImageUrl = new URL(getFullSizeImageURL(request));
     final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
-
     getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), revision.getNumber(),
         fullSizeImageUrl, imageFormatName, maxThumbnailSize, output);
-
     output.flush();
     output.close();
     return null;
-  }
-
-  protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
-    response.setContentType(imageUtil.getContentType(FilenameUtils.getExtension(svnCommand.getPath())));
   }
 
   private String getFullSizeImageURL(final HttpServletRequest request) {

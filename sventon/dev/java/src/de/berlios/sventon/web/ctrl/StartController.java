@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.config.ApplicationConfiguration;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -37,23 +37,20 @@ import javax.servlet.http.HttpServletResponse;
 public class StartController extends AbstractController {
 
   /**
-   * The application.
+   * The application configuration. Used to get all instance names.
    */
-  private Application application;
+  private ApplicationConfiguration configuration;
 
-  /**
-   * {@inheritDoc}
-   */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
     final ModelAndView modelAndView;
-    if (!application.isConfigured()) {
+    if (!configuration.isConfigured()) {
       modelAndView = new ModelAndView(new RedirectView("config.svn"));
-    } else if (application.getInstanceCount() > 1) {
+    } else if (configuration.getInstanceCount() > 1) {
       modelAndView = new ModelAndView(new RedirectView("listinstances.svn"));
-    } else if (application.getInstanceCount() == 1) {
-      final String instanceName = application.getInstanceNames().iterator().next();
+    } else if (configuration.getInstanceCount() == 1) {
+      final String instanceName = configuration.getInstanceNames().iterator().next();
       modelAndView = new ModelAndView(new RedirectView("repobrowser.svn?name=" + instanceName));
     } else {
       throw new IllegalStateException("No instance has been configured!");
@@ -62,12 +59,12 @@ public class StartController extends AbstractController {
   }
 
   /**
-   * Sets the application.
+   * Sets the application configuration.
    *
-   * @param application Application
+   * @param configuration Configuration.
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
 }

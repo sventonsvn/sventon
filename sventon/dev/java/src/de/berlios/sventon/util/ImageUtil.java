@@ -88,7 +88,7 @@ public final class ImageUtil {
    *
    * @param mimeMappings The mappings
    */
-  public void setMimeMappings(final Properties mimeMappings) {
+  public void setMimeMappings(Properties mimeMappings) {
     this.mimeMappings = mimeMappings;
   }
 

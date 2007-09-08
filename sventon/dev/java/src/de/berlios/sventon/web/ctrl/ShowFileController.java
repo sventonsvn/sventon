@@ -12,13 +12,13 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.colorer.Colorer;
-import de.berlios.sventon.model.ArchiveFile;
-import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.util.ImageUtil;
-import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.ArchiveFile;
+import de.berlios.sventon.web.model.HTMLDecoratedTextFile;
+import de.berlios.sventon.web.model.RawTextFile;
 import de.berlios.sventon.web.model.UserContext;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,9 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
 
 /**
  * ShowFileController.
@@ -77,59 +75,42 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     final String formatParameter = ServletRequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final Map fileProperties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
+    final Map properties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
 
-    logger.debug(fileProperties);
+    logger.debug(properties);
 
     final String charset = userContext.getCharset();
     logger.debug("Using charset encoding: " + charset);
 
-    model.put("properties", fileProperties);
-    model.put("committedRevision", fileProperties.get(SVNProperty.COMMITTED_REVISION));
+    model.put("properties", properties);
+    model.put("committedRevision", properties.get(SVNProperty.COMMITTED_REVISION));
 
-    final ModelAndView modelAndView;
-
-    if (isTextFile(fileProperties)) {
+    if (SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE))) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-
       if ("raw".equals(formatParameter)) {
-        response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
-        response.getOutputStream().write(outStream.toByteArray());
-        return null;
+        model.putAll(new RawTextFile(outStream.toString(charset), true).getModel());
       } else {
-        model.put("file", new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
-            colorer, fileProperties, repository.getLocation().toDecodedString()));
+        model.putAll(new HTMLDecoratedTextFile(outStream.toString(charset), properties,
+            repository.getLocation().toDecodedString(), svnCommand.getPath(), charset, colorer).getModel());
       }
-      modelAndView = new ModelAndView("showtextfile", model);
+      return new ModelAndView("showtextfile", model);
     } else {
-      if (isArchiveFile(svnCommand)) {
-        logger.debug("Binary file is an archive file");
-        final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
+      // It's a binary file
+      logger.debug("Binary file detected");
+
+      if (PathUtil.getFileExtension(svnCommand.getPath()).toLowerCase().
+          matches(archiveFileExtensionPattern)) {
+        logger.debug("Binary file as an archive file");
         getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-        model1.put("entries", new ArchiveFile(outStream.toByteArray()).getEntries());
-        modelAndView = new ModelAndView("showarchivefile", model1);
+        model.putAll(new ArchiveFile(outStream.toByteArray()).getModel());
+        return new ModelAndView("showarchivefile", model);
       } else {
-        if (isImageFile(svnCommand)) {
-          logger.debug("Binary file is an image file");
-          modelAndView = new ModelAndView("showimagefile", model);
-        } else {
-          modelAndView = new ModelAndView("showbinaryfile", model);
+        if (imageUtil.isImageFileExtension(PathUtil.getFileExtension(svnCommand.getPath()))) {
+          return new ModelAndView("showimagefile", model);
         }
+        return new ModelAndView("showbinaryfile", model);
       }
     }
-    return modelAndView;
-  }
-
-  protected boolean isTextFile(final Map properties) {
-    return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
-  }
-
-  protected boolean isImageFile(final SVNBaseCommand svnCommand) {
-    return imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()));
-  }
-
-  protected boolean isArchiveFile(final SVNBaseCommand svnCommand) {
-    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
   }
 
   /**

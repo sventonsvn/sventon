@@ -1,12 +1,12 @@
 package de.berlios.sventon.web.tags;
 
-import org.apache.commons.io.FilenameUtils;
+import de.berlios.sventon.util.PathUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 /**
@@ -22,10 +22,51 @@ public final class FileTypeIconTag extends TagSupport {
 
   private static final String FILE_TYPE_ICON_MAPPINGS_FILENAME = "/fileTypeIconMappings.properties";
 
+  static {
+/*
+    MAPPINGS.put("c", "images/icon_file_c.png");
+    MAPPINGS.put("h", "images/icon_file_h.png");
+    MAPPINGS.put("cpp", "images/icon_file_cplusplus.png");
+    MAPPINGS.put("cs", "images/icon_file_csharp.png");
+    MAPPINGS.put("php", "images/icon_file_php.png");
+    MAPPINGS.put("pdf", "images/icon_file_acrobat.png");
+    MAPPINGS.put("as", "images/icon_file_actionscript.png");
+    MAPPINGS.put("cfm", "images/icon_file_coldfusion.png");
+    MAPPINGS.put("doc", "images/icon_file_word.png");
+    MAPPINGS.put("xls", "images/icon_file_excel.png");
+    MAPPINGS.put("ppt", "images/icon_file_powerpoint.png");
+    MAPPINGS.put("rb", "images/icon_file_ruby.png");
+    MAPPINGS.put("txt", "images/icon_file_text.png");
+    MAPPINGS.put("jar", "images/icon_file_zip.png");
+    MAPPINGS.put("zip", "images/icon_file_zip.png");
+    MAPPINGS.put("war", "images/icon_file_zip.png");
+    MAPPINGS.put("ear", "images/icon_file_zip.png");
+    MAPPINGS.put("vbproj", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vcproj", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vaf", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vam", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vdp", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vdproj", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("vsmproj", "images/icon_file_visualstudio.png");
+    MAPPINGS.put("swf", "images/icon_file_flash.png");
+    MAPPINGS.put("fla", "images/icon_file_flash.png");
+    MAPPINGS.put("arj", "images/icon_file_compressed.png");
+    MAPPINGS.put("lha", "images/icon_file_compressed.png");
+    MAPPINGS.put("rar", "images/icon_file_compressed.png");
+    MAPPINGS.put("uc2", "images/icon_file_compressed.png");
+    MAPPINGS.put("ace", "images/icon_file_compressed.png");
+    MAPPINGS.put("sqz", "images/icon_file_compressed.png");
+    MAPPINGS.put("tar", "images/icon_file_compressed.png");
+    MAPPINGS.put("tgz", "images/icon_file_compressed.png");
+    MAPPINGS.put("mda", "images/icon_file_database.png");
+    MAPPINGS.put("mdb", "images/icon_file_database.png");
+    MAPPINGS.put("db", "images/icon_file_database.png");
+*/
+  }
+
   /**
    * {@inheritDoc}
    */
-  @Override
   public int doStartTag() throws JspException {
     try {
       assertMappingsLoaded();
@@ -58,12 +99,18 @@ public final class FileTypeIconTag extends TagSupport {
       throw new IllegalArgumentException("Filename was null");
     }
 
-    final String extension = FilenameUtils.getExtension(filename.toLowerCase());
+    final String extension = PathUtil.getFileExtension(filename.toLowerCase());
     String icon = (String) mappings.get(extension);
     if (icon == null) {
       icon = "images/icon_file.png";
     }
-    return "<img src=\"" + icon + "\" alt=\"" + extension + "\"/>";
+    final StringBuilder sb = new StringBuilder("<img src=\"");
+    sb.append(icon);
+    sb.append("\" alt=\"");
+    sb.append(extension);
+    sb.append("\"/>");
+
+    return sb.toString();
   }
 
   /**

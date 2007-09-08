@@ -11,15 +11,16 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.model.AvailableCharsets;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.repository.RevisionObservable;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.AvailableCharsets;
 import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -27,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
@@ -39,7 +39,6 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -47,8 +46,8 @@ import java.util.Set;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,
- *HttpServletResponse,BindException)}</code>.
+ * <code>{@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest,
+ * HttpServletResponse, BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -59,15 +58,15 @@ import java.util.Set;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,de.berlios.sventon.web.model.UserContext,
- *HttpServletRequest,HttpServletResponse,BindException)}
+ * {@link #svnHandle(SVNRepository, de.berlios.sventon.web.command.SVNBaseCommand, SVNRevision, UserContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,
- *BindException)}
+ * {@link #svnHandle(SVNRepository, SVNBaseCommand, SVNRevision, UserContext, HttpServletRequest, HttpServletResponse,
+ * BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -112,14 +111,24 @@ import java.util.Set;
 public abstract class AbstractSVNTemplateController extends AbstractCommandController {
 
   /**
-   * The application.
+   * The application configuration instance.
    */
-  private Application application;
+  private ApplicationConfiguration configuration = null;
 
   /**
    * Gateway class for accessing the caches.
    */
   private CacheGateway cacheGateway;
+
+  /**
+   * The observable instance. Used to check whether it's buzy updating or not.
+   */
+  private RevisionObservable revisionObservable;
+
+  /**
+   * The repository service instance.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * Maximum number of revisions, default set to 10.
@@ -184,13 +193,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
     // If application config is not ok - redirect to config.jsp
-    if (!application.isConfigured()) {
+    if (!configuration.isConfigured()) {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
-    final Set<String> instanceNames = application.getInstanceNames();
-    if (svnCommand.getName() == null || !instanceNames.contains(svnCommand.getName())) {
+    if (!configuration.getInstanceNames().contains(svnCommand.getName())) {
       logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
       return new ModelAndView(new RedirectView("listinstances.svn"));
     }
@@ -200,12 +208,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
       final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
-      final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand, repository);
-      final long headRevision = getRepositoryService().getLatestRevision(repository);
+      final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand);
+      final long headRevision = repositoryService.getLatestRevision(repository);
 
       final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
@@ -223,17 +231,17 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
+        model.put("isUpdating", revisionObservable.isUpdating(svnCommand.getName()));
         model.put("useCache", instanceConfiguration.isCacheUsed());
         model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
-        model.put("instanceNames", application.getInstanceNames());
+        model.put("instanceNames", configuration.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);
         model.put("charsets", availableCharsets.getCharsets());
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + userContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", getRepositoryService().getLatestRevisions(svnCommand.getName(), repository,
+          model.put("revisions", repositoryService.getLatestRevisions(svnCommand.getName(), repository,
               userContext.getLatestRevisionsDisplayCount()));
         }
 
@@ -244,7 +252,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return forwardToAuthenticationFailureView(svnae);
     } catch (Exception ex) {
       logger.error("Exception", ex);
-      final Throwable cause = ex.getCause();
+      Throwable cause = ex.getCause();
       if (cause instanceof NoRouteToHostException || cause instanceof ConnectException) {
         errors.reject("error.message.no-route-to-host");
       } else {
@@ -372,7 +380,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
-    final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+    final InstanceConfiguration instanceConfiguration = configuration.getInstanceConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -388,22 +396,18 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * <p/>
    * The given <code>SVNBaseCommand</code> instance will be updated with key
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
+   * <p/>
+   * TODO: This (could perhaps) be a suitable place to also handle conversion of
+   * date to revision to expand possible user input to handle calendar
+   * intervals.
    *
    * @param svnCommand Command object.
-   * @param repository Repository instance.
    * @return The converted SVN revision.
    */
-  protected SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand, final SVNRepository repository)
-      throws SVNException {
-
+  private SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand) {
     if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
         && !"HEAD".equals(svnCommand.getRevision())) {
-      SVNRevision revision = SVNRevision.parse(svnCommand.getRevision());
-      if (revision.getNumber() == -1 && revision.getDate() != null) {
-        revision = SVNRevision.create(repository.getDatedRevision(revision.getDate()));
-        svnCommand.setRevision(String.valueOf(revision.getNumber()));
-      }
-      return revision;
+      return SVNRevision.parse(svnCommand.getRevision());
     } else {
       svnCommand.setRevision("HEAD");
       return HEAD;
@@ -458,22 +462,39 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Sets the application.
+   * Set application configuration.
    *
-   * @param application Application
+   * @param configuration ApplicationConfiguration
    */
-  public void setApplication(final Application application) {
-    this.application = application;
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
   }
 
   /**
    * Get current application configuration.
    *
-   * @param instanceName Instance name
    * @return ApplicationConfiguration
    */
-  public InstanceConfiguration getInstanceConfiguration(final String instanceName) {
-    return application.getInstance(instanceName).getConfiguration();
+  public ApplicationConfiguration getConfiguration() {
+    return configuration;
+  }
+
+  /**
+   * Sets the observable. Needed to trigger cache updates.
+   *
+   * @param revisionObservable The observable
+   */
+  public void setRevisionObservable(final RevisionObservable revisionObservable) {
+    this.revisionObservable = revisionObservable;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
   /**
@@ -482,7 +503,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return Repository service
    */
   public RepositoryService getRepositoryService() {
-    return application.getRepositoryService();
+    return repositoryService;
   }
 
   /**

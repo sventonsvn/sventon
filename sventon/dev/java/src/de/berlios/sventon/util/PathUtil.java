@@ -21,12 +21,12 @@ public final class PathUtil {
   /**
    * Gets the target (leaf/end) part of the <code>path</code>, it could be a file
    * or a directory.
-   * <p/>
+   * <p>
    * The returned string will have no final "/", even if it is a directory.
    *
    * @param fullpath Path
    * @return Target part of the path. If <tt>fullpath</tt> is null an
-   *         empty string will be returned.
+   * empty string will be returned.
    */
   public static String getTarget(final String fullpath) {
     if (fullpath == null) {
@@ -43,8 +43,27 @@ public final class PathUtil {
   }
 
   /**
+   * Gets the file extension.
+   *
+   * @param fullpath Path
+   * @return The file extension if any. Empty string otherwise.
+   * If <tt>fullpath</tt> is null an empty string will be returned.
+   */
+  public static String getFileExtension(final String fullpath) {
+    if (fullpath == null) {
+      return "";
+    }
+
+    String fileExtension = "";
+    if (getTarget(fullpath).lastIndexOf(".") > -1) {
+      fileExtension = getTarget(fullpath).substring(getTarget(fullpath).lastIndexOf(".") + 1);
+    }
+    return fileExtension;
+  }
+
+  /**
    * Gets the path, excluding the target leaf.
-   * <p/>
+   * <p>
    * The returned string will have a final "/". If the path info is empty or null, ""
    * (empty string) will be returned.
    *
@@ -66,7 +85,7 @@ public final class PathUtil {
 
   /**
    * Gets the path, excluding the end/leaf.
-   * <p/>
+   * <p>
    * The returned string will have a final "/". If the path info is empty or null, ""
    * (empty string) will be returned.
    *

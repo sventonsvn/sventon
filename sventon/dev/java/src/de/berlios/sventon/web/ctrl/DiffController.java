@@ -13,10 +13,10 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
-import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -28,8 +28,8 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 /**
  * The DiffController generates a Side-by-side diff between two repository entries.
@@ -56,7 +56,7 @@ public class DiffController extends AbstractSVNTemplateController implements Con
 
     try {
       final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-          userContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+          userContext.getCharset(), getConfiguration().getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);

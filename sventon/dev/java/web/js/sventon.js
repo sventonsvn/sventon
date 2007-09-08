@@ -120,7 +120,7 @@ function verifyCheckBox(checkbox) {
   var count = 0;
   var first = null;
   var form = checkbox.form;
-  for (var i = 0; i < form.entry.length; i++) {
+  for (i = 0; i < form.entry.length; i++) {
     if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
       if (first == null && form.entry[i] != checkbox) {
         first = form.entry[i];
@@ -248,7 +248,7 @@ function reportAjaxError(request) {
 
 function showHideHelp(helpDiv, id) {
   if (isAjaxRequestSent) {
-    return;
+    return false;
   }
 
   if (helpDiv.style.display == '') {
@@ -264,23 +264,6 @@ function showHideHelp(helpDiv, id) {
     Element.show(helpDiv);
     isAjaxRequestSent = true;
   }
-}
-
-// Gets the log message for given revision.
-function getLogMessage(revision, instanceName) {
-  var url = 'getmessage.ajax';
-  var urlParams = 'revision=' + revision + '&name=' + instanceName;
-  var divName = 'msg' + revision + 'Div';
-  
-  var ajax = new Ajax.Request(url, {
-    method: 'get',
-    parameters: urlParams,
-    onSuccess: function(transport) {
-      Element.update(divName, transport.responseText);
-    },
-    onFailure: reportAjaxError
-  });
-  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"/></div>', TITLE, 'Log message', BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff');
 }
 
 // ===============================================================================================
@@ -299,7 +282,7 @@ function toggleInnerHTML(id, text1, text2) {
 // function to toggle the entry checkboxes
 function toggleEntryFields(formName) {
   for (var i = 0; i < formName.length; i++) {
-    var fieldObj = formName.elements[i];
+    fieldObj = formName.elements[i];
     if (fieldObj.type == 'checkbox') {
       fieldObj.checked = !fieldObj.checked;
     }
@@ -338,7 +321,7 @@ function getCheckedCount(formName) {
     checkedEntriesCount = formName.entry.checked ? 1 : 0;
   } else {
     // More than one entry exists - Check how many are checked
-    for (var i = 0; i < formName.entry.length; i++) {
+    for (i = 0; i < formName.entry.length; i++) {
       if (formName.entry[i].checked) {
         checkedEntriesCount++;
       }

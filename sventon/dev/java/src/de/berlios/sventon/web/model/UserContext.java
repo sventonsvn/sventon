@@ -44,7 +44,6 @@ public class UserContext {
 
   /**
    * Search mode.
-   *
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
    */
@@ -144,7 +143,7 @@ public class UserContext {
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
    * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
    */
-  public void setSearchMode(final String searchMode) {
+  public void setSearchMode(String searchMode) {
     this.searchMode = searchMode;
   }
 

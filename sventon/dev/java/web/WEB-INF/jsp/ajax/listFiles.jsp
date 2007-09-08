@@ -43,7 +43,7 @@
     <td class="sventonCol4"></td>
     <td class="sventonCol5">${entry.size}</td>
     <td class="sventonCol6">
-      <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}');">
+      <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
         ${entry.revision}
       </a>
     </td>

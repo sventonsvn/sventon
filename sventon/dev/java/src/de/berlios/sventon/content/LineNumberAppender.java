@@ -13,8 +13,9 @@ package de.berlios.sventon.content;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.StringReader;
 
 /**
  * Appends line numbers to strings.
@@ -93,20 +94,16 @@ public final class LineNumberAppender {
    * @throws IOException if unable to read given string.
    */
   public String appendTo(final String content) throws IOException {
+    final BufferedReader reader = new BufferedReader(new StringReader(content));
     final StringBuilder sb = new StringBuilder();
-    final Scanner scanner = new Scanner(content);
-
-    try {
-      int lineCount = offset;
-      while (scanner.hasNextLine()) {
-        sb.append(embedStart);
-        sb.append(StringUtils.leftPad(String.valueOf(++lineCount), paddingLength, paddingCharacter));
-        sb.append(embedEnd);
-        sb.append(scanner.nextLine());
-        sb.append(System.getProperty("line.separator"));
-      }
-    } finally {
-      scanner.close();
+    String tempLine;
+    int lineCount = offset;
+    while ((tempLine = reader.readLine()) != null) {
+      sb.append(embedStart);
+      sb.append(StringUtils.leftPad(String.valueOf(++lineCount), paddingLength, paddingCharacter));
+      sb.append(embedEnd);
+      sb.append(tempLine);
+      sb.append(System.getProperty("line.separator"));
     }
     return StringUtils.chomp(sb.toString());
   }

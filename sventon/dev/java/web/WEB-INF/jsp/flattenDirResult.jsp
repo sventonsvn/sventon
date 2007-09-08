@@ -54,19 +54,19 @@
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
             <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
             <td class="sventonCol2">
-              <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
+              <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
               </a>
             </td>
             <td class="sventonCol3">
-              <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+              <a href="${viewUrl}" onmouseover="this.T_WIDTH=1;return escape('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
               </a>
             </td>
             <td class="sventonCol4"></td>
             <td class="sventonCol5"></td>
             <td class="sventonCol6">
-              <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}');">
+              <a href="${showRevInfoUrl}" onmouseover="this.T_WIDTH=1;return escape('<spring:message code="showrevinfo.link.tooltip"/>')">
                 ${entry.revision}
               </a>
             </td>

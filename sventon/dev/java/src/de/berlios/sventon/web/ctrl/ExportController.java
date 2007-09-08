@@ -13,7 +13,6 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.EncodingUtils;
-import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.io.IOUtils;
@@ -30,9 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.nio.charset.Charset;
 
 /**
  * Controller for exporting and downloading files or directories as a zip file.
@@ -45,6 +44,11 @@ public class ExportController extends AbstractSVNTemplateController implements C
    * Root of temporary directory where export will be made.
    */
   private File exportDir;
+
+  /**
+   * Response stream content type. Default set to <code>application/octet-stream</code>.
+   */
+  private String contentType = "application/octet-stream";
 
   /**
    * The charset to use for filenames and comments in the archive file.
@@ -79,8 +83,8 @@ public class ExportController extends AbstractSVNTemplateController implements C
       getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
       final File compressedFile = exportDirectory.compress(archiveFileCharset);
       output = response.getOutputStream();
-      response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);
-      response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\""
+      response.setContentType(contentType);
+      response.setHeader("Content-disposition", "attachment; filename=\""
           + EncodingUtils.encodeFilename(compressedFile.getName(), request) + "\"");
 
       fileInputStream = new FileInputStream(compressedFile);
@@ -93,6 +97,15 @@ public class ExportController extends AbstractSVNTemplateController implements C
 
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
     return null;
+  }
+
+  /**
+   * Sets the content type used when writing the stream to the response.
+   *
+   * @param contentType Content type to use.
+   */
+  public void setContentType(final String contentType) {
+    this.contentType = contentType;
   }
 
   /**

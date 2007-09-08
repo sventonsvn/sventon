@@ -11,30 +11,28 @@
  */
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.SventonException;
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.colorer.Colorer;
+import de.berlios.sventon.config.ApplicationConfiguration;
+import de.berlios.sventon.config.InstanceConfiguration;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
-import de.berlios.sventon.model.AnnotatedTextFile;
-import de.berlios.sventon.model.ImageMetadata;
-import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.cache.CacheException;
+import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.DiffCommand;
+import de.berlios.sventon.web.model.ImageMetadata;
+import de.berlios.sventon.web.model.RawTextFile;
+import de.berlios.sventon.web.model.SideBySideDiffRow;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNLogClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.imageio.ImageIO;
@@ -55,14 +53,46 @@ public class RepositoryServiceImpl implements RepositoryService {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
+   * The cache instance.
+   */
+  private CacheGateway cacheGateway;
+
+  /**
+   * The application configuration instance. Used to check if caching is enabled or not.
+   */
+  private ApplicationConfiguration configuration;
+
+  /**
+   * Sets the application configuration.
+   *
+   * @param configuration Configuration
+   */
+  public void setConfiguration(final ApplicationConfiguration configuration) {
+    this.configuration = configuration;
+  }
+
+  /**
+   * Sets the cache gateway instance.
+   *
+   * @param cacheGateway Cache gateway instance
+   */
+  public void setCacheGateway(final CacheGateway cacheGateway) {
+    this.cacheGateway = cacheGateway;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
-      throws SVNException, SventonException {
-
+      throws SVNException, CacheException {
     final long start = System.currentTimeMillis();
     final SVNLogEntry logEntry;
-    logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
+      logger.debug("Fetching cached revision: " + revision);
+      logEntry = cacheGateway.getRevision(instanceName, revision);
+    } else {
+      logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+    }
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
     return logEntry;
   }
@@ -72,7 +102,6 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision, final long toRevision)
       throws SVNException {
-
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
@@ -89,15 +118,28 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
-                                        final long limit) throws SVNException, SventonException {
+                                        final long limit) throws SVNException, CacheException {
 
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
-      public void handleLogEntry(final SVNLogEntry logEntry) {
-        logEntries.add(logEntry);
-      }
-    });
+    if (configuration.getInstanceConfiguration(instanceName).isCacheUsed()) {
+      // To be able to return cached revisions, we first have to get the revision numbers
+      // Doing a logs-call, skipping the details, to get them.
+      final List<Long> revisions = new ArrayList<Long>();
+      repository.log(new String[]{path}, fromRevision, toRevision, false, false, limit, new ISVNLogEntryHandler() {
+        public void handleLogEntry(final SVNLogEntry logEntry) {
+          revisions.add(logEntry.getRevision());
+        }
+      });
+      logger.debug("Fetching cached revisions [" + toRevision + "-" + fromRevision + "]");
+      logEntries.addAll(cacheGateway.getRevisions(instanceName, revisions));
+    } else {
+      repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
+        public void handleLogEntry(final SVNLogEntry logEntry) {
+          logEntries.add(logEntry);
+        }
+      });
+    }
     logger.debug("PERF: getRevisions(): " + (System.currentTimeMillis() - start));
     return logEntries;
   }
@@ -126,12 +168,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public TextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
-      throws SVNException, IOException {
+  public RawTextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
+      throws SVNException, UnsupportedEncodingException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFile(repository, path, revision, outStream);
-    return new TextFile(outStream.toString(charset));
+    return new RawTextFile(outStream.toString(charset), true);
   }
 
   /**
@@ -191,7 +233,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, SventonException {
+                                              final long revisionCount) throws SVNException, CacheException {
     return getLatestRevisions(instanceName, "/", repository, revisionCount);
   }
 
@@ -199,7 +241,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, SventonException {
+                                              final long revisionCount) throws SVNException, CacheException {
     final long headRevision = repository.getLatestRevision();
     return getRevisions(instanceName, repository, headRevision, 1, path, revisionCount);
   }
@@ -333,8 +375,8 @@ public class RepositoryServiceImpl implements RepositoryService {
     SideBySideDiffCreator sideBySideDiffCreator;
 
     try {
-      final TextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final TextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
 
       final Map leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
       final Map rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
@@ -379,8 +421,8 @@ public class RepositoryServiceImpl implements RepositoryService {
     String diffResultString;
 
     try {
-      final TextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-      final TextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+      final RawTextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final RawTextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
       final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
@@ -398,48 +440,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
 
     return diffResultString;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
-                                 final String charset, final Colorer colorer) throws SVNException {
-
-    long blameRevision = revision;
-    if (blameRevision == -1) {
-      blameRevision = repository.getLatestRevision();
-    }
-
-    final long start = System.currentTimeMillis();
-
-    logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
-
-    final Map properties = getFileProperties(repository, path, revision);
-    final SVNLogClient logClient = SVNClientManager.newInstance(
-        null, repository.getAuthenticationManager()).getLogClient();
-    final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
-        path, charset, colorer, properties, repository.getLocation().toDecodedString());
-    final ISVNAnnotateHandler handler = new ISVNAnnotateHandler() {
-      public void handleLine(final Date date, final long revision, final String author, final String line) {
-        annotatedTextFile.addRow(date, revision, author, line);
-      }
-    };
-
-    final SVNRevision pegRev = SVNRevision.HEAD;
-    final SVNRevision startRev = SVNRevision.create(0);
-    final SVNRevision endRev = SVNRevision.create(blameRevision);
-
-    logClient.doAnnotate(SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), pegRev, startRev,
-        endRev, false, handler, charset);
-    try {
-      annotatedTextFile.colorize();
-    } catch (IOException ioex) {
-      logger.warn("Unable to colorize [" + path + "]", ioex);
-    }
-
-    logger.debug("PERF: blame(): " + (System.currentTimeMillis() - start));
-    return annotatedTextFile;
   }
 
   private void assertNotBinary(final SVNRepository repository, final DiffCommand diffCommand) throws SVNException,

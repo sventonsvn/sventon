@@ -1,14 +1,11 @@
 package de.berlios.sventon.rss;
 
 import junit.framework.TestCase;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class SyndFeedGeneratorTest extends TestCase {
@@ -39,15 +36,7 @@ public class SyndFeedGeneratorTest extends TestCase {
 
     final File tempFile = File.createTempFile("sventon-rss-test", null);
     final PrintWriter pw = new PrintWriter(tempFile);
-
-    final MockHttpServletRequest req = new MockHttpServletRequest("get", "http://localhost:8888/svn/");
-    final MockHttpServletResponse res = new MockHttpServletResponse() {
-      public PrintWriter getWriter() throws UnsupportedEncodingException {
-        return pw;
-      }
-    };
-
-    generator.outputFeed("defaultsvn", logEntries, req, res);
+    generator.outputFeed("defaultsvn", logEntries, "http://localhost:8888/svn/", pw);
     pw.flush();
     pw.close();
 
@@ -56,20 +45,15 @@ public class SyndFeedGeneratorTest extends TestCase {
     } else {
       throw new Exception("No rss feed file was created in " + System.getProperty("java.io.tmpdir"));
     }
+
   }
 
   public void testGetAbbreviatedLogMessage() throws Exception {
-    final SyndFeedGenerator generator = new SyndFeedGenerator();
-    assertEquals("this is...", generator.getAbbreviatedLogMessage("this is a message", 10));
-    assertEquals("this is a mes...", generator.getAbbreviatedLogMessage("this is a message", 16));
-    assertEquals("this is a message", generator.getAbbreviatedLogMessage("this is a message", 17));
-    assertEquals(null, generator.getAbbreviatedLogMessage(null, 10));
-    assertEquals("", generator.getAbbreviatedLogMessage("", 10));
-  }
-
-  public void testAddLogMessage() throws Exception {
-    final SyndFeedGenerator generator = new SyndFeedGenerator();
-    final SVNLogEntry logEntry = new SVNLogEntry(null, 1, "test", new Date(), "one\ntwo");
-    assertEquals("one<br/>two", generator.addLogMessage(logEntry, SyndFeedGenerator.LOG_MESSAGE_KEY));
+    SyndFeedGenerator f = new SyndFeedGenerator();
+    assertEquals("this is...", f.getAbbreviatedLogMessage("this is a message", 10));
+    assertEquals("this is a mes...", f.getAbbreviatedLogMessage("this is a message", 16));
+    assertEquals("this is a message", f.getAbbreviatedLogMessage("this is a message", 17));
+    assertEquals(null, f.getAbbreviatedLogMessage(null, 10));
+    assertEquals("", f.getAbbreviatedLogMessage("", 10));
   }
 }

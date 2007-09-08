@@ -1,13 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[874] Added: Feature #1571 - Browse specific date instead of revision.
-[860] Added: Feature #953 - Blame.
-[859] Added: Upgraded to SVNKit 1.1.4.
-[856] Added: Feature #3345 - More details in RSS body.
-[845] Added: Feature #3477 - Configurable feed sizes.
-[844] Added: Feature #3498 - Visual feedback when skipping directories.
-[843] Added: Feature #3341 - Log message popup div.
+[883] Release 1.2.0 (2007-09-08)
 
 [851] Release 1.2 RC3 (2007-07-21)
 [848] Fixed: Bug #11430 - Cache functionality doesn't work with file-protocol.

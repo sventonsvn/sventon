@@ -12,7 +12,9 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.util.HTMLCreator" %>
+<%@ page import="org.tmatesoft.svn.core.SVNLogEntryPath"%>
+<%@ page import="de.berlios.sventon.web.model.LogEntryActionType"%>
+<%@ page import="java.util.*"%>
 
 <html>
   <head>
@@ -62,7 +64,7 @@
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
-          <jsp:useBean id="entry" type="de.berlios.sventon.model.LogEntryBundle" />
+          <jsp:useBean id="entry" type="de.berlios.sventon.web.model.LogEntryBundle" />
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
             <c:choose>
@@ -81,7 +83,70 @@
           </tr>
           <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
             <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
-              <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), "", command.getName(), false, false, response)%>
+              <table width="100%" border="0">
+                <tr>
+                  <th>Action</th>
+                  <th>Path</th>
+                </tr>
+                <c:set var="changedPaths" value="${entry.svnLogEntry.changedPaths}" />
+                <jsp:useBean id="changedPaths" type="java.util.Map" />
+                <%
+                  final List pathsList = new ArrayList(changedPaths.keySet());
+                  Collections.sort(pathsList);
+                  final Iterator i = pathsList.iterator();
+                  while (i.hasNext()) {
+                    final SVNLogEntryPath logEntryPath = (SVNLogEntryPath) changedPaths.get(i.next());
+                    final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+                %>
+                <tr>
+
+                  <c:url value="goto.svn" var="goToUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
+                  <c:url value="goto.svn" var="goToCopyUrl">
+                    <c:param name="path" value="<%= logEntryPath.getCopyPath() %>" />
+                    <c:param name="revision" value="<%= String.valueOf(logEntryPath.getCopyRevision()) %>"/>
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
+                  <c:url value="revinfo.svn" var="showRevInfoCopyUrl">
+                    <c:param name="name" value="${command.name}" />
+                  </c:url>
+
+                  <td valign="top" width="1"><i><%= actionType %></i></td>
+                  <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
+                  <td><a href="${goToUrl}" title="Show"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a>
+                  <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
+
+                  <%
+                      String entry1 = logEntryPath.getPath() + ";;" + entry.getSvnLogEntry().getRevision();
+                      String entry2 = logEntryPath.getPath() + ";;" + (entry.getSvnLogEntry().getRevision() - 1);
+                  %>
+
+                  <c:url value="diff.svn" var="diffUrl">
+                    <c:param name="path" value="<%= logEntryPath.getPath() %>" />
+                    <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                    <c:param name="name" value="${command.name}" />
+                    <c:param name="entry" value="<%= entry1 %>"/>
+                    <c:param name="entry" value="<%= entry2 %>"/>
+                  </c:url>
+
+                  <td><a href="${diffUrl}" title="Diff with previous version"><%= logEntryPath.getPath().startsWith(command.getPath()) ? "<i>" + logEntryPath.getPath() + "</i>" : logEntryPath.getPath() %></a>
+                  <% } else if (LogEntryActionType.DELETED == actionType) { %>
+                  <td><strike><%= logEntryPath.getPath() %></strike>
+                  <% } %>
+                  <% if (logEntryPath.getCopyPath() != null) { %>
+                    <br/><b>Copy from</b> <a href="${goToCopyUrl}" title="Show"><%=logEntryPath.getCopyPath()%></a> @ <a href="${showRevInfoCopyUrl}&revision=<%=logEntryPath.getCopyRevision()%>"><%=Long.toString(logEntryPath.getCopyRevision())%></a>
+                  <% } %>
+                  </td>
+                </tr>
+              <%
+                }
+              %>
+              </table>
             </td>
           </tr>
           <c:set var="rowCount" value="${rowCount + 1}"/>

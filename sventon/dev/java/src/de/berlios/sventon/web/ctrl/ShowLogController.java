@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.model.LogEntryBundle;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.LogEntryBundle;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -31,9 +31,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Controller for showing logs.
- * <p/>
- * The log entries will be paged if the number of entries exceeds max page size, {@link #pageSize}.
+ * ShowLogController. For showing logs. Note, this currently does not work for
+ * protocol http/https. <p/> The log entries will be paged if the number of
+ * entries exceeds max page siz, {@link #pageSize}. Paged log entries are
+ * stored in the user HTTP session using key <code>sventon.logEntryPages</code>.
+ * The type of this object is <code>List<List<SVNLogEntry>></code>.
  *
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
@@ -93,13 +95,11 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
     }
 
     final List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
-    final long toRevision = 1;
 
-    logger.debug("Assembling logs data revision [" + revNumber + " - " + toRevision + "] limit: " + pageSize);
-
+    logger.debug("Assembling logs data");
     // TODO: Safer parsing would be nice.
     final List<SVNLogEntry> logEntries =
-        getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, toRevision, targetPath, pageSize);
+        getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, 1, targetPath, pageSize);
 
     String pathAtRevision = targetPath;
 
