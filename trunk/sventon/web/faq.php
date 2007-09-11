@@ -19,7 +19,8 @@
   <li><a href="#q18">Why did you start this project?</a></li>
   <li><a href="#q19">Is there a publicly running version of Sventon that I can try?</a></li>
   <li><a href="#q20">Can I change the layout of the RSS feed?</a></li>
-  <li><a href="#q21">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q21">Can I use sventon together with JIRA?</a></li>
+  <li><a href="#q22">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -224,6 +225,15 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q21">
+<b>Q:</b> Can I use sventon together with JIRA?
+</a>
+<br/>
+<b>A:</b> Yes. An example configuration can be found <a href="http://confluence.atlassian.com/display/JIRAEXT/JIRA+Subversion+plugin#comment-36962434">here</a>.
+</p>
+
+
+<p>
+<a name="q22">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
