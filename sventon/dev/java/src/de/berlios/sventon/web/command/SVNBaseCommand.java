@@ -27,7 +27,7 @@ import java.util.Map;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class SVNBaseCommand {
+public final class SVNBaseCommand {
 
   /**
    * The full path.
@@ -247,7 +247,10 @@ public class SVNBaseCommand {
     return result;
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String toString() {
     return "SVNBaseCommand{" +
         "path='" + path + '\'' +

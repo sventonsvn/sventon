@@ -16,7 +16,9 @@ import de.berlios.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * DiffCommand.
@@ -25,11 +27,26 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class DiffCommand {
+public final class DiffCommand {
 
+  /**
+   * From revision.
+   */
   private final SVNRevision fromRevision;
+
+  /**
+   * To revision.
+   */
   private final SVNRevision toRevision;
+
+  /**
+   * From path.
+   */
   private final String fromPath;
+
+  /**
+   * To path.
+   */
   private final String toPath;
 
   /**
@@ -159,6 +176,7 @@ public class DiffCommand {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String toString() {
     return "DiffCommand{" +
         "fromRevision=" + fromRevision +

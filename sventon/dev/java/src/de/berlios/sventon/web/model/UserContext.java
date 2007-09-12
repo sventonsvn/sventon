@@ -20,7 +20,7 @@ import de.berlios.sventon.repository.RepositoryEntrySorter;
  *
  * @author jesper@users.berlios.de
  */
-public class UserContext {
+public final class UserContext {
 
   /**
    * The sort type.

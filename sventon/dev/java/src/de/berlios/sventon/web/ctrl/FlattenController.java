@@ -30,7 +30,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class FlattenController extends AbstractSVNTemplateController implements Controller {
+public final class FlattenController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

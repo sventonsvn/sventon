@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class SearchLogsController extends AbstractSVNTemplateController implements Controller {
+public final class SearchLogsController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

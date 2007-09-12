@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  *
  * @author jesper@users.berlios.de
  */
-public class ConfigCommand {
+public final class ConfigCommand {
 
   private String name;
   private String repositoryURL;
@@ -81,6 +81,7 @@ public class ConfigCommand {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
   }

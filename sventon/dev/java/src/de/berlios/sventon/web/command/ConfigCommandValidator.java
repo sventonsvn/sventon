@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +27,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  *
  * @author jesper@users.berlios.de
  */
-public class ConfigCommandValidator implements Validator {
+public final class ConfigCommandValidator implements Validator {
 
   /**
    * Logger for this class and subclasses
@@ -51,15 +51,21 @@ public class ConfigCommandValidator implements Validator {
    * @param testConnection If <tt>false</tt> repository
    *                       connection will not be tested.
    */
-  protected ConfigCommandValidator(boolean testConnection) {
+  protected ConfigCommandValidator(final boolean testConnection) {
     this.testConnection = testConnection;
   }
 
-  public boolean supports(Class clazz) {
+  /**
+   * {@inheritDoc}
+   */
+  public boolean supports(final Class clazz) {
     return clazz.equals(ConfigCommand.class);
   }
 
-  public void validate(Object obj, Errors errors) {
+  /**
+   * {@inheritDoc}
+   */
+  public void validate(final Object obj, final Errors errors) {
     final ConfigCommand command = (ConfigCommand) obj;
 
     // Validate 'repository instance name'

@@ -16,8 +16,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Properties;
 import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Colorizes given input using the JHighlight syntax highlighting library.
@@ -25,17 +25,17 @@ import java.io.IOException;
  * @author jesper@users.berlios.de
  * @link http://jhighlight.dev.java.net
  */
-public class JHighlightColorer implements Colorer {
-
-  private final Log logger = LogFactory.getLog(getClass());
-
-  private Properties rendererMappings;
+public final class JHighlightColorer implements Colorer {
 
   /**
-   * Constructor.
+   * The logging instance.
    */
-  public JHighlightColorer() {
-  }
+  private final Log logger = LogFactory.getLog(getClass());
+
+  /**
+   * File type <-> renderer mappings.
+   */
+  private Properties rendererMappings;
 
   /**
    * {@inheritDoc}

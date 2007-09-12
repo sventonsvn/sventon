@@ -33,7 +33,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class ShowThumbnailsController extends AbstractSVNTemplateController implements Controller {
+public final class ShowThumbnailsController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Image utility.

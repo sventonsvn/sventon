@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RSSController extends AbstractController {
+public final class RSSController extends AbstractController {
 
   /**
    * Logger for this class and subclasses.

@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class ConfigurationController extends AbstractFormController {
+public final class ConfigurationController extends AbstractFormController {
 
   /**
    * The application.
@@ -62,9 +62,11 @@ public class ConfigurationController extends AbstractFormController {
     this.application = application;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView showForm(final HttpServletRequest request,
-                                  final HttpServletResponse response, final BindException e)
-      throws IOException {
+                                  final HttpServletResponse response, final BindException e) throws IOException {
 
     logger.debug("showForm() started");
     logger.info("sventon configured: " + application.isConfigured());
@@ -87,6 +89,9 @@ public class ConfigurationController extends AbstractFormController {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView processFormSubmission(final HttpServletRequest request,
                                                final HttpServletResponse response, final Object command,
                                                final BindException errors) throws IOException {

@@ -4,8 +4,6 @@ import junit.framework.TestCase;
 
 import java.util.Map;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
-
 public class SVNBaseCommandTest extends TestCase {
 
   public static void main(String[] args) {

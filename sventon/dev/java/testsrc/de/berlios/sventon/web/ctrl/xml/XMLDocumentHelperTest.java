@@ -1,14 +1,14 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import junit.framework.TestCase;
+import org.jdom.Document;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.jdom.Document;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class XMLDocumentHelperTest extends TestCase {
 

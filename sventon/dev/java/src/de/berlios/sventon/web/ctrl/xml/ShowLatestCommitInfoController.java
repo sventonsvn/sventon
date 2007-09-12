@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * @author jesper@users.berlios.de
  */
-public class ShowLatestCommitInfoController extends AbstractController {
+public final class ShowLatestCommitInfoController extends AbstractController {
 
   /**
    * Logger for this class and subclasses.

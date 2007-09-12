@@ -15,8 +15,8 @@ import de.berlios.sventon.util.ByteFormatter;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-import java.util.Locale;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * JSP Tag for formatting bytes size values.
@@ -24,13 +24,20 @@ import java.io.IOException;
  * @author jesper@users.berlios.de
  * @see de.berlios.sventon.util.ByteFormatter
  */
-public class ByteFormatterTag extends TagSupport {
+public final class ByteFormatterTag extends TagSupport {
 
+  /**
+   * The size.
+   */
   private long size;
+
+  /**
+   * Locale.
+   */
   private Locale locale;
 
   /**
-   * {@inheritDoc} 
+   * {@inheritDoc}
    */
   @Override
   public int doStartTag() throws JspException {

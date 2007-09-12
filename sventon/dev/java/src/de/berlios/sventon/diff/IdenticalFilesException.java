@@ -16,7 +16,7 @@ package de.berlios.sventon.diff;
  *
  * @author jesper@users.berlios.de
  */
-public class IdenticalFilesException extends DiffException {
+public final class IdenticalFilesException extends DiffException {
 
   /**
    * Constructor.

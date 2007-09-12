@@ -45,11 +45,6 @@ public class HTMLCreatorTest extends TestCase {
     assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "", "sandbox", false, false, new MockHttpServletResponse()));
   }
 
-  public void testEncode() throws Exception {
-    assertEquals("%2F", HTMLCreator.encode("/"));
-    assertEquals("+", HTMLCreator.encode(" "));
-  }
-
   public void testCreateGoToUrl() throws Exception {
     assertEquals("http://localhost/goto.svn?path=%2Ftrunk%2Fa.txt&revision=1&name=sandbox",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, "sandbox", false));

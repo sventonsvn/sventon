@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@users.berlios.de
  */
-public class ConfigurationSubmissionController extends AbstractController {
+public final class ConfigurationSubmissionController extends AbstractController {
 
   /**
    * The application.
@@ -65,6 +65,9 @@ public class ConfigurationSubmissionController extends AbstractController {
     this.scheduler = scheduler;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 

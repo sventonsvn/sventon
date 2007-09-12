@@ -38,7 +38,7 @@ import java.util.*;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class ShowLogController extends AbstractSVNTemplateController implements Controller {
+public final class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Max entries per page, default set to 50.
@@ -57,7 +57,6 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                    final SVNRevision revision, final UserContext userContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
@@ -105,6 +104,7 @@ public class ShowLogController extends AbstractSVNTemplateController implements 
 
     for (final SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
+      //noinspection unchecked
       final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
       final Set<String> changedPaths = allChangedPaths.keySet();
       for (String entryPath : changedPaths) {

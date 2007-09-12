@@ -29,6 +29,9 @@ import java.util.Map;
  */
 public class ListDirectoryContentsController extends AbstractSVNTemplateController implements Controller {
 
+  /**
+   * {@inheritDoc}
+   */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                    final SVNRevision revision, final UserContext userContext,

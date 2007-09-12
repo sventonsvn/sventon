@@ -16,6 +16,7 @@ import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +31,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**
@@ -227,20 +227,11 @@ public final class SyndFeedGenerator implements FeedGenerator {
    */
   protected String getBodyTemplate() throws IOException {
     if (bodyTemplate == null) {
-      final StringBuilder sb = new StringBuilder();
       final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
       if (is == null) {
         throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
       }
-      final Scanner scanner = new Scanner(is);
-      try {
-        while (scanner.hasNextLine()) {
-          sb.append(scanner.nextLine());
-        }
-      } finally {
-        scanner.close();
-      }
-      bodyTemplate = sb.toString();
+      bodyTemplate = IOUtils.toString(is);
     }
     return bodyTemplate;
   }

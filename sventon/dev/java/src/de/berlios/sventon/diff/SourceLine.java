@@ -17,9 +17,16 @@ package de.berlios.sventon.diff;
  *
  * @author jesper@users.berlios.de
  */
-public class SourceLine {
+public final class SourceLine {
 
+  /**
+   * The line's diff action.
+   */
   private DiffAction action;
+
+  /**
+   * The actual source line.
+   */
   private String line;
 
   /**
@@ -54,6 +61,7 @@ public class SourceLine {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String toString() {
     return "SourceLine{action='" + action + "', " + "line='" + line + "'}";
   }

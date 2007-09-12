@@ -21,7 +21,7 @@ import java.util.TreeSet;
  *
  * @author jesper@users.berlios.de
  */
-public class AvailableCharsets {
+public final class AvailableCharsets {
 
   /**
    * Cached available character sets.

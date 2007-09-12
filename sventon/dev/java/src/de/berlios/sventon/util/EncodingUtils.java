@@ -21,7 +21,26 @@ import java.net.URLEncoder;
  */
 public final class EncodingUtils {
 
+  /**
+   * Default charset, UTF-8.
+   */
   private static final String DEFAULT_CHARSET = "UTF-8";
+
+  /**
+   * Encodes given string using default encoding (UTF-8).
+   *
+   * @param str String to encode.
+   * @return Encoded string.
+   */
+  protected static String encode(final String str) {
+    String s = "";
+    try {
+      s = URLEncoder.encode(str, DEFAULT_CHARSET);
+    } catch (UnsupportedEncodingException e) {
+      // ignore
+    }
+    return s;
+  }
 
   /**
    * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.

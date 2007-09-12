@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl {
+public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl {
 
   /**
    * The cache instance.

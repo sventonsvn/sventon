@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class SearchEntriesController extends AbstractSVNTemplateController implements Controller {
+public final class SearchEntriesController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -69,6 +69,12 @@ public class SearchEntriesController extends AbstractSVNTemplateController imple
     return new ModelAndView("searchEntriesResult", model);
   }
 
+  /**
+   * Checks if all characters in given string is in upper case.
+   *
+   * @param string String.
+   * @return True if all is uppercase.
+   */
   private boolean isAllUpperCase(final String string) {
     return string.toUpperCase().equals(string);
   }

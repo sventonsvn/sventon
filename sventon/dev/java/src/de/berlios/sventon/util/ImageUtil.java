@@ -26,12 +26,6 @@ public final class ImageUtil {
   private Properties mimeMappings;
 
   /**
-   * Constructor.
-   */
-  public ImageUtil() {
-  }
-
-  /**
    * Gets the content type for given file extension.
    *
    * @param fileExtension The file extension

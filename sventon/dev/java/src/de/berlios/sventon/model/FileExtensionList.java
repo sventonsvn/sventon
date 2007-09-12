@@ -23,7 +23,7 @@ import java.util.TreeSet;
  *
  * @author jesper@users.berlios.de
  */
-public class FileExtensionList {
+public final class FileExtensionList {
 
   /**
    * The Set of existing extensions.

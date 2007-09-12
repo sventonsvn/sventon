@@ -59,9 +59,9 @@ public class DiffResultParserTest extends TestCase {
   public void testDiffHelperChangeII() throws Exception {
     String result =
         "10,12c3,4\n" +
-        "< * $HeadURL$\n" +
-        "< * $URL$\n" +
-        "< * $Id$";
+            "< * $HeadURL$\n" +
+            "< * $URL$\n" +
+            "< * $Id$";
     Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
     DiffSegment action = actions.next();
     assertSame(DiffAction.CHANGED, action.getAction());
