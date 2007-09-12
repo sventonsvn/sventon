@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class ExportController extends AbstractSVNTemplateController implements Controller {
+public final class ExportController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Root of temporary directory where export will be made.

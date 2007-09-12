@@ -18,7 +18,7 @@ import java.util.Date;
  *
  * @author jesper@users.berlios.de
  */
-public class AnnotatedTextFileRow {
+public final class AnnotatedTextFileRow {
 
   /**
    * Time stamp.

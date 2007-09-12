@@ -36,7 +36,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class DiffController extends AbstractSVNTemplateController implements Controller {
+public final class DiffController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

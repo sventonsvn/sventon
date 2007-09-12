@@ -24,7 +24,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author jesper@users.berlios.de
  */
-public class ArchiveFile {
+public final class ArchiveFile {
 
   /**
    * The archive entries.
@@ -53,13 +53,6 @@ public class ArchiveFile {
    */
   public List<ZipEntry> getEntries() {
     return Collections.unmodifiableList(archiveEntries);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getContent() {
-    throw new UnsupportedOperationException();
   }
 
 }

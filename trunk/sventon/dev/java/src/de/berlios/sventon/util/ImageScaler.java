@@ -11,18 +11,29 @@
  */
 package de.berlios.sventon.util;
 
-import java.awt.image.BufferedImage;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Class for scaling images.
  *
  * @author jesper@users.berlios.de
  */
-public class ImageScaler {
+public final class ImageScaler {
 
+  /**
+   * The image.
+   */
   private final BufferedImage image;
+
+  /**
+   * Image width.
+   */
   private final int width;
+
+  /**
+   * Image height.
+   */
   private final int height;
 
   /**
@@ -43,7 +54,6 @@ public class ImageScaler {
    * @return The thumbnail.
    */
   public BufferedImage getThumbnail(final int maxSize) {
-    // Get preferred thumbnail dimension.
     final Dimension thumbnailSize = getThumbnailSize(width, height, maxSize);
 
     // Resize image.
@@ -63,7 +73,7 @@ public class ImageScaler {
    * @return The thumbnail dimension.
    */
   protected Dimension getThumbnailSize(final int width, final int height, final int maxSize) {
-    int max = (width >= height) ? width : height;
+    final int max = (width >= height) ? width : height;
     if (max <= maxSize) {
       // Image is smaller than maximum size - no need for a resize
       return new Dimension(width, height);
@@ -82,8 +92,8 @@ public class ImageScaler {
    * @see java.awt.image.BufferedImage
    */
   private BufferedImage toBufferedImage(final Image image, final int type) {
-    int width = image.getWidth(null);
-    int height = image.getHeight(null);
+    final int width = image.getWidth(null);
+    final int height = image.getHeight(null);
 
     final BufferedImage result = new BufferedImage(width, height, type);
     final Graphics2D g = result.createGraphics();

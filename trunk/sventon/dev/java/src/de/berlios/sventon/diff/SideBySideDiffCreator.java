@@ -19,12 +19,13 @@ import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.util.WebUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Creates side by side diff result instances.
@@ -35,7 +36,14 @@ import java.util.Scanner;
  */
 public final class SideBySideDiffCreator {
 
+  /**
+   * The left source lines.
+   */
   private final List<String> leftSourceLines;
+
+  /**
+   * The right source lines.
+   */
   private final List<String> rightSourceLines;
 
   /**
@@ -138,16 +146,8 @@ public final class SideBySideDiffCreator {
    * @throws IOException if unable to read string
    */
   private List<String> toLinesList(final String string) throws IOException {
-    final List<String> lines = new ArrayList<String>();
-    final Scanner scanner = new Scanner(string);
-    try {
-      while (scanner.hasNextLine()) {
-        lines.add(scanner.nextLine());
-      }
-    } finally {
-      scanner.close();
-    }
-    return lines;
+    //noinspection unchecked
+    return (List<String>) IOUtils.readLines(new StringReader(string));
   }
 
   /**

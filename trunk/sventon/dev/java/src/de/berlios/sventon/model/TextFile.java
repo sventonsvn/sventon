@@ -23,8 +23,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class TextFile {
+public final class TextFile {
 
+  /**
+   * The text file rows.
+   */
   private final List<TextFileRow> rows = new ArrayList<TextFileRow>();
 
   /**

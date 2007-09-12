@@ -28,14 +28,16 @@ import java.io.IOException;
  *
  * @author jesper@users.berlios.de
  */
-public class GetStaticContentController extends AbstractController {
+public final class GetStaticContentController extends AbstractController {
 
   /**
    * Path to static content, from context root.
    */
   private String path;
 
-
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final String filename = ServletRequestUtils.getRequiredStringParameter(request, "id");
     final File file = new File(path, filename + ".html");

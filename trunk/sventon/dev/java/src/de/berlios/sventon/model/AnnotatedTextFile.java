@@ -24,7 +24,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class AnnotatedTextFile {
+public final class AnnotatedTextFile {
 
   /**
    * The annotated rows.
@@ -32,6 +32,7 @@ public class AnnotatedTextFile {
   private final List<AnnotatedTextFileRow> rows = new ArrayList<AnnotatedTextFileRow>();
 
   private static final String NEWLINE = System.getProperty("line.separator");
+
   private String path;
   private String encoding;
   private Colorer colorer;

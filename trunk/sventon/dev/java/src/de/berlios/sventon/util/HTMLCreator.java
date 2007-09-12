@@ -12,12 +12,11 @@
 package de.berlios.sventon.util;
 
 import de.berlios.sventon.model.LogEntryActionType;
+import static de.berlios.sventon.util.EncodingUtils.encode;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +29,6 @@ import java.util.Map;
  */
 public final class HTMLCreator {
 
-  private static final String DEFAULT_ENCODING = "UTF-8";
-
   private static final String GOTO_URL = "goto.svn";
   private static final String REV_INFO_URL = "revinfo.svn";
   private static final String DIFF_URL = "diff.svn";
@@ -40,22 +37,6 @@ public final class HTMLCreator {
    * Prevent instantiation.
    */
   private HTMLCreator() {
-  }
-
-  /**
-   * Encodes given string using default encoding (UTF-8).
-   *
-   * @param str String to encode.
-   * @return Encoded string.
-   */
-  protected static String encode(final String str) {
-    String s = "";
-    try {
-      s = URLEncoder.encode(str, DEFAULT_ENCODING);
-    } catch (UnsupportedEncodingException e) {
-      // ignore
-    }
-    return s;
   }
 
   /**

@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.diff;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Diff segment bean. Represents one result segment produced by
@@ -20,16 +20,24 @@ import java.util.HashMap;
  *
  * @author jesper@users.berlios.de
  */
-public class DiffSegment {
+public final class DiffSegment {
 
   public enum Side {
     LEFT, RIGHT;
 
+    /**
+     * Gets the opposite side.
+     *
+     * @return The opposite side.
+     */
     public Side opposite() {
       return this == LEFT ? RIGHT : LEFT;
     }
   }
 
+  /**
+   * The diff action.
+   */
   private DiffAction action;
 
   private Map<Side, Interval> segmentSides = new HashMap<Side, Interval>(2);
@@ -64,10 +72,22 @@ public class DiffSegment {
     return action;
   }
 
+  /**
+   * Gets the line interval start.
+   *
+   * @param side Side
+   * @return Start
+   */
   public int getLineIntervalStart(final Side side) {
     return segmentSides.get(side).getStart();
   }
 
+  /**
+   * Gets the line interval end.
+   *
+   * @param side Side
+   * @return End
+   */
   public int getLineIntervalEnd(final Side side) {
     return segmentSides.get(side).getEnd();
   }
@@ -75,6 +95,7 @@ public class DiffSegment {
   /**
    * {@inheritDoc}
    */
+  @Override
   public String toString() {
     return "DiffSegment: " + action
         + ", left: " + segmentSides.get(Side.LEFT)

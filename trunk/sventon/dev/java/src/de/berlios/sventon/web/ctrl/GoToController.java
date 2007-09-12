@@ -40,7 +40,7 @@ import java.util.Map;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class GoToController extends AbstractSVNTemplateController implements Controller {
+public final class GoToController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

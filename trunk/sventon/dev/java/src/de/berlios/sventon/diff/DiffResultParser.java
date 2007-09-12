@@ -11,9 +11,6 @@
  */
 package de.berlios.sventon.diff;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +22,7 @@ import java.util.regex.Pattern;
  *
  * @author jesper@users.berlios.de
  */
-public class DiffResultParser {
+public final class DiffResultParser {
 
   /**
    * This pattern will match the following strings:
@@ -40,11 +37,6 @@ public class DiffResultParser {
    * </pre>
    */
   public static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)");
-
-  /**
-   * Logger for this class and subclasses.
-   */
-  private static final Log LOGGER = LogFactory.getLog(DiffResultParser.class);
 
   /**
    * Private constructor.

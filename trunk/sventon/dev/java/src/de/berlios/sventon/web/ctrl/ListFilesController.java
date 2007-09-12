@@ -33,8 +33,11 @@ import java.util.Map;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class ListFilesController extends ListDirectoryContentsController implements Controller {
+public final class ListFilesController extends ListDirectoryContentsController implements Controller {
 
+  /**
+   * {@inheritDoc}
+   */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                    final SVNRevision revision, final UserContext userContext,

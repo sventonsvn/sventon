@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@users.berlios.de
  */
-public class StartController extends AbstractController {
+public final class StartController extends AbstractController {
 
   /**
    * The application.

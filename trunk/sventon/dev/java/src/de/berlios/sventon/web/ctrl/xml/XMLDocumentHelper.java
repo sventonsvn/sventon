@@ -11,24 +11,24 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.text.SimpleDateFormat;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Utility class for handling XML documents.
  *
  * @author jesper@users.berlios.de
  */
-public class XMLDocumentHelper {
+public final class XMLDocumentHelper {
 
   /**
    * Creates the XML document based on given log entry.

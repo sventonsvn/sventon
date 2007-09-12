@@ -34,10 +34,16 @@ import java.util.Map;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class BlameController extends AbstractSVNTemplateController implements Controller {
+public final class BlameController extends AbstractSVNTemplateController implements Controller {
 
+  /**
+   * First revision in repository.
+   */
   private static final SVNRevision FIRST_REVISION = SVNRevision.parse("1");
 
+  /**
+   * The colorer instance.
+   */
   private Colorer colorer;
 
   /**
@@ -49,6 +55,9 @@ public class BlameController extends AbstractSVNTemplateController implements Co
     this.colorer = colorer;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
                                    final SVNRevision revision, final UserContext userContext,

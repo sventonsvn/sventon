@@ -17,7 +17,7 @@ package de.berlios.sventon.diff;
  *
  * @author jesper@users.berlios.de
  */
-public class IllegalFileFormatException extends DiffException {
+public final class IllegalFileFormatException extends DiffException {
 
   /**
    * Constructor.

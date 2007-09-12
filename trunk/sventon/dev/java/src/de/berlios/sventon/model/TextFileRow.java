@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.model;
 
-public class TextFileRow {
+public final class TextFileRow {
 
   /**
    * Line content.

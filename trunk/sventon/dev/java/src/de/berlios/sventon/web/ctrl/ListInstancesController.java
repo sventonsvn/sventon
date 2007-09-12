@@ -26,13 +26,16 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class ListInstancesController extends AbstractController {
+public final class ListInstancesController extends AbstractController {
 
   /**
    * The application.
    */
   private Application application;
 
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 

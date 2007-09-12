@@ -16,10 +16,19 @@ import java.util.Properties;
  */
 public final class FileTypeIconTag extends TagSupport {
 
+  /**
+   * Mappings.
+   */
   private static final Properties MAPPINGS = new Properties();
 
+  /**
+   * File name.
+   */
   private String filename;
 
+  /**
+   * Property file containing file type mappings.
+   */
   private static final String FILE_TYPE_ICON_MAPPINGS_FILENAME = "/fileTypeIconMappings.properties";
 
   /**

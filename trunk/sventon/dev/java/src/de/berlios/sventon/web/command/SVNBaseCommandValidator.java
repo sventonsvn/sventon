@@ -24,17 +24,23 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  *
  * @author patrikfr@users.berlios.de
  */
-public class SVNBaseCommandValidator implements Validator {
+public final class SVNBaseCommandValidator implements Validator {
 
   /**
    * Logger for this class and subclasses
    */
   protected final Log logger = LogFactory.getLog(getClass());
 
+  /**
+   * {@inheritDoc}
+   */
   public boolean supports(final Class clazz) {
     return clazz.equals(SVNBaseCommand.class);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public void validate(final Object obj, final Errors errors) {
     final SVNBaseCommand command = (SVNBaseCommand) obj;
 

@@ -13,7 +13,6 @@ package de.berlios.sventon.content;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -90,9 +89,8 @@ public final class LineNumberAppender {
    *
    * @param content The content to add line number to.
    * @return The string containing appended line numbers.
-   * @throws IOException if unable to read given string.
    */
-  public String appendTo(final String content) throws IOException {
+  public String appendTo(final String content) {
     final StringBuilder sb = new StringBuilder();
     final Scanner scanner = new Scanner(content);
 

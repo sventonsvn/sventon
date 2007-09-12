@@ -18,12 +18,26 @@ import de.berlios.sventon.diff.SourceLine;
  *
  * @author jesper@users.berlios.de
  */
-public class SideBySideDiffRow {
+public final class SideBySideDiffRow {
 
+  /**
+   * Row number.
+   */
   private final int rowNumber;
+
+  /**
+   * The left source line.
+   */
   private final SourceLine left;
+
+  /**
+   * The right source line.
+   */
   private final SourceLine right;
 
+  /**
+   * Represents the sides.
+   */
   public enum Side {
     LEFT, RIGHT
   }

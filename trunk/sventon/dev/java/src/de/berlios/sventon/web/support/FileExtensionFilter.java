@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class FileExtensionFilter {
+public final class FileExtensionFilter {
 
   /**
    * The file extension to filter.

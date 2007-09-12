@@ -14,9 +14,9 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class DiffPreviousController extends AbstractSVNTemplateController implements Controller {
+public final class DiffPreviousController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

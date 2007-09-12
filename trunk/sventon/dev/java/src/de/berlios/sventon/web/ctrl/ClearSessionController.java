@@ -23,8 +23,11 @@ import javax.servlet.http.HttpSession;
  *
  * @author patrikfr@users.berlios.de
  */
-public class ClearSessionController extends AbstractController {
+public final class ClearSessionController extends AbstractController {
 
+  /**
+   * {@inheritDoc}
+   */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
