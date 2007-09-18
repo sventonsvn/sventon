@@ -20,24 +20,42 @@ package de.berlios.sventon.diff;
 public final class SourceLine {
 
   /**
+   * The actual source line.
+   */
+  private final String line;
+
+  /**
+   * Row number.
+   */
+  private final Integer rowNumber;
+
+  /**
    * The line's diff action.
    */
   private DiffAction action;
 
   /**
-   * The actual source line.
-   */
-  private String line;
-
-  /**
    * Constructor.
    *
-   * @param action The <tt>DiffAction</tt> code.
-   * @param line   The source line.
+   * @param rowNumber The row number, or <tt>null</tt> if unknown.
+   * @param action    The <tt>DiffAction</tt> code.
+   * @param line      The source line.
    */
-  public SourceLine(final DiffAction action, final String line) {
-    this.action = action;
+  public SourceLine(final Integer rowNumber, final DiffAction action, final String line) {
+    this.rowNumber = rowNumber;
     this.line = line;
+    this.action = action;
+  }
+
+  /**
+   * Changes the line's diff action.
+   *
+   * @param action New diff action.
+   * @return Itself
+   */
+  public SourceLine changeAction(final DiffAction action) {
+    this.action = action;
+    return this;
   }
 
   /**
@@ -59,11 +77,19 @@ public final class SourceLine {
   }
 
   /**
+   * Gets the row number.
+   *
+   * @return Row number or <tt>null</tt> if unknown.
+   */
+  public Integer getRowNumber() {
+    return rowNumber;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   public String toString() {
     return "SourceLine{action='" + action + "', " + "line='" + line + "'}";
   }
-
 }

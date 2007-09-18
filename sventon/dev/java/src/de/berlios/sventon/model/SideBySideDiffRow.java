@@ -21,11 +21,6 @@ import de.berlios.sventon.diff.SourceLine;
 public final class SideBySideDiffRow {
 
   /**
-   * Row number.
-   */
-  private final int rowNumber;
-
-  /**
    * The left source line.
    */
   private final SourceLine left;
@@ -45,23 +40,12 @@ public final class SideBySideDiffRow {
   /**
    * Constructor.
    *
-   * @param rowNumber Row number
    * @param left      Left source line
    * @param right     Right source line
    */
-  public SideBySideDiffRow(final int rowNumber, final SourceLine left, final SourceLine right) {
-    this.rowNumber = rowNumber;
+  public SideBySideDiffRow(final SourceLine left, final SourceLine right) {
     this.left = left;
     this.right = right;
-  }
-
-  /**
-   * Gets the row number.
-   *
-   * @return Row number.
-   */
-  public int getRowNumber() {
-    return rowNumber;
   }
 
   /**

@@ -12,7 +12,6 @@
 package de.berlios.sventon.diff;
 
 import de.berlios.sventon.content.KeywordHandler;
-import de.berlios.sventon.content.LineNumberAppender;
 import static de.berlios.sventon.diff.DiffAction.*;
 import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
@@ -57,14 +56,10 @@ public final class SideBySideDiffCreator {
    * @param toFileCharset      Charset
    * @throws IOException if IO error
    */
+  @SuppressWarnings({"unchecked"})
   public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
                                final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
-
-    final LineNumberAppender lineNumberAppender = new LineNumberAppender();
-    lineNumberAppender.setEmbedStart("<span class=\"sventonLineNo\">");
-    lineNumberAppender.setEmbedEnd(":&nbsp;</span>");
-    lineNumberAppender.setPadding(5);
 
     final String leftString = WebUtils.replaceLeadingSpaces(
         appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
@@ -72,8 +67,8 @@ public final class SideBySideDiffCreator {
     final String rightString = WebUtils.replaceLeadingSpaces(
         appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
 
-    leftSourceLines = toLinesList(lineNumberAppender.appendTo(leftString));
-    rightSourceLines = toLinesList(lineNumberAppender.appendTo(rightString));
+    leftSourceLines = IOUtils.readLines(new StringReader(leftString));
+    rightSourceLines = IOUtils.readLines(new StringReader(rightString));
   }
 
   /**
@@ -91,7 +86,7 @@ public final class SideBySideDiffCreator {
     final List<SideBySideDiffRow> diff = new ArrayList<SideBySideDiffRow>();
 
     for (int i = 0; i < leftLinesList.size(); i++) {
-      diff.add(new SideBySideDiffRow(i + 1, leftLinesList.get(i), rightLinesList.get(i)));
+      diff.add(new SideBySideDiffRow(leftLinesList.get(i), rightLinesList.get(i)));
     }
     return diff;
   }
@@ -139,18 +134,6 @@ public final class SideBySideDiffCreator {
   }
 
   /**
-   * Reads given input string line by line and creates a list of lines.
-   *
-   * @param string String to read
-   * @return List of lines (strings)
-   * @throws IOException if unable to read string
-   */
-  private List<String> toLinesList(final String string) throws IOException {
-    //noinspection unchecked
-    return (List<String>) IOUtils.readLines(new StringReader(string));
-  }
-
-  /**
    * Process given list of source lines.
    *
    * @param side         Side to process
@@ -160,12 +143,15 @@ public final class SideBySideDiffCreator {
    */
   private List<SourceLine> process(final DiffSegment.Side side, final List<String> sourceLines, final List<DiffSegment> diffSegments) {
     final List<SourceLine> resultLines = new ArrayList<SourceLine>();
-    for (String tempLine : sourceLines) {
-      resultLines.add(new SourceLine(UNCHANGED, tempLine));
+
+    int lineNumber = 1;
+
+    for (final String tempLine : sourceLines) {
+      resultLines.add(new SourceLine(lineNumber++, UNCHANGED, tempLine));
     }
 
     int offset = 0;
-    for (DiffSegment diffSegment : diffSegments) {
+    for (final DiffSegment diffSegment : diffSegments) {
       if (ADDED == diffSegment.getAction()) {
         offset = applyAdded(side, diffSegment, resultLines, offset);
       } else if (DELETED == diffSegment.getAction()) {
@@ -187,14 +173,15 @@ public final class SideBySideDiffCreator {
    * @return Updated row offset
    */
   private int applyChanged(final DiffSegment.Side side, final DiffSegment diffSegment, final List<SourceLine> resultLines, final int offset) {
+    final int rowIndex;
     int newOffset = offset;
-    int rowIndex;
     int start = diffSegment.getLineIntervalStart(side.opposite());
     int end = diffSegment.getLineIntervalEnd(side.opposite());
 
     int changedLines = 0;
     for (int i = start; i <= end; i++) {
-      resultLines.set(i - 1 + newOffset, new SourceLine(CHANGED, resultLines.get(i - 1 + newOffset).getLine()));
+      final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
+      resultLines.set(i - 1 + newOffset, sourceLine.changeAction(CHANGED));
       changedLines++;
     }
 
@@ -204,7 +191,7 @@ public final class SideBySideDiffCreator {
 
     int addedLines = 0;
     for (int i = start + changedLines; i <= end; i++) {
-      resultLines.add(rowIndex + newOffset, new SourceLine(CHANGED, ""));
+      resultLines.add(rowIndex + newOffset, new SourceLine(null, CHANGED, ""));
       addedLines++;
       if (side == DiffSegment.Side.LEFT) {
         changedLines++;
@@ -227,9 +214,10 @@ public final class SideBySideDiffCreator {
     int deletedLines = 0;
     for (int i = diffSegment.getLineIntervalStart(LEFT); i <= diffSegment.getLineIntervalEnd(LEFT); i++) {
       if (side == LEFT) {
-        resultLines.set(i - 1, new SourceLine(DELETED, resultLines.get(i - 1).getLine()));
+        final SourceLine sourceLine = resultLines.get(i - 1);
+        resultLines.set(i - 1, sourceLine.changeAction(DELETED));
       } else {
-        resultLines.add(i - 1, new SourceLine(DELETED, ""));
+        resultLines.add(i - 1, new SourceLine(null, DELETED, ""));
         deletedLines++;
       }
     }
@@ -253,14 +241,15 @@ public final class SideBySideDiffCreator {
         int startLine = diffSegment.getLineIntervalStart(side) + newOffset;
         for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++)
         {
-          resultLines.add(startLine++ - 1, new SourceLine(ADDED, ""));
+          resultLines.add(startLine++ - 1, new SourceLine(null, ADDED, ""));
           addedLines++;
         }
         newOffset += addedLines;
         break;
       case RIGHT:
         for (int i = diffSegment.getLineIntervalStart(side); i <= diffSegment.getLineIntervalEnd(side); i++) {
-          resultLines.set(i - 1 + newOffset, new SourceLine(ADDED, resultLines.get(i - 1 + newOffset).getLine()));
+          final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
+          resultLines.set(i - 1 + newOffset, sourceLine.changeAction(ADDED));
         }
     }
     return newOffset;

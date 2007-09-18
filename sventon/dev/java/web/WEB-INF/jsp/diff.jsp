@@ -42,21 +42,23 @@
 
             <table id="diffTable" class="sventonDiffTable" cellspacing="0">
               <tr>
-                <th>
+                <th style="background-color: white;">
                   <a href="#diff0">
                     <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff"/>
                   </a>
                 </th>
-                <th>&nbsp;</th>
+                <th style="background-color: white;">&nbsp;</th>
+                <th valign="top" class="sventonLineNo">&nbsp;</th>
                 <th width="50%">${diffCommand.fromTarget} @ revision ${diffCommand.fromRevision}</th>
-                <th>&nbsp;</th>
+                <th style="background-color: white;">&nbsp;</th>
+                <th valign="top" class="sventonLineNo">&nbsp;</th>
                 <th width="50%">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <c:set var="diffCount" value="0"/>
               <c:forEach items="${diffResult}" var="row">
                 <jsp:useBean id="row" type="de.berlios.sventon.model.SideBySideDiffRow"/>
                 <tr>
-                  <td>
+                  <td style="background-color: white;">
                     <c:if test="${!row.isUnchanged}">
                       <a name="diff${diffCount}"/>
                       <c:set var="diffCount" value="${diffCount + 1}"/>
@@ -66,7 +68,11 @@
                     </c:if>
                   </td>
 
-                  <td><b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b></td>
+                  <td style="background-color: white;">
+                    <b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b>
+                  </td>
+                  <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber()
+                      != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
                       <%
@@ -75,7 +81,11 @@
                       %>
                     </span>
                   </td>
-                  <td><b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b></td>
+                  <td style="background-color: white;">
+                    <b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b>
+                  </td>
+                  <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber()
+                      != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
                       <%
