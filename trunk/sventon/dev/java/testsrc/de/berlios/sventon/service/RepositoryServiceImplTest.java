@@ -1,24 +1,25 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.diff.SourceLine;
-import de.berlios.sventon.diff.DiffException;
-import de.berlios.sventon.repository.SVNRepositoryStub;
-import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.model.SideBySideDiffRow;
+import de.berlios.sventon.repository.SVNRepositoryStub;
+import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.web.command.DiffCommand;
 import junit.framework.TestCase;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.ISVNSession;
 
-import java.io.OutputStream;
 import java.io.IOException;
-import java.util.Map;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 public class RepositoryServiceImplTest extends TestCase {
 
@@ -29,7 +30,7 @@ public class RepositoryServiceImplTest extends TestCase {
   public void testDiffUnifiedBinaryFile() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
-        properties.put(SVNProperty.MIME_TYPE, "application/octet-stream");
+        properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
     };
@@ -150,7 +151,7 @@ public class RepositoryServiceImplTest extends TestCase {
   public void testDiffSideBySideBinaryFile() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
-        properties.put(SVNProperty.MIME_TYPE, "application/octet-stream");
+        properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
     };
@@ -312,7 +313,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
 
     String leftResult =
-        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>/**\n" +
+        "1u/**\n" +
             "a\n" +
             "a\n" +
             "a\n" +
@@ -320,15 +321,15 @@ public class RepositoryServiceImplTest extends TestCase {
             "a\n" +
             "a\n" +
             "a\n" +
-            "u<span class=\"sventonLineNo\">    2:&nbsp;</span>&nbsp;* $Author$\n" +
-            "c<span class=\"sventonLineNo\">    3:&nbsp;</span>&nbsp;* $Revision$\n" +
-            "c<span class=\"sventonLineNo\">    4:&nbsp;</span>&nbsp;* $Date:$\n" +
+            "2u&nbsp;* $Author$\n" +
+            "3c&nbsp;* $Revision$\n" +
+            "4c&nbsp;* $Date:$\n" +
             "c\n" +
-            "u<span class=\"sventonLineNo\">    5:&nbsp;</span>&nbsp;*/\n" +
-            "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Test1\n" +
-            "u<span class=\"sventonLineNo\">    7:&nbsp;</span>Another test!\n" +
-            "u<span class=\"sventonLineNo\">    8:&nbsp;</span>More!\n" +
-            "u<span class=\"sventonLineNo\">    9:&nbsp;</span>Even more!\n" +
+            "5u&nbsp;*/\n" +
+            "6uTest1\n" +
+            "7uAnother test!\n" +
+            "8uMore!\n" +
+            "9uEven more!\n" +
             "a\n" +
             "a\n" +
             "a\n" +
@@ -336,34 +337,35 @@ public class RepositoryServiceImplTest extends TestCase {
             "a\n";
 
     String rightResult =
-        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>/**\n" +
-            "a<span class=\"sventonLineNo\">    2:&nbsp;</span>&nbsp;* $Id$\n" +
-            "a<span class=\"sventonLineNo\">    3:&nbsp;</span>&nbsp;* $LastChangedDate$\n" +
-            "a<span class=\"sventonLineNo\">    4:&nbsp;</span>&nbsp;* $Date$\n" +
-            "a<span class=\"sventonLineNo\">    5:&nbsp;</span>&nbsp;* $LastChangedRevision$\n" +
-            "a<span class=\"sventonLineNo\">    6:&nbsp;</span>&nbsp;* $Revision$\n" +
-            "a<span class=\"sventonLineNo\">    7:&nbsp;</span>&nbsp;* $Rev$\n" +
-            "a<span class=\"sventonLineNo\">    8:&nbsp;</span>&nbsp;* $LastChangedBy$\n" +
-            "u<span class=\"sventonLineNo\">    9:&nbsp;</span>&nbsp;* $Author$\n" +
-            "c<span class=\"sventonLineNo\">   10:&nbsp;</span>&nbsp;* $HeadURL$\n" +
-            "c<span class=\"sventonLineNo\">   11:&nbsp;</span>&nbsp;* $URL$\n" +
-            "c<span class=\"sventonLineNo\">   12:&nbsp;</span>&nbsp;* $Id$\n" +
-            "u<span class=\"sventonLineNo\">   13:&nbsp;</span>&nbsp;*/\n" +
-            "u<span class=\"sventonLineNo\">   14:&nbsp;</span>Test1\n" +
-            "u<span class=\"sventonLineNo\">   15:&nbsp;</span>Another test!\n" +
-            "u<span class=\"sventonLineNo\">   16:&nbsp;</span>More!\n" +
-            "u<span class=\"sventonLineNo\">   17:&nbsp;</span>Even more!\n" +
-            "a<span class=\"sventonLineNo\">   18:&nbsp;</span>\n" +
-            "a<span class=\"sventonLineNo\">   19:&nbsp;</span>public String getRev {\n" +
-            "a<span class=\"sventonLineNo\">   20:&nbsp;</span>&nbsp;return &quot;$Rev$&quot;;\n" +
-            "a<span class=\"sventonLineNo\">   21:&nbsp;</span>\n" +
-            "a<span class=\"sventonLineNo\">   22:&nbsp;</span>}\n";
+        "1u/**\n" +
+            "2a&nbsp;* $Id$\n" +
+            "3a&nbsp;* $LastChangedDate$\n" +
+            "4a&nbsp;* $Date$\n" +
+            "5a&nbsp;* $LastChangedRevision$\n" +
+            "6a&nbsp;* $Revision$\n" +
+            "7a&nbsp;* $Rev$\n" +
+            "8a&nbsp;* $LastChangedBy$\n" +
+            "9u&nbsp;* $Author$\n" +
+            "10c&nbsp;* $HeadURL$\n" +
+            "11c&nbsp;* $URL$\n" +
+            "12c&nbsp;* $Id$\n" +
+            "13u&nbsp;*/\n" +
+            "14uTest1\n" +
+            "15uAnother test!\n" +
+            "16uMore!\n" +
+            "17uEven more!\n" +
+            "18a\n" +
+            "19apublic String getRev {\n" +
+            "20a&nbsp;return &quot;$Rev$&quot;;\n" +
+            "21a\n" +
+            "22a}\n";
 
     diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
       final SourceLine line = row.getSide(SideBySideDiffRow.Side.LEFT);
+      sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
       sb.append("\n");
@@ -373,6 +375,7 @@ public class RepositoryServiceImplTest extends TestCase {
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
       final SourceLine line = row.getSide(SideBySideDiffRow.Side.RIGHT);
+      sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
       sb.append("\n");
@@ -404,15 +407,15 @@ public class RepositoryServiceImplTest extends TestCase {
             "OneMore=9\n";
 
     leftResult =
-        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>[.ShellClassInfo]\n" +
-            "c<span class=\"sventonLineNo\">    2:&nbsp;</span>InfoTip=@Shell32.dll,-12690\n" +
-            "c<span class=\"sventonLineNo\">    3:&nbsp;</span>IconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
-            "c<span class=\"sventonLineNo\">    4:&nbsp;</span>IconIndex=-238\n" +
-            "u<span class=\"sventonLineNo\">    5:&nbsp;</span>[DeleteOnCopy]\n" +
-            "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Owner=Jesper\n" +
+        "1u[.ShellClassInfo]\n" +
+            "2cInfoTip=@Shell32.dll,-12690\n" +
+            "3cIconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
+            "4cIconIndex=-238\n" +
+            "5u[DeleteOnCopy]\n" +
+            "6uOwner=Jesper\n" +
             "a\n" +
-            "u<span class=\"sventonLineNo\">    7:&nbsp;</span>Personalized=14\n" +
-            "u<span class=\"sventonLineNo\">    8:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
+            "7uPersonalized=14\n" +
+            "8uPersonalizedName=Mina videoklipp\n" +
             "a\n" +
             "a\n" +
             "a\n" +
@@ -420,26 +423,27 @@ public class RepositoryServiceImplTest extends TestCase {
             "a\n";
 
     rightResult =
-        "u<span class=\"sventonLineNo\">    1:&nbsp;</span>[.ShellClassInfo]\n" +
-            "c<span class=\"sventonLineNo\">    2:&nbsp;</span>IconIndex=-2388\n" +
+        "1u[.ShellClassInfo]\n" +
+            "2cIconIndex=-2388\n" +
             "c\n" +
             "c\n" +
-            "u<span class=\"sventonLineNo\">    3:&nbsp;</span>[DeleteOnCopy]\n" +
-            "u<span class=\"sventonLineNo\">    4:&nbsp;</span>Owner=Jesper\n" +
-            "a<span class=\"sventonLineNo\">    5:&nbsp;</span>Owner=Patrik&amp;Jesper\n" +
-            "u<span class=\"sventonLineNo\">    6:&nbsp;</span>Personalized=14\n" +
-            "u<span class=\"sventonLineNo\">    7:&nbsp;</span>PersonalizedName=Mina videoklipp\n" +
-            "a<span class=\"sventonLineNo\">    8:&nbsp;</span>OneMore=true\n" +
-            "a<span class=\"sventonLineNo\">    9:&nbsp;</span>OneMore=4\n" +
-            "a<span class=\"sventonLineNo\">   10:&nbsp;</span>OneMore=5\n" +
-            "a<span class=\"sventonLineNo\">   11:&nbsp;</span>OneMore=6\n" +
-            "a<span class=\"sventonLineNo\">   12:&nbsp;</span>OneMore=9\n";
+            "3u[DeleteOnCopy]\n" +
+            "4uOwner=Jesper\n" +
+            "5aOwner=Patrik&amp;Jesper\n" +
+            "6uPersonalized=14\n" +
+            "7uPersonalizedName=Mina videoklipp\n" +
+            "8aOneMore=true\n" +
+            "9aOneMore=4\n" +
+            "10aOneMore=5\n" +
+            "11aOneMore=6\n" +
+            "12aOneMore=9\n";
 
     diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
       final SourceLine line = row.getSide(SideBySideDiffRow.Side.LEFT);
+      sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
       sb.append("\n");
@@ -449,6 +453,7 @@ public class RepositoryServiceImplTest extends TestCase {
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
       final SourceLine line = row.getSide(SideBySideDiffRow.Side.RIGHT);
+      sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
       sb.append("\n");
@@ -456,7 +461,6 @@ public class RepositoryServiceImplTest extends TestCase {
     assertEquals(rightResult, sb.toString());
 
   }
-
 
   public static class TestSVNRepositoryStub extends SVNRepositoryStub {
 
