@@ -1,10 +1,13 @@
+/* Setup defaults since variable in browsers
+----------------------------------------------- */
+body, div, dd, dt, dl, img, ul, ol, li, h1, h2, h3, h4, h5, form, hr, fieldset {
+    margin: 0;
+    padding: 0;
+}
+
 body {
 	background-image: url(images/background.gif);
 	background-repeat: repeat-x;
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
 	background-color: #fefef7;
 }
 
@@ -46,6 +49,12 @@ A {
 	color:#FF6600;	
 }
 
+.boxHeaderS {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
 .boxHeader {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -60,7 +69,7 @@ A {
 .boxBody {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	line-height:17px;
+	line-height:14px;
 	color: #444;
 	background-color: #FFFFFF;
 	padding: 7px;
@@ -75,15 +84,34 @@ A {
 	border: 1px solid #bbb;
 }
 
+li {
+	margin-left: -3px;
+	margin-right: 4%;
+	margin-top: .5em;
+	margin-bottom: .75em;
+}
+
+ul {
+	margin: 0;
+	margin-left: 20px;
+}
+
 .header {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
-	font-size: 16px;
+	font-size: 18px;
 	margin-bottom:10px;
+}
+
+.footer {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	margin-bottom:0px;
+	line-height: 1;
 }
 
 .body {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	line-height:20px;
+	line-height:16px;
 	color: #222;
 }
