@@ -16,9 +16,11 @@ import de.berlios.sventon.model.ArchiveFile;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.util.ZipUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,11 +31,13 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * ShowFileController.
@@ -41,7 +45,7 @@ import java.util.zip.ZipEntry;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class ShowFileController extends AbstractSVNTemplateController implements Controller {
+public final class ShowFileController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * The colorer instance.
@@ -63,6 +67,17 @@ public class ShowFileController extends AbstractSVNTemplateController implements
    */
   private static final String FORMAT_REQUEST_PARAMETER = "format";
 
+  /**
+   * Request parameter identifying the arcived entry to display.
+   */
+  private static final String ARCHIVED_ENTRY = "archivedEntry";
+
+  /**
+   * Request parameter controlling if archived entry should be displayed
+   * independently of it's mime-type.
+   */
+  private static final String FORCE_ARCHIVED_ENTRY_DISPLAY = "force";
+
 
   /**
    * {@inheritDoc}
@@ -75,6 +90,8 @@ public class ShowFileController extends AbstractSVNTemplateController implements
     logger.debug("Assembling file contents for: " + svnCommand);
 
     final String formatParameter = ServletRequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
+    final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
+    final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final Map fileProperties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
@@ -97,17 +114,39 @@ public class ShowFileController extends AbstractSVNTemplateController implements
         response.getOutputStream().write(outStream.toByteArray());
         return null;
       } else {
-        model.put("file", new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
-            colorer, fileProperties, repository.getLocation().toDecodedString()));
+        final TextFile textFile = new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
+            colorer, fileProperties, repository.getLocation().toDecodedString());
+        model.put("file", textFile);
       }
       modelAndView = new ModelAndView("showtextfile", model);
     } else {
       if (isArchiveFile(svnCommand)) {
-        logger.debug("Binary file is an archive file");
-        final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
-        getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-        model1.put("entries", new ArchiveFile(outStream.toByteArray()).getEntries());
-        modelAndView = new ModelAndView("showarchivefile", model1);
+        if (archivedEntry == null) {
+          logger.debug("Binary file is an archive file");
+          final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
+          getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+          final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
+          model1.put("entries", archiveFile.getEntries());
+          modelAndView = new ModelAndView("showarchivefile", model1);
+        } else {
+          logger.debug("Archived entry: " + archivedEntry);
+          model.put("archivedEntry", archivedEntry);
+          final ConfigurableMimeFileTypeMap ftm = new ConfigurableMimeFileTypeMap();
+          ftm.afterPropertiesSet();
+          final String contentType = ftm.getContentType(archivedEntry);
+          logger.debug("Detected content-type: " + contentType);
+
+          if (contentType != null && contentType.startsWith("text") || forceDisplay) {
+            getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+            final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
+            final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
+                archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
+            model.put("file", textFile);
+            modelAndView = new ModelAndView("showtextfile", model);
+          } else {
+            modelAndView = new ModelAndView("showbinaryfile", model);
+          }
+        }
       } else {
         if (isImageFile(svnCommand)) {
           logger.debug("Binary file is an image file");

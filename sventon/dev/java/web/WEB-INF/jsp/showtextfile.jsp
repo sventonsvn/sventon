@@ -23,7 +23,15 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
+    <c:choose>
+      <c:when test="${archivedEntry ne null}">
+        <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
+        <sventon:currentTargetHeader title="Show File" target="${newTarget}" hasProperties="false"/>
+      </c:when>
+      <c:otherwise>
+        <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
+      </c:otherwise>
+    </c:choose>
     <sventon:functionLinks pageName="showTextFile"/>
 
     <table id="textFileTable" class="codeBlock" cellspacing="0">

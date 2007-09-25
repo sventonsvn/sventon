@@ -22,7 +22,15 @@
   <body>
     <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/>
+    <c:choose>
+      <c:when test="${archivedEntry ne null}">
+        <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
+        <sventon:currentTargetHeader title="Show Binary File" target="${newTarget}" hasProperties="false"/>
+      </c:when>
+      <c:otherwise>
+        <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/>
+      </c:otherwise>
+    </c:choose>
     <sventon:functionLinks pageName="showBinaryFile"/>
 
     <p>File is in binary format.</p>
