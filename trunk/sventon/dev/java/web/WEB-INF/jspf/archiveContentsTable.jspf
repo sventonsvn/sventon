@@ -24,6 +24,14 @@
     <th>CRC</th>
   </tr>
   <c:forEach items="${entries}" var="zipEntry">
+
+    <c:url value="showfile.svn" var="showFileUrl">
+      <c:param name="path" value="${command.path}" />
+      <c:param name="revision" value="${command.revision}" />
+      <c:param name="name" value="${command.name}" />
+      <c:param name="archivedEntry" value="${zipEntry.name}" />
+    </c:url>
+
     <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
     <jsp:useBean id="entryDate" class="java.util.Date" />
 
@@ -36,7 +44,7 @@
           <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
         </c:otherwise>
       </c:choose>
-      <td>${zipEntry.name}</td>
+      <td><a href="${showFileUrl}">${zipEntry.name}</a></td>
       <td class="sventonColRightAlign">${zipEntry.size}</td>
       <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
       <td class="sventonColNoWrap"><fmt:formatDate type="both" value="<%=new java.util.Date(zipEntry.getTime())%>"

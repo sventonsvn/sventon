@@ -15,12 +15,15 @@ import de.schlichtherle.io.ArchiveDetector;
 import de.schlichtherle.io.DefaultArchiveDetector;
 import de.schlichtherle.io.archive.spi.ArchiveDriver;
 import de.schlichtherle.io.archive.zip.Zip32Driver;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Utility class for handling ZIP actions.
@@ -64,4 +67,25 @@ public final class ZipUtils {
     de.schlichtherle.io.File.umount();  // TODO: Is this the way to do it? Why is the method static? Is this thread safe?
   }
 
+  /**
+   * Extracts given file from a zipped input stream.
+   *
+   * @param zipInputStream Input stream.
+   * @param filename       Filename to extract
+   * @return The extracted file.
+   * @throws IOException if unable to extract file.
+   */
+  public static byte[] extractFile(final ZipInputStream zipInputStream, final String filename) throws IOException {
+    byte[] extractedFile = null;
+    ZipEntry zipEntry;
+
+    while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+      if (zipEntry.getName().equals(filename)) {
+        extractedFile = IOUtils.toByteArray(zipInputStream);
+        break;
+      }
+    }
+    IOUtils.closeQuietly(zipInputStream);
+    return extractedFile;
+  }
 }
