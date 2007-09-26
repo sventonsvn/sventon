@@ -39,12 +39,13 @@
       <c:choose>
         <c:when test="${zipEntry.directory}">
           <td><img src="images/icon_folder.png" alt="dir"/></td>
+          <td>${zipEntry.name}</td>
         </c:when>
         <c:otherwise>
           <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
+          <td><a href="${showFileUrl}">${zipEntry.name}</a></td>
         </c:otherwise>
       </c:choose>
-      <td><a href="${showFileUrl}">${zipEntry.name}</a></td>
       <td class="sventonColRightAlign">${zipEntry.size}</td>
       <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
       <td class="sventonColNoWrap"><fmt:formatDate type="both" value="<%=new java.util.Date(zipEntry.getTime())%>"
