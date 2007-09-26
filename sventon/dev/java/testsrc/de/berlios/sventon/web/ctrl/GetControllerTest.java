@@ -3,13 +3,13 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
-import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -17,7 +17,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.Map;
-import java.util.Properties;
 
 public class GetControllerTest extends TestCase {
 
@@ -30,7 +29,9 @@ public class GetControllerTest extends TestCase {
     command.setPath("/testimage.gif");
     final GetController ctrl = new GetController();
     ctrl.setApplication(application);
-    ctrl.setImageUtil(getImageUtil());
+    final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
+    mftm.afterPropertiesSet();
+    ctrl.setMimeFileTypeMap(mftm);
     final ModelAndView modelAndView;
 
     final MockHttpServletRequest req = new MockHttpServletRequest();
@@ -62,18 +63,6 @@ public class GetControllerTest extends TestCase {
 
     assertEquals(WebUtils.APPLICATION_OCTET_STREAM, res.getContentType());
     assertTrue(((String) res.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("attachment"));
-  }
-
-  private ImageUtil getImageUtil() {
-    ImageUtil imageUtil = new ImageUtil();
-    Properties prop = new Properties();
-    prop.setProperty("jpg", "image/jpg");
-    prop.setProperty("jpe", "image/jpg");
-    prop.setProperty("jpeg", "image/jpg");
-    prop.setProperty("gif", "image/gif");
-    prop.setProperty("png", "image/png");
-    imageUtil.setMimeMappings(prop);
-    return imageUtil;
   }
 
   static class TestRepository extends SVNRepositoryStub {

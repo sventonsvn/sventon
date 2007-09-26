@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[894] Added: Feature #3768 - Override mime-types in show file view.
 [891] Added: Feature #3767 - Show content of files inside archives.
 [874] Added: Feature #1571 - Browse specific date instead of revision.
 [860] Added: Feature #953 - Blame.

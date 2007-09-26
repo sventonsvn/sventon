@@ -13,14 +13,14 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.util.ImageUtil;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ import java.util.Map;
 public final class ShowThumbnailsController extends AbstractSVNTemplateController implements Controller {
 
   /**
-   * Image utility.
+   * The mime/file type map.
    */
-  private ImageUtil imageUtil;
+  private FileTypeMap mimeFileTypeMap;
 
   /**
    * {@inheritDoc}
@@ -56,26 +56,24 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
 
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.
-    for(final String entry : entryParameters) {
+    for (final String entry : entryParameters) {
       logger.debug("entry: " + entry);
-      if (imageUtil.isImageFilename(entry)) {
+      if (mimeFileTypeMap.getContentType(entry).startsWith("image")) {
         entries.add(entry);
       }
     }
     logger.debug(entries.size() + " entries out of " + entryParameters.length + " are image files");
     model.put("thumbnailentries", entries);
     return new ModelAndView("showThumbnails", model);
-
   }
 
   /**
-   * Sets the <code>ImageUtil</code> helper instance.
+   * Sets the mime/file type map.
    *
-   * @param imageUtil The instance
-   * @see de.berlios.sventon.util.ImageUtil
+   * @param mimeFileTypeMap Map.
    */
-  public void setImageUtil(final ImageUtil imageUtil) {
-    this.imageUtil = imageUtil;
+  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
 }

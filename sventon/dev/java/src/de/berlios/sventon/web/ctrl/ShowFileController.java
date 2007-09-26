@@ -14,13 +14,11 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.model.ArchiveFile;
 import de.berlios.sventon.model.TextFile;
-import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.util.ZipUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,6 +27,7 @@ import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -53,9 +52,19 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   private Colorer colorer;
 
   /**
-   * Image utility.
+   * The mime/file type map.
    */
-  private ImageUtil imageUtil;
+  private FileTypeMap mimeFileTypeMap;
+
+  /**
+   * Regex pattern that identifies text file extensions.
+   */
+  protected String textFileExtensionPattern;
+
+  /**
+   * Regex pattern that identifies binary file extensions.
+   */
+  protected String binaryFileExtensionPattern;
 
   /**
    * Regex pattern that identifies archive file extensions.
@@ -78,6 +87,10 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    */
   private static final String FORCE_ARCHIVED_ENTRY_DISPLAY = "force";
 
+  /**
+   * Request parameter indicating display should be done in a raw, unprocessed format.
+   */
+  private static final String RAW_DISPLAY_FORMAT = "raw";
 
   /**
    * {@inheritDoc}
@@ -106,10 +119,41 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
 
     final ModelAndView modelAndView;
 
-    if (isTextFile(fileProperties)) {
+    if (isImageFileExtension(svnCommand)) {
+      logger.debug("File identified as an image file");
+      modelAndView = new ModelAndView("showimagefile", model);
+    } else if (isArchiveFileExtension(svnCommand)) {
+      if (archivedEntry == null) {
+        logger.debug("File identified as an archive file");
+        final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
+        getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+        final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
+        model1.put("entries", archiveFile.getEntries());
+        modelAndView = new ModelAndView("showarchivefile", model1);
+      } else {
+        logger.debug("Archived entry: " + archivedEntry);
+        model.put("archivedEntry", archivedEntry);
+        final String contentType = mimeFileTypeMap.getContentType(archivedEntry);
+        logger.debug("Detected content-type: " + contentType);
+
+        if (contentType != null && contentType.startsWith("text") || forceDisplay) {
+          getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+          final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
+          final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
+              archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
+          model.put("file", textFile);
+          modelAndView = new ModelAndView("showtextfile", model);
+        } else {
+          modelAndView = new ModelAndView("showbinaryfile", model);
+        }
+      }
+    } else if (isBinaryFileExtension(svnCommand)) {
+      logger.debug("File identified as a binary file");
+      modelAndView = new ModelAndView("showbinaryfile", model);
+    } else if (isTextFileExtension(svnCommand) || isTextMimeType(fileProperties)) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
 
-      if ("raw".equals(formatParameter)) {
+      if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
         response.getOutputStream().write(outStream.toByteArray());
         return null;
@@ -120,55 +164,60 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
       }
       modelAndView = new ModelAndView("showtextfile", model);
     } else {
-      if (isArchiveFile(svnCommand)) {
-        if (archivedEntry == null) {
-          logger.debug("Binary file is an archive file");
-          final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
-          getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-          final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
-          model1.put("entries", archiveFile.getEntries());
-          modelAndView = new ModelAndView("showarchivefile", model1);
-        } else {
-          logger.debug("Archived entry: " + archivedEntry);
-          model.put("archivedEntry", archivedEntry);
-          final ConfigurableMimeFileTypeMap ftm = new ConfigurableMimeFileTypeMap();
-          ftm.afterPropertiesSet();
-          final String contentType = ftm.getContentType(archivedEntry);
-          logger.debug("Detected content-type: " + contentType);
-
-          if (contentType != null && contentType.startsWith("text") || forceDisplay) {
-            getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
-            final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
-            final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
-                archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
-            model.put("file", textFile);
-            modelAndView = new ModelAndView("showtextfile", model);
-          } else {
-            modelAndView = new ModelAndView("showbinaryfile", model);
-          }
-        }
-      } else {
-        if (isImageFile(svnCommand)) {
-          logger.debug("Binary file is an image file");
-          modelAndView = new ModelAndView("showimagefile", model);
-        } else {
-          modelAndView = new ModelAndView("showbinaryfile", model);
-        }
-      }
+      logger.debug("File unidentified - showing as binary");
+      modelAndView = new ModelAndView("showbinaryfile", model);
     }
     return modelAndView;
   }
 
-  protected boolean isTextFile(final Map properties) {
+  /**
+   * Checks if given map of svn properties contains a text file mime type.
+   *
+   * @param properties The svn properties for given file.
+   * @return True if text file, false if not.
+   */
+  protected boolean isTextMimeType(final Map properties) {
     return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
   }
 
-  protected boolean isImageFile(final SVNBaseCommand svnCommand) {
-    return imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()));
+  /**
+   * Checks if given file name indicates a text file.
+   *
+   * @param svnCommand Command
+   * @return True if text file, false if not.
+   */
+  protected boolean isTextFileExtension(final SVNBaseCommand svnCommand) {
+    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(textFileExtensionPattern);
   }
 
-  protected boolean isArchiveFile(final SVNBaseCommand svnCommand) {
+  /**
+   * Checks if given file name indicates a binary file.
+   *
+   * @param svnCommand Command
+   * @return True if binary file, false if not.
+   */
+  protected boolean isBinaryFileExtension(final SVNBaseCommand svnCommand) {
+    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(binaryFileExtensionPattern);
+  }
+
+  /**
+   * Checks if given file name indicates an archive file.
+   *
+   * @param svnCommand Command
+   * @return True if archive file, false if not.
+   */
+  protected boolean isArchiveFileExtension(final SVNBaseCommand svnCommand) {
     return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
+  }
+
+  /**
+   * Checks if given file name indicates an image file.
+   *
+   * @param svnCommand Command
+   * @return True if image file, false if not.
+   */
+  protected boolean isImageFileExtension(final SVNBaseCommand svnCommand) {
+    return mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image");
   }
 
   /**
@@ -181,6 +230,24 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   }
 
   /**
+   * Sets the text file extension pattern.
+   *
+   * @param fileExtensionPattern The pattern
+   */
+  public void setTextFileExtensionPattern(final String fileExtensionPattern) {
+    textFileExtensionPattern = fileExtensionPattern;
+  }
+
+  /**
+   * Sets the binary file extension pattern.
+   *
+   * @param fileExtensionPattern The pattern
+   */
+  public void setBinaryFileExtensionPattern(final String fileExtensionPattern) {
+    binaryFileExtensionPattern = fileExtensionPattern;
+  }
+
+  /**
    * Sets the archive file extension pattern.
    *
    * @param fileExtensionPattern The pattern
@@ -190,13 +257,12 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   }
 
   /**
-   * Sets the <code>ImageUtil</code> helper instance.
+   * Sets the mime/file type map.
    *
-   * @param imageUtil The instance
-   * @see de.berlios.sventon.util.ImageUtil
+   * @param mimeFileTypeMap Map.
    */
-  public void setImageUtil(final ImageUtil imageUtil) {
-    this.imageUtil = imageUtil;
+  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
 }

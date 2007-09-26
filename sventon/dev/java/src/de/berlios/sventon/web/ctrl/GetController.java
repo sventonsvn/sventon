@@ -12,11 +12,9 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.util.EncodingUtils;
-import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +22,7 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.activation.FileTypeMap;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,13 +45,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GetController extends AbstractSVNTemplateController implements Controller {
 
-  public static final String DISPLAY_REQUEST_PARAMETER = "disp";
-  public static final String DISPLAY_TYPE_INLINE = "inline";
-
   /**
-   * Image utility.
+   * The mime/file type map.
    */
-  private ImageUtil imageUtil;
+  private FileTypeMap mimeFileTypeMap;
+
+  public static final String DISPLAY_REQUEST_PARAMETER = "disp";
+
+  public static final String DISPLAY_TYPE_INLINE = "inline";
 
   /**
    * {@inheritDoc}
@@ -70,7 +70,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     } else if (DISPLAY_TYPE_INLINE.equals(displayType)) {
       logger.debug("Getting file as 'inline'");
 
-      if (imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()))) {
+      if (mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
         getAsInlineImage(repository, svnCommand, revision, request, response);
       } else {
         logger.warn("File [" + svnCommand.getTarget() + "] is not an image file - unable to display it 'inline'");
@@ -84,7 +84,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
   private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final ServletOutputStream output = response.getOutputStream();
-    response.setContentType(imageUtil.getContentType(FilenameUtils.getExtension(svnCommand.getPath())));
+    response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
     getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);
@@ -115,13 +115,12 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   }
 
   /**
-   * Sets the <code>ImageUtil</code> helper instance.
+   * Sets the mime/file type map.
    *
-   * @param imageUtil The instance
-   * @see de.berlios.sventon.util.ImageUtil
+   * @param mimeFileTypeMap Map.
    */
-  public void setImageUtil(final ImageUtil imageUtil) {
-    this.imageUtil = imageUtil;
+  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
 }
