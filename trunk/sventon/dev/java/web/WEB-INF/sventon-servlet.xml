@@ -94,23 +94,25 @@
   </bean>
 
   <bean id="showFileController" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
+    <property name="textFileExtensionPattern" value=""/>
+    <property name="binaryFileExtensionPattern" value="(bin|exe|pdf)"/>
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
     <property name="colorer" ref="colorer"/>
-    <property name="imageUtil" ref="imageUtil"/>
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
   <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController"
         parent="abstractController">
-    <property name="imageUtil" ref="imageUtil"/>
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
   <bean id="getController" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
-    <property name="imageUtil" ref="imageUtil"/>
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
   <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController"
         parent="abstractController">
-    <property name="imageUtil" ref="imageUtil"/>
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>
     <property name="maxThumbnailSize" value="200"/>
@@ -189,17 +191,7 @@
     <constructor-arg ref="defaultEncoding"/>
   </bean>
 
-  <bean id="imageUtil" class="de.berlios.sventon.util.ImageUtil">
-    <property name="mimeMappings">
-      <props>
-        <prop key="gif">image/gif</prop>
-        <prop key="png">image/png</prop>
-        <prop key="jpg">image/jpg</prop>
-        <prop key="jpe">image/jpg</prop>
-        <prop key="jpeg">image/jpg</prop>
-      </props>
-    </property>
-  </bean>
+  <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
   <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
         destroy-method="shutdown">

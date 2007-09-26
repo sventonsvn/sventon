@@ -13,17 +13,16 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
-import de.berlios.sventon.util.ImageUtil;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import javax.activation.FileTypeMap;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,14 +36,14 @@ import java.net.URL;
 public class GetThumbnailController extends AbstractSVNTemplateController implements Controller {
 
   /**
+   * The mime/file type map.
+   */
+  private FileTypeMap mimeFileTypeMap;
+
+  /**
    * Object cache manager instance.
    */
   private ObjectCacheManager objectCacheManager;
-
-  /**
-   * Image utility.
-   */
-  protected ImageUtil imageUtil;
 
   /**
    * Image format name to use when generating thumbnails.
@@ -68,7 +67,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
     final ServletOutputStream output = response.getOutputStream();
 
-    if (!imageUtil.isImageFileExtension(FilenameUtils.getExtension(svnCommand.getPath()))) {
+    if (!mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
       return null;
     }
@@ -88,7 +87,7 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
 
   protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
-    response.setContentType(imageUtil.getContentType(FilenameUtils.getExtension(svnCommand.getPath())));
+    response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
   }
 
   private String getFullSizeImageURL(final HttpServletRequest request) {
@@ -118,16 +117,6 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
   }
 
   /**
-   * Sets the <code>ImageUtil</code> helper instance.
-   *
-   * @param imageUtil The instance
-   * @see de.berlios.sventon.util.ImageUtil
-   */
-  public void setImageUtil(final ImageUtil imageUtil) {
-    this.imageUtil = imageUtil;
-  }
-
-  /**
    * Sets the maximum vertical/horizontal size in pixels for the generated thumbnail images.
    *
    * @param maxSize Size in pixels.
@@ -135,4 +124,14 @@ public class GetThumbnailController extends AbstractSVNTemplateController implem
   public void setMaxThumbnailSize(final int maxSize) {
     this.maxThumbnailSize = maxSize;
   }
+
+  /**
+   * Sets the mime/file type map.
+   *
+   * @param mimeFileTypeMap Map.
+   */
+  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
+  }
+
 }
