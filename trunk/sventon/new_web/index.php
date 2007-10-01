@@ -129,7 +129,7 @@
                     $item = $rss->items[$counter];
                     $published = parse_w3cdtf($item['published']);
                     $title = $item['title'];
-                    echo "<li><b>";
+                    echo "<li style=\"white-space: nowrap;\"><b>";
                     echo date("Y-m-d", $published);
                     echo " - $title</b></li>\r";
                     $counter = $counter + 1;
