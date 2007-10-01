@@ -40,6 +40,22 @@ body {
 	text-decoration: none;
 }
 
+#selectedTopMenuCell {
+  background-color: #F28B00;
+  color: #000000;
+  border-right-color: #FFFFFF;
+	border-right-style: solid;
+	border-right-width: 1px;
+	vertical-align: bottom;
+	padding-bottom: 4px;
+	padding-top: 4px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 11px;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	line-height: 9pt;
+}
+
 A:hover {
 	TEXT-DECORATION: underline;
 }

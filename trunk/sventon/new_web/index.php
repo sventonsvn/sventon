@@ -62,6 +62,7 @@
       break;
     default:
       $includepage="main.php";
+      $pageparameter="main";
       break;
   }
 ?>
@@ -72,11 +73,11 @@
       <td height="64" colspan="2" valign="top">
         <table border="0" align="right" cellpadding="1" cellspacing="0" class="topMenu">
           <tr>
-            <td width="94" class="topMenuCell" bgcolor="#F28B00"><a href="index.php?page=main" class="style1"><font color="#000000">Main</font></a></td>
-            <td width="94" class="topMenuCell"><a href="index.php?page=news">News</a></td>
-            <td width="94" class="topMenuCell"><a href="index.php?page=features">Features</a></td>
-            <td width="94" class="topMenuCell"><a href="index.php?page=screenshots">Screenshots</a></td>
-            <td width="94" class="topMenuCell"><a href="index.php?page=faq">FAQ</a></td>
+            <td width="94" <?php if ($pageparameter == "main") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=main" <?php if ($pageparameter == "main") { ?>class="style1"<?php } ?>>Main</a></td>
+            <td width="94" <?php if ($pageparameter == "news") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=news" <?php if ($pageparameter == "news") { ?>class="style1"<?php } ?>>News</a></td>
+            <td width="94" <?php if ($pageparameter == "features") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=features" <?php if ($pageparameter == "features") { ?>class="style1"<?php } ?>>Features</a></td>
+            <td width="94" <?php if ($pageparameter == "screenshots") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=screenshots" <?php if ($pageparameter == "screenshots") { ?>class="style1"<?php } ?>>Screenshots</a></td>
+            <td width="94" <?php if ($pageparameter == "faq") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=faq" <?php if ($pageparameter == "faq") { ?>class="style1"<?php } ?>>FAQ</a></td>
             <td width="94" class="topMenuCell"><a href="http://groups.google.com/group/sventon-support/">Forum</a></td>
             <td width="94" class="topMenuCell"><a href="http://developer.berlios.de/projects/sventon/">Project page</a></td>
           </tr>
