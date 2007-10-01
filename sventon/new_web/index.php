@@ -121,13 +121,21 @@
           <tr>
             <td class="boxBody">
               <ul style="list-style-image:url(images/bullet_orange.png);line-height:13px;">
-                <li><b>2007-06-12</b> - Freakin' made a war now'em! Go ahead and <a href="www.yeah.com">download</a> or
-                  up. Yes up.
-                </li>
-                <li><b>2007-06-12</b> - Now Sventon is spelled correctly with a capital S.</li>
-                <li><b>2007-06-12</b> - Fastighetsskatten kommer bli 13.5% med en reavinstskatt på 2% som man får skjuta
-                  upp i röven om man har en dieselbil med partikelfilter.
-                </li>
+                <?php
+                  $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml');
+                  echo "<ul>\r";
+                  $counter = 0;
+                  while ( $counter < 3 ) {
+                    $item = $rss->items[$counter];
+                    $published = parse_w3cdtf($item['published']);
+                    $title = $item['title'];
+                    echo "<li><b>";
+                    echo date("Y-m-d", $published);
+                    echo " - $title</b></li>\r";
+                    $counter = $counter + 1;
+                  }
+                  echo "</ul>\r";
+                ?> 
               </ul>
             </td>
           </tr>
