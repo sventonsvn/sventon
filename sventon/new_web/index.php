@@ -131,11 +131,11 @@
                     $title = $item['title'];
                     echo "<li style=\"white-space: nowrap;\"><b>";
                     echo date("Y-m-d", $published);
-                    echo " - $title</b></li>\r";
-                    $counter = $counter + 1;
+                    echo " - <a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
+                    $counter++;
                   }
                   echo "</ul>\r";
-                ?> 
+                ?>
               </ul>
             </td>
           </tr>
