@@ -11,18 +11,19 @@
   <li><a href="#q10">Will sventon in any way jeopardize my Subversion repository?</a></li>
   <li><a href="#q11">Will sventon write any information to my Windows registry?</a></li>
   <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
-  <li><a href="#q13">Is there a log file for sventon?</a></li>
-  <li><a href="#q14">Does sventon support non-Latin 1 charsets?</a></li>
-  <li><a href="#q15">Can I send suggestions for new functions?</a></li>
-  <li><a href="#q16">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
-  <li><a href="#q17">What license do you use?</a></li>
-  <li><a href="#q18">Why did you start this project?</a></li>
-  <li><a href="#q19">Is there a publicly running version of Sventon that I can try?</a></li>
-  <li><a href="#q20">Can I change the layout of the RSS feed?</a></li>
-  <li><a href="#q21">Can I use sventon together with JIRA?</a></li>
-  <li><a href="#q22">Where can I find the change history?</a></li>
-  <li><a href="#q23">Where can I find the sventon roadmap?</a></li>
-  <li><a href="#q24">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q13">Why is the binary file type [XYZ] treated as a text file when I view it in sventon?</a></li>
+  <li><a href="#q14">Is there a log file for sventon?</a></li>
+  <li><a href="#q15">Does sventon support non-Latin 1 charsets?</a></li>
+  <li><a href="#q16">Can I send suggestions for new functions?</a></li>
+  <li><a href="#q17">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
+  <li><a href="#q18">What license do you use?</a></li>
+  <li><a href="#q19">Why did you start this project?</a></li>
+  <li><a href="#q20">Is there a publicly running version of Sventon that I can try?</a></li>
+  <li><a href="#q21">Can I change the layout of the RSS feed?</a></li>
+  <li><a href="#q22">Can I use sventon together with JIRA?</a></li>
+  <li><a href="#q23">Where can I find the change history?</a></li>
+  <li><a href="#q24">Where can I find the sventon roadmap?</a></li>
+  <li><a href="#q25">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <p>
@@ -162,6 +163,15 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q13">
+<b>Q:</b> Why is the binary file type [XYZ] treated as a text file when I view it in sventon?
+</a>
+<br/>
+<b>A:</b> Subversion's binary detection algorithm sometimes fails for binary files.
+<br/>Since sventon 1.3 it is possible to override the detection by adding file extensions to the <code>textFileExtensionPattern</code> and the <code>binaryFileExtensionPattern</code> in <code>WEB-INF/sventon-servlet.xml</code> 
+</p>
+
+<p>
+<a name="q14">
 <b>Q:</b> Is there a log file for sventon?
 </a>
 <br/>
@@ -169,7 +179,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q14">
+<a name="q15">
 <b>Q:</b> Does sventon support non-US-ASCII charsets?
 </a>
 <br/>
@@ -178,7 +188,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q15">
+<a name="q16">
 <b>Q:</b> Can I send suggestions for new functions?
 </a>
 <br/>
@@ -186,7 +196,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q16">
+<a name="q17">
 <b>Q:</b> Will sventon be avaliable for CVS (or any other version control system) in the future?
 </a>
 <br/>
@@ -194,7 +204,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q17">
+<a name="q18">
 <b>Q:</b> What license do you use?
 </a>
 <br/>
@@ -202,7 +212,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q18">
+<a name="q19">
 <b>Q:</b> Why did you start this project?
 </a>
 <br/>
@@ -210,7 +220,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q19">
+<a name="q20">
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
@@ -218,7 +228,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q20">
+<a name="q21">
 <b>Q:</b> Can I change the layout of the RSS feed?
 </a>
 <br/>
@@ -226,7 +236,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q21">
+<a name="q22">
 <b>Q:</b> Can I use sventon together with JIRA?
 </a>
 <br/>
@@ -234,7 +244,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q22">
+<a name="q23">
 <b>Q:</b> Where can I find the change history?
 </a>
 <br/>
@@ -242,7 +252,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q23">
+<a name="q24">
 <b>Q:</b> Where can I find the sventon roadmap?
 </a>
 <br/>
@@ -250,7 +260,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 </p>
 
 <p>
-<a name="q24">
+<a name="q25">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
