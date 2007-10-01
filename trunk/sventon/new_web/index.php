@@ -113,7 +113,7 @@
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td class="boxHeaderS">Latest news</td>
-                  <td width="16px"><img src="images/feed.png" alt="Add feed" width="16" height="16"/></td>
+                  <td width="16px"><a href="http://sventonblog.blogspot.com/atom.xml"><img src="images/feed.png" alt="Add feed" width="16" height="16"/></a></td>
                 </tr>
               </table>
             </td>

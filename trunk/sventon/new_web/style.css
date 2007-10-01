@@ -5,6 +5,10 @@ body, div, dd, dt, dl, img, ul, ol, li, h1, h2, h3, h4, h5, form, hr, fieldset {
     padding: 0;
 }
 
+img {
+  border: none;
+}
+
 body {
 	background-image: url(images/background.gif);
 	background-repeat: repeat-x;
