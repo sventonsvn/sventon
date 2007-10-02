@@ -1,3 +1,5 @@
+<div class="header">Screenshots</div>
+<div class="body">
 <p>
   <b>Mac OS X screenshots</b>
 </p>
@@ -58,4 +60,4 @@
     <td><a href="images/screenshots/win_logsearch.png"><img width="150" height="100" alt="Search logs" src="images/screenshots/win_logsearch.png"/></a></td>
   </tr>
 </table>
-
+</div>

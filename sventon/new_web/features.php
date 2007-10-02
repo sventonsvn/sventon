@@ -1,7 +1,5 @@
-<p>
-  <b>Current sventon features:</b>
-</p>
-
+<div class="header">Current sventon features</div>
+<div class="body">
 <ul>
   <li>Easy installation and setup.</li>
   <li>WebDAV, svnserve and file repository browsning.</li>
@@ -27,3 +25,4 @@
   <li>Bypass of empty middle directories for faster navigation.</li>
   <li>Support for multiple encodings.</li>
 </ul>
+</div>

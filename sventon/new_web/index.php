@@ -120,7 +120,6 @@
               <ul style="list-style-image:url(images/bullet_orange.png);line-height:13px;">
                 <?php
                   $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml');
-                  echo "<ul>\r";
                   $counter = 0;
                   while ( $counter < 3 ) {
                     $item = $rss->items[$counter];
@@ -131,7 +130,6 @@
                     echo " - <a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
                     $counter++;
                   }
-                  echo "</ul>\r";
                 ?>
               </ul>
             </td>

@@ -1,3 +1,5 @@
+<div class="header">Frequently Asked Questions</div>
+<div class="body">
 <ul>
   <li><a href="#q1">What is sventon?</a></li>
   <li><a href="#q2">What features does sventon have?</a></li>
@@ -21,9 +23,10 @@
   <li><a href="#q20">Is there a publicly running version of Sventon that I can try?</a></li>
   <li><a href="#q21">Can I change the layout of the RSS feed?</a></li>
   <li><a href="#q22">Can I use sventon together with JIRA?</a></li>
-  <li><a href="#q23">Where can I find the change history?</a></li>
-  <li><a href="#q24">Where can I find the sventon roadmap?</a></li>
-  <li><a href="#q25">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
+  <li><a href="#q23"> Can I use sventon together with Luntbuild?</a></li>
+  <li><a href="#q24">Where can I find the change history?</a></li>
+  <li><a href="#q25">Where can I find the sventon roadmap?</a></li>
+  <li><a href="#q26">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
 <hr/>
@@ -33,7 +36,7 @@
 <b>Q:</b> What is sventon?
 </a>
 <br/>
-<b>A:</b> sventon is a pure java web based browser for the <a href="http://subversion.tigris.org">Subversion</a> version control system.
+<b>A:</b> sventon is a pure java web application for browsing <a href="http://subversion.tigris.org">Subversion</a> version control system repositories.
 </p>
 
 <hr/>
@@ -265,7 +268,13 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
 </a>
 <br/>
-<b>A:</b> Not yet, but we are working on it! Have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
+<b>A:</b> Yes! You can browse the sventon Subversion repository using <a href="http://svn.sventon.org">sventon</a>.
+<br/>
+Please note that the repository and the sventon instance is hosted in two geographically different locations. This
+could make the sventon instance response times sluggish from time to time.
+<br/>
+Also, have a look at the
+<a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
 
 <hr/>
@@ -292,6 +301,17 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 
 <p>
 <a name="q23">
+<b>Q:</b> Can I use sventon together with Luntbuild?
+</a>
+<br/>
+<b>A:</b> Yes. Starting with <a href="http://www.javaforge.com/proj/doc.do?doc_id=36361">Luntbuild version 1.5.2</a>
+ support for sventon is included.
+</p>
+
+<hr/>
+
+<p>
+<a name="q24">
 <b>Q:</b> Where can I find the change history?
 </a>
 <br/>
@@ -301,7 +321,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <hr/>
 
 <p>
-<a name="q24">
+<a name="q25">
 <b>Q:</b> Where can I find the sventon roadmap?
 </a>
 <br/>
@@ -311,7 +331,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <hr/>
 
 <p>
-<a name="q25">
+<a name="q26">
 <b>Q:</b> How can I use Glorbosoft XYZ to maximize team productivity?
 </a>
 <br/>
@@ -321,3 +341,4 @@ Further reading: <a href="http://svnbook.red-bean.com/en/1.1/svn-book.html#svn-f
 </p>
 
 <hr/>
+</div>
