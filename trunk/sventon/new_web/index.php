@@ -140,20 +140,17 @@
 
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
           <tr>
-            <td class="boxHeader">Contact</td>
+            <td class="boxHeader">Support</td>
           </tr>
           <tr>
             <td class="boxBody">
-              <p>If you have any questions regarding sventon usage or development, use the
-                <a href="http://groups.google.com/group/sventon-support/">sventon Google group</a>.
-                Please do not write the developers directly in these matters (but <em>do</em> post in the forum,
-                we'll try to answer).</p>
-
-              <p><strong>Developer e-mail addresses:</strong><br/>
-                <em>sventonproject at gmail.com</em><br/>
-                <em>patrikfr at users.berlios.de</em><br/>
-                <em>jesper at users.berlios.de</em>
-              </p>
+              <p>If you have any questions regarding sventon usage or development, please visit the
+                <a href="http://groups.google.com/group/sventon-support/">sventon Google group</a> to
+                discuss different topics with sventon committers and users.
+                </p>
+                <p>
+                Post any questions here and we will try to answer as soon as we can.
+                </p>
             </td>
           </tr>
         </table>

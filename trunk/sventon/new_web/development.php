@@ -11,16 +11,12 @@
   Here you will find source code repository, bug and feature request databases and releases.
   </p>
   <p>
-  <b><a href="http://svn.sventon.org">The sventon sventon instance</a></b><br/>
-  Browse the source code and keep track of changes using the RSS feeds
-  </p>
-  <p>
   <b><a href="http://svn.sventon.org/repobrowser.svn?name=berlios">The sventon sventon instance</a></b><br/>
   Browse the source code and keep track of changes using the RSS feeds
   </p>
   <p>
   <b><a href="http://groups.google.com/group/sventon-support/">The sventon support Google group</a></b><br/>
-  Discuss usage and development with sventon committers and users.  Bugs and feature requests submitted to
+  Discuss usage and development with sventon committers and users. Bugs and feature requests submitted to
   <a href="http://developer.berlios.de/projects/sventon/">trackers at BerliOS</a> are posted here as well.
   </p>
 
@@ -38,13 +34,35 @@
   </p>
   <p>
   The latest development sources can be accessed anonymously from
-  <code>http://svn.berlios.de/svnroot/repos/sventon/trunk</code>.
+  <code><a href="http://svn.berlios.de/svnroot/repos/sventon/trunk">http://svn.berlios.de/svnroot/repos/sventon/trunk</a></code>.
   </p>
   <p>
-  The best way of communicating would be to use our
+  The best way of communicating is to use our
   <a href="http://groups.google.com/group/sventon-support/">Google group</a>. Patches can be
-  <a href="http://groups.google.com/group/sventon-support/files?upload=1">uploaded to the group</a> or emailed directly
+  <a href="http://groups.google.com/group/sventon-support/files?upload=1">uploaded to the group</a> or e-mailed directly
   to <a href="mailto:sventonproject@gmail.com">sventonproject@gmail.com</a>
+  </p>
+  <p>
+  When creating patches, use <code>svn diff</code> from the top of a sventon Subversion trunk working copy.
+  The <a href="http://subversion.tigris.org/">Subversion</a> project has an <a href="http://subversion.tigris.org/hacking.html#patches">excellent writeup about
+  submitting patches</a>, much of what is mentioned in this text should be applied when submitting patches to sventon as
+  well.
+  </p>
+
+  <br/>
+  <b>Contact</b>
+  <p>
+  <p>Developer e-mail addresses:<br/>
+  sventonproject at gmail.com<br/>
+  patrik at sventon.org<br/>
+  jesper at sventon.org<br/>
+  </p>
+
+  <br/>
+  <b>Acknowledgments</b>
+  <p>
+  sventon uses several open source projects created by contributions from many individuals and organizations.
+  Many thanks!
   </p>
 
 </div>
