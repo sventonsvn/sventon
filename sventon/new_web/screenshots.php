@@ -1,7 +1,7 @@
 <p>
   <b>Mac OS X screenshots</b>
 </p>
-<table>
+<table style="border: 1px solid;">
   <tr>
     <th>Flattened directory</th>
     <th>Thumbnail image view</th>
@@ -32,7 +32,7 @@
   <b>Win XP screenshots</b>
 </p>
 
-<table>
+<table style="border: 1px solid;">
   <tr>
     <th>Flattened directory</th>
     <th>Thumbnail image view</th>

@@ -26,6 +26,8 @@
   <li><a href="#q25">How can I use Glorbosoft XYZ to maximize team productivity?</a></li>
 </ul>
 
+<hr/>
+
 <p>
 <a name="q1">
 <b>Q:</b> What is sventon?
@@ -33,6 +35,8 @@
 <br/>
 <b>A:</b> sventon is a pure java web based browser for the <a href="http://subversion.tigris.org">Subversion</a> version control system.
 </p>
+
+<hr/>
 
 <p>
 <a name="q2">
@@ -42,6 +46,8 @@
 <b>A:</b> Read the <a href="index.php?page=features">feature</a> list.
 </p>
 
+<hr/>
+
 <p>
 <a name="q3">
 <b>Q:</b> What do I need to run sventon?
@@ -49,6 +55,8 @@
 <br/>
 <b>A:</b> <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a> or higher and a servlet container like <a href="http://jakarta.apache.org/tomcat/">Tomcat 5.5</a>. Note that Tomcat version 5.5.12 and newer includes a Java 5 compliant JSP compiler, which simplifies set-up further.
 </p>
+
+<hr/>
 
 <p>
 <a name="q4">
@@ -58,6 +66,8 @@
 <b>A:</b> Any platform capable of running a servlet container with <a href="http://java.sun.com/j2se/1.5.0/">Java 1.5</a> should do.
 </p>
 
+<hr/>
+
 <p>
 <a name="q5">
 <b>Q:</b> What configurations have been tested?
@@ -65,7 +75,7 @@
 <br/>
 <b>A:</b> Test matrix:
 </p>
-<table style="border-style: solid; border-width: 1px">
+<table style="white-space: nowrap; border-style: solid; border-width: 1px">
   <tr>
     <th>OS</th>
     <th>Subversion</th>
@@ -94,6 +104,9 @@
     <td>RC4</td>
   </tr>
 </table>
+<br/>
+
+<hr/>
 
 <p>
 <a name="q6">
@@ -103,6 +116,8 @@
 <b>A:</b> <a href="index.php?page=downloads">Download</a> the latest version and drop the <code>WAR</code> file in your servlet container's <code>webapps</code> directory. Point your web browser to <code>http://yourmachinename/svn/</code> and you should see the initial configuration page. If not, make sure your container is running (on the correct port). Submit the fields on the configuration page and you're done! The configuration will be stored in the generated file <code>WEB-INF/classes/sventon.properties</code> and will be used automatically next time the container starts.
 </p>
 
+<hr/>
+
 <p>
 <a name="q7">
 <b>Q:</b> How do I uninstall sventon?
@@ -110,6 +125,8 @@
 <br/>
 <b>A:</b> Remove the file <code>svn.war</code> from the <code>webapps</code> directory and the subdirectory <code>svn</code>. The configuration and the cache files will be kept in a subdirectory called <code>sventon</code> in the container's <code>temp</code> directory. Find it and delete it.
 </p>
+
+<hr/>
 
 <p>
 <a name="q8">
@@ -119,6 +136,8 @@
 <b>A:</b> The cache/index function, if configured to be active, enables features such as searching, directory flattening and log message search. The first time sventon is started all revisions will be cached aswell as the repository <tt>HEAD</tt>. This can take a couple of minutes depending on network speed and the number of entries. Each time a cache dependant action is triggered, the cache will be updated if necessary. There's also a scheduled job that triggers regularly to ensure that the index is up-to-date. The polling interval is default set to <code>10</code> minutes, but can be customized in <code>WEB-INF/sventon-servlet.xml</code>.<br/>A good reason for disabling the index is if the repository is really large and contains a lot of branches and tags, or if the network connection to it is just too slow.
 </p>
 
+<hr/>
+
 <p>
 <a name="q9">
 <b>Q:</b> How do I upgrade sventon to a newer version?
@@ -126,6 +145,8 @@
 <br/>
 <b>A:</b> Simply replace the old <code>svn.war</code> file. The configuration files are stored in the container's <code>temp</code> directory, so they will be reused automatically.
 </p>
+
+<hr/>
 
 <p>
 <a name="q10">
@@ -135,6 +156,8 @@
 <b>A:</b> No. Unless something really scary is going on, sventon will only perform <i>read</i> operations.
 </p>
 
+<hr/>
+
 <p>
 <a name="q11">
 <b>Q:</b> Will sventon write any information to my Windows registry?
@@ -142,6 +165,8 @@
 <br/>
 <b>A:</b> No.
 </p>
+
+<hr/>
 
 <p>
 <a name="q12">
@@ -161,6 +186,8 @@
 </ul>
 The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> to enable easy modification or additions.
 
+<hr/>
+
 <p>
 <a name="q13">
 <b>Q:</b> Why is the binary file type [XYZ] treated as a text file when I view it in sventon?
@@ -170,6 +197,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>Since sventon 1.3 it is possible to override the detection by adding file extensions to the <code>textFileExtensionPattern</code> and the <code>binaryFileExtensionPattern</code> in <code>WEB-INF/sventon-servlet.xml</code> 
 </p>
 
+<hr/>
+
 <p>
 <a name="q14">
 <b>Q:</b> Is there a log file for sventon?
@@ -177,6 +206,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> Yes, it's called <code>sventon.log</code> and is by default written to the container's <code>temp</code> directory. Logging can be customized by editing the file <code>WEB-INF/classes/log4j.properties</code>.
 </p>
+
+<hr/>
 
 <p>
 <a name="q15">
@@ -187,6 +218,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>For Tomcat to work correctly with non-US-ASCII charsets, the Tomcat connector attribute <code>URIEncoding</code> should be set to <code>UTF-8</code>, or alternatively the attribute <code>useBodyEncodingForURI</code> should be set to <code>true</code>.
 </p>
 
+<hr/>
+
 <p>
 <a name="q16">
 <b>Q:</b> Can I send suggestions for new functions?
@@ -194,6 +227,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> Yes, please do! But we cannot guarantee when or if your suggestion will be implemented.
 </p>
+
+<hr/>
 
 <p>
 <a name="q17">
@@ -203,6 +238,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>A:</b> No.
 </p>
 
+<hr/>
+
 <p>
 <a name="q18">
 <b>Q:</b> What license do you use?
@@ -210,6 +247,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> The sventon code is licensed under the new BSD license. Read the full text <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/sventon/licenses/LICENSE">here</a>. Also, when you're at it, read <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/trunk/sventon/licenses/license-notes.txt">the license notes</a>. 
 </p>
+
+<hr/>
 
 <p>
 <a name="q19">
@@ -219,6 +258,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>A:</b> Well, we kind of needed the functionality but we couldn't find what we were looking for, so we went ahead and started this project.
 </p>
 
+<hr/>
+
 <p>
 <a name="q20">
 <b>Q:</b> Is there a publicly running version of sventon that I can try?
@@ -226,6 +267,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> Not yet, but we are working on it! Have a look at the <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
+
+<hr/>
 
 <p>
 <a name="q21">
@@ -235,6 +278,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>A:</b> Yes. It's template based, and the default template file is called <code>rsstemplate.html</code> and is located in <code>WEB-INF/classes</code>. Edit it the way you want it.
 </p>
 
+<hr/>
+
 <p>
 <a name="q22">
 <b>Q:</b> Can I use sventon together with JIRA?
@@ -242,6 +287,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> Yes. An example configuration can be found <a href="http://confluence.atlassian.com/display/JIRAEXT/JIRA+Subversion+plugin#comment-36962434">here</a>.
 </p>
+
+<hr/>
 
 <p>
 <a name="q23">
@@ -251,6 +298,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>A:</b> <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/branches/releases/1.2/sventon/doc/changes.txt">Here</a>!
 </p>
 
+<hr/>
+
 <p>
 <a name="q24">
 <b>Q:</b> Where can I find the sventon roadmap?
@@ -258,6 +307,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 <b>A:</b> <a href="http://developer.berlios.de/feature/?group_id=3670">Here</a>!
 </p>
+
+<hr/>
 
 <p>
 <a name="q25">
@@ -269,3 +320,4 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 Further reading: <a href="http://svnbook.red-bean.com/en/1.1/svn-book.html#svn-foreword">Version Control with Subversion</a>
 </p>
 
+<hr/>
