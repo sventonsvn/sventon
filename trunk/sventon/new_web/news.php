@@ -1,3 +1,5 @@
+<div class="header">News</div>
+<div class="body">
 <?php
   $rss = fetch_rss('http://sventonblog.blogspot.com/atom.xml'); 
 	echo "<ul>\r";
@@ -16,3 +18,4 @@
 	}
 	echo "</ul>\r"; 
 ?> 
+</div>
