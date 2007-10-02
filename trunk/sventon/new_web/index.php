@@ -36,17 +36,11 @@
   $pageparameter=$_GET['page'];
 
   switch ($pageparameter) {
-    case "history":
-      $includepage="history.php";
-      break;
     case "downloads":
       $includepage="downloads.php";
       break;
     case "faq":
       $includepage="faq.php";
-      break;
-    case "roadmap":
-      $includepage="roadmap.php";
       break;
     case "links":
       $includepage="links.php";
@@ -59,6 +53,9 @@
       break;
     case "news":
       $includepage="news.php";
+      break;
+      case "development":
+      $includepage="development.php";
       break;
     default:
       $includepage="main.php";
@@ -79,7 +76,7 @@
             <td width="94" <?php if ($pageparameter == "screenshots") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=screenshots" <?php if ($pageparameter == "screenshots") { ?>class="style1"<?php } ?>>Screenshots</a></td>
             <td width="94" <?php if ($pageparameter == "faq") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=faq" <?php if ($pageparameter == "faq") { ?>class="style1"<?php } ?>>FAQ</a></td>
             <td width="94" class="topMenuCell"><a href="http://groups.google.com/group/sventon-support/">Forum</a></td>
-            <td width="94" class="topMenuCell"><a href="http://developer.berlios.de/projects/sventon/">Project page</a></td>
+            <td width="94" <?php if ($pageparameter == "development") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=development" <?php if ($pageparameter == "development") { ?>class="style1"<?php } ?>>Development</a></td>
           </tr>
         </table>
       </td>
