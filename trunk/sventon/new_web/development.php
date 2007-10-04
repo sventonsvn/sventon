@@ -1,4 +1,4 @@
-<div class="header">development</div>
+<div class="header">Development</div>
 <div class="body">
   <b>Monitoring progress</b>
   <p>
@@ -8,7 +8,7 @@
   </p>
   <p>
   <b><a href="http://developer.berlios.de/projects/sventon/">The project page at BerliOS</a></b><br/>
-  Here you will find source code repository, bug and feature request databases and releases.
+  Here you will find source code repository, bug and feature request databases as well as binary and source releases.
   </p>
   <p>
   <b><a href="http://svn.sventon.org/repobrowser.svn?name=berlios">The sventon sventon instance</a></b><br/>
