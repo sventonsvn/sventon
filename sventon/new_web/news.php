@@ -13,7 +13,7 @@
     echo " - $title</b></li>\r";
     $content = $item['atom_content'];
     echo "$content\r<br/>\r";
-    echo "<hr class=\"news\">";
+    echo "<hr>";
     $count++;
 	}
 	echo "</ul>\r"; 
