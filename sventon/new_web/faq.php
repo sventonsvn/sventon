@@ -238,7 +238,7 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <b>Q:</b> Will sventon be avaliable for CVS (or any other version control system) in the future?
 </a>
 <br/>
-<b>A:</b> No.
+<b>A:</b> No, there are currently no such plans.
 </p>
 
 <hr/>
@@ -272,7 +272,8 @@ The file extension mapping is done in <code>WEB-INF/sventon-servlet.xml</code> t
 <br/>
 Please note that the repository and the sventon instance is hosted in two geographically different locations. This
 could make the sventon instance response times sluggish from time to time.
-<br/>
+</p>
+<p>
 Also, have a look at the
 <a href="index.php?page=screenshots">screenshots</a> to get an idea of what a running sventon installation could look like.
 </p>
