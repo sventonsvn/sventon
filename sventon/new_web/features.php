@@ -2,7 +2,7 @@
 <div class="body">
 <ul>
   <li>Easy installation and setup.</li>
-  <li>WebDAV, svnserve and file repository browsning.</li>
+  <li>WebDAV (http/https), svnserve (svn/svn+ssh) and file repository browsning.</li>
   <li>Support for multiple repositories.</li>
   <li>View and download files for any given revision.</li>
   <li>Sort or filter directory listings.</li>
