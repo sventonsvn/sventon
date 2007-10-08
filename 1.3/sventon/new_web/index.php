@@ -125,9 +125,9 @@
                     $item = $rss->items[$counter];
                     $published = parse_w3cdtf($item['published']);
                     $title = $item['title'];
-                    echo "<li style=\"white-space: nowrap;\"><b>";
+                    echo "<li><b>";
                     echo date("Y-m-d", $published);
-                    echo " - <a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
+                    echo "<br/><a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
                     $counter++;
                   }
                 ?>
