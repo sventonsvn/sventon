@@ -95,7 +95,7 @@
     <td>svn/dav</td>
     <td>1.5.0_04</td>
     <td>sventon committer</td>
-    <td>1.2.0</td>
+    <td>1.3 RC1</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
@@ -316,7 +316,7 @@ Also, have a look at the
 <b>Q:</b> Where can I find the change history?
 </a>
 <br/>
-<b>A:</b> <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/branches/releases/1.2/sventon/doc/changes.txt">Here</a>!
+<b>A:</b> <a href="http://svn.berlios.de/viewcvs/*checkout*/sventon/branches/releases/1.3/sventon/doc/changes.txt">Here</a>!
 </p>
 
 <hr/>
