@@ -87,11 +87,11 @@
       </td>
     </tr>
     <tr>
-      <td width="484" height="53" valign="top" style="padding-right:65px;padding-top:20px;" class="body">
+      <td width="484" height="53" valign="top" style="padding-right:65px;padding-top:20px;" class="body" align="left">
         <?php require($includepage); ?>
       </td>
 
-      <td width="216" valign="top">
+      <td width="216" valign="top" align="left">
         <!-- Dowload box -->
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
           <tr>
