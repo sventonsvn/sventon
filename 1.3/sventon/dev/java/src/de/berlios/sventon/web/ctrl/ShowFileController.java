@@ -33,9 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -125,11 +123,10 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     } else if (isArchiveFileExtension(svnCommand)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
-        final Map<String, List<ZipEntry>> model1 = new HashMap<String, List<ZipEntry>>();
         getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
-        model1.put("entries", archiveFile.getEntries());
-        modelAndView = new ModelAndView("showarchivefile", model1);
+        model.put("entries", archiveFile.getEntries());
+        modelAndView = new ModelAndView("showarchivefile", model);
       } else {
         logger.debug("Archived entry: " + archivedEntry);
         model.put("archivedEntry", archivedEntry);
