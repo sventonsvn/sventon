@@ -99,7 +99,7 @@
           </tr>
           <tr>
             <td class="downloadBody">
-              <?php require('download.php'); ?>
+              <?php require('downloads.php'); ?>
             </td>
           </tr>
         </table>
