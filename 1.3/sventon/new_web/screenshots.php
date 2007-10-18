@@ -1,5 +1,6 @@
 <div class="header">Screenshots</div>
 <div class="body">
+<!--
 <p>
   <b>Mac OS X screenshots</b>
 </p>
@@ -29,7 +30,7 @@
     <td><a href="images/screenshots/mac_logsearch.png"><img width="150" height="100" alt="Search logs" src="images/screenshots/mac_logsearch.png"/></a></td>
   </tr>
 </table>
-
+-->
 <p>
   <b>Win XP screenshots</b>
 </p>
@@ -59,5 +60,15 @@
     <td><a href="images/screenshots/win_diff.png"><img width="150" height="100" alt="File diff" src="images/screenshots/win_diff.png"/></a></td>
     <td><a href="images/screenshots/win_logsearch.png"><img width="150" height="100" alt="Search logs" src="images/screenshots/win_logsearch.png"/></a></td>
   </tr>
+
+  <tr>
+    <th>Blame</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td><a href="images/screenshots/win_blame.png"><img width="150" height="100" alt="Blame" src="images/screenshots/win_blame.png"/></a></td>
+    <td></td>
+  </tr>
+
 </table>
 </div>
