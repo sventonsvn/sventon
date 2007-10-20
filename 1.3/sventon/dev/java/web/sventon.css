@@ -274,6 +274,10 @@ input.btn {
   padding: 0;
 }
 
+.blameAuthor {
+  background-color: white;
+}
+
 .sventonLineNo {
   color: #000000;
   background-color: white;
