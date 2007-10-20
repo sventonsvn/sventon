@@ -267,7 +267,7 @@ function showHideHelp(helpDiv, id) {
 }
 
 // Gets the log message for given revision.
-function getLogMessage(revision, instanceName) {
+function getLogMessage(revision, instanceName, date) {
   var url = 'getmessage.ajax';
   var urlParams = 'revision=' + revision + '&name=' + instanceName;
   var divName = 'msg' + revision + 'Div';
@@ -280,12 +280,30 @@ function getLogMessage(revision, instanceName) {
     },
     onFailure: reportAjaxError
   });
-  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"/></div>', TITLE, 'Log message', BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff');
+  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"/></div>', TITLE, 'Log message: ' + date, BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff');
+}
+
+function highlightBlameRev(revision) {
+  var tags = $('blameTable').getElementsByTagName('td');
+  setBackgroundColor(tags, 'blameRev_' + revision, '#dddddd');
+}
+
+function restoreBlameRev(revision) {
+  var tags = $('blameTable').getElementsByTagName('td');
+  setBackgroundColor(tags, 'blameRev_' + revision, '#ffffff');
 }
 
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================
+
+function setBackgroundColor(tags, cssName, color) {
+  for (var i = 0; i < tags.length; i++) {
+    if (tags[i].className == cssName) {
+        tags[i].style.backgroundColor = color;
+    }
+  }
+}
 
 function toggleInnerHTML(id, text1, text2) {
   var object = $(id);
