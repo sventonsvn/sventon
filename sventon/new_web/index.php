@@ -87,11 +87,11 @@
       </td>
     </tr>
     <tr>
-      <td width="484" height="53" valign="top" style="padding-right:65px;padding-top:20px;" class="body">
+      <td width="484" height="53" valign="top" style="padding-right:65px;padding-top:20px;" class="body" align="left">
         <?php require($includepage); ?>
       </td>
 
-      <td width="216" valign="top">
+      <td width="216" valign="top" align="left">
         <!-- Dowload box -->
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
           <tr>
@@ -99,7 +99,7 @@
           </tr>
           <tr>
             <td class="downloadBody">
-              <?php require('download.php'); ?>
+              <?php require('downloads.php'); ?>
             </td>
           </tr>
         </table>
@@ -125,9 +125,9 @@
                     $item = $rss->items[$counter];
                     $published = parse_w3cdtf($item['published']);
                     $title = $item['title'];
-                    echo "<li style=\"white-space: nowrap;\"><b>";
+                    echo "<li><b>";
                     echo date("Y-m-d", $published);
-                    echo " - <a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
+                    echo "<br/><a href=\"index.php?page=news#$counter\">$title</a></b></li>\r";
                     $counter++;
                   }
                 ?>
