@@ -1,6 +1,9 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[934] Release 1.3 RC3 (2007-10-22)
+[933] Fixed: Bug #12252 - Faulty escaping in log search result view.
+
 [932] Release 1.3 RC2 (2007-10-22)
 [921] Fixed: Bug #12143 - Unable to show properties for archive files.
 [917] Fixed: Bug #12136 - Log message not escaped properly.
