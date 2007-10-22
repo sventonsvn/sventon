@@ -35,9 +35,19 @@
       </tr>
 
       <c:forEach items="${annotatedFile.unmodifiableRows}" var="row">
+
+        <c:url value="revinfo.svn" var="showRevInfoUrl">
+          <c:param name="revision" value="${row.revision}" />
+          <c:param name="name" value="${command.name}" />
+        </c:url>
+
         <tr>
-          <td valign="top" style="text-align:right;" title="<fmt:formatDate type="both" value="${row.date}" dateStyle="short" timeStyle="short"/>">${row.revision}</td>
-          <td valign="top">${row.author}</td>
+          <td valign="top" style="background-color: white; text-align:right;" class="blameRev_${row.revision}">
+            <a href="${showRevInfoUrl}" onmouseover="highlightBlameRev(${row.revision}); getLogMessage(${row.revision}, '${command.name}', '<fmt:formatDate type="both" value="${row.date}" dateStyle="short" timeStyle="short"/>');" onmouseout="restoreBlameRev(${row.revision});">
+              ${row.revision}
+            </a>
+          </td>
+          <td valign="top" class="blameAuthor">${row.author}</td>
           <td valign="top" class="sventonLineNo">${row.rowNumber}</td>
           <td valign="top">${row.content}</td>
         </tr>

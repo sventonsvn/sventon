@@ -74,7 +74,7 @@
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(entry.svnLogEntry.message, br, '<br/>')}</a></td>
+            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br/>')}</a></td>
             <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
