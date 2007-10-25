@@ -85,7 +85,6 @@
     <th>Container</th>
     <th>Protocols</th>
     <th>Java version</th>
-    <th>Tester</th>
     <th>Version</th>
   </tr>
   <tr>
@@ -94,8 +93,7 @@
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
     <td>1.5.0_04</td>
-    <td>sventon committer</td>
-    <td>1.3 RC1</td>
+    <td>1.2.0</td>
   </tr>
   <tr>
     <td>Mac OS X 10.4.3</td>
@@ -103,7 +101,6 @@
     <td>Tomcat 5.5.9</td>
     <td>svn/dav</td>
     <td>1.5.0_05</td>
-    <td>sventon committer</td>
     <td>RC4</td>
   </tr>
 </table>
