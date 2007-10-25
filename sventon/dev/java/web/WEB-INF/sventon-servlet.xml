@@ -207,7 +207,7 @@
 
   <!-- temporarily use the reloadable version (makes developing easier) -->
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    <property name="basename" value="/WEB-INF/classes/messages"/>
+    <property name="basename" value="classpath:messages"/>
     <property name="useCodeAsDefaultMessage" value="true"/>
     <property name="cacheSeconds" value="0"/>
   </bean>
