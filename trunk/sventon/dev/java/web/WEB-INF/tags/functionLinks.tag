@@ -183,7 +183,7 @@
   </c:when>
 
   <c:when test="${pageName == 'showBlame'}">
-    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" title="<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
