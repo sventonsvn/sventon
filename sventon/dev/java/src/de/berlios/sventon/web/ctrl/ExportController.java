@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -88,9 +89,12 @@ public final class ExportController extends AbstractSVNTemplateController implem
     } finally {
       IOUtils.closeQuietly(fileInputStream);
       IOUtils.closeQuietly(output);
-      logger.debug("Cleanup of temporary directory ok: " + exportDirectory.delete());
+      try {
+        exportDirectory.delete();
+      } catch (IOException e) {
+        logger.warn("Unable to cleanup temporary directory: " + exportDirectory.toString());
+      }
     }
-
     //TODO: When converted into asynch, redirect to repobrowser and wait for download to complete.
     return null;
   }
