@@ -12,15 +12,16 @@
 package de.berlios.sventon.repository.export;
 
 import de.berlios.sventon.util.ZipUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.nio.charset.Charset;
 
 /**
  * Represents a temporary export directory.
@@ -105,28 +106,10 @@ public class ExportDirectory {
   /**
    * Deletes the temporary export directory.
    *
-   * @return True if deletion was successful, false if not.
+   * @throws IOException if deletion was unsuccessful.
    */
-  public boolean delete() {
-    return deleteDir(exportDirectory);
-  }
-
-  /**
-   * Deletes a directory recursively.
-   *
-   * @param dir Directory to delete
-   * @return True if directory was successfully deleted.
-   */
-  private static boolean deleteDir(final File dir) {
-    if (dir.isDirectory()) {
-      for (String child : dir.list()) {
-        final boolean success = deleteDir(new File(dir, child));
-        if (!success) {
-          return false;
-        }
-      }
-    }
-    return dir.delete();
+  public void delete() throws IOException {
+    FileUtils.forceDelete(exportDirectory);
   }
 
   /**
