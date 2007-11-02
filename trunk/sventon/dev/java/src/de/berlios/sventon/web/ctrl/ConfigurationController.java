@@ -117,8 +117,8 @@ public final class ConfigurationController extends AbstractFormController {
     } else {
       final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
       instanceConfiguration.setRepositoryRoot(confCommand.getRepositoryURL().trim());
-      instanceConfiguration.setConfiguredUID(confCommand.getUsername());
-      instanceConfiguration.setConfiguredPWD(confCommand.getPassword());
+      instanceConfiguration.setUid(confCommand.getUsername());
+      instanceConfiguration.setPwd(confCommand.getPassword());
       instanceConfiguration.setCacheUsed(confCommand.isCacheUsed());
       instanceConfiguration.setZippedDownloadsAllowed(confCommand.isZippedDownloadsAllowed());
       application.addInstance(confCommand.getName(), instanceConfiguration);

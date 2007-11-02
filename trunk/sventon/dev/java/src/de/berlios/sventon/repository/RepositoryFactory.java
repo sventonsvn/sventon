@@ -50,9 +50,9 @@ public final class RepositoryFactory {
       return null;
     }
     final SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-    if (configuration.getConfiguredUID() != null) {
+    if (configuration.getUid() != null) {
       final BasicAuthenticationManager authManager = new BasicAuthenticationManager(
-          configuration.getConfiguredUID(), configuration.getConfiguredPWD());
+          configuration.getUid(), configuration.getPwd());
       repository.setAuthenticationManager(authManager);
     }
     return repository;

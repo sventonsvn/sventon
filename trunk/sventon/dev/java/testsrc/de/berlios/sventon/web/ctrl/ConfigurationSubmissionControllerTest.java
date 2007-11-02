@@ -56,15 +56,15 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
 
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
-    instanceConfiguration1.setConfiguredUID("user1");
-    instanceConfiguration1.setConfiguredPWD("abc123");
+    instanceConfiguration1.setUid("user1");
+    instanceConfiguration1.setPwd("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
     final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
-    instanceConfiguration2.setConfiguredUID("user2");
-    instanceConfiguration2.setConfiguredPWD("123abc");
+    instanceConfiguration2.setUid("user2");
+    instanceConfiguration2.setPwd("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
