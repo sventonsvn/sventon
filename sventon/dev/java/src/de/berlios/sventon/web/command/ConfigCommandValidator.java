@@ -95,8 +95,8 @@ public final class ConfigCommandValidator implements Validator {
         logger.info("Testing repository connection");
         final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
         instanceConfiguration.setRepositoryRoot(trimmedURL);
-        instanceConfiguration.setConfiguredUID(command.getUsername());
-        instanceConfiguration.setConfiguredPWD(command.getPassword());
+        instanceConfiguration.setUid(command.getUsername());
+        instanceConfiguration.setPwd(command.getPassword());
         try {
           final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
           repos.testConnection();

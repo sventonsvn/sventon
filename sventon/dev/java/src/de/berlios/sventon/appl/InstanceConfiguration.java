@@ -46,13 +46,13 @@ public class InstanceConfiguration {
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String configuredUID;
+  private String uid;
 
   /**
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String configuredPWD;
+  private String pwd;
 
   /**
    * Decides whether the caching feature will be used.
@@ -63,6 +63,12 @@ public class InstanceConfiguration {
    * Decides whether <i>download as zip</i> is allowed.
    */
   private boolean zipDownloadsAllowed;
+
+  /**
+   * Decides wheter repository access control is enforced (this is configured on the
+   * SVN server). Note that enabling access control _disables_ caching.
+   */
+  private boolean enableAccessControl;
 
   /**
    * Number of items in the generated RSS feed.
@@ -79,6 +85,7 @@ public class InstanceConfiguration {
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
+  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = ".enableAccessControl";
   public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
 
   /**
@@ -91,14 +98,16 @@ public class InstanceConfiguration {
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
-    instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
-    instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
+    instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
+    instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+    instanceConfiguration.enableAccessControl(
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
-        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+       properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
   }
 
@@ -107,14 +116,15 @@ public class InstanceConfiguration {
    *
    * @param repositoryRoot The root url.
    */
-  public void setRepositoryRoot(final String repositoryRoot) {
-    repositoryURL = repositoryRoot;
+  public void setRepositoryRoot(String repositoryRoot) {
 
     // Strip last slash if any.
     if (repositoryRoot.endsWith("/")) {
       logger.debug("Removing trailing slash from url");
-      repositoryURL = repositoryRoot.substring(0, repositoryRoot.length() - 1);
+      repositoryRoot = repositoryRoot.substring(0, repositoryRoot.length() - 1);
     }
+
+    repositoryURL = repositoryRoot;
 
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
@@ -126,39 +136,39 @@ public class InstanceConfiguration {
   /**
    * Get configured Password, if any.
    *
-   * @return Returns the configuredPWD.
+   * @return Returns the pwd.
    */
-  public String getConfiguredPWD() {
-    return configuredPWD;
+  public String getPwd() {
+    return pwd;
   }
 
   /**
    * Set a configured password. This password will be used for repository
-   * access, together with configured user ID, {@see #setConfiguredUID(String)}
+   * access, together with configured user ID, {@see #setUid(String)}
    *
-   * @param configuredPWD The configuredPWD to set, may be <code>null</code>.
+   * @param pwd The pwd to set, may be <code>null</code>.
    */
-  public void setConfiguredPWD(final String configuredPWD) {
-    this.configuredPWD = configuredPWD;
+  public void setPwd(final String pwd) {
+    this.pwd = pwd;
   }
 
   /**
    * Get configured user ID, if any.
    *
-   * @return Returns the configuredUID.
+   * @return Returns the uid.
    */
-  public String getConfiguredUID() {
-    return configuredUID;
+  public String getUid() {
+    return uid;
   }
 
   /**
    * Set a configured user ID. This user ID will be used for repository access,
-   * together with configured password, {@see #setConfiguredPWD(String)}
+   * together with configured password, {@see #setPwd(String)}
    *
-   * @param configuredUID The configuredUID to set, may be <code>null</code>
+   * @param uid The uid to set, may be <code>null</code>
    */
-  public void setConfiguredUID(final String configuredUID) {
-    this.configuredUID = configuredUID;
+  public void setUid(final String uid) {
+    this.uid = uid;
   }
 
   /**
@@ -195,7 +205,26 @@ public class InstanceConfiguration {
    * @return <code>true</code> if cache is enabled, <code>false</code> if not.
    */
   public boolean isCacheUsed() {
-    return this.useCache;
+    return this.useCache && !this.enableAccessControl;
+  }
+
+  /**
+   * Checks if repository access control is enabled.
+   *
+   * @return {@code true} if access control is enabled.
+   */
+  public boolean isAccessControlEnabled() {
+    return enableAccessControl;
+  }
+
+  /**
+   * Sets the 'enableAccessControl' flag.
+   * <b>Note</b> Enabling access control <i>disables</i> cache.
+   *
+   * @param enableAccessControl {@code true] enables repository access control.
+   */
+  public void enableAccessControl(final boolean enableAccessControl) {
+    this.enableAccessControl = enableAccessControl;
   }
 
   /**

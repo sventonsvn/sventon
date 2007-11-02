@@ -241,7 +241,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(svnae);
+      return forwardToAuthenticationFailureView(svnae); //TODO: Show form and retry (but how?)
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();

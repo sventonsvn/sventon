@@ -192,15 +192,15 @@ public class Application {
     final Set<String> instanceNames = getInstanceNames();
 
     for (final String instanceName : instanceNames) {
-      final Properties properties = new Properties();
+      final Properties properties = new Properties(); //TODO: Move this to InstanceConfiguration.java
       final InstanceConfiguration config = getInstance(instanceName).getConfiguration();
 
       properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
           config.getUrl());
       properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
-          config.getConfiguredUID());
+          config.getUid());
       properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
-          config.getConfiguredPWD());
+          config.getPwd());
       properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
           config.isCacheUsed() ? "true" : "false");
       properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,

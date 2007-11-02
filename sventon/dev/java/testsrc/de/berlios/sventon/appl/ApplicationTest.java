@@ -29,15 +29,15 @@ public class ApplicationTest extends TestCase {
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
-    instanceConfiguration1.setConfiguredUID("user1");
-    instanceConfiguration1.setConfiguredPWD("abc123");
+    instanceConfiguration1.setUid("user1");
+    instanceConfiguration1.setPwd("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
     final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
-    instanceConfiguration2.setConfiguredUID("user2");
-    instanceConfiguration2.setConfiguredPWD("123abc");
+    instanceConfiguration2.setUid("user2");
+    instanceConfiguration2.setPwd("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
@@ -59,13 +59,13 @@ public class ApplicationTest extends TestCase {
     final Application application = new Application(new File(TEMPDIR), "filename");
     final InstanceConfiguration config1 = new InstanceConfiguration();
     config1.setRepositoryRoot("http://repo1");
-    config1.setConfiguredUID("");
-    config1.setConfiguredPWD("");
+    config1.setUid("");
+    config1.setPwd("");
 
     final InstanceConfiguration config2 = new InstanceConfiguration();
     config2.setRepositoryRoot("http://repo2");
-    config2.setConfiguredUID("");
-    config2.setConfiguredPWD("");
+    config2.setUid("");
+    config2.setPwd("");
 
     application.addInstance("test1", config1);
     application.addInstance("test2", config2);
