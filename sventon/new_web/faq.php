@@ -15,7 +15,7 @@
   <li><a href="#q12">Why is not file type [XYZ] colorized when displayed in sventon?</a></li>
   <li><a href="#q13">Why is the binary file type [XYZ] treated as a text file when I view it in sventon?</a></li>
   <li><a href="#q14">Is there a log file for sventon?</a></li>
-  <li><a href="#q15">Does sventon support non-Latin 1 charsets?</a></li>
+  <li><a href="#q15">Does sventon support non-US-ASCII charsets?</a></li>
   <li><a href="#q16">Can I send suggestions for new functions?</a></li>
   <li><a href="#q17">Will sventon be avaliable for CVS (or any other version control system) in the future?</a></li>
   <li><a href="#q18">What license do you use?</a></li>
