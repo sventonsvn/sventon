@@ -147,7 +147,7 @@ input.btn {
   color: #14233D;
   background-color: #AFC4D2;
   border: 1px solid black;
-  width: 950px;
+  width: 100%;
   border-spacing: 1px;
 }
 
@@ -181,7 +181,7 @@ input.btn {
   color: #14233D;
   background-color: #AFC4D2;
   border: 1px solid black;
-  width: 950px;
+  width: 100%;
 }
 
 .sventonStackTraceTable {
@@ -350,4 +350,29 @@ input.btn {
 a.helpDivCloseLink {
   color: #000000;
   text-decoration: none;
+}
+
+.entryTrayContainerDiv {
+  background-color: #3E647E;
+  float: right;
+  text-align: left;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.entryTrayHeaderTable {
+  color: #E2E4E6;
+  font-weight: bold;
+  width: 280px;
+}
+
+.entryTrayTable {
+  width: 280px;
+  color: #14233D;
+  background-color: #AFC4D2;
+  border-top: 1px solid black;
+}
+
+.entry {
 }

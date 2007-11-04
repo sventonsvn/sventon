@@ -14,13 +14,15 @@ package de.berlios.sventon.web.model;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 
+import java.io.Serializable;
+
 /**
  * Class containing user specific data.
  * An instance will be stored on the user's HTTPSession.
  *
  * @author jesper@users.berlios.de
  */
-public final class UserContext {
+public final class UserContext implements Serializable {
 
   /**
    * The sort type.
@@ -41,6 +43,11 @@ public final class UserContext {
    * The user chosen charset.
    */
   private String charset;
+
+  /**
+   * The user's repository entry tray.
+   */
+  private RepositoryEntryTray repositoryEntryTray = new RepositoryEntryTray();
 
   /**
    * Search mode.
@@ -148,4 +155,13 @@ public final class UserContext {
     this.searchMode = searchMode;
   }
 
+  /**
+   * Gets the repository entry tray.
+   *
+   * @return The entry tray instance.
+   */
+  public RepositoryEntryTray getRepositoryEntryTray() {
+    return repositoryEntryTray;
+  }
+  
 }
