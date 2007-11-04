@@ -83,7 +83,7 @@ public final class FileTypeIconTag extends TagSupport {
     if (icon == null) {
       icon = "images/icon_file.png";
     }
-    return "<img src=\"" + icon + "\" alt=\"" + extension + "\"/>";
+    return "<img src=\"" + icon + "\" title=\"" + extension + "\" alt=\"" + extension + "\"/>";
   }
 
   /**
