@@ -48,7 +48,7 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entryParameters = ServletRequestUtils.getStringParameters(request, "entry");
+    final String[] entryParameters = ServletRequestUtils.getRequiredStringParameters(request, "entry");
 
     logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();

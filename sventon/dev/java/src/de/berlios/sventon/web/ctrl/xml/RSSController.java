@@ -64,13 +64,8 @@ public final class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
+    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
-
-    if (instanceName == null) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
-      return null;
-    }
 
     if (!application.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";

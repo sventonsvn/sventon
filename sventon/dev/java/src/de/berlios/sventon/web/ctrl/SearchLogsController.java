@@ -24,7 +24,10 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller used when searching for log messages.
@@ -41,8 +44,8 @@ public final class SearchLogsController extends AbstractSVNTemplateController im
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String searchString = ServletRequestUtils.getStringParameter(request, "searchString");
-    final String startDir = ServletRequestUtils.getStringParameter(request, "startDir");
+    final String searchString = ServletRequestUtils.getRequiredStringParameter(request, "searchString");
+    final String startDir = ServletRequestUtils.getRequiredStringParameter(request, "startDir");
 
     logger.debug("Searching logMessages for: " + searchString);
 
