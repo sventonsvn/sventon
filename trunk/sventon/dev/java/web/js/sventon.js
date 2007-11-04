@@ -293,6 +293,24 @@ function restoreBlameRev(revision) {
   setBackgroundColor(tags, 'blameRev_' + revision, '#ffffff');
 }
 
+function addEntryToTray(element, dropon, event) {
+  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id,
+  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+}
+
+function removeEntryFromTray(removeEntryUrl) {
+  var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl,
+  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+}
+
+function showHideEntryTray() {
+  if ($('entryTrayWrapper').style.display == '') {
+    Effect.SlideUp('entryTrayWrapper');
+  } else {
+    Effect.SlideDown('entryTrayWrapper');
+  }
+}
+
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================

@@ -25,7 +25,7 @@
   <sventon:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/>
   <sventon:functionLinks pageName="repobrowser"/>
 
-  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
+  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}"/>
     <input type="hidden" name="revision" value="${command.revision}"/>
@@ -63,6 +63,12 @@
           <c:param name="revision" value="${entry.revision}" />
           <c:param name="name" value="${command.name}" />
         </c:url>
+        <c:url value="entrytray.ajax" var="entryTrayAddUrl">
+          <c:param name="path" value="${entry.fullEntryName}" />
+          <c:param name="revision" value="${entry.revision}" />
+          <c:param name="name" value="${command.name}" />
+          <c:param name="action" value="add" />
+        </c:url>
 
         <c:set var="totalSize" value="${totalSize + entry.size}"/>
 
@@ -72,11 +78,19 @@
           </td>
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">
-              <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"/></td>
+              <td class="sventonCol2">
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <img src="images/icon_folder.png" alt="dir"/>
+                </div>
+              </td>
               <td class="sventonCol3"><a href="${viewUrl}&bypassEmpty=true">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
-              <td class="sventonCol2"><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
+              <td class="sventonCol2">
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+                </div>
+              </td>
               <td class="sventonCol3"><a href="${showFileUrl}">${entry.name}</a></td>
             </c:otherwise>
           </c:choose>
@@ -111,8 +125,10 @@
         <td></td>
       </tr>
       <tr>
-        <td colspan="2" class="sventonCol1"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
-        <td>
+        <td colspan="2" class="sventonCol1">
+          <input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"/>
+        </td>
+        <td nowrap>
           <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
         </td>
         <td colspan="5"></td>
@@ -126,8 +142,28 @@
     </script>
   </c:if>
 
-<br>
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
-<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+  <div align="right" class="entryTrayContainerDiv" id="entryTrayContainer">
+    <table class="entryTrayHeaderTable">
+      <tr>
+        <td>drag&amp;drop tray - <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '[hide]', '[show]'); showHideEntryTray(); return false;"><span id="hideShowTrayLink">[show]</span></a></td>
+      </tr>
+    </table>
+    <div id="entryTrayWrapper" style="display: none">
+      <div id="entryTray">
+        <%@ include file="/WEB-INF/jsp/ajax/entryTray.jsp"%>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var entries = document.getElementsByClassName('entry');
+    for (var i = 0; i < entries.length; i++) {
+      new Draggable(entries[i].id, {revert:true})
+    }
+    Droppables.add('entryTrayContainer', {onDrop:addEntryToTray})
+  </script>
+
+  <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>
