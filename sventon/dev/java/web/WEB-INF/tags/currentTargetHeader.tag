@@ -25,7 +25,7 @@
       <c:choose>
         <c:when test="${hasProperties}">
           <td>${title} - ${target}&nbsp;
-            <a class="sventonHeaderLink" href="#" onclick="javascript:Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', 'show', 'hide'); return false;">
+            <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', 'show', 'hide'); return false;">
               [<span id="propertiesLink">show</span> properties]
             </a>
           </td>

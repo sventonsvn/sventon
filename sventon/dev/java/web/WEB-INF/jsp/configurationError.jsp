@@ -27,7 +27,7 @@
   </h3>
 
   <p>
-    <a href="javascript:history.go(-1)">Back...</a>
+    <a href="#" onclick="history.go(-1); return false;">Back...</a>
   </p>
 </body>
 </html>

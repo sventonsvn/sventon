@@ -65,12 +65,12 @@
   <c:when test="${pageName == 'showTextFile'}">
     <c:choose>
       <c:when test="${archivedEntry ne null}">
-        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>        
+        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
       </c:when>
       <c:otherwise>
         <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
-        <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="javascript:parent.location='${blameLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='${downloadLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="parent.location='${blameLinkUrl}';"/>
         <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="javascript:parent.location='${showFileLinkUrl}&format=raw';"/>
 
         <c:if test="${!empty committedRevision}">
@@ -91,32 +91,32 @@
     <c:choose>
       <c:when test="${archivedEntry eq null}">
         <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='${downloadLinkUrl}';"/>
       </c:when>
       <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-        <input type="button" class="btn" value="<spring:message code="force-display.button.text"/>" onclick="javascript:parent.location='${showArchivedFileLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="force-display.button.text"/>" onclick="parent.location='${showArchivedFileLinkUrl}';"/>
       </c:otherwise>
     </c:choose>
   </c:when>
 
   <c:when test="${pageName == 'repobrowser'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target eq '' ? '/' : command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="showlocks.button.text"/>" onclick="javascript:parent.location='${showLockLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showlocks.button.text"/>" onclick="parent.location='${showLockLinkUrl}';"/>
     <c:choose>
       <c:when test="${useCache}">
         <c:choose>
           <c:when test="${isUpdating}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.isupdating.tooltip"/>')" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('${command.path}', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.isupdating.tooltip"/>')" />
           </c:when>
           <c:when test="${!isHead}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.disabled.tooltip"/>')" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('${command.path}', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.disabled.tooltip"/>')" />
           </c:when>
           <c:when test="${isFlatten}">
-            <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
+            <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
           </c:when>
           <c:otherwise>
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="javascript:return doFlatten('${command.path}', '${command.name}');" onmouseover="Tip('<spring:message code="flatten.button.tooltip"/>')" />
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('${command.path}', '${command.name}');" onmouseover="Tip('<spring:message code="flatten.button.tooltip"/>')" />
           </c:otherwise>
         </c:choose>
       </c:when>
@@ -131,29 +131,29 @@
             <option value="${extension}" ${extension eq filterExtension ? "selected" : ""}>${extension}</option>
           </c:forEach>
         </select>
-        <input type="button" class="btn" value="<spring:message code="filter.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;"/>
+        <input type="button" class="btn" value="<spring:message code="filter.button.text"/>" onclick="parent.location='${showDirLinkUrl}&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;"/>
     </c:if>
   </c:when>
 
   <c:when test="${pageName == 'showLog'}">
     <c:choose>
       <c:when test="${isFile}">
-        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
+        <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='${downloadLinkUrl}';"/>
       </c:when>
       <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
+        <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
       </c:otherwise>
     </c:choose>
   </c:when>
 
   <c:when test="${pageName == 'showRevInfo'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
   </c:when>
 
   <c:when test="${pageName == 'showDiff'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
 
     <c:url value="unifieddiff.svn" var="unifiedDiffUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
@@ -163,13 +163,13 @@
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
     <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" onmouseover="Tip('<spring:message code="unifieddiff.button.tooltip"/>')" onclick="javascript:parent.location='${unifiedDiffUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="javascript:toggleWrap();"/>
+    <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();"/>
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showUnifiedDiff'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
 
     <c:url value="diff.svn" var="diffUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
@@ -184,17 +184,17 @@
 
   <c:when test="${pageName == 'showBlame'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="javascript:parent.location='${showLogLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="javascript:parent.location='${showFileLinkUrl}';"/>
-    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="javascript:parent.location='${downloadLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='${showFileLinkUrl}';"/>
+    <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='${downloadLinkUrl}';"/>
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
         
   <c:when test="${pageName == 'showThumbs'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
   </c:when>
 
   <c:when test="${pageName == 'showLock'}">
-    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="javascript:parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')" />
   </c:when>
 
   <c:otherwise>
