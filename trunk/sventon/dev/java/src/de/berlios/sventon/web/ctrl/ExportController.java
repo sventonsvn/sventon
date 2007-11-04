@@ -72,7 +72,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
     ServletOutputStream output = null;
     InputStream fileInputStream = null;
 
-    final List<String> targets = Arrays.asList(ServletRequestUtils.getStringParameters(request, "entry"));
+    final List<String> targets = Arrays.asList(ServletRequestUtils.getRequiredStringParameters(request, "entry"));
     final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
 
     try {

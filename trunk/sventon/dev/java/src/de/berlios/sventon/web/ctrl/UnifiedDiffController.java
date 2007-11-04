@@ -11,18 +11,18 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.diff.IdenticalFilesException;
+import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.diff.IllegalFileFormatException;
-import de.berlios.sventon.diff.IdenticalFilesException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +44,7 @@ public final class UnifiedDiffController extends AbstractSVNTemplateController i
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entries = ServletRequestUtils.getStringParameters(request, "entry");
+    final String[] entries = ServletRequestUtils.getRequiredStringParameters(request, "entry");
     logger.debug("Diffing file (unified): " + StringUtils.join(entries, ","));
     final Map<String, Object> model = new HashMap<String, Object>();
 

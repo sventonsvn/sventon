@@ -62,13 +62,8 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
+    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final RepositoryService repositoryService = application.getRepositoryService();
-
-    if (instanceName == null) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
-      return null;
-    }
 
     final SVNRepository repository =
         RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName).getConfiguration());

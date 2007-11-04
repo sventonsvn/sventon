@@ -46,6 +46,9 @@ public enum DiffAction {
    * Private constructor.
    *
    * @param description The description
+   * @param code        Code
+   * @param symbol      Symbol
+   * @param cssClass    CSS style class
    */
   private DiffAction(final String description, final char code, final String symbol, final String cssClass) {
     this.description = description;
@@ -77,13 +80,13 @@ public enum DiffAction {
    */
   public static DiffAction parse(final char code) {
     switch (code) {
-      case 'd':
+      case'd':
         return DELETED;
-      case 'c':
+      case'c':
         return CHANGED;
-      case 'a':
+      case'a':
         return ADDED;
-      case 'u':
+      case'u':
         return UNCHANGED;
       default:
         throw new IllegalArgumentException("Unable to parse code: " + code);
