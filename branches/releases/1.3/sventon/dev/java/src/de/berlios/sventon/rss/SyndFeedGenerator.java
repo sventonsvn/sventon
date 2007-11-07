@@ -173,6 +173,9 @@ public final class SyndFeedGenerator implements FeedGenerator {
    * @return Result
    */
   protected String addLogMessage(final SVNLogEntry logEntry, final String itemBody) {
+    if (StringUtils.isEmpty(logEntry.getMessage())) {
+      return itemBody;
+    }
     return itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(WebUtils.nl2br(logEntry.getMessage())));
   }
 
