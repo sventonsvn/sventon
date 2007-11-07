@@ -296,11 +296,15 @@ function restoreBlameRev(revision) {
 function addEntryToTray(element, dropon, event) {
   var ajax = new Ajax.Updater({success: $('entryTray')}, element.id,
   {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+  Element.show('spinner');
+  isAjaxRequestSent = true;
 }
 
 function removeEntryFromTray(removeEntryUrl) {
   var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl,
   {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+  Element.show('spinner');
+  isAjaxRequestSent = true;
 }
 
 function showHideEntryTray() {
