@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.repository.cache;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * CamelCase regex pattern class.
  *
@@ -18,6 +20,9 @@ package de.berlios.sventon.repository.cache;
  */
 public class CamelCasePattern {
 
+  /**
+   * The pattern string.
+   */
   private final String camelCasePattern;
 
   /**
@@ -27,9 +32,8 @@ public class CamelCasePattern {
    * @param camelCaseString The CamelCase string
    */
   public CamelCasePattern(final String camelCaseString) {
-    if (camelCaseString == null || "".equals(camelCaseString)) {
-      throw new IllegalArgumentException("Illegal camelCase string: " + camelCaseString);
-    }
+    Validate.notEmpty(camelCaseString, "Illegal camelCase string: " + camelCaseString);
+
     final StringBuilder pattern = new StringBuilder();
     for (int i = 0; i < camelCaseString.length(); i++) {
       pattern.append("[");
@@ -49,6 +53,10 @@ public class CamelCasePattern {
     return camelCasePattern;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String toString() {
     return camelCasePattern;
   }

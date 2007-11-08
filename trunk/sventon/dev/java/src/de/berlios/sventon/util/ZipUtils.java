@@ -16,6 +16,7 @@ import de.schlichtherle.io.DefaultArchiveDetector;
 import de.schlichtherle.io.archive.spi.ArchiveDriver;
 import de.schlichtherle.io.archive.zip.Zip32Driver;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,10 +45,9 @@ public final class ZipUtils {
    * @param charset Charset to use for file names and comments.
    */
   public ZipUtils(final Charset charset) {
-    if (charset == null) {
-      throw new IllegalArgumentException("Charset was null");
-    }
+    Validate.notNull(charset, "Charset was null");
     logger.debug("Using charset: " + charset.name());
+
     final ArchiveDriver driver = new Zip32Driver(charset.name());
     de.schlichtherle.io.File.setDefaultArchiveDetector(
         new DefaultArchiveDetector(ArchiveDetector.DEFAULT, "zip", driver));

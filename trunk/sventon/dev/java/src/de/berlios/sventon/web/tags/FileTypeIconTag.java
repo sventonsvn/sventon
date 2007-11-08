@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.tags;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.Validate;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -74,10 +75,7 @@ public final class FileTypeIconTag extends TagSupport {
    * @return <code>IMG</code> tag.
    */
   protected static String createImageTag(final String filename, final Properties mappings) {
-    if (filename == null) {
-      throw new IllegalArgumentException("Filename was null");
-    }
-
+    Validate.notNull(filename, "Filename was null or empty");
     final String extension = FilenameUtils.getExtension(filename.toLowerCase());
     String icon = (String) mappings.get(extension);
     if (icon == null) {

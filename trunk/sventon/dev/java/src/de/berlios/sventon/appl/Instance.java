@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.appl;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * Represents a configured Subversion repository instance in sventon.
  *
@@ -46,9 +48,7 @@ public class Instance {
    * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
    */
   public Instance(final String instanceName, final InstanceConfiguration configuration) {
-    if (!isValidName(instanceName)) {
-      throw new IllegalArgumentException("Name must be in lower case a-z and/or 0-9");
-    }
+    Validate.isTrue(isValidName(instanceName), "Name must be in lower case a-z and/or 0-9");
     this.instanceName = instanceName;
     this.configuration = configuration;
   }
@@ -79,9 +79,7 @@ public class Instance {
    * @throws IllegalArgumentException if given name was null.
    */
   public static boolean isValidName(final String instanceName) {
-    if (instanceName == null) {
-      throw new IllegalArgumentException("Instance name cannot be null");
-    }
+    Validate.notNull(instanceName, "Instance name cannot be null");
     return instanceName.matches(INSTANCE_NAME_PATTERN);
   }
 

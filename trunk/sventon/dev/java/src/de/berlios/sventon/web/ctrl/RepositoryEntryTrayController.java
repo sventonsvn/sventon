@@ -15,6 +15,7 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.RepositoryEntryTray;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.lang.Validate;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,11 +57,9 @@ public class RepositoryEntryTrayController extends AbstractSVNTemplateController
     final RepositoryEntry entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(),
         revision.getNumber());
 
-    if (entry == null) {
-      throw new IllegalArgumentException("Entry does not exist: " + svnCommand);
-    }
-
+    Validate.notNull(entry, "Entry does not exist: " + svnCommand);
     final RepositoryEntryTray entryTray = userContext.getRepositoryEntryTray();
+
     if (PARAMETER_ADD.equals(actionParameter)) {
       logger.debug("Adding entry to tray: " + entry.getFullEntryName());
       entryTray.add(entry);

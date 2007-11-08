@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.model;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * Type enum for log entry actions.
  *
@@ -36,7 +38,7 @@ public enum LogEntryActionType {
    * Private constructor.
    *
    * @param action The action
-   * @param code Code
+   * @param code   Code
    */
   private LogEntryActionType(final String action, final char code) {
     this.action = action;
@@ -51,9 +53,7 @@ public enum LogEntryActionType {
    * @throws IllegalArgumentException if code was null
    */
   public static LogEntryActionType parse(final String code) {
-    if (code == null) {
-      throw new IllegalArgumentException("Unable to parse code as it was null");
-    }
+    Validate.notNull(code, "Given code was null");
     return parse(code.charAt(0));
   }
 

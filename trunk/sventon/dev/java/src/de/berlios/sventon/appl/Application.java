@@ -20,6 +20,7 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -87,9 +88,9 @@ public class Application {
    * @throws IOException if IO error occur
    */
   public Application(final File configurationDirectory, final String configurationFilename) throws IOException {
-    if (configurationDirectory == null || configurationFilename == null) {
-      throw new IllegalArgumentException("Parameters cannot be null");
-    }
+    Validate.notNull(configurationDirectory, "Config directory cannot be null");
+    Validate.notNull(configurationFilename, "Config filename cannot be null");
+
     this.configurationDirectory = configurationDirectory;
     if (!this.configurationDirectory.exists() && !this.configurationDirectory.mkdirs()) {
       throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());

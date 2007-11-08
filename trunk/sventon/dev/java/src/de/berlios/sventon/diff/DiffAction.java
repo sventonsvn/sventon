@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.diff;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * Type enum for diff segment actions.
  *
@@ -65,9 +67,7 @@ public enum DiffAction {
    * @throws IllegalArgumentException if code was null
    */
   public static DiffAction parse(final String code) {
-    if (code == null) {
-      throw new IllegalArgumentException("Unable to parse code as it was null");
-    }
+    Validate.notNull(code, "Given code was null");
     return parse(code.charAt(0));
   }
 
