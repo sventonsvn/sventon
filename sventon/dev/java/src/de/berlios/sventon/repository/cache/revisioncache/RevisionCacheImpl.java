@@ -11,9 +11,10 @@
  */
 package de.berlios.sventon.repository.cache.revisioncache;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import org.apache.commons.lang.Validate;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 /**
  * Contains cached revisions.
@@ -42,9 +43,7 @@ public class RevisionCacheImpl implements RevisionCache {
    * {@inheritDoc}
    */
   public void add(final SVNLogEntry logEntry) throws CacheException {
-    if (logEntry == null) {
-      throw new IllegalArgumentException("Given logEntry was null");
-    }
+    Validate.notNull(logEntry, "Given logEntry was null");
     objectCache.put(CacheKey.createKey(logEntry.getRevision()), logEntry);
   }
 
