@@ -200,8 +200,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+      final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
+          configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand, repository);
@@ -220,12 +221,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", instanceConfiguration.getUrl());
+        model.put("url", configuration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
-        model.put("useCache", instanceConfiguration.isCacheUsed());
-        model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
+        model.put("useCache", configuration.isCacheUsed());
+        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
         model.put("instanceNames", application.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);

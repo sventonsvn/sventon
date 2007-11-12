@@ -75,7 +75,8 @@ public final class RSSController extends AbstractController {
     }
 
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+        configuration.getUid(), configuration.getPwd());
 
     try {
       logger.debug("Outputting feed for [" + path + "]");

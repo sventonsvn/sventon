@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
@@ -65,8 +66,9 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final RepositoryService repositoryService = application.getRepositoryService();
 
-    final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName).getConfiguration());
+    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+        configuration.getUid(), configuration.getPwd());
 
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";

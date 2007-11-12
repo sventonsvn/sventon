@@ -11,8 +11,8 @@
  */
 package de.berlios.sventon.repository;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.BasicAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
@@ -41,21 +41,22 @@ public final class RepositoryFactory {
    * <p/>
    * This method will assign credentials as they are set in the given <code>InstanceConfiguration</code>.
    *
-   * @param configuration The instance configuration.
+   * @param svnUrl Subversion URL
+   * @param uid    User id
+   * @param pwd    Password
    * @return The repository instance.
    * @throws SVNException if unable to create repository instance.
    */
-  public SVNRepository getRepository(final InstanceConfiguration configuration) throws SVNException {
-    if (configuration == null || configuration.getSVNURL() == null) {
+  public SVNRepository getRepository(final SVNURL svnUrl, final String uid, final String pwd) throws SVNException {
+    if (svnUrl == null) {
       return null;
     }
-    final SVNRepository repository = SVNRepositoryFactory.create(configuration.getSVNURL());
-    if (configuration.getUid() != null) {
-      final BasicAuthenticationManager authManager = new BasicAuthenticationManager(
-          configuration.getUid(), configuration.getPwd());
+    final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
+    if (uid != null) {
+      final BasicAuthenticationManager authManager = new BasicAuthenticationManager(uid, pwd);
+
       repository.setAuthenticationManager(authManager);
     }
     return repository;
   }
-
 }
