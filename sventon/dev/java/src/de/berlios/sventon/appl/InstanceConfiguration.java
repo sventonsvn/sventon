@@ -33,6 +33,11 @@ public class InstanceConfiguration {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
+   * Instance name.
+   */
+  private String instanceName;
+
+  /**
    * The url.
    */
   private String repositoryURL;
@@ -89,6 +94,15 @@ public class InstanceConfiguration {
   public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
 
   /**
+   * Constructor.
+   *
+   * @param instanceName Instance name.
+   */
+  public InstanceConfiguration(final String instanceName) {
+    this.instanceName = instanceName;
+  }
+
+  /**
    * Creates an instance using given name and properties.
    *
    * @param instanceName Instance name
@@ -96,19 +110,43 @@ public class InstanceConfiguration {
    * @return The InstanceConfiguration
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
-    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     instanceConfiguration.enableAccessControl(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
-       properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
+  }
+
+  /**
+   * Gets the configuration as a properties instance.
+   *
+   * @return Populated properties instance.
+   */
+  public Properties getAsProperties() {
+    final Properties properties = new Properties();
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
+        getUrl());
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
+        getUid());
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
+        getPwd());
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
+        isCacheUsed() ? "true" : "false");
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
+        isZippedDownloadsAllowed() ? "true" : "false");
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL,
+        isAccessControlEnabled() ? "true" : "false");
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
+        String.valueOf(getRssItemsCount()));
+    return properties;
   }
 
   /**

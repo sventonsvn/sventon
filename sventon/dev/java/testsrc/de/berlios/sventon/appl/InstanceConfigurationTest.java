@@ -33,7 +33,7 @@ public class InstanceConfigurationTest extends TestCase {
   }
 
   public void testSetRepositoryRoot() throws Exception {
-    InstanceConfiguration conf = new InstanceConfiguration();
+    InstanceConfiguration conf = new InstanceConfiguration("test");
 
     conf.setRepositoryRoot("svn://localhost/svn");
     assertEquals("svn://localhost/svn", conf.getUrl());
@@ -46,7 +46,7 @@ public class InstanceConfigurationTest extends TestCase {
   }
 
   public void testasdf() {
-    InstanceConfiguration conf = new InstanceConfiguration();
+    InstanceConfiguration conf = new InstanceConfiguration("test");
     conf.setCacheUsed(true);
     conf.enableAccessControl(false);
 

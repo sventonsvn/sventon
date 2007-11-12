@@ -46,7 +46,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final InstanceConfiguration instanceConfig = new InstanceConfiguration();
+    final InstanceConfiguration instanceConfig = new InstanceConfiguration("test");
 
     final Application application = new Application(new File(TEMPDIR), "filename");
     application.setConfigured(false);

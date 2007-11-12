@@ -93,7 +93,7 @@ public final class ConfigCommandValidator implements Validator {
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
-        final InstanceConfiguration configuration = new InstanceConfiguration();
+        final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryRoot(trimmedURL);
         configuration.setUid(command.getUsername());
         configuration.setPwd(command.getPassword());

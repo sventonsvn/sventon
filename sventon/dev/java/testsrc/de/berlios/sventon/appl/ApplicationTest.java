@@ -27,14 +27,14 @@ public class ApplicationTest extends TestCase {
 
   public void testStoreInstanceConfigurations() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
+    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("test");
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
     instanceConfiguration1.setUid("user1");
     instanceConfiguration1.setPwd("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
+    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("test");
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
     instanceConfiguration2.setUid("user2");
     instanceConfiguration2.setPwd("123abc");
@@ -57,12 +57,12 @@ public class ApplicationTest extends TestCase {
 
   public void testGetConfigurationAsProperties() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
-    final InstanceConfiguration config1 = new InstanceConfiguration();
+    final InstanceConfiguration config1 = new InstanceConfiguration("test");
     config1.setRepositoryRoot("http://repo1");
     config1.setUid("");
     config1.setPwd("");
 
-    final InstanceConfiguration config2 = new InstanceConfiguration();
+    final InstanceConfiguration config2 = new InstanceConfiguration("test");
     config2.setRepositoryRoot("http://repo2");
     config2.setUid("");
     config2.setPwd("");
@@ -72,9 +72,9 @@ public class ApplicationTest extends TestCase {
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);
-    assertEquals(6, props.size());
+    assertEquals(7, props.size());
     props = configurations.get(1);
-    assertEquals(6, props.size());
+    assertEquals(7, props.size());
   }
 
 }

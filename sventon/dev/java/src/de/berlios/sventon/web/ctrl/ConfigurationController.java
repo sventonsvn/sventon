@@ -115,7 +115,7 @@ public final class ConfigurationController extends AbstractFormController {
       return new ModelAndView("config", model);
 
     } else {
-      final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
+      final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(confCommand.getName());
       instanceConfiguration.setRepositoryRoot(confCommand.getRepositoryURL().trim());
       instanceConfiguration.setUid(confCommand.getUsername());
       instanceConfiguration.setPwd(confCommand.getPassword());

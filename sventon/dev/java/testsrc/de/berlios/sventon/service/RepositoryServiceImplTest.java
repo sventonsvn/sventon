@@ -36,7 +36,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -62,7 +62,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -96,7 +96,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -138,7 +138,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -157,7 +157,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -183,7 +183,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -217,7 +217,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try1;;91",
@@ -251,7 +251,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -269,7 +269,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final TestSVNRepositoryStub repository = new TestSVNRepositoryStub(null, null);
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
     final DiffCommand diffCommand = new DiffCommand(new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
