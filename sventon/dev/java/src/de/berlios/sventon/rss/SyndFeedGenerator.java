@@ -18,6 +18,7 @@ import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -29,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -56,12 +58,12 @@ public final class SyndFeedGenerator implements FeedGenerator {
    */
   protected final Log logger = LogFactory.getLog(getClass());
 
-  public static final String LOG_MESSAGE_KEY = "@LOG_MESSAGE@";
-  public static final String ADDED_COUNT_KEY = "@ADDED_COUNT@";
-  public static final String MODIFIED_COUNT_KEY = "@MODIFIED_COUNT@";
-  public static final String REPLACED_COUNT_KEY = "@REPLACED_COUNT@";
-  public static final String DELETED_COUNT_KEY = "@DELETED_COUNT@";
-  public static final String CHANGED_PATHS_KEY = "@CHANGED_PATHS@";
+  public static final String LOG_MESSAGE_KEY = "logMessage";
+  public static final String ADDED_COUNT_KEY = "addedCount";
+  public static final String MODIFIED_COUNT_KEY = "modifiedCount";
+  public static final String REPLACED_COUNT_KEY = "replacedCount";
+  public static final String DELETED_COUNT_KEY = "deletedCount";
+  public static final String CHANGED_PATHS_KEY = "changedPaths";
 
   /**
    * Cached rss HTML body template.
@@ -141,50 +143,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
   protected String createItemBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
                                   final String instanceName, final HttpServletResponse response) {
 
-    String itemBody = bodyTemplate;
-    itemBody = addActionCounts(logEntry, itemBody);
-    itemBody = addLogMessage(logEntry, itemBody);
-    itemBody = addChangedPathsTable(logEntry, itemBody, baseURL, instanceName, response);
-    return itemBody;
-  }
-
-  /**
-   * Adds the changed paths table to the item body.
-   *
-   * @param logEntry     Log entry revision.
-   * @param itemBody     String to add the table to.
-   * @param baseURL      Application base URL
-   * @param instanceName Instance name
-   * @param response     Response
-   * @return Result
-   */
-  private String addChangedPathsTable(final SVNLogEntry logEntry, final String itemBody, final String baseURL,
-                                      final String instanceName, final HttpServletResponse response) {
-
-    return itemBody.replaceAll(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, baseURL, instanceName, false, false, response)));
-  }
-
-  /**
-   * Adds the log message to the item body.
-   *
-   * @param logEntry Log entry revision.
-   * @param itemBody String to add details to.
-   * @return Result
-   */
-  protected String addLogMessage(final SVNLogEntry logEntry, final String itemBody) {
-    return itemBody.replaceAll(LOG_MESSAGE_KEY, Matcher.quoteReplacement(WebUtils.nl2br(logEntry.getMessage())));
-  }
-
-  /**
-   * Adds the count details to the item body.
-   *
-   * @param logEntry Log entry revision.
-   * @param itemBody String to add details to.
-   * @return Result
-   */
-  private String addActionCounts(final SVNLogEntry logEntry, final String itemBody) {
-    String str = itemBody;
+    final Map<String, String> valueMap = new HashMap<String, String>();
 
     int added = 0;
     int modified = 0;
@@ -212,11 +171,17 @@ public final class SyndFeedGenerator implements FeedGenerator {
           break;
       }
     }
-    str = str.replaceAll(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
-    str = str.replaceAll(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
-    str = str.replaceAll(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
-    str = str.replaceAll(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-    return str;
+
+    valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
+    valueMap.put(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
+    valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
+    valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
+    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(WebUtils.nl2br(logEntry.getMessage())));
+    valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
+        logEntry, baseURL, instanceName, false, false, response)));
+
+    final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
+    return substitutor.replace(bodyTemplate);
   }
 
   /**
