@@ -15,8 +15,8 @@ var isAjaxRequestSent = false;
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-
-  var selectedValue = formName.actionSelect.options[formName.actionSelect.selectedIndex].value;
+  var input = $(formName)['actionSelect'];
+  var selectedValue = $F(input);
 
   // If no option value is selected, no action is taken.
   if (selectedValue == '') {
@@ -55,8 +55,12 @@ function setHeadRevision() {
 
 // function to handle search submission
 function doSearch(formName) {
+
+  var input = $(formName)['searchString'];
+  var searchStr = $F(input);
+
   // If no search string is entered, no action is taken.
-  if (formName.searchString.value == '') {
+  if (searchStr == '') {
     return false;
   } else {
 
@@ -65,7 +69,7 @@ function doSearch(formName) {
     } else {
       formName.action = 'searchlogs.svn';
     }
-    if (formName.searchString.value.length < 3) {
+    if (searchStr.length < 3) {
       return searchWarning();
     } else {
       return true;
@@ -90,12 +94,13 @@ function doFlatten(url, instanceName) {
 
 // function to validate url during instance configuration submisson
 function validateUrl(formName) {
-  var url = formName.repositoryURL.value.toLowerCase();
+  var input = $(formName)['repositoryURL'];
+  var url = $F(input).toLocaleLowerCase();
   if (url.indexOf('trunk') > -1
       || url.indexOf('tags') > -1
       || url.indexOf('branches') > -1) {
     return confirm('The URL entered must be the root of the repository!\n' +
-                   'Is [' + formName.repositoryURL.value + '] really the subversion root?\n');
+                   'Is [' + $F(input) + '] really the subversion root?\n');
   }
   return true;
 }
