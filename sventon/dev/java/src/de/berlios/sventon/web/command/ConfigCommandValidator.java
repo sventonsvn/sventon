@@ -93,12 +93,13 @@ public final class ConfigCommandValidator implements Validator {
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
-        final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
-        instanceConfiguration.setRepositoryRoot(trimmedURL);
-        instanceConfiguration.setUid(command.getUsername());
-        instanceConfiguration.setPwd(command.getPassword());
+        final InstanceConfiguration configuration = new InstanceConfiguration();
+        configuration.setRepositoryRoot(trimmedURL);
+        configuration.setUid(command.getUsername());
+        configuration.setPwd(command.getPassword());
         try {
-          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
+          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(
+              configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
