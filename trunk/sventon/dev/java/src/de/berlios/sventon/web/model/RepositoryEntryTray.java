@@ -25,7 +25,7 @@ import java.util.TreeSet;
  *
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntryTray implements Serializable {
+public final class RepositoryEntryTray implements Serializable {
 
   /**
    * List of entries in tray.
