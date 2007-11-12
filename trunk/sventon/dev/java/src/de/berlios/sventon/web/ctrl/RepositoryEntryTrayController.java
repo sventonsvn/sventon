@@ -15,11 +15,11 @@ import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.RepositoryEntryTray;
 import de.berlios.sventon.web.model.UserContext;
-import org.apache.commons.lang.Validate;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -53,11 +53,15 @@ public class RepositoryEntryTrayController extends AbstractSVNTemplateController
                                    final BindException exception) throws Exception {
 
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
+    final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
 
-    final RepositoryEntry entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(),
-        revision.getNumber());
+    final RepositoryEntry entry;
+    try {
+      entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(), revision.getNumber());
+    } catch (SVNException e) {
+      return modelAndView;
+    }
 
-    Validate.notNull(entry, "Entry does not exist: " + svnCommand);
     final RepositoryEntryTray entryTray = userContext.getRepositoryEntryTray();
 
     if (PARAMETER_ADD.equals(actionParameter)) {
@@ -69,6 +73,6 @@ public class RepositoryEntryTrayController extends AbstractSVNTemplateController
     } else {
       throw new UnsupportedOperationException(actionParameter);
     }
-    return new ModelAndView("ajax/entryTray");
+    return modelAndView;
   }
 }
