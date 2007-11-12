@@ -183,32 +183,16 @@ public class Application {
   }
 
   /**
-   * Creates and populates a List of <code>Properties</code> instances with relevant configuration values
-   * extracted from given <code>ApplicationConfiguration</code>.
+   * Creates and populates a List of <code>Properties</code> instances with relevant
+   * configuration values extracted from given <code>ApplicationConfiguration</code>.
    *
    * @return List of populated Properties.
    */
   protected List<Properties> getConfigurationAsProperties() {
     final List<Properties> propertyList = new ArrayList<Properties>();
-    final Set<String> instanceNames = getInstanceNames();
-
-    for (final String instanceName : instanceNames) {
-      final Properties properties = new Properties(); //TODO: Move this to InstanceConfiguration.java
-      final InstanceConfiguration config = getInstance(instanceName).getConfiguration();
-
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
-          config.getUrl());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
-          config.getUid());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
-          config.getPwd());
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
-          config.isCacheUsed() ? "true" : "false");
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
-          config.isZippedDownloadsAllowed() ? "true" : "false");
-      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
-          String.valueOf(config.getRssItemsCount()));
-      propertyList.add(properties);
+    for (final String instanceName : getInstanceNames()) {
+      final InstanceConfiguration configuration = getInstance(instanceName).getConfiguration();
+      propertyList.add(configuration.getAsProperties());
     }
     return propertyList;
   }

@@ -70,7 +70,7 @@ public final class ConfigCommand {
     return enableAccessControl;
   }
 
-  public void setEnableAccessControl(boolean enableAccessControl) {
+  public void setEnableAccessControl(final boolean enableAccessControl) {
     this.enableAccessControl = enableAccessControl;
   }
 
@@ -86,7 +86,7 @@ public final class ConfigCommand {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
