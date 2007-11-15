@@ -21,6 +21,7 @@ import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -201,14 +202,22 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     try {
       final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(
-          configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+      final UserContext userContext = getUserContext(request);
+
+      final SVNRepository repository;
+      if (configuration.isAccessControlEnabled()) {
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+            userContext.getUid(), userContext.getPwd());
+      } else {
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+            configuration.getUid(), configuration.getPwd());
+      }
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand, repository);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
 
-      final UserContext userContext = getUserContext(request);
+
       parseAndUpdateSortParameters(request, userContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
       parseAndUpdateCharsetParameter(request, userContext);
@@ -242,7 +251,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      return forwardToAuthenticationFailureView(svnae); //TODO: Show form and retry (but how?)
+      return forwardToAuthenticationFailureView(svnCommand);
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();
@@ -340,11 +349,20 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   protected UserContext getUserContext(final HttpServletRequest request) {
     final HttpSession session = request.getSession(true);
+    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
+    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
+
     UserContext userContext = (UserContext) session.getAttribute("userContext");
     if (userContext == null) {
       userContext = new UserContext();
       session.setAttribute("userContext", userContext);
     }
+
+    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
+      userContext.setUid(uid);
+      userContext.setPwd(pwd);
+    }
+
     return userContext;
   }
 
@@ -352,15 +370,17 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
-   * @param svnae The SVNAuthenticationException.
+   * @param svnCommand Command.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(final SVNAuthenticationException svnae) {
-    logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
-    logger.error("Authentication failed", svnae);
-    return new ModelAndView("authenticationfailure");
+  private ModelAndView forwardToAuthenticationFailureView(final SVNBaseCommand svnCommand) {
+    logger.info("Authentication failed for request: " + svnCommand);
+    final Map<String, Object> model = new HashMap<String, Object>();
+    model.put("command", svnCommand);
+    logger.debug("Forwarding to 'authenticationfailure' view");
+    return new ModelAndView("authenticationfailure", model);
   }
 
   /**

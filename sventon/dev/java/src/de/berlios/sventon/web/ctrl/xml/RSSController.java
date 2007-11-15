@@ -66,7 +66,9 @@ public final class RSSController extends AbstractController {
 
     final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
-
+    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
+    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
+    
     if (!application.isConfigured()) {
       String errorMessage = "Unable to connect to repository!";
       logger.error(errorMessage + " Have sventon been configured?");
@@ -75,8 +77,13 @@ public final class RSSController extends AbstractController {
     }
 
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-        configuration.getUid(), configuration.getPwd());
+    final SVNRepository repository;
+    if (configuration.isAccessControlEnabled()) {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
+    } else {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+          configuration.getUid(), configuration.getPwd());
+    }
 
     try {
       logger.debug("Outputting feed for [" + path + "]");

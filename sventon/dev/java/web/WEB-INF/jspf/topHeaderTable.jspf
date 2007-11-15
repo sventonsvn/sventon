@@ -19,7 +19,10 @@
     <td>sventon subversion web client - <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a></td>
     <c:if test="${not empty instanceNames && fn:length(instanceNames) > 1}">
       <td align="right">
-        <a class="sventonHeaderLink" href="listinstances.svn">change repository</a>
+        <a class="sventonHeaderLink" href="listinstances.svn">[change repository]</a>
+        <c:if test="${userContext.uid ne ''}">
+          <a class="sventonHeaderLink" href="clearsession.svn">[logout]</a>
+        </c:if>
       </td>
     </c:if>
   </tr>
