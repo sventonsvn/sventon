@@ -12,4 +12,14 @@ public class UserContextTest extends TestCase {
     assertNull(userContext.getSortMode());
     assertNull(userContext.getSortType());
   }
+
+  public void testHasCredentials() throws Exception {
+    final UserContext userContext = new UserContext();
+    assertFalse(userContext.hasCredentials());
+    userContext.setUid("uid");
+    assertFalse(userContext.hasCredentials());
+    userContext.setPwd("pwd");
+    assertTrue(userContext.hasCredentials());
+  }
+
 }

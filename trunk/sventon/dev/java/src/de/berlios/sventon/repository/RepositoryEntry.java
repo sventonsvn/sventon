@@ -183,10 +183,14 @@ public final class RepositoryEntry implements Serializable {
   /**
    * Returns the date the entry was created at.
    *
-   * @return the creation date
+   * @return the creation date, or <tt>null</tt> if no date exists.
    */
   public Date getDate() {
-    return (Date) entryCreatedDate.clone();
+    if (entryCreatedDate != null) {
+      return (Date) entryCreatedDate.clone();
+    } else {
+      return null;
+    }
   }
 
   /**

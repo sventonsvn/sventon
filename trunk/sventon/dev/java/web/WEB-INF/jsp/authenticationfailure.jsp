@@ -30,6 +30,15 @@
       Peruse sventon log for further information.
     </p>
 
+    <form action="repobrowser.svn" method="post">
+      <p>UID: <input name="uid" type="text" nocache/></p>
+      <p>PWD: <input name="pwd" type="password" nocache/></p>
+      <input type="hidden" name="path" value="${command.path}"/>
+      <input type="hidden" name="revision" value="${command.revision}"/>
+      <input type="hidden" name="name" value="${command.name}"/>
+      <input type="submit" value="log in">
+    </form>
+
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
 </html>

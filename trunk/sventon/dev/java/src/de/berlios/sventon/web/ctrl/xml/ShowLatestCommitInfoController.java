@@ -64,11 +64,18 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     response.setHeader("Cache-Control", "no-cache");
 
     final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
-    final RepositoryService repositoryService = application.getRepositoryService();
+    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
+    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
+    final RepositoryService repositoryService = application.getRepositoryService();
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-        configuration.getUid(), configuration.getPwd());
+    final SVNRepository repository;
+    if (configuration.isAccessControlEnabled()) {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
+    } else {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+          configuration.getUid(), configuration.getPwd());
+    }
 
     if (repository == null) {
       final String errorMessage = "Unable to connect to repository!";

@@ -58,6 +58,16 @@ public final class UserContext implements Serializable {
   private String searchMode;
 
   /**
+   * User id.
+   */
+  private String uid;
+
+  /**
+   * Password.
+   */
+  private String pwd;
+
+  /**
    * Gets the sort type, i.e. the field to sort on.
    *
    * @return Sort type
@@ -163,5 +173,50 @@ public final class UserContext implements Serializable {
   public RepositoryEntryTray getRepositoryEntryTray() {
     return repositoryEntryTray;
   }
-  
+
+  /**
+   * Gets the user id.
+   *
+   * @return User id, or null.
+   */
+  public String getUid() {
+    return uid;
+  }
+
+  /**
+   * Sets the user id.
+   *
+   * @param uid User id.
+   */
+  public void setUid(final String uid) {
+    this.uid = uid;
+  }
+
+  /**
+   * Gets the password.
+   *
+   * @return Password, or null.
+   */
+  public String getPwd() {
+    return pwd;
+  }
+
+  /**
+   * Sets the password.
+   *
+   * @param pwd Password.
+   */
+  public void setPwd(final String pwd) {
+    this.pwd = pwd;
+  }
+
+  /**
+   * Checks if user id and password has been set.
+   *
+   * @return True if user id and password has been set, false if not.
+   */
+  public boolean hasCredentials() {
+    return uid != null && pwd != null;
+  }
+
 }
