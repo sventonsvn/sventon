@@ -30,7 +30,7 @@
       Peruse sventon log for further information.
     </p>
 
-    <form action="repobrowser.svn" method="post">
+    <form action="${action}" method="post">
       <p>UID: <input name="uid" type="text" nocache/></p>
       <p>PWD: <input name="pwd" type="password" nocache/></p>
       <input type="hidden" name="path" value="${command.path}"/>

@@ -102,4 +102,18 @@ public final class WebUtils {
     sb.append("/");
     return sb.toString();
   }
+
+  /**
+   * Extracts the servlet name from given request.
+   *
+   * @param request Request
+   * @return Servlet name.
+   */
+  public static String extractServletNameFromRequest(final HttpServletRequest request) {
+    final String servletPath = request.getServletPath();
+    if (servletPath != null) {
+      return servletPath.substring(servletPath.lastIndexOf("/") + 1);
+    }
+    return null;
+  }
 }
