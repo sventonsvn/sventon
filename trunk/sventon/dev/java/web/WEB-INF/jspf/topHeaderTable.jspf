@@ -11,7 +11,7 @@
  * ====================================================================
  */
 %>
-<div id="spinner" style="display: none; position: absolute; left: 0px; top: 0px; padding: 1em;">
+<div id="spinner" style="display: none; position: absolute; left: 0; top: 0; padding: 1em;">
   <img src="images/spinner.gif" alt="spinner"/>
 </div>
 <table class="sventonHeader">
