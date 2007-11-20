@@ -83,9 +83,9 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
     final SyndFeed feed = new SyndFeedImpl();
     final String baseURL = WebUtils.extractBaseURLFromRequest(request);
-    feed.setTitle("sventon feed - " + baseURL);
+    feed.setTitle(instanceName + " sventon feed - " + baseURL);
     feed.setLink(baseURL);
-    feed.setDescription("sventon feed - " + logEntries.size() + " latest repository changes");
+    feed.setDescription("sventon feed for " + instanceName + " - " + logEntries.size() + " latest repository changes");
     feed.setEntries(createEntries(instanceName, logEntries, baseURL, response));
     feed.setFeedType(feedType);
     new SyndFeedOutput().output(feed, response.getWriter());
