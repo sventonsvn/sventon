@@ -17,14 +17,14 @@
 <table class="sventonHeader">
   <tr>
     <td>sventon subversion web client - <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a></td>
-    <c:if test="${not empty instanceNames && fn:length(instanceNames) > 1}">
-      <td align="right">
+    <td align="right">
+      <c:if test="${not empty instanceNames && fn:length(instanceNames) > 1}">
         <a class="sventonHeaderLink" href="listinstances.svn">[change repository]</a>
-        <c:if test="${userContext.uid ne ''}">
-          <a class="sventonHeaderLink" href="clearsession.svn">[logout]</a>
-        </c:if>
-      </td>
-    </c:if>
+      </c:if>
+      <c:if test="${userContext.uid ne ''}">
+        <a class="sventonHeaderLink" href="clearsession.svn">[logout]</a>
+      </c:if>
+    </td>
   </tr>
 </table>
 <script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
