@@ -81,20 +81,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    exception = new BindException(command, "test");
-    command.setRepositoryURL("svn://domain.com/svn/");
-    command.setPassword("");
-    command.setUsername("");
-    validator.validate(command, exception);
-    assertEquals(0, exception.getAllErrors().size());
-
-    exception = new BindException(command, "test");
-    command.setRepositoryURL("svn://domain.com/svn/");
-    command.setPassword("");
-    command.setUsername("");
-    validator.validate(command, exception);
-    assertEquals(0, exception.getAllErrors().size());
-
     //if user based access is used, test connection uid and pwd can be supplied
     //(this is the tyical case)
     command.setRepositoryURL("svn://domain.com/svn/");
