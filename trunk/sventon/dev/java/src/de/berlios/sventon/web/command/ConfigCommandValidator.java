@@ -26,6 +26,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  * ConfigCommandValidator.
  *
  * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
  */
 public final class ConfigCommandValidator implements Validator {
 
@@ -95,16 +96,19 @@ public final class ConfigCommandValidator implements Validator {
         logger.info("Testing repository connection");
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryRoot(trimmedURL);
-        configuration.setUid(command.getUsername());
-        configuration.setPwd(command.getPassword());
+        configuration.setUid(command.isEnableAccessControl() ?
+           command.getConnectionTestUsername() : command.getUsername());
+        configuration.setPwd(command.isEnableAccessControl() ?
+           command.getConnectionTestPassword() : command.getPassword());
         try {
+          //TODO: Extract and kill this singelton in favor of DI
           final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(
-              configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
           errors.rejectValue("repositoryURL", "config.error.connection-error",
-              "Unable to connect to repository. Check URL, user name and password.");
+             "Unable to connect to repository. Check URL, user name and password.");
         }
       }
     }
