@@ -20,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -68,10 +70,10 @@ public final class RSSController extends AbstractController {
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
-    
+
     if (!application.isConfigured()) {
-      String errorMessage = "Unable to connect to repository!";
-      logger.error(errorMessage + " Have sventon been configured?");
+      String errorMessage = "sventon has not been configured yet!";
+      logger.error(errorMessage);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
@@ -85,13 +87,16 @@ public final class RSSController extends AbstractController {
           configuration.getUid(), configuration.getPwd());
     }
 
+    final String errorMessage = "Unable to generate RSS feed";
     try {
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = application.getRepositoryService().getLatestRevisions(
           instanceName, path, repository, configuration.getRssItemsCount());
       feedGenerator.outputFeed(instanceName, logEntries, request, response);
-    } catch (Exception ex) {
-      final String errorMessage = "Unable to generate RSS feed";
+    } catch (SVNAuthenticationException ae) {
+      logger.info(errorMessage + " - " + ae.getMessage());
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());
+    } catch (SVNException ex) {
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
     }
