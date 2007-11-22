@@ -16,7 +16,7 @@
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 
 <select class="sventonSelect" name="latestRevisionsSelect" onChange="latestRevisionsCount = this.options[this.selectedIndex].value; getLatestRevisions('${command.name}', latestRevisionsCount);">
-  <option class="sventonSelectOption">1</option>
+  <option class="sventonSelectOption" value="1">1</option>
   <c:forEach var="i" begin="${2}" end="${maxRevisionsCount}">
     <option ${userContext.latestRevisionsDisplayCount == i ? 'selected' : ''} value="${i}">${i}</option>
   </c:forEach>
