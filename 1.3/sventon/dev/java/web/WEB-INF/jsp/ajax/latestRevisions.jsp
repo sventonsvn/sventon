@@ -13,6 +13,7 @@
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 
 <select class="sventonSelect" name="latestRevisionsSelect" onChange="latestRevisionsCount = this.options[this.selectedIndex].value; getLatestRevisions('${command.name}', latestRevisionsCount);">
@@ -25,8 +26,11 @@
 <table class="sventonLatestCommitInfoTable">
   <tr>
     <td>
+      <c:set var="revCount" value="0"/>
       <c:forEach var="revision" items="${revisions}">
         <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="${revision.revision == headRevision ? 'true' : 'false'}" />
+        <c:set var="revCount" value="${revCount + 1}"/>
+        <c:if test="${revCount lt fn:length(revisions)}"><hr/></c:if>
       </c:forEach>
     </td>
   </tr>
