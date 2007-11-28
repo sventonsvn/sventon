@@ -116,7 +116,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
     for (final SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
       entry.setTitle("Revision " + logEntry.getRevision() + " - "
-          + getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength));
+          + StringUtils.trimToEmpty(getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength)));
       entry.setAuthor(logEntry.getAuthor());
       entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
@@ -171,12 +171,12 @@ public final class SyndFeedGenerator implements FeedGenerator {
           break;
       }
     }
-
     valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
     valueMap.put(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
     valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
     valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(WebUtils.nl2br(logEntry.getMessage())));
+    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
+        WebUtils.nl2br(logEntry.getMessage()))));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
         logEntry, baseURL, instanceName, false, false, response)));
 
