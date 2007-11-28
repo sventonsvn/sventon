@@ -11,8 +11,6 @@
  */
 package de.berlios.sventon.repository;
 
-import org.apache.commons.lang.Validate;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
@@ -49,7 +47,9 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
    * @throws IllegalArgumentException if given sortType is null.
    */
   public RepositoryEntryComparator(final SortType sortType, final boolean groupDirs) {
-    Validate.notNull(sortType, "sortType cannot be null");
+    if (sortType == null) {
+      throw new IllegalArgumentException("sortType cannot be null");
+    }
     this.groupDirs = groupDirs;
     this.sortType = sortType;
   }
@@ -58,6 +58,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
    * {@inheritDoc}
    */
   public int compare(final RepositoryEntry entry1, final RepositoryEntry entry2) {
+
     if (groupDirs) {
       final RepositoryEntry.Kind kind1 = entry1.getKind();
       final RepositoryEntry.Kind kind2 = entry2.getKind();

@@ -67,15 +67,15 @@
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
             <c:choose>
               <c:when test="${isFile}">
-                <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)" /></td>
+                <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="javascript:verifyCheckBox(this)" /></td>
                 <td><a href="${showUrl}">${entry.svnLogEntry.revision}</a></td>
               </c:when>
               <c:otherwise>
                 <td>${entry.svnLogEntry.revision}</td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br/>')}</a></td>
-            <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
+            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br/>')}</a></td>
+            <td><a href="#" onclick="javascript: Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>

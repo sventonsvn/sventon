@@ -20,8 +20,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -66,37 +64,31 @@ public final class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
+    final String instanceName = ServletRequestUtils.getStringParameter(request, "name", null);
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
+
+    if (instanceName == null) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No 'name' parameter provided.");
+      return null;
+    }
 
     if (!application.isConfigured()) {
-      String errorMessage = "sventon has not been configured yet!";
-      logger.error(errorMessage);
+      String errorMessage = "Unable to connect to repository!";
+      logger.error(errorMessage + " Have sventon been configured?");
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
 
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository;
-    if (configuration.isAccessControlEnabled()) {
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
-    } else {
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-          configuration.getUid(), configuration.getPwd());
-    }
+    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
-    final String errorMessage = "Unable to generate RSS feed";
     try {
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = application.getRepositoryService().getLatestRevisions(
           instanceName, path, repository, configuration.getRssItemsCount());
       feedGenerator.outputFeed(instanceName, logEntries, request, response);
-    } catch (SVNAuthenticationException ae) {
-      logger.info(errorMessage + " - " + ae.getMessage());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());
-    } catch (SVNException ex) {
+    } catch (Exception ex) {
+      final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
     }

@@ -11,11 +11,9 @@
  */
 package de.berlios.sventon.repository;
 
-import org.apache.commons.lang.Validate;
-
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Comparator;
+import java.util.Collections;
 
 /**
  * Sorts collections of <code>RepositoryEntry</code> instances.
@@ -41,13 +39,18 @@ public class RepositoryEntrySorter {
   /**
    * Constructor.
    *
-   * @param sortType Field to sort on.
+   * @param sortType   Field to sort on.
    * @param sortMode Sort mode, ascending or descending.
    * @throws IllegalArgumentException if sortBy is null
    */
   public RepositoryEntrySorter(final RepositoryEntryComparator.SortType sortType, final SortMode sortMode) {
-    Validate.notNull(sortType, "sortType cannot be null");
-    Validate.notNull(sortMode, "sortMode cannot be null");
+    if (sortType == null) {
+      throw new IllegalArgumentException("sortType cannot be null");
+    }
+    if (sortMode == null) {
+      throw new IllegalArgumentException("sortMode cannot be null");
+    }
+
     this.sortType = sortType;
     this.sortMode = sortMode;
   }

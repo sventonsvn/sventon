@@ -16,15 +16,14 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 
 /**
- * Wrapper class for cache handling.
- * Uses <a href="http://ehcache.sourceforge.net/">ehcache</a> behind the scenes.
+ * Wrapper class for cache handling. Uses
+ * <a href="http://ehcache.sourceforge.net/">ehcache</a> behind the scenes.
  *
  * @author jesper@users.berlios.de
  */
@@ -33,12 +32,12 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * The cache manager instance.
    */
-  private final CacheManager cacheManager;
+  private CacheManager cacheManager;
 
   /**
    * The cache instance.
    */
-  private final Cache cache;
+  private Cache cache;
 
   /**
    * Logger for this class and subclasses
@@ -83,8 +82,10 @@ public final class ObjectCacheImpl implements ObjectCache {
    * {@inheritDoc}
    */
   public void put(final Object cacheKey, final Object value) {
-    Validate.notNull(cacheKey, "Cache key cannot be null");
-    final Element element = new Element(cacheKey.toString(), (Serializable) value);
+    if (cacheKey == null) {
+      throw new IllegalArgumentException("Cache key cannot be null");
+    }
+    Element element = new Element(cacheKey.toString(), (Serializable) value);
     cache.put(element);
   }
 
@@ -92,8 +93,10 @@ public final class ObjectCacheImpl implements ObjectCache {
    * {@inheritDoc}
    */
   public Object get(final Object cacheKey) {
-    Validate.notNull(cacheKey, "Cache key cannot be null");
-    final String key = cacheKey.toString();
+    if (cacheKey == null) {
+      throw new IllegalArgumentException("Cache key cannot be null");
+    }
+    String key = cacheKey.toString();
     Element element = null;
     try {
       element = cache.get(key);

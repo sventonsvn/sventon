@@ -45,25 +45,28 @@ public final class WebUtils {
    * Replaces any new line characters with a HTML BR.
    *
    * @param string String to replace
-   * @return Result
+   * @return Result, or <tt>null</tt> if given input was <tt>null</tt>.
    */
   public static String nl2br(final String string) {
+    if (StringUtils.isEmpty(string)) {
+      return string;
+    }
     return string.replaceAll(NL_REGEXP, "<br/>");
   }
 
   /**
    * Replaces leading spaces with the HTML entity <code>&nbsp;</code>.
    *
-   * @param str Input string. Can be one or more lines.
+   * @param string Input string. Can be one or more lines.
    * @return Replaced output string.
    */
-  public static String replaceLeadingSpaces(final String str) {
-    if (StringUtils.isEmpty(str)) {
-      return str;
+  public static String replaceLeadingSpaces(final String string) {
+    if (StringUtils.isEmpty(string)) {
+      return string;
     }
 
     final StringBuilder sb = new StringBuilder();
-    final String[] lines = str.split(NL_REGEXP);
+    final String[] lines = string.split(NL_REGEXP);
 
     for (final String line : lines) {
       if (!StringUtils.isWhitespace(line)) {
@@ -101,19 +104,5 @@ public final class WebUtils {
     sb.append(request.getContextPath());
     sb.append("/");
     return sb.toString();
-  }
-
-  /**
-   * Extracts the servlet name from given request.
-   *
-   * @param request Request
-   * @return Servlet name.
-   */
-  public static String extractServletNameFromRequest(final HttpServletRequest request) {
-    final String servletPath = request.getServletPath();
-    if (servletPath != null) {
-      return servletPath.substring(servletPath.lastIndexOf("/") + 1);
-    }
-    return null;
   }
 }

@@ -21,8 +21,6 @@ import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.util.WebUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -202,22 +200,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     }
 
     try {
-      final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
-      final UserContext userContext = getUserContext(request);
-
-      final SVNRepository repository;
-      if (configuration.isAccessControlEnabled()) {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-            userContext.getUid(), userContext.getPwd());
-      } else {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-            configuration.getUid(), configuration.getPwd());
-      }
+      final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(instanceConfiguration);
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final SVNRevision requestedRevision = convertAndUpdateRevision(svnCommand, repository);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
 
+      final UserContext userContext = getUserContext(request);
       parseAndUpdateSortParameters(request, userContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, userContext);
       parseAndUpdateCharsetParameter(request, userContext);
@@ -230,12 +220,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", configuration.getUrl());
+        model.put("url", instanceConfiguration.getUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
-        model.put("useCache", configuration.isCacheUsed());
-        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
+        model.put("useCache", instanceConfiguration.isCacheUsed());
+        model.put("isZipDownloadsAllowed", instanceConfiguration.isZippedDownloadsAllowed());
         model.put("instanceNames", application.getInstanceNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);
@@ -251,8 +241,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       }
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
-      logger.debug(svnae.getMessage());
-      return forwardToAuthenticationFailureView(request, svnCommand);
+      return forwardToAuthenticationFailureView(svnae);
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();
@@ -350,20 +339,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   protected UserContext getUserContext(final HttpServletRequest request) {
     final HttpSession session = request.getSession(true);
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
-
     UserContext userContext = (UserContext) session.getAttribute("userContext");
     if (userContext == null) {
       userContext = new UserContext();
       session.setAttribute("userContext", userContext);
     }
-
-    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      userContext.setUid(uid);
-      userContext.setPwd(pwd);
-    }
-
     return userContext;
   }
 
@@ -371,18 +351,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
-   * @param svnCommand Command.
+   * @param svnae The SVNAuthenticationException.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(final HttpServletRequest request,
-                                                          final SVNBaseCommand svnCommand) {
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("command", svnCommand);
-    model.put("action", WebUtils.extractServletNameFromRequest(request));
-    logger.debug("Forwarding to 'authenticationfailure' view");
-    return new ModelAndView("authenticationfailure", model);
+  private ModelAndView forwardToAuthenticationFailureView(final SVNAuthenticationException svnae) {
+    logger.debug("Authentication failed, forwarding to 'authenticationfailure' view");
+    logger.error("Authentication failed", svnae);
+    return new ModelAndView("authenticationfailure");
   }
 
   /**

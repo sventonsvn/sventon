@@ -13,7 +13,6 @@ package de.berlios.sventon.web.support;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.Validate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +38,9 @@ public final class FileExtensionFilter {
    * @throws IllegalArgumentException if given extension was null or blank.
    */
   public FileExtensionFilter(final String filterExtension) {
-    Validate.notEmpty(filterExtension, "File extension was null or empty");
+    if (filterExtension == null || "".equals(filterExtension)) {
+      throw new IllegalArgumentException("Illegal file extension: " + filterExtension);
+    }
     this.filterExtension = filterExtension;
   }
 

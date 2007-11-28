@@ -13,7 +13,6 @@
   <meta name="rating" content="General">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml"/>
-  <link rel="shortcut icon" href="/images/favicon.ico" />
   <style type="text/css">
     <!--
     .style1 {

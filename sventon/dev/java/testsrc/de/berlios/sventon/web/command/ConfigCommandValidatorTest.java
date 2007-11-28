@@ -18,7 +18,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     BindException exception = new BindException(command, "test");
     validator.validate(command, exception);
 
-    // An empty command is valid
+    // An empty base command is valid
     assertEquals(0, exception.getAllErrors().size());
 
     // Invalid repository instance name
@@ -46,8 +46,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setName("default");
     command.setPassword("");
     command.setUsername("");
-    command.setConnectionTestUsername("");
-    command.setConnectionTestPassword("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
@@ -81,18 +79,19 @@ public class ConfigCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    //if user based access is used, test connection uid and pwd can be supplied
-    //(this is the tyical case)
+    exception = new BindException(command, "test");
     command.setRepositoryURL("svn://domain.com/svn/");
-    command.setName("default");
     command.setPassword("");
     command.setUsername("");
-    command.setEnableAccessControl(true);
-    command.setConnectionTestUsername("admin");
-    command.setConnectionTestPassword("super-secret-pwd123");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
+    exception = new BindException(command, "test");
+    command.setRepositoryURL("svn://domain.com/svn/");
+    command.setPassword("");
+    command.setUsername("");
+    validator.validate(command, exception);
+    assertEquals(0, exception.getAllErrors().size());
   }
 
 }

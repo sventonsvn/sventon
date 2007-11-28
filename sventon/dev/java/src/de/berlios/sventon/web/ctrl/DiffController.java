@@ -14,9 +14,9 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.model.SideBySideDiffRow;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -46,7 +46,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entries = ServletRequestUtils.getRequiredStringParameters(request, "entry");
+    final String[] entries = ServletRequestUtils.getStringParameters(request, "entry");
     logger.debug("Diffing file (side-by-side): " + StringUtils.join(entries, ","));
     final Map<String, Object> model = new HashMap<String, Object>();
 

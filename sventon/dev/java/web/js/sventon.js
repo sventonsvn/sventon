@@ -15,8 +15,8 @@ var isAjaxRequestSent = false;
 
 // function to handle action submissions in repo browser view
 function doAction(formName) {
-  var input = $(formName)['actionSelect'];
-  var selectedValue = $F(input);
+
+  var selectedValue = formName.actionSelect.options[formName.actionSelect.selectedIndex].value;
 
   // If no option value is selected, no action is taken.
   if (selectedValue == '') {
@@ -55,12 +55,8 @@ function setHeadRevision() {
 
 // function to handle search submission
 function doSearch(formName) {
-
-  var input = $(formName)['searchString'];
-  var searchStr = $F(input);
-
   // If no search string is entered, no action is taken.
-  if (searchStr == '') {
+  if (formName.searchString.value == '') {
     return false;
   } else {
 
@@ -69,7 +65,7 @@ function doSearch(formName) {
     } else {
       formName.action = 'searchlogs.svn';
     }
-    if (searchStr.length < 3) {
+    if (formName.searchString.value.length < 3) {
       return searchWarning();
     } else {
       return true;
@@ -94,13 +90,12 @@ function doFlatten(url, instanceName) {
 
 // function to validate url during instance configuration submisson
 function validateUrl(formName) {
-  var input = $(formName)['repositoryURL'];
-  var url = $F(input).toLocaleLowerCase();
+  var url = formName.repositoryURL.value.toLowerCase();
   if (url.indexOf('trunk') > -1
       || url.indexOf('tags') > -1
       || url.indexOf('branches') > -1) {
     return confirm('The URL entered must be the root of the repository!\n' +
-                   'Is [' + $F(input) + '] really the subversion root?\n');
+                   'Is [' + formName.repositoryURL.value + '] really the subversion root?\n');
   }
   return true;
 }
@@ -296,28 +291,6 @@ function highlightBlameRev(revision) {
 function restoreBlameRev(revision) {
   var tags = $('blameTable').getElementsByTagName('td');
   setBackgroundColor(tags, 'blameRev_' + revision, '#ffffff');
-}
-
-function addEntryToTray(element, dropon, event) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id,
-  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
-  Element.show('spinner');
-  isAjaxRequestSent = true;
-}
-
-function removeEntryFromTray(removeEntryUrl) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl,
-  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
-  Element.show('spinner');
-  isAjaxRequestSent = true;
-}
-
-function showHideEntryTray() {
-  if ($('entryTrayWrapper').style.display == '') {
-    Effect.SlideUp('entryTrayWrapper');
-  } else {
-    Effect.SlideDown('entryTrayWrapper');
-  }
 }
 
 // ===============================================================================================

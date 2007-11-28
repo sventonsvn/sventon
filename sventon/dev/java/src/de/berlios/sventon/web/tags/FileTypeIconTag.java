@@ -1,18 +1,6 @@
-/*
- * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
- *
- * This software is licensed as described in the file LICENSE, which
- * you should have received as part of this distribution. The terms
- * are also available at http://sventon.berlios.de.
- * If newer versions of this license are posted there, you may use a
- * newer version instead, at your option.
- * ====================================================================
- */
 package de.berlios.sventon.web.tags;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.Validate;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -75,13 +63,16 @@ public final class FileTypeIconTag extends TagSupport {
    * @return <code>IMG</code> tag.
    */
   protected static String createImageTag(final String filename, final Properties mappings) {
-    Validate.notNull(filename, "Filename was null or empty");
+    if (filename == null) {
+      throw new IllegalArgumentException("Filename was null");
+    }
+
     final String extension = FilenameUtils.getExtension(filename.toLowerCase());
     String icon = (String) mappings.get(extension);
     if (icon == null) {
       icon = "images/icon_file.png";
     }
-    return "<img src=\"" + icon + "\" title=\"" + extension + "\" alt=\"" + extension + "\"/>";
+    return "<img src=\"" + icon + "\" alt=\"" + extension + "\"/>";
   }
 
   /**

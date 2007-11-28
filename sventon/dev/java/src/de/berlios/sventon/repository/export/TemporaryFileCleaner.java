@@ -11,7 +11,6 @@
  */
 package de.berlios.sventon.repository.export;
 
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -43,9 +42,13 @@ public class TemporaryFileCleaner {
    * @param exportRootDir Directory
    */
   public void setExportRootDir(final File exportRootDir) {
-    Validate.isTrue(exportRootDir.exists(), "Directory does not exist: " + exportRootDir);
-    Validate.isTrue(exportRootDir.isDirectory(), "Not a directory: " + exportRootDir);
     this.exportRootDir = exportRootDir;
+    if (!this.exportRootDir.exists()) {
+      throw new IllegalArgumentException("Directory does not exist: " + exportRootDir);
+    }
+    if (!this.exportRootDir.isDirectory()) {
+      throw new IllegalArgumentException("Not a directory: " + exportRootDir);
+    }
   }
 
   /**

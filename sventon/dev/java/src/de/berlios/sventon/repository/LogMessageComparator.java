@@ -53,6 +53,7 @@ public class LogMessageComparator implements Comparator<LogMessage>, Serializabl
    * @param sortType See constants defined in this class.
    */
   public LogMessageComparator(final int sortType) {
+
     if (!legalTypes.contains(sortType)) {
       throw new IllegalArgumentException("Not a valid sort type: " + sortType);
     }
@@ -68,7 +69,7 @@ public class LogMessageComparator implements Comparator<LogMessage>, Serializabl
     if (sortType == ASCENDING) {
       return revision1 < revision2 ? -1 : 1;
     } else {
-      return revision2 < revision1 ? -1 : 1;
+      return revision2 < revision1 ? -1 : 1;      
     }
   }
 }

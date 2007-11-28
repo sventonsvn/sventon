@@ -4,12 +4,10 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.web.command.ConfigCommand;
 
 import java.util.Map;
@@ -48,7 +46,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final InstanceConfiguration instanceConfig = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfig = new InstanceConfiguration();
 
     final Application application = new Application(new File(TEMPDIR), "filename");
     application.setConfigured(false);
@@ -68,9 +66,7 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
     assertNotNull(modelAndView);
-    assertTrue(modelAndView.getView() instanceof RedirectView);
-    RedirectView rv = (RedirectView) modelAndView.getView();
-    assertEquals("repobrowser.svn", rv.getUrl());
+    assertEquals(null, modelAndView.getViewName());
   }
 
   public void testProcessFormSubmissionNonConfiguredValidationError() throws Exception {
@@ -105,43 +101,6 @@ public class ConfigurationControllerTest extends TestCase {
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
     assertEquals("testrepos", ((Set) model.get("addedInstances")).iterator().next());
-  }
-
-  public void testProcessFormSubmissionNonConfiguredUserBasedAccessControl() throws Exception {
-    final String instanceName = "testrepos";
-
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
-    assertEquals(0, application.getInstanceCount());
-    assertFalse(application.isConfigured());
-    ctrl.setApplication(application);
-    final ConfigCommand command = new ConfigCommand();
-    command.setName(instanceName);
-    command.setRepositoryURL("http://localhost");
-    command.setEnableAccessControl(true);
-    command.setZippedDownloadsAllowed(true);
-    command.setConnectionTestUsername("test uid");
-    command.setConnectionTestPassword("test pwd");
-    final BindException exception = new BindException(command, "test");
-    final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
-    assertNotNull(modelAndView);
-    assertEquals("confirmAddConfig", modelAndView.getViewName());
-    assertEquals(1, application.getInstanceCount());
-    assertFalse(application.isConfigured());
-    final Map model = modelAndView.getModel();
-    assertEquals(instanceName, ((Set) model.get("addedInstances")).iterator().next());
-
-    //assert that the config was created correctly:
-    final Instance instance = application.getInstance(instanceName);
-    final InstanceConfiguration configuration = instance.getConfiguration();
-    assertEquals("http://localhost", configuration.getUrl());
-    assertTrue(configuration.isAccessControlEnabled());
-    assertTrue(configuration.isZippedDownloadsAllowed());
-    assertNull(configuration.getUid()); //UID only for connection testing, not stored
-    assertNull(configuration.getPwd()); //PWD only for connection testing, not stored
-
   }
 
 }

@@ -25,7 +25,7 @@
   <sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
   <sventon:functionLinks pageName="repobrowser"/>
 
-  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
+  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(entriesForm);">
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}"/>
     <input type="hidden" name="revision" value="${command.revision}"/>
@@ -119,7 +119,7 @@
         <td></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"/></td>
+        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="javascript:toggleEntryFields(this.form)"/></td>
         <td>
           <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
         </td>

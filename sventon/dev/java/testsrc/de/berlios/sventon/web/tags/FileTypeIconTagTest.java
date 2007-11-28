@@ -16,8 +16,8 @@ public class FileTypeIconTagTest extends TestCase {
     } catch (IllegalArgumentException e) {
       // expected
     }
-    assertEquals("<img src=\"images/icon_file.png\" title=\"\" alt=\"\"/>", FileTypeIconTag.createImageTag("", mappings));
-    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.txt", mappings));
-    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.TXT", mappings));
+    assertEquals("<img src=\"images/icon_file.png\" alt=\"\"/>", FileTypeIconTag.createImageTag("", mappings));
+    assertEquals("<img src=\"images/icon_txt.png\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.txt", mappings));
+    assertEquals("<img src=\"images/icon_txt.png\" alt=\"txt\"/>", FileTypeIconTag.createImageTag("filename.TXT", mappings));
   }
 }

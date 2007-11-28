@@ -1,7 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.Application;
 import junit.framework.TestCase;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -50,21 +50,21 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
       public void triggerJob(final String string, final String string1) {
       }
     });
-
+    
 
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
-    instanceConfiguration1.setUid("user1");
-    instanceConfiguration1.setPwd("abc123");
+    instanceConfiguration1.setConfiguredUID("user1");
+    instanceConfiguration1.setConfiguredPWD("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
-    instanceConfiguration2.setUid("user2");
-    instanceConfiguration2.setPwd("123abc");
+    instanceConfiguration2.setConfiguredUID("user2");
+    instanceConfiguration2.setConfiguredPWD("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 

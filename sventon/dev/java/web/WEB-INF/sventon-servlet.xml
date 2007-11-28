@@ -85,7 +85,6 @@
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
   <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
   <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.GetLogMessageController" parent="abstractController"/>
-  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.RepositoryEntryTrayController" parent="abstractController"/>
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
   <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
   <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
@@ -184,7 +183,6 @@
         <prop key="/latestrevisions.ajax">latestRevisionsController</prop>
         <prop key="/static.ajax">getStaticContentController</prop>
         <prop key="/getmessage.ajax">logMessageController</prop>
-        <prop key="/entrytray.ajax">entryTrayController</prop>
       </props>
     </property>
   </bean>
@@ -209,7 +207,7 @@
 
   <!-- temporarily use the reloadable version (makes developing easier) -->
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-    <property name="basename" value="classpath:messages"/>
+    <property name="basename" value="/WEB-INF/classes/messages"/>
     <property name="useCodeAsDefaultMessage" value="true"/>
     <property name="cacheSeconds" value="0"/>
   </bean>

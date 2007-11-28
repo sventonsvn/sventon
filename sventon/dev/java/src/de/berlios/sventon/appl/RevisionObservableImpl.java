@@ -188,8 +188,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
           instance.setUpdatingCache(true);
           SVNRepository repository;
           try {
-            repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-                configuration.getUid(), configuration.getPwd());
+            repository = RepositoryFactory.INSTANCE.getRepository(configuration);
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
             update(instanceName, repository, objectCache, flushAfterUpdate);
           } catch (final Exception ex) {

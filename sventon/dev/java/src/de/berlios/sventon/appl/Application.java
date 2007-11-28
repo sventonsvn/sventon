@@ -20,7 +20,6 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -88,9 +87,9 @@ public class Application {
    * @throws IOException if IO error occur
    */
   public Application(final File configurationDirectory, final String configurationFilename) throws IOException {
-    Validate.notNull(configurationDirectory, "Config directory cannot be null");
-    Validate.notNull(configurationFilename, "Config filename cannot be null");
-
+    if (configurationDirectory == null || configurationFilename == null) {
+      throw new IllegalArgumentException("Parameters cannot be null");
+    }
     this.configurationDirectory = configurationDirectory;
     if (!this.configurationDirectory.exists() && !this.configurationDirectory.mkdirs()) {
       throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());
@@ -183,16 +182,32 @@ public class Application {
   }
 
   /**
-   * Creates and populates a List of <code>Properties</code> instances with relevant
-   * configuration values extracted from given <code>ApplicationConfiguration</code>.
+   * Creates and populates a List of <code>Properties</code> instances with relevant configuration values
+   * extracted from given <code>ApplicationConfiguration</code>.
    *
    * @return List of populated Properties.
    */
   protected List<Properties> getConfigurationAsProperties() {
     final List<Properties> propertyList = new ArrayList<Properties>();
-    for (final String instanceName : getInstanceNames()) {
-      final InstanceConfiguration configuration = getInstance(instanceName).getConfiguration();
-      propertyList.add(configuration.getAsProperties());
+    final Set<String> instanceNames = getInstanceNames();
+
+    for (final String instanceName : instanceNames) {
+      final Properties properties = new Properties();
+      final InstanceConfiguration config = getInstance(instanceName).getConfiguration();
+
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
+          config.getUrl());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
+          config.getConfiguredUID());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
+          config.getConfiguredPWD());
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
+          config.isCacheUsed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
+          config.isZippedDownloadsAllowed() ? "true" : "false");
+      properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
+          String.valueOf(config.getRssItemsCount()));
+      propertyList.add(properties);
     }
     return propertyList;
   }

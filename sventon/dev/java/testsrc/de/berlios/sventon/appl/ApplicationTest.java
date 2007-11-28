@@ -27,17 +27,17 @@ public class ApplicationTest extends TestCase {
 
   public void testStoreInstanceConfigurations() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration();
     instanceConfiguration1.setRepositoryRoot("http://localhost/1");
-    instanceConfiguration1.setUid("user1");
-    instanceConfiguration1.setPwd("abc123");
+    instanceConfiguration1.setConfiguredUID("user1");
+    instanceConfiguration1.setConfiguredPWD("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration();
     instanceConfiguration2.setRepositoryRoot("http://localhost/2");
-    instanceConfiguration2.setUid("user2");
-    instanceConfiguration2.setPwd("123abc");
+    instanceConfiguration2.setConfiguredUID("user2");
+    instanceConfiguration2.setConfiguredPWD("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
@@ -57,24 +57,24 @@ public class ApplicationTest extends TestCase {
 
   public void testGetConfigurationAsProperties() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
-    final InstanceConfiguration config1 = new InstanceConfiguration("test");
+    final InstanceConfiguration config1 = new InstanceConfiguration();
     config1.setRepositoryRoot("http://repo1");
-    config1.setUid("");
-    config1.setPwd("");
+    config1.setConfiguredUID("");
+    config1.setConfiguredPWD("");
 
-    final InstanceConfiguration config2 = new InstanceConfiguration("test");
+    final InstanceConfiguration config2 = new InstanceConfiguration();
     config2.setRepositoryRoot("http://repo2");
-    config2.setUid("");
-    config2.setPwd("");
+    config2.setConfiguredUID("");
+    config2.setConfiguredPWD("");
 
     application.addInstance("test1", config1);
     application.addInstance("test2", config2);
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);
-    assertEquals(7, props.size());
+    assertEquals(6, props.size());
     props = configurations.get(1);
-    assertEquals(7, props.size());
+    assertEquals(6, props.size());
   }
 
 }

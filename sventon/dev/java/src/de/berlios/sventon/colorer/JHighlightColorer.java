@@ -13,7 +13,6 @@ package de.berlios.sventon.colorer;
 
 import com.uwyn.jhighlight.renderer.Renderer;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -68,7 +67,9 @@ public final class JHighlightColorer implements Colorer {
    * @throws IllegalArgumentException if file extension is null.
    */
   protected Renderer getRenderer(final String fileExtension) {
-    Validate.notNull(fileExtension, "File extension cannot be null");
+    if (fileExtension == null) {
+      throw new IllegalArgumentException("File extension cannot be null");
+    }
     return (Renderer) rendererMappings.get(fileExtension.toLowerCase());
   }
 

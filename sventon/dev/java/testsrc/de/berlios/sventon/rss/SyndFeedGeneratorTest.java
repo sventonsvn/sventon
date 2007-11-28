@@ -35,7 +35,7 @@ public class SyndFeedGeneratorTest extends TestCase {
     changedPaths.put("/anotherfile2.html", new SVNLogEntryPath("/file2.html", 'D', null, 2));
     changedPaths.put("/anotherfile3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 2));
     changedPaths.put("/anotherfile4.def", new SVNLogEntryPath("/file4.def", 'R', "/file44.def", 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another\nlog message."));
+    logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another log message."));
 
     final File tempFile = File.createTempFile("sventon-rss-test", null);
     final PrintWriter pw = new PrintWriter(tempFile);
@@ -54,7 +54,7 @@ public class SyndFeedGeneratorTest extends TestCase {
     if (tempFile.exists()) {
       tempFile.delete();
     } else {
-      fail("No rss feed file was created in " + System.getProperty("java.io.tmpdir"));
+      throw new Exception("No rss feed file was created in " + System.getProperty("java.io.tmpdir"));
     }
   }
 
@@ -65,5 +65,11 @@ public class SyndFeedGeneratorTest extends TestCase {
     assertEquals("this is a message", generator.getAbbreviatedLogMessage("this is a message", 17));
     assertEquals(null, generator.getAbbreviatedLogMessage(null, 10));
     assertEquals("", generator.getAbbreviatedLogMessage("", 10));
+  }
+
+  public void testAddLogMessage() throws Exception {
+    final SyndFeedGenerator generator = new SyndFeedGenerator();
+    final SVNLogEntry logEntry = new SVNLogEntry(null, 1, "test", new Date(), "one\ntwo");
+    assertEquals("one<br/>two", generator.addLogMessage(logEntry, SyndFeedGenerator.LOG_MESSAGE_KEY));
   }
 }

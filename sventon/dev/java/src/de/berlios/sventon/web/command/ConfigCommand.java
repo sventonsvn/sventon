@@ -20,7 +20,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Command class used to bind and pass servlet parameter arguments for sventon configuration.
  *
  * @author jesper@users.berlios.de
- * @author patrik@sventon.org
  */
 public final class ConfigCommand {
 
@@ -28,11 +27,8 @@ public final class ConfigCommand {
   private String repositoryURL;
   private String username;
   private String password;
-  private String connectionTestUsername;
-  private String connectionTestPassword;
   private boolean useCache;
   private boolean zipDownloadsAllowed;
-  private boolean enableAccessControl;
 
   public String getRepositoryURL() {
     return repositoryURL;
@@ -66,14 +62,6 @@ public final class ConfigCommand {
     this.useCache = useCache;
   }
 
-  public boolean isEnableAccessControl() {
-    return enableAccessControl;
-  }
-
-  public void setEnableAccessControl(final boolean enableAccessControl) {
-    this.enableAccessControl = enableAccessControl;
-  }
-
   public boolean isZippedDownloadsAllowed() {
     return zipDownloadsAllowed;
   }
@@ -86,24 +74,8 @@ public final class ConfigCommand {
     return name;
   }
 
-  public void setName(final String name) {
+  public void setName(String name) {
     this.name = name;
-  }
-
-  public String getConnectionTestUsername() {
-    return connectionTestUsername;
-  }
-
-  public void setConnectionTestUsername(final String connectionTestUsername) {
-    this.connectionTestUsername = connectionTestUsername;
-  }
-
-  public String getConnectionTestPassword() {
-    return connectionTestPassword;
-  }
-
-  public void setConnectionTestPassword(final String connectionTestPassword) {
-    this.connectionTestPassword = connectionTestPassword;
   }
 
   /**

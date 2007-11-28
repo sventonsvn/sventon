@@ -33,11 +33,6 @@ public class InstanceConfiguration {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Instance name.
-   */
-  private String instanceName;
-
-  /**
    * The url.
    */
   private String repositoryURL;
@@ -51,13 +46,13 @@ public class InstanceConfiguration {
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String uid;
+  private String configuredUID;
 
   /**
    * If a global user is configured for repository browsing, this property
    * should be set.
    */
-  private String pwd;
+  private String configuredPWD;
 
   /**
    * Decides whether the caching feature will be used.
@@ -68,12 +63,6 @@ public class InstanceConfiguration {
    * Decides whether <i>download as zip</i> is allowed.
    */
   private boolean zipDownloadsAllowed;
-
-  /**
-   * Decides wheter repository access control is enforced (this is configured on the
-   * SVN server). Note that enabling access control _disables_ caching.
-   */
-  private boolean enableAccessControl;
 
   /**
    * Number of items in the generated RSS feed.
@@ -90,17 +79,7 @@ public class InstanceConfiguration {
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
-  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = ".enableAccessControl";
   public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
-
-  /**
-   * Constructor.
-   *
-   * @param instanceName Instance name.
-   */
-  public InstanceConfiguration(final String instanceName) {
-    this.instanceName = instanceName;
-  }
 
   /**
    * Creates an instance using given name and properties.
@@ -110,43 +89,17 @@ public class InstanceConfiguration {
    * @return The InstanceConfiguration
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
-    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
+    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration();
     instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
-    instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
-    instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
+    instanceConfiguration.setConfiguredUID((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
+    instanceConfiguration.setConfiguredPWD((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
         Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
         Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
-    instanceConfiguration.enableAccessControl(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
         properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
-  }
-
-  /**
-   * Gets the configuration as a properties instance.
-   *
-   * @return Populated properties instance.
-   */
-  public Properties getAsProperties() {
-    final Properties properties = new Properties();
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
-        getUrl());
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
-        getUid());
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
-        getPwd());
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
-        isCacheUsed() ? "true" : "false");
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
-        isZippedDownloadsAllowed() ? "true" : "false");
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL,
-        isAccessControlEnabled() ? "true" : "false");
-    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
-        String.valueOf(getRssItemsCount()));
-    return properties;
   }
 
   /**
@@ -154,15 +107,14 @@ public class InstanceConfiguration {
    *
    * @param repositoryRoot The root url.
    */
-  public void setRepositoryRoot(String repositoryRoot) {
+  public void setRepositoryRoot(final String repositoryRoot) {
+    repositoryURL = repositoryRoot;
 
     // Strip last slash if any.
     if (repositoryRoot.endsWith("/")) {
       logger.debug("Removing trailing slash from url");
-      repositoryRoot = repositoryRoot.substring(0, repositoryRoot.length() - 1);
+      repositoryURL = repositoryRoot.substring(0, repositoryRoot.length() - 1);
     }
-
-    repositoryURL = repositoryRoot;
 
     try {
       svnURL = SVNURL.parseURIDecoded(repositoryURL);
@@ -174,39 +126,39 @@ public class InstanceConfiguration {
   /**
    * Get configured Password, if any.
    *
-   * @return Returns the pwd.
+   * @return Returns the configuredPWD.
    */
-  public String getPwd() {
-    return pwd;
+  public String getConfiguredPWD() {
+    return configuredPWD;
   }
 
   /**
    * Set a configured password. This password will be used for repository
-   * access, together with configured user ID, {@see #setUid(String)}
+   * access, together with configured user ID, {@see #setConfiguredUID(String)}
    *
-   * @param pwd The pwd to set, may be <code>null</code>.
+   * @param configuredPWD The configuredPWD to set, may be <code>null</code>.
    */
-  public void setPwd(final String pwd) {
-    this.pwd = pwd;
+  public void setConfiguredPWD(final String configuredPWD) {
+    this.configuredPWD = configuredPWD;
   }
 
   /**
    * Get configured user ID, if any.
    *
-   * @return Returns the uid.
+   * @return Returns the configuredUID.
    */
-  public String getUid() {
-    return uid;
+  public String getConfiguredUID() {
+    return configuredUID;
   }
 
   /**
    * Set a configured user ID. This user ID will be used for repository access,
-   * together with configured password, {@see #setPwd(String)}
+   * together with configured password, {@see #setConfiguredPWD(String)}
    *
-   * @param uid The uid to set, may be <code>null</code>
+   * @param configuredUID The configuredUID to set, may be <code>null</code>
    */
-  public void setUid(final String uid) {
-    this.uid = uid;
+  public void setConfiguredUID(final String configuredUID) {
+    this.configuredUID = configuredUID;
   }
 
   /**
@@ -243,26 +195,7 @@ public class InstanceConfiguration {
    * @return <code>true</code> if cache is enabled, <code>false</code> if not.
    */
   public boolean isCacheUsed() {
-    return this.useCache && !this.enableAccessControl;
-  }
-
-  /**
-   * Checks if repository access control is enabled.
-   *
-   * @return {@code true} if access control is enabled.
-   */
-  public boolean isAccessControlEnabled() {
-    return enableAccessControl;
-  }
-
-  /**
-   * Sets the 'enableAccessControl' flag.
-   * <b>Note</b> Enabling access control <i>disables</i> cache.
-   *
-   * @param enableAccessControl {@code true] enables repository access control.
-   */
-  public void enableAccessControl(final boolean enableAccessControl) {
-    this.enableAccessControl = enableAccessControl;
+    return this.useCache;
   }
 
   /**

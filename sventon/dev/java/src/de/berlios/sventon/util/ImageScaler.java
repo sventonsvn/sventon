@@ -73,12 +73,12 @@ public final class ImageScaler {
    * @return The thumbnail dimension.
    */
   protected Dimension getThumbnailSize(final int width, final int height, final int maxSize) {
-    final int max = Math.max(width, height);
+    final int max = (width >= height) ? width : height;
     if (max <= maxSize) {
       // Image is smaller than maximum size - no need for a resize
       return new Dimension(width, height);
     } else {
-      final double scaleFactor = (double) max / maxSize;
+      double scaleFactor = (double) max / maxSize;
       return new Dimension(((int) (width / scaleFactor)), ((int) (height / scaleFactor)));
     }
   }
@@ -87,8 +87,8 @@ public final class ImageScaler {
    * Converts an <code>Image</code> instance into a <code>BufferedImage</code> instance.
    *
    * @param image The <code>Image<code> instance.
-   * @param type  Type of the created image.
-   * @return The buffered image.
+   * @param type
+   * @return The buffered image
    * @see java.awt.image.BufferedImage
    */
   private BufferedImage toBufferedImage(final Image image, final int type) {
