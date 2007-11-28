@@ -19,9 +19,9 @@ import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
+import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
-import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -252,7 +252,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       logger.debug(svnae.getMessage());
-      return forwardToAuthenticationFailureView(request, svnCommand);
+      return forwardToAuthenticationFailureView(request);
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();
@@ -371,15 +371,13 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
-   * @param svnCommand Command.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(final HttpServletRequest request,
-                                                          final SVNBaseCommand svnCommand) {
+  private ModelAndView forwardToAuthenticationFailureView(final HttpServletRequest request) {
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("command", svnCommand);
+    model.put("parameters", request.getParameterMap());
     model.put("action", WebUtils.extractServletNameFromRequest(request));
     logger.debug("Forwarding to 'authenticationfailure' view");
     return new ModelAndView("authenticationfailure", model);

@@ -33,9 +33,13 @@
     <form action="${action}" method="post">
       <p>UID: <input name="uid" type="text" nocache/></p>
       <p>PWD: <input name="pwd" type="password" nocache/></p>
-      <input type="hidden" name="path" value="${command.path}"/>
-      <input type="hidden" name="revision" value="${command.revision}"/>
-      <input type="hidden" name="name" value="${command.name}"/>
+
+      <c:forEach items="${parameters}" var="paramEntry">
+        <c:forEach items="${paramEntry.value}" var="parameter">
+          <input type="hidden" name="${paramEntry.key}" value="${parameter}"/>
+        </c:forEach>
+      </c:forEach>
+
       <input type="submit" value="log in">
     </form>
 
