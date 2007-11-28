@@ -35,7 +35,7 @@ public final class SVNBaseCommandValidator implements Validator {
    * {@inheritDoc}
    */
   public boolean supports(final Class clazz) {
-    return clazz.equals(SVNBaseCommand.class);
+    return SVNBaseCommand.class.isAssignableFrom(clazz);
   }
 
   /**
