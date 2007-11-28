@@ -72,7 +72,7 @@
                     <b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b>
                   </td>
                   <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber()
-                      != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber() : "" %></td>
+                      != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber().toString() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
                       <%
@@ -85,7 +85,7 @@
                     <b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b>
                   </td>
                   <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber()
-                      != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber() : "" %></td>
+                      != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber().toString() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
                       <%
