@@ -12,7 +12,9 @@
 package de.berlios.sventon.web.tags;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -44,6 +46,11 @@ public final class FileTypeIconTag extends TagSupport {
   private static final String FILE_TYPE_ICON_MAPPINGS_FILENAME = "/fileTypeIconMappings.properties";
 
   /**
+   * Default file icon.
+   */
+  private static final String DEFAULT_FILE_ICON = "images/icon_file.png";
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -57,6 +64,11 @@ public final class FileTypeIconTag extends TagSupport {
     return EVAL_BODY_INCLUDE;
   }
 
+  /**
+   * Makes sure the mappings are loaded.
+   *
+   * @throws IOException if unable to load mappings.
+   */
   private synchronized void assertMappingsLoaded() throws IOException {
     if (MAPPINGS.isEmpty()) {
       final InputStream is = this.getClass().getResourceAsStream(FILE_TYPE_ICON_MAPPINGS_FILENAME);
@@ -74,14 +86,46 @@ public final class FileTypeIconTag extends TagSupport {
    * @param mappings Extension and image filename mappings.
    * @return <code>IMG</code> tag.
    */
-  protected static String createImageTag(final String filename, final Properties mappings) {
+  protected String createImageTag(final String filename, final Properties mappings) {
     Validate.notNull(filename, "Filename was null or empty");
     final String extension = FilenameUtils.getExtension(filename.toLowerCase());
-    String icon = (String) mappings.get(extension);
-    if (icon == null) {
-      icon = "images/icon_file.png";
+    final String icon = extractIconFromMapping((String) mappings.get(extension));
+
+    String description = extractDescriptionFromMapping((String) mappings.get(extension));
+    if (description == null) {
+      description = extension;
+    } else {
+      description = StringEscapeUtils.escapeHtml(description);
     }
-    return "<img src=\"" + icon + "\" title=\"" + extension + "\" alt=\"" + extension + "\"/>";
+    return "<img src=\"" + icon + "\" title=\"" + description + "\" alt=\"" + description + "\"/>";
+  }
+
+  /**
+   * Extracts description from mapping string.
+   *
+   * @param mapping Mapping string
+   * @return Description, or null if no description exists.
+   */
+  protected String extractDescriptionFromMapping(final String mapping) {
+    if (StringUtils.isEmpty(mapping)) {
+      return null;
+    }
+    final String[] s = mapping.trim().split(";");
+    return s.length > 1 ? s[1] : null;
+  }
+
+  /**
+   * Extracts icon path and name from mapping string.
+   *
+   * @param mapping Mapping string.
+   * @return Icon path and name or {@link #DEFAULT_FILE_ICON} if mapping was null.
+   */
+  protected String extractIconFromMapping(final String mapping) {
+    if (mapping == null) {
+      return DEFAULT_FILE_ICON;
+    }
+    final String[] s = mapping.trim().split(";");
+    return StringUtils.isEmpty(s[0]) ? DEFAULT_FILE_ICON : s[0];
   }
 
   /**
