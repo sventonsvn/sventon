@@ -22,4 +22,40 @@ public class UserContextTest extends TestCase {
     assertTrue(userContext.hasCredentials());
   }
 
+  public void testSetUid() throws Exception {
+    final UserContext userContext = new UserContext();
+    userContext.setUid("userid");
+    assertEquals("userid", userContext.getUid());
+
+    //test null case
+    userContext.setUid(null);
+    assertEquals(null, userContext.getUid());
+  }
+
+  public void testSetPwd() throws Exception {
+    final UserContext userContext = new UserContext();
+    userContext.setPwd("password");
+    assertEquals("password", userContext.getPwd());
+
+    //test null case
+    userContext.setPwd(null);
+    assertEquals(null, userContext.getPwd());
+  }
+
+  //Test toString to make sure pwd and uid is not outputted
+  public void testToString() throws Exception {
+
+    final String testString = "UserContext[sortType=<null>," +
+       "sortMode=<null>," +
+       "latestRevisionsDisplayCount=1," +
+       "charset=<null>," +
+       "uid=*****," +
+       "pwd=*****]";
+
+    final UserContext userContext = new UserContext();
+    userContext.setUid("uid");
+    userContext.setPwd("pwd");
+    assertEquals(testString, userContext.toString());
+  }
+
 }

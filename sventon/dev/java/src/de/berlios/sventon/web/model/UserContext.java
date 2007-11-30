@@ -13,6 +13,9 @@ package de.berlios.sventon.web.model;
 
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -180,16 +183,18 @@ public final class UserContext implements Serializable {
    * @return User id, or null.
    */
   public String getUid() {
-    return uid;
+    return decodeBase64(uid);
   }
 
   /**
    * Sets the user id.
+   * <p/>
+   * The uid is stored obfuscated as Base64.
    *
    * @param uid User id.
    */
   public void setUid(final String uid) {
-    this.uid = uid;
+    this.uid = encodeBase64(uid);
   }
 
   /**
@@ -198,16 +203,17 @@ public final class UserContext implements Serializable {
    * @return Password, or null.
    */
   public String getPwd() {
-    return pwd;
+    return decodeBase64(pwd);
   }
 
   /**
    * Sets the password.
+   * The pwd is stored obfuscated as Base64.
    *
    * @param pwd Password.
    */
   public void setPwd(final String pwd) {
-    this.pwd = pwd;
+    this.pwd = encodeBase64(pwd);
   }
 
   /**
@@ -219,4 +225,31 @@ public final class UserContext implements Serializable {
     return uid != null && pwd != null;
   }
 
+  private String encodeBase64(final String s) {
+    if (s != null) {
+      return new String(Base64.encodeBase64(s.getBytes()));
+    } else {
+      return null;
+    }
+  }
+
+  private String decodeBase64(final String s) {
+    if (s != null) {
+      return new String(Base64.decodeBase64(s.getBytes()));
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+       append("sortType", sortType).
+       append("sortMode", sortMode).
+       append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
+       append("charset", charset).
+       append("uid", "*****").
+       append("pwd", "*****").
+       toString();
+  }
 }
