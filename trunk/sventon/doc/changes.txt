@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[978] Added: Feature #3809 - Popup file type when cursor hovers over.
 [977] Added: Upgraded to Spring 2.5
 [944] Added: Feature #3825 - Entry tray.
 
