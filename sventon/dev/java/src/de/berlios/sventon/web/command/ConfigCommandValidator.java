@@ -79,27 +79,27 @@ public final class ConfigCommandValidator implements Validator {
       }
     }
 
-    // Validate 'repositoryURL', 'username' and 'password'
-    final String repositoryURL = command.getRepositoryURL();
+    // Validate 'repositoryUrl', 'username' and 'password'
+    final String repositoryUrl = command.getRepositoryUrl();
 
-    if (repositoryURL != null) {
-      final String trimmedURL = repositoryURL.trim();
+    if (repositoryUrl != null) {
+      final String trimmedURL = repositoryUrl.trim();
       SVNURL url = null;
       try {
         url = SVNURL.parseURIDecoded(trimmedURL);
       } catch (SVNException ex) {
-        final String msg = "Invalid repository URL: " + repositoryURL;
+        final String msg = "Invalid repository URL: " + repositoryUrl;
         logger.warn(msg);
-        errors.rejectValue("repositoryURL", "config.error.illegal-url", msg);
+        errors.rejectValue("repositoryUrl", "config.error.illegal-url", msg);
       }
       if (url != null && testConnection) {
         logger.info("Testing repository connection");
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
-        configuration.setRepositoryRoot(trimmedURL);
+        configuration.setRepositoryUrl(trimmedURL);
         configuration.setUid(command.isEnableAccessControl() ?
-           command.getConnectionTestUsername() : command.getUsername());
+           command.getConnectionTestUid() : command.getUid());
         configuration.setPwd(command.isEnableAccessControl() ?
-           command.getConnectionTestPassword() : command.getPassword());
+           command.getConnectionTestPwd() : command.getPwd());
         try {
           //TODO: Extract and kill this singelton in favor of DI
           final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(
@@ -107,7 +107,7 @@ public final class ConfigCommandValidator implements Validator {
           repos.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
-          errors.rejectValue("repositoryURL", "config.error.connection-error",
+          errors.rejectValue("repositoryUrl", "config.error.connection-error",
              "Unable to connect to repository. Check URL, user name and password.");
         }
       }

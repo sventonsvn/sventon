@@ -23,9 +23,9 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     // Invalid repository instance name
     command.setName("Illegal!");
-    command.setRepositoryURL("svn://domain.com/svn/");
-    command.setPassword("");
-    command.setUsername("");
+    command.setRepositoryUrl("svn://domain.com/svn/");
+    command.setPwd("");
+    command.setUid("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
@@ -33,63 +33,63 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     // Empty name is not ok
     command.setName("");
-    command.setRepositoryURL("svn://domain.com/svn/");
-    command.setPassword("");
-    command.setUsername("");
+    command.setRepositoryUrl("svn://domain.com/svn/");
+    command.setPwd("");
+    command.setUid("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
     exception = new BindException(command, "test");
 
     // Valid (typical) input
-    command.setRepositoryURL("svn://domain.com/svn/");
+    command.setRepositoryUrl("svn://domain.com/svn/");
     command.setName("default");
-    command.setPassword("");
-    command.setUsername("");
-    command.setConnectionTestUsername("");
-    command.setConnectionTestPassword("");
+    command.setPwd("");
+    command.setUid("");
+    command.setConnectionTestUid("");
+    command.setConnectionTestPwd("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     // Valid input, spaces will be trimmed
-    command.setRepositoryURL(" svn://domain.com/svn/ ");
-    command.setPassword("");
-    command.setUsername("");
+    command.setRepositoryUrl(" svn://domain.com/svn/ ");
+    command.setPwd("");
+    command.setUid("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setPassword(null);
-    command.setUsername(null);
+    command.setPwd(null);
+    command.setUid(null);
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRepositoryURL("");
+    command.setRepositoryUrl("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
-    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryURL").getCode());
+    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryUrl").getCode());
 
     exception = new BindException(command, "test");
-    command.setRepositoryURL("notavalidurl");
+    command.setRepositoryUrl("notavalidurl");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
-    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryURL").getCode());
+    assertEquals("config.error.illegal-url", exception.getFieldError("repositoryUrl").getCode());
 
     exception = new BindException(command, "test");
-    command.setRepositoryURL("svn://domain.com/svn/");
-    command.setPassword("");
-    command.setUsername("");
+    command.setRepositoryUrl("svn://domain.com/svn/");
+    command.setPwd("");
+    command.setUid("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     //if user based access is used, test connection uid and pwd can be supplied
     //(this is the tyical case)
-    command.setRepositoryURL("svn://domain.com/svn/");
+    command.setRepositoryUrl("svn://domain.com/svn/");
     command.setName("default");
-    command.setPassword("");
-    command.setUsername("");
+    command.setPwd("");
+    command.setUid("");
     command.setEnableAccessControl(true);
-    command.setConnectionTestUsername("admin");
-    command.setConnectionTestPassword("super-secret-pwd123");
+    command.setConnectionTestUid("admin");
+    command.setConnectionTestPwd("super-secret-pwd123");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 

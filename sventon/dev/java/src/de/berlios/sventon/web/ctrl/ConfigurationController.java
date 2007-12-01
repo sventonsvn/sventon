@@ -117,14 +117,7 @@ public final class ConfigurationController extends AbstractFormController {
       return new ModelAndView("config", model);
 
     } else {
-      //TODO: Move this copy stuff to the command
-      final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(confCommand.getName());
-      instanceConfiguration.setRepositoryRoot(confCommand.getRepositoryURL().trim());
-      instanceConfiguration.setUid(confCommand.getUsername());
-      instanceConfiguration.setPwd(confCommand.getPassword());
-      instanceConfiguration.setCacheUsed(confCommand.isCacheUsed());
-      instanceConfiguration.setZippedDownloadsAllowed(confCommand.isZippedDownloadsAllowed());
-      instanceConfiguration.enableAccessControl(confCommand.isEnableAccessControl());
+      final InstanceConfiguration instanceConfiguration = confCommand.createInstanceConfiguration();
       application.addInstance(confCommand.getName(), instanceConfiguration);
       model.put("addedInstances", application.getInstanceNames());
       model.put("latestAddedInstance", confCommand.getName());
