@@ -62,8 +62,8 @@
 <tr>
   <td valign="top" align="right" style="white-space: nowrap;">Enter subversion repository root url:</td>
   <td valign="top">
-    <spring:bind path="command.repositoryURL">
-    <input type="text" name="repositoryURL" size="30" value="${status.value}"/><c:if test="${status.error}"><span
+    <spring:bind path="command.repositoryUrl">
+    <input type="text" name="repositoryUrl" size="30" value="${status.value}"/><c:if test="${status.error}"><span
      class="exclamationText">*</span></c:if></td>
   </spring:bind>
   <td valign="top">
@@ -107,7 +107,7 @@
 <tr id="global-uid">
   <td valign="top" align="right" style="white-space: nowrap;">Enter user name:</td>
   <td valign="top">
-    <spring:bind path="command.username">
+    <spring:bind path="command.uid">
     <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span
      class="exclamationText">*</span></c:if></td>
   </spring:bind>
@@ -116,7 +116,7 @@
 <tr id="global-pwd">
   <td valign="top" align="right" style="white-space: nowrap;">Enter user password:</td>
   <td valign="top">
-    <spring:bind path="command.password">
+    <spring:bind path="command.pwd">
     <input type="password" name="${status.expression}" size="30" value="${status.value}"/><c:if
      test="${status.error}"><span class="exclamationText">*</span></c:if></td>
   </spring:bind>
@@ -137,7 +137,7 @@
 <tr id="connection-test-uid">
   <td valign="top" align="right" style="white-space: nowrap;">Enter user name for connection test:</td>
   <td valign="top">
-    <spring:bind path="command.connectionTestUsername">
+    <spring:bind path="command.connectionTestUid">
     <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span
      class="exclamationText">*</span></c:if></td>
   </spring:bind>
@@ -146,7 +146,7 @@
 <tr id="connection-test-pwd">
   <td valign="top" align="right" style="white-space: nowrap;">Enter password for connection test:</td>
   <td valign="top">
-    <spring:bind path="command.connectionTestPassword">
+    <spring:bind path="command.connectionTestPwd">
     <input type="password" name="${status.expression}" size="30" value="${status.value}"/><c:if
      test="${status.error}"><span class="exclamationText">*</span></c:if></td>
   </spring:bind>

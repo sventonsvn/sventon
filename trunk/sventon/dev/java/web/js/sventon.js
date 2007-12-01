@@ -94,7 +94,7 @@ function doFlatten(url, instanceName) {
 
 // function to validate url during instance configuration submisson
 function validateUrl(formName) {
-  var input = $(formName)['repositoryURL'];
+  var input = $(formName)['repositoryUrl'];
   var url = $F(input).toLocaleLowerCase();
   if (url.indexOf('trunk') > -1
       || url.indexOf('tags') > -1

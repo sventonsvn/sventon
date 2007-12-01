@@ -230,7 +230,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + svnCommand);
         model.put("command", svnCommand); // This is for the form to work
-        model.put("url", configuration.getUrl());
+        model.put("url", configuration.getRepositoryUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
         model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
@@ -397,7 +397,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
-    model.put("url", instanceConfiguration != null ? instanceConfiguration.getUrl() : "");
+    model.put("url", instanceConfiguration != null ? instanceConfiguration.getRepositoryUrl() : "");
     model.put("numrevision", null);
     return new ModelAndView("goto", model);
   }

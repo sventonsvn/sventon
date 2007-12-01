@@ -96,7 +96,7 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     command.setName("testrepos");
-    command.setRepositoryURL("http://localhost");
+    command.setRepositoryUrl("http://localhost");
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
@@ -119,11 +119,11 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     command.setName(instanceName);
-    command.setRepositoryURL("http://localhost");
+    command.setRepositoryUrl("http://localhost");
     command.setEnableAccessControl(true);
     command.setZippedDownloadsAllowed(true);
-    command.setConnectionTestUsername("test uid");
-    command.setConnectionTestPassword("test pwd");
+    command.setConnectionTestUid("test uid");
+    command.setConnectionTestPwd("test pwd");
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
@@ -136,7 +136,7 @@ public class ConfigurationControllerTest extends TestCase {
     //assert that the config was created correctly:
     final Instance instance = application.getInstance(instanceName);
     final InstanceConfiguration configuration = instance.getConfiguration();
-    assertEquals("http://localhost", configuration.getUrl());
+    assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());
     assertNull(configuration.getUid()); //UID only for connection testing, not stored

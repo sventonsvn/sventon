@@ -11,8 +11,10 @@
  */
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.appl.InstanceConfiguration;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.beans.BeanUtils;
 
 /**
  * ConfigCommand.
@@ -25,37 +27,37 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public final class ConfigCommand {
 
   private String name;
-  private String repositoryURL;
-  private String username;
-  private String password;
-  private String connectionTestUsername;
-  private String connectionTestPassword;
+  private String repositoryUrl;
+  private String uid;
+  private String pwd;
+  private String connectionTestUid;
+  private String connectionTestPwd;
   private boolean useCache;
   private boolean zipDownloadsAllowed;
   private boolean enableAccessControl;
 
-  public String getRepositoryURL() {
-    return repositoryURL;
+  public String getRepositoryUrl() {
+    return repositoryUrl;
   }
 
-  public void setRepositoryURL(final String repositoryURL) {
-    this.repositoryURL = repositoryURL;
+  public void setRepositoryUrl(final String repositoryUrl) {
+    this.repositoryUrl = repositoryUrl;
   }
 
-  public String getUsername() {
-    return username;
+  public String getUid() {
+    return uid;
   }
 
-  public void setUsername(final String username) {
-    this.username = username;
+  public void setUid(final String uid) {
+    this.uid = uid;
   }
 
-  public String getPassword() {
-    return password;
+  public String getPwd() {
+    return pwd;
   }
 
-  public void setPassword(final String password) {
-    this.password = password;
+  public void setPwd(final String pwd) {
+    this.pwd = pwd;
   }
 
   public boolean isCacheUsed() {
@@ -90,20 +92,31 @@ public final class ConfigCommand {
     this.name = name;
   }
 
-  public String getConnectionTestUsername() {
-    return connectionTestUsername;
+  public String getConnectionTestUid() {
+    return connectionTestUid;
   }
 
-  public void setConnectionTestUsername(final String connectionTestUsername) {
-    this.connectionTestUsername = connectionTestUsername;
+  public void setConnectionTestUid(final String connectionTestUid) {
+    this.connectionTestUid = connectionTestUid;
   }
 
-  public String getConnectionTestPassword() {
-    return connectionTestPassword;
+  public String getConnectionTestPwd() {
+    return connectionTestPwd;
   }
 
-  public void setConnectionTestPassword(final String connectionTestPassword) {
-    this.connectionTestPassword = connectionTestPassword;
+  public void setConnectionTestPwd(final String connectionTestPwd) {
+    this.connectionTestPwd = connectionTestPwd;
+  }
+
+  /**
+   * Create an populate a InstanceConfiguration based on the contens of this config command instance.
+   *
+   * @return New, populated InstanceConfiguration
+   */
+  public InstanceConfiguration createInstanceConfiguration() {
+    InstanceConfiguration configuration = new InstanceConfiguration(getName());
+    BeanUtils.copyProperties(this, configuration);
+    return configuration;
   }
 
   /**

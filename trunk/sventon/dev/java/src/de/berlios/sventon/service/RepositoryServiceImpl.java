@@ -352,9 +352,9 @@ public class RepositoryServiceImpl implements RepositoryService {
       }
 
       final KeywordHandler fromFileKeywordHandler =
-          new KeywordHandler(leftFileProperties, configuration.getUrl() + diffCommand.getFromPath());
+          new KeywordHandler(leftFileProperties, configuration.getRepositoryUrl() + diffCommand.getFromPath());
       final KeywordHandler toFileKeywordHandler =
-          new KeywordHandler(rightFileProperties, configuration.getUrl() + diffCommand.getToPath());
+          new KeywordHandler(rightFileProperties, configuration.getRepositoryUrl() + diffCommand.getToPath());
 
       sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, charset, rightFile,
           toFileKeywordHandler, charset);

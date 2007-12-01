@@ -24,37 +24,47 @@ public class InstanceConfigurationTest extends TestCase {
     assertTrue(conf.isAccessControlEnabled());
     assertEquals("pwd", conf.getPwd());
     assertEquals("uid", conf.getUid());
-    assertEquals("svn://repositoryserver/repository", conf.getUrl());
-    assertEquals(SVNURL.parseURIDecoded(conf.getUrl()), conf.getSVNURL());
+    assertEquals("svn://repositoryserver/repository", conf.getRepositoryUrl());
+    assertEquals(SVNURL.parseURIDecoded(conf.getRepositoryUrl()), conf.getSVNURL());
 
     assertFalse(conf.isCacheUsed());
     assertEquals(20, conf.getRssItemsCount());
 
   }
 
-  public void testSetRepositoryRoot() throws Exception {
+  public void testSetRepositoryUrl() throws Exception {
     InstanceConfiguration conf = new InstanceConfiguration("test");
 
-    conf.setRepositoryRoot("svn://localhost/svn");
-    assertEquals("svn://localhost/svn", conf.getUrl());
+    conf.setRepositoryUrl("svn://localhost/svn");
+    assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
     assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
 
     //trailing slashes should be removed
-    conf.setRepositoryRoot("svn://localhost/svn/");
-    assertEquals("svn://localhost/svn", conf.getUrl());
+    conf.setRepositoryUrl("svn://localhost/svn/");
+    assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
     assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+
+    //so should trailing spaces
+    conf.setRepositoryUrl("svn://localhost/svn/    ");
+    assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
+    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+
+    conf.setRepositoryUrl("svn://localhost/svn    ");
+    assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
+    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+
   }
 
   public void testasdf() {
     InstanceConfiguration conf = new InstanceConfiguration("test");
     conf.setCacheUsed(true);
-    conf.enableAccessControl(false);
+    conf.setEnableAccessControl(false);
 
     assertTrue(conf.isCacheUsed());
     assertFalse(conf.isAccessControlEnabled());
 
     //Can't have both caching and access control
-    conf.enableAccessControl(true);
+    conf.setEnableAccessControl(true);
     assertFalse(conf.isCacheUsed());
     assertTrue(conf.isAccessControlEnabled());
 
@@ -62,7 +72,7 @@ public class InstanceConfigurationTest extends TestCase {
     assertFalse(conf.isCacheUsed());
     assertTrue(conf.isAccessControlEnabled());
 
-    conf.enableAccessControl(false);
+    conf.setEnableAccessControl(false);
     assertFalse(conf.isCacheUsed());
     assertFalse(conf.isAccessControlEnabled());
 

@@ -41,7 +41,7 @@ public class ApplicationConfigurationTest extends TestCase {
 
       final InstanceConfiguration defaultSVN = application.getInstance("defaultsvn").getConfiguration();
       assertNotNull(defaultSVN);
-      assertEquals("http://localhost", defaultSVN.getUrl());
+      assertEquals("http://localhost", defaultSVN.getRepositoryUrl());
       assertEquals("username", defaultSVN.getUid());
       assertEquals("abc123", defaultSVN.getPwd());
       assertFalse(defaultSVN.isCacheUsed());

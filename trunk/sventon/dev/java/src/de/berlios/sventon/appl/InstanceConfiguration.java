@@ -40,12 +40,12 @@ public class InstanceConfiguration {
   /**
    * The url.
    */
-  private String repositoryURL;
+  private String repositoryUrl;
 
   /**
    * The repository location.
    */
-  private SVNURL svnURL;
+  private SVNURL svnUrl;
 
   /**
    * If a global user is configured for repository browsing, this property
@@ -111,17 +111,17 @@ public class InstanceConfiguration {
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
-    instanceConfiguration.setRepositoryRoot((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
+    instanceConfiguration.setRepositoryUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
-    instanceConfiguration.enableAccessControl(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+    instanceConfiguration.setEnableAccessControl(
+       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
-        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+       properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
   }
 
@@ -133,41 +133,43 @@ public class InstanceConfiguration {
   public Properties getAsProperties() {
     final Properties properties = new Properties();
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
-        getUrl());
+       getRepositoryUrl());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
-        getUid());
+       getUid());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
-        getPwd());
+       getPwd());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
-        isCacheUsed() ? "true" : "false");
+       isCacheUsed() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
-        isZippedDownloadsAllowed() ? "true" : "false");
+       isZippedDownloadsAllowed() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL,
-        isAccessControlEnabled() ? "true" : "false");
+       isAccessControlEnabled() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
-        String.valueOf(getRssItemsCount()));
+       String.valueOf(getRssItemsCount()));
     return properties;
   }
 
   /**
-   * Sets the repository root. Root URL will never end with a slash.
+   * Sets the repository root URL. Trailing slashes will be trimmed.
    *
-   * @param repositoryRoot The root url.
+   * @param repositoryUrl The root url.
    */
-  public void setRepositoryRoot(String repositoryRoot) {
+  public void setRepositoryUrl(String repositoryUrl) {
+
+    repositoryUrl = repositoryUrl.trim();
 
     // Strip last slash if any.
-    if (repositoryRoot.endsWith("/")) {
+    if (repositoryUrl.endsWith("/")) {
       logger.debug("Removing trailing slash from url");
-      repositoryRoot = repositoryRoot.substring(0, repositoryRoot.length() - 1);
+      repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - 1);
     }
 
-    repositoryURL = repositoryRoot;
+    this.repositoryUrl = repositoryUrl;
 
     try {
-      svnURL = SVNURL.parseURIDecoded(repositoryURL);
+      svnUrl = SVNURL.parseURIDecoded(this.repositoryUrl);
     } catch (final SVNException ex) {
-      logger.warn("Unable to parse URL [" + repositoryRoot + "]", ex);
+      logger.warn("Unable to parse URL [" + repositoryUrl + "]", ex);
     }
   }
 
@@ -181,7 +183,7 @@ public class InstanceConfiguration {
   }
 
   /**
-   * Set a configured password. This password will be used for repository
+   * Set a configured pwd. This pwd will be used for repository
    * access, together with configured user ID, {@see #setUid(String)}
    *
    * @param pwd The pwd to set, may be <code>null</code>.
@@ -201,7 +203,7 @@ public class InstanceConfiguration {
 
   /**
    * Set a configured user ID. This user ID will be used for repository access,
-   * together with configured password, {@see #setPwd(String)}
+   * together with configured pwd, {@see #setPwd(String)}
    *
    * @param uid The uid to set, may be <code>null</code>
    */
@@ -214,18 +216,18 @@ public class InstanceConfiguration {
    *
    * @return Returns the repository url.
    */
-  public String getUrl() {
-    return repositoryURL;
+  public String getRepositoryUrl() {
+    return repositoryUrl;
   }
 
   /**
    * Get the SVNURL, this is the typed version of the URL set using method
-   * {@link #setRepositoryRoot(String)}
+   * {@link #setRepositoryUrl(String)}
    *
    * @return Returns the location.
    */
   public SVNURL getSVNURL() {
-    return svnURL;
+    return svnUrl;
   }
 
   /**
@@ -261,7 +263,7 @@ public class InstanceConfiguration {
    *
    * @param enableAccessControl {@code true] enables repository access control.
    */
-  public void enableAccessControl(final boolean enableAccessControl) {
+  public void setEnableAccessControl(final boolean enableAccessControl) {
     this.enableAccessControl = enableAccessControl;
   }
 
