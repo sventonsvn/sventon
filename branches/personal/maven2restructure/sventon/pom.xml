@@ -51,9 +51,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet.jsp.jstl</groupId>
+      <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
-      <version>1.2</version>
+      <version>1.1.2</version>
     </dependency>
     <dependency>
       <groupId>taglibs</groupId>
@@ -165,17 +165,17 @@
       <artifactId>quartz</artifactId>
       <version>1.5.2</version>
     </dependency>
+    <dependency>
+      <groupId>de.schlichtherle.io</groupId>
+      <artifactId>truezip</artifactId>
+      <version>6.6</version>
+    </dependency>
 
-    <!-- These two are not currently deployed to central, they need to be hosted locally -->
+    <!-- Currently deployed to central, they need to be hosted locally -->
     <dependency>
       <groupId>com.svnkit</groupId>
       <artifactId>svnkit</artifactId>
       <version>1.1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>de.schlichtherle</groupId>
-      <artifactId>truezip</artifactId>
-      <version>6.6</version>
     </dependency>
 
   </dependencies>
@@ -215,6 +215,8 @@
   </build>
 
   <reporting>
+    <outputDirectory>target/site</outputDirectory>
+
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
