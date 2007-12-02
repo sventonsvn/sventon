@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,9 +45,16 @@ public final class ListInstancesController extends AbstractController {
       logger.debug("sventon not configured, redirecting to 'config.svn'");
       return new ModelAndView(new RedirectView("config.svn"));
     }
-    
+
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("instanceNames", application.getInstanceNames());
+
+    // Make sure session is cleared (credentials etc.)
+    final HttpSession session = request.getSession(false);
+    if (session != null) {
+      session.invalidate();
+    }
+
     return new ModelAndView("listinstances", model);
   }
 
