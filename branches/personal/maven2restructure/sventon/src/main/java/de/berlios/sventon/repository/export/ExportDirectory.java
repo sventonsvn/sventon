@@ -28,7 +28,7 @@ import java.util.Date;
  *
  * @author jesper@users.berlios.de
  */
-public class ExportDirectory {
+public final class ExportDirectory {
 
   /**
    * Logger for this class.

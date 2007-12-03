@@ -31,6 +31,12 @@ import java.util.Map;
 public final class XMLDocumentHelper {
 
   /**
+   * Private.
+   */
+  private XMLDocumentHelper() {
+  }
+
+  /**
    * Creates the XML document based on given log entry.
    *
    * @param log         The log entry.

@@ -16,16 +16,16 @@ package de.berlios.sventon.repository;
  *
  * @author jesper@users.berlios.de
  */
-public class LogMessage {
+public final class LogMessage {
 
-  final private long revision;
-  final private String message;
+  private final long revision;
+  private final String message;
 
   /**
    * Constructor.
    *
    * @param revision The revision
-   * @param message The log message
+   * @param message  The log message
    */
   public LogMessage(final long revision, final String message) {
     this.revision = revision;

@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntryKindFilter {
+public final class RepositoryEntryKindFilter {
 
   /**
    * The kind to filter.
@@ -36,10 +36,10 @@ public class RepositoryEntryKindFilter {
    *                                  {@link RepositoryEntry.Kind#unknown} or {@link RepositoryEntry.Kind#none}
    */
   public RepositoryEntryKindFilter(final RepositoryEntry.Kind kind) {
-    if (kind == null ||
-        RepositoryEntry.Kind.any == kind ||
-        RepositoryEntry.Kind.unknown == kind ||
-        RepositoryEntry.Kind.none == kind) {
+    if (kind == null
+        || RepositoryEntry.Kind.any == kind
+        || RepositoryEntry.Kind.unknown == kind
+        || RepositoryEntry.Kind.none == kind) {
       throw new IllegalArgumentException("Illegal kind: " + kind);
     }
 

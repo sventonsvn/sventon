@@ -68,8 +68,8 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed() &&
-        !application.getInstance(instanceName).isUpdatingCache()) {
+    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()
+        && !application.getInstance(instanceName).isUpdatingCache()) {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(instanceName, revision);
     } else {
@@ -90,8 +90,8 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
                                         final long limit) throws SVNException, SventonException {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed() &&
-        !application.getInstance(instanceName).isUpdatingCache()) {
+    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()
+        && !application.getInstance(instanceName).isUpdatingCache()) {
       // To be able to return cached revisions, we first have to get the revision numbers
       // Doing a logs-call, skipping the details, to get them.
       final List<Long> revisions = new ArrayList<Long>();

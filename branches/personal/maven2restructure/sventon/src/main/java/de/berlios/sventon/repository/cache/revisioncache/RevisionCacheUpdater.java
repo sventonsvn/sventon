@@ -25,12 +25,12 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RevisionCacheUpdater extends AbstractRevisionObserver {
+public final class RevisionCacheUpdater extends AbstractRevisionObserver {
 
   /**
    * The static logging instance.
    */
-  private static final Log logger = LogFactory.getLog(RevisionCacheUpdater.class);
+  private static final Log LOGGER = LogFactory.getLog(RevisionCacheUpdater.class);
 
   /**
    * The cache manager instance.
@@ -43,7 +43,7 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
    * @param revisionCacheManager The cache manager instance.
    */
   public RevisionCacheUpdater(final RevisionCacheManager revisionCacheManager) {
-    logger.info("Starting");
+    LOGGER.info("Starting");
     this.revisionCacheManager = revisionCacheManager;
   }
 
@@ -54,14 +54,14 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
-    logger.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: "
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: "
         + revisionUpdate.getInstanceName());
 
     try {
       final RevisionCache revisionCache = revisionCacheManager.getCache(revisionUpdate.getInstanceName());
       updateInternal(revisionCache, revisions);
     } catch (final CacheException ex) {
-      logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+      LOGGER.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
       return;
     }
   }
@@ -79,7 +79,7 @@ public class RevisionCacheUpdater extends AbstractRevisionObserver {
         revisionCache.flush();
       }
     } catch (CacheException ce) {
-      logger.error("Unable to update revisionCache", ce);
+      LOGGER.error("Unable to update revisionCache", ce);
     }
   }
 }

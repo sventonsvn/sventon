@@ -68,5 +68,4 @@ public final class ByteFormatterTag extends TagSupport {
   public void setLocale(final Locale locale) {
     this.locale = locale;
   }
-
 }

@@ -24,6 +24,12 @@ public final class Version {
   private static final String REVISION = "@REVISION@";
 
   /**
+   * Private.
+   */
+  private Version() {
+  }
+
+  /**
    * Gets the sventon application version.
    *
    * @return The version

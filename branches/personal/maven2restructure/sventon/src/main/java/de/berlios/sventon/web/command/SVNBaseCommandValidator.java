@@ -13,8 +13,6 @@ package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -25,11 +23,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  * @author patrikfr@users.berlios.de
  */
 public final class SVNBaseCommandValidator implements Validator {
-
-  /**
-   * Logger for this class and subclasses
-   */
-  protected final Log logger = LogFactory.getLog(getClass());
 
   /**
    * {@inheritDoc}

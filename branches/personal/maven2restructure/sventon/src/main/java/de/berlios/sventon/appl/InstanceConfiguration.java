@@ -25,7 +25,7 @@ import java.util.Properties;
  * @author patrikfr@user.berlios.de
  * @author jesper@users.berlios.de
  */
-public class InstanceConfiguration {
+public final class InstanceConfiguration {
 
   /**
    * The logging instance.
@@ -115,13 +115,13 @@ public class InstanceConfiguration {
     instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     instanceConfiguration.setEnableAccessControl(
-       Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
-       properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
   }
 
@@ -133,19 +133,19 @@ public class InstanceConfiguration {
   public Properties getAsProperties() {
     final Properties properties = new Properties();
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
-       getRepositoryUrl());
+        getRepositoryUrl());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
-       getUid());
+        getUid());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
-       getPwd());
+        getPwd());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USE_CACHE,
-       isCacheUsed() ? "true" : "false");
+        isCacheUsed() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS,
-       isZippedDownloadsAllowed() ? "true" : "false");
+        isZippedDownloadsAllowed() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL,
-       isAccessControlEnabled() ? "true" : "false");
+        isAccessControlEnabled() ? "true" : "false");
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
-       String.valueOf(getRssItemsCount()));
+        String.valueOf(getRssItemsCount()));
     return properties;
   }
 

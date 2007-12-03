@@ -37,12 +37,12 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class EntryCacheUpdater extends AbstractRevisionObserver {
+public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
   /**
    * The static logging instance.
    */
-  private static final Log logger = LogFactory.getLog(EntryCacheUpdater.class);
+  private static final Log LOGGER = LogFactory.getLog(EntryCacheUpdater.class);
 
   /**
    * The EntryCacheManager instance.
@@ -61,7 +61,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param application       Application
    */
   public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application) {
-    logger.info("Starting");
+    LOGGER.info("Starting");
     this.entryCacheManager = entryCacheManager;
     this.application = application;
   }
@@ -74,7 +74,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
     final String instanceName = revisionUpdate.getInstanceName();
 
-    logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
+    LOGGER.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
         + instanceName);
 
     try {
@@ -84,7 +84,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           configuration.getUid(), configuration.getPwd());
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
-      logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+      LOGGER.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
     }
   }
 
@@ -115,16 +115,16 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
-      logger.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getInstanceName());
+      LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getInstanceName());
       try {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision, repositoryService);
         entryCache.setCachedRevision(lastRevision);
       } catch (SVNException svnex) {
-        logger.error("Unable to populate cache", svnex);
+        LOGGER.error("Unable to populate cache", svnex);
       }
-      logger.info("Cache population done");
+      LOGGER.info("Cache population done");
     } else {
       // Initial population has already been performed - only apply changes for now.
 
@@ -134,7 +134,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
         for (final SVNLogEntry logEntry : revisions) {
           try {
             long revision = logEntry.getRevision();
-            logger.debug("Applying changes in revision [" + revision + "] to cache");
+            LOGGER.debug("Applying changes in revision [" + revision + "] to cache");
 
             //noinspection unchecked
             final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
@@ -146,19 +146,19 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
               final SVNLogEntryPath logEntryPath = map.get(entryPath);
               switch (LogEntryActionType.parse(logEntryPath.getType())) {
                 case ADDED:
-                  logger.debug("Adding entry to cache: " + logEntryPath.getPath());
+                  LOGGER.debug("Adding entry to cache: " + logEntryPath.getPath());
                   doEntryCacheAdd(entryCache, repository, logEntryPath, revision, repositoryService);
                   break;
                 case DELETED:
-                  logger.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
+                  LOGGER.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
                   doEntryCacheDelete(entryCache, repository, logEntryPath, revision, repositoryService);
                   break;
                 case REPLACED:
-                  logger.debug("Replacing entry in cache: " + logEntryPath.getPath());
+                  LOGGER.debug("Replacing entry in cache: " + logEntryPath.getPath());
                   doEntryCacheReplace(entryCache, repository, logEntryPath, revision, repositoryService);
                   break;
                 case MODIFIED:
-                  logger.debug("Updating modified entry in cache: " + logEntryPath.getPath());
+                  LOGGER.debug("Updating modified entry in cache: " + logEntryPath.getPath());
                   doEntryCacheModify(entryCache, repository, logEntryPath, revision, repositoryService);
                   break;
                 default:
@@ -166,7 +166,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
               }
             }
           } catch (SVNException svnex) {
-            logger.error("Unable to update entryCache", svnex);
+            LOGGER.error("Unable to update entryCache", svnex);
           }
         }
         entryCache.setCachedRevision(lastRevision);
@@ -175,11 +175,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
           try {
             entryCache.flush();
           } catch (final CacheException ce) {
-            logger.error("Unable to flush cache", ce);
+            LOGGER.error("Unable to flush cache", ce);
           }
         }
 
-        logger.debug("Update completed");
+        LOGGER.debug("Update completed");
       }
     }
   }
@@ -205,10 +205,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Replaces an entry (file or directory) in the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entryCache        The cache instance.
+   * @param repository        Repository
+   * @param logEntryPath      The log entry path
+   * @param revision          The log revision
+   * @param repositoryService Service
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheReplace(final EntryCache entryCache, final SVNRepository repository,
@@ -221,10 +222,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Deletes an entry (file or directory) from the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entryCache        The cache instance.
+   * @param repository        Repository
+   * @param logEntryPath      The log entry path
+   * @param revision          The log revision
+   * @param repositoryService Service
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheDelete(final EntryCache entryCache, final SVNRepository repository,
@@ -234,13 +236,13 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     // Have to find out if deleted entry was a file or directory
     final RepositoryEntry deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision - 1);
     if (deletedEntry == null) {
-      logger.debug("Entry has not yet been added - nothing to remove");
+      LOGGER.debug("Entry has not yet been added - nothing to remove");
       return;
     }
 
     if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
       // Directory node deleted
-      logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
+      LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
       entryCache.removeByName(logEntryPath.getPath(), true);
     } else {
       // Single entry delete
@@ -251,10 +253,11 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Adds an entry (file or directory) to the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entryCache        The cache instance.
+   * @param repository        Repository
+   * @param logEntryPath      The log entry path
+   * @param revision          The log revision
+   * @param repositoryService Service
    * @throws SVNException if subversion error occur.
    */
   private void doEntryCacheAdd(final EntryCache entryCache, final SVNRepository repository,
@@ -270,7 +273,7 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     // the contents will be added one by one as single entries.
     if (addedEntry.getKind() == RepositoryEntry.Kind.dir && logEntryPath.getCopyPath() != null) {
       // Directory node added
-      logger.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
+      LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       entryCache.add(addedEntry);
       // Add directory contents
       addDirectories(entryCache, repository, logEntryPath.getPath() + "/", revision, repositoryService);
@@ -284,25 +287,26 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
    * Adds all entries in given path.
    * This method will be recursively called by itself.
    *
-   * @param entryCache The cache instance.
-   * @param repository Repository
-   * @param path       The path to add.
-   * @param revision   Revision
+   * @param entryCache        The cache instance.
+   * @param repository        Repository
+   * @param path              The path to add.
+   * @param revision          Revision
+   * @param repositoryService Service
    * @throws SVNException if a Subversion error occurs.
    */
   @SuppressWarnings("unchecked")
   private void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
                               final long revision, final RepositoryService repositoryService) throws SVNException {
 
-    logger.debug("Cached entries: " + entryCache.getSize());
+    LOGGER.debug("Cached entries: " + entryCache.getSize());
     final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
     for (final RepositoryEntry entry : entriesList) {
       if (!entryCache.add(entry)) {
-        logger.warn("Unable to add already existing entry to cache: " + entry.toString());
+        LOGGER.warn("Unable to add already existing entry to cache: " + entry.toString());
       }
       if (entry.getKind() == RepositoryEntry.Kind.dir) {
         final String pathToAdd = path + entry.getName() + "/";
-        logger.debug("Adding: " + pathToAdd);
+        LOGGER.debug("Adding: " + pathToAdd);
         addDirectories(entryCache, repository, pathToAdd, revision, repositoryService);
       }
     }

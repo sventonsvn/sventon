@@ -24,7 +24,7 @@ import java.util.Set;
  *
  * @author jesper@users.berlios.de
  */
-public class LogMessageComparator implements Comparator<LogMessage>, Serializable {
+public final class LogMessageComparator implements Comparator<LogMessage>, Serializable {
 
   private static final long serialVersionUID = -123291078109887289L;
 

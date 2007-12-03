@@ -180,8 +180,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /**
    * {@inheritDoc}
    */
-  public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response, Object command,
-                             final BindException errors) {
+  public final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+                                   final Object command, final BindException errors) {
 
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
 
@@ -272,7 +272,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param request     The request.
    * @param userContext The UserContext instance to update.
    */
-  private void parseAndUpdateCharsetParameter(final HttpServletRequest request, final UserContext userContext) {
+  private final void parseAndUpdateCharsetParameter(final HttpServletRequest request, final UserContext userContext) {
     final String charset = ServletRequestUtils.getStringParameter(request, CHARSET_REQUEST_PARAMETER, null);
     if (charset != null) {
       userContext.setCharset(charset);
@@ -287,7 +287,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param request     The request.
    * @param userContext The UserContext instance to update.
    */
-  private void parseAndUpdateSearchModeParameter(final HttpServletRequest request, final UserContext userContext) {
+  private final void parseAndUpdateSearchModeParameter(final HttpServletRequest request, final UserContext userContext) {
     final String searchMode = ServletRequestUtils.getStringParameter(request, SEARCH_MODE_REQUEST_PARAMETER, null);
     if (searchMode != null) {
       userContext.setSearchMode(searchMode);
@@ -303,7 +303,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param request     The request.
    * @param userContext The UserContext instance to update.
    */
-  private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request, final UserContext userContext) {
+  private final void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request,
+                                                               final UserContext userContext) {
     final int latestRevisionsDisplayCount = ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
     if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
       if (latestRevisionsDisplayCount > 0) {
@@ -321,7 +322,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param request     The request.
    * @param userContext The UserContext instance to update.
    */
-  protected void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
+  protected final void parseAndUpdateSortParameters(final HttpServletRequest request, final UserContext userContext) {
     final String sortType = ServletRequestUtils.getStringParameter(request, SORT_TYPE_REQUEST_PARAMETER, null);
     final String sortMode = ServletRequestUtils.getStringParameter(request, SORT_MODE_REQUEST_PARAMETER, null);
 
@@ -348,7 +349,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return The UserContext instance.
    * @see UserContext
    */
-  protected UserContext getUserContext(final HttpServletRequest request) {
+  protected final UserContext getUserContext(final HttpServletRequest request) {
     final HttpSession session = request.getSession(true);
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
@@ -392,7 +393,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView prepareExceptionModelAndView(final BindException exception, final SVNBaseCommand svnCommand) {
+  protected final ModelAndView prepareExceptionModelAndView(final BindException exception,
+                                                            final SVNBaseCommand svnCommand) {
     final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
@@ -413,8 +415,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param svnCommand Command object.
    * @param repository Repository instance.
    * @return The converted SVN revision.
+   * @throws SVNException if unable to get dated revision.
    */
-  protected SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand, final SVNRepository repository)
+  protected final SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand, final SVNRepository repository)
       throws SVNException {
 
     if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
@@ -447,8 +450,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param exception   BindException, could be used by the subclass to add error
    *                    messages to the exception.
    * @return Model and view to render.
-   * @throws de.berlios.sventon.SventonException
-   *                   Thrown if a sventon error occurs.
    * @throws Exception Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
@@ -465,7 +466,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param cacheGateway The cache gateway instance.
    */
-  public void setCacheGateway(final CacheGateway cacheGateway) {
+  public final void setCacheGateway(final CacheGateway cacheGateway) {
     this.cacheGateway = cacheGateway;
   }
 
@@ -474,7 +475,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return The instance.
    */
-  public CacheGateway getCache() {
+  public final CacheGateway getCache() {
     return cacheGateway;
   }
 
@@ -483,7 +484,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param application Application
    */
-  public void setApplication(final Application application) {
+  public final void setApplication(final Application application) {
     this.application = application;
   }
 
@@ -493,7 +494,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param instanceName Instance name
    * @return ApplicationConfiguration
    */
-  public InstanceConfiguration getInstanceConfiguration(final String instanceName) {
+  public final InstanceConfiguration getInstanceConfiguration(final String instanceName) {
     return application.getInstance(instanceName).getConfiguration();
   }
 
@@ -502,7 +503,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return Repository service
    */
-  public RepositoryService getRepositoryService() {
+  public final RepositoryService getRepositoryService() {
     return application.getRepositoryService();
   }
 
@@ -511,7 +512,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param maxRevisionsCount Max count.
    */
-  public void setMaxRevisionsCount(final int maxRevisionsCount) {
+  public final void setMaxRevisionsCount(final int maxRevisionsCount) {
     this.maxRevisionsCount = maxRevisionsCount;
   }
 
@@ -521,7 +522,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return Count
    */
-  protected int getMaxRevisionsCount() {
+  protected final int getMaxRevisionsCount() {
     return maxRevisionsCount;
   }
 
@@ -530,7 +531,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param availableCharsets Charsets
    */
-  public void setAvailableCharsets(final AvailableCharsets availableCharsets) {
+  public final void setAvailableCharsets(final AvailableCharsets availableCharsets) {
     this.availableCharsets = availableCharsets;
   }
 

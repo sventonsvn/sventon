@@ -24,7 +24,7 @@ import java.util.TreeSet;
  *
  * @author jesper@users.berlios.de
  */
-public class MemoryCache extends EntryCache {
+public final class MemoryCache extends EntryCache {
 
   /**
    * Constructor.

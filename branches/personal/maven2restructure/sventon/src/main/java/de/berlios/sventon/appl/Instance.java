@@ -18,7 +18,7 @@ import org.apache.commons.lang.Validate;
  *
  * @author jesper@users.berlios.de
  */
-public class Instance {
+public final class Instance {
 
   /**
    * Instance name regex pattern.

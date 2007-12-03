@@ -20,7 +20,7 @@ import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
  *
  * @author jesper@users.berlios.de
  */
-public class RevisionCacheManager extends CacheManager<RevisionCache> {
+public final class RevisionCacheManager extends CacheManager<RevisionCache> {
 
   /**
    * Object cache manager instance.

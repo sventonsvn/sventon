@@ -26,7 +26,7 @@ import java.util.Date;
  * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
+public final class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
 
   private static final long serialVersionUID = -823291078109887289L;
 
@@ -111,7 +111,7 @@ public class RepositoryEntryComparator implements Comparator<RepositoryEntry>, S
     }
   }
 
-  private <T> int nullSafeCompare(final Comparable<T> o1, T o2) {
+  private <T> int nullSafeCompare(final Comparable<T> o1, final T o2) {
     if (o1 != null && o2 != null) {
       return o1.compareTo(o2);
     } else if (o1 == null && o2 == null) {

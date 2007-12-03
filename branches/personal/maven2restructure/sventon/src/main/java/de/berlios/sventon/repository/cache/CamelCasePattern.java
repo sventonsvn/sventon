@@ -18,7 +18,7 @@ import org.apache.commons.lang.Validate;
  *
  * @author jesper@users.berlios.de
  */
-public class CamelCasePattern {
+public final class CamelCasePattern {
 
   /**
    * The pattern string.

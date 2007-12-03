@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
  *
  * @author jesper@users.berlios.de
  */
-public class CacheBeforeAdvice implements MethodBeforeAdvice {
+public final class CacheBeforeAdvice implements MethodBeforeAdvice {
 
   /**
    * The logging instance.

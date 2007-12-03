@@ -28,7 +28,7 @@ public final class FileExtensionList {
   /**
    * The Set of existing extensions.
    */
-  final Set<String> existingExtensions = new TreeSet<String>();
+  private final Set<String> existingExtensions = new TreeSet<String>();
 
   /**
    * Constructor.

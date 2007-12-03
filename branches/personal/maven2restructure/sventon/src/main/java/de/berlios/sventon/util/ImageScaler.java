@@ -86,7 +86,7 @@ public final class ImageScaler {
   /**
    * Converts an <code>Image</code> instance into a <code>BufferedImage</code> instance.
    *
-   * @param image The <code>Image<code> instance.
+   * @param image The <code>Image</code> instance.
    * @param type  Type of the created image.
    * @return The buffered image.
    * @see java.awt.image.BufferedImage

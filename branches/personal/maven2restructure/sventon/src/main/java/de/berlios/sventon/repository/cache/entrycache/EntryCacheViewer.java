@@ -26,7 +26,13 @@ import java.util.zip.GZIPInputStream;
  *
  * @author jesper@users.berlios.de
  */
-public class EntryCacheViewer {
+public final class EntryCacheViewer {
+
+  /**
+   * Private.
+   */
+  private EntryCacheViewer() {
+  }
 
   public static void main(String[] args) throws Exception {
 

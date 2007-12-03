@@ -1,15 +1,16 @@
 package de.berlios.sventon.appl;
 
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.util.Properties;
+import java.io.*;
 import java.util.List;
+import java.util.Properties;
 
 public class ApplicationTest extends TestCase {
 
   private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-  
+
   public void testApplication() throws Exception {
     try {
       new Application(null, null);
@@ -75,6 +76,40 @@ public class ApplicationTest extends TestCase {
     assertEquals(7, props.size());
     props = configurations.get(1);
     assertEquals(7, props.size());
+  }
+
+  public void testLoadInstanceConfigurations() throws Exception {
+    final Properties testConfig = new Properties();
+    testConfig.put("defaultsvn.root", "http://localhost");
+    testConfig.put("defaultsvn.uid", "username");
+    testConfig.put("defaultsvn.pwd", "abc123");
+    testConfig.put("defaultsvn.useCache", "false");
+    testConfig.put("defaultsvn.allowZipDownloads", "false");
+
+    final Application application = new Application(
+        new File(System.getProperty("java.io.tmpdir")), "sventon-config-test.tmp");
+    assertEquals(0, application.getInstanceCount());
+    assertFalse(application.isConfigured());
+
+    final File tempConfigFile = new File(application.getConfigurationDirectory(),
+        application.getConfigurationFilename());
+
+    OutputStream os = null;
+    InputStream is = null;
+    try {
+      os = new FileOutputStream(tempConfigFile);
+      testConfig.store(os, null);
+
+      is = new FileInputStream(tempConfigFile);
+      application.loadInstanceConfigurations();
+
+      assertEquals(1, application.getInstanceCount());
+      assertTrue(application.isConfigured());
+    } finally {
+      IOUtils.closeQuietly(is);
+      IOUtils.closeQuietly(os);
+      tempConfigFile.delete();
+    }
   }
 
 }

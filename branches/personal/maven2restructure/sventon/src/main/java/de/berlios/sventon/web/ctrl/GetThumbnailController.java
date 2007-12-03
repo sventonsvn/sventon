@@ -33,7 +33,7 @@ import java.net.URL;
  *
  * @author jesper@users.berlios.de
  */
-public class GetThumbnailController extends AbstractSVNTemplateController implements Controller {
+public final class GetThumbnailController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * The mime/file type map.

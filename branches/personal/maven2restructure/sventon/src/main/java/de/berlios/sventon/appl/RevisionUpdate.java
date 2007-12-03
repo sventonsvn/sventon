@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RevisionUpdate {
+public final class RevisionUpdate {
 
   private final String instanceName;
   private final List<SVNLogEntry> logEntries;
