@@ -21,7 +21,7 @@ import java.io.File;
  *
  * @author jesper@users.berlios.de
  */
-public class EntryCacheManager extends CacheManager<EntryCache> {
+public final class EntryCacheManager extends CacheManager<EntryCache> {
 
   /**
    * Root directory for cache files.

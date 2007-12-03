@@ -70,8 +70,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision, final long toRevision)
-      throws SVNException {
+  public final List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision,
+                                                            final long toRevision) throws SVNException {
 
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
@@ -105,8 +105,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public void export(final SVNRepository repository, final List<String> targets, final long revision,
-                     final ExportDirectory exportDirectory) throws SVNException {
+  public final void export(final SVNRepository repository, final List<String> targets, final long revision,
+                           final ExportDirectory exportDirectory) throws SVNException {
 
     final long start = System.currentTimeMillis();
     long exportRevision = revision;
@@ -126,8 +126,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public TextFile getTextFile(final SVNRepository repository, final String path, final long revision, final String charset)
-      throws SVNException, IOException {
+  public final TextFile getTextFile(final SVNRepository repository, final String path, final long revision,
+                                    final String charset) throws SVNException, IOException {
 
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFile(repository, path, revision, outStream);
@@ -137,16 +137,16 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public void getFile(final SVNRepository repository, final String path, final long revision,
-                      final OutputStream output) throws SVNException {
+  public final void getFile(final SVNRepository repository, final String path, final long revision,
+                            final OutputStream output) throws SVNException {
     getFile(repository, path, revision, output, null);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void getFile(final SVNRepository repository, final String path, final long revision,
-                      final OutputStream output, final Map properties) throws SVNException {
+  public final void getFile(final SVNRepository repository, final String path, final long revision,
+                            final OutputStream output, final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
     repository.getFile(path, revision, properties, output);
     logger.debug("PERF: getFile(): " + (System.currentTimeMillis() - start));
@@ -155,7 +155,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
+  public final Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
     final Map props = new HashMap();
     final long start = System.currentTimeMillis();
     repository.getFile(path, revision, props, null);
@@ -166,21 +166,21 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
+  public final boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
     return SVNProperty.isTextMimeType((String) getFileProperties(repository, path, revision).get(SVNProperty.MIME_TYPE));
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
+  public final String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
     return (String) getFileProperties(repository, path, revision).get(SVNProperty.CHECKSUM);
   }
 
   /**
    * {@inheritDoc}
    */
-  public long getLatestRevision(final SVNRepository repository) throws SVNException {
+  public final long getLatestRevision(final SVNRepository repository) throws SVNException {
     final long start = System.currentTimeMillis();
     final long revision = repository.getLatestRevision();
     logger.debug("PERF: getLatestRevision(): " + (System.currentTimeMillis() - start));
@@ -190,16 +190,16 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, SventonException {
+  public final List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
+                                                    final long revisionCount) throws SVNException, SventonException {
     return getLatestRevisions(instanceName, "/", repository, revisionCount);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
-                                              final long revisionCount) throws SVNException, SventonException {
+  public final List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
+                                                    final long revisionCount) throws SVNException, SventonException {
     final long headRevision = repository.getLatestRevision();
     return getRevisions(instanceName, repository, headRevision, 1, path, revisionCount);
   }
@@ -207,7 +207,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision) throws SVNException {
+  public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
     final long start = System.currentTimeMillis();
     final SVNNodeKind svnNodeKind = repository.checkPath(path, revision);
     logger.debug("PERF: getNodeKind(): " + (System.currentTimeMillis() - start));
@@ -241,8 +242,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
-                                    final Map properties) throws SVNException {
+  public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
+                                          final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
     //noinspection unchecked
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
@@ -254,7 +255,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
+  public final RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
     final long start = System.currentTimeMillis();
@@ -272,7 +273,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
+  public final List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
     final long start = System.currentTimeMillis();
@@ -287,10 +288,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache,
-                                         final String path, final long revision,
-                                         final URL fullSizeImageUrl, final String imageFormatName,
-                                         final int maxThumbnailSize, final OutputStream out) throws SVNException {
+  public final ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache,
+                                               final String path, final long revision,
+                                               final URL fullSizeImageUrl, final String imageFormatName,
+                                               final int maxThumbnailSize, final OutputStream out) throws SVNException {
 
     // Check if the thumbnail exists on the cache
     final String checksum = getFileChecksum(repository, path, revision);
@@ -323,8 +324,9 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                                                final InstanceConfiguration configuration) throws SVNException, DiffException {
+  public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
+                                                      final String charset, final InstanceConfiguration configuration)
+      throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand);
     assertFileEntries(repository, diffCommand);
@@ -369,9 +371,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
-                            final InstanceConfiguration configuration)
-      throws SVNException, DiffException {
+  public final String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
+                                  final InstanceConfiguration configuration) throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand);
     assertFileEntries(repository, diffCommand);
@@ -403,8 +404,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
-                                 final String charset, final Colorer colorer) throws SVNException {
+  public final AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
+                                       final String charset, final Colorer colorer) throws SVNException {
 
     long blameRevision = revision;
     if (blameRevision == -1) {

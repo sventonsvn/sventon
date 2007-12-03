@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  *
  * @author jesper@users.berlios.de
  */
-public class CacheGatewayImpl implements CacheGateway {
+public final class CacheGatewayImpl implements CacheGateway {
 
   private EntryCacheManager entryCacheManager;
   private LogMessageCacheManager logMessageCacheManager;
@@ -84,13 +84,15 @@ public class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile("/" + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, null);
+    return cache.findByPattern(Pattern.compile("/" + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
+        RepositoryEntry.Kind.any, null);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir) throws CacheException {
+  public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir)
+      throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
     String rootDir = startDir;
@@ -103,19 +105,23 @@ public class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir) throws CacheException {
+  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir)
+      throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, null);
+    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
+        RepositoryEntry.Kind.any, null);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir, final Integer limit) throws CacheException {
+  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir, final Integer limit)
+      throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE), RepositoryEntry.Kind.any, limit);
+    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
+        RepositoryEntry.Kind.any, limit);
   }
 
   /**

@@ -27,7 +27,7 @@ public abstract class AbstractRevisionObserver implements RevisionObserver {
    * @param observable The observable.
    * @param arg        Argument object.
    */
-  public void update(final Observable observable, final Object arg) {
+  public final void update(final Observable observable, final Object arg) {
     if (observable != null && observable instanceof RevisionObservableImpl) {
       update((RevisionUpdate) arg);
     }

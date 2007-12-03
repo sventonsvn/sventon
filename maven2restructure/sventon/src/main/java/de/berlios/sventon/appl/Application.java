@@ -42,7 +42,7 @@ import java.util.*;
  * @author patrikfr@users.berlios.de
  * @see <a href="http://www.svnkit.com">SVNKit</a>
  */
-public class Application {
+public final class Application {
 
   /**
    * The logging instance.

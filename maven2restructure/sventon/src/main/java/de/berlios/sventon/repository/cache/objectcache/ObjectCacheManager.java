@@ -21,7 +21,7 @@ import java.io.File;
  *
  * @author jesper@users.berlios.de
  */
-public class ObjectCacheManager extends CacheManager<ObjectCache> {
+public final class ObjectCacheManager extends CacheManager<ObjectCache> {
 
   /**
    * Root directory for cache files.

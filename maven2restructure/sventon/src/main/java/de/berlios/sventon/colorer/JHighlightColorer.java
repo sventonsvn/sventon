@@ -77,7 +77,7 @@ public final class JHighlightColorer implements Colorer {
    *
    * @param rendererMappings The mappings
    */
-  public void setRendererMappings(Properties rendererMappings) {
+  public void setRendererMappings(final Properties rendererMappings) {
     this.rendererMappings = rendererMappings;
   }
 

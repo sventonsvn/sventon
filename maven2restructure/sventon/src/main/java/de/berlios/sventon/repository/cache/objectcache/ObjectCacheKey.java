@@ -11,12 +11,14 @@
  */
 package de.berlios.sventon.repository.cache.objectcache;
 
+import java.io.Serializable;
+
 /**
  * Cachekey class.
  *
  * @author jesper@users.berlios.de
  */
-public class ObjectCacheKey {
+public final class ObjectCacheKey implements Serializable {
 
   private final String path;
   private final String checksum;

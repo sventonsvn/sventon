@@ -119,7 +119,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    *
    * @param mimeFileTypeMap Map.
    */
-  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+  public final void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
     this.mimeFileTypeMap = mimeFileTypeMap;
   }
 

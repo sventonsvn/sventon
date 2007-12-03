@@ -33,7 +33,7 @@ import java.util.Observable;
  *
  * @author jesper@user.berlios.de
  */
-public class RevisionObservableImpl extends Observable implements RevisionObservable {
+public final class RevisionObservableImpl extends Observable implements RevisionObservable {
 
   /**
    * The logging instance.
@@ -129,9 +129,9 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
 
       // Sanity check
       if (headRevision < lastUpdatedRevision) {
-        final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached" +
-            " revision. The repository URL has probably been changed. Delete all cache files from the temp directory" +
-            " and restart sventon.";
+        final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached"
+            + " revision. The repository URL has probably been changed. Delete all cache files from the temp directory"
+            + " and restart sventon.";
         logger.error(errorMessage);
         throw new RuntimeException(errorMessage);
       }
@@ -142,8 +142,8 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
 
         do {
           long fromRevision = lastUpdatedRevision + 1;
-          long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate ?
-              lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+          long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
+              ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           logEntries.addAll(application.getRepositoryService().getRevisionsFromRepository(

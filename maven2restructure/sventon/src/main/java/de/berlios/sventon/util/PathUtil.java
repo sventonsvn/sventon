@@ -19,6 +19,12 @@ package de.berlios.sventon.util;
 public final class PathUtil {
 
   /**
+   * Private.
+   */
+  private PathUtil() {
+  }
+
+  /**
    * Gets the target (leaf/end) part of the <code>path</code>, it could be a file
    * or a directory.
    * <p/>

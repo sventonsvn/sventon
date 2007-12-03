@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class LogMessageCacheImpl implements LogMessageCache {
+public final class LogMessageCacheImpl implements LogMessageCache {
 
   /**
    * The logging instance.
@@ -65,6 +65,7 @@ public class LogMessageCacheImpl implements LogMessageCache {
    *
    * @param directory The <i>lucene</i> directory.
    * @param analyzer  Analyzer to use.
+   * @throws CacheException if unable to start up cache.
    */
   public LogMessageCacheImpl(final Directory directory, final Class<? extends Analyzer> analyzer) throws CacheException {
     logger.debug("Initializing cache");
@@ -93,8 +94,8 @@ public class LogMessageCacheImpl implements LogMessageCache {
   /**
    * Gets the index Searcher.
    *
-   * @throws IOException          if unable to create searcher.
-   * @throws NullPointerException if index does not exist.
+   * @return Index searcher.
+   * @throws IOException if unable to create searcher.
    */
   private synchronized Searcher getIndexSearcher() throws IOException {
     return new IndexSearcher(directory);
@@ -154,8 +155,8 @@ public class LogMessageCacheImpl implements LogMessageCache {
 
       final Document document = new Document();
       document.add(new Field("revision", String.valueOf(logMessage.getRevision()), Field.Store.YES, Field.Index.NO));
-      document.add(new Field("content", logMessage.getMessage() == null ? "" :
-          logMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
+      document.add(new Field("content", logMessage.getMessage() == null ? ""
+          : logMessage.getMessage(), Field.Store.YES, Field.Index.TOKENIZED));
       writer.addDocument(document);
     } catch (final Exception ioex) {
       throw new CacheException("Unable to add content to lucene cache", ioex);

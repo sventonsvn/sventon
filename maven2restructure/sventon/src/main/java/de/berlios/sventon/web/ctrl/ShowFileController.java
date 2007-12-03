@@ -57,17 +57,17 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   /**
    * Regex pattern that identifies text file extensions.
    */
-  protected String textFileExtensionPattern;
+  private String textFileExtensionPattern;
 
   /**
    * Regex pattern that identifies binary file extensions.
    */
-  protected String binaryFileExtensionPattern;
+  private String binaryFileExtensionPattern;
 
   /**
    * Regex pattern that identifies archive file extensions.
    */
-  protected String archiveFileExtensionPattern;
+  private String archiveFileExtensionPattern;
 
   /**
    * FORMAT_REQUEST_PARAMETER = format.

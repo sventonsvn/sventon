@@ -19,8 +19,11 @@ import java.io.FilenameFilter;
 /**
  * Filter to match temporary export files using the name format <code>sventon-[millis].zip</code>.
  */
-public class ExportFileFilter implements FilenameFilter {
+public final class ExportFileFilter implements FilenameFilter {
 
+  /**
+   * {@inheritDoc}
+   */
   public boolean accept(final File dir, final String name) {
     return name.matches(Instance.INSTANCE_NAME_PATTERN + "-[0-9]{17}\\.zip");
   }

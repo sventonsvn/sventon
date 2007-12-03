@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  *
  * @author jesper@users.berlios.de
  */
-public class TemporaryFileCleaner {
+public final class TemporaryFileCleaner {
 
   /**
    * The logging instance.

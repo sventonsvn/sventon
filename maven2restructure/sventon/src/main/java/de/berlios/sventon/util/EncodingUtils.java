@@ -22,6 +22,12 @@ import java.net.URLEncoder;
 public final class EncodingUtils {
 
   /**
+   * Private.
+   */
+  private EncodingUtils() {
+  }
+
+  /**
    * Default charset, UTF-8.
    */
   private static final String DEFAULT_CHARSET = "UTF-8";

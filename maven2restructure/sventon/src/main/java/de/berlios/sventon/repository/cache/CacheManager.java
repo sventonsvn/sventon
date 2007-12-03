@@ -42,7 +42,7 @@ public abstract class CacheManager<T> {
    * @return The cache instance.
    * @throws CacheException if cache does not exist.
    */
-  public T getCache(final String cacheName) throws CacheException {
+  public final T getCache(final String cacheName) throws CacheException {
     T cache = caches.get(cacheName);
     if (cache == null) {
       throw new CacheException("Unknown cache instance name: " + cacheName);
@@ -58,7 +58,7 @@ public abstract class CacheManager<T> {
    * @throws CacheException if unable to create cache instance, or if the
    *                        cache has already been registered.
    */
-  public void register(final String cacheName) throws CacheException {
+  public final void register(final String cacheName) throws CacheException {
     T cache = caches.get(cacheName);
     if (cache != null) {
       throw new IllegalStateException("Cache instance [" + cacheName + "] has already been registered");
@@ -83,7 +83,7 @@ public abstract class CacheManager<T> {
    * @param cache     Cache instance
    * @return The added cache instance
    */
-  public T addCache(final String cacheName, final T cache) {
+  public final T addCache(final String cacheName, final T cache) {
     caches.put(cacheName, cache);
     return cache;
   }

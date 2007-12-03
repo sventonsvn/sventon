@@ -37,7 +37,7 @@ import java.util.regex.Matcher;
 
 /**
  * Class to generate <code>RSS</code> feeds from Subversion log information.
- * Uses the <a href="https://rome.dev.java.net/">ROME</code> library.
+ * Uses the <a href="https://rome.dev.java.net/">ROME</a> library.
  *
  * @author jesper@users.berlios.de
  */
