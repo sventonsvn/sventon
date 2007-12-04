@@ -6,9 +6,10 @@
   <fileSets>
     <fileSet>
       <includes>
-        <include>**/doc/**</include>
         <include>**/licenses/**</include>
-        <include>*.txt</include>
+        <include>changes.txt</include>
+        <include>readme.txt</include>
+        <include>LICENSE.txt</include>
       </includes>
     </fileSet>
     <fileSet>
