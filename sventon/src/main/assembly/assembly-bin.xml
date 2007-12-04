@@ -1,0 +1,28 @@
+<assembly>
+  <id>bin</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>**/doc/**</include>
+        <include>**/licenses/**</include>
+        <include>*.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/assembly/files</directory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>*.war</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
