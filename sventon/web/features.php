@@ -13,7 +13,7 @@
   <li>Style sheet marked up for easy graphical customization.</li>
   <li>Single account authentication support for non public repositories.</li>
   <li>Caching for fast access.</li>
-  <li>File and directory name search (CamelCase enabled).</li>
+  <li>File and directory name search (<a href="http://en.wikipedia.org/wiki/Camel_case">CamelCase</a> enabled).</li>
   <li>Directory flattening for fast navigation.</li>
   <li>Image thumbnail preview.</li>
   <li>Diff files between revisions or directories, side-by-side or as unified diff.</li>
