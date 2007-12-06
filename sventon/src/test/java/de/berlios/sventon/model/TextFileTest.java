@@ -36,8 +36,8 @@ public class TextFileTest extends TestCase {
   }
 
   private Colorer getColorer() {
-    JHighlightColorer col = new JHighlightColorer();
-    Properties mappings = new Properties();
+    final JHighlightColorer col = new JHighlightColorer();
+    final Properties mappings = new Properties();
     mappings.put("java", new com.uwyn.jhighlight.renderer.JavaXhtmlRenderer());
     mappings.put("html", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
     mappings.put("xml", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());

@@ -111,15 +111,15 @@ public final class InstanceConfiguration {
    */
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
-    instanceConfiguration.setRepositoryUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
-    instanceConfiguration.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
-    instanceConfiguration.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
+    instanceConfiguration.setRepositoryUrl(properties.getProperty(instanceName + PROPERTY_KEY_REPOSITORY_URL));
+    instanceConfiguration.setUid(properties.getProperty(instanceName + PROPERTY_KEY_USERNAME));
+    instanceConfiguration.setPwd(properties.getProperty(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+        Boolean.parseBoolean(properties.getProperty(instanceName + PROPERTY_KEY_USE_CACHE)));
     instanceConfiguration.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+        Boolean.parseBoolean(properties.getProperty(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     instanceConfiguration.setEnableAccessControl(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+        Boolean.parseBoolean(properties.getProperty(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     instanceConfiguration.rssItemsCount = Integer.parseInt(
         properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return instanceConfiguration;
