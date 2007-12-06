@@ -21,7 +21,7 @@
       <c:if test="${not empty instanceNames && fn:length(instanceNames) > 1}">
         <a class="sventonHeaderLink" href="listinstances.svn">[change repository]</a>
       </c:if>
-      <c:if test="${userContext.uid ne ''}">
+      <c:if test="${userContext.uid ne null}">
         <a class="sventonHeaderLink" href="clearsession.svn">[logout]</a>
       </c:if>
     </td>
