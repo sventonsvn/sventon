@@ -54,11 +54,6 @@
 
         <% pageContext.setAttribute("br", "\n"); %>        
         <c:forEach items="${logEntriesPage}" var="entry">
-          <c:url value="showfile.svn" var="showUrl">
-            <c:param name="path" value="${entry.pathAtRevision}" />
-            <c:param name="revision" value="${entry.svnLogEntry.revision}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
           <c:set var="nextPath" value="${entry.pathAtRevision}"/>
           <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
 
@@ -67,11 +62,20 @@
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
             <c:choose>
               <c:when test="${isFile}">
+                <c:url value="showfile.svn" var="showUrl">
+                  <c:param name="path" value="${entry.pathAtRevision}" />
+                  <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                  <c:param name="name" value="${command.name}" />
+                </c:url>
                 <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)" /></td>
                 <td><a href="${showUrl}">${entry.svnLogEntry.revision}</a></td>
               </c:when>
               <c:otherwise>
-                <td>${entry.svnLogEntry.revision}</td>
+                <c:url value="revinfo.svn" var="showRevInfoUrl">
+                  <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                  <c:param name="name" value="${command.name}" />
+                </c:url>
+                <td><a href="${showRevInfoUrl}">${entry.svnLogEntry.revision}</a></td>
               </c:otherwise>
             </c:choose>
             <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br/>')}</a></td>
@@ -80,7 +84,7 @@
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="5">
+            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="4">
               <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), "", command.getName(), false, false, response)%>
             </td>
           </tr>
