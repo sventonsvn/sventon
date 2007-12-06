@@ -84,7 +84,7 @@ public final class Application {
    *
    * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist,
    *                               not {@code null} Configuration settings will be stored in this directory.
-   * @param configurationFilename  Path and file name of sventon configuration file, not {@null}
+   * @param configurationFilename  Path and file name of sventon configuration file, not {@code null}
    * @throws IOException if IO error occur
    */
   public Application(final File configurationDirectory, final String configurationFilename) throws IOException {
@@ -138,9 +138,9 @@ public final class Application {
    * If a config file is found an configuration is successful this instance will be marked as configured. If no file is
    * found initialization will fail silently and the instance will not be marked as configured.
    * <p/>
-   * It is legal to reload an already configured {@code ApplicationConfiguration] instance.
+   * It is legal to reload an already configured {@link InstanceConfiguration} instance.
    * {@code configurationDirectory} and {@code configurationFilename} must be set before calling this method, or bad
-   * things will muost certainly happen...
+   * things will most certainly happen...
    *
    * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()

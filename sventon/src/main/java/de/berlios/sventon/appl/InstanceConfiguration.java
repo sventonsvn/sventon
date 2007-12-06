@@ -184,7 +184,7 @@ public final class InstanceConfiguration {
 
   /**
    * Set a configured pwd. This pwd will be used for repository
-   * access, together with configured user ID, {@see #setUid(String)}
+   * access, together with configured user ID, {@link #setUid(String)}
    *
    * @param pwd The pwd to set, may be <code>null</code>.
    */
@@ -203,7 +203,7 @@ public final class InstanceConfiguration {
 
   /**
    * Set a configured user ID. This user ID will be used for repository access,
-   * together with configured pwd, {@see #setPwd(String)}
+   * together with configured pwd, {@link #setPwd(String)}
    *
    * @param uid The uid to set, may be <code>null</code>
    */
@@ -261,7 +261,7 @@ public final class InstanceConfiguration {
    * Sets the 'enableAccessControl' flag.
    * <b>Note</b> Enabling access control <i>disables</i> cache.
    *
-   * @param enableAccessControl {@code true] enables repository access control.
+   * @param enableAccessControl {@code true} enables repository access control.
    */
   public void setEnableAccessControl(final boolean enableAccessControl) {
     this.enableAccessControl = enableAccessControl;

@@ -21,14 +21,19 @@ import de.berlios.sventon.SventonException;
 public class CacheException extends SventonException {
 
   /**
-   * {@inheritDoc}
+   * Constructor.
+   *
+   * @param message Exception message.
    */
   public CacheException(final String message) {
     super(message);
   }
 
   /**
-   * {@inheritDoc}
+   * Constructor.
+   *
+   * @param message Exception message.
+   * @param cause   Cause
    */
   public CacheException(final String message, final Throwable cause) {
     super(message, cause);
