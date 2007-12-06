@@ -38,7 +38,7 @@
       <sventon-ui:fileTypeIcon filename="${entry.name}"/>
     </td>
     <td class="sventonCol3">
-      <a href="${showFileUrl}">${entry.name}</a>
+      <a href="<sventon-ui:formatUrl url='${showFileUrl}'/>">${entry.name}</a>
     </td>
     <td class="sventonCol4"></td>
     <td class="sventonCol5">${entry.size}</td>

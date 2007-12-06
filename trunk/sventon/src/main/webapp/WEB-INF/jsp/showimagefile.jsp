@@ -29,6 +29,7 @@
       <c:param name="path" value="${command.path}${entry.name}" />
       <c:param name="revision" value="${command.revision}" />
       <c:param name="name" value="${command.name}" />
+      <c:param name="disp" value="inline" />
     </c:url>
 
     <c:url value="getthumb.svn" var="getThumbUrl">
@@ -38,8 +39,8 @@
     </c:url>
 
     <p>
-      <a href="${showUrl}&disp=inline">
-        <img src="${getThumbUrl}" alt="Thumbnail"/>
+      <a href="<sventon-ui:formatUrl url='${showUrl}'/>">
+        <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail"/>
       </a>
     </p>
 

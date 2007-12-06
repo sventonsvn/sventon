@@ -68,7 +68,7 @@
                   <c:param name="name" value="${command.name}" />
                 </c:url>
                 <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)" /></td>
-                <td><a href="${showUrl}">${entry.svnLogEntry.revision}</a></td>
+                <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${entry.svnLogEntry.revision}</a></td>
               </c:when>
               <c:otherwise>
                 <c:url value="revinfo.svn" var="showRevInfoUrl">
@@ -102,7 +102,7 @@
           <c:when test="${morePages}">
             <tr>
               <td colspan="5" align="center">
-                <a href="${showNextLogUrl}">Next ${pageSize}</a>&nbsp;
+                <a href="<sventon-ui:formatUrl url='${showNextLogUrl}'/>">Next ${pageSize}</a>&nbsp;
               </td>
             </tr>
           </c:when>

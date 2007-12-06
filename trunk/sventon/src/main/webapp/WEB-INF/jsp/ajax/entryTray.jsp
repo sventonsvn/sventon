@@ -56,12 +56,12 @@
       <c:choose>
         <c:when test="${'dir' eq entry.kind}">
           <td>
-            <div id="${entryTrayRemoveUrl}" class="entry">
+            <div id="<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>" class="entry">
               <img src="images/icon_folder.png" alt="dir"/>
             </div>
           </td>
           <td>
-            <a href="${entryTrayViewUrl}">${entry.name}</a>
+            <a href="<sventon-ui:formatUrl url='${entryTrayViewUrl}'/>">${entry.name}</a>
           </td>
         </c:when>
         <c:otherwise>
@@ -69,13 +69,13 @@
             <sventon-ui:fileTypeIcon filename="${entry.name}"/>
           </td>
           <td>
-            <a href="${entryTrayShowFileUrl}">${entry.name}</a>&nbsp;
+            <a href="<sventon-ui:formatUrl url='${entryTrayShowFileUrl}'/>">${entry.name}</a>&nbsp;
             (<a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">${entry.revision}</a>)
           </td>
         </c:otherwise>
       </c:choose>
       <td>
-        <a href="#" onclick="removeEntryFromTray('${entryTrayRemoveUrl}'); return false;">
+        <a href="#" onclick="removeEntryFromTray('<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>'); return false;">
           <img align="middle" src="images/delete.png" alt="Delete" title="Delete"/>
         </a>
       </td>

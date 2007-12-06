@@ -59,7 +59,7 @@
               </a>
             </td>
             <td class="sventonCol3">
-              <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+              <a href="<sventon-ui:formatUrl url='${viewUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
               </a>
             </td>

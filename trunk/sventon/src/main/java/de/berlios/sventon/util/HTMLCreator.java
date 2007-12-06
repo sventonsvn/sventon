@@ -13,6 +13,7 @@ package de.berlios.sventon.util;
 
 import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
+import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
@@ -137,7 +138,7 @@ public final class HTMLCreator {
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(GOTO_URL);
-    sb.append("?path=").append(encode(path));
+    sb.append("?path=").append(encodeUrl(path));
     sb.append("&revision=").append(linkToHead ? "head" : revision);
     sb.append("&name=").append(encode(instanceName));
     return sb.toString();
@@ -161,11 +162,11 @@ public final class HTMLCreator {
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(DIFF_URL);
-    sb.append("?path=").append(encode(path));
+    sb.append("?path=").append(encodeUrl(path));
     sb.append("&revision=").append(linkToHead ? "head" : revision);
     sb.append("&name=").append(encode(instanceName));
-    sb.append("&entry=").append(encode(entry1));
-    sb.append("&entry=").append(encode(entry2));
+    sb.append("&entry=").append(encodeUrl(entry1));
+    sb.append("&entry=").append(encodeUrl(entry2));
     return sb.toString();
   }
 

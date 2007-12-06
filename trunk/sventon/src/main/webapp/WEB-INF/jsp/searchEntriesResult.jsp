@@ -72,7 +72,7 @@
                 <img src="images/icon_folder.png" alt="dir"/>
               </td>
               <td class="sventonCol3">
-                <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                <a href="<sventon-ui:formatUrl url='${viewUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                 </a>
               </td>
@@ -82,7 +82,7 @@
                 <sventon-ui:fileTypeIcon filename="${entry.name}"/>
               </td>
               <td class="sventonCol3">
-                <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                <a href="<sventon-ui:formatUrl url='${showFileUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                 </a>
               </td>

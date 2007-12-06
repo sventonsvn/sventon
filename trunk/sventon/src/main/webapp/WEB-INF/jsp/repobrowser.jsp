@@ -53,6 +53,7 @@
           <c:param name="path" value="${entry.fullEntryName}" />
           <c:param name="revision" value="${command.revision}" />
           <c:param name="name" value="${command.name}" />
+          <c:param name="bypassEmpty" value="true" />
         </c:url>
         <c:url value="showfile.svn" var="showFileUrl">
           <c:param name="path" value="${entry.fullEntryName}" />
@@ -79,11 +80,11 @@
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">
               <td class="sventonCol2">
-                <div id="${entryTrayAddUrl}" class="entry">
+                <div id="<sventon-ui:formatUrl url='${entryTrayAddUrl}'/>" class="entry">
                   <img src="images/icon_folder.png" alt="dir"/>
                 </div>
               </td>
-              <td class="sventonCol3"><a href="${viewUrl}&bypassEmpty=true">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="<sventon-ui:formatUrl url='${viewUrl}'/>">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">
@@ -91,7 +92,7 @@
                   <sventon-ui:fileTypeIcon filename="${entry.name}"/>
                 </div>
               </td>
-              <td class="sventonCol3"><a href="${showFileUrl}">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="<sventon-ui:formatUrl url="${showFileUrl}" />">${entry.name}</a></td>
             </c:otherwise>
           </c:choose>
           <td class="sventonCol4" align="center">
