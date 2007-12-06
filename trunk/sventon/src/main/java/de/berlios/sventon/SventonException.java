@@ -19,23 +19,22 @@ package de.berlios.sventon;
 public class SventonException extends Exception {
 
   /**
-   * {@inheritDoc}
+   * Constructor.
+   *
+   * @param message Exception message.
    */
   public SventonException(final String message) {
     super(message);
   }
 
   /**
-   * {@inheritDoc}
+   * Constructor.
+   *
+   * @param message Exception message.
+   * @param cause   Cause.
    */
   public SventonException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public SventonException(final Throwable cause) {
-    super(cause);
-  }
 }
