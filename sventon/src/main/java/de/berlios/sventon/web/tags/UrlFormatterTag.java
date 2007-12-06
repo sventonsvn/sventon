@@ -11,6 +11,8 @@
  */
 package de.berlios.sventon.web.tags;
 
+import de.berlios.sventon.util.EncodingUtils;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.io.IOException;
  * JSP Tag that unescapes legal URL characters (ie. slash and colon).
  *
  * @author jesper@users.berlios.de
+ * @see de.berlios.sventon.util.EncodingUtils
  */
 public final class UrlFormatterTag extends TagSupport {
 
@@ -41,12 +44,7 @@ public final class UrlFormatterTag extends TagSupport {
   }
 
   protected String unescapeLegalCharacters(final String url) {
-    String result = url;
-    // un-encode colons
-    result = result.replaceAll("(?i)%3A", ":");
-    // un-encode forward slashes
-    result = result.replaceAll("(?i)%2F", "/");
-    return result;
+    return EncodingUtils.encodeUrl(url);
   }
 
   /**

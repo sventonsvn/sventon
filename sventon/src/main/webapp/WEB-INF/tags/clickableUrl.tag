@@ -13,6 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
 <%@ attribute name="command" required="true" type="de.berlios.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
@@ -29,7 +30,7 @@
             <c:param name="revision" value="${command.revision}" />
             <c:param name="name" value="${command.name}" />
           </c:url>
-          <a href="${pathUrl}">${pathSegment}</a>
+          <a href="<sventon-ui:formatUrl url='${pathUrl}'/>">${pathSegment}</a>
         </c:otherwise>
       </c:choose>
     /

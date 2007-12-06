@@ -46,7 +46,8 @@
             File: <b>${entry}</b>
           </td>
           <td width="210px" style="text-align:center;">
-            <a href="${downloadUrl}"><img src="${getThumbUrl}" alt="Thumbnail of ${entry}" /></a>
+            <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
+              <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry}" /></a>
           </td>
         </tr>
       </c:forEach>

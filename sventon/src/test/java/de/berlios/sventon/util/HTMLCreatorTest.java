@@ -19,19 +19,19 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Modified</i></td>\n" +
-        "    <td><a href=\"diff.svn?path=%2Ffile1.java&revision=1&name=sandbox&entry=%2Ffile1.java%3B%3B1&entry=%2Ffile1.java%3B%3B0\" title=\"Diff with previous version\">/file1.java</a></td>\n" +
+        "    <td><a href=\"diff.svn?path=/file1.java&revision=1&name=sandbox&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\">/file1.java</a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Deleted</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=%2Ffile2.html&revision=0&name=sandbox\" title=\"Show previous revision\"><strike>/file2.html</strike></a></td>\n" +
+        "    <td><a href=\"goto.svn?path=/file2.html&revision=0&name=sandbox\" title=\"Show previous revision\"><strike>/file2.html</strike></a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Added</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=%2Ffile3.abc&revision=1&name=sandbox\" title=\"Show\">/file3.abc</a><br/><b>Copy from</b> <a href=\"goto.svn?path=%2Fbranch%2Ffile3.abc&revision=1&name=sandbox\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"revinfo.svn?revision=1&name=sandbox\">1</a></td>\n" +
+        "    <td><a href=\"goto.svn?path=/file3.abc&revision=1&name=sandbox\" title=\"Show\">/file3.abc</a><br/><b>Copy from</b> <a href=\"goto.svn?path=/branch/file3.abc&revision=1&name=sandbox\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"revinfo.svn?revision=1&name=sandbox\">1</a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Replaced</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=%2Ffile4.def&revision=1&name=sandbox\" title=\"Show\">/file4.def</a></td>\n" +
+        "    <td><a href=\"goto.svn?path=/file4.def&revision=1&name=sandbox\" title=\"Show\">/file4.def</a></td>\n" +
         "  </tr>\n" +
         "</table>";
 
@@ -46,9 +46,9 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testCreateGoToUrl() throws Exception {
-    assertEquals("http://localhost/goto.svn?path=%2Ftrunk%2Fa.txt&revision=1&name=sandbox",
+    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=1&name=sandbox",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, "sandbox", false));
-    assertEquals("http://localhost/goto.svn?path=%2Ftrunk%2Fa.txt&revision=head&name=sandbox",
+    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=head&name=sandbox",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, "sandbox", true));
   }
 
@@ -58,7 +58,7 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testCreateDiffUrl() throws Exception {
-    assertEquals("http://localhost/diff.svn?path=%2Fa.txt&revision=2&name=sandbox&entry=%2Fa.txt%3B%3B2&entry=%2Fa.txt%3B%3B1",
+    assertEquals("http://localhost/diff.svn?path=/a.txt&revision=2&name=sandbox&entry=/a.txt;;2&entry=/a.txt;;1",
         HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, "sandbox", false));
   }
 }

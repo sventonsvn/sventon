@@ -38,7 +38,7 @@ public final class EncodingUtils {
    * @param str String to encode.
    * @return Encoded string.
    */
-  protected static String encode(final String str) {
+  public static String encode(final String str) {
     String s = "";
     try {
       s = URLEncoder.encode(str, DEFAULT_CHARSET);
@@ -46,6 +46,22 @@ public final class EncodingUtils {
       // ignore
     }
     return s;
+  }
+
+  /**
+   * Encodes given URL string using default encoding (UTF-8).
+   * The characters slash and colon will be untouched as they are URL safe.
+   *
+   * @param str String to encode.
+   * @return Encoded string.
+   */
+  public static String encodeUrl(final String str) {
+    String result = str;
+    // un-encode colons
+    result = result.replaceAll("(?i)%3A", ":");
+    // un-encode forward slashes
+    result = result.replaceAll("(?i)%2F", "/");
+    return result;
   }
 
   /**
