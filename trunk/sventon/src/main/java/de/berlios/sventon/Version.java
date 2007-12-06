@@ -11,17 +11,30 @@
  */
 package de.berlios.sventon;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * Represents the sventon application version details.
- * Keywords in the source will be replaced with correct
- * data during build process.
  *
  * @author jesper@users.berlios.de
  */
 public final class Version {
 
-  private static final String VERSION = "@VERSION@";
-  private static final String REVISION = "@REVISION@";
+  /**
+   * Version properties.
+   */
+  private static final Properties VERSION_PROPERTIES = new Properties();
+
+  /**
+   * Path to version.properties.
+   */
+  private static final String VERSION_PROPERTIES_PATH = "/version.properties";
+
+  /**
+   * Release version property key.
+   */
+  private static final String RELEASE_VERSION_KEY = "svn.release.version";
 
   /**
    * Private.
@@ -35,15 +48,22 @@ public final class Version {
    * @return The version
    */
   public static String getVersion() {
-    return VERSION;
+    assertMappingsLoaded();
+    return (String) VERSION_PROPERTIES.getProperty(RELEASE_VERSION_KEY, "Unknown");
   }
 
   /**
-   * Gets the sventon application source revision.
-   *
-   * @return The revision
+   * Makes sure the version info are loaded, if possible. Else defaults will be used.
    */
-  public static String getRevision() {
-    return REVISION;
+  private static synchronized void assertMappingsLoaded() {
+    if (VERSION_PROPERTIES.isEmpty()) {
+      try {
+        final InputStream is = Version.class.getResourceAsStream(VERSION_PROPERTIES_PATH);
+        VERSION_PROPERTIES.load(is);
+      } catch (Exception e) {
+        // ignored - using defaults
+      }
+    }
   }
+
 }

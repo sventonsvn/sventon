@@ -244,8 +244,7 @@ public final class Application {
    */
   private void initSvnSupport() {
     SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
-    logger.info("Initializing sventon version "
-        + Version.getVersion() + " (revision " + Version.getRevision() + ")");
+    logger.info("Initializing sventon version " + Version.getVersion());
 
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();

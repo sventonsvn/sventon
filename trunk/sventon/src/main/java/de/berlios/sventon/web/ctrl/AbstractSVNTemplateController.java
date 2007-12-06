@@ -124,9 +124,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private CacheGateway cacheGateway;
 
   /**
-   * Maximum number of revisions, default set to 10.
+   * Maximum number of revisions.
    */
-  private int maxRevisionsCount = 10;
+  private int maxRevisionsCount;
+
+  /**
+   * Maximum number of entries per page.
+   */
+  private int maxEntriesCount;
 
   /**
    * Cached available charsets.
@@ -524,6 +529,24 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   protected final int getMaxRevisionsCount() {
     return maxRevisionsCount;
+  }
+
+  /**
+   * Sets the maximum number of entries per page.
+   *
+   * @param maxEntriesCount Max count.
+   */
+  public final void setMaxEntriesCount(final int maxEntriesCount) {
+    this.maxEntriesCount = maxEntriesCount;
+  }
+
+  /**
+   * Gets the maximum number of entries per page.
+   *
+   * @return Count
+   */
+  protected final int getMaxEntriesCount() {
+    return maxEntriesCount;
   }
 
   /**
