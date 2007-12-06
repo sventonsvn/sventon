@@ -28,7 +28,6 @@
     <name>formatBytes</name>
     <tag-class>de.berlios.sventon.web.tags.ByteFormatterTag</tag-class>
     <body-content>JSP</body-content>
-
     <description>Tag for formatting bytes size values.</description>
     <attribute>
       <name>size</name>
@@ -46,10 +45,21 @@
     <name>fileTypeIcon</name>
     <tag-class>de.berlios.sventon.web.tags.FileTypeIconTag</tag-class>
     <body-content>JSP</body-content>
-
     <description>Tag that returns appropriate file type icon for given file extension.</description>
     <attribute>
       <name>filename</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>formatUrl</name>
+    <tag-class>de.berlios.sventon.web.tags.UrlFormatterTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>Tag that unescapes legal URL characters (i.e. slash and colon).</description>
+    <attribute>
+      <name>url</name>
       <required>true</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
