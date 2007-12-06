@@ -12,9 +12,9 @@
 package de.berlios.sventon.web.tags;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -89,9 +89,9 @@ public final class FileTypeIconTag extends TagSupport {
   protected String createImageTag(final String filename, final Properties mappings) {
     Validate.notNull(filename, "Filename was null or empty");
     final String extension = FilenameUtils.getExtension(filename.toLowerCase());
-    final String icon = extractIconFromMapping((String) mappings.get(extension));
+    final String icon = extractIconFromMapping(mappings.getProperty(extension));
 
-    String description = extractDescriptionFromMapping((String) mappings.get(extension));
+    String description = extractDescriptionFromMapping(mappings.getProperty(extension));
     if (description == null) {
       description = extension;
     } else {
