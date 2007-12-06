@@ -150,8 +150,19 @@
 
   <build>
     <finalName>svn</finalName>
-    <plugins>
 
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/filtered</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-scm-plugin</artifactId>
