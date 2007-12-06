@@ -45,7 +45,7 @@ public class UserContextTest extends TestCase {
   //Test toString to make sure pwd and uid is not outputted
   public void testToString() throws Exception {
 
-    final String testString = "UserContext[sortType=<null>," +
+    String testString = "UserContext[sortType=<null>," +
        "sortMode=<null>," +
        "latestRevisionsDisplayCount=1," +
        "charset=<null>," +
@@ -55,6 +55,24 @@ public class UserContextTest extends TestCase {
     final UserContext userContext = new UserContext();
     userContext.setUid("uid");
     userContext.setPwd("pwd");
+    assertEquals(testString, userContext.toString());
+
+    testString = "UserContext[sortType=<null>," +
+       "sortMode=<null>," +
+       "latestRevisionsDisplayCount=1," +
+       "charset=<null>," +
+       "uid=<null>," +
+       "pwd=*****]";
+    userContext.setUid(null);
+    assertEquals(testString, userContext.toString());
+
+    testString = "UserContext[sortType=<null>," +
+       "sortMode=<null>," +
+       "latestRevisionsDisplayCount=1," +
+       "charset=<null>," +
+       "uid=<null>," +
+       "pwd=<null>]";
+    userContext.setPwd(null);
     assertEquals(testString, userContext.toString());
   }
 

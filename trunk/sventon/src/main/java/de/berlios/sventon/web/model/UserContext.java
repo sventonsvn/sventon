@@ -248,8 +248,8 @@ public final class UserContext implements Serializable {
        append("sortMode", sortMode).
        append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
        append("charset", charset).
-       append("uid", "*****").
-       append("pwd", "*****").
+       append("uid", uid != null ? "*****" : "<null>").
+       append("pwd", pwd != null ? "*****" : "<null>").
        toString();
   }
 }
