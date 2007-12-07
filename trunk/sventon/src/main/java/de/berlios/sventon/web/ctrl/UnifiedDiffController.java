@@ -67,7 +67,7 @@ public final class UnifiedDiffController extends AbstractSVNTemplateController i
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
 
-    return new ModelAndView("unifieddiff", model);
+    return new ModelAndView("unifiedDiff", model);
   }
 
 }

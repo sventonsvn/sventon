@@ -130,6 +130,6 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
     model.put("pageSize", pageSize);
     model.put("isFile", getRepositoryService().getNodeKind(repository, path, revision.getNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
-    return new ModelAndView("showlog", model);
+    return new ModelAndView("showLog", model);
   }
 }

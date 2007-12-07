@@ -119,14 +119,14 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
 
     if (isImageFileExtension(svnCommand)) {
       logger.debug("File identified as an image file");
-      modelAndView = new ModelAndView("showimagefile", model);
+      modelAndView = new ModelAndView("showImageFile", model);
     } else if (isArchiveFileExtension(svnCommand)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
         getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
         model.put("entries", archiveFile.getEntries());
-        modelAndView = new ModelAndView("showarchivefile", model);
+        modelAndView = new ModelAndView("showArchiveFile", model);
       } else {
         logger.debug("Archived entry: " + archivedEntry);
         model.put("archivedEntry", archivedEntry);
@@ -139,14 +139,14 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
           final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
               archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
           model.put("file", textFile);
-          modelAndView = new ModelAndView("showtextfile", model);
+          modelAndView = new ModelAndView("showTextFile", model);
         } else {
-          modelAndView = new ModelAndView("showbinaryfile", model);
+          modelAndView = new ModelAndView("showBinaryFile", model);
         }
       }
     } else if (isBinaryFileExtension(svnCommand)) {
       logger.debug("File identified as a binary file");
-      modelAndView = new ModelAndView("showbinaryfile", model);
+      modelAndView = new ModelAndView("showBinaryFile", model);
     } else if (isTextFileExtension(svnCommand) || isTextMimeType(fileProperties)) {
       getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
 
@@ -159,10 +159,10 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
             colorer, fileProperties, repository.getLocation().toDecodedString());
         model.put("file", textFile);
       }
-      modelAndView = new ModelAndView("showtextfile", model);
+      modelAndView = new ModelAndView("showTextFile", model);
     } else {
       logger.debug("File unidentified - showing as binary");
-      modelAndView = new ModelAndView("showbinaryfile", model);
+      modelAndView = new ModelAndView("showBinaryFile", model);
     }
     return modelAndView;
   }
