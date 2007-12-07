@@ -386,7 +386,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     model.put("parameters", request.getParameterMap());
     model.put("action", WebUtils.extractServletNameFromRequest(request));
     logger.debug("Forwarding to 'authenticationfailure' view");
-    return new ModelAndView("authenticationfailure", model);
+    return new ModelAndView("authenticationFailure", model);
   }
 
   /**

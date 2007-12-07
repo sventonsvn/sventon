@@ -55,7 +55,7 @@ public final class ListInstancesController extends AbstractController {
       session.invalidate();
     }
 
-    return new ModelAndView("listinstances", model);
+    return new ModelAndView("listInstances", model);
   }
 
   /**
