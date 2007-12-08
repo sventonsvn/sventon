@@ -30,6 +30,6 @@ public class ListInstancesControllerTest extends TestCase {
     application.setConfigured(true);
 
     modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listinstances", modelAndView.getViewName());
+    assertEquals("listInstances", modelAndView.getViewName());
   }
 }
