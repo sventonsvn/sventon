@@ -138,6 +138,11 @@
       <artifactId>jstl</artifactId>
       <version>1.1.2</version>
     </dependency>
+    <dependency>
+      <groupId>ch.ethz.ganymed</groupId>
+      <artifactId>ganymed-ssh2</artifactId>
+      <version>build210</version>
+    </dependency>
 
     <!-- Currently deployed to central, they need to be hosted locally -->
     <dependency>
