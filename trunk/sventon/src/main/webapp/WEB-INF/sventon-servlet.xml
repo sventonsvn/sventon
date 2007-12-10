@@ -82,7 +82,6 @@
     <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
   </bean>
 
-  <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
   <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController"
         parent="abstractController"/>
   <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ListFilesController" parent="abstractController"/>
@@ -173,7 +172,6 @@
         <prop key="/repobrowser.svn">repoBrowserController</prop>
         <prop key="/showlog.svn">showLogsController</prop>
         <prop key="/showfile.svn">showFileController</prop>
-        <prop key="/clearsession.svn">clearSessionController</prop>
         <prop key="/searchentries.svn">searchEntriesController</prop>
         <prop key="/searchlogs.svn">searchLogsController</prop>
         <prop key="/blame.svn">blameController</prop>

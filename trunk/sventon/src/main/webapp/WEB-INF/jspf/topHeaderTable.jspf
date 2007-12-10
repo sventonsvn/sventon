@@ -22,7 +22,7 @@
         <a class="sventonHeaderLink" href="listinstances.svn">[change repository]</a>
       </c:if>
       <c:if test="${userContext.uid ne null}">
-        <a class="sventonHeaderLink" href="clearsession.svn">[logout]</a>
+        <a class="sventonHeaderLink" href="listinstances.svn">[logout]</a>
       </c:if>
     </td>
   </tr>

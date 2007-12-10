@@ -12,6 +12,7 @@
   */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
+
 <html>
   <head>
     <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
