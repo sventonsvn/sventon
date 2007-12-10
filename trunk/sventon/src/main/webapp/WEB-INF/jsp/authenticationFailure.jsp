@@ -18,30 +18,56 @@
     <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
     <title>sventon repository browser</title>
   </head>
-  <body>
-    <p class="sventonHeader">
-      An authentication failure occured when connecting to the Subversion server.
-    </p>
-    <p>
-      This is typically the symptom of incorrect or missing user id and password configuration
-      in sventon when anonymous access to the repository is not allowed.
-    </p>
-    <p>
-      Peruse sventon log for further information.
-    </p>
 
-    <form action="${action}" method="post">
-      <p>UID: <input name="uid" type="text" nocache/></p>
-      <p>PWD: <input name="pwd" type="password" nocache/></p>
+  <body>
+    <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
+    <h2>
+      Authentication required for
+      <c:choose>
+        <c:when test="${paramValues['path'] eq null}">
+          repository
+        </c:when>
+        <c:otherwise>
+          directory: <i>${paramValues['path'][0]}</i>
+        </c:otherwise>
+      </c:choose>
+    </h2>
+
+    <form name="loginForm" action="${action}" method="post">
+      <table>
+        <tr>
+          <td>Username</td>
+          <td><input name="uid" type="text" nocache value="${paramValues['uid'][0]}"/></td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><input name="pwd" type="password" nocache/></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="right">
+            <input type="submit" value="log in">
+          </td>
+        </tr>
+        <c:if test="${paramValues['uid'] ne null}" >
+        <tr>
+          <td colspan="2">
+            <span class="exclamationText">Authentication failed!</span>
+          </td>
+        </tr>
+        </c:if>
+      </table>
 
       <c:forEach items="${parameters}" var="paramEntry">
         <c:forEach items="${paramEntry.value}" var="parameter">
-          <input type="hidden" name="${paramEntry.key}" value="${parameter}"/>
+          <c:if test="${paramEntry.key ne 'pwd' && paramEntry.key ne 'uid'}">
+            <input type="hidden" name="${paramEntry.key}" value="${parameter}"/>
+          </c:if>
         </c:forEach>
       </c:forEach>
 
-      <input type="submit" value="log in">
     </form>
+
+    <script language="JavaScript" type="text/javascript">document.loginForm.uid.focus();</script>    
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>
