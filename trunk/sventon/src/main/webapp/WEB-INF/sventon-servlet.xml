@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd"
+       default-lazy-init="false">
 
-<!-- Application context definition for sventon DispatcherServlet -->
-<beans default-lazy-init="false">
+
+  <!-- Application context definition for sventon DispatcherServlet -->
 
   <bean id="sventonConfigFile" class="java.lang.String">
     <constructor-arg value="sventon.properties"/>
@@ -75,20 +83,28 @@
   </bean>
 
   <bean id="clearSessionController" class="de.berlios.sventon.web.ctrl.ClearSessionController"/>
-  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
+  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController"
+        parent="abstractController"/>
   <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ListFilesController" parent="abstractController"/>
   <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
   <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
   <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
-  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
+  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController"
+        parent="abstractController"/>
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
-  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
-  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController" parent="abstractController"/>
-  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.GetLogMessageController" parent="abstractController"/>
-  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.RepositoryEntryTrayController" parent="abstractController"/>
+  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController"
+        parent="abstractController"/>
+  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController"
+        parent="abstractController"/>
+  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.GetLogMessageController"
+        parent="abstractController"/>
+  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.RepositoryEntryTrayController"
+        parent="abstractController"/>
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
-  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
-  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController" parent="abstractController"/>
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController"
+        parent="abstractController"/>
+  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController"
+        parent="abstractController"/>
 
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
@@ -124,7 +140,7 @@
     <property name="archiveFileCharset" value="cp850"/>
   </bean>
 
-  <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">  	   
+  <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">
     <property name="colorer" ref="colorer"/>
   </bean>
 
@@ -258,16 +274,11 @@
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
-
-  <bean id="observerList" class="java.util.ArrayList">
-    <constructor-arg>
-      <list>
-        <ref local="entryCacheUpdater"/>
-        <ref local="logMessageCacheUpdater"/>
-        <ref local="revisionCacheUpdater"/>
-      </list>
-    </constructor-arg>
-  </bean>
+  <util:list id="observerList">
+    <ref local="entryCacheUpdater"/>
+    <ref local="logMessageCacheUpdater"/>
+    <ref local="revisionCacheUpdater"/>
+  </util:list>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="revisionCacheUpdater" class="de.berlios.sventon.repository.cache.revisioncache.RevisionCacheUpdater">
