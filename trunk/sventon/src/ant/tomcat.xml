@@ -4,7 +4,7 @@
   <property file="dev-build.properties"/>
   <property file="default-dev-build.properties"/>
 
-  <property name="web.dir" value="../../target/sventon"/>
+  <property name="web.dir" value="../../target/svn"/>
   <property name="name" value="svn"/>
 
 
