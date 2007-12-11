@@ -173,15 +173,6 @@
 </tr>
 </form>
 <c:if test="${fn:length(addedInstances) > 0}">
-  <form action="config.svn">
-    <tr>
-      <td>
-        <input type="submit" value="cancel" class="btn"/>
-      </td>
-    </tr>
-  </form>
-</c:if>
-<c:if test="${fn:length(addedInstances) > 0}">
   <tr>
     <td><b>Added instances</b></td>
   </tr>
