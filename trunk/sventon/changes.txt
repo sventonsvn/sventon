@@ -2,6 +2,7 @@ sventon change history
 -----------------------------------------------------------------------------------------
 
 [1044] Fixed: Bug #12698 - Highlighting problem when searching using wildcards.
+ [982] Added: Feature #2164 - Repository browsing with user credential.
  [978] Added: Feature #3809 - Popup file type when cursor hovers over.
  [977] Added: Upgraded to Spring 2.5
  [944] Added: Feature #3825 - Entry tray.
