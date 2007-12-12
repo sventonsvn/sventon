@@ -75,7 +75,7 @@
             <td width="94" <?php if ($pageparameter == "news") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=news" <?php if ($pageparameter == "news") { ?>class="style1"<?php } ?>>News</a></td>
             <td width="94" <?php if ($pageparameter == "features") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=features" <?php if ($pageparameter == "features") { ?>class="style1"<?php } ?>>Features</a></td>
             <td width="94" <?php if ($pageparameter == "screenshots") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=screenshots" <?php if ($pageparameter == "screenshots") { ?>class="style1"<?php } ?>>Screenshots</a></td>
-            <td width="94" <?php if ($pageparameter == "faq") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=faq" <?php if ($pageparameter == "faq") { ?>class="style1"<?php } ?>>FAQ</a></td>
+            <td width="94" class="topMenuCell"><a href="http://wiki.sventon.org/">Wiki</a></td>
             <td width="94" class="topMenuCell"><a href="http://groups.google.com/group/sventon-support/">Forum</a></td>
             <td width="94" <?php if ($pageparameter == "development") { ?>id="selectedTopMenuCell" <?php } else { ?> class="topMenuCell" <?php } ?>><a href="index.php?page=development" <?php if ($pageparameter == "development") { ?>class="style1"<?php } ?>>Development</a></td>
           </tr>
@@ -143,12 +143,12 @@
           </tr>
           <tr>
             <td class="boxBody">
+              <p>
+              See the <a href="http://wiki.sventon.org/">sventon Wiki</a> for user and developer documentation.
+              </p>
               <p>If you have any questions regarding sventon usage or development, please visit the
                 <a href="http://groups.google.com/group/sventon-support/">sventon Google group</a> to
                 discuss different topics with sventon committers and users.
-                </p>
-                <p>
-                Post any questions here and we will try to answer as soon as we can.
                 </p>
             </td>
           </tr>
