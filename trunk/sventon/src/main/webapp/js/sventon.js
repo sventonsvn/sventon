@@ -210,7 +210,7 @@ function hideLatestRevisions() {
 }
 
 function isLatestRevisionsVisible() {
-  return $('latestCommitInfoDiv').style.display == '';
+  return $('latestCommitInfoDiv').visible();
 }
 
 // Requests the N latest revisions
@@ -256,8 +256,8 @@ function showHideHelp(helpDiv, id) {
     return;
   }
 
-  if (helpDiv.style.display == '') {
-    Element.hide(helpDiv);
+  if (helpDiv.visible()) {
+    helpDiv.hide();
   } else {
     // Do the ajax call
     var url = 'static.ajax';
@@ -313,7 +313,7 @@ function removeEntryFromTray(removeEntryUrl) {
 }
 
 function showHideEntryTray() {
-  if ($('entryTrayWrapper').style.display == '') {
+  if ($('entryTrayWrapper').visible()) {
     Effect.SlideUp('entryTrayWrapper');
   } else {
     Effect.SlideDown('entryTrayWrapper');
