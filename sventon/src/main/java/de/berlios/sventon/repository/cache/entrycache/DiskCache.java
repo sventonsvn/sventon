@@ -92,7 +92,7 @@ public class DiskCache extends EntryCache {
         throw new CacheException("Unable to read entryCache file", ex);
       }
     } else {
-      // No serialized cachefile exsisted - initialize an empty one.
+      // No serialized cachefile excisted - initialize an empty one.
       setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
           new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)), RepositoryEntry.class));
     }

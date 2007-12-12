@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1047] Added: Feature #3900 - Change behaviour when searching entries.
 [1044] Fixed: Bug #12698 - Highlighting problem when searching using wildcards.
  [982] Added: Feature #2164 - Repository browsing with user credential.
  [978] Added: Feature #3809 - Popup file type when cursor hovers over.

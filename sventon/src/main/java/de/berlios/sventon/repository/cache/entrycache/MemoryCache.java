@@ -13,7 +13,6 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
-import de.berlios.sventon.repository.cache.CacheException;
 
 import java.util.Collections;
 import java.util.TreeSet;
@@ -48,7 +47,7 @@ public final class MemoryCache extends EntryCache {
   /**
    * {@inheritDoc}
    */
-  public void flush() throws CacheException {
+  public void flush() {
     // Nothing to do.
   }
 }
