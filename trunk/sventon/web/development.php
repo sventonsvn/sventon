@@ -50,6 +50,12 @@
   </p>
 
   <br/>
+  <b>Documentation</b>
+  <p>
+  End-user and developer documentation can be found on the <a href="http://wiki.sventon.org/">sventon Wiki</a>.
+  </p>
+  
+  <br/>
   <b>Contact</b>
   <p>
   <p>Developer e-mail addresses:<br/>
