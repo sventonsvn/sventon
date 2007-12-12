@@ -57,7 +57,7 @@ public abstract class EntryCache implements Cache {
   /**
    * Flushes the cache. Will only have effect on disk persistent caches.
    *
-   * @throws CacheException
+   * @throws CacheException if unable to flush cache.
    */
   public abstract void flush() throws CacheException;
 
@@ -162,24 +162,18 @@ public abstract class EntryCache implements Cache {
    *
    * @param pattern Entry name pattern to search for
    * @param kind    Entry kind
-   * @param limit   Result limit
    * @return List of entries.
-   * @throws CacheException if error
    */
-  public synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind, final Integer limit) throws CacheException {
+  public synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding [" + pattern + "] of kind [" + kind + "] with limit [" + limit + "]");
+      logger.debug("Finding [" + pattern + "] of kind [" + kind + "]");
     }
-    int count = 0;
     final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
     for (final RepositoryEntry entry : cachedEntries) {
       final Matcher matcher = pattern.matcher(entry.getFullEntryName());
       if (matcher.matches() && (entry.getKind() == kind || kind == any)) {
         result.add(entry);
-        if (limit != null && ++count == limit) {
-          break;
-        }
       }
     }
     if (logger.isDebugEnabled()) {
@@ -189,4 +183,41 @@ public abstract class EntryCache implements Cache {
     return result;
   }
 
+  /**
+   * Finds entry names based on given regex pattern.
+   *
+   * @param searchString Entry name search string.
+   * @param startDir     Directory/path to start in.
+   * @return List of entries.
+   */
+  public synchronized List<RepositoryEntry> findEntry(final String searchString, final String startDir) {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
+    }
+    final List<RepositoryEntry> result = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+
+    boolean hit = false;
+    for (final RepositoryEntry entry : cachedEntries) {
+      System.out.println(entry.getFullEntryName());
+      if (entry.getPath().startsWith(startDir)) {
+        hit = true;
+        if (entry.getName().contains(searchString)) {
+          result.add(entry);
+        }
+      } else {
+        if (hit) {
+          System.out.println("stopping!");
+          break;
+        } else {
+          hit = false;
+        }
+      }
+    }
+    if (logger.isDebugEnabled()) {
+      logger.debug("Result count: " + result.size());
+      logger.debug("Result: " + result);
+    }
+    return result;
+
+  }
 }

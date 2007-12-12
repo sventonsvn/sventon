@@ -49,8 +49,7 @@ import java.util.Set;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,
- *HttpServletResponse,BindException)}</code>.
+ * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -61,15 +60,14 @@ import java.util.Set;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository,de.berlios.sventon.web.command.SVNBaseCommand,SVNRevision,de.berlios.sventon.web.model.UserContext,
+ * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,
  *HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,
- *BindException)}
+ * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserContext,HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -89,11 +87,11 @@ import java.util.Set;
  * </tr>
  * <tr>
  * <td>command</td>
- * <td>{@link de.berlios.sventon.web.command.SVNBaseCommand}-object</td>
+ * <td>{@link SVNBaseCommand}-object</td>
  * </tr>
  * </table> <p/> <b>Input arguments</b><br>
  * Input to this argument is wrapped in a
- * <code>{@link de.berlios.sventon.web.command.SVNBaseCommand}</code> object by the
+ * <code>{@link SVNBaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>SVNBaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception

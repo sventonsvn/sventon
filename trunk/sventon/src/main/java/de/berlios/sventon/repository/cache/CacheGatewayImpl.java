@@ -24,8 +24,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -81,16 +81,6 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile("/" + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
-        RepositoryEntry.Kind.any, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
@@ -99,7 +89,7 @@ public final class CacheGatewayImpl implements CacheGateway {
     if (rootDir.endsWith("/")) {
       rootDir = rootDir.substring(0, rootDir.length() - 1);
     }
-    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.any, null);
+    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.any);
   }
 
   /**
@@ -109,19 +99,7 @@ public final class CacheGatewayImpl implements CacheGateway {
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
-        RepositoryEntry.Kind.any, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir, final Integer limit)
-      throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile(startDir + ".*?" + searchString + ".*?", Pattern.CASE_INSENSITIVE),
-        RepositoryEntry.Kind.any, limit);
+    return cache.findEntry(searchString, startDir);
   }
 
   /**
@@ -130,7 +108,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(instanceName);
     assertCacheExists(cache, instanceName);
-    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), dir, null);
+    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), dir);
   }
 
   /**

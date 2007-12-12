@@ -25,16 +25,6 @@ import java.util.List;
 public interface CacheGateway {
 
   /**
-   * Searches the cached entries for given string (name fragment).
-   *
-   * @param instanceName Cache instance name
-   * @param searchString String to search for
-   * @return List of entries
-   * @throws CacheException if error
-   */
-  List<RepositoryEntry> findEntry(final String instanceName, final String searchString) throws CacheException;
-
-  /**
    * Searches the cached entries for given string CamelCase name.
    *
    * @param instanceName Cache instance name
@@ -55,18 +45,6 @@ public interface CacheGateway {
    * @throws CacheException if error
    */
   List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir) throws CacheException;
-
-  /**
-   * Searches the cached entries for given string (name fragment) starting from given directory.
-   *
-   * @param instanceName Cache instance name
-   * @param searchString String to search for
-   * @param startDir     Start path
-   * @param limit        Limit search result entries.
-   * @return List of entries
-   * @throws CacheException if error
-   */
-  List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir, final Integer limit) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.
