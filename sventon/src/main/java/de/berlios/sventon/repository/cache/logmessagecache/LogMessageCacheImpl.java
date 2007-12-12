@@ -85,7 +85,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         try {
           writer.close();
         } catch (final IOException ioex) {
-          throw new CacheException("Unable to startup lucene index", ioex);
+          logger.error("Unable to startup lucene index", ioex);
         }
       }
     }
@@ -102,15 +102,28 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   }
 
   /**
+   * Gets the index Reader.
+   *
+   * @return Index reader.
+   * @throws IOException if unable to create reader.
+   */
+  private synchronized IndexReader getIndexReader() throws IOException {
+    return IndexReader.open(directory);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public synchronized List<LogMessage> find(final String queryString) throws CacheException {
     final List<LogMessage> result = new ArrayList<LogMessage>();
     Searcher searcher = null;
+    IndexReader reader = null;
     try {
       logger.debug("Searching for: [" + queryString + "]");
-      final Query query = new QueryParser("content", analyzer.newInstance()).parse(queryString);
+      Query query = new QueryParser("content", analyzer.newInstance()).parse(queryString);
       searcher = getIndexSearcher();
+      reader = getIndexReader();
+      query = query.rewrite(reader);
       final Hits hits = searcher.search(query);
 
       final SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span class=\"searchHit\">", "</span>");
@@ -137,7 +150,14 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         try {
           searcher.close();
         } catch (final IOException ioex) {
-          throw new CacheException("Unable to close lucene searcher", ioex);
+          logger.error("Unable to close lucene index searcher", ioex);
+        }
+      }
+      if (reader != null) {
+        try {
+          reader.close();
+        } catch (final IOException ioex) {
+          logger.error("Unable to close lucene index reader", ioex);
         }
       }
     }
@@ -166,12 +186,12 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         try {
           writer.optimize();
         } catch (final IOException ioex) {
-          throw new CacheException("Unable to optimize lucene index", ioex);
+          logger.error("Unable to optimize lucene index", ioex);
         } finally {
           try {
             writer.close();
           } catch (final IOException ioex) {
-            throw new CacheException("Unable to close lucene index", ioex);
+            logger.error("Unable to close lucene index", ioex);
           }
         }
       }
@@ -197,7 +217,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         try {
           writer.close();
         } catch (final IOException ioex) {
-          throw new CacheException("Unable to close lucene index", ioex);
+          logger.error("Unable to close lucene index", ioex);
         }
       }
     }
@@ -209,7 +229,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    */
   public void clear() throws CacheException {
     logger.debug("Clearing log message cache");
-    IndexWriter writer = null;
+    IndexWriter writer;
     try {
       writer = new IndexWriter(directory, analyzer.newInstance(), true);
       writer.close();
