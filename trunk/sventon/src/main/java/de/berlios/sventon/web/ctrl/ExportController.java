@@ -51,6 +51,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
    * The charset to use for filenames and comments in the archive file.
    */
   private Charset archiveFileCharset;
+  private static final String FALLBACK_CHARSET = "iso-8859-1";
 
   /**
    * Sets the export dir to use when exporting files to be zipped from the repository
@@ -101,13 +102,18 @@ public final class ExportController extends AbstractSVNTemplateController implem
 
   /**
    * Sets the archive file charset to use for filenames and comments.
+   * <p/>
+   * If given charset does not exist, <code>iso-8859-1</code> will be used as a fallback.
    *
-   * @param archiveFileCharset Charset
-   * @throws java.nio.charset.UnsupportedCharsetException
-   *          if unsupported charset
+   * @param archiveFileCharset Charset.
+   * @see #FALLBACK_CHARSET
    */
   public void setArchiveFileCharset(final String archiveFileCharset) {
-    this.archiveFileCharset = Charset.forName(archiveFileCharset);
+    try {
+      this.archiveFileCharset = Charset.forName(archiveFileCharset);
+    } catch (IllegalArgumentException iae) {
+      this.archiveFileCharset = Charset.forName(FALLBACK_CHARSET);
+    }
   }
 
 }
