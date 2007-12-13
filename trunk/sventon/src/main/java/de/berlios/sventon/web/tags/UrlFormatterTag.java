@@ -36,15 +36,11 @@ public final class UrlFormatterTag extends TagSupport {
   @Override
   public int doStartTag() throws JspException {
     try {
-      pageContext.getOut().write(unescapeLegalCharacters(url));
+      pageContext.getOut().write(EncodingUtils.encodeUrl(url));
     } catch (final IOException e) {
       throw new JspException(e);
     }
     return EVAL_BODY_INCLUDE;
-  }
-
-  protected String unescapeLegalCharacters(final String url) {
-    return EncodingUtils.encodeUrl(url);
   }
 
   /**
