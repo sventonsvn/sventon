@@ -10,9 +10,6 @@
  * ====================================================================
  */
 
-var isAjaxRequestSent = false;
-
-
 // function to handle action submissions in repo browser view
 function doAction(formName) {
   var input = $(formName)['actionSelect'];
@@ -168,12 +165,7 @@ function toggleWrap() {
 }
 
 // Requests directory contents in given path
-// Uses the global variable 'isAjaxRequestSent'
 function listFiles(rowNumber, path, name) {
-  if (isAjaxRequestSent) {
-    return false;
-  }
-
   var iconElement = $('dirIcon' + rowNumber);
 
   if (iconElement.className == 'minus') {
@@ -189,19 +181,23 @@ function listFiles(rowNumber, path, name) {
     var url = 'listfiles.ajax';
     var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
     var elementId = 'dir' + rowNumber;
-    var ajax = new Ajax.Updater({success: elementId}, url,
-    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError, insertion:Insertion.After});
-    iconElement.src = 'images/icon_folder.png';
-    iconElement.className = 'minus';
+    var ajax = new Ajax.Updater({success: elementId}, url, {
+      method: 'post', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After, onComplete:
+        function(response) {
+          iconElement.src = 'images/icon_folder.png';
+          iconElement.className = 'minus';
+          Element.hide('spinner');
+        }
+    });
+    iconElement.src = 'images/spinner.gif';
     Element.show('spinner');
-    isAjaxRequestSent = true;
   }
   return false;
 }
 
 function hideLatestRevisions() {
-  if (isLatestRevisionsVisible()) {
-    var infoDiv = $('latestCommitInfoDiv');
+  var infoDiv = $('latestCommitInfoDiv');
+  if (infoDiv.visible()) {
     // Hide details
     Element.hide(infoDiv);
     Element.update(infoDiv, '');
@@ -209,53 +205,29 @@ function hideLatestRevisions() {
   }
 }
 
-function isLatestRevisionsVisible() {
-  return $('latestCommitInfoDiv').visible();
-}
-
 // Requests the N latest revisions
-// Uses the global variable 'isAjaxRequestSent'
 function getLatestRevisions(name, count) {
-  if (isAjaxRequestSent) {
-    return false;
-  }
-
   // Do the ajax call
   var url = 'latestrevisions.ajax';
   var urlParams = 'path=/&revision=head&name=' + name + "&revcount=" + count;
 
-  var ajax = new Ajax.Updater({success: $('latestCommitInfoDiv')}, url,
-  {method: 'post', parameters: urlParams, onSuccess: showLatestRevisionsDiv, onFailure: reportAjaxError});
+  var ajax = new Ajax.Updater({success: $('latestCommitInfoDiv')}, url, {
+    method: 'post', parameters: urlParams, onFailure: reportAjaxError, onSuccess: function(request) {
+    Element.show('latestCommitInfoDiv');
+    Element.update('latestCommitLink', 'hide');
+  }, onComplete: function() {
+    Element.hide('spinner');
+  }});
   Element.show('spinner');
-  isAjaxRequestSent = true;
   return false;
-}
-
-// Function called when ajax request in 'getLatestRevisions' is finished.
-function showLatestRevisionsDiv(request) {
-  Element.show('latestCommitInfoDiv');
-  Element.update('latestCommitLink', 'hide');
-  ajaxSuccess(request)
-}
-
-// General ajax success method
-function ajaxSuccess(request) {
-  isAjaxRequestSent = false;
-  Element.hide('spinner');
 }
 
 // General ajax error alert method
 function reportAjaxError(request) {
-  isAjaxRequestSent = false;
-  Element.hide('spinner');
   alert('An error occured during asynchronous request.');
 }
 
 function showHideHelp(helpDiv, id) {
-  if (isAjaxRequestSent) {
-    return;
-  }
-
   if (helpDiv.visible()) {
     helpDiv.hide();
   } else {
@@ -263,11 +235,12 @@ function showHideHelp(helpDiv, id) {
     var url = 'static.ajax';
     var urlParams = 'id=' + id;
 
-    var ajax = new Ajax.Updater({success: $(helpDiv)}, url,
-    {method: 'post', parameters: urlParams, onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+    var ajax = new Ajax.Updater({success: $(helpDiv)}, url, {
+      method: 'post', parameters: urlParams, onFailure: reportAjaxError, onComplete: function(request) {
+      Element.hide('spinner');
+    }});
     Element.show('spinner');
     Element.show(helpDiv);
-    isAjaxRequestSent = true;
   }
 }
 
@@ -299,17 +272,19 @@ function restoreBlameRev(revision) {
 }
 
 function addEntryToTray(element, dropon, event) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id,
-  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id, {
+    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+    Element.hide('spinner');
+  }});
   Element.show('spinner');
-  isAjaxRequestSent = true;
 }
 
 function removeEntryFromTray(removeEntryUrl) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl,
-  {method: 'post', onSuccess: ajaxSuccess, onFailure: reportAjaxError});
+  var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl, {
+    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+    Element.hide('spinner');
+  }});
   Element.show('spinner');
-  isAjaxRequestSent = true;
 }
 
 function showHideEntryTray() {
