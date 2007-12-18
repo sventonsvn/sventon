@@ -3,6 +3,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindException;
@@ -22,29 +23,30 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
 
     final HttpServletRequest request = new MockHttpServletRequest();
     assertNull(request.getSession().getAttribute("userContext"));
-    final UserContext userContext = ctrl.getUserContext(request);
+    final UserRepositoryContext userRepositoryContext = ctrl.getUserContext(request, "instance1");
     assertNotNull(request.getSession());
     final Object o = request.getSession().getAttribute("userContext");
     assertNotNull(o);
     assertTrue(o instanceof UserContext);
-    assertSame(o, userContext);
+    final UserRepositoryContext contextFromSession = ((UserContext) o).getRepositoryContext("instance1");
+    assertSame(contextFromSession, userRepositoryContext);
   }
 
   public void testParseAndUpdateSortParameters() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
-    final UserContext userContext = new UserContext();
+    final UserRepositoryContext userRepositoryContext = new UserRepositoryContext();
     final AbstractSVNTemplateController ctrl = new TestController();
-    assertNull(userContext.getSortMode());
-    assertNull(userContext.getSortType());
-    ctrl.parseAndUpdateSortParameters(request, userContext);
-    assertEquals("ASC", userContext.getSortMode().toString());
-    assertEquals("FULL_NAME", userContext.getSortType().toString());
+    assertNull(userRepositoryContext.getSortMode());
+    assertNull(userRepositoryContext.getSortType());
+    ctrl.parseAndUpdateSortParameters(request, userRepositoryContext);
+    assertEquals("ASC", userRepositoryContext.getSortMode().toString());
+    assertEquals("FULL_NAME", userRepositoryContext.getSortType().toString());
 
     request.addParameter("sortType", "SIZE");
     request.addParameter("sortMode", "DESC");
-    ctrl.parseAndUpdateSortParameters(request, userContext);
-    assertEquals("DESC", userContext.getSortMode().toString());
-    assertEquals("SIZE", userContext.getSortType().toString());
+    ctrl.parseAndUpdateSortParameters(request, userRepositoryContext);
+    assertEquals("DESC", userRepositoryContext.getSortMode().toString());
+    assertEquals("SIZE", userRepositoryContext.getSortType().toString());
   }
 
   public void testConvertAndUpdateRevision() throws Exception {
@@ -67,7 +69,7 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
 
   private static class TestController extends AbstractSVNTemplateController {
     protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                     final SVNRevision revision, final UserContext userContext,
+                                     final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                      final HttpServletRequest request, final HttpServletResponse response,
                                      final BindException exception) throws Exception {
       return new ModelAndView();

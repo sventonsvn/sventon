@@ -15,23 +15,23 @@
   <th></th>
   <th></th>
 
-  <c:set var="sortModeArrow" value="${userContext.sortMode eq 'ASC' ? 'icon_arrow_up.png' : 'icon_arrow_down.png'}"/>
-  <c:set var="opositeSortType" value="${userContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
+  <c:set var="sortModeArrow" value="${userRepositoryContext.sortMode eq 'ASC' ? 'icon_arrow_up.png' : 'icon_arrow_down.png'}"/>
+  <c:set var="opositeSortType" value="${userRepositoryContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
 
   <th><a href="${sortUrl}&sortType=FULL_NAME&sortMode=${opositeSortType}" style="color: #000000;">
-      <c:if test="${userContext.sortType eq 'FULL_NAME'}"><img alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Name</a>
+      <c:if test="${userRepositoryContext.sortType eq 'FULL_NAME'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"/></c:if>Name</a>
   </th>
   <th></th>
   <th><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
-    <c:if test="${userContext.sortType eq 'SIZE'}"><img alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Size (bytes)</a>
+    <c:if test="${userRepositoryContext.sortType eq 'SIZE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"/></c:if>Size (bytes)</a>
   </th>
   <th><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
-    <c:if test="${userContext.sortType eq 'REVISION'}"><img alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Revision</a>
+    <c:if test="${userRepositoryContext.sortType eq 'REVISION'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"/></c:if>Revision</a>
   </th>
   <th><a href="${sortUrl}&sortType=AUTHOR&sortMode=${opositeSortType}" style="color: #000000;">
-    <c:if test="${userContext.sortType eq 'AUTHOR'}"><img alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Author</a>
+    <c:if test="${userRepositoryContext.sortType eq 'AUTHOR'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"/></c:if>Author</a>
   </th>
   <th><a href="${sortUrl}&sortType=DATE&sortMode=${opositeSortType}" style="color: #000000;">
-    <c:if test="${userContext.sortType eq 'DATE'}"><img alt="${userContext.sortType}" src="images/${sortModeArrow}"/></c:if>Date</a>
+    <c:if test="${userRepositoryContext.sortType eq 'DATE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"/></c:if>Date</a>
   </th>
 </tr>

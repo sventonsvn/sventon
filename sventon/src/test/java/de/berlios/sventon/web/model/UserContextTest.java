@@ -4,76 +4,42 @@ import junit.framework.TestCase;
 
 public class UserContextTest extends TestCase {
 
-  public void testDefaults() throws Exception {
-    final UserContext userContext = new UserContext();
-    assertNull(userContext.getCharset());
-    assertEquals(1, userContext.getLatestRevisionsDisplayCount());
-    assertNull(userContext.getSearchMode());
-    assertNull(userContext.getSortMode());
-    assertNull(userContext.getSortType());
+  public void testAddGetRemoveUserContext() throws Exception {
+    UserContext context = new UserContext();
+
+    //Fetching UserRepositoryContext for a repository that doesn't have URC added
+    UserRepositoryContext urc1 = context.getRepositoryContext("repository1");
+    assertNull(urc1);
+
+    //Add one and try again
+    urc1 = new UserRepositoryContext();
+    context.add("repository1", urc1);
+
+    assertSame(urc1, context.getRepositoryContext("repository1"));
+
+    //Add one more
+    UserRepositoryContext urc2 = new UserRepositoryContext();
+    context.add("repository2", urc2);
+
+    assertSame(urc1, context.getRepositoryContext("repository1"));
+    assertSame(urc2, context.getRepositoryContext("repository2"));
+
+    //Re-adding changes nothing
+    context.add("repository1", urc1);
+    assertSame(urc1, context.getRepositoryContext("repository1"));
+    assertSame(urc2, context.getRepositoryContext("repository2"));
+
+    //Adding a new URC instance for an existing repository overwrites
+    UserRepositoryContext urc3 = new UserRepositoryContext();
+    context.add("repository1", urc3);
+    assertSame(urc3, context.getRepositoryContext("repository1"));
+    assertSame(urc2, context.getRepositoryContext("repository2"));
+
+    //Remove context
+    context.remove("repository1");
+    assertNull(context.getRepositoryContext("repository1"));
+
+    //Removing non-existing context is scilently ignored
+    context.remove("repository9");    
   }
-
-  public void testHasCredentials() throws Exception {
-    final UserContext userContext = new UserContext();
-    assertFalse(userContext.hasCredentials());
-    userContext.setUid("uid");
-    assertFalse(userContext.hasCredentials());
-    userContext.setPwd("pwd");
-    assertTrue(userContext.hasCredentials());
-  }
-
-  public void testSetUid() throws Exception {
-    final UserContext userContext = new UserContext();
-    userContext.setUid("userid");
-    assertEquals("userid", userContext.getUid());
-
-    //test null case
-    userContext.setUid(null);
-    assertEquals(null, userContext.getUid());
-  }
-
-  public void testSetPwd() throws Exception {
-    final UserContext userContext = new UserContext();
-    userContext.setPwd("password");
-    assertEquals("password", userContext.getPwd());
-
-    //test null case
-    userContext.setPwd(null);
-    assertEquals(null, userContext.getPwd());
-  }
-
-  //Test toString to make sure pwd and uid is not outputted
-  public void testToString() throws Exception {
-
-    String testString = "UserContext[sortType=<null>," +
-       "sortMode=<null>," +
-       "latestRevisionsDisplayCount=1," +
-       "charset=<null>," +
-       "uid=*****," +
-       "pwd=*****]";
-
-    final UserContext userContext = new UserContext();
-    userContext.setUid("uid");
-    userContext.setPwd("pwd");
-    assertEquals(testString, userContext.toString());
-
-    testString = "UserContext[sortType=<null>," +
-       "sortMode=<null>," +
-       "latestRevisionsDisplayCount=1," +
-       "charset=<null>," +
-       "uid=<null>," +
-       "pwd=*****]";
-    userContext.setUid(null);
-    assertEquals(testString, userContext.toString());
-
-    testString = "UserContext[sortType=<null>," +
-       "sortMode=<null>," +
-       "latestRevisionsDisplayCount=1," +
-       "charset=<null>," +
-       "uid=<null>," +
-       "pwd=<null>]";
-    userContext.setPwd(null);
-    assertEquals(testString, userContext.toString());
-  }
-
 }

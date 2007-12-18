@@ -19,7 +19,7 @@
 <select class="sventonSelect" name="latestRevisionsSelect" onChange="latestRevisionsCount = this.options[this.selectedIndex].value; getLatestRevisions('${command.name}', latestRevisionsCount);">
   <option class="sventonSelectOption" value="1">1</option>
   <c:forEach var="i" begin="${2}" end="${maxRevisionsCount}">
-    <option ${userContext.latestRevisionsDisplayCount == i ? 'selected' : ''} value="${i}">${i}</option>
+    <option ${userRepositoryContext.latestRevisionsDisplayCount == i ? 'selected' : ''} value="${i}">${i}</option>
   </c:forEach>
 </select>
 <span>Number of logs to show</span>

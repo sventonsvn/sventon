@@ -30,7 +30,7 @@
       <th>Name</th>
       <th></th>
     </tr>
-    <c:forEach var="entry" items="${userContext.repositoryEntryTray.unmodifiableEntries}">
+    <c:forEach var="entry" items="${userRepositoryContext.repositoryEntryTray.unmodifiableEntries}">
       <c:url value="repobrowser.svn" var="entryTrayViewUrl">
         <c:param name="path" value="${entry.fullEntryName}" />
         <c:param name="revision" value="${command.revision}" />
