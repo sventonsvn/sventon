@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -38,11 +38,11 @@ public class GetLatestRevisionsController extends AbstractSVNTemplateController 
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    long revisionCount = userContext.getLatestRevisionsDisplayCount();
+    long revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
     logger.debug("Getting [" + revisionCount + "] latest revisions");
     final List<SVNLogEntry> revisions = getRepositoryService().getLatestRevisions(
         svnCommand.getName(), repository, revisionCount);

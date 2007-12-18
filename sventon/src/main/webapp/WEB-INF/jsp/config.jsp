@@ -21,7 +21,7 @@
     function toggleAccessControl() {
       var accessControl = $('accessControlCheckbox');
       ['global-uid', 'global-pwd', 'caching'].each(accessControl.checked ? Element.hide : Element.show);
-      ['connection-test-uid', 'connection-test-pwd'].each(!accessControl.checked ? Element.show : Element.hide);
+      ['connection-test-uid', 'connection-test-pwd'].each(accessControl.checked ? Element.show : Element.hide);
     }
     window.onload = toggleAccessControl;
   </script>

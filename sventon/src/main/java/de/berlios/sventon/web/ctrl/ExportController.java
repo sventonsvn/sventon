@@ -15,7 +15,7 @@ import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -66,7 +66,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 

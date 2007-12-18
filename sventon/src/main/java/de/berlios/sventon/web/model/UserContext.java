@@ -11,245 +11,50 @@
  */
 package de.berlios.sventon.web.model;
 
-import de.berlios.sventon.repository.RepositoryEntryComparator;
-import de.berlios.sventon.repository.RepositoryEntrySorter;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import java.io.Serializable;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Class containing user specific data.
  * An instance will be stored on the user's HTTPSession.
+ * This class works more or less as a map and holds zero or more
+ * {@link de.berlios.sventon.web.model.UserRepositoryContext} instances.
  *
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
  */
 public final class UserContext implements Serializable {
 
-  /**
-   * The sort type.
-   */
-  private RepositoryEntryComparator.SortType sortType;
+  private Map<String, UserRepositoryContext> repositoryContexts = new HashMap<String, UserRepositoryContext>();
 
   /**
-   * Sort mode.
-   */
-  private RepositoryEntrySorter.SortMode sortMode;
-
-  /**
-   * Revisions display count. Default set to 1.
-   */
-  private int latestRevisionsDisplayCount = 1;
-
-  /**
-   * The user chosen charset.
-   */
-  private String charset;
-
-  /**
-   * The user's repository entry tray.
-   */
-  private RepositoryEntryTray repositoryEntryTray = new RepositoryEntryTray();
-
-  /**
-   * Search mode.
+   * Get a user context given the repository name.
    *
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   * @param repositoryName Repository name.
+   * @return Matching instance, {@code null} if not found.
    */
-  private String searchMode;
+  public UserRepositoryContext getRepositoryContext(final String repositoryName) {
+    return repositoryContexts.get(repositoryName);
+  }
 
   /**
-   * User id.
-   */
-  private String uid;
-
-  /**
-   * Password.
-   */
-  private String pwd;
-
-  /**
-   * Gets the sort type, i.e. the field to sort on.
+   * Add new {@link de.berlios.sventon.web.model.UserRepositoryContext} instances.
    *
-   * @return Sort type
+   * @param repositoryName Repository name to use for binding the context.
+   * @param urc            Context.
    */
-  public RepositoryEntryComparator.SortType getSortType() {
-    return sortType;
+  public void add(final String repositoryName, final UserRepositoryContext urc) {
+    repositoryContexts.put(repositoryName, urc);
   }
 
   /**
-   * Sets the sort type, i.e. which field to sort on.
+   * Remove a {@link de.berlios.sventon.web.model.UserRepositoryContext} instance.
    *
-   * @param sortType Sort type
+   * @param repositoryName Repository name for context to remove.
    */
-  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
-    if (sortType != null) {
-      this.sortType = sortType;
-    }
+  public void remove(final String repositoryName) {
+    repositoryContexts.remove(repositoryName);
   }
 
-  /**
-   * Gets the sort mode, ascending or descending.
-   *
-   * @return Sort mode
-   */
-  public RepositoryEntrySorter.SortMode getSortMode() {
-    return sortMode;
-  }
-
-  /**
-   * Sets the sort mode.
-   *
-   * @param sortMode Sort mode
-   */
-  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
-    if (sortMode != null) {
-      this.sortMode = sortMode;
-    }
-  }
-
-  /**
-   * Sets how many revisions that should be displayed in the <i>latest commit info</i> DIV.
-   *
-   * @param latestRevisionsDisplayCount Count
-   */
-  public void setLatestRevisionsDisplayCount(final int latestRevisionsDisplayCount) {
-    this.latestRevisionsDisplayCount = latestRevisionsDisplayCount;
-  }
-
-  /**
-   * Gets number of revisions that should be displayed in the <i>latest commit info</i> DIV.
-   *
-   * @return Count
-   */
-  public int getLatestRevisionsDisplayCount() {
-    return latestRevisionsDisplayCount;
-  }
-
-  /**
-   * Gets the user's charset.
-   *
-   * @return Charset
-   */
-  public String getCharset() {
-    return charset;
-  }
-
-  /**
-   * Sets the user's charset.
-   *
-   * @param charset Charset
-   */
-  public void setCharset(final String charset) {
-    this.charset = charset;
-  }
-
-  /**
-   * Gets the user's search mode.
-   *
-   * @return Search mode
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
-   */
-  public String getSearchMode() {
-    return searchMode;
-  }
-
-  /**
-   * Sets the user's search mode.
-   *
-   * @param searchMode Search mode
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see de.berlios.sventon.web.ctrl.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
-   */
-  public void setSearchMode(final String searchMode) {
-    this.searchMode = searchMode;
-  }
-
-  /**
-   * Gets the repository entry tray.
-   *
-   * @return The entry tray instance.
-   */
-  public RepositoryEntryTray getRepositoryEntryTray() {
-    return repositoryEntryTray;
-  }
-
-  /**
-   * Gets the user id.
-   *
-   * @return User id, or null.
-   */
-  public String getUid() {
-    return decodeBase64(uid);
-  }
-
-  /**
-   * Sets the user id.
-   * <p/>
-   * The uid is stored obfuscated as Base64.
-   *
-   * @param uid User id.
-   */
-  public void setUid(final String uid) {
-    this.uid = encodeBase64(uid);
-  }
-
-  /**
-   * Gets the password.
-   *
-   * @return Password, or null.
-   */
-  public String getPwd() {
-    return decodeBase64(pwd);
-  }
-
-  /**
-   * Sets the password.
-   * The pwd is stored obfuscated as Base64.
-   *
-   * @param pwd Password.
-   */
-  public void setPwd(final String pwd) {
-    this.pwd = encodeBase64(pwd);
-  }
-
-  /**
-   * Checks if user id and password has been set.
-   *
-   * @return True if user id and password has been set, false if not.
-   */
-  public boolean hasCredentials() {
-    return uid != null && pwd != null;
-  }
-
-  private String encodeBase64(final String s) {
-    if (s != null) {
-      return new String(Base64.encodeBase64(s.getBytes()));
-    } else {
-      return null;
-    }
-  }
-
-  private String decodeBase64(final String s) {
-    if (s != null) {
-      return new String(Base64.decodeBase64(s.getBytes()));
-    } else {
-      return null;
-    }
-  }
-
-  @Override
-  public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-       append("sortType", sortType).
-       append("sortMode", sortMode).
-       append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
-       append("charset", charset).
-       append("uid", uid != null ? "*****" : "<null>").
-       append("pwd", pwd != null ? "*****" : "<null>").
-       toString();
-  }
+  //TODO: Add toString()
 }

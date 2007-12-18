@@ -11,11 +11,11 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.model.FileExtensionList;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.model.FileExtensionList;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import de.berlios.sventon.web.support.FileExtensionFilter;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -42,11 +42,11 @@ public final class RepoBrowserController extends ListDirectoryContentsController
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, revision, userContext, request,
+    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, revision, userRepositoryContext, request,
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();
@@ -63,7 +63,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
         logger.debug("Bypassing empty directory: " + svnCommand.getPath());
         svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
         final ModelAndView bypassedModelAndView =
-            svnHandle(repository, svnCommand, revision, userContext, request, response, exception);
+            svnHandle(repository, svnCommand, revision, userRepositoryContext, request, response, exception);
         bypassedModelAndView.getModel().put("bypassed", true);
         return bypassedModelAndView;
       }
@@ -74,8 +74,8 @@ public final class RepoBrowserController extends ListDirectoryContentsController
       entries = fileExtensionFilter.filter(entries);
     }
 
-    logger.debug("Sort params: " + userContext.getSortType().name() + ", " + userContext.getSortMode());
-    new RepositoryEntrySorter(userContext.getSortType(), userContext.getSortMode()).sort(entries);
+    logger.debug("Sort params: " + userRepositoryContext.getSortType().name() + ", " + userRepositoryContext.getSortMode());
+    new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");
     model.put("svndir", entries);

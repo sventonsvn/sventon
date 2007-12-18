@@ -16,7 +16,7 @@ import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -42,7 +42,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -56,7 +56,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
 
     try {
       final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-          userContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+          userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);

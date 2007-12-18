@@ -11,15 +11,15 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.repository.LogMessage;
+import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +38,7 @@ public class GetLogMessageController extends AbstractSVNTemplateController imple
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 

@@ -14,7 +14,7 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.model.AnnotatedTextFile;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -60,13 +60,13 @@ public final class BlameController extends AbstractSVNTemplateController impleme
    */
   @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     logger.debug("Blaming path: " + svnCommand.getPath() + ", rev: " + FIRST_REVISION + " - " + revision);
 
-    final String charset = userContext.getCharset();
+    final String charset = userRepositoryContext.getCharset();
     logger.debug("Using charset encoding: " + charset);
 
     final AnnotatedTextFile annotatedFile =
