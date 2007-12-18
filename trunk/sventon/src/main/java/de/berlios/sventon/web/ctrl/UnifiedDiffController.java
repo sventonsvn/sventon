@@ -15,7 +15,7 @@ import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -40,7 +40,7 @@ public final class UnifiedDiffController extends AbstractSVNTemplateController i
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserContext userContext,
+                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -53,7 +53,7 @@ public final class UnifiedDiffController extends AbstractSVNTemplateController i
     logger.debug("Using: " + diffCommand);
 
     try {
-      final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userContext.getCharset(),
+      final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userRepositoryContext.getCharset(),
           getInstanceConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
