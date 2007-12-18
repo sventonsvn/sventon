@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,10 +49,13 @@ public final class ListInstancesController extends AbstractController {
     model.put("instanceNames", application.getInstanceNames());
 
     // Make sure session is cleared (credentials etc.)
+    //TODO: Clear session only if logout param is supplied
+    /*
     final HttpSession session = request.getSession(false);
     if (session != null) {
       session.invalidate();
     }
+    */
 
     return new ModelAndView("listInstances", model);
   }
