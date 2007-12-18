@@ -206,9 +206,9 @@
     <c:if test="${useCache}">
       <td align="right" style="white-space: nowrap;">
         <spring:message code="search.text"/>
-        <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${userContext.searchMode eq 'entries' ? 'checked' : ''}/>
+        <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${userRepositoryContext.searchMode eq 'entries' ? 'checked' : ''}/>
         <label for="entrySearch">entries</label>
-        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userContext.searchMode eq 'logMessages' ? 'checked' : ''}>
+        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userRepositoryContext.searchMode eq 'logMessages' ? 'checked' : ''}>
         <label for="logSearch">logs</label>
         <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''} />
         <input type="hidden" name="startDir" value="${command.pathPart}"/>
