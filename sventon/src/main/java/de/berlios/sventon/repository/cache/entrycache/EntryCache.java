@@ -198,7 +198,6 @@ public abstract class EntryCache implements Cache {
 
     boolean hit = false;
     for (final RepositoryEntry entry : cachedEntries) {
-      System.out.println(entry.getFullEntryName());
       if (entry.getPath().startsWith(startDir)) {
         hit = true;
         if (entry.getName().contains(searchString)) {
@@ -206,7 +205,6 @@ public abstract class EntryCache implements Cache {
         }
       } else {
         if (hit) {
-          System.out.println("stopping!");
           break;
         } else {
           hit = false;
