@@ -427,11 +427,10 @@ public class RepositoryServiceImpl implements RepositoryService {
       }
     };
 
-    final SVNRevision pegRev = SVNRevision.HEAD;
     final SVNRevision startRev = SVNRevision.create(0);
     final SVNRevision endRev = SVNRevision.create(blameRevision);
 
-    logClient.doAnnotate(SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), pegRev, startRev,
+    logClient.doAnnotate(SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), endRev, startRev,
         endRev, false, handler, charset);
     try {
       annotatedTextFile.colorize();
