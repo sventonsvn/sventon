@@ -42,6 +42,18 @@ public class UserRepositoryContextTest extends TestCase {
     assertEquals(null, context.getPwd());
   }
 
+  public void testClearCredentials() throws Exception {
+    final UserRepositoryContext context = new UserRepositoryContext();
+    context.setPwd("password");
+    context.setUid("user");
+    assertEquals("password", context.getPwd());
+    assertEquals("user", context.getUid());
+
+    context.clearCredentials();
+    assertNull(context.getPwd());
+    assertNull(context.getUid());
+  }
+
   //Test toString to make sure pwd and uid is not outputted
   public void testToString() throws Exception {
 

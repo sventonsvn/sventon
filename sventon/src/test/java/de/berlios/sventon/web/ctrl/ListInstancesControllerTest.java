@@ -1,6 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -41,8 +42,17 @@ public class ListInstancesControllerTest extends TestCase {
 
     //Create a mock session and prepare it. After the contrller call completes, the session should be empty.
     final MockHttpSession session = new MockHttpSession();
-    final UserRepositoryContext context = new UserRepositoryContext();
-    session.putValue("userRepositoryContext", context);
+    final UserRepositoryContext context1 = new UserRepositoryContext();
+    context1.setUid("UID1");
+    context1.setPwd("PWD1");
+    final UserRepositoryContext context2 = new UserRepositoryContext();
+    context2.setUid("UID2");
+    context2.setPwd("PWD2");
+    final UserContext userContext = new UserContext();
+    userContext.add("repo1", context1);
+    userContext.add("repo2", context2);
+
+    session.putValue("userContext", userContext);
     request.setSession(session);
 
     final ListInstancesController controller = new ListInstancesController();
@@ -52,13 +62,76 @@ public class ListInstancesControllerTest extends TestCase {
 
     ModelAndView modelAndView = controller.handleRequestInternal(request, response);
     assertEquals("listInstances", modelAndView.getViewName());
-    assertSame(context, session.getAttribute("userRepositoryContext"));
+    assertSame(userContext, session.getAttribute("userContext"));
+    UserContext uCFromSession = (UserContext) session.getAttribute("userContext");
+    UserRepositoryContext uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    assertEquals("UID1", uRC1FromSession.getUid());
+    assertEquals("PWD1", uRC1FromSession.getPwd());
 
-    //Now try again, this time supply logout param
+    UserRepositoryContext uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    assertEquals("UID2", uRC2FromSession.getUid());
+    assertEquals("PWD2", uRC2FromSession.getPwd());
+
+    //Now try again, this time with an incorrect repository name
     request.setParameter("logout", "true");
+    request.setParameter("instanceName", "repoWRONG");
     modelAndView = controller.handleRequestInternal(request, response);
     assertEquals("listInstances", modelAndView.getViewName());
-    assertNull(session.getAttribute("userRepositoryContext"));
+    assertSame(userContext, session.getAttribute("userContext"));
+    uCFromSession = (UserContext) session.getAttribute("userContext");
+    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    assertEquals("UID1", uRC1FromSession.getUid());
+    assertEquals("PWD1", uRC1FromSession.getPwd());
+
+    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    assertEquals("UID2", uRC2FromSession.getUid());
+    assertEquals("PWD2", uRC2FromSession.getPwd());
+
+    //Now try again, this time with no repository name
+    request.setParameter("logout", "true");
+    request.setParameter("instanceName", "");
+    modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("listInstances", modelAndView.getViewName());
+    assertSame(userContext, session.getAttribute("userContext"));
+    uCFromSession = (UserContext) session.getAttribute("userContext");
+    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    assertEquals("UID1", uRC1FromSession.getUid());
+    assertEquals("PWD1", uRC1FromSession.getPwd());
+
+    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    assertEquals("UID2", uRC2FromSession.getUid());
+    assertEquals("PWD2", uRC2FromSession.getPwd());
+
+    //Now try again, this time with no logout param
+    request.setParameter("logout", "");
+    request.setParameter("instanceName", "repo1");
+    modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("listInstances", modelAndView.getViewName());
+    assertSame(userContext, session.getAttribute("userContext"));
+    uCFromSession = (UserContext) session.getAttribute("userContext");
+    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    assertEquals("UID1", uRC1FromSession.getUid());
+    assertEquals("PWD1", uRC1FromSession.getPwd());
+
+    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    assertEquals("UID2", uRC2FromSession.getUid());
+    assertEquals("PWD2", uRC2FromSession.getPwd());
+
+    //Now try again, this time supply correct logout param and repo name
+    request.setParameter("logout", "true");
+    request.setParameter("instanceName", "repo1");
+    modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("listInstances", modelAndView.getViewName());
+
+    assertSame(userContext, session.getAttribute("userContext"));
+    uCFromSession = (UserContext) session.getAttribute("userContext");
+    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    assertNull(uRC1FromSession.getUid());
+    assertNull(uRC1FromSession.getPwd());
+
+    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    assertEquals("UID2", uRC2FromSession.getUid());
+    assertEquals("PWD2", uRC2FromSession.getPwd());
 
   }
 }

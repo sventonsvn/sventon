@@ -216,6 +216,11 @@ public class UserRepositoryContext implements Serializable {
     return uid != null && pwd != null;
   }
 
+  public void clearCredentials() {
+    uid = null;
+    pwd = null;
+  }
+
   private String encodeBase64(final String s) {
     if (s != null) {
       return new String(Base64.encodeBase64(s.getBytes()));

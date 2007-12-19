@@ -25,6 +25,7 @@
       <c:if test="${userRepositoryContext.uid ne null}">
         <c:url value="listinstances.svn" var="logout">
           <c:param name="logout" value="true"/>
+          <c:param name="instanceName" value="${command.name}"/>
         </c:url>
         <a class="sventonHeaderLink" href="${logout}">[logout]</a>
       </c:if>
