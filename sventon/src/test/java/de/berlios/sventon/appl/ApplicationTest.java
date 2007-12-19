@@ -28,22 +28,23 @@ public class ApplicationTest extends TestCase {
 
   public void testStoreInstanceConfigurations() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("test");
+
+    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("testrepos1");
     instanceConfiguration1.setRepositoryUrl("http://localhost/1");
     instanceConfiguration1.setUid("user1");
     instanceConfiguration1.setPwd("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("testrepos2");
     instanceConfiguration2.setRepositoryUrl("http://localhost/2");
     instanceConfiguration2.setUid("user2");
     instanceConfiguration2.setPwd("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance("testrepos1", instanceConfiguration1);
-    application.addInstance("testrepos2", instanceConfiguration2);
+    application.addInstance(instanceConfiguration1);
+    application.addInstance(instanceConfiguration2);
 
     final File propFile = new File(TEMPDIR, "tmpconfigfilename");
     assertFalse(propFile.exists());
@@ -58,18 +59,19 @@ public class ApplicationTest extends TestCase {
 
   public void testGetConfigurationAsProperties() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
-    final InstanceConfiguration config1 = new InstanceConfiguration("test");
+
+    final InstanceConfiguration config1 = new InstanceConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
     config1.setUid("");
     config1.setPwd("");
 
-    final InstanceConfiguration config2 = new InstanceConfiguration("test");
+    final InstanceConfiguration config2 = new InstanceConfiguration("test2");
     config2.setRepositoryUrl("http://repo2");
     config2.setUid("");
     config2.setPwd("");
 
-    application.addInstance("test1", config1);
-    application.addInstance("test2", config2);
+    application.addInstance(config1);
+    application.addInstance(config2);
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);

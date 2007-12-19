@@ -118,7 +118,7 @@ public final class ConfigurationController extends AbstractFormController {
 
     } else {
       final InstanceConfiguration instanceConfiguration = confCommand.createInstanceConfiguration();
-      application.addInstance(confCommand.getName(), instanceConfiguration);
+      application.addInstance(instanceConfiguration);
       model.put("addedInstances", application.getInstanceNames());
       model.put("latestAddedInstance", confCommand.getName());
       return new ModelAndView("confirmAddConfig", model);
