@@ -25,7 +25,6 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
     instanceConfiguration.setCacheUsed(true);
     application.addInstance(instanceName, instanceConfiguration);
     application.setConfigured(true);
-    application.setRepositoryService(new RepositoryServiceImpl());
 
     final ObjectCache cache = createMemoryCache();
 
@@ -35,6 +34,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
       revisionObservable.setMaxRevisionCountPerUpdate(3);
       revisionObservable.setApplication(application);
+      revisionObservable.setRepositoryService(new RepositoryServiceImpl());
       assertFalse(application.getInstance(instanceName).isUpdatingCache());
       revisionObservable.update(instanceName, new TestRepository(), cache, false);
       assertFalse(application.getInstance(instanceName).isUpdatingCache());

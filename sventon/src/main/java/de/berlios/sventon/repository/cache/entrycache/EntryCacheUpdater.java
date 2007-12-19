@@ -55,6 +55,11 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   private Application application;
 
   /**
+   * Service.
+   */
+  private RepositoryService repositoryService;
+
+  /**
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
@@ -111,7 +116,6 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     final int revisionCount = revisions.size();
     final long firstRevision = revisions.get(0).getRevision();
-    final RepositoryService repositoryService = application.getRepositoryService();
     long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
@@ -311,4 +315,14 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       }
     }
   }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
+
 }

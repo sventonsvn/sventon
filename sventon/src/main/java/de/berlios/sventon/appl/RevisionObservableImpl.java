@@ -14,6 +14,7 @@ package de.berlios.sventon.appl;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -60,6 +61,11 @@ public final class RevisionObservableImpl extends Observable implements Revision
    * Maximum number of revisions to get each update.
    */
   private int maxRevisionCountPerUpdate;
+
+  /**
+   * Service.
+   */
+  private RepositoryService repositoryService;
 
   /**
    * Constructor.
@@ -125,7 +131,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
         lastUpdatedRevision = 0L;
       }
 
-      final long headRevision = application.getRepositoryService().getLatestRevision(repository);
+      final long headRevision = repositoryService.getLatestRevision(repository);
 
       // Sanity check
       if (headRevision < lastUpdatedRevision) {
@@ -146,7 +152,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
               ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(application.getRepositoryService().getRevisionsFromRepository(
+          logEntries.addAll(repositoryService.getRevisionsFromRepository(
               repository, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
           setChanged();
@@ -213,6 +219,15 @@ public final class RevisionObservableImpl extends Observable implements Revision
         update(instance.getName(), true);
       }
     }
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
 }
