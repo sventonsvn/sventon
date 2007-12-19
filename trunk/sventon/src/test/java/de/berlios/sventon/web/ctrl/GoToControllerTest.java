@@ -30,7 +30,7 @@ public class GoToControllerTest extends TestCase {
     ctrl.setRepositoryService(mockService);
 
     // Test NodeKind.FILE
-    EasyMock.expect(mockService.getNodeKind(null, command.getPath(), revision.getNumber())).andStubReturn(SVNNodeKind.FILE);
+    expect(mockService.getNodeKind(null, command.getPath(), revision.getNumber())).andStubReturn(SVNNodeKind.FILE);
     replay(mockService);
 
     ModelAndView modelAndView = ctrl.svnHandle(null, command, revision, null, mockRequest, null, null);
