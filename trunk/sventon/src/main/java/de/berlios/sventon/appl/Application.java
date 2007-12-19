@@ -118,7 +118,7 @@ public final class Application {
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
     for (final Instance instance : getInstances()) {
-      final String instanceName = instance.getName();
+      final String instanceName = instance.getConfiguration().getInstanceName();
       if (instance.getConfiguration().isCacheUsed()) {
         logger.debug("Registering caches for instance: " + instanceName);
         entryCacheManager.register(instanceName);

@@ -26,11 +26,6 @@ public final class Instance {
   public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
 
   /**
-   * Name of subversion repository intance.
-   */
-  private String instanceName;
-
-  /**
    * The instance configuration.
    */
   private InstanceConfiguration configuration;
@@ -58,15 +53,6 @@ public final class Instance {
    */
   public InstanceConfiguration getConfiguration() {
     return configuration;
-  }
-
-  /**
-   * Gets the name of this instance.
-   *
-   * @return Name
-   */
-  public String getName() {
-    return instanceName;
   }
 
   /**
