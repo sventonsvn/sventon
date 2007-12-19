@@ -15,9 +15,11 @@ import de.berlios.sventon.appl.Application;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public final class ListInstancesController extends AbstractController {
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
-      throws Exception {
+     throws Exception {
 
     // If application config is not ok - redirect to config.jsp
     if (!application.isConfigured()) {
@@ -48,14 +50,14 @@ public final class ListInstancesController extends AbstractController {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("instanceNames", application.getInstanceNames());
 
-    // Make sure session is cleared (credentials etc.)
-    //TODO: Clear session only if logout param is supplied
-    /*
-    final HttpSession session = request.getSession(false);
-    if (session != null) {
-      session.invalidate();
+    //Clear session if logout param is supplied
+
+    final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
+
+    if (logout) {
+      final HttpSession session = request.getSession(false);
+      if (session != null) session.invalidate();
     }
-    */
 
     return new ModelAndView("listInstances", model);
   }
@@ -68,5 +70,4 @@ public final class ListInstancesController extends AbstractController {
   public void setApplication(final Application application) {
     this.application = application;
   }
-
 }
