@@ -12,10 +12,12 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.web.model.UserContext;
+import de.berlios.sventon.web.model.UserRepositoryContext;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,13 +52,17 @@ public final class ListInstancesController extends AbstractController {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("instanceNames", application.getInstanceNames());
 
-    //Clear session if logout param is supplied
-
+    //Clear uid and pwd if logout param is supplied
     final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
+    final String instanceName = ServletRequestUtils.getStringParameter(request, "instanceName", "");
 
     if (logout) {
       final HttpSession session = request.getSession(false);
-      if (session != null) session.invalidate();
+      if (session != null) {
+        final UserContext userContext = (UserContext) session.getAttribute("userContext");
+        final UserRepositoryContext userRepositoryContext = userContext.getRepositoryContext(instanceName);
+        if (userRepositoryContext != null) userRepositoryContext.clearCredentials();
+      }
     }
 
     return new ModelAndView("listInstances", model);
