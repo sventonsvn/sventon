@@ -206,19 +206,19 @@ public final class Application {
    * @throws IOException if IO error occurs.
    */
   private void initConfiguration(final InputStream input) throws IOException {
-    final Set<String> instanceNameSet = new HashSet<String>();
+    final Set<String> instanceNames = new HashSet<String>();
     final Properties props = new Properties();
     props.load(input);
 
     for (final Object object : props.keySet()) {
       final String key = (String) object;
       final String instanceName = key.substring(0, key.indexOf("."));
-      instanceNameSet.add(instanceName);
+      instanceNames.add(instanceName);
     }
 
-    for (final String instanceName : instanceNameSet) {
+    for (final String instanceName : instanceNames) {
       logger.info("Configuring instance: " + instanceName);
-      addInstance(instanceName, InstanceConfiguration.create(instanceName, props));
+      addInstance(InstanceConfiguration.create(instanceName, props));
     }
 
     if (getInstanceCount() > 0) {
@@ -232,11 +232,10 @@ public final class Application {
   /**
    * Adds an instance to the application.
    *
-   * @param instanceName  The name of the instance.
    * @param configuration The instance configuration to add.
    */
-  public void addInstance(final String instanceName, final InstanceConfiguration configuration) {
-    instances.put(instanceName, new Instance(instanceName, configuration));
+  public void addInstance(final InstanceConfiguration configuration) {
+    instances.put(configuration.getInstanceName(), new Instance(configuration));
   }
 
   /**

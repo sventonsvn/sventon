@@ -43,13 +43,11 @@ public final class Instance {
   /**
    * Constructor.
    *
-   * @param instanceName  Instance name.
    * @param configuration Instance configuration
    * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
    */
-  public Instance(final String instanceName, final InstanceConfiguration configuration) {
-    Validate.isTrue(isValidName(instanceName), "Name must be in lower case a-z and/or 0-9");
-    this.instanceName = instanceName;
+  public Instance(final InstanceConfiguration configuration) {
+    Validate.notNull(configuration, "Configuration cannot be null");
     this.configuration = configuration;
   }
 

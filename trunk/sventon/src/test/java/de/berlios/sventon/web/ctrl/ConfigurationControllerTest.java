@@ -1,20 +1,20 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.Instance;
+import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.web.command.ConfigCommand;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import de.berlios.sventon.appl.InstanceConfiguration;
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
-import de.berlios.sventon.web.command.ConfigCommand;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
-import java.io.File;
 
 public class ConfigurationControllerTest extends TestCase {
 
@@ -48,11 +48,11 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final InstanceConfiguration instanceConfig = new InstanceConfiguration("test");
 
+    final InstanceConfiguration instanceConfig = new InstanceConfiguration("firstinstance");
     final Application application = new Application(new File(TEMPDIR), "filename");
     application.setConfigured(false);
-    application.addInstance("firstinstance", instanceConfig);
+    application.addInstance(instanceConfig);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);

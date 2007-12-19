@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.appl;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -99,6 +100,7 @@ public final class InstanceConfiguration {
    * @param instanceName Instance name.
    */
   public InstanceConfiguration(final String instanceName) {
+    Validate.isTrue(Instance.isValidName(instanceName), "Name must be in lower case a-z and/or 0-9");
     this.instanceName = instanceName;
   }
 
@@ -292,5 +294,14 @@ public final class InstanceConfiguration {
    */
   public int getRssItemsCount() {
     return rssItemsCount;
+  }
+
+  /**
+   * Gets the instance name.
+   *
+   * @return
+   */
+  public String getInstanceName() {
+    return instanceName;
   }
 }

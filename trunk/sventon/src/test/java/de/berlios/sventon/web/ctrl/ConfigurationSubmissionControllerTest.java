@@ -54,22 +54,22 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
 
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("testrepos1");
     instanceConfiguration1.setRepositoryUrl("http://localhost/1");
     instanceConfiguration1.setUid("user1");
     instanceConfiguration1.setPwd("abc123");
     instanceConfiguration1.setCacheUsed(false);
     instanceConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("test");
+    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("testrepos2");
     instanceConfiguration2.setRepositoryUrl("http://localhost/2");
     instanceConfiguration2.setUid("user2");
     instanceConfiguration2.setPwd("123abc");
     instanceConfiguration2.setCacheUsed(false);
     instanceConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance("testrepos1", instanceConfiguration1);
-    application.addInstance("testrepos2", instanceConfiguration2);
+    application.addInstance(instanceConfiguration1);
+    application.addInstance(instanceConfiguration2);
     application.setConfigured(false);
     controller.setApplication(application);
 

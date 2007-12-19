@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * The {@code StartController} is the class that handles all entry point calls to the application, i.e. it handles calls to sventon
- * where no request parameters are given.
+ * The {@code StartController} is the class that handles all entry point calls to the
+ * application, i.e. it handles calls to sventon where no request parameters are given.
  * <p/>
  * {@code StartController} checks how many repository instances are configured and
  * redirects to appropriate page. If only one instance is configured
