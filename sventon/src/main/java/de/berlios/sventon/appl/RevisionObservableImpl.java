@@ -216,7 +216,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
   public void updateAll() {
     if (application.isConfigured()) {
       for (final Instance instance : application.getInstances()) {
-        update(instance.getName(), true);
+        update(instance.getConfiguration().getInstanceName(), true);
       }
     }
   }
