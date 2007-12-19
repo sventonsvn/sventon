@@ -51,7 +51,7 @@ import java.util.Set;
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
  * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- * HttpServletRequest,HttpServletResponse,BindException)}</code>.
+ *HttpServletRequest,HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -63,14 +63,14 @@ import java.util.Set;
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
  * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- * HttpServletRequest,HttpServletResponse,BindException)}
+ *HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
  * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- * HttpServletRequest,HttpServletResponse,BindException)}
+ *HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -174,6 +174,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   private static final String SORT_MODE_REQUEST_PARAMETER = "sortMode";
 
+  /**
+   * Service.
+   */
+  private RepositoryService repositoryService;
+
 
   /**
    * Constructor.
@@ -214,10 +219,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final SVNRepository repository;
       if (configuration.isAccessControlEnabled()) {
         repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-           repositoryContext.getUid(), repositoryContext.getPwd());
+            repositoryContext.getUid(), repositoryContext.getPwd());
       } else {
         repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-           configuration.getUid(), configuration.getPwd());
+            configuration.getUid(), configuration.getPwd());
       }
 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
@@ -229,7 +234,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       parseAndUpdateCharsetParameter(request, repositoryContext);
       parseAndUpdateSearchModeParameter(request, repositoryContext);
       final ModelAndView modelAndView =
-         svnHandle(repository, svnCommand, requestedRevision, repositoryContext, request, response, errors);
+          svnHandle(repository, svnCommand, requestedRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
@@ -252,7 +257,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
           model.put("revisions", getRepositoryService().getLatestRevisions(svnCommand.getName(), repository,
-             repositoryContext.getLatestRevisionsDisplayCount()));
+              repositoryContext.getLatestRevisionsDisplayCount()));
         }
 
         modelAndView.addAllObjects(model);
@@ -316,7 +321,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request,
                                                          final UserRepositoryContext userContext) {
     final int latestRevisionsDisplayCount =
-       ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
+        ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
     if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
       if (latestRevisionsDisplayCount > 0) {
         userContext.setLatestRevisionsDisplayCount(latestRevisionsDisplayCount);
@@ -436,10 +441,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @throws SVNException if unable to get dated revision.
    */
   protected final SVNRevision convertAndUpdateRevision(final SVNBaseCommand svnCommand, final SVNRepository repository)
-     throws SVNException {
+      throws SVNException {
 
     if (svnCommand.getRevision() != null && !"".equals(svnCommand.getRevision())
-       && !"HEAD".equals(svnCommand.getRevision())) {
+        && !"HEAD".equals(svnCommand.getRevision())) {
       SVNRevision revision = SVNRevision.parse(svnCommand.getRevision());
       if (revision.getNumber() == -1 && revision.getDate() != null) {
         revision = SVNRevision.create(repository.getDatedRevision(revision.getDate()));
@@ -522,7 +527,16 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return Repository service
    */
   public final RepositoryService getRepositoryService() {
-    return application.getRepositoryService();
+    return repositoryService;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
   /**

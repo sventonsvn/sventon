@@ -373,21 +373,4 @@ public final class Application {
     this.revisionCacheManager = revisionCacheManager;
   }
 
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
-  }
-
-  /**
-   * Gets the repository service.
-   *
-   * @return Service.
-   */
-  public RepositoryService getRepositoryService() {
-    return repositoryService;
-  }
 }

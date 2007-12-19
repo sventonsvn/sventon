@@ -45,7 +45,6 @@
     <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="revisionCacheManager" ref="revisionCacheManager"/>
-    <property name="repositoryService" ref="repositoryService"/>
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>
@@ -58,6 +57,7 @@
 
   <bean id="abstractController" abstract="true">
     <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
     <property name="maxRevisionsCount" value="10"/>
@@ -66,6 +66,7 @@
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
     <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="feedGenerator" ref="syndFeedGenerator"/>
   </bean>
@@ -78,6 +79,7 @@
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
     <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
     <property name="encoding" ref="defaultEncoding"/>
     <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
   </bean>
@@ -267,6 +269,7 @@
   <bean id="revisionObservable" class="de.berlios.sventon.appl.RevisionObservableImpl">
     <constructor-arg ref="observerList"/>
     <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="maxRevisionCountPerUpdate" value="500"/>
   </bean>
@@ -287,6 +290,7 @@
   <bean id="entryCacheUpdater" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheUpdater">
     <constructor-arg index="0" ref="entryCacheManager"/>
     <constructor-arg index="1" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->

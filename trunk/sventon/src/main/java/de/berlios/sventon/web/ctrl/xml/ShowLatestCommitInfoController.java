@@ -14,6 +14,7 @@ package de.berlios.sventon.web.ctrl.xml;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
+import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -53,6 +54,11 @@ public final class ShowLatestCommitInfoController extends AbstractController {
   private String datePattern;
 
   /**
+   * Service.
+   */
+  private RepositoryService repositoryService;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -77,11 +83,11 @@ public final class ShowLatestCommitInfoController extends AbstractController {
 
     final String errorMessage = "Unable to generate RSS feed";
     try {
-      final long headRevision = application.getRepositoryService().getLatestRevision(repository);
+      final long headRevision = repositoryService.getLatestRevision(repository);
       logger.debug("Latest revision is: " + headRevision);
 
       response.getWriter().write(XMLDocumentHelper.getAsString(
-          XMLDocumentHelper.createXML(application.getRepositoryService().getRevision(
+          XMLDocumentHelper.createXML(repositoryService.getRevision(
               instanceName, repository, headRevision), datePattern), encoding));
     } catch (SVNAuthenticationException ae) {
       logger.info(errorMessage + " - " + ae.getMessage());
@@ -118,6 +124,15 @@ public final class ShowLatestCommitInfoController extends AbstractController {
    */
   public void setDatePattern(final String datePattern) {
     this.datePattern = datePattern;
+  }
+
+  /**
+   * Sets the repository service instance.
+   *
+   * @param repositoryService The service instance.
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
   }
 
 }

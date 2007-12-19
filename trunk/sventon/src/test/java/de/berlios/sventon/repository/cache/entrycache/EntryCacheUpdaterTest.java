@@ -31,8 +31,9 @@ public class EntryCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
 
     final Application application = new Application(new File(TEMPDIR), "filename");
-    application.setRepositoryService(new RepositoryServiceImpl());
-    new EntryCacheUpdater(null, application).updateInternal(entryCache, new TestRepository(),
+    final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
+    cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
+    cacheUpdater.updateInternal(entryCache, new TestRepository(),
         new RevisionUpdate("defaultsvn", logEntries, false, false));
 
     assertEquals(4, entryCache.getSize());
