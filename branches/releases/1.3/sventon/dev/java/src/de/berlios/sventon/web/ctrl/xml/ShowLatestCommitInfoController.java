@@ -70,25 +70,32 @@ public final class ShowLatestCommitInfoController extends AbstractController {
       return null;
     }
 
-    final SVNRepository repository =
-        RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName).getConfiguration());
-
-    if (repository == null) {
-      final String errorMessage = "Unable to connect to repository!";
-      logger.error(errorMessage + " Have sventon been configured?");
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
-      return null;
-    }
-
-    final long headRevision = repositoryService.getLatestRevision(repository);
-    logger.debug("Latest revision is: " + headRevision);
+    SVNRepository repository = null;
 
     try {
-      response.getWriter().write(XMLDocumentHelper.getAsString(XMLDocumentHelper.createXML(
-          repositoryService.getRevision(instanceName, repository, headRevision), datePattern),
-          encoding));
-    } catch (IOException ioex) {
-      logger.warn(ioex);
+      repository = RepositoryFactory.INSTANCE.getRepository(application.getInstance(instanceName).getConfiguration());
+
+      if (repository == null) {
+        final String errorMessage = "Unable to connect to repository!";
+        logger.error(errorMessage + " Have sventon been configured?");
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+        return null;
+      }
+
+      final long headRevision = repositoryService.getLatestRevision(repository);
+      logger.debug("Latest revision is: " + headRevision);
+
+      try {
+        response.getWriter().write(XMLDocumentHelper.getAsString(XMLDocumentHelper.createXML(
+            repositoryService.getRevision(instanceName, repository, headRevision), datePattern),
+            encoding));
+      } catch (IOException ioex) {
+        logger.warn(ioex);
+      }
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
+      }
     }
     return null;
   }

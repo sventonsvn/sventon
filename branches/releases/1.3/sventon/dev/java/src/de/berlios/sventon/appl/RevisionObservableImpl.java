@@ -186,7 +186,7 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
       if (configuration.isCacheUsed() && !instance.isUpdatingCache()) {
         synchronized (instanceName) {
           instance.setUpdatingCache(true);
-          SVNRepository repository;
+          SVNRepository repository = null;
           try {
             repository = RepositoryFactory.INSTANCE.getRepository(configuration);
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
@@ -194,6 +194,9 @@ public class RevisionObservableImpl extends Observable implements RevisionObserv
           } catch (final Exception ex) {
             logger.warn("Unable to establish repository connection", ex);
           } finally {
+            if (repository != null) {
+              repository.closeSession();
+            }
             instance.setUpdatingCache(false);
           }
         }
