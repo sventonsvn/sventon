@@ -1,14 +1,25 @@
-<b>Available versions:</b><br/>
+<p>
+Available versions:
+<p>
 
-<div style="padding-left:3px;padding-top:5px;">
+<ul>
 <!--
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v13rc3'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.3 RC3 (beta)</a>
-  <a href="/download/sventon-1.3rc3-r934-bin.zip" onClick="javascript:urchinTracker ('/downloads/v13rc3');">(mirror)</a>
-  <br/>
+  <li><a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v12rc3'); ">1.2 RC3 (beta)</a></li>
 -->
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v130'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.3.0 (stable)</a>
-  <a href="/download/sventon-1.3.0-r970-bin.zip" onClick="javascript:urchinTracker ('/downloads/v130');">(mirror)</a>
-  <br/>
-</div>
+  <li><a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v120'); ">1.2.0 (stable)</a></li>
+</ul>
+
+<p>
+  Alternative download locations:
+</p>
+
+<ul>
+<!--
+  <li><a href="/download/sventon-1.2rc3-r851-bin.zip" onClick="javascript:urchinTracker ('/downloads/v12rc3'); ">1.2 RC3 (beta) binary</a></li>
+  <li><a href="/download/sventon-1.2rc3-r851-src.zip" onClick="javascript:urchinTracker ('/downloads/v12rc3'); ">1.2 RC3 (beta) source</a></li>
+-->
+  <li><a href="/download/sventon-1.2.0-r883-bin.zip" onClick="javascript:urchinTracker ('/downloads/v120'); ">1.2.0 (stable) binary</a></li>
+  <li><a href="/download/sventon-1.2.0-r883-src.zip" onClick="javascript:urchinTracker ('/downloads/v120'); ">1.2.0 (stable) source</a></li>
+</ul>
+
+</p>
