@@ -80,9 +80,10 @@ public final class RSSController extends AbstractController {
     }
 
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
 
+    SVNRepository repository = null;
     try {
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = application.getRepositoryService().getLatestRevisions(
           instanceName, path, repository, configuration.getRssItemsCount());
@@ -91,6 +92,10 @@ public final class RSSController extends AbstractController {
       final String errorMessage = "Unable to generate RSS feed";
       logger.warn(errorMessage, ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
+      }
     }
     return null;
   }

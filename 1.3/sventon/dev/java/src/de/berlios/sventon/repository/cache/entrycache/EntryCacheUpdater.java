@@ -11,11 +11,11 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
+import de.berlios.sventon.appl.AbstractRevisionObserver;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.model.LogEntryActionType;
-import de.berlios.sventon.appl.AbstractRevisionObserver;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.cache.CacheException;
@@ -77,13 +77,18 @@ public class EntryCacheUpdater extends AbstractRevisionObserver {
     logger.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
         + instanceName);
 
+    SVNRepository repository = null;
     try {
       final EntryCache entryCache = entryCacheManager.getCache(instanceName);
       final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-      final SVNRepository repository = RepositoryFactory.INSTANCE.getRepository(configuration);
+      repository = RepositoryFactory.INSTANCE.getRepository(configuration);
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
       logger.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
+      }
     }
   }
 
