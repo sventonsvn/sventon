@@ -96,10 +96,10 @@ public final class HTMLCreator {
           sb.append("\" title=\"Diff with previous version\">").append(logEntryPath.getPath()).append("</a>");
           break;
         case DELETED:
-          // strike
+          // del
           sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
               baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, instanceName, false)));
-          sb.append("\" title=\"Show previous revision\"><strike>").append(logEntryPath.getPath()).append("</strike></a>");
+          sb.append("\" title=\"Show previous revision\"><del>").append(logEntryPath.getPath()).append("</del></a>");
           break;
       }
 
