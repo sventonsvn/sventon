@@ -97,7 +97,7 @@ public final class FileTypeIconTag extends TagSupport {
     } else {
       description = StringEscapeUtils.escapeHtml(description);
     }
-    return "<img src=\"" + icon + "\" title=\"" + description + "\" alt=\"" + description + "\"/>";
+    return "<img src=\"" + icon + "\" title=\"" + description + "\" alt=\"" + description + "\">";
   }
 
   /**

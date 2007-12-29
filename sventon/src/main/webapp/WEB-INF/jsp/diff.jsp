@@ -44,7 +44,7 @@
               <tr>
                 <th style="background-color: white;">
                   <a href="#diff0">
-                    <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff"/>
+                    <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff">
                   </a>
                 </th>
                 <th style="background-color: white;">&nbsp;</th>
@@ -63,7 +63,7 @@
                       <a name="diff${diffCount}"/>
                       <c:set var="diffCount" value="${diffCount + 1}"/>
                       <a href="#diff${diffCount}">
-                        <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff"/>
+                        <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff">
                       </a>
                     </c:if>
                   </td>

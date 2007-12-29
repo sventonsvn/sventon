@@ -61,7 +61,7 @@
       <c:forEach items="${parameters}" var="paramEntry">
         <c:forEach items="${paramEntry.value}" var="parameter">
           <c:if test="${paramEntry.key ne 'pwd' && paramEntry.key ne 'uid'}">
-            <input type="hidden" name="${paramEntry.key}" value="${parameter}"/>
+            <input type="hidden" name="${paramEntry.key}" value="${parameter}">
           </c:if>
         </c:forEach>
       </c:forEach>

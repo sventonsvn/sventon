@@ -29,9 +29,9 @@
     <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">
 
       <!-- Needed by ASVNTC -->
-      <input type="hidden" name="path" value="${command.path}${entry.name}"/>
-      <input type="hidden" name="revision" value="${command.revision}"/>
-      <input type="hidden" name="name" value="${command.name}"/>
+      <input type="hidden" name="path" value="${command.path}${entry.name}">
+      <input type="hidden" name="revision" value="${command.revision}">
+      <input type="hidden" name="name" value="${command.name}">
 
       <c:set var="command" value="${command}"/>
       <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
@@ -67,7 +67,7 @@
                   <c:param name="revision" value="${entry.svnLogEntry.revision}" />
                   <c:param name="name" value="${command.name}" />
                 </c:url>
-                <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)" /></td>
+                <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)"></td>
                 <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${entry.svnLogEntry.revision}</a></td>
               </c:when>
               <c:otherwise>
@@ -78,13 +78,13 @@
                 <td><a href="${showRevInfoUrl}">${entry.svnLogEntry.revision}</a></td>
               </c:otherwise>
             </c:choose>
-            <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br/>')}</a></td>
+            <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br>')}</a></td>
             <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', 'less', 'more'); return false;">[<span id="hdr${rowCount}">more</span>]</a></td>
             <td>${entry.svnLogEntry.author}</td>
             <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
           </tr>
           <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
-            <td valign="top"><b>Changed<br/>paths</b></td><td colspan="4">
+            <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
               <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), "", command.getName(), false, false, response)%>
             </td>
           </tr>
@@ -109,7 +109,7 @@
         </c:choose>
         <tr>
           <td colspan="2">
-            <c:if test="${isFile}"><input type="submit" class="btn" value="diff"/></c:if>
+            <c:if test="${isFile}"><input type="submit" class="btn" value="diff"></c:if>
           </td>
           <td colspan="3">&nbsp;</td>
         </tr>

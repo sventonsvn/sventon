@@ -22,6 +22,6 @@
     <i><spring:message code="logmessage.empty"/></i>
   </c:when>
   <c:otherwise>
-    ${fn:replace(fn:escapeXml(logMessage.message), br, '<br/>')}
+    ${fn:replace(fn:escapeXml(logMessage.message), br, '<br>')}
   </c:otherwise>
 </c:choose>

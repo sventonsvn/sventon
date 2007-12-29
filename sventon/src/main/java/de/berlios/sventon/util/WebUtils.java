@@ -51,7 +51,7 @@ public final class WebUtils {
     if (StringUtils.isEmpty(string)) {
       return string;
     }
-    return string.replaceAll(NL_REGEXP, "<br/>");
+    return string.replaceAll(NL_REGEXP, "<br>");
   }
 
   /**

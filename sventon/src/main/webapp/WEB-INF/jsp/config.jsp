@@ -30,7 +30,7 @@
 <body>
 <sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
 
-<br/>
+<br>
 
 <p>
 <form name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
@@ -39,7 +39,7 @@
     <td valign="top" align="right" style="white-space: nowrap;">Enter repository name:</td>
     <td valign="top">
       <spring:bind path="command.name">
-      <input type="text" name="name" size="30" value="${status.value}"/><c:if test="${status.error}"><span
+      <input type="text" name="name" size="30" value="${status.value}"><c:if test="${status.error}"><span
        class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top">
@@ -55,7 +55,7 @@
     <td valign="top" align="right" style="white-space: nowrap;">Enter subversion repository root url:</td>
     <td valign="top">
       <spring:bind path="command.repositoryUrl">
-      <input type="text" name="repositoryUrl" size="30" value="${status.value}"/><c:if test="${status.error}"><span
+      <input type="text" name="repositoryUrl" size="30" value="${status.value}"><c:if test="${status.error}"><span
        class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top">
@@ -72,10 +72,10 @@
     <td valign="top">
       <spring:bind path="command.zippedDownloadsAllowed">
       <input type="checkbox" name="${status.expression}"
-             <c:if test="${status.value}">checked</c:if>/></td>
+             <c:if test="${status.value}">checked</c:if>></td>
     </spring:bind>
     <td valign="top">
-      Enable/disable the 'download as zip' function. <br/>
+      Enable/disable the 'download as zip' function. <br>
     </td>
   </tr>
   <tr>
@@ -83,15 +83,15 @@
     <td valign="top">
       <spring:bind path="command.enableAccessControl">
       <input type="checkbox" name="${status.expression}" id="accessControlCheckbox"
-             <c:if test="${status.value}">checked</c:if> onclick="toggleAccessControl();"/></td>
+             <c:if test="${status.value}">checked</c:if> onclick="toggleAccessControl();"></td>
     </spring:bind>
     <td valign="top">
       Controls whether user based access control should be enabled. This should be used if access control is
       enabled on the repository and each sventon user should authenticate them self individually. Do not check
       this box if anonymus read access is enabled on the repository or if you have set a global user and
-      password above.<br/>
+      password above.<br>
       If enabled, the search and directory flattening features, as well as the log message search, will be
-      <i>disabled</i>. <br/>
+      <i>disabled</i>. <br>
       Note that enabling user based access control stores user id and password in the user session, this could
       be considered a security problem.
     </td>
@@ -100,7 +100,7 @@
     <td valign="top" align="right" style="white-space: nowrap;">Enter user name:</td>
     <td valign="top">
       <spring:bind path="command.uid">
-      <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span
+      <input type="text" name="${status.expression}" size="30" value="${status.value}"><c:if test="${status.error}"><span
        class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top">(leave blank for anonymous)</td>
@@ -109,7 +109,7 @@
     <td valign="top" align="right" style="white-space: nowrap;">Enter user password:</td>
     <td valign="top">
       <spring:bind path="command.pwd">
-      <input type="password" name="${status.expression}" size="30" value="${status.value}"/><c:if
+      <input type="password" name="${status.expression}" size="30" value="${status.value}"><c:if
        test="${status.error}"><span class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top">(leave blank for anonymous)</td>
@@ -119,18 +119,18 @@
     <td valign="top">
       <spring:bind path="command.cacheUsed">
       <input type="checkbox" name="${status.expression}"
-             <c:if test="${status.value}">checked</c:if>/></td>
+             <c:if test="${status.value}">checked</c:if>></td>
     </spring:bind>
     <td valign="top">
-      Controls whether repository caching feature should be used. <br/>
-      If enabled, the search and directory flattening features will be available, as well as the log message search <br/>
+      Controls whether repository caching feature should be used. <br>
+      If enabled, the search and directory flattening features will be available, as well as the log message search <br>
     </td>
   </tr>
   <tr id="connection-test-uid">
     <td valign="top" align="right" style="white-space: nowrap;">Enter user name for connection test:</td>
     <td valign="top">
       <spring:bind path="command.connectionTestUid">
-      <input type="text" name="${status.expression}" size="30" value="${status.value}"/><c:if test="${status.error}"><span
+      <input type="text" name="${status.expression}" size="30" value="${status.value}"><c:if test="${status.error}"><span
        class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top"></td>
@@ -139,7 +139,7 @@
     <td valign="top" align="right" style="white-space: nowrap;">Enter password for connection test:</td>
     <td valign="top">
       <spring:bind path="command.connectionTestPwd">
-      <input type="password" name="${status.expression}" size="30" value="${status.value}"/><c:if
+      <input type="password" name="${status.expression}" size="30" value="${status.value}"><c:if
        test="${status.error}"><span class="exclamationText">*</span></c:if></td>
     </spring:bind>
     <td valign="top"></td>
@@ -152,7 +152,7 @@
       <spring:hasBindErrors name="command">
         <span class="exclamationText">
           <c:forEach var="errMsgObj" items="${errors.allErrors}">
-            *&nbsp;<spring:message code="${errMsgObj.code}" text="${errMsgObj.defaultMessage}"/><br/>
+            *&nbsp;<spring:message code="${errMsgObj.code}" text="${errMsgObj.defaultMessage}"/><br>
           </c:forEach>
         </span>
       </spring:hasBindErrors>

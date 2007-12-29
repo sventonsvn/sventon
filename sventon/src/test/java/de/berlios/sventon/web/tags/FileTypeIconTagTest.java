@@ -20,11 +20,11 @@ public class FileTypeIconTagTest extends TestCase {
       // expected
     }
 
-    assertEquals("<img src=\"images/icon_file.png\" title=\"\" alt=\"\"/>", iconTag.createImageTag("", mappings));
-    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\"/>", iconTag.createImageTag("filename.txt", mappings));
-    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\"/>", iconTag.createImageTag("filename.TXT", mappings));
+    assertEquals("<img src=\"images/icon_file.png\" title=\"\" alt=\"\">", iconTag.createImageTag("", mappings));
+    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\">", iconTag.createImageTag("filename.txt", mappings));
+    assertEquals("<img src=\"images/icon_txt.png\" title=\"txt\" alt=\"txt\">", iconTag.createImageTag("filename.TXT", mappings));
 
-    assertEquals("<img src=\"images/icon_file_zip.png\" title=\"Web archive (WAR)\" alt=\"Web archive (WAR)\"/>", iconTag.createImageTag("filename.war", mappings));
+    assertEquals("<img src=\"images/icon_file_zip.png\" title=\"Web archive (WAR)\" alt=\"Web archive (WAR)\">", iconTag.createImageTag("filename.war", mappings));
   }
 
   public void testExtractDescriptionFromMapping() throws Exception {

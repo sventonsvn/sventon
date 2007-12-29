@@ -27,7 +27,7 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Added</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=/file3.abc&revision=1&name=sandbox\" title=\"Show\">/file3.abc</a><br/><b>Copy from</b> <a href=\"goto.svn?path=/branch/file3.abc&revision=1&name=sandbox\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"revinfo.svn?revision=1&name=sandbox\">1</a></td>\n" +
+        "    <td><a href=\"goto.svn?path=/file3.abc&revision=1&name=sandbox\" title=\"Show\">/file3.abc</a><br><b>Copy from</b> <a href=\"goto.svn?path=/branch/file3.abc&revision=1&name=sandbox\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"revinfo.svn?revision=1&name=sandbox\">1</a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Replaced</i></td>\n" +
