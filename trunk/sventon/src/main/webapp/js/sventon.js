@@ -258,7 +258,7 @@ function getLogMessage(revision, instanceName, date) {
     },
     onFailure: reportAjaxError
   });
-  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"/></div>', TITLE, 'Log message: ' + date, BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff', ABOVE, true);
+  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"></div>', TITLE, 'Log message: ' + date, BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff', ABOVE, true);
 }
 
 function highlightBlameRev(revision) {

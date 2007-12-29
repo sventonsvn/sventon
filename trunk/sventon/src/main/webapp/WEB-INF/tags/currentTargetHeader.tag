@@ -39,13 +39,13 @@
 </div>
 <c:if test="${hasProperties}">
   <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
-    <br/>
+    <br>
       <table class="sventonPropertiesTable">
         <% application.setAttribute("br", "\n"); %>
         <c:forEach items="${properties}" var="property">
           <tr>
             <td valign="top"><b>${property.key}:&nbsp;</b></td>
-            <td>${fn:replace(property.value, br, '<br/>')}</td>
+            <td>${fn:replace(property.value, br, '<br>')}</td>
           </tr>
         </c:forEach>
       </table>

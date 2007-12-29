@@ -38,7 +38,7 @@
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <c:choose>
         <c:when test="${zipEntry.directory}">
-          <td><img src="images/icon_folder.png" alt="dir"/></td>
+          <td><img src="images/icon_folder.png" alt="dir"></td>
           <td>${zipEntry.name}</td>
         </c:when>
         <c:otherwise>

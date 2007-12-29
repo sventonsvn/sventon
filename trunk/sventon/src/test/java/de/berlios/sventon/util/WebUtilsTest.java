@@ -7,7 +7,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class WebUtilsTest extends TestCase {
 
   public void testNl2br() throws Exception {
-    assertEquals("one<br/>two", WebUtils.nl2br("one\ntwo"));
+    assertEquals("one<br>two", WebUtils.nl2br("one\ntwo"));
   }
 
   public void testReplaceLeadingSpaces() throws Exception {

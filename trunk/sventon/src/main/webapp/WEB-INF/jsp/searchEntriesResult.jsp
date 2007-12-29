@@ -27,9 +27,9 @@
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
     <!-- Needed by ASVNTC -->
-    <input type="hidden" name="path" value="${command.path}"/>
-    <input type="hidden" name="revision" value="${command.revision}"/>
-    <input type="hidden" name="name" value="${command.name}"/>
+    <input type="hidden" name="path" value="${command.path}">
+    <input type="hidden" name="revision" value="${command.revision}">
+    <input type="hidden" name="name" value="${command.name}">
 
     <c:url value="searchentries.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
@@ -64,12 +64,12 @@
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td class="sventonCol1">
-            <input type="checkbox" name="entry" value="${entry.fullEntryName}"/>
+            <input type="checkbox" name="entry" value="${entry.fullEntryName}">
           </td>
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">
               <td class="sventonCol2">
-                <img src="images/icon_folder.png" alt="dir"/>
+                <img src="images/icon_folder.png" alt="dir">
               </td>
               <td class="sventonCol3">
                 <a href="<sventon-ui:formatUrl url='${viewUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
@@ -119,9 +119,9 @@
         <td></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"/></td>
+        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"></td>
         <td>
-          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
+          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!">
         </td>
         <td colspan="5"></td>
       </tr>

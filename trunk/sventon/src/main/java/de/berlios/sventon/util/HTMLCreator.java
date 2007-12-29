@@ -104,7 +104,7 @@ public final class HTMLCreator {
       }
 
       if (logEntryPath.getCopyPath() != null) {
-        sb.append("<br/><b>Copy from</b> ");
+        sb.append("<br><b>Copy from</b> ");
         sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
             baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), instanceName, false)));
         if (showLatestRevInfo) {

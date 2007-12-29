@@ -12,7 +12,7 @@
   */
 %>
 <div id="spinner" style="display: none; position: absolute; left: 0; top: 0; padding: 1em;">
-  <img src="images/spinner.gif" alt="spinner"/>
+  <img src="images/spinner.gif" alt="spinner">
 </div>
 <table class="sventonHeader">
   <tr>

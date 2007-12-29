@@ -26,7 +26,7 @@
     <sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/>
     <sventon:functionLinks pageName="showThumbs"/>
 
-    <br/>
+    <br>
 
     <table border="1">
       <c:forEach items="${thumbnailentries}" var="entry">
@@ -47,7 +47,7 @@
           </td>
           <td width="210px" style="text-align:center;">
             <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
-              <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry}" /></a>
+              <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry}"></a>
           </td>
         </tr>
       </c:forEach>

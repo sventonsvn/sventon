@@ -26,9 +26,9 @@
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
     <!-- Needed by ASVNTC -->
-    <input type="hidden" name="path" value="${command.path}"/>
-    <input type="hidden" name="revision" value="${command.revision}"/>
-    <input type="hidden" name="name" value="${command.name}"/>
+    <input type="hidden" name="path" value="${command.path}">
+    <input type="hidden" name="revision" value="${command.revision}">
+    <input type="hidden" name="name" value="${command.name}">
 
     <c:url value="flatten.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
@@ -52,7 +52,7 @@
           </c:url>
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
-            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"/></td>
+            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"></td>
             <td class="sventonCol2">
               <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
@@ -89,9 +89,9 @@
       </tr>
 
       <tr>
-        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"/></td>
+        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"></td>
         <td>
-          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!"/>
+          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!">
         </td>
         <td colspan="5"></td>
       </tr>
