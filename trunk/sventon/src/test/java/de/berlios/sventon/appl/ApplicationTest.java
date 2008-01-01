@@ -27,6 +27,7 @@ public class ApplicationTest extends TestCase {
   }
 
   public void testStoreInstanceConfigurations() throws Exception {
+    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
     final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("testrepos1");
@@ -46,15 +47,15 @@ public class ApplicationTest extends TestCase {
     application.addInstance(instanceConfiguration1);
     application.addInstance(instanceConfiguration2);
 
-    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
-    assertFalse(propFile.exists());
+    try {
+      assertFalse(propFile.exists());
+      application.storeInstanceConfigurations();
 
-    application.storeInstanceConfigurations();
-
-    //File should now be written
-    assertTrue(propFile.exists());
-    propFile.delete();
-    assertFalse(propFile.exists());
+      //File should now be written
+      assertTrue(propFile.exists());
+    } finally {
+      propFile.delete();
+    }
   }
 
   public void testGetConfigurationAsProperties() throws Exception {
@@ -75,9 +76,9 @@ public class ApplicationTest extends TestCase {
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);
-    assertEquals(7, props.size());
+    assertEquals(8, props.size());
     props = configurations.get(1);
-    assertEquals(7, props.size());
+    assertEquals(8, props.size());
   }
 
   public void testLoadInstanceConfigurations() throws Exception {
