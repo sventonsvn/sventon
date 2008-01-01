@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -40,8 +40,8 @@ public final class SideBySideDiffRow {
   /**
    * Constructor.
    *
-   * @param left      Left source line
-   * @param right     Right source line
+   * @param left  Left source line
+   * @param right Right source line
    */
   public SideBySideDiffRow(final SourceLine left, final SourceLine right) {
     this.left = left;

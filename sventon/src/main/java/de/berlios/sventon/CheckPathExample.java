@@ -1,10 +1,9 @@
 package de.berlios.sventon;
 
-import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
-import static org.tmatesoft.svn.core.SVNNodeKind.NONE;
-
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
+import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
+import static org.tmatesoft.svn.core.SVNNodeKind.NONE;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
