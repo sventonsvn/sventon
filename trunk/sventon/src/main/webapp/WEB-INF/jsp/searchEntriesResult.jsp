@@ -17,7 +17,7 @@
 <html>
   <head>
     <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>sventon repository browser - ${url}</title>
+    <title>sventon repository browser - ${repositoryURL}</title>
   </head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
