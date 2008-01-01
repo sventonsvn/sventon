@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -16,9 +16,9 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Handler class for subversion keyword substitution.

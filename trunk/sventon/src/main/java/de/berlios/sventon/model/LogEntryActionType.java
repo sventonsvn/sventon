@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -66,13 +66,13 @@ public enum LogEntryActionType {
    */
   public static LogEntryActionType parse(final char code) {
     switch (code) {
-      case 'D':
+      case'D':
         return DELETED;
-      case 'M':
+      case'M':
         return MODIFIED;
-      case 'A':
+      case'A':
         return ADDED;
-      case 'R':
+      case'R':
         return REPLACED;
       default:
         throw new IllegalArgumentException("Unable to parse code: " + code);

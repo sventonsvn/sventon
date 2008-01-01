@@ -240,12 +240,12 @@ public class UserRepositoryContext implements Serializable {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-       append("sortType", sortType).
-       append("sortMode", sortMode).
-       append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
-       append("charset", charset).
-       append("uid", uid != null ? "*****" : "<null>").
-       append("pwd", pwd != null ? "*****" : "<null>").
-       toString();
+        append("sortType", sortType).
+        append("sortMode", sortMode).
+        append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
+        append("charset", charset).
+        append("uid", uid != null ? "*****" : "<null>").
+        append("pwd", pwd != null ? "*****" : "<null>").
+        toString();
   }
 }

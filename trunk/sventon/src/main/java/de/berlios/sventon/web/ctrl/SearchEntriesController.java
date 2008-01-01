@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * Copyright (c) 2005-2007 Sventon Project. All rights reserved.
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
  *
  * This software is licensed as described in the file LICENSE, which
  * you should have received as part of this distribution. The terms
@@ -58,8 +58,8 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
     }
 
     logger.debug("Sort params: " +
-       userRepositoryContext.getSortType().name() + ", " +
-       userRepositoryContext.getSortMode());
+        userRepositoryContext.getSortType().name() + ", " +
+        userRepositoryContext.getSortMode());
     new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");
