@@ -40,6 +40,8 @@ public final class RepositoryFactory {
    * Gets a repository instance configured using given <code>InstanceConfiguration</code>.
    * <p/>
    * This method will assign credentials as they are set in the given <code>InstanceConfiguration</code>.
+   * <p/>
+   * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
    *
    * @param svnUrl Subversion URL
    * @param uid    User id
@@ -53,8 +55,8 @@ public final class RepositoryFactory {
     }
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
     if (uid != null) {
-      final BasicAuthenticationManager authManager = new BasicAuthenticationManager(uid, pwd);
 
+      final BasicAuthenticationManager authManager = new BasicAuthenticationManager(uid, pwd);
       repository.setAuthenticationManager(authManager);
     }
     return repository;

@@ -58,6 +58,8 @@ public final class ShowLatestCommitInfoController extends AbstractController {
    */
   private RepositoryService repositoryService;
 
+  private static final String ERROR_MESSAGE = "Unable to get latest commit info";
+
   /**
    * {@inheritDoc}
    */
@@ -73,16 +75,16 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
     final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-    final SVNRepository repository;
-    if (configuration.isAccessControlEnabled()) {
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
-    } else {
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
-          configuration.getUid(), configuration.getPwd());
-    }
 
-    final String errorMessage = "Unable to generate RSS feed";
+    SVNRepository repository = null;
     try {
+      if (configuration.isAccessControlEnabled()) {
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
+      } else {
+        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+            configuration.getUid(), configuration.getPwd());
+      }
+
       final long headRevision = repositoryService.getLatestRevision(repository);
       logger.debug("Latest revision is: " + headRevision);
 
@@ -90,11 +92,15 @@ public final class ShowLatestCommitInfoController extends AbstractController {
           XMLDocumentHelper.createXML(repositoryService.getRevision(
               instanceName, repository, headRevision), datePattern), encoding));
     } catch (SVNAuthenticationException ae) {
-      logger.info(errorMessage + " - " + ae.getMessage());
+      logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());
     } catch (Exception ex) {
-      logger.warn(errorMessage, ex);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+      logger.warn(ERROR_MESSAGE, ex);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ERROR_MESSAGE);
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
+      }
     }
     return null;
   }
