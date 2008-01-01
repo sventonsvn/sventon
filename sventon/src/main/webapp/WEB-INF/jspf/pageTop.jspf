@@ -56,7 +56,7 @@
   <tr>
     <td class="sventonHeadlines" colspan="2">
       <sventon:currentRevision command="${command}" revisionNumber="${numrevision}"/> -
-      <sventon:clickableUrl command="${command}" url="${url}"/>
+      <sventon:clickableUrl command="${command}" url="${repositoryURL}"/>
     </td>
   </tr>
 </table>
