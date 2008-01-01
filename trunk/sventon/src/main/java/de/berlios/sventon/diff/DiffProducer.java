@@ -11,11 +11,14 @@
  */
 package de.berlios.sventon.diff;
 
-import de.regnis.q.sequence.line.diff.*;
+import de.regnis.q.sequence.line.diff.QDiffGenerator;
+import de.regnis.q.sequence.line.diff.QDiffManager;
+import de.regnis.q.sequence.line.diff.QDiffNormalGenerator;
+import de.regnis.q.sequence.line.diff.QDiffUniGenerator;
 
 import java.io.*;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class for producing normal or unified diff results.
@@ -39,6 +42,11 @@ public final class DiffProducer {
    */
   private final String encoding;
 
+  static {
+    QDiffNormalGenerator.setup();
+    QDiffUniGenerator.setup();
+  }
+
   /**
    * Constructor.
    *
@@ -59,13 +67,7 @@ public final class DiffProducer {
    * @throws IOException if IO error occurs.
    */
   public void doNormalDiff(final OutputStream output) throws IOException {
-    QDiffNormalGenerator.setup();
-    final Map<String, String> generatorProperties = new HashMap<String, String>();
-    final QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffNormalGenerator.TYPE, generatorProperties);
-    final Writer writer = new OutputStreamWriter(output);
-    QDiffManager.generateTextDiff(this.left, this.right, this.encoding, writer, generator);
-    writer.flush();
-    writer.close();
+    doDiff(output, QDiffNormalGenerator.TYPE);
   }
 
   /**
@@ -75,9 +77,19 @@ public final class DiffProducer {
    * @throws IOException if IO error occurs.
    */
   public void doUniDiff(final OutputStream output) throws IOException {
-    QDiffUniGenerator.setup();
+    doDiff(output, QDiffUniGenerator.TYPE);
+  }
+
+  /**
+   * Performs a diff of given left, right and type.
+   *
+   * @param output        Result output
+   * @param generatorType {@link QDiffNormalGenerator#TYPE} or {@link QDiffUniGenerator#TYPE}
+   * @throws IOException if IO error occurs.
+   */
+  private void doDiff(final OutputStream output, final String generatorType) throws IOException {
     final Map<String, String> generatorProperties = new HashMap<String, String>();
-    final QDiffGenerator generator = QDiffManager.getDiffGenerator(QDiffUniGenerator.TYPE, generatorProperties);
+    final QDiffGenerator generator = QDiffManager.getDiffGenerator(generatorType, generatorProperties);
     final Writer writer = new OutputStreamWriter(output);
     QDiffManager.generateTextDiff(left, right, encoding, writer, generator);
     writer.flush();

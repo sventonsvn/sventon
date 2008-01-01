@@ -239,8 +239,7 @@ public final class SideBySideDiffCreator {
       case LEFT:
         int addedLines = 0;
         int startLine = diffSegment.getLineIntervalStart(side) + newOffset;
-        for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++)
-        {
+        for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++) {
           resultLines.add(startLine++ - 1, new SourceLine(null, ADDED, ""));
           addedLines++;
         }
