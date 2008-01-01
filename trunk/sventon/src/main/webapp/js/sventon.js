@@ -289,9 +289,9 @@ function removeEntryFromTray(removeEntryUrl) {
 
 function showHideEntryTray() {
   if ($('entryTrayWrapper').visible()) {
-    Effect.SlideUp('entryTrayWrapper');
+    Effect.SlideUp('entryTrayWrapper', {duration:0.3});
   } else {
-    Effect.SlideDown('entryTrayWrapper');
+    Effect.SlideDown('entryTrayWrapper', {duration:0.3});
   }
 }
 
