@@ -212,11 +212,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return prepareExceptionModelAndView(errors, svnCommand);
     }
 
+    SVNRepository repository = null;
     try {
       final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
       final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
 
-      final SVNRepository repository;
       if (configuration.isAccessControlEnabled()) {
         repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
             repositoryContext.getUid(), repositoryContext.getPwd());
@@ -275,6 +275,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         errors.reject(null, ex.getMessage());
       }
       return prepareExceptionModelAndView(errors, svnCommand);
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
+      }
     }
 
   }

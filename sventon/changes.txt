@@ -8,6 +8,9 @@ sventon change history
  [977] Added: Upgraded to Spring 2.5
  [944] Added: Feature #3825 - Entry tray.
 
+[1067] Release 1.3.1 (2007-12-22)
+[1066] Fixed: Sessions were not closed (only affects svn protocol).
+
  [970] Release 1.3.0 (2007-11-28)
 
  [934] Release 1.3 RC3 (2007-10-22)

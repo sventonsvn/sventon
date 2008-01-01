@@ -97,18 +97,23 @@ public final class ConfigCommandValidator implements Validator {
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
         configuration.setUid(command.isEnableAccessControl() ?
-           command.getConnectionTestUid() : command.getUid());
+            command.getConnectionTestUid() : command.getUid());
         configuration.setPwd(command.isEnableAccessControl() ?
-           command.getConnectionTestPwd() : command.getPwd());
+            command.getConnectionTestPwd() : command.getPwd());
+
+        SVNRepository repository = null;
         try {
           //TODO: Extract and kill this singelton in favor of DI
-          final SVNRepository repos = RepositoryFactory.INSTANCE.getRepository(
-             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
-          repos.testConnection();
+          repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+          repository.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
           errors.rejectValue("repositoryUrl", "config.error.connection-error",
-             "Unable to connect to repository. Check URL, user name and password.");
+              "Unable to connect to repository. Check URL, user name and password.");
+        } finally {
+          if (repository != null) {
+            repository.closeSession();
+          }
         }
       }
     }
