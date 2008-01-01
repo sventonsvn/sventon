@@ -9,12 +9,14 @@ public class InstanceConfigurationTest extends TestCase {
   private static final String I = "test";
 
   public void testCreateInstanceConfigurationTest() throws Exception {
+    final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties p = new Properties();
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_PASSWORD, "pwd");
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_USERNAME, "uid");
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, "svn://repositoryserver/repository");
+
+    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_USE_CACHE, "false");
     p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
 
@@ -24,7 +26,8 @@ public class InstanceConfigurationTest extends TestCase {
     assertTrue(conf.isAccessControlEnabled());
     assertEquals("pwd", conf.getPwd());
     assertEquals("uid", conf.getUid());
-    assertEquals("svn://repositoryserver/repository", conf.getRepositoryUrl());
+    assertEquals(repositoryUrl, conf.getRepositoryUrl());
+    assertEquals(repositoryUrl, conf.getRepositoryDisplayUrl());
     assertEquals(SVNURL.parseURIDecoded(conf.getRepositoryUrl()), conf.getSVNURL());
 
     assertFalse(conf.isCacheUsed());

@@ -39,9 +39,14 @@ public final class InstanceConfiguration {
   private String instanceName;
 
   /**
-   * The url.
+   * The repository URL.
    */
   private String repositoryUrl;
+
+  /**
+   * The repository URL displayed to the user.
+   */
+  private String repositoryDisplayUrl;
 
   /**
    * The repository location.
@@ -85,8 +90,8 @@ public final class InstanceConfiguration {
    * Default number of RSS feed items (20).
    */
   public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
-
   public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
+  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = ".displayURL";
   public static final String PROPERTY_KEY_USERNAME = ".uid";
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
@@ -114,6 +119,8 @@ public final class InstanceConfiguration {
   public static InstanceConfiguration create(final String instanceName, final Properties properties) {
     final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
     instanceConfiguration.setRepositoryUrl(properties.getProperty(instanceName + PROPERTY_KEY_REPOSITORY_URL));
+    instanceConfiguration.setRepositoryDisplayUrl(properties.getProperty(instanceName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL,
+        instanceConfiguration.getRepositoryUrl()));
     instanceConfiguration.setUid(properties.getProperty(instanceName + PROPERTY_KEY_USERNAME));
     instanceConfiguration.setPwd(properties.getProperty(instanceName + PROPERTY_KEY_PASSWORD));
     instanceConfiguration.setCacheUsed(
@@ -136,6 +143,8 @@ public final class InstanceConfiguration {
     final Properties properties = new Properties();
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL,
         getRepositoryUrl());
+    properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_DISPLAY_URL,
+        getRepositoryDisplayUrl());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_USERNAME,
         getUid());
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_PASSWORD,
@@ -149,30 +158,6 @@ public final class InstanceConfiguration {
     properties.put(instanceName + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT,
         String.valueOf(getRssItemsCount()));
     return properties;
-  }
-
-  /**
-   * Sets the repository root URL. Trailing slashes will be trimmed.
-   *
-   * @param repositoryUrl The root url.
-   */
-  public void setRepositoryUrl(String repositoryUrl) {
-
-    repositoryUrl = repositoryUrl.trim();
-
-    // Strip last slash if any.
-    if (repositoryUrl.endsWith("/")) {
-      logger.debug("Removing trailing slash from url");
-      repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - 1);
-    }
-
-    this.repositoryUrl = repositoryUrl;
-
-    try {
-      svnUrl = SVNURL.parseURIDecoded(this.repositoryUrl);
-    } catch (final SVNException ex) {
-      logger.warn("Unable to parse URL [" + repositoryUrl + "]", ex);
-    }
   }
 
   /**
@@ -220,6 +205,49 @@ public final class InstanceConfiguration {
    */
   public String getRepositoryUrl() {
     return repositoryUrl;
+  }
+
+  /**
+   * Sets the repository root URL. Trailing slashes will be trimmed.
+   *
+   * @param repositoryUrl The root url.
+   */
+  public void setRepositoryUrl(String repositoryUrl) {
+
+    repositoryUrl = repositoryUrl.trim();
+
+    // Strip last slash if any.
+    if (repositoryUrl.endsWith("/")) {
+      logger.debug("Removing trailing slash from url");
+      repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - 1);
+    }
+
+    this.repositoryUrl = repositoryUrl;
+
+    try {
+      svnUrl = SVNURL.parseURIDecoded(this.repositoryUrl);
+    } catch (final SVNException ex) {
+      logger.warn("Unable to parse URL [" + repositoryUrl + "]", ex);
+    }
+  }
+
+  /**
+   * Sets the repository URL displayed to the user.
+   *
+   * @param repositoryDisplayUrl Display URL.
+   */
+  public void setRepositoryDisplayUrl(final String repositoryDisplayUrl) {
+    this.repositoryDisplayUrl = repositoryDisplayUrl;
+  }
+
+  /**
+   * Gets the repository URL displayed to the user.
+   *
+   * @return Display URL, never <tt>null</tt>. If no display URL is set, the
+   *         repository URL will be returned instead.
+   */
+  public String getRepositoryDisplayUrl() {
+    return repositoryDisplayUrl != null ? repositoryDisplayUrl : repositoryUrl;
   }
 
   /**
