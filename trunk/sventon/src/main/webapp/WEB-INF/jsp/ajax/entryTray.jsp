@@ -58,17 +58,19 @@
           <td>
             <img src="images/icon_folder.png" alt="dir">
           </td>
+          <td>
+            <a href="<sventon-ui:formatUrl url='${entryTrayViewUrl}'/>">${entry.name}</a>&nbsp;
         </c:when>
         <c:otherwise>
           <td>
             <sventon-ui:fileTypeIcon filename="${entry.name}"/>
           </td>
+          <td>
+            <a href="<sventon-ui:formatUrl url='${entryTrayShowFileUrl}'/>">${entry.name}</a>&nbsp;
         </c:otherwise>
       </c:choose>
-        <td>
-          <a href="<sventon-ui:formatUrl url='${entryTrayShowFileUrl}'/>">${entry.name}</a>&nbsp;
-          (<a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">${entry.revision}</a>)
-        </td>
+            (<a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">${entry.revision}</a>)
+          </td>
       <td>
         <a href="#" onclick="removeEntryFromTray('<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>'); return false;">
           <img align="middle" src="images/delete.png" alt="Delete" title="Delete"/>
