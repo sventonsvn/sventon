@@ -9,31 +9,40 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package de.berlios.sventon.web.ctrl;
+package de.berlios.sventon.web.ctrl.ajax;
 
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.RepositoryEntryKindFilter;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.model.RepositoryEntryTray;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
 
 /**
- * ListFilesController.
+ * Controller for the repository entry tray.
  *
- * @author patrikfr@users.berlios.de
  * @author jesper@users.berlios.de
  */
-public final class ListFilesController extends ListDirectoryContentsController implements Controller {
+public class RepositoryEntryTrayController extends AbstractSVNTemplateController implements Controller {
+
+  /**
+   * Request parameter indicating entry should be added to tray.
+   */
+  public static final String PARAMETER_ADD = "add";
+
+  /**
+   * Request parameter indicating entry should be removed from tray.
+   */
+  public static final String PARAMETER_REMOVE = "remove";
 
   /**
    * {@inheritDoc}
@@ -44,18 +53,27 @@ public final class ListFilesController extends ListDirectoryContentsController i
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, revision, userRepositoryContext, request,
-        response, exception);
+    final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
+    final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
 
-    final Map<String, Object> model = modelAndView.getModel();
-    final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
-    final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
-    final int rowNumber = ServletRequestUtils.getRequiredIntParameter(request, "rowNumber");
+    final RepositoryEntry entry;
+    try {
+      entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(), revision.getNumber());
+    } catch (SVNException e) {
+      return modelAndView;
+    }
 
-    logger.debug("Adding data to model");
-    model.put("svndir", entryFilter.filter(entries));
-    model.put("rowNumber", rowNumber);
-    modelAndView.setViewName("ajax/listFiles");
+    final RepositoryEntryTray entryTray = userRepositoryContext.getRepositoryEntryTray();
+
+    if (PARAMETER_ADD.equals(actionParameter)) {
+      logger.debug("Adding entry to tray: " + entry.getFullEntryName());
+      entryTray.add(entry);
+    } else if (PARAMETER_REMOVE.equals(actionParameter)) {
+      logger.debug("Removing entry from tray: " + entry.getFullEntryName());
+      entryTray.remove(entry);
+    } else {
+      throw new UnsupportedOperationException(actionParameter);
+    }
     return modelAndView;
   }
 }

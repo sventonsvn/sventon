@@ -98,7 +98,7 @@
 
   <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController"
         parent="abstractController"/>
-  <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ListFilesController" parent="abstractController"/>
+  <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ajax.ListFilesController" parent="abstractController"/>
   <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
   <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
   <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
@@ -107,11 +107,11 @@
   <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
   <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController"
         parent="abstractController"/>
-  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.GetLatestRevisionsController"
+  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.ajax.GetLatestRevisionsController"
         parent="abstractController"/>
-  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.GetLogMessageController"
+  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.ajax.GetLogMessageController"
         parent="abstractController"/>
-  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.RepositoryEntryTrayController"
+  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.ajax.RepositoryEntryTrayController"
         parent="abstractController"/>
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
   <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController"
