@@ -48,10 +48,10 @@
                   </a>
                 </th>
                 <th style="background-color: white;">&nbsp;</th>
-                <th valign="top" class="sventonLineNo">&nbsp;</th>
+                <th class="lineNo">&nbsp;</th>
                 <th width="50%">${diffCommand.fromTarget} @ revision ${diffCommand.fromRevision}</th>
                 <th style="background-color: white;">&nbsp;</th>
-                <th valign="top" class="sventonLineNo">&nbsp;</th>
+                <th class="lineNo">&nbsp;</th>
                 <th width="50%">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
               </tr>
               <c:set var="diffCount" value="0"/>
@@ -71,7 +71,7 @@
                   <td style="background-color: white;">
                     <b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b>
                   </td>
-                  <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber()
+                  <td class="lineNo"><%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber()
                       != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber().toString() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
@@ -84,7 +84,7 @@
                   <td style="background-color: white;">
                     <b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b>
                   </td>
-                  <td valign="top" class="sventonLineNo"><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber()
+                  <td class="lineNo"><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber()
                       != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber().toString() : "" %></td>
                   <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
                     <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
