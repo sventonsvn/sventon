@@ -289,6 +289,10 @@ input.btn {
   vertical-align: top;
 }
 
+.lineContent {
+  vertical-align: top;  
+}
+
 .sventonFunctionLinksTable {
   width: 100%;
   border-spacing: 3px;

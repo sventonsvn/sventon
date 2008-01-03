@@ -8,7 +8,6 @@ import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -19,7 +18,6 @@ public class GetLogMessageControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
-    final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
     final SVNRevision revision = SVNRevision.create(12);
 
@@ -34,8 +32,8 @@ public class GetLogMessageControllerTest extends TestCase {
     expect(mockService.getRevision(command.getName(), null, revision.getNumber())).andStubReturn(logEntry);
 
     replay(mockService);
-    ModelAndView modelAndView = ctrl.svnHandle(null, command, revision, null, mockRequest, null, null);
-    Map model = modelAndView.getModel();
+    final ModelAndView modelAndView = ctrl.svnHandle(null, command, revision, null, null, null, null);
+    final Map model = modelAndView.getModel();
     verify(mockService);
 
     assertEquals(1, model.size());
