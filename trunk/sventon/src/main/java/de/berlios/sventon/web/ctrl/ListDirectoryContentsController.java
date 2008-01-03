@@ -61,7 +61,6 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
     final List<RepositoryEntry> entries = getRepositoryService().list(
         repository, completePath, revision.getNumber(), properties);
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("svndir", entries);
     logger.debug(properties);

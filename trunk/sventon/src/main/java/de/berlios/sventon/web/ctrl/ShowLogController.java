@@ -123,7 +123,6 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
       }
     }
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
 
     model.put("logEntriesPage", logEntryBundles);

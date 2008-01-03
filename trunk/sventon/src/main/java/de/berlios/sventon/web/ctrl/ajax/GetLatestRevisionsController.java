@@ -49,7 +49,6 @@ public class GetLatestRevisionsController extends AbstractSVNTemplateController 
         svnCommand.getName(), repository, revisionCount);
     logger.debug("Got [" + revisions.size() + "] revisions");
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("revisions", revisions);
 

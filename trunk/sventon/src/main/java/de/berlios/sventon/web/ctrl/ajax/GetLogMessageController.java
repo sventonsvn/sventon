@@ -49,7 +49,6 @@ public class GetLogMessageController extends AbstractSVNTemplateController imple
         revision.getNumber());
     final LogMessage logMessage = new LogMessage(revision.getNumber(), logEntry.getMessage());
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("logMessage", logMessage);
 
