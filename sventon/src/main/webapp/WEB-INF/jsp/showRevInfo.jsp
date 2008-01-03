@@ -39,7 +39,7 @@
       <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revinfo.previousrev"/>"></a>
     </c:if>
     <c:if test="${!(command.revision + 1 gt headRevision)}">
-      <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Previous revision" title="<spring:message code="revinfo.nextrev"/>"></a>
+      <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Next revision" title="<spring:message code="revinfo.nextrev"/>"></a>
     </c:if>
 
     <br>
