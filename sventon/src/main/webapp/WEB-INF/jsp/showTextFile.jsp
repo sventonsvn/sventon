@@ -37,8 +37,8 @@
     <table id="textFileTable" class="codeBlock" cellspacing="0">
       <c:forEach items="${file.rows}" var="row">
         <tr>
-          <td valign="top" class="sventonLineNo">${row.rowNumber}&nbsp;</td>
-          <td valign="top">${row.content}</td>
+          <td class="lineNo">${row.rowNumber}&nbsp;</td>
+          <td class="lineContent">${row.content}</td>
         </tr>
       </c:forEach>
     </table>

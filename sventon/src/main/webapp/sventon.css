@@ -276,15 +276,17 @@ input.btn {
 
 .blameAuthor {
   background-color: white;
+  vertical-align: top;
 }
 
-.sventonLineNo {
+.lineNo {
   color: #000000;
   background-color: white;
   text-decoration: none;
   text-align: right;
   width: 30px;
   border-right: black solid 1px;
+  vertical-align: top;
 }
 
 .sventonFunctionLinksTable {

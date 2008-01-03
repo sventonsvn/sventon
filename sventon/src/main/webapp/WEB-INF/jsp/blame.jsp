@@ -47,9 +47,9 @@
               ${row.revision}
             </a>
           </td>
-          <td valign="top" class="blameAuthor">${row.author}</td>
-          <td valign="top" class="sventonLineNo">${row.rowNumber}</td>
-          <td valign="top">${row.content}</td>
+          <td class="blameAuthor">${row.author}</td>
+          <td class="lineNo">${row.rowNumber}</td>
+          <td class="lineContent">${row.content}</td>
         </tr>
       </c:forEach>
     </table>
