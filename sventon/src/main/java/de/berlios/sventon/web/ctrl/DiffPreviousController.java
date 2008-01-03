@@ -48,7 +48,7 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long commitRev = ServletRequestUtils.getRequiredLongParameter(request, "commitRevision");
+    final long commitRev = ServletRequestUtils.getRequiredLongParameter(request, "committedRevision");
     logger.debug("Diffing file (previous): " + svnCommand);
     logger.debug("committed-rev: " + commitRev);
     final Map<String, Object> model = new HashMap<String, Object>();

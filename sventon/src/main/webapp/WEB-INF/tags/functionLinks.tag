@@ -78,7 +78,7 @@
             <c:param name="path" value="${command.path}${entry.name}" />
             <c:param name="revision" value="${command.revision}" />
             <c:param name="name" value="${command.name}" />
-            <c:param name="commitRevision" value="${committedRevision}" />
+            <c:param name="committedRevision" value="${committedRevision}" />
           </c:url>
           <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${diffPreviousUrl}"/>';">
           <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
