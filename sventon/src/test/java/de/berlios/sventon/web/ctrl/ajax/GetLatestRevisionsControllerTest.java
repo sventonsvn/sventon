@@ -8,7 +8,6 @@ import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -23,7 +22,6 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     userRepositoryContext.setLatestRevisionsDisplayCount(2);
 
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
-    final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
     final GetLatestRevisionsController ctrl = new GetLatestRevisionsController();
     ctrl.setRepositoryService(mockService);
@@ -38,8 +36,8 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     expect(mockService.getLatestRevisions(command.getName(), null, userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);
 
     replay(mockService);
-    ModelAndView modelAndView = ctrl.svnHandle(null, command, null, userRepositoryContext, mockRequest, null, null);
-    Map model = modelAndView.getModel();
+    final ModelAndView modelAndView = ctrl.svnHandle(null, command, null, userRepositoryContext, null, null, null);
+    final Map model = modelAndView.getModel();
     verify(mockService);
 
     assertEquals(1, model.size());
