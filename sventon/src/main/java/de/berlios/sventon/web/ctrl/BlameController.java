@@ -72,7 +72,6 @@ public final class BlameController extends AbstractSVNTemplateController impleme
     final AnnotatedTextFile annotatedFile =
         getRepositoryService().blame(repository, svnCommand.getPath(), revision.getNumber(), charset, colorer);
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("annotatedFile", annotatedFile);
     //model.put("properties", new HashMap());   //TODO: Replace with valid entry properties

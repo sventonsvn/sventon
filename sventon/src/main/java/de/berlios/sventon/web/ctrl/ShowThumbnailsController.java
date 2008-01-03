@@ -50,7 +50,6 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
 
     final String[] entryParameters = ServletRequestUtils.getRequiredStringParameters(request, "entry");
 
-    logger.debug("Create model");
     final Map<String, Object> model = new HashMap<String, Object>();
     final List<String> entries = new ArrayList<String>();
 
