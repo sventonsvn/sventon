@@ -55,7 +55,7 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
 
     //TODO: Solve this issue in a better way?
     if (SVNNodeKind.NONE == getRepositoryService().getNodeKind(repository, svnCommand.getPath(), commitRev)) {
-      model.put("isMissingHistory", true);
+      model.put("noHistory", true);
     } else {
       final List<SVNFileRevision> revisions =
           getRepositoryService().getFileRevisions(repository, svnCommand.getPath(), commitRev);
