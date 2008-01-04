@@ -53,10 +53,6 @@
       </c:forEach>
     </table>
 
-    <br>
-
-    <p>&nbsp;</p>
-    
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
   </body>

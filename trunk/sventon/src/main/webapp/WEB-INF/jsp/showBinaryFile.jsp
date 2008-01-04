@@ -19,24 +19,23 @@
     <title>Show Binary File - ${command.target}</title>
   </head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <c:choose>
-      <c:when test="${archivedEntry ne null}">
-        <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
-        <sventon:currentTargetHeader title="Show Binary File" target="${newTarget}" hasProperties="false"/>
-      </c:when>
-      <c:otherwise>
-        <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/>
-      </c:otherwise>
-    </c:choose>
-    <sventon:functionLinks pageName="showBinaryFile"/>
+  <c:choose>
+    <c:when test="${archivedEntry ne null}">
+      <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
+      <sventon:currentTargetHeader title="Show Binary File" target="${newTarget}" hasProperties="false"/>
+    </c:when>
+    <c:otherwise>
+      <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/>
+    </c:otherwise>
+  </c:choose>
+  <sventon:functionLinks pageName="showBinaryFile"/>
 
-    <p>File is in binary format.</p>
+  <p>File is in binary format.</p>
 
-    <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+</body>
 </html>
