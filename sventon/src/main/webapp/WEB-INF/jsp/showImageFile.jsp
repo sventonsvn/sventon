@@ -19,33 +19,32 @@
     <title>Show Image File - ${command.target}</title>
   </head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/>
-    <sventon:functionLinks pageName="showImageFile"/>
+  <sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/>
+  <sventon:functionLinks pageName="showImageFile"/>
 
-    <c:url value="get.svn" var="showUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-      <c:param name="revision" value="${command.revision}" />
-      <c:param name="name" value="${command.name}" />
-      <c:param name="disp" value="inline" />
-    </c:url>
+  <c:url value="get.svn" var="showUrl">
+    <c:param name="path" value="${command.path}${entry.name}" />
+    <c:param name="revision" value="${command.revision}" />
+    <c:param name="name" value="${command.name}" />
+    <c:param name="disp" value="inline" />
+  </c:url>
 
-    <c:url value="getthumb.svn" var="getThumbUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-      <c:param name="revision" value="${command.revision}" />
-      <c:param name="name" value="${command.name}" />
-    </c:url>
+  <c:url value="getthumb.svn" var="getThumbUrl">
+    <c:param name="path" value="${command.path}${entry.name}" />
+    <c:param name="revision" value="${command.revision}" />
+    <c:param name="name" value="${command.name}" />
+  </c:url>
 
-    <p>
-      <a href="<sventon-ui:formatUrl url='${showUrl}'/>">
-        <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail">
-      </a>
-    </p>
+  <p>
+    <a href="<sventon-ui:formatUrl url='${showUrl}'/>">
+      <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail">
+    </a>
+  </p>
 
-    <br>
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+</body>
 </html>

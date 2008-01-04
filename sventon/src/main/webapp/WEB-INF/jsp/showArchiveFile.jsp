@@ -11,24 +11,23 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>Show Archive File - ${command.target}</title>
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf" %>
+  <title>Show Archive File - ${command.target}</title>
+</head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 
-    <sventon:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/>
-    <sventon:functionLinks pageName="showArchiveFile"/>
+  <sventon:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/>
+  <sventon:functionLinks pageName="showArchiveFile"/>
 
-    <%@ include file="/WEB-INF/jspf/archiveContentsTable.jspf"%>
-
-    <br>
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
-<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+  <%@ include file="/WEB-INF/jspf/archiveContentsTable.jspf" %>
+  
+<%@ include file="/WEB-INF/jspf/rssLink.jspf" %>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
+</body>
 </html>
