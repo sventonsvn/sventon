@@ -34,7 +34,7 @@
   </p>
   <p>
   The latest development sources can be accessed anonymously from
-  <code><a href="http://svn.berlios.de/svnroot/repos/sventon/trunk">http://svn.berlios.de/svnroot/repos/sventon/trunk</a></code>.
+  <a href="http://svn.berlios.de/svnroot/repos/sventon/trunk">http://svn.berlios.de/svnroot/repos/sventon/trunk</a>.
   </p>
   <p>
   The best way of communicating is to use our
