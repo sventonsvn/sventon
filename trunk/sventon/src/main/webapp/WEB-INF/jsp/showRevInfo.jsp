@@ -14,45 +14,45 @@
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>Revision information details</title>
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <title>Revision information details</title>
+</head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
-    <sventon:functionLinks pageName="showRevInfo"/>
+  <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
+  <sventon:functionLinks pageName="showRevInfo"/>
 
-    <c:url value="revinfo.svn" var="showPrevRevInfoUrl">
-      <c:param name="revision" value="${command.revision - 1}" />
-      <c:param name="name" value="${command.name}" />
-    </c:url>
+  <c:url value="revinfo.svn" var="showPrevRevInfoUrl">
+    <c:param name="revision" value="${command.revision - 1}" />
+    <c:param name="name" value="${command.name}" />
+  </c:url>
 
-    <c:url value="revinfo.svn" var="showNextRevInfoUrl">
-      <c:param name="revision" value="${command.revision + 1}" />
-      <c:param name="name" value="${command.name}" />
-    </c:url>
+  <c:url value="revinfo.svn" var="showNextRevInfoUrl">
+    <c:param name="revision" value="${command.revision + 1}" />
+    <c:param name="name" value="${command.name}" />
+  </c:url>
 
-    <c:if test="${command.revision - 1 gt 0}">
-      <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revinfo.previousrev"/>"></a>
-    </c:if>
-    <c:if test="${!(command.revision + 1 gt headRevision)}">
-      <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Next revision" title="<spring:message code="revinfo.nextrev"/>"></a>
-    </c:if>
+  <c:if test="${command.revision - 1 gt 0}">
+    <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revinfo.previousrev"/>"></a>
+  </c:if>
+  <c:if test="${!(command.revision + 1 gt headRevision)}">
+    <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Next revision" title="<spring:message code="revinfo.nextrev"/>"></a>
+  </c:if>
 
-    <br>
+  <br>
 
-    <table class="sventonLatestCommitInfoTable">
-      <tr>
-        <td>
-          <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
-        </td>
-      </tr>
-    </table>
+  <table class="sventonLatestCommitInfoTable">
+    <tr>
+      <td>
+        <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+      </td>
+    </tr>
+  </table>
 
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+</body>
 </html>

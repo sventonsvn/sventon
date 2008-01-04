@@ -26,14 +26,13 @@
 
 <c:if test="${latestAddedInstance ne null}">
   <p>
-  Instance <b>${latestAddedInstance}</b> successfully added.
-</p>
+    Instance <b>${latestAddedInstance}</b> successfully added.
+  </p>
 </c:if>
 <p>Added repositories:
   <c:forEach var="instance" items="${addedInstances}">
     <li>${instance}</li>
   </c:forEach>
-
 </p>
 
 <br>

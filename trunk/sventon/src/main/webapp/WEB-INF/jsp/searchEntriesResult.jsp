@@ -15,10 +15,10 @@
 <%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>sventon repository browser - ${repositoryURL}</title>
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <title>sventon repository browser - ${repositoryURL}</title>
+</head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
