@@ -14,46 +14,46 @@
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>Show Thumbnails</title>
-    <link rel="stylesheet" type="text/css" href="jhighlight.css" >
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <title>Show Thumbnails</title>
+  <link rel="stylesheet" type="text/css" href="jhighlight.css" >
+</head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/>
-    <sventon:functionLinks pageName="showThumbs"/>
+  <sventon:currentTargetHeader title="Show Thumbnails" target="${command.target}" hasProperties="false"/>
+  <sventon:functionLinks pageName="showThumbs"/>
 
-    <br>
+  <br>
 
-    <table border="1">
-      <c:forEach items="${thumbnailentries}" var="entry">
-        <tr height="160px">
-          <c:url value="get.svn" var="downloadUrl" >
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="path" value="${entry}" />
-            <c:param name="name" value="${command.name}" />
-            <c:param name="disp" value="inline" />
-          </c:url>
-          <c:url value="getthumb.svn" var="getThumbUrl" >
-            <c:param name="revision" value="${command.revision}" />
-            <c:param name="path" value="${entry}" />
-            <c:param name="name" value="${command.name}" />
-          </c:url>
-          <td valign="top">
-            File: <b>${entry}</b>
-          </td>
-          <td width="210px" style="text-align:center;">
-            <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
-              <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry}"></a>
-          </td>
-        </tr>
-      </c:forEach>
-    </table>
+  <table border="1">
+    <c:forEach items="${thumbnailentries}" var="entry">
+      <tr height="160px">
+        <c:url value="get.svn" var="downloadUrl" >
+          <c:param name="revision" value="${command.revision}" />
+          <c:param name="path" value="${entry}" />
+          <c:param name="name" value="${command.name}" />
+          <c:param name="disp" value="inline" />
+        </c:url>
+        <c:url value="getthumb.svn" var="getThumbUrl" >
+          <c:param name="revision" value="${command.revision}" />
+          <c:param name="path" value="${entry}" />
+          <c:param name="name" value="${command.name}" />
+        </c:url>
+        <td valign="top">
+          File: <b>${entry}</b>
+        </td>
+        <td width="210px" style="text-align:center;">
+          <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
+            <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry}"></a>
+        </td>
+      </tr>
+    </c:forEach>
+  </table>
 
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+</body>
 </html>
