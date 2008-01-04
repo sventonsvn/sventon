@@ -31,7 +31,7 @@
     <c:when test="${isIdentical}">
       <p><b><spring:message code="diff.error.identical"/></b></p>
     </c:when>
-    <c:when test="${isMissingHistory}">
+    <c:when test="${noHistory}">
       <p><b><spring:message code="diff.error.no-history"/></b></p>
     </c:when>
     <c:otherwise>
