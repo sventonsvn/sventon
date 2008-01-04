@@ -59,6 +59,8 @@ public final class EncodingUtils {
     String result = str;
     // un-encode colons
     result = result.replaceAll("(?i)%3A", ":");
+    // un-encode semi colons
+    result = result.replaceAll("(?i)%3B", ";");
     // un-encode forward slashes
     result = result.replaceAll("(?i)%2F", "/");
     return result;
