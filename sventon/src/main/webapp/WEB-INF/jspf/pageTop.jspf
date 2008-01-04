@@ -17,7 +17,7 @@
 <script type="text/javascript">
   var latestRevisionsCount = ${userRepositoryContext.latestRevisionsDisplayCount};
 </script>
-<table class="sventonTopTable" border="0">
+<table class="sventonTopTable">
   <tr>
     <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount);">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     <td align="right">
@@ -62,7 +62,7 @@
 </table>
 
 <spring:hasBindErrors name="command">
-  <table class="sventonSpringErrorMessageTable" border="0">
+  <table class="sventonSpringErrorMessageTable">
     <tr><td><span class="exclamationText"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></span></td></tr>
   </table>
 </spring:hasBindErrors>

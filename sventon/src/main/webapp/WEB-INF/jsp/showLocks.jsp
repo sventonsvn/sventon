@@ -25,7 +25,7 @@
     <sventon:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/>
     <sventon:functionLinks pageName="showLock"/>
 
-    <table class="sventonEntriesTable" border="0">
+    <table class="sventonEntriesTable">
       <c:set var="rowCount" value="0"/>
       <tr>
         <th></th>
