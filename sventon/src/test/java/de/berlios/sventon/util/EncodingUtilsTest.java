@@ -15,6 +15,8 @@ public class EncodingUtilsTest extends TestCase {
 
     assertEquals("http://localhost/svn/showfile.svn?path=/trunk/public/%c3%a5%c3%a4%c3%b6.txt&revision=HEAD&name=test",
         EncodingUtils.encodeUrl("http://localhost/svn/showfile.svn?path=%2ftrunk%2fpublic%2f%c3%a5%c3%a4%c3%b6.txt&revision=HEAD&name=test"));
+
+    assertEquals(";", EncodingUtils.encodeUrl("%3b"));
   }
 
 }
