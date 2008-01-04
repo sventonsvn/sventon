@@ -58,7 +58,7 @@
 </c:url>
 
 <form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
-<table class="sventonFunctionLinksTable" border="0">
+<table class="sventonFunctionLinksTable">
   <tr><td style="white-space: nowrap;">
 
 <c:choose>

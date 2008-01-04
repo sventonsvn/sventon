@@ -34,7 +34,7 @@
 
 <p>
 <form name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
-  <table width="800" border="0">
+  <table class="configFormTable">
   <tr>
     <td valign="top" align="right" style="white-space: nowrap;">Enter repository name:</td>
     <td valign="top">

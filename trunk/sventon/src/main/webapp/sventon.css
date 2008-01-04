@@ -249,6 +249,7 @@ input.btn {
 
 .sventonTopTable {
   width: 100%;
+  border: none;
 }
 
 .sventonPropertiesDiv {
@@ -290,15 +291,17 @@ input.btn {
 }
 
 .lineContent {
-  vertical-align: top;  
+  vertical-align: top;
 }
 
 .sventonFunctionLinksTable {
   width: 100%;
   border-spacing: 3px;
+  border: none;
 }
 
 .sventonSpringErrorMessageTable {
+  border: none;
 }
 
 .sventonRepositoryFunctionsTable {
@@ -378,6 +381,15 @@ a.helpDivCloseLink {
   color: #14233D;
   background-color: #AFC4D2;
   border-top: 1px solid black;
+}
+
+.revisionInfoTable {
+  border: none;
+}
+
+.configFormTable {
+  border: none;
+  width: 800px;
 }
 
 .entry {

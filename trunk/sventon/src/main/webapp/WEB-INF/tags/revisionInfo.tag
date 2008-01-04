@@ -22,7 +22,7 @@
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
 <% application.setAttribute("br", "\n"); %>
-<table border="0">
+<table class="revisionInfoTable">
   <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
   <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
   <tr><td><b>User:</b></td><td>${details.author}</td></tr>
