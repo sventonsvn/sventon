@@ -14,37 +14,44 @@
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>Show File - ${command.target}</title>
-    <link rel="stylesheet" type="text/css" href="jhighlight.css" >
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <title>Show File - ${command.target}</title>
+  <link rel="stylesheet" type="text/css" href="jhighlight.css" >
+</head>
 
-  <body>
-    <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+<body>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-    <c:choose>
-      <c:when test="${archivedEntry ne null}">
-        <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
-        <sventon:currentTargetHeader title="Show File" target="${newTarget}" hasProperties="false"/>
-      </c:when>
-      <c:otherwise>
-        <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
-      </c:otherwise>
-    </c:choose>
-    <sventon:functionLinks pageName="showTextFile"/>
+  <c:choose>
+    <c:when test="${archivedEntry ne null}">
+      <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
+      <sventon:currentTargetHeader title="Show File" target="${newTarget}" hasProperties="false"/>
+    </c:when>
+    <c:otherwise>
+      <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
+    </c:otherwise>
+  </c:choose>
+  <sventon:functionLinks pageName="showTextFile"/>
 
-    <table id="textFileTable" class="codeBlock" cellspacing="0">
-      <c:forEach items="${file.rows}" var="row">
-        <tr>
-          <td class="lineNo">${row.rowNumber}&nbsp;</td>
-          <td class="lineContent">${row.content}</td>
-        </tr>
-      </c:forEach>
-    </table>
+  <div id="fileRevisionsContainerDiv" class="fileRevisionsContainer">
+    <img src="images/spinner.gif" alt="spinner" style="border: 1px solid">
+  </div>
 
-    <br>
+  <table id="textFileTable" class="codeBlock" cellspacing="0">
+    <c:forEach items="${file.rows}" var="row">
+      <tr>
+        <td class="lineNo">${row.rowNumber}&nbsp;</td>
+        <td class="lineContent">${row.content}</td>
+      </tr>
+    </c:forEach>
+  </table>
+
+  <script type="text/javascript">
+    getFileRevisions('${command.path}', '${committedRevision}', '${command.name}');
+  </script>
+
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
-  </body>
+</body>
 </html>

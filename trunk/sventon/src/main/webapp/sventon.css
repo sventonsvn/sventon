@@ -361,13 +361,25 @@ a.helpDivCloseLink {
   text-decoration: none;
 }
 
-.entryTrayContainerDiv {
+.entryTrayContainer {
   background-color: #3E647E;
   float: right;
   text-align: left;
   border-bottom: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid black;
+}
+
+.fileRevisionsContainer {
+  float: right;
+  position: relative;
+  top: 3px;
+  left: -4px;
+}
+
+.fileRevisionsTable {
+  background-color: inherit;
+  border: 1px solid;
 }
 
 .entryTrayHeaderTable {

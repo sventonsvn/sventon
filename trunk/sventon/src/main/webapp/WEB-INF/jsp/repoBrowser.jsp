@@ -15,10 +15,10 @@
 <%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <html>
-  <head>
-    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-    <title>sventon repository browser - ${repositoryURL}</title>
-  </head>
+<head>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <title>sventon repository browser - ${repositoryURL}</title>
+</head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
@@ -143,7 +143,7 @@
     </script>
   </c:if>
 
-  <div align="right" class="entryTrayContainerDiv" id="entryTrayContainer">
+  <div align="right" class="entryTrayContainer" id="entryTrayContainerDiv">
     <table class="entryTrayHeaderTable">
       <tr>
         <td>drag&amp;drop tray - <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '[hide]', '[show]'); showHideEntryTray(); return false;"><span id="hideShowTrayLink">[show]</span></a></td>
@@ -161,10 +161,10 @@
     for (var i = 0; i < entries.length; i++) {
       new Draggable(entries[i].id, {revert:true})
     }
-    Droppables.add('entryTrayContainer', {onDrop:addEntryToTray})
+    Droppables.add('entryTrayContainerDiv', {onDrop:addEntryToTray})
   </script>
 
-  <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
-  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

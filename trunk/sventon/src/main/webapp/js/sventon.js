@@ -295,6 +295,14 @@ function showHideEntryTray() {
   }
 }
 
+function getFileRevisions(path, revision, name) {
+  var url = 'filerevisions.ajax';
+  var urlParams = 'path=' + path + '&revision=' + revision + '&name=' + name;
+
+  var ajax = new Ajax.Updater({success: $('fileRevisionsContainerDiv')}, url, {
+    method: 'post', parameters: urlParams, onFailure: reportAjaxError});
+}
+
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================

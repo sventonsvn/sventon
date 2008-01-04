@@ -111,6 +111,8 @@
         parent="abstractController"/>
   <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.ajax.GetLogMessageController"
         parent="abstractController"/>
+  <bean id="fileRevisionsController" class="de.berlios.sventon.web.ctrl.ajax.GetFileRevisionsController"
+        parent="abstractController"/>
   <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.ajax.RepositoryEntryTrayController"
         parent="abstractController"/>
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
@@ -213,6 +215,7 @@
         <prop key="/static.ajax">getStaticContentController</prop>
         <prop key="/getmessage.ajax">logMessageController</prop>
         <prop key="/entrytray.ajax">entryTrayController</prop>
+        <prop key="/filerevisions.ajax">fileRevisionsController</prop>
       </props>
     </property>
   </bean>
