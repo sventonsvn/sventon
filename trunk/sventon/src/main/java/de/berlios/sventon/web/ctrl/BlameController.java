@@ -74,7 +74,6 @@ public final class BlameController extends AbstractSVNTemplateController impleme
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("annotatedFile", annotatedFile);
-    //model.put("properties", new HashMap());   //TODO: Replace with valid entry properties
     return new ModelAndView("blame", model);
   }
 }
