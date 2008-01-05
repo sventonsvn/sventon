@@ -31,9 +31,6 @@
     <c:when test="${isIdentical}">
       <p><b><spring:message code="diff.error.identical"/></b></p>
     </c:when>
-    <c:when test="${!hasHistory}">
-      <p><b><spring:message code="diff.error.no-history"/></b></p>
-    </c:when>
     <c:otherwise>
       <c:choose>
         <c:when test="${!isBinary}">
