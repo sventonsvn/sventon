@@ -370,14 +370,14 @@ a.helpDivCloseLink {
   border-right: 1px solid black;
 }
 
-.fileRevisionsContainer {
+.fileHistoryContainer {
   float: right;
   position: relative;
   top: 3px;
   left: -4px;
 }
 
-.fileRevisionsTable {
+.fileHistoryTable {
   background-color: inherit;
   border: 1px solid;
 }
