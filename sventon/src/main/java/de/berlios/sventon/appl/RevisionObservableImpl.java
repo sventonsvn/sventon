@@ -175,7 +175,8 @@ public final class RevisionObservableImpl extends Observable implements Revision
         } while (revisionsLeftToFetchCount > 0);
       }
     } catch (SVNException svnex) {
-      throw new RuntimeException(svnex);
+      logger.warn("Exception: " + svnex.getMessage());
+      logger.debug("Exception [" + svnex.getErrorMessage().getErrorCode().toString() + "]", svnex);
     }
   }
 
