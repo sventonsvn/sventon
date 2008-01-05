@@ -21,7 +21,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -53,31 +52,26 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
     logger.debug("committed-rev: " + commitRev);
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    //TODO: Solve this issue in a better way?
-    if (SVNNodeKind.NONE == getRepositoryService().getNodeKind(repository, svnCommand.getPath(), commitRev)) {
-      model.put("hasHistory", false);
-    } else {
-      final List<SVNFileRevision> revisions =
-          getRepositoryService().getFileRevisions(repository, svnCommand.getPath(), commitRev);
+    final List<SVNFileRevision> revisions =
+        getRepositoryService().getFileRevisions(repository, svnCommand.getPath(), commitRev);
 
-      final DiffCommand diffCommand = new DiffCommand(revisions);
-      model.put("diffCommand", diffCommand);
-      logger.debug("Using: " + diffCommand);
+    final DiffCommand diffCommand = new DiffCommand(revisions);
+    model.put("diffCommand", diffCommand);
+    logger.debug("Using: " + diffCommand);
 
-      try {
-        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-            userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+    try {
+      final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
+          userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
 
-        model.put("diffResult", diffResult);
-        model.put("isIdentical", false);
-        model.put("isBinary", false);
-      } catch (final IdenticalFilesException ife) {
-        logger.debug("Files are identical");
-        model.put("isIdentical", true);
-      } catch (final IllegalFileFormatException iffe) {
-        logger.info("Binary file(s) detected", iffe);
-        model.put("isBinary", true);  // Indicates that one or both files are in binary format.
-      }
+      model.put("diffResult", diffResult);
+      model.put("isIdentical", false);
+      model.put("isBinary", false);
+    } catch (final IdenticalFilesException ife) {
+      logger.debug("Files are identical");
+      model.put("isIdentical", true);
+    } catch (final IllegalFileFormatException iffe) {
+      logger.info("Binary file(s) detected", iffe);
+      model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
 
     return new ModelAndView("diff", model);
