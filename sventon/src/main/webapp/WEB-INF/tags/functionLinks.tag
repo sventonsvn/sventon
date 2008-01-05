@@ -228,7 +228,7 @@
   </tr>
 </table>
   <!-- Needed by ASVNTC -->
-  <input type="hidden" name="path" value="${command.path}${entry.name}">
+  <input type="hidden" name="path" value="${command.path}">
   <input type="hidden" name="revision" value="${command.revision}">
   <input type="hidden" name="name" value="${command.name}">
 </form>
