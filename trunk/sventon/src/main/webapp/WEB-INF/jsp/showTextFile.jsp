@@ -34,7 +34,7 @@
   </c:choose>
   <sventon:functionLinks pageName="showTextFile"/>
 
-  <div id="fileRevisionsContainerDiv" class="fileRevisionsContainer">
+  <div id="fileHistoryContainerDiv" class="fileHistoryContainer">
     <img src="images/spinner.gif" alt="spinner" style="border: 1px solid">
   </div>
 
@@ -48,7 +48,7 @@
   </table>
 
   <script type="text/javascript">
-    getFileRevisions('${command.path}', '${committedRevision}', '${command.name}');
+    getFileHistory('${command.path}', '${command.revision}', '${command.name}');
   </script>
 
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>

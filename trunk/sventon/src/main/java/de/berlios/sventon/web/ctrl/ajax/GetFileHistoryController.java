@@ -26,11 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Gets the file revisions for a given entry.
+ * Gets the file revision history for a given entry.
  *
  * @author jesper@users.berlios.de
  */
-public class GetFileRevisionsController extends AbstractSVNTemplateController implements Controller {
+public class GetFileHistoryController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
@@ -45,37 +45,21 @@ public class GetFileRevisionsController extends AbstractSVNTemplateController im
 
     logger.debug("Finding revisions for [" + svnCommand.getPath() + "]");
 
-    final long headRevision = getRepositoryService().getLatestRevision(repository);
+    final long targetRevision = SVNRevision.HEAD != revision ? revision.getNumber() : getRepositoryService().getLatestRevision(repository); 
+    final List<SVNFileRevision> fileRevisions = getRepositoryService().getFileRevisions(
+        repository, svnCommand.getPath(), targetRevision);
 
-    final List<Long> fileRevisions = new ArrayList<Long>();
-    for (final SVNFileRevision fileRevision : getRepositoryService().getFileRevisions(
-        repository, svnCommand.getPath(), headRevision)) {
-      fileRevisions.add(fileRevision.getRevision());
+    if (logger.isDebugEnabled()) {
+      final List<Long> fileRevisionNumbers = new ArrayList<Long>();
+      for (final SVNFileRevision fileRevision : fileRevisions) {
+        fileRevisionNumbers.add(fileRevision.getRevision());
+      }
+      logger.debug("Found revisions: " + fileRevisionNumbers);
     }
-    logger.debug("Found revisions: " + fileRevisions);
 
-    model.put("currentRevision", revision.getNumber());
-    model.put("previousRevision", findPreviousRevision(fileRevisions, revision.getNumber()));
-    model.put("nextRevision", findNextRevision(fileRevisions, revision.getNumber()));
     Collections.reverse(fileRevisions);
-    model.put("allRevisions", fileRevisions);
-    return new ModelAndView("ajax/fileRevisions", model);
+    model.put("currentRevision", revision.getNumber());
+    model.put("fileRevisions", fileRevisions);
+    return new ModelAndView("ajax/fileHistory", model);
   }
-
-  protected Long findPreviousRevision(final List<Long> revisions, long targetRevision) {
-    final int index = revisions.indexOf(targetRevision);
-    if (index <= 0) {
-      return null;
-    }
-    return revisions.get(index - 1);
-  }
-
-  protected Long findNextRevision(final List<Long> revisions, long targetRevision) {
-    final int index = revisions.indexOf(targetRevision);
-    if (index < 0 || index == revisions.size() - 1) {
-      return null;
-    }
-    return revisions.get(index + 1);
-  }
-
 }
