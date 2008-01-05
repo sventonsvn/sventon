@@ -27,6 +27,8 @@ import java.util.TreeSet;
  */
 public final class RepositoryEntryTray implements Serializable {
 
+  private static final long serialVersionUID = -7140458501231816209L;
+
   /**
    * List of entries in tray.
    */
