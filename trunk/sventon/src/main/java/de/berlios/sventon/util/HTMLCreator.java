@@ -14,14 +14,14 @@ package de.berlios.sventon.util;
 import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
 import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * Class responsible for creating HTML formatted content.
@@ -34,10 +34,71 @@ public final class HTMLCreator {
   private static final String REV_INFO_URL = "revinfo.svn";
   private static final String DIFF_URL = "diff.svn";
 
+  public static final String LOG_MESSAGE_KEY = "logMessage";
+  public static final String ADDED_COUNT_KEY = "addedCount";
+  public static final String MODIFIED_COUNT_KEY = "modifiedCount";
+  public static final String REPLACED_COUNT_KEY = "replacedCount";
+  public static final String DELETED_COUNT_KEY = "deletedCount";
+  public static final String CHANGED_PATHS_KEY = "changedPaths";
+
   /**
    * Prevent instantiation.
    */
   private HTMLCreator() {
+  }
+
+  /**
+   * Creates a string containing the details for a given revision.
+   *
+   * @param bodyTemplate Body template string.
+   * @param logEntry     log entry revision.
+   * @param baseURL      Application base URL.
+   * @param instanceName Instance name
+   * @param response     Response, null if n/a.
+   * @return Result
+   */
+  public static String createRevisionDetailBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
+                                                final String instanceName, final HttpServletResponse response) {
+
+    final Map<String, String> valueMap = new HashMap<String, String>();
+
+    int added = 0;
+    int modified = 0;
+    int replaced = 0;
+    int deleted = 0;
+
+    //noinspection unchecked
+    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
+    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
+
+    for (final String entryPath : latestPathsList) {
+      final LogEntryActionType type = LogEntryActionType.parse(latestChangedPaths.get(entryPath).getType());
+      switch (type) {
+        case ADDED:
+          added++;
+          break;
+        case MODIFIED:
+          modified++;
+          break;
+        case REPLACED:
+          replaced++;
+          break;
+        case DELETED:
+          deleted++;
+          break;
+      }
+    }
+    valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
+    valueMap.put(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
+    valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
+    valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
+    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
+        WebUtils.nl2br(logEntry.getMessage()))));
+    valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
+        logEntry, baseURL, instanceName, false, false, response)));
+
+    final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
+    return substitutor.replace(bodyTemplate);
   }
 
   /**
@@ -48,7 +109,7 @@ public final class HTMLCreator {
    * @param instanceName      Instance name
    * @param showLatestRevInfo If true, the latest revision details DIV will be displayed.
    * @param linkToHead        If true, navigation links will be pointing at HEAD if applicable.
-   * @param response          The HTTP response, used to encode the session parameter to the generated URLs.
+   * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
   public static String createChangedPathsTable(final SVNLogEntry logEntry, final String baseURL,
@@ -75,12 +136,16 @@ public final class HTMLCreator {
 
       sb.append("    <td>");
 
+      String goToUrl;
       switch (actionType) {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
-          sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
-              baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead)));
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead);
+          if (response != null) {
+            goToUrl = response.encodeURL(goToUrl);
+          }
+          sb.append("<a href=\"").append(goToUrl);
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
@@ -88,8 +153,11 @@ public final class HTMLCreator {
           break;
         case MODIFIED:
           // diffUrl
-          sb.append("<a href=\"").append(response.encodeURL(createDiffUrl(
-              baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead)));
+          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead);
+          if (response != null) {
+            diffUrl = response.encodeURL(diffUrl);
+          }
+          sb.append("<a href=\"").append(diffUrl);
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
@@ -97,22 +165,31 @@ public final class HTMLCreator {
           break;
         case DELETED:
           // del
-          sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
-              baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, instanceName, false)));
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, instanceName, false);
+          if (response != null) {
+            goToUrl = response.encodeURL(goToUrl);
+          }
+          sb.append("<a href=\"").append(goToUrl);
           sb.append("\" title=\"Show previous revision\"><del>").append(logEntryPath.getPath()).append("</del></a>");
           break;
       }
 
       if (logEntryPath.getCopyPath() != null) {
         sb.append("<br><b>Copy from</b> ");
-        sb.append("<a href=\"").append(response.encodeURL(createGoToUrl(
-            baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), instanceName, false)));
+        goToUrl = createGoToUrl(baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), instanceName, false);
+        if (response != null) {
+          goToUrl = response.encodeURL(goToUrl);
+        }
+        sb.append("<a href=\"").append(goToUrl);
         if (showLatestRevInfo) {
           sb.append("&showlatestrevinfo=true");
         }
         sb.append("\" title=\"Show\">").append(logEntryPath.getCopyPath()).append("</a>").append(" @ ");
-        sb.append("<a href=\"").append(response.encodeURL(createRevInfoUrl(
-            baseURL, logEntryPath.getCopyRevision(), instanceName)));
+        String revInfoUrl = createRevInfoUrl(baseURL, logEntryPath.getCopyRevision(), instanceName);
+        if (response != null) {
+          revInfoUrl = response.encodeURL(revInfoUrl);
+        }
+        sb.append("<a href=\"").append(revInfoUrl);
         sb.append("\">");
         sb.append(logEntryPath.getCopyRevision()).append("</a>");
       }
