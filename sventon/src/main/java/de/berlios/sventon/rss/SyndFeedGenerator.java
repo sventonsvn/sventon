@@ -13,16 +13,13 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
-import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
 
 /**
  * Class to generate <code>RSS</code> feeds from Subversion log information.
@@ -57,13 +51,6 @@ public final class SyndFeedGenerator implements FeedGenerator {
    * Logging instance.
    */
   protected final Log logger = LogFactory.getLog(getClass());
-
-  public static final String LOG_MESSAGE_KEY = "logMessage";
-  public static final String ADDED_COUNT_KEY = "addedCount";
-  public static final String MODIFIED_COUNT_KEY = "modifiedCount";
-  public static final String REPLACED_COUNT_KEY = "replacedCount";
-  public static final String DELETED_COUNT_KEY = "deletedCount";
-  public static final String CHANGED_PATHS_KEY = "changedPaths";
 
   /**
    * Cached rss HTML body template.
@@ -123,65 +110,11 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
       description = new SyndContentImpl();
       description.setType("text/html");
-      description.setValue(createItemBody(getBodyTemplate(), logEntry, baseURL, instanceName, response));
+      description.setValue(HTMLCreator.createRevisionDetailBody(getBodyTemplate(), logEntry, baseURL, instanceName, response));
       entry.setDescription(description);
       entries.add(entry);
     }
     return entries;
-  }
-
-  /**
-   * Creates an RSS item body.
-   *
-   * @param bodyTemplate Body template string.
-   * @param logEntry     log entry revision.
-   * @param baseURL      Application base URL.
-   * @param instanceName Instance name
-   * @param response     Response
-   * @return Result
-   */
-  protected String createItemBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
-                                  final String instanceName, final HttpServletResponse response) {
-
-    final Map<String, String> valueMap = new HashMap<String, String>();
-
-    int added = 0;
-    int modified = 0;
-    int replaced = 0;
-    int deleted = 0;
-
-    //noinspection unchecked
-    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
-    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
-
-    for (final String entryPath : latestPathsList) {
-      final LogEntryActionType type = LogEntryActionType.parse(latestChangedPaths.get(entryPath).getType());
-      switch (type) {
-        case ADDED:
-          added++;
-          break;
-        case MODIFIED:
-          modified++;
-          break;
-        case REPLACED:
-          replaced++;
-          break;
-        case DELETED:
-          deleted++;
-          break;
-      }
-    }
-    valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
-    valueMap.put(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
-    valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
-    valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
-        WebUtils.nl2br(logEntry.getMessage()))));
-    valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, baseURL, instanceName, false, false, response)));
-
-    final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
-    return substitutor.replace(bodyTemplate);
   }
 
   /**
