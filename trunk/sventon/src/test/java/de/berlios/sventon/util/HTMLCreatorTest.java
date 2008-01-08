@@ -12,7 +12,7 @@ import java.util.Map;
 public class HTMLCreatorTest extends TestCase {
 
   public void testCreateChangedPathsTable() throws Exception {
-    final String result = "<table border=\"0\">\n" +
+    final String result = "<table class=\"changedPathsTable\">\n" +
         "  <tr>\n" +
         "    <th>Action</th>\n" +
         "    <th>Path</th>\n" +

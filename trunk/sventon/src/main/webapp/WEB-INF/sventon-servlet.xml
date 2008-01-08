@@ -87,6 +87,7 @@
     <property name="feedType" value="rss_2.0"/>
     <property name="logMessageLength" value="40"/>
     <property name="bodyTemplateFile" value="/rsstemplate.html"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
   </bean>
 
   <bean id="latestInfoController" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
@@ -294,6 +295,28 @@
     <ref local="entryCacheUpdater"/>
     <ref local="logMessageCacheUpdater"/>
     <ref local="revisionCacheUpdater"/>
+    <!--<ref local="mailNotifier"/>-->
+  </util:list>
+
+  <!-- NOTE: Make sure to change the parameters below! -->
+  <bean id="mailNotifier" class="de.berlios.sventon.mail.MailNotifier" init-method="init">
+    <property name="baseUrl" value="http://yourserver.com/svn/"/>
+    <property name="host" value="smtp.yourserver.com"/>
+    <property name="from" value="sventon@yourserver.com"/>
+    <property name="subject" value="@@instanceName@@ - revision @@revision@@"/>
+    <property name="port" value="25"/>
+    <property name="receivers" ref="mailNotificationReceivers"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+    <property name="bodyTemplateFile" value="/mailtemplate.html"/>
+    <property name="auth" value="false"/>
+    <property name="ssl" value="false"/>
+    <property name="user" value=""/>
+    <property name="password" value=""/>
+  </bean>
+
+  <!-- List of notification mail receivers -->
+  <util:list id="mailNotificationReceivers">
+    <value>you@yourserver.org</value>
   </util:list>
 
   <!-- Updater class for applying repository changes to cache -->

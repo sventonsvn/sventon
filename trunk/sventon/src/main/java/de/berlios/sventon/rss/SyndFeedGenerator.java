@@ -16,6 +16,7 @@ import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +64,11 @@ public final class SyndFeedGenerator implements FeedGenerator {
    * The rss body template file. Default set to <tt>rsstemplate.html</tt> in classpath root.
    */
   private String bodyTemplateFile = "/rsstemplate.html";
+
+  /**
+   * The date formatter instance.
+   */
+  private DateFormat dateFormat;
 
   /**
    * {@inheritDoc}
@@ -102,19 +110,29 @@ public final class SyndFeedGenerator implements FeedGenerator {
     // One logEntry is one commit (or revision)
     for (final SVNLogEntry logEntry : logEntries) {
       entry = new SyndEntryImpl();
-      entry.setTitle("Revision " + logEntry.getRevision() + " - "
-          + StringUtils.trimToEmpty(getAbbreviatedLogMessage(logEntry.getMessage(), logMessageLength)));
+      entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
+          StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));
       entry.setAuthor(logEntry.getAuthor());
       entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
       entry.setPublishedDate(logEntry.getDate());
 
       description = new SyndContentImpl();
       description.setType("text/html");
-      description.setValue(HTMLCreator.createRevisionDetailBody(getBodyTemplate(), logEntry, baseURL, instanceName, response));
+      description.setValue(HTMLCreator.createRevisionDetailBody(
+          getBodyTemplate(), logEntry, baseURL, instanceName, dateFormat, response));
       entry.setDescription(description);
       entries.add(entry);
     }
     return entries;
+  }
+
+  /**
+   * Sets the date format.
+   *
+   * @param dateFormat Date format.
+   */
+  public void setDateFormat(final String dateFormat) {
+    this.dateFormat = new SimpleDateFormat(dateFormat);
   }
 
   /**

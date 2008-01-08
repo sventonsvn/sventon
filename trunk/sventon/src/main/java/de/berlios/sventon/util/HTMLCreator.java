@@ -15,11 +15,13 @@ import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
 import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -35,6 +37,8 @@ public final class HTMLCreator {
   private static final String DIFF_URL = "diff.svn";
 
   public static final String LOG_MESSAGE_KEY = "logMessage";
+  public static final String AUTHOR_KEY = "author";
+  public static final String DATE_KEY = "date";
   public static final String ADDED_COUNT_KEY = "addedCount";
   public static final String MODIFIED_COUNT_KEY = "modifiedCount";
   public static final String REPLACED_COUNT_KEY = "replacedCount";
@@ -55,10 +59,11 @@ public final class HTMLCreator {
    * @param baseURL      Application base URL.
    * @param instanceName Instance name
    * @param response     Response, null if n/a.
+   * @param dateFormat   Date formatter instance.
    * @return Result
    */
   public static String createRevisionDetailBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
-                                                final String instanceName, final HttpServletResponse response) {
+                                                final String instanceName, final DateFormat dateFormat, final HttpServletResponse response) {
 
     final Map<String, String> valueMap = new HashMap<String, String>();
 
@@ -93,7 +98,9 @@ public final class HTMLCreator {
     valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
     valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
     valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
-        WebUtils.nl2br(logEntry.getMessage()))));
+        WebUtils.nl2br(StringEscapeUtils.escapeHtml(logEntry.getMessage())))));
+    valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logEntry.getAuthor())));
+    valueMap.put(DATE_KEY, dateFormat.format(logEntry.getDate()));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
         logEntry, baseURL, instanceName, false, false, response)));
 
@@ -116,7 +123,7 @@ public final class HTMLCreator {
                                                final String instanceName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {
 
-    final StringBuilder sb = new StringBuilder("<table border=\"0\">\n");
+    final StringBuilder sb = new StringBuilder("<table class=\"changedPathsTable\">\n");
     sb.append("  <tr>\n");
     sb.append("    <th>Action</th>\n");
     sb.append("    <th>Path</th>\n");

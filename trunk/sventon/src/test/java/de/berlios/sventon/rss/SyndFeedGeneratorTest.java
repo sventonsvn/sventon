@@ -14,9 +14,10 @@ import java.util.*;
 public class SyndFeedGeneratorTest extends TestCase {
 
   public void testGenerateFeedRSS20() throws Exception {
-    SyndFeedGenerator generator = new SyndFeedGenerator();
+    final SyndFeedGenerator generator = new SyndFeedGenerator();
     generator.setFeedType("rss_2.0");
     generator.setLogMessageLength(20);
+    generator.setDateFormat("yyyyMMdd HH:mm:ss");
 
     List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     Map<String, SVNLogEntryPath> changedPaths;
