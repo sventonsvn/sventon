@@ -90,14 +90,16 @@ public final class InstanceConfiguration {
    * Default number of RSS feed items (20).
    */
   public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
+
   public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
-  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = ".displayURL";
+  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = ".displayRoot";
   public static final String PROPERTY_KEY_USERNAME = ".uid";
   public static final String PROPERTY_KEY_PASSWORD = ".pwd";
   public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
   public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = ".enableAccessControl";
   public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
+
 
   /**
    * Constructor.
@@ -327,7 +329,7 @@ public final class InstanceConfiguration {
   /**
    * Gets the instance name.
    *
-   * @return
+   * @return Instance name.
    */
   public String getInstanceName() {
     return instanceName;
