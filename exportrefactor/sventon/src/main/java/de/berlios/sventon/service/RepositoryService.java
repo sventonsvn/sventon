@@ -96,8 +96,8 @@ public interface RepositoryService {
    * @param exportDirectory Destination directory
    * @throws SVNException if a subversion error occur
    */
-  void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long revision,
-              final ExportDirectory exportDirectory) throws SVNException;
+  void export(final SVNRepository repository, final List<SVNFileRevision> targets, final ExportDirectory exportDirectory)
+      throws SVNException;
 
   /**
    * Gets a file from the repository as a raw text file.

@@ -78,7 +78,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
 
     try {
       logger.debug(exportDirectory);
-      getRepositoryService().export(repository, targets, revision.getNumber(), exportDirectory);
+      getRepositoryService().export(repository, targets, exportDirectory);
       final File compressedFile = exportDirectory.compress(archiveFileCharset);
       output = response.getOutputStream();
       response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);

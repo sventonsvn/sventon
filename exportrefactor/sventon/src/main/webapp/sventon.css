@@ -405,6 +405,7 @@ a.helpDivCloseLink {
 }
 
 .droparea {
+  font-style: italic;
   padding: 5px;
   background-color: white;
   height: 20px;

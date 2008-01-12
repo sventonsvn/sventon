@@ -42,17 +42,16 @@ public class DiffCommandTest extends TestCase {
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
 
-  public void testDiffCommandIAE() throws Exception {
+  public void testDiffCommandNoHistory() throws Exception {
     final String[] params = new String[]{
-        "/bug/code/try2/Order.java;;92",
-        "/bug/code/try2/OrderDetail.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/Order.java;;92"
+    };
 
     try {
       new DiffCommand(parameterParser.parseEntries(params));
-      fail("Should throw IllegalArgumentException");
+      fail("Should throw DiffException");
     }
-    catch (IllegalArgumentException ex) {
+    catch (DiffException ex) {
       // expected
     }
   }

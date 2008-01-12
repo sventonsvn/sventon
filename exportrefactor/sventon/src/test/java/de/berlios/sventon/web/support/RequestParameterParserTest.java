@@ -18,13 +18,14 @@ public class RequestParameterParserTest extends TestCase {
     final List<SVNFileRevision> entries = requestParameterParser.parseEntries(mockRequest);
     assertEquals(1, entries.size());
 
-    final SVNFileRevision entry1 = entries.get(0);
-    assertEquals("/trunk/test;;file.java", entry1.getPath());
-    assertEquals(123, entry1.getRevision());
+    final SVNFileRevision entry0 = entries.get(0);
+    assertEquals("/trunk/test;;file.java", entry0.getPath());
+    assertEquals(123, entry0.getRevision());
   }
 
   public void testParseEntries() throws Exception {
     final String[] parameters = new String[]{
+        "/trunk/test.java;;3",
         "/trunk/test.java;;2",
         "/trunk/test.java;;1"
     };
@@ -32,14 +33,18 @@ public class RequestParameterParserTest extends TestCase {
     mockRequest.addParameter("entry", parameters);
     final RequestParameterParser requestParameterParser = new RequestParameterParser();
     final List<SVNFileRevision> entries = requestParameterParser.parseEntries(mockRequest);
-    assertEquals(2, entries.size());
+    assertEquals(3, entries.size());
 
-    final SVNFileRevision entry1 = entries.get(0);
+    final SVNFileRevision entry0 = entries.get(0);
+    assertEquals("/trunk/test.java", entry0.getPath());
+    assertEquals(1, entry0.getRevision());
+
+    final SVNFileRevision entry1 = entries.get(1);
     assertEquals("/trunk/test.java", entry1.getPath());
     assertEquals(2, entry1.getRevision());
 
-    final SVNFileRevision entry2 = entries.get(1);
+    final SVNFileRevision entry2 = entries.get(2);
     assertEquals("/trunk/test.java", entry2.getPath());
-    assertEquals(1, entry2.getRevision());
+    assertEquals(3, entry2.getRevision());
   }
 }
