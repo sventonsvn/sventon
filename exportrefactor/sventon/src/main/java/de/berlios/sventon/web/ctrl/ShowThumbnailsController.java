@@ -13,10 +13,11 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.web.support.RequestParameterParser;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -48,21 +49,21 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entryParameters = ServletRequestUtils.getRequiredStringParameters(request, "entry");
+    final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final List<String> entries = new ArrayList<String>();
+    final List<SVNFileRevision> imageEntries = new ArrayList<SVNFileRevision>();
 
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.
-    for (final String entry : entryParameters) {
+    for (final SVNFileRevision entry : entries) {
       logger.debug("entry: " + entry);
-      if (mimeFileTypeMap.getContentType(entry).startsWith("image")) {
-        entries.add(entry);
+      if (mimeFileTypeMap.getContentType(entry.getPath()).startsWith("image")) {
+        imageEntries.add(entry);
       }
     }
-    logger.debug(entries.size() + " entries out of " + entryParameters.length + " are image files");
-    model.put("thumbnailentries", entries);
+    logger.debug(imageEntries.size() + " entries out of " + entries.size() + " are image files");
+    model.put("thumbnailentries", imageEntries);
     return new ModelAndView("showThumbnails", model);
   }
 

@@ -16,11 +16,12 @@ import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.web.support.RequestParameterParser;
 import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -32,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,7 +73,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
     ServletOutputStream output = null;
     InputStream fileInputStream = null;
 
-    final List<String> targets = Arrays.asList(ServletRequestUtils.getRequiredStringParameters(request, "entry"));
+    final List<SVNFileRevision> targets = new RequestParameterParser().parseEntries(request);
     final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
 
     try {

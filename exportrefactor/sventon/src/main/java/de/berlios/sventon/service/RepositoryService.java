@@ -93,11 +93,10 @@ public interface RepositoryService {
    *
    * @param repository      The repository
    * @param targets         Targets to export.
-   * @param revision        Revision to export
    * @param exportDirectory Destination directory
    * @throws SVNException if a subversion error occur
    */
-  void export(final SVNRepository repository, final List<String> targets, final long revision,
+  void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long revision,
               final ExportDirectory exportDirectory) throws SVNException;
 
   /**

@@ -17,11 +17,11 @@ import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
-import org.apache.commons.lang.StringUtils;
+import de.berlios.sventon.web.support.RequestParameterParser;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -46,8 +46,8 @@ public final class DiffController extends AbstractSVNTemplateController implemen
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String[] entries = ServletRequestUtils.getRequiredStringParameters(request, "entry");
-    logger.debug("Diffing file (side-by-side): " + StringUtils.join(entries, ","));
+    final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
+    logger.debug("Diffing file (side-by-side): " + entries);
     final Map<String, Object> model = new HashMap<String, Object>();
 
     final DiffCommand diffCommand = new DiffCommand(entries);
