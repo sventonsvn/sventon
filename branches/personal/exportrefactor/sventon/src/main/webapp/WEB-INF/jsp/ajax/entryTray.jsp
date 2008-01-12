@@ -23,13 +23,16 @@
   <input type="hidden" name="name" value="${command.name}">
 
   <table class="entryTrayTable">
-    <c:set var="rowCount" value="0"/>
     <tr>
-      <th></th>
-      <th></th>
-      <th>Name</th>
-      <th></th>
+      <td class="droparea" colspan="4">Drag &amp; drop file/dir icons here!</td>
     </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><b>Name</b></td>
+      <td></td>
+    </tr>
+    <c:set var="rowCount" value="0"/>
     <c:forEach var="entry" items="${userRepositoryContext.repositoryEntryTray.unmodifiableEntries}">
       <c:url value="repobrowser.svn" var="entryTrayViewUrl">
         <c:param name="path" value="${entry.fullEntryName}" />
