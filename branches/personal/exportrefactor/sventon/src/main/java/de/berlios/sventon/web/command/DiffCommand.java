@@ -49,18 +49,7 @@ public final class DiffCommand {
    */
   private final String toPath;
 
-  /**
-   * Constructor.
-   * Used when diffing two given entries with given path and revision details.
-   *
-   * @param parameters The string array containing exactly two entries in the format,
-   *                   <i>pathAndFilename;;revision</i>.
-   *                   The first is assumed to be the <i>to (i.e. latest)</i> revision,
-   *                   the second to be the <i>from (i.e. oldest)</i> revision.
-   * @throws DiffException            if unable to parse given input.
-   * @throws IllegalArgumentException if argument is null or array does not contain
-   *                                  exactly two entries.
-   */
+/*
   public DiffCommand(final String[] parameters) throws DiffException {
     final String[] toPathAndRevision;
     final String[] fromPathAndRevision;
@@ -88,6 +77,7 @@ public final class DiffCommand {
       throw new DiffException("Unable to diff. Unable to parse revision and path.", ex);
     }
   }
+*/
 
   /**
    * Constructor.
@@ -102,7 +92,7 @@ public final class DiffCommand {
    */
   public DiffCommand(final List<SVNFileRevision> revisions) throws DiffException {
 
-    if (revisions == null || revisions.size() < 2) {
+    if (revisions == null || revisions.size() != 2) {
       throw new DiffException("The entry does not have a history.");
     }
 

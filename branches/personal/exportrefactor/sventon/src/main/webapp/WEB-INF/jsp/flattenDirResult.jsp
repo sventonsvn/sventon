@@ -52,7 +52,7 @@
           </c:url>
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
-            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName}"></td>
+            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}"></td>
             <td class="sventonCol2">
               <a href="#" onclick="return listFiles('${rowCount}', '${entry.fullEntryName}', '${command.name}');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
