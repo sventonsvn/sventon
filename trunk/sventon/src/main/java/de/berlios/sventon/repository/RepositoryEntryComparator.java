@@ -77,7 +77,14 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
     // Natural ordering of strings as used below may not always be desirable?
     switch (sortType) {
       case NAME:
-        return nullSafeCompare(entryName1, entryName2);
+        final int nameCompare = nullSafeCompare(entryName1, entryName2);
+        if (nameCompare == 0) {
+          final long revision1 = entry1.getRevision();
+          final long revision2 = entry2.getRevision();
+          return revision1 == revision2 ? 0 : revision1 < revision2 ? -1 : 1;
+        } else {
+          return nameCompare;
+        }
       case AUTHOR:
         final String author1 = entry1.getAuthor();
         final String author2 = entry2.getAuthor();

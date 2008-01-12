@@ -105,20 +105,18 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final void export(final SVNRepository repository, final List<String> targets, final long revision,
+  public final void export(final SVNRepository repository, final List<SVNFileRevision> targets,
                            final ExportDirectory exportDirectory) throws SVNException {
 
     final long start = System.currentTimeMillis();
-    long exportRevision = revision;
-    if (exportRevision == -1) {
-      exportRevision = repository.getLatestRevision();
-    }
-    for (final String target : targets) {
-      logger.debug("Exporting file [" + target + "] revision [" + exportRevision + "]");
-      final File entryToExport = new File(exportDirectory.getFile(), target);
+    for (final SVNFileRevision fileRevision : targets) {
+      logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
+      final File revisionRootDir = new File(exportDirectory.getFile(), String.valueOf(fileRevision.getRevision()));
+      revisionRootDir.mkdirs();
+      final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
-          SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + target), entryToExport,
-          SVNRevision.create(exportRevision), SVNRevision.create(exportRevision), null, true, true);
+          SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
+          SVNRevision.create(fileRevision.getRevision()), SVNRevision.create(fileRevision.getRevision()), null, true, true);
     }
     logger.debug("PERF: export(): " + (System.currentTimeMillis() - start));
   }

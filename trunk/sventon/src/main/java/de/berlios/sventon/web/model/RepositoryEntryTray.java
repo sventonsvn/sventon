@@ -73,4 +73,10 @@ public final class RepositoryEntryTray implements Serializable {
     return Collections.unmodifiableSet(entries);
   }
 
+  /**
+   * Removes all entries from the tray.
+   */
+  public void removeAll() {
+    entries.clear();
+  }
 }

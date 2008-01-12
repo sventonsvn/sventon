@@ -9,6 +9,7 @@ import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.DiffCommand;
+import de.berlios.sventon.web.support.RequestParameterParser;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -27,6 +28,8 @@ public class RepositoryServiceImplTest extends TestCase {
 
   private static final String BR = System.getProperty("line.separator");
 
+  private final RequestParameterParser parameterParser = new RequestParameterParser();
+
   public void testDiffUnifiedBinaryFile() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
@@ -38,9 +41,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffUnified(repository, diffCommand, ENCODING, configuration);
@@ -64,9 +68,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffUnified(repository, diffCommand, ENCODING, configuration);
@@ -98,9 +103,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffUnified(repository, diffCommand, ENCODING, configuration);
@@ -140,9 +146,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     final String s = service.diffUnified(repository, diffCommand, ENCODING, configuration);
     assertEquals("@@ -1 +1 @@" + BR + "-test left file contents" + BR + "+test right file contents", s.trim());
@@ -159,9 +166,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
@@ -185,9 +193,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
@@ -219,9 +228,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try1;;91",
-        "/bug/code/try2;;90"});
+        "/bug/code/try2;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
@@ -253,9 +263,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
       service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
@@ -271,9 +282,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryService service = new RepositoryServiceImpl();
     final InstanceConfiguration configuration = new InstanceConfiguration("test");
 
-    final DiffCommand diffCommand = new DiffCommand(new String[]{
+    final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"});
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     List<SideBySideDiffRow> diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
     assertEquals(1, diff.size());

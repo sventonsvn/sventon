@@ -32,7 +32,7 @@
 
   <tr class="sventonFileEntryTableRow expandedDir${rowNumber}">
     <td class="sventonCol1">
-      <input type="checkbox" name="entry" value="${entry.fullEntryName}">
+      <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
     </td>
     <td class="sventonCol2">
       <sventon-ui:fileTypeIcon filename="${entry.name}"/>
