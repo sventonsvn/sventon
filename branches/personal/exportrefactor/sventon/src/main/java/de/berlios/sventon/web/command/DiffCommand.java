@@ -19,6 +19,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Comparator;
 
 /**
  * DiffCommand.
@@ -49,36 +50,6 @@ public final class DiffCommand {
    */
   private final String toPath;
 
-/*
-  public DiffCommand(final String[] parameters) throws DiffException {
-    final String[] toPathAndRevision;
-    final String[] fromPathAndRevision;
-
-    if (parameters == null || parameters.length != 2) {
-      throw new IllegalArgumentException("Parameter list must contain exactly two entries");
-    }
-
-    try {
-      toPathAndRevision = parameters[0].split(";;");
-      toPath = toPathAndRevision[0];
-
-      fromPathAndRevision = parameters[1].split(";;");
-      fromPath = fromPathAndRevision[0];
-
-      if (toPathAndRevision.length == 1 && fromPathAndRevision.length == 1) {
-        // Assume HEAD revision
-        toRevision = SVNRevision.HEAD;
-        fromRevision = SVNRevision.HEAD;
-      } else {
-        toRevision = SVNRevision.parse(toPathAndRevision[1]);
-        fromRevision = SVNRevision.parse(fromPathAndRevision[1]);
-      }
-    } catch (Exception ex) {
-      throw new DiffException("Unable to diff. Unable to parse revision and path.", ex);
-    }
-  }
-*/
-
   /**
    * Constructor.
    * Used when diffing an entry to its previous entry in history.
@@ -92,12 +63,16 @@ public final class DiffCommand {
    */
   public DiffCommand(final List<SVNFileRevision> revisions) throws DiffException {
 
-    if (revisions == null || revisions.size() != 2) {
+    if (revisions == null || revisions.size() < 2) {
       throw new DiffException("The entry does not have a history.");
     }
 
     // Reverse to get latest first
-    Collections.reverse(revisions);
+    Collections.sort(revisions, new Comparator<SVNFileRevision>() {
+      public int compare(final SVNFileRevision o1, final SVNFileRevision o2) {
+        return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
+      }
+    });
     final Iterator revisionIterator = revisions.iterator();
     // Grab the latest..
     final SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();

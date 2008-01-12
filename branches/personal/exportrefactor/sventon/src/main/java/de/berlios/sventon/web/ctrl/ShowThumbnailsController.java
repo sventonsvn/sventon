@@ -57,7 +57,7 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.
     for (final SVNFileRevision entry : entries) {
-      logger.debug("entry: " + entry);
+      logger.debug("entry: " + entry.getPath() + "@" + entry.getRevision());
       if (mimeFileTypeMap.getContentType(entry.getPath()).startsWith("image")) {
         imageEntries.add(entry);
       }

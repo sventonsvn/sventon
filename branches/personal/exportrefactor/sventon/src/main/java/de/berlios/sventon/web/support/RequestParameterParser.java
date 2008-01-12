@@ -17,6 +17,7 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ import java.util.List;
  */
 public class RequestParameterParser {
 
+  /**
+   * The delimiter between the path and the revision values.
+   */
   private static final String DELIMITER = ";;";
 
   /**
@@ -33,7 +37,6 @@ public class RequestParameterParser {
    *
    * @param entries Array of entries.
    * @return List of file revisions.
-   * @throws ServletRequestBindingException if request is missing the parameters.
    */
   public List<SVNFileRevision> parseEntries(final String[] entries) {
     final List<SVNFileRevision> result = new ArrayList<SVNFileRevision>();
@@ -47,6 +50,7 @@ public class RequestParameterParser {
       final SVNFileRevision fileRevision = new SVNFileRevision(path, Long.parseLong(revision), null, null);
       result.add(fileRevision);
     }
+    Collections.sort(result);
     return result;
   }
 
