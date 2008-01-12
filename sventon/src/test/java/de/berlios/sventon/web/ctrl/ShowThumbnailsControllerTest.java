@@ -8,6 +8,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
@@ -24,7 +25,10 @@ public class ShowThumbnailsControllerTest extends TestCase {
     ctrl.setMimeFileTypeMap(mftm);
 
     final MockHttpServletRequest req = new MockHttpServletRequest();
-    final String[] pathEntries = new String[]{"file1.gif", "file2.jpg", "file.abc"};
+    final String[] pathEntries = new String[]{
+        "file1.gif;;123",
+        "file2.jpg;;123",
+        "file.abc;;123"};
     req.addParameter("entry", pathEntries);
 
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
@@ -36,6 +40,10 @@ public class ShowThumbnailsControllerTest extends TestCase {
     final List entries = (List) model.get("thumbnailentries");
 
     assertEquals(2, entries.size());
+
+    final SVNFileRevision entry0 = (SVNFileRevision) entries.get(0);
+    assertEquals("file1.gif", entry0.getPath());
+    assertEquals(123, entry0.getRevision());
   }
 
   static class TestRepository extends SVNRepositoryStub {

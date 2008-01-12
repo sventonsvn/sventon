@@ -75,7 +75,7 @@
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td class="sventonCol1">
-            <input type="checkbox" name="entry" value="${entry.fullEntryName}">
+            <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
           </td>
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">

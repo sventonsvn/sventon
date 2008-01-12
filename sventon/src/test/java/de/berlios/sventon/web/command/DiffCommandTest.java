@@ -1,84 +1,71 @@
 package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.diff.DiffException;
+import de.berlios.sventon.web.support.RequestParameterParser;
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 public class DiffCommandTest extends TestCase {
 
+  private final RequestParameterParser parameterParser = new RequestParameterParser();
+
   public void testDiffCommandNull() throws Exception {
     try {
-      new DiffCommand((String[]) null);
+      new DiffCommand(null);
       fail("Should have thrown an IAE");
     }
-    catch (IllegalArgumentException ex) {
+    catch (DiffException ex) {
       // expected
     }
   }
 
   public void testDiffCommand() throws Exception {
-    String[] params = new String[]{
+    final String[] params = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
         "/bug/code/try2/OrderDetailModel.java;;90"};
 
-    DiffCommand diffCommand = new DiffCommand(params);
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(params));
     assertEquals(91, diffCommand.getToRevision().getNumber());
     assertEquals(90, diffCommand.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getToPath());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
 
-  public void testDiffCommandNoRevision() throws Exception {
-    String[] params = new String[]{
-        "/bug/code/try2/OrderDetailModel.java",
-        "/bug/code/try2/OrderDetailModel.java"};
-
-    // If no revision is given, assume HEAD
-    DiffCommand diffCommand = new DiffCommand(params);
-    assertEquals(SVNRevision.HEAD, diffCommand.getToRevision());
-    assertEquals(SVNRevision.HEAD, diffCommand.getFromRevision());
-    assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getToPath());
-    assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
-  }
-
   public void testDiffCommandDifferentPaths() throws Exception {
-    String[] params = new String[]{
+    final String[] params = new String[]{
         "/bug/code/try2/OrderDetail.java;;91",
         "/bug/code/try2/OrderDetailModel.java;;90"};
 
-    DiffCommand diffCommand = new DiffCommand(params);
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(params));
     assertEquals(91, diffCommand.getToRevision().getNumber());
     assertEquals(90, diffCommand.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetail.java", diffCommand.getToPath());
     assertEquals("/bug/code/try2/OrderDetailModel.java", diffCommand.getFromPath());
   }
 
-  public void testDiffCommandIAE() throws Exception {
-    String[] params = new String[]{
-        "/bug/code/try2/Order.java;;92",
-        "/bug/code/try2/OrderDetail.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+  public void testDiffCommandNoHistory() throws Exception {
+    final String[] params = new String[]{
+        "/bug/code/try2/Order.java;;92"
+    };
 
     try {
-      new DiffCommand(params);
-      fail("Should throw IllegalArgumentException");
+      new DiffCommand(parameterParser.parseEntries(params));
+      fail("Should throw DiffException");
     }
-    catch (IllegalArgumentException ex) {
+    catch (DiffException ex) {
       // expected
     }
   }
 
   public void testDiffCommandWrongDelimiter() throws Exception {
-    String[] params = new String[]{
+    final String[] params = new String[]{
         "/bug/code/try2/OrderDetail.java##91",
         "/bug/code/try2/OrderDetailModel.java##90"};
 
     try {
-      new DiffCommand(params);
-      //fail("Should throw DiffException");
-      //TODO: Fix the error above. Temp disable for now.
+      new DiffCommand(parameterParser.parseEntries(params));
+      fail("Should throw IllegalArgumentException");
     }
-    catch (DiffException ex) {
+    catch (IllegalArgumentException ex) {
       // expected
     }
   }

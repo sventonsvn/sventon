@@ -383,9 +383,9 @@ a.helpDivCloseLink {
 }
 
 .entryTrayHeaderTable {
+  width: 280px;
   color: #E2E4E6;
   font-weight: bold;
-  width: 280px;
 }
 
 .entryTrayTable {
@@ -402,6 +402,15 @@ a.helpDivCloseLink {
 .configFormTable {
   border: none;
   width: 800px;
+}
+
+.droparea {
+  font-style: italic;
+  padding: 5px;
+  background-color: white;
+  height: 20px;
+  text-align: center;
+  border: 1px dashed;
 }
 
 .entry {
