@@ -1,0 +1,31 @@
+<%
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://sventon.berlios.de.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
+%>
+<c:url value="repobrowser.svn" var="backUrl">
+  <c:param name="path" value="${command.pathNoLeaf}" />
+  <c:param name="revision" value="${command.revision}" />
+  <c:param name="name" value="${command.name}" />
+</c:url>
+
+<tr class="sventonEntryEven">
+  <td class="sventonCol1"></td>
+  <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"></td>
+  <td class="sventonCol3">
+    <a href="<sventon-ui:formatUrl url='${backUrl}'/> ">..&nbsp;&nbsp;&nbsp;</a>
+  </td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>
