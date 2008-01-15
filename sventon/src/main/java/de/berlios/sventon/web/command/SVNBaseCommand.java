@@ -12,9 +12,9 @@
 package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.util.PathUtil;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * SVNBaseCommand.
@@ -201,50 +201,12 @@ public final class SVNBaseCommand {
     return name;
   }
 
-  /**
-   * Return the contents of this object as a map model.
-   * <p/>
-   * Model data keys:
-   * <ul>
-   * <li><code>revision</code></li>
-   * <li><code>path</code></li>
-   * </ul>
-   *
-   * @return The model map.
-   */
-  public Map<String, Object> asModel() {
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("revision", getRevision());
-    model.put("path", getPath());
-    model.put("name", getName());
-    model.put("sortType", getSortType());
-    model.put("sortMode", getSortMode());
-    return model;
-  }
-
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    final SVNBaseCommand that = (SVNBaseCommand) o;
-
-    if (name != null ? !name.equals(that.name) : that.name != null) return false;
-    if (path != null ? !path.equals(that.path) : that.path != null) return false;
-    if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
-    if (sortMode != null ? !sortMode.equals(that.sortMode) : that.sortMode != null) return false;
-    if (sortType != null ? !sortType.equals(that.sortType) : that.sortType != null) return false;
-
-    return true;
+    return EqualsBuilder.reflectionEquals(this, o);
   }
 
   public int hashCode() {
-    int result;
-    result = (path != null ? path.hashCode() : 0);
-    result = 29 * result + (revision != null ? revision.hashCode() : 0);
-    result = 29 * result + (name != null ? name.hashCode() : 0);
-    result = 29 * result + (sortType != null ? sortType.hashCode() : 0);
-    result = 29 * result + (sortMode != null ? sortMode.hashCode() : 0);
-    return result;
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 
   /**
@@ -252,12 +214,6 @@ public final class SVNBaseCommand {
    */
   @Override
   public String toString() {
-    return "SVNBaseCommand{" +
-        "path='" + path + '\'' +
-        ", revision='" + revision + '\'' +
-        ", name='" + name + '\'' +
-        ", sortType='" + sortType + '\'' +
-        ", sortMode='" + sortMode + '\'' +
-        '}';
+    return ToStringBuilder.reflectionToString(this);
   }
 }
