@@ -62,13 +62,4 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("trunk/src/File.java", command.getPath());
   }
 
-  public void testAsMap() throws Exception {
-    SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("/src/File.java");
-    command.setRevision("123");
-    Map<String, Object> model = command.asModel();
-
-    assertEquals("/src/File.java", model.get("path"));
-    assertEquals("123", model.get("revision"));
-  }
 }
