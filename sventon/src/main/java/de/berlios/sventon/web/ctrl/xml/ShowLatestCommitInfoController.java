@@ -61,6 +61,11 @@ public final class ShowLatestCommitInfoController extends AbstractController {
   private static final String ERROR_MESSAGE = "Unable to get latest commit info";
 
   /**
+   * The repository factory.
+   */
+  private RepositoryFactory repositoryFactory;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -79,9 +84,9 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), uid, pwd);
+        repository = repositoryFactory.getRepository(configuration.getSVNURL(), uid, pwd);
       } else {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
             configuration.getUid(), configuration.getPwd());
       }
 
@@ -103,6 +108,15 @@ public final class ShowLatestCommitInfoController extends AbstractController {
       }
     }
     return null;
+  }
+
+  /**
+   * Sets the repository factory instance.
+   *
+   * @param repositoryFactory Factory.
+   */
+  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+    this.repositoryFactory = repositoryFactory;
   }
 
   /**

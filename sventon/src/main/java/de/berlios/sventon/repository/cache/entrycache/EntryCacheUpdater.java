@@ -60,6 +60,11 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   private RepositoryService repositoryService;
 
   /**
+   * The repository factory.
+   */
+  private RepositoryFactory repositoryFactory;
+
+  /**
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
@@ -86,7 +91,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     try {
       final EntryCache entryCache = entryCacheManager.getCache(instanceName);
       final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-      repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+      repository = repositoryFactory.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
       LOGGER.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
@@ -318,6 +323,15 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
         addDirectories(entryCache, repository, pathToAdd, revision, repositoryService);
       }
     }
+  }
+
+  /**
+   * Sets the repository factory instance.
+   *
+   * @param repositoryFactory Factory.
+   */
+  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+    this.repositoryFactory = repositoryFactory;
   }
 
   /**
