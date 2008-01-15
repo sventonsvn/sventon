@@ -24,18 +24,6 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
  */
 public final class RepositoryFactory {
 
-
-  /**
-   * Singelton instance of the factory.
-   */
-  public static final RepositoryFactory INSTANCE = new RepositoryFactory();
-
-  /**
-   * Private constructor.
-   */
-  private RepositoryFactory() {
-  }
-
   /**
    * Gets a repository instance configured using given <code>InstanceConfiguration</code>.
    * <p/>

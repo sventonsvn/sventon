@@ -41,6 +41,11 @@ public final class ConfigCommandValidator implements Validator {
   private boolean testConnection = true;
 
   /**
+   * The repository factory.
+   */
+  private RepositoryFactory repositoryFactory;
+
+  /**
    * Constructor.
    */
   public ConfigCommandValidator() {
@@ -61,6 +66,15 @@ public final class ConfigCommandValidator implements Validator {
    */
   public boolean supports(final Class clazz) {
     return clazz.equals(ConfigCommand.class);
+  }
+
+  /**
+   * Sets the repository factory instance.
+   *
+   * @param repositoryFactory Factory.
+   */
+  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+    this.repositoryFactory = repositoryFactory;
   }
 
   /**
@@ -103,8 +117,7 @@ public final class ConfigCommandValidator implements Validator {
 
         SVNRepository repository = null;
         try {
-          //TODO: Extract and kill this singelton in favor of DI
-          repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+          repository = repositoryFactory.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
           repository.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);

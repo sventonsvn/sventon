@@ -68,6 +68,11 @@ public final class RevisionObservableImpl extends Observable implements Revision
   private RepositoryService repositoryService;
 
   /**
+   * Repository factory.
+   */
+  private RepositoryFactory repositoryFactory;
+
+  /**
    * Constructor.
    *
    * @param observers List of observers to add
@@ -195,7 +200,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
           instance.setUpdatingCache(true);
           SVNRepository repository = null;
           try {
-            repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+            repository = repositoryFactory.getRepository(configuration.getSVNURL(),
                 configuration.getUid(), configuration.getPwd());
             final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
             update(instanceName, repository, objectCache, flushAfterUpdate);
@@ -234,4 +239,12 @@ public final class RevisionObservableImpl extends Observable implements Revision
     this.repositoryService = repositoryService;
   }
 
+  /**
+   * Sets the repository factory instance.
+   *
+   * @param repositoryFactory Factory.
+   */
+  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+    this.repositoryFactory = repositoryFactory;
+  }
 }

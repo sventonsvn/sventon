@@ -179,6 +179,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   private RepositoryService repositoryService;
 
+  /**
+   * The repository factory.
+   */
+  private RepositoryFactory repositoryFactory;
+
 
   /**
    * Constructor.
@@ -218,10 +223,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
 
       if (configuration.isAccessControlEnabled()) {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
             repositoryContext.getUid(), repositoryContext.getPwd());
       } else {
-        repository = RepositoryFactory.INSTANCE.getRepository(configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
             configuration.getUid(), configuration.getPwd());
       }
 
@@ -587,6 +592,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public final void setAvailableCharsets(final AvailableCharsets availableCharsets) {
     this.availableCharsets = availableCharsets;
+  }
+
+  /**
+   * Sets the repository factory instance.
+   *
+   * @param repositoryFactory Factory.
+   */
+  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+    this.repositoryFactory = repositoryFactory;
   }
 
 }

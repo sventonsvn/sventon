@@ -50,6 +50,8 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
+  <bean id="repositoryFactory" class="de.berlios.sventon.repository.RepositoryFactory" scope="prototype"/> 
+
   <bean id="application" class="de.berlios.sventon.appl.Application" init-method="init" destroy-method="shutdown">
     <constructor-arg index="0" ref="sventonDir"/>
     <constructor-arg index="1" ref="sventonConfigFile"/>
@@ -67,13 +69,14 @@
     <property name="application" ref="application"/>
   </bean>
 
-  <bean id="abstractController" abstract="true">
+  <bean id="abstractController" class="de.berlios.sventon.web.ctrl.AbstractSVNTemplateController" abstract="true">
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
     <property name="maxRevisionsCount" value="10"/>
     <property name="availableCharsets" ref="availableCharsets"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <bean id="rssController" class="de.berlios.sventon.web.ctrl.xml.RSSController">
@@ -81,6 +84,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="feedGenerator" ref="syndFeedGenerator"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
@@ -95,6 +99,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="encoding" ref="defaultEncoding"/>
     <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController"
@@ -288,6 +293,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="maxRevisionCountPerUpdate" value="500"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
@@ -329,6 +335,7 @@
     <constructor-arg index="0" ref="entryCacheManager"/>
     <constructor-arg index="1" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
