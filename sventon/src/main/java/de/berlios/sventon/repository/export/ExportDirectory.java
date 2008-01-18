@@ -41,19 +41,21 @@ public final class ExportDirectory {
   public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
   /**
-   * The export directory <code>File</code> instance.
-   */
-  private final File exportDirectory;
-
-  /**
    * The directory name prefix.
    */
   private static final String DIRECTORY_PREFIX = "sventon-";
 
   /**
+   * The export directory <code>File</code> instance.
+   */
+  private final File exportDirectory;
+
+  /**
    * The instance name.
    */
-  private String instanceName;
+  private final String instanceName;
+
+  private final Charset charset;
 
   /**
    * Creates an export directory in given parent directory using the name format
@@ -61,9 +63,11 @@ public final class ExportDirectory {
    *
    * @param instanceName Instance name
    * @param parentDir    Parent dir
+   * @param charset      The charset to use for filenames and comments in compressed archive file.
    */
-  public ExportDirectory(final String instanceName, final File parentDir) {
+  public ExportDirectory(final String instanceName, final File parentDir, final Charset charset) {
     this.instanceName = instanceName;
+    this.charset = charset;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());
     exportDirectory.mkdirs();
     exportDirectory.deleteOnExit();
@@ -72,11 +76,10 @@ public final class ExportDirectory {
   /**
    * Compresses the temporary export directory.
    *
-   * @param charset The charset to use for filenames and comments in compressed archive file.
    * @return The <code>File</code> instance of the compressed file.
    * @throws IOException if IO error occurs.
    */
-  public File compress(final Charset charset) throws IOException {
+  public File compress() throws IOException {
     final File zipFile = new File(exportDirectory.getParentFile(), createTempFilename(new Date()));
 
     logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
@@ -112,14 +115,4 @@ public final class ExportDirectory {
     FileUtils.forceDelete(exportDirectory);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return "ExportDirectory{" +
-        "exportDirectory=" + exportDirectory +
-        ", instanceName='" + instanceName + '\'' +
-        '}';
-  }
 }

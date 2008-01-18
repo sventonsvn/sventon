@@ -26,7 +26,7 @@ public final class AvailableCharsets {
   /**
    * Cached available character sets.
    */
-  private Set<String> charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
+  private final Set<String> charsets = new TreeSet<String>(Charset.availableCharsets().keySet());
 
   /**
    * Default charset.

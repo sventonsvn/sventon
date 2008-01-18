@@ -18,7 +18,6 @@ import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
 import de.berlios.sventon.repository.cache.revisioncache.RevisionCacheManager;
-import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
@@ -52,7 +51,7 @@ public final class Application {
   /**
    * Set of added subversion repository instances.
    */
-  private Map<String, Instance> instances = new TreeMap<String, Instance>();
+  private final Map<String, Instance> instances = new TreeMap<String, Instance>();
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -62,22 +61,17 @@ public final class Application {
   /**
    * Application configuration directory.
    */
-  private File configurationDirectory;
+  private final File configurationDirectory;
 
   /**
    * Application configuration file name.
    */
-  private String configurationFilename;
+  private final String configurationFilename;
 
   private EntryCacheManager entryCacheManager;
   private LogMessageCacheManager logMessageCacheManager;
   private ObjectCacheManager objectCacheManager;
   private RevisionCacheManager revisionCacheManager;
-
-  /**
-   * The repository service instance.
-   */
-  private RepositoryService repositoryService;
 
   /**
    * Constructor.

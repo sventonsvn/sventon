@@ -19,6 +19,7 @@ import org.apache.commons.lang.Validate;
  * @author jesper@users.berlios.de
  */
 public enum LogEntryActionType {
+
   ADDED("Added", 'A'),
   DELETED("Deleted", 'D'),
   MODIFIED("Modified", 'M'),

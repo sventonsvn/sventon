@@ -33,11 +33,11 @@ public final class AnnotatedTextFile {
 
   private static final String NEWLINE = System.getProperty("line.separator");
 
-  private String path;
-  private String encoding;
-  private Colorer colorer;
-  private Map properties;
-  private String repositoryURL;
+  private final String path;
+  private final String encoding;
+  private final Colorer colorer;
+  private final Map properties;
+  private final String repositoryURL;
 
   /**
    * Constructor.

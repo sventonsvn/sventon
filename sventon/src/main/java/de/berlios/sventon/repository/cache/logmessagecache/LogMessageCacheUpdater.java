@@ -54,18 +54,19 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
+    final String instanceName = revisionUpdate.getInstanceName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: "
-        + revisionUpdate.getInstanceName());
+
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + instanceName);
 
     try {
-      final LogMessageCache logMessageCache = logMessageCacheManager.getCache(revisionUpdate.getInstanceName());
+      final LogMessageCache logMessageCache = logMessageCacheManager.getCache(instanceName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
         logMessageCache.clear();
       }
       updateInternal(logMessageCache, revisions);
-    } catch (final CacheException ex) {
-      LOGGER.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
+    } catch (final Exception ex) {
+      LOGGER.warn("Could not update cache instance [" + instanceName + "]", ex);
     }
   }
 
@@ -75,7 +76,7 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
    * @param logMessageCache Cache instance
    * @param revisions       Revisions
    */
-  protected static void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
+  protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         logMessageCache.add(new LogMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));

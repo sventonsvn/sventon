@@ -28,7 +28,8 @@ public class LogMessageCacheUpdaterTest extends TestCase {
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "jesper", new Date(), "Log message for revision 124."));
 
     assertEquals(0, cache.getSize());
-    LogMessageCacheUpdater.updateInternal(cache, logEntries);
+    final LogMessageCacheUpdater logMessageCacheUpdater = new LogMessageCacheUpdater(null);
+    logMessageCacheUpdater.updateInternal(cache, logEntries);
     assertEquals(2, cache.find("revision").size());
   }
 }

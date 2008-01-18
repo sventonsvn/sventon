@@ -97,7 +97,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    * @return Index searcher.
    * @throws IOException if unable to create searcher.
    */
-  private synchronized Searcher getIndexSearcher() throws IOException {
+  private Searcher getIndexSearcher() throws IOException {
     return new IndexSearcher(directory);
   }
 
@@ -107,7 +107,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    * @return Index reader.
    * @throws IOException if unable to create reader.
    */
-  private synchronized IndexReader getIndexReader() throws IOException {
+  private IndexReader getIndexReader() throws IOException {
     return IndexReader.open(directory);
   }
 

@@ -15,6 +15,7 @@ import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * SVNBaseCommand.
@@ -201,10 +202,18 @@ public final class SVNBaseCommand {
     return name;
   }
 
-  public boolean equals(Object o) {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(final Object o) {
     return EqualsBuilder.reflectionEquals(this, o);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
@@ -214,6 +223,6 @@ public final class SVNBaseCommand {
    */
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }

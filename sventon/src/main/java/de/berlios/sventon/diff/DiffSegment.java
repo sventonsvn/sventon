@@ -38,9 +38,9 @@ public final class DiffSegment {
   /**
    * The diff action.
    */
-  private DiffAction action;
+  private final DiffAction action;
 
-  private Map<Side, Interval> segmentSides = new HashMap<Side, Interval>(2);
+  private final Map<Side, Interval> segmentSides = new HashMap<Side, Interval>(2);
 
 
   /**

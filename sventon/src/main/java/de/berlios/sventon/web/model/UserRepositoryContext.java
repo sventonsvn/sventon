@@ -52,7 +52,7 @@ public class UserRepositoryContext implements Serializable {
   /**
    * The user's repository entry tray.
    */
-  private RepositoryEntryTray repositoryEntryTray = new RepositoryEntryTray();
+  private final RepositoryEntryTray repositoryEntryTray = new RepositoryEntryTray();
 
   /**
    * Search mode.

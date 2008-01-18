@@ -33,9 +33,10 @@ public final class TemporaryFileCleaner {
    */
   protected final Log logger = LogFactory.getLog(getClass());
 
+  private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
+
   private File exportRootDir;
   private long timeThreshold;
-  private Pattern digitPattern = Pattern.compile("\\d+");
 
   /**
    * Sets the export root directory.
@@ -80,7 +81,7 @@ public final class TemporaryFileCleaner {
    * @return True if file is old enough, according to the threshold value.
    */
   protected boolean isOld(final File tempFile) {
-    final Matcher matcher = digitPattern.matcher(tempFile.getName());
+    final Matcher matcher = DIGIT_PATTERN.matcher(tempFile.getName());
     matcher.find();
     try {
       final Date fileDate = ExportDirectory.DATE_FORMAT.parse(matcher.group());

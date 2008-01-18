@@ -371,7 +371,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * <code>userContext</code> does not exists, a new instance will be
    * created and added to the session.
    *
-   * @param request The HTTP request.
+   * @param request      The HTTP request.
+   * @param instanceName Instance name.
    * @return The UserContext instance.
    * @see UserContext
    */
@@ -404,6 +405,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Prepare authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
+   * @param request Request.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.

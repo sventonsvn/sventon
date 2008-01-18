@@ -36,7 +36,7 @@ public final class InstanceConfiguration {
   /**
    * Instance name.
    */
-  private String instanceName;
+  private final String instanceName;
 
   /**
    * The repository URL.

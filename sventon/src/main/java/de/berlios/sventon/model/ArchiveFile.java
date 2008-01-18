@@ -20,7 +20,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * ArchiveFile.
+ * Represents an archive file.
  *
  * @author jesper@users.berlios.de
  */
