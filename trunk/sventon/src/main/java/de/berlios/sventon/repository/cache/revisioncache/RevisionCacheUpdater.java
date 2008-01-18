@@ -53,16 +53,16 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
+    final String instanceName = revisionUpdate.getInstanceName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: "
-        + revisionUpdate.getInstanceName());
+
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + instanceName);
 
     try {
-      final RevisionCache revisionCache = revisionCacheManager.getCache(revisionUpdate.getInstanceName());
+      final RevisionCache revisionCache = revisionCacheManager.getCache(instanceName);
       updateInternal(revisionCache, revisions);
     } catch (final CacheException ex) {
-      LOGGER.warn("Could not update cache instance [" + revisionUpdate.getInstanceName() + "]", ex);
-      return;
+      LOGGER.warn("Could not update cache instance [" + instanceName + "]", ex);
     }
   }
 
@@ -72,7 +72,7 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
    * @param revisionCache Cache instance
    * @param revisions     Revisions
    */
-  protected static void updateInternal(final RevisionCache revisionCache, final List<SVNLogEntry> revisions) {
+  protected void updateInternal(final RevisionCache revisionCache, final List<SVNLogEntry> revisions) {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
         revisionCache.add(svnLogEntry);

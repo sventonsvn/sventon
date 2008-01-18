@@ -13,13 +13,15 @@ package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Comparator;
 
 /**
  * DiffCommand.
@@ -143,11 +145,6 @@ public final class DiffCommand {
    */
   @Override
   public String toString() {
-    return "DiffCommand{" +
-        "fromRevision=" + fromRevision +
-        ", toRevision=" + toRevision +
-        ", fromPath='" + fromPath + '\'' +
-        ", toPath='" + toPath + '\'' +
-        '}';
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }

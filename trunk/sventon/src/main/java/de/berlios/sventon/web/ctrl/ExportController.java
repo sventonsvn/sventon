@@ -74,12 +74,12 @@ public final class ExportController extends AbstractSVNTemplateController implem
     InputStream fileInputStream = null;
 
     final List<SVNFileRevision> targets = new RequestParameterParser().parseEntries(request);
-    final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir);
+    final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir, archiveFileCharset);
 
     try {
       logger.debug(exportDirectory);
       getRepositoryService().export(repository, targets, exportDirectory);
-      final File compressedFile = exportDirectory.compress(archiveFileCharset);
+      final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
       response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);
       response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\""

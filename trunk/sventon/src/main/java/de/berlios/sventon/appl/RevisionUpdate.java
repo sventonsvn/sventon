@@ -26,8 +26,8 @@ public final class RevisionUpdate {
 
   private final String instanceName;
   private final List<SVNLogEntry> logEntries;
-  private boolean flushAfterUpdate;
-  private boolean clearCacheBeforeUpdate;
+  private final boolean flushAfterUpdate;
+  private final boolean clearCacheBeforeUpdate;
 
   /**
    * Constructor.

@@ -36,74 +36,164 @@ public final class ConfigCommand {
   private boolean zipDownloadsAllowed;
   private boolean enableAccessControl;
 
+  /**
+   * Gets the repository URL.
+   *
+   * @return URL.
+   */
   public String getRepositoryUrl() {
     return repositoryUrl;
   }
 
+  /**
+   * Sets the repository URL.
+   *
+   * @param repositoryUrl URL.
+   */
   public void setRepositoryUrl(final String repositoryUrl) {
     this.repositoryUrl = repositoryUrl;
   }
 
+  /**
+   * Gets the UID.
+   *
+   * @return UID.
+   */
   public String getUid() {
     return uid;
   }
 
+  /**
+   * Sets the UID.
+   *
+   * @param uid UID.
+   */
   public void setUid(final String uid) {
     this.uid = uid;
   }
 
+  /**
+   * Gets the password.
+   *
+   * @return Password.
+   */
   public String getPwd() {
     return pwd;
   }
 
+  /**
+   * Sets the password.
+   *
+   * @param pwd Password.
+   */
   public void setPwd(final String pwd) {
     this.pwd = pwd;
   }
 
+  /**
+   * Checks if cache is enabled.
+   *
+   * @return True if cache is enabled, false if not.
+   */
   public boolean isCacheUsed() {
     return useCache;
   }
 
+  /**
+   * Sets the cache enable flag.
+   *
+   * @param useCache True to enable cache, false if not.
+   */
   public void setCacheUsed(final boolean useCache) {
     this.useCache = useCache;
   }
 
+  /**
+   * Checks if access control is enabled.
+   *
+   * @return True if access control is enabled, false if not.
+   */
   public boolean isEnableAccessControl() {
     return enableAccessControl;
   }
 
+  /**
+   * Sets the access control enable flag.
+   *
+   * @param enableAccessControl True to enable access control, false if not.
+   */
   public void setEnableAccessControl(final boolean enableAccessControl) {
     this.enableAccessControl = enableAccessControl;
   }
 
+  /**
+   * Checks if zipped downloads are enabled.
+   *
+   * @return True if enabled, false if not.
+   */
   public boolean isZippedDownloadsAllowed() {
     return zipDownloadsAllowed;
   }
 
+  /**
+   * Sets the zipped downloads enable flag.
+   *
+   * @param zipDownloadsAllowed True to enable zipped downloads, false if not.
+   */
   public void setZippedDownloadsAllowed(final boolean zipDownloadsAllowed) {
     this.zipDownloadsAllowed = zipDownloadsAllowed;
   }
 
+  /**
+   * Gets the instance name.
+   *
+   * @return Name of instance.
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Sets the instance name.
+   *
+   * @param name Name of instance.
+   */
   public void setName(final String name) {
     this.name = name;
   }
 
+  /**
+   * Gets the connection test UID.
+   *
+   * @return Test UID.
+   */
   public String getConnectionTestUid() {
     return connectionTestUid;
   }
 
+  /**
+   * Sets the connection test UID.
+   *
+   * @param connectionTestUid Test UID.
+   */
   public void setConnectionTestUid(final String connectionTestUid) {
     this.connectionTestUid = connectionTestUid;
   }
 
+  /**
+   * Gets the connection test password.
+   *
+   * @return Test password.
+   */
   public String getConnectionTestPwd() {
     return connectionTestPwd;
   }
 
+  /**
+   * Sets the connection test password.
+   *
+   * @param connectionTestPwd Test password.
+   */
   public void setConnectionTestPwd(final String connectionTestPwd) {
     this.connectionTestPwd = connectionTestPwd;
   }
@@ -124,7 +214,7 @@ public final class ConfigCommand {
    */
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 
 }

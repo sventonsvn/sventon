@@ -30,7 +30,7 @@ public final class FileExtensionFilter {
   /**
    * The file extension to filter.
    */
-  private String filterExtension;
+  private final String filterExtension;
 
   /**
    * Constructor.

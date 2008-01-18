@@ -112,6 +112,7 @@ public abstract class EntryCache implements Cache {
    * Adds one entry to the cache.
    *
    * @param entry The entry to parse and add
+   * @return True if entry was added, false if not.
    */
   public synchronized boolean add(final RepositoryEntry entry) {
     return cachedEntries.add(entry);
@@ -121,6 +122,7 @@ public abstract class EntryCache implements Cache {
    * Adds one or more entries to the cache.
    *
    * @param entries The entries to parse and add
+   * @return True if entries were added, false if not.
    */
   public synchronized boolean add(final List<RepositoryEntry> entries) {
     return cachedEntries.addAll(entries);

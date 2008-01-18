@@ -17,8 +17,6 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.apache.commons.lang.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 
@@ -39,11 +37,6 @@ public final class ObjectCacheImpl implements ObjectCache {
    * The cache instance.
    */
   private final Cache cache;
-
-  /**
-   * Logger for this class and subclasses
-   */
-  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Constructor.

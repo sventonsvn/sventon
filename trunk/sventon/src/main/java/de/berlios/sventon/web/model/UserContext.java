@@ -27,7 +27,7 @@ public final class UserContext implements Serializable {
 
   private static final long serialVersionUID = 6749054345534594360L;
 
-  private Map<String, UserRepositoryContext> repositoryContexts = new HashMap<String, UserRepositoryContext>();
+  private final Map<String, UserRepositoryContext> repositoryContexts = new HashMap<String, UserRepositoryContext>();
 
   /**
    * Get a user context given the repository name.

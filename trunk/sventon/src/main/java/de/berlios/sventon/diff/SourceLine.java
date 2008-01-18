@@ -11,6 +11,9 @@
  */
 package de.berlios.sventon.diff;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Source line bean. Represents one line of text including
  * the line's {@link de.berlios.sventon.diff.DiffAction}.
@@ -90,6 +93,6 @@ public final class SourceLine {
    */
   @Override
   public String toString() {
-    return "SourceLine{action='" + action + "', " + "line='" + line + "'}";
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }

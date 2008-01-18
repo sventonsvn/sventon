@@ -11,6 +11,14 @@
  */
 package de.berlios.sventon.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+/**
+ * Represents a row in a text file.
+ *
+ * @author jesper@users.berlios.de
+ */
 public final class TextFileRow {
 
   /**
@@ -57,9 +65,6 @@ public final class TextFileRow {
    */
   @Override
   public String toString() {
-    return "TextFileRow{" +
-        "rowNumber=" + rowNumber +
-        ", content='" + content + '\'' +
-        '}';
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }

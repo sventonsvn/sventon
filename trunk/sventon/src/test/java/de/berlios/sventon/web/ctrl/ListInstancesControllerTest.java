@@ -24,8 +24,7 @@ public class ListInstancesControllerTest extends TestCase {
     final Application application = new Application(new File(TEMPDIR), "filename");
     controller.setApplication(application);
 
-    ModelAndView modelAndView = null;
-    modelAndView = controller.handleRequestInternal(request, response);
+    ModelAndView modelAndView = controller.handleRequestInternal(request, response);
 
     // Not configured
     assertTrue(modelAndView.getView() instanceof RedirectView);

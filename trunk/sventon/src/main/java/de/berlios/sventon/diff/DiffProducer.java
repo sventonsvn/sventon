@@ -30,12 +30,12 @@ public final class DiffProducer {
   /**
    * Left (old) input.
    */
-  private InputStream left;
+  private final InputStream left;
 
   /**
    * Right (new) input.
    */
-  private InputStream right;
+  private final InputStream right;
 
   /**
    * Character encoding.

@@ -49,7 +49,7 @@ public final class Version {
    */
   public static String getVersion() {
     assertMappingsLoaded();
-    return (String) VERSION_PROPERTIES.getProperty(RELEASE_VERSION_KEY, "Unknown");
+    return VERSION_PROPERTIES.getProperty(RELEASE_VERSION_KEY, "Unknown");
   }
 
   /**

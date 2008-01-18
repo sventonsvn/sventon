@@ -26,7 +26,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
   /**
    * Root directory for cache files.
    */
-  private File rootDirectory;
+  private final File rootDirectory;
 
   /**
    * Constructor.

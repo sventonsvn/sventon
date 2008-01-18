@@ -23,12 +23,12 @@ public final class LogEntryBundle {
   /**
    * Subversion log entry.
    */
-  private SVNLogEntry svnLogEntry;
+  private final SVNLogEntry svnLogEntry;
 
   /**
    * The path at revision.
    */
-  private String pathAtRevision;
+  private final String pathAtRevision;
 
   /**
    * @param logEntry       The log entry

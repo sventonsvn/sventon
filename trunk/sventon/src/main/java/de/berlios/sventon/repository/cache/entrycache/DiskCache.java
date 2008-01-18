@@ -85,6 +85,7 @@ public class DiskCache extends EntryCache {
           inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
         }
         setCachedRevision(inputStream.readLong());
+        //noinspection unchecked
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
         logger.debug("Number of loaded cached entries: " + getSize());
         logger.debug("Revision: " + getCachedRevision());

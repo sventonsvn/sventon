@@ -28,7 +28,7 @@ public final class Instance {
   /**
    * The instance configuration.
    */
-  private InstanceConfiguration configuration;
+  private final InstanceConfiguration configuration;
 
   /**
    * Flag that indicates if the cache is being updated.

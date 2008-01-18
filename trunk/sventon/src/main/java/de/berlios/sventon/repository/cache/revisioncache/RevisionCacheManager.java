@@ -25,7 +25,7 @@ public final class RevisionCacheManager extends CacheManager<RevisionCache> {
   /**
    * Object cache manager instance.
    */
-  private ObjectCacheManager objectCacheManager;
+  private final ObjectCacheManager objectCacheManager;
 
   /**
    * Constructor.
