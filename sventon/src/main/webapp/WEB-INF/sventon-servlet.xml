@@ -62,7 +62,10 @@
   </bean>
 
   <bean id="svnBaseCommandValidator" class="de.berlios.sventon.web.command.SVNBaseCommandValidator"/>
-  <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator"/>
+
+  <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator">
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+  </bean>
 
   <bean id="repositoryService" class="de.berlios.sventon.service.CacheAwareRepositoryServiceImpl">
     <property name="cacheGateway" ref="cacheGatewayBean"/>
