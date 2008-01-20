@@ -2,31 +2,17 @@ package de.berlios.sventon.repository.cache;
 
 import de.berlios.sventon.appl.RevisionObservable;
 import junit.framework.TestCase;
+import org.easymock.EasyMock;
 
 public class CacheBeforeAdviceTest extends TestCase {
 
   public void testBefore() throws Throwable {
     final CacheBeforeAdvice cacheBeforeAdvice = new CacheBeforeAdvice();
-
-    final TestObservable revisionObservable = new TestObservable();
-    cacheBeforeAdvice.setRevisionObservable(revisionObservable);
+    final RevisionObservable observableMock = EasyMock.createMock(RevisionObservable.class);
+    cacheBeforeAdvice.setRevisionObservable(observableMock);
+    observableMock.update("instance1", false);
+    EasyMock.replay(observableMock);
     cacheBeforeAdvice.before(null, new Object[]{"instance1"}, null);
-    assertTrue(revisionObservable.called);
-  }
-
-  private static class TestObservable implements RevisionObservable {
-    public boolean called = false;
-
-    public void updateAll() {
-    }
-
-    public void update(final String instanceName, final boolean flushAfterUpdate) {
-      called = true;
-      assertEquals("instance1", instanceName);
-    }
-
-    public boolean isUpdating(final String instanceName) {
-      return false;
-    }
+    EasyMock.verify(observableMock);
   }
 }
