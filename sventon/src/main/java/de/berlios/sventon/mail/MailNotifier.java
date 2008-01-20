@@ -70,6 +70,11 @@ public class MailNotifier extends AbstractRevisionObserver {
   private DateFormat dateFormat;
 
   /**
+   * Threshold value that decides if an update is too big to send notification mails.
+   */
+  private int revisionCountThreshold;
+
+  /**
    * The mail body template file. Default set to <tt>mailtemplate.html</tt> in classpath root.
    */
   private String bodyTemplateFile = "/mailtemplate.html";
@@ -111,8 +116,15 @@ public class MailNotifier extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
 
-    // One logEntry is one commit (or revision)
-    for (final SVNLogEntry logEntry : revisionUpdate.getRevisions()) {
+    final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+
+    if (revisions.size() > revisionCountThreshold) {
+      LOGGER.info("Update contains more than max allowed updates, [" +
+          revisionCountThreshold + "]. No notification mail sent");
+      return;
+    }
+
+    for (final SVNLogEntry logEntry : revisions) {
       final String instanceName = revisionUpdate.getInstanceName();
       LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
 
@@ -294,4 +306,15 @@ public class MailNotifier extends AbstractRevisionObserver {
     this.password = password;
   }
 
+  /**
+   * Sets the threshold value that decides if an update is too big to
+   * send notification mails.
+   *
+   * @param revisionCountThreshold Threshold value. If an update contains more
+   *                               revisions than the given threshold, no notification
+   *                               mail will be sent.
+   */
+  public void setRevisionCountThreshold(int revisionCountThreshold) {
+    this.revisionCountThreshold = revisionCountThreshold;
+  }
 }

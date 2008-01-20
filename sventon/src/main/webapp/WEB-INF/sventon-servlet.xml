@@ -313,6 +313,7 @@
     <property name="port" value="25"/>
     <property name="receivers" ref="mailNotificationReceivers"/>
     <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+    <property name="revisionCountThreshold" value="100"/>
     <property name="bodyTemplateFile" value="/mailtemplate.html"/>
     <property name="auth" value="false"/>
     <property name="ssl" value="false"/>
