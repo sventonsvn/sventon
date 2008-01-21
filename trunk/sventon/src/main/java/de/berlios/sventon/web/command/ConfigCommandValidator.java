@@ -102,7 +102,7 @@ public final class ConfigCommandValidator implements Validator {
       try {
         url = SVNURL.parseURIDecoded(trimmedURL);
       } catch (SVNException ex) {
-        final String msg = "Invalid repository URL: " + repositoryUrl;
+        final String msg = "Invalid repository URL!";
         logger.warn(msg);
         errors.rejectValue("repositoryUrl", "config.error.illegal-url", msg);
       }
