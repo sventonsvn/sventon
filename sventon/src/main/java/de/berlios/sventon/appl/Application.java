@@ -312,21 +312,12 @@ public final class Application {
   }
 
   /**
-   * Gets the configuration directory.
+   * Gets the configuration file.
    *
-   * @return The directory
+   * @return The file.
    */
-  public File getConfigurationDirectory() {
-    return configurationDirectory;
-  }
-
-  /**
-   * Gets the configuration filename.
-   *
-   * @return The filename
-   */
-  public String getConfigurationFilename() {
-    return configurationFilename;
+  public File getConfigurationFile() {
+    return new File(configurationDirectory, configurationFilename);
   }
 
   /**

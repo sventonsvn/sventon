@@ -22,8 +22,8 @@ public class ApplicationTest extends TestCase {
     final Application application = new Application(new File(TEMPDIR), "filename");
     assertFalse(application.isConfigured());
     assertEquals(0, application.getInstanceCount());
-    assertNotNull(application.getConfigurationDirectory());
-    assertEquals("filename", application.getConfigurationFilename());
+    assertNotNull(application.getConfigurationFile());
+    assertEquals(new File(TEMPDIR, "filename"), application.getConfigurationFile());
   }
 
   public void testStoreInstanceConfigurations() throws Exception {
@@ -94,8 +94,7 @@ public class ApplicationTest extends TestCase {
     assertEquals(0, application.getInstanceCount());
     assertFalse(application.isConfigured());
 
-    final File tempConfigFile = new File(application.getConfigurationDirectory(),
-        application.getConfigurationFilename());
+    final File tempConfigFile = application.getConfigurationFile();
 
     OutputStream os = null;
     InputStream is = null;
