@@ -303,9 +303,30 @@ function getFileHistory(path, revision, name) {
     method: 'post', parameters: urlParams, onFailure: reportAjaxError});
 }
 
+function updateCharsetParameter(charset) {
+  var url = document.location.href;
+  var path = getRequestParameter(url, 'path');
+  var name = getRequestParameter(url, 'name');
+  var revision = getRequestParameter(url, 'revision');
+  url = document.location.pathname + '?path=' + path + '&revision=' + revision + '&name=' + name + '&charset=' + charset;
+  document.location.href = url;
+}
+
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================
+
+function getRequestParameter(url, name) {
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(url);
+  if (results == null) {
+    return "";
+  } else {
+    return results[1];
+  }
+}
 
 function setBackgroundColor(tags, cssName, color) {
   for (var i = 0; i < tags.length; i++) {
