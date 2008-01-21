@@ -20,7 +20,9 @@
   <script type="text/javascript">
     function toggleAccessControl() {
       var accessControl = $('accessControlCheckbox');
-      ['global-uid', 'global-pwd', 'caching'].each(accessControl.checked ? Element.hide : Element.show);
+      ['global-uid', 'global-pwd', 'caching'].each(function(input) {
+        return accessControl.checked ? Field.disable(input) : Field.enable(input);
+      });
       ['connection-test-uid', 'connection-test-pwd'].each(accessControl.checked ? Element.show : Element.hide);
     }
     window.onload = toggleAccessControl;
@@ -34,146 +36,163 @@
 
 <p>
 <form name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
-  <table class="configFormTable">
-  <tr>
-    <td valign="top" align="right" style="white-space: nowrap;">Enter repository name:</td>
-    <td valign="top">
-      <spring:bind path="command.name">
-      <input type="text" name="name" size="30" value="${status.value}"><c:if test="${status.error}"><span
-       class="exclamationText">*</span></c:if></td>
+<table class="configFormTable">
+<tr>
+  <td class="configHeaderBig" colspan="3">Repository details</td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Repository name:</td>
+  <td>
+    <spring:bind path="command.name">
+      <input type="text" name="name" size="60" value="${status.value}" class="configHeaderSmall">
+      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
     </spring:bind>
-    <td valign="top">
-      Example:
-      <p>
-        <b>local</b><br>
-        <b>myrepos</b><br>
-        <b>project1</b><br>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top" align="right" style="white-space: nowrap;">Enter subversion repository root url:</td>
-    <td valign="top">
-      <spring:bind path="command.repositoryUrl">
-      <input type="text" name="repositoryUrl" size="30" value="${status.value}"><c:if test="${status.error}"><span
-       class="exclamationText">*</span></c:if></td>
+    <p>
+      <b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Subversion repository root URL:</td>
+  <td>
+    <spring:bind path="command.repositoryUrl">
+      <input type="text" name="repositoryUrl" size="60" value="${status.value}" class="configHeaderSmall">
+      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
     </spring:bind>
-    <td valign="top">
-      Example:
-      <p>
-        <b>http://domain/project/</b><br>
-        <b>svn://domain/project/</b><br>
-        <b>svn+ssh://domain/project/</b><br>
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top" align="right" style="white-space: nowrap;">Allow download as compressed ZIP:</td>
-    <td valign="top">
-      <spring:bind path="command.zippedDownloadsAllowed">
-      <input type="checkbox" name="${status.expression}"
-             <c:if test="${status.value}">checked</c:if>></td>
+    <p>
+      <b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or <i>svn+ssh://domain/project/</i>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">User name:</td>
+  <td>
+    <spring:bind path="command.uid">
+      <input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
     </spring:bind>
-    <td valign="top">
-      Enable/disable the 'download as zip' function. <br>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top" align="right" style="white-space: nowrap;">Enable user based access control:</td>
-    <td valign="top">
-      <spring:bind path="command.enableAccessControl">
+    <p>
+      Leave blank for anonymous
+    </p>
+  </td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Password:</td>
+  <td>
+    <spring:bind path="command.pwd">
+      <input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+    </spring:bind>
+    <p>
+      Leave blank for anonymous
+    </p>
+  </td>
+</tr>
+<tr>
+  <td class="configHeaderBig" colspan="3">Application configuration</td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Enable user based access control:</td>
+  <td>
+    <spring:bind path="command.enableAccessControl">
       <input type="checkbox" name="${status.expression}" id="accessControlCheckbox"
-             <c:if test="${status.value}">checked</c:if> onclick="toggleAccessControl();"></td>
+      <c:if test="${status.value}"> checked</c:if> onclick="toggleAccessControl();">
     </spring:bind>
-    <td valign="top">
+    <p>
       Controls whether user based access control should be enabled. This should be used if access control is
       enabled on the repository and each sventon user should authenticate them self individually. Do not check
       this box if anonymus read access is enabled on the repository or if you have set a global user and
-      password above.<br>
-      If enabled, the search and directory flattening features, as well as the log message search, will be
-      <i>disabled</i>. <br>
+      password above.
+    </p>
+
+    <p>
+      If enabled, all features relying on the repository cache, such as the search and directory flattening features and the log message
+      search, will be <i>disabled</i>.
+    </p>
+
+    <p>
       Note that enabling user based access control stores user id and password in the user session, this could
       be considered a security problem.
-    </td>
-  </tr>
-  <tr id="global-uid">
-    <td valign="top" align="right" style="white-space: nowrap;">Enter user name:</td>
-    <td valign="top">
-      <spring:bind path="command.uid">
-      <input type="text" name="${status.expression}" size="30" value="${status.value}"><c:if test="${status.error}"><span
-       class="exclamationText">*</span></c:if></td>
-    </spring:bind>
-    <td valign="top">(leave blank for anonymous)</td>
-  </tr>
-  <tr id="global-pwd">
-    <td valign="top" align="right" style="white-space: nowrap;">Enter user password:</td>
-    <td valign="top">
-      <spring:bind path="command.pwd">
-      <input type="password" name="${status.expression}" size="30" value="${status.value}"><c:if
-       test="${status.error}"><span class="exclamationText">*</span></c:if></td>
-    </spring:bind>
-    <td valign="top">(leave blank for anonymous)</td>
-  </tr>
-  <tr id="caching">
-    <td valign="top" align="right" style="white-space: nowrap;">Use repository caching feature:</td>
-    <td valign="top">
-      <spring:bind path="command.cacheUsed">
+    </p>
+    <table class="configFormTable">
+      <tr id="connection-test-uid">
+        <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">User name for connection test:</td>
+        <td>
+          <spring:bind path="command.connectionTestUid">
+            <input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+            <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+          </spring:bind>
+        </td>
+      </tr>
+      <tr id="connection-test-pwd">
+        <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Password for connection test:</td>
+        <td>
+          <spring:bind path="command.connectionTestPwd">
+            <input type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+            <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+          </spring:bind>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Allow download as compressed ZIP:</td>
+  <td>
+    <spring:bind path="command.zippedDownloadsAllowed">
       <input type="checkbox" name="${status.expression}"
-             <c:if test="${status.value}">checked</c:if>></td>
+      <c:if test="${status.value}"> checked</c:if>>
     </spring:bind>
-    <td valign="top">
+    <p>
+      Enable/disable the 'download as zip' function.
+    </p>
+  </td>
+</tr>
+<tr>
+  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Use repository caching:</td>
+  <td>
+    <spring:bind path="command.cacheUsed">
+      <input id="caching" type="checkbox" name="${status.expression}"
+      <c:if test="${status.value}"> checked</c:if>>
+    </spring:bind>
+    <p>
       Controls whether repository caching feature should be used. <br>
-      If enabled, the search and directory flattening features will be available, as well as the log message search <br>
-    </td>
-  </tr>
-  <tr id="connection-test-uid">
-    <td valign="top" align="right" style="white-space: nowrap;">Enter user name for connection test:</td>
-    <td valign="top">
-      <spring:bind path="command.connectionTestUid">
-      <input type="text" name="${status.expression}" size="30" value="${status.value}"><c:if test="${status.error}"><span
-       class="exclamationText">*</span></c:if></td>
-    </spring:bind>
-    <td valign="top"></td>
-  </tr>
-  <tr id="connection-test-pwd">
-    <td valign="top" align="right" style="white-space: nowrap;">Enter password for connection test:</td>
-    <td valign="top">
-      <spring:bind path="command.connectionTestPwd">
-      <input type="password" name="${status.expression}" size="30" value="${status.value}"><c:if
-       test="${status.error}"><span class="exclamationText">*</span></c:if></td>
-    </spring:bind>
-    <td valign="top"></td>
-  </tr>
+      If enabled, the search and directory flattening features will be available, as well as the log message search.
+    </p>
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td>
+    <spring:hasBindErrors name="command">
+      <span class="exclamationText">
+        <b>Please fix the errors above!</b>
+      </span>
+    </spring:hasBindErrors>
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td>
+    <input type="submit" value="Continue" class="cfgbtn">
+  </td>
+</tr>
+<c:if test="${fn:length(addedInstances) > 0}">
   <tr>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td colspan="2">
-      <spring:hasBindErrors name="command">
-        <span class="exclamationText">
-          <c:forEach var="errMsgObj" items="${errors.allErrors}">
-            *&nbsp;<spring:message code="${errMsgObj.code}" text="${errMsgObj.defaultMessage}"/><br>
-          </c:forEach>
-        </span>
-      </spring:hasBindErrors>
-    </td>
+    <td></td>
+    <td class="configHeaderSmall"><b>Already added instances</b></td>
   </tr>
-  <tr>
-    <td>
-      <input type="submit" value="add repository" class="btn">
-    <td>
-  </tr>
-  <c:if test="${fn:length(addedInstances) > 0}">
+  <c:forEach var="instance" items="${addedInstances}">
     <tr>
-      <td><b>Added instances</b></td>
+      <td></td>
+      <td class="configHeaderSmall">${instance}</td>
     </tr>
-    <c:forEach var="instance" items="${addedInstances}">
-      <tr>
-        <td>${instance}</td>
-      </tr>
-    </c:forEach>
-  </c:if>
-  </table>
+  </c:forEach>
+</c:if>
+</table>
 </form>
 </p>
 <script language="JavaScript" type="text/javascript">document.configForm.name.focus();</script>

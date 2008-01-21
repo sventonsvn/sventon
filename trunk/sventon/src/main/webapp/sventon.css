@@ -49,10 +49,6 @@ a:hover {
   text-decoration: underline;
 }
 
-exclamationText {
-  color: #ff0000;
-}
-
 a.sventonHeaderLink:link, a.sventonHeaderLink:visited, a.sventonHeaderLink:active, a.sventonHeaderLink:hover {
   color: #FEAE02;
   border: none;
@@ -371,6 +367,7 @@ a.helpDivCloseLink {
 }
 
 .fileHistoryContainer {
+  height: 16px;
   float: right;
   position: relative;
   top: 3px;
@@ -400,8 +397,28 @@ a.helpDivCloseLink {
 }
 
 .configFormTable {
-  border: none;
-  width: 800px;
+}
+
+input.cfgbtn {
+  border: 1px solid;
+  font-family: verdana, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.configHeaderBig {
+  color: #3E647E;
+  background-color: #E2E4E6;  
+  font-family: verdana, sans-serif;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.configHeaderSmall {
+  color: #000000;
+  font-family: verdana, sans-serif;
+  font-size: 14px;
 }
 
 .droparea {
