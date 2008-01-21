@@ -25,49 +25,99 @@
 <br>
 
 <c:if test="${latestAddedInstance ne null}">
-  <p>
-    Instance <b>${latestAddedInstance}</b> successfully added.
+  <p class="configHeaderBig">
+    Repository added!
+  </p>
+
+  <p class="configHeaderSmall">
+    The repository <b>${latestAddedInstance}</b> has been successfully added to sventon.
+    The configuration parameters will be stored in the file <b>${configFile.absolutePath}</b>.
   </p>
 </c:if>
-<p>Added repositories:
-  <c:forEach var="instance" items="${addedInstances}">
-    <li>${instance}</li>
-  </c:forEach>
-</p>
 
-<br>
-You can now:
 <br>
 <br>
 
-<form action="config.svn">
-  <input type="hidden" value="addnew" name="addnew">
-  <input type="submit" value="add another repository" class="btn"> <a href="#" title="what is this?">?</a>
-</form>
-<br>
-- or -
+<c:if test="${fn:length(addedInstances) > 1}">
+  <p class="configHeaderSmall"><b>Repositories added so far:</b>
+    <ul>
+      <c:forEach var="instance" items="${addedInstances}">
+        <li><i><span class="configHeaderSmall">${instance}</span></i></li>
+      </c:forEach>
+    </ul>
+  </p>
+</c:if>
+
 <br>
 <br>
 
-<form action="submitconfig.svn">
-  <input type="submit" value="start browsing" class="btn"> <a href="#" title="what is this?">?</a>
-</form>
+<hr>
 
-<p>
-<i>Where are the configuration and log files stored?</i><br>
-By default, the temporary files created by sventon, including the <b>sventon.log</b> file and repository configurations will be stored in
-<b><%=System.getProperty("java.io.tmpdir")%></b>.
-</p>
-<p>
-<i>What if I want to change logging granularity or log file location?</i><br>
-Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
-</p>
-<p>
-<i>What about UTF-8 support?</i><br>
-If this sventon instance will be used with Tomcat in a non-US-ASCII environment, making fully use of Subversion's
-UTF-8 support, modifications must be made to the Coyote HTTP/1.1 connector: In server.xml, either set attribute
-<code>URIEncoding="UTF-8"</code> and/or set <code>useBodyEncodingForURI="true"</code>.
-</p>
+<table class="configFormTable">
+  <tr>
+    <td class="configHeaderBig">Where are the log files stored?</td>
+  </tr>
+  <tr>
+    <td class="configHeaderSmall">By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
+      repository configurations will be stored in the servlet container's temporary directory,
+      <b><%=System.getProperty("java.io.tmpdir")%></b>.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td class="configHeaderBig">What if I want to change logging granularity or log file location?</td>
+  </tr>
+  <tr>
+    <td class="configHeaderSmall">Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td class="configHeaderBig">What about UTF-8 support?</td>
+  </tr>
+  <tr>
+    <td class="configHeaderSmall">If this sventon instance will be used with <a href="http://tomcat.apache.org/">Tomcat</a> in a
+      non-US-ASCII environment, making fully use of Subversion's UTF-8 support, modifications must be made to the
+      Coyote HTTP/1.1 connector: In <code>server.xml</code>, either set attribute <code>URIEncoding="UTF-8"</code>
+      and/or set <code>useBodyEncodingForURI="true"</code>.
+    </td>
+  </tr>
+</table>
+
+<hr>
+
+<br>
+<br>
+
+<div align="center" class="configHeaderSmall">
+  <table>
+    <tr>
+      <td align="right">
+        <form action="config.svn">
+          <input type="hidden" value="addnew" name="addnew">
+          <input type="submit" value="Add another repository to sventon" class="cfgbtn">
+        </form>
+      </td>
+      <td>or</td>
+      <td>
+        <form action="submitconfig.svn">
+          <input type="submit" value="Complete setup and start browsing" class="cfgbtn">
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br>
+<br>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
 </body>

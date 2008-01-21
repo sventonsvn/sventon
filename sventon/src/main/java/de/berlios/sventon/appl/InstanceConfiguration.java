@@ -220,7 +220,6 @@ public final class InstanceConfiguration {
 
     // Strip last slash if any.
     if (repositoryUrl.endsWith("/")) {
-      logger.debug("Removing trailing slash from url");
       repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - 1);
     }
 
