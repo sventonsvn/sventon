@@ -357,6 +357,10 @@ a.helpDivCloseLink {
   text-decoration: none;
 }
 
+.helpIcon {
+  vertical-align:middle;
+}
+
 .entryTrayContainer {
   background-color: #3E647E;
   float: right;
