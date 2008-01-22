@@ -107,10 +107,12 @@
       <c:when test="${useCache}">
         <c:choose>
           <c:when test="${isUpdating}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('<sventon-ui:formatUrl url="${command.path}"/>', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.isupdating.tooltip"/>')">
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" disabled="disabled">
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="flatten.button.isupdating.tooltip"/>')">
           </c:when>
           <c:when test="${!isHead}">
-            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('<sventon-ui:formatUrl url="${command.path}"/>', '${command.name}');" disabled onmouseover="Tip('<spring:message code="flatten.button.disabled.tooltip"/>')">
+            <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" disabled="disabled">
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="flatten.button.disabled.tooltip"/>')">
           </c:when>
           <c:when test="${isFlatten}">
             <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showDirLinkUrl}"/>';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
@@ -210,14 +212,16 @@
         <label for="entrySearch">entries</label>
         <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userRepositoryContext.searchMode eq 'logMessages' ? 'checked' : ''}>
         <label for="logSearch">logs</label>
-        <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled' : ''}>
+        <input type="text" name="searchString" class="sventonSearchField" value="" ${isUpdating || !isHead ? 'disabled="disabled"' : ''}>
         <input type="hidden" name="startDir" value="${command.pathPart}">
         <c:choose>
           <c:when test="${isUpdating}">
-            <input type="submit" value="go!" disabled onmouseover="Tip('<spring:message code="search.button.isupdating.tooltip"/>')" class="btn">
+            <input type="submit" value="go!" disabled="disabled" class="btn">
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="search.button.isupdating.tooltip"/>')">
           </c:when>
           <c:when test="${!isHead}">
-            <input type="submit" value="go!" disabled onmouseover="Tip('<spring:message code="search.button.disabled.tooltip"/>')" class="btn">
+            <input type="submit" value="go!" disabled="disabled" class="btn">
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="search.button.disabled.tooltip"/>')">
           </c:when>
           <c:otherwise>
             <input type="submit" value="go!" onmouseover="Tip('<spring:message code="search.button.tooltip"/>')" class="btn">
