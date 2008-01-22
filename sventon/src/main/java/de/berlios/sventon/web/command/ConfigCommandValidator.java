@@ -122,7 +122,7 @@ public final class ConfigCommandValidator implements Validator {
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
           errors.rejectValue("repositoryUrl", "config.error.connection-error",
-              "Unable to connect to repository. Check URL, user name and password.");
+              "Unable to connect to repository [" + trimmedURL + "]. Check URL, user name and password.");
         } finally {
           if (repository != null) {
             repository.closeSession();

@@ -183,19 +183,21 @@
   </tr>
   <tr>
     <td></td>
-    <td class="configHeaderSmall"><b>Already added instances</b></td>
+    <td class="configHeaderSmall"><b>Already added instances:</b></td>
   </tr>
   <c:forEach var="instance" items="${addedInstances}">
     <tr>
       <td></td>
-      <td class="configHeaderSmall">${instance}</td>
+      <td class="configHeaderSmall"><i>${instance}</i></td>
     </tr>
   </c:forEach>
 </c:if>
 </table>
 </form>
 </p>
-<script language="JavaScript" type="text/javascript">document.configForm.name.focus();</script>
+<script language="JavaScript" type="text/javascript">
+  document.configForm.name.focus();
+</script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
 </body>
