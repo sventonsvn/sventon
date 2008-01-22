@@ -227,21 +227,19 @@ function reportAjaxError(request) {
   alert('An error occured during asynchronous request.');
 }
 
-function showHideHelp(helpDiv, id) {
-  if (helpDiv.visible()) {
-    helpDiv.hide();
-  } else {
-    // Do the ajax call
-    var url = 'static.ajax';
-    var urlParams = 'id=' + id;
+function getHelpText(id) {
+  var url = 'static.ajax';
+  var urlParams = 'id=' + id;
+  var divName = 'help' + id + 'Div';
 
-    var ajax = new Ajax.Updater({success: $(helpDiv)}, url, {
-      method: 'post', parameters: urlParams, onFailure: reportAjaxError, onComplete: function(request) {
-      Element.hide('spinner');
+  var ajax = new Ajax.Request(url, {
+    method: 'post',
+    parameters: urlParams,
+    onFailure: reportAjaxError,
+    onSuccess: function(transport) {
+      Element.update(divName, transport.responseText);
     }});
-    Element.show('spinner');
-    Element.show(helpDiv);
-  }
+  return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"></div>', TITLE, 'Help', BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff', STICKY, 1, CLICKCLOSE, true);
 }
 
 // Gets the log message for given revision.
@@ -251,12 +249,12 @@ function getLogMessage(revision, instanceName, date) {
   var divName = 'msg' + revision + 'Div';
   
   var ajax = new Ajax.Request(url, {
-    method: 'get',
+    method: 'post',
     parameters: urlParams,
+    onFailure: reportAjaxError,
     onSuccess: function(transport) {
       Element.update(divName, transport.responseText);
-    },
-    onFailure: reportAjaxError
+    }
   });
   return Tip('<div id=\"' + divName + '\" style=\"width: 350px;\"><img src=\"images/spinner.gif\" alt=\"spinner\"></div>', TITLE, 'Log message: ' + date, BORDERCOLOR, '#3e647e', BGCOLOR, '#ffffff', ABOVE, true);
 }
