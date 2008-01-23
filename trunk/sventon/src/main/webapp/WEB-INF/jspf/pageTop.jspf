@@ -35,7 +35,7 @@
           <tr>
             <td>
               <c:if test="${!isHead}">
-                <a href="#" onclick="setHeadRevision(); return false;" title="Click to insert 'HEAD' into revision field">HEAD</a>
+                <a href="#" onclick="goToHeadRevision(document.gotoForm); return false;" title="Click to go to 'HEAD' revision">HEAD</a>
               </c:if>
             </td>
             <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind>
