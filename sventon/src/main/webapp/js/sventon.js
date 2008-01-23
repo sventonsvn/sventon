@@ -46,8 +46,9 @@ function doAction(formName) {
 }
 
 // sets the value of the revision input text field to 'HEAD'
-function setHeadRevision() {
-  $('revisionInput').value = 'HEAD'
+function goToHeadRevision(form) {
+  form.elements['revisionInput'].value = 'HEAD';
+  form.submit();
 }
 
 // function to handle search submission
