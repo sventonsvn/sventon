@@ -64,6 +64,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
       final File cachePath = new File(rootDirectory, cacheName);
       cachePath.mkdirs();
       fsDirectory = FSDirectory.getDirectory(cachePath);
+      logger.debug("Log cache dir: " + fsDirectory.getFile().getAbsolutePath());
     } catch (IOException ioex) {
       throw new CacheException("Unable to create LogMessageCache instance", ioex);
     }

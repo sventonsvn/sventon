@@ -84,6 +84,9 @@
           <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
+          <c:if test="${isFile}">
+            <td>&nbsp;</td>
+          </c:if>
           <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
             <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), "", command.getName(), false, false, response)%>
           </td>
