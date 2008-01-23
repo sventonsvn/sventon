@@ -1,11 +1,24 @@
-This is just a test of how a help popup could look like.
+<b>Searching for entries</b><br>
+The entered search string will be matched against all file and directory names recursively from the current path and below.
+<br>
+Note that the matching is <i>case sensitive</i>!
+<br>
+CamelCase search patterns can also be used.<br>
+Searching for <tt>CS</tt> will for example match<br>
+<tt>CacheService.java</tt>
+<br>and<br>
+<tt>CacheServiceImpl.java</tt>.
+
+<br>
+<br>
+
+<b>Searching log messages</b><br>
+The log search handles single or multiple words, phrases, wildcards and boolean operators (<tt>AND</tt>, <tt>OR</tt> and <tt>NOT</tt>).
+Examples:
 <ul>
- <li>One</li>
- <li>Two</li>
+  <li><tt>foo</tt></li>
+  <li><tt>"foo bar"</tt></li>
+  <li><tt>foo NOT bar</tt></li>
+  <li><tt>foo*bar</tt></li>
 </ul>
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut euismod. <u>Cras interdum scelerisque mauris.</u>
-Fusce feugiat interdum nulla. Maecenas nec velit. In non ligula. Maecenas at massa quis leo molestie convallis.
-In hac habitasse platea dictumst. <b>Curabitur sit amet enim et tellus mattis facilisis.</b> Mauris sit amet nisl.
-Integer diam nulla, lacinia tristique, auctor et, iaculis interdum, justo. Nullam malesuada ante vitae nibh.
-Integer hendrerit turpis a <i>justo vulputate molestie</i>. Nunc sit amet nisl sed turpis sagittis bibendum.
-Aliquam varius dui sit amet sem. Nullam at pede.
+<a href="http://lucene.apache.org/java/2_2_0/queryparsersyntax.html" target="_blank">[Read more]</a>
