@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1135] Fixed: Bug #6387 - Markup of changed file in logs view fails if it's renamed.
 [1131] Added: Upgraded to Lucene 2.2.0.
 [1104] Added: Feature #3943 - Send notification mail for new revisions.
 [1092] Added: Feature #3931 - Easy navigation between file revisions.
