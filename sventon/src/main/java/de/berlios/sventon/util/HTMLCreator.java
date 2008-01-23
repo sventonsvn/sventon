@@ -14,8 +14,8 @@ package de.berlios.sventon.util;
 import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
 import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -102,7 +102,7 @@ public final class HTMLCreator {
     valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logEntry.getAuthor())));
     valueMap.put(DATE_KEY, dateFormat.format(logEntry.getDate()));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, baseURL, instanceName, false, false, response)));
+        logEntry, null, baseURL, instanceName, false, false, response)));
 
     final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
     return substitutor.replace(bodyTemplate);
@@ -112,6 +112,7 @@ public final class HTMLCreator {
    * Creates a HTML table containing the changed paths for given revision.
    *
    * @param logEntry          Log entry revision
+   * @param pathAtRevision    The target's path at current revision or <tt>null</tt> if unknown.
    * @param baseURL           Base application URL.
    * @param instanceName      Instance name
    * @param showLatestRevInfo If true, the latest revision details DIV will be displayed.
@@ -119,7 +120,7 @@ public final class HTMLCreator {
    * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
-  public static String createChangedPathsTable(final SVNLogEntry logEntry, final String baseURL,
+  public static String createChangedPathsTable(final SVNLogEntry logEntry, final String pathAtRevision, final String baseURL,
                                                final String instanceName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {
 
@@ -156,7 +157,12 @@ public final class HTMLCreator {
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
-          sb.append("\" title=\"Show\">").append(logEntryPath.getPath()).append("</a>");
+          sb.append("\" title=\"Show\">");
+          if (logEntryPath.getPath().equals(pathAtRevision)) {
+            sb.append("<i>").append(logEntryPath.getPath()).append("</i>").append("</a>");
+          } else {
+            sb.append(logEntryPath.getPath()).append("</a>");
+          }
           break;
         case MODIFIED:
           // diffUrl
@@ -168,7 +174,12 @@ public final class HTMLCreator {
           if (showLatestRevInfo) {
             sb.append("&showlatestrevinfo=true");
           }
-          sb.append("\" title=\"Diff with previous version\">").append(logEntryPath.getPath()).append("</a>");
+          sb.append("\" title=\"Diff with previous version\">");
+          if (logEntryPath.getPath().equals(pathAtRevision)) {
+            sb.append("<i>").append(logEntryPath.getPath()).append("</i>").append("</a>");
+          } else {
+            sb.append(logEntryPath.getPath()).append("</a>");
+          }
           break;
         case DELETED:
           // del

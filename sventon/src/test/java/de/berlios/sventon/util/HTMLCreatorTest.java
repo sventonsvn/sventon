@@ -19,7 +19,7 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Modified</i></td>\n" +
-        "    <td><a href=\"diff.svn?path=/file1.java&revision=1&name=sandbox&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\">/file1.java</a></td>\n" +
+        "    <td><a href=\"diff.svn?path=/file1.java&revision=1&name=sandbox&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\"><i>/file1.java</i></a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Deleted</i></td>\n" +
@@ -42,7 +42,7 @@ public class HTMLCreatorTest extends TestCase {
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
     final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
 
-    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "", "sandbox", false, false, new MockHttpServletResponse()));
+    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "/file1.java", "", "sandbox", false, false, new MockHttpServletResponse()));
   }
 
   public void testCreateGoToUrl() throws Exception {

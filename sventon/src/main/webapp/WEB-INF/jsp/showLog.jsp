@@ -88,7 +88,7 @@
             <td>&nbsp;</td>
           </c:if>
           <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
-            <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), "", command.getName(), false, false, response)%>
+            <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), entry.getPathAtRevision(), "", command.getName(), false, false, response)%>
           </td>
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>

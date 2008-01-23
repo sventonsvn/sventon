@@ -37,7 +37,7 @@
 
   <tr>
     <td colspan="2">
-      <%=HTMLCreator.createChangedPathsTable(details, "", instanceName, keepVisible.booleanValue(), linkToHead.booleanValue(), response)%>
+      <%=HTMLCreator.createChangedPathsTable(details, null, "", instanceName, keepVisible.booleanValue(), linkToHead.booleanValue(), response)%>
     </td>
   </tr>
 </table>
