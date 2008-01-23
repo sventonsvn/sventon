@@ -63,7 +63,7 @@ public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
     try {
       final File cachePath = new File(rootDirectory, cacheName);
       cachePath.mkdirs();
-      fsDirectory = FSDirectory.getDirectory(cachePath, false);
+      fsDirectory = FSDirectory.getDirectory(cachePath);
     } catch (IOException ioex) {
       throw new CacheException("Unable to create LogMessageCache instance", ioex);
     }

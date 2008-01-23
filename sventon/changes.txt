@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1131] Added: Upgraded to Lucene 2.2.0.
 [1104] Added: Feature #3943 - Send notification mail for new revisions.
 [1092] Added: Feature #3931 - Easy navigation between file revisions.
 [1077] Added: Feature #3928 - Possibility to set an URL for display.
