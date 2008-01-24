@@ -1,21 +1,27 @@
 package de.berlios.sventon;
 
-import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
-
+/**
+ * Test class.
+ * <p/>
+ * For testing svn+ssh, supply the following JVM parameters:
+ * <ul>
+ * <li>-Dsvnkit.ssh2.username=you</li>
+ * <li>-Dsvnkit.ssh2.passphrase=your_passphrase</li>
+ * <li>-Dsvnkit.ssh2.key=/path/to/your_dsa_or_rsa_key</li>
+ * </ul>
+ */
 public class CmdTool {
 
   /**
@@ -25,28 +31,27 @@ public class CmdTool {
   public static void main(String[] args) {
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
-    String URL = "http://localhost:8080/svnsandbox/";
-    try {
-      SVNURL location = SVNURL.parseURIDecoded(URL);
-      SVNRepository repository = SVNRepositoryFactory.create(location);
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(new File("."), "jesper", "jesper", false);
-      repository.setAuthenticationManager(authManager);
+    FSRepositoryFactory.setup();
 
-      // get latest revisions
+    final String url = "svn+ssh://svn.berlios.de/svnroot/repos/sventon/trunk";
+    final String uid = null; // overridden by JVM parameter
+    final String pwd = null; // overridden by JVM parameter
+
+    try {
+      final SVNURL location = SVNURL.parseURIDecoded(url);
+      final SVNRepository repository = SVNRepositoryFactory.create(location);
+      final File currentDir = new File(".");
+      System.out.println("Current dir is: " + currentDir.getAbsolutePath());
+      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(currentDir, uid, pwd);
+      repository.setAuthenticationManager(authManager);
+      repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
+
+      repository.testConnection();
+
       long latestRevision = repository.getLatestRevision();
       System.out.println("[" + location.toString() + "] latest revision: " + latestRevision);
-
-      Collection<SVNDirEntry> dir = repository.getDir("/bins/", repository.getLatestRevision(), new HashMap(),
-          new ArrayList());
-      for (SVNDirEntry entry : dir) {
-        //System.out.println(entry.getName() + entry.getRevision() + entry.getKind());
-        System.out.println(entry.getName() + " - " + entry.getURL());
-      }
-
     } catch (SVNException e) {
       e.printStackTrace();
     }
-
   }
-
 }
