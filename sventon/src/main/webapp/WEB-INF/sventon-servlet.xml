@@ -50,7 +50,9 @@
   <!-- property placeholder post-processor -->
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="repositoryFactory" class="de.berlios.sventon.repository.RepositoryFactory" scope="prototype"/> 
+  <bean id="repositoryFactory" class="de.berlios.sventon.repository.RepositoryFactory" scope="prototype">
+    <constructor-arg><ref bean="sventonCacheDir"/></constructor-arg>
+  </bean>
 
   <bean id="application" class="de.berlios.sventon.appl.Application" init-method="init" destroy-method="shutdown">
     <constructor-arg index="0" ref="sventonDir"/>

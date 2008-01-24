@@ -223,10 +223,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
 
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getInstanceName(), configuration.getSVNURL(),
             repositoryContext.getUid(), repositoryContext.getPwd());
       } else {
-        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getInstanceName(), configuration.getSVNURL(),
             configuration.getUid(), configuration.getPwd());
       }
 

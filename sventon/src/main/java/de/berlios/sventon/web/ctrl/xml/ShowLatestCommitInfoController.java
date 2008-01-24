@@ -84,10 +84,11 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getSVNURL(), uid, pwd);
+        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+            configuration.getSVNURL(), uid, pwd);
       } else {
-        repository = repositoryFactory.getRepository(configuration.getSVNURL(),
-            configuration.getUid(), configuration.getPwd());
+        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+            configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
       }
 
       final long headRevision = repositoryService.getLatestRevision(repository);

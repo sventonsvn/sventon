@@ -11,11 +11,14 @@
  */
 package de.berlios.sventon.repository;
 
+import org.apache.commons.lang.Validate;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.auth.BasicAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
+
+import java.io.File;
 
 /**
  * Factory class for creating subversion repository connections.
@@ -25,28 +28,45 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 public final class RepositoryFactory {
 
   /**
-   * Gets a repository instance configured using given <code>InstanceConfiguration</code>.
-   * <p/>
-   * This method will assign credentials as they are set in the given <code>InstanceConfiguration</code>.
+   * Root directory where to place the svn config files.
+   */
+  private final File configurationRootDirectory;
+
+  /**
+   * Constructor.
+   *
+   * @param configurationRootDirectory Root directory where to place the svn config files.
+   *                                   If the directory does not exist, it will be created.
+   */
+  public RepositoryFactory(final File configurationRootDirectory) {
+    Validate.notNull(configurationRootDirectory, "Configuration root dir cannot be null!");
+    configurationRootDirectory.mkdirs();
+    this.configurationRootDirectory = configurationRootDirectory;
+  }
+
+  /**
+   * Gets a repository instance configured using given connection info.
    * <p/>
    * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
    *
-   * @param svnUrl Subversion URL
-   * @param uid    User id
-   * @param pwd    Password
+   * @param instanceName Instance name.
+   * @param svnUrl       Subversion repository URL
+   * @param uid          User id
+   * @param pwd          Password
    * @return The repository instance.
    * @throws SVNException if unable to create repository instance.
    */
-  public SVNRepository getRepository(final SVNURL svnUrl, final String uid, final String pwd) throws SVNException {
+  public SVNRepository getRepository(final String instanceName, final SVNURL svnUrl, final String uid, final String pwd)
+      throws SVNException {
+
     if (svnUrl == null) {
       return null;
     }
-    final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
-    if (uid != null) {
 
-      final BasicAuthenticationManager authManager = new BasicAuthenticationManager(uid, pwd);
-      repository.setAuthenticationManager(authManager);
-    }
+    final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
+    final File configDirectory = new File(configurationRootDirectory, instanceName);
+    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd));
+    repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;
   }
 }
