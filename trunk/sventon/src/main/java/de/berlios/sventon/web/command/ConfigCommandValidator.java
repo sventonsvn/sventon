@@ -117,7 +117,8 @@ public final class ConfigCommandValidator implements Validator {
 
         SVNRepository repository = null;
         try {
-          repository = repositoryFactory.getRepository(configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+          repository = repositoryFactory.getRepository(instanceName, configuration.getSVNURL(),
+              configuration.getUid(), configuration.getPwd());
           repository.testConnection();
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
