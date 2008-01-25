@@ -83,7 +83,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * Request parameter controlling if archived entry should be displayed
    * independently of it's mime-type.
    */
-  private static final String FORCE_ARCHIVED_ENTRY_DISPLAY = "force";
+  private static final String FORCE_ARCHIVED_ENTRY_DISPLAY = "forceDisplay";
 
   /**
    * Request parameter indicating display should be done in a raw, unprocessed format.
@@ -136,6 +136,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
           getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
           final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
+          logger.debug("Extracting [" + archivedEntry + "] from archive [" + svnCommand.getPath() + "]");
           final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
               archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
           model.put("file", textFile);

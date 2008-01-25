@@ -29,6 +29,10 @@
               <c:param name="path" value="${fileRevision.path}" />
               <c:param name="name" value="${command.name}" />
               <c:param name="revision" value="${fileRevision.revision}" />
+              <c:if test="${archivedEntry ne null}">
+                <c:param name="archivedEntry" value="${archivedEntry}" />
+                <c:param name="forceDisplay" value="true" />
+              </c:if>
             </c:url>
             <option ${currentRevision == fileRevision.revision ? 'selected' : ''}
                 value="<sventon-ui:formatUrl url="${showFileAtRevisionUrl}"/>">${fileRevision.revision}</option>

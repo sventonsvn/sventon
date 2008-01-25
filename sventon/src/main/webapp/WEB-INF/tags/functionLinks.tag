@@ -54,7 +54,7 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />
   <c:param name="archivedEntry" value="${archivedEntry}" />
-  <c:param name="force" value="true" />
+  <c:param name="forceDisplay" value="true" />
 </c:url>
 
 <form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
@@ -81,10 +81,10 @@
             <c:param name="committedRevision" value="${committedRevision}" />
           </c:url>
           <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${diffPreviousUrl}"/>';">
-          <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
         </c:if>
       </c:otherwise>
     </c:choose>
+    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
   <c:when test="${pageName == 'showImageFile' || pageName == 'showBinaryFile' || pageName == 'showArchiveFile'}">
