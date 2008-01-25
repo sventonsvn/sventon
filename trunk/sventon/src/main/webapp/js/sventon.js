@@ -248,7 +248,7 @@ function getLogMessage(revision, instanceName, date) {
   var url = 'getmessage.ajax';
   var urlParams = 'revision=' + revision + '&name=' + instanceName;
   var divName = 'msg' + revision + 'Div';
-  
+
   var ajax = new Ajax.Request(url, {
     method: 'post',
     parameters: urlParams,
@@ -294,9 +294,12 @@ function showHideEntryTray() {
   }
 }
 
-function getFileHistory(path, revision, name) {
+function getFileHistory(path, revision, name, archivedEntry) {
   var url = 'filehistory.ajax';
   var urlParams = 'path=' + path + '&revision=' + revision + '&name=' + name;
+  if (archivedEntry != '') {
+    urlParams = urlParams + '&archivedEntry=' + archivedEntry;
+  }
 
   var ajax = new Ajax.Updater({success: $('fileHistoryContainerDiv')}, url, {
     method: 'post', parameters: urlParams, onFailure: reportAjaxError});
@@ -307,7 +310,11 @@ function updateCharsetParameter(charset) {
   var path = getRequestParameter(url, 'path');
   var name = getRequestParameter(url, 'name');
   var revision = getRequestParameter(url, 'revision');
+  var archivedEntry = getRequestParameter(url, 'archivedEntry');
   url = document.location.pathname + '?path=' + path + '&revision=' + revision + '&name=' + name + '&charset=' + charset;
+  if (archivedEntry != '') {
+    url = url + '&archivedEntry=' + archivedEntry + '&forceDisplay=true';
+  }
   document.location.href = url;
 }
 
@@ -330,7 +337,7 @@ function getRequestParameter(url, name) {
 function setBackgroundColor(tags, cssName, color) {
   for (var i = 0; i < tags.length; i++) {
     if (tags[i].className == cssName) {
-        tags[i].style.backgroundColor = color;
+      tags[i].style.backgroundColor = color;
     }
   }
 }

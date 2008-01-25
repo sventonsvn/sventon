@@ -48,7 +48,7 @@
   </table>
 
   <script type="text/javascript">
-    getFileHistory('${command.path}', '${command.revision}', '${command.name}');
+    getFileHistory('${command.path}', '${command.revision}', '${command.name}', '${archivedEntry}');
   </script>
 
 <%@ include file="/WEB-INF/jspf/rssLink.jspf"%>

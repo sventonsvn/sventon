@@ -15,6 +15,7 @@ import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -33,6 +34,11 @@ import java.util.*;
 public class GetFileHistoryController extends AbstractSVNTemplateController implements Controller {
 
   /**
+   * Request parameter identifying the arcived entry to display.
+   */
+  private static final String ARCHIVED_ENTRY = "archivedEntry";
+
+  /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
@@ -45,7 +51,9 @@ public class GetFileHistoryController extends AbstractSVNTemplateController impl
 
     logger.debug("Finding revisions for [" + svnCommand.getPath() + "]");
 
-    final long targetRevision = SVNRevision.HEAD != revision ? revision.getNumber() : getRepositoryService().getLatestRevision(repository); 
+    final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
+
+    final long targetRevision = SVNRevision.HEAD != revision ? revision.getNumber() : getRepositoryService().getLatestRevision(repository);
     final List<SVNFileRevision> fileRevisions = getRepositoryService().getFileRevisions(
         repository, svnCommand.getPath(), targetRevision);
 
@@ -60,6 +68,9 @@ public class GetFileHistoryController extends AbstractSVNTemplateController impl
     Collections.reverse(fileRevisions);
     model.put("currentRevision", revision.getNumber());
     model.put("fileRevisions", fileRevisions);
+    if (archivedEntry != null) {
+      model.put(ARCHIVED_ENTRY, archivedEntry);
+    }
     return new ModelAndView("ajax/fileHistory", model);
   }
 }
