@@ -376,6 +376,7 @@ a.helpDivCloseLink {
   position: relative;
   top: 3px;
   left: -4px;
+  background-color: #E2E4E6;
 }
 
 .fileHistoryTable {
