@@ -85,4 +85,18 @@ public class InstanceConfigurationTest extends TestCase {
   }
 
 
+  public void testGetAsProperties() throws Exception {
+    final InstanceConfiguration conf = new InstanceConfiguration("test");
+
+    try {
+      conf.getAsProperties();
+      fail("Should throw NPE");
+    } catch (NullPointerException npe) {
+      // expected
+    }
+
+    conf.setRepositoryUrl("http://localhost");
+    assertEquals(6, conf.getAsProperties().size());
+
+  }
 }
