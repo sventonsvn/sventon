@@ -15,6 +15,7 @@ import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
+import de.berlios.sventon.web.support.SVNUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -109,19 +110,21 @@ public final class SyndFeedGenerator implements FeedGenerator {
 
     // One logEntry is one commit (or revision)
     for (final SVNLogEntry logEntry : logEntries) {
-      entry = new SyndEntryImpl();
-      entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
-          StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));
-      entry.setAuthor(logEntry.getAuthor());
-      entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
-      entry.setPublishedDate(logEntry.getDate());
+      if (SVNUtils.isAccessible(logEntry)) {
+        entry = new SyndEntryImpl();
+        entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
+            StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));
+        entry.setAuthor(logEntry.getAuthor());
+        entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
+        entry.setPublishedDate(logEntry.getDate());
 
-      description = new SyndContentImpl();
-      description.setType("text/html");
-      description.setValue(HTMLCreator.createRevisionDetailBody(
-          getBodyTemplate(), logEntry, baseURL, instanceName, dateFormat, response));
-      entry.setDescription(description);
-      entries.add(entry);
+        description = new SyndContentImpl();
+        description.setType("text/html");
+        description.setValue(HTMLCreator.createRevisionDetailBody(
+            getBodyTemplate(), logEntry, baseURL, instanceName, dateFormat, response));
+        entry.setDescription(description);
+        entries.add(entry);
+      }
     }
     return entries;
   }
