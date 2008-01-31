@@ -65,7 +65,7 @@ public final class RepositoryFactory {
 
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
     final File configDirectory = new File(configurationRootDirectory, instanceName);
-    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd));
+    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd, false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;
   }
