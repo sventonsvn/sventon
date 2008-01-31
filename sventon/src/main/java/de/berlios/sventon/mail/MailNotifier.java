@@ -15,6 +15,7 @@ import com.sun.mail.smtp.SMTPTransport;
 import de.berlios.sventon.appl.AbstractRevisionObserver;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.util.HTMLCreator;
+import de.berlios.sventon.web.support.SVNUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -125,36 +126,38 @@ public class MailNotifier extends AbstractRevisionObserver {
     }
 
     for (final SVNLogEntry logEntry : revisions) {
-      final String instanceName = revisionUpdate.getInstanceName();
-      LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
-
-      try {
-        final Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(from));
-        msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[0]));
-        msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
-
-        msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-            getBodyTemplate(), logEntry, baseUrl, instanceName, dateFormat, null), "text/html")));
-
-        msg.setHeader("X-Mailer", "sventon");
-        msg.setSentDate(new Date());
-
-        final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
+      if (SVNUtils.isAccessible(logEntry)) {
+        final String instanceName = revisionUpdate.getInstanceName();
+        LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
 
         try {
-          if (auth) {
-            transport.connect(host, user, password);
-          } else {
-            transport.connect();
+          final Message msg = new MimeMessage(session);
+          msg.setFrom(new InternetAddress(from));
+          msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[0]));
+          msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
+
+          msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
+              getBodyTemplate(), logEntry, baseUrl, instanceName, dateFormat, null), "text/html")));
+
+          msg.setHeader("X-Mailer", "sventon");
+          msg.setSentDate(new Date());
+
+          final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
+
+          try {
+            if (auth) {
+              transport.connect(host, user, password);
+            } else {
+              transport.connect();
+            }
+            transport.sendMessage(msg, msg.getAllRecipients());
+          } finally {
+            transport.close();
           }
-          transport.sendMessage(msg, msg.getAllRecipients());
-        } finally {
-          transport.close();
+          LOGGER.debug("Notification mail was sent successfully");
+        } catch (Exception e) {
+          LOGGER.error("Unable to send notification mail", e);
         }
-        LOGGER.debug("Notification mail was sent successfully");
-      } catch (Exception e) {
-        LOGGER.error("Unable to send notification mail", e);
       }
     }
   }
