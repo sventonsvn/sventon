@@ -158,6 +158,8 @@ public final class SideBySideDiffCreator {
         offset = applyDeleted(side, diffSegment, resultLines, offset);
       } else if (CHANGED == diffSegment.getAction()) {
         offset = applyChanged(side, diffSegment, resultLines, offset);
+      } else {
+        throw new IllegalArgumentException("Unknow action: " + diffSegment.getAction());
       }
     }
     return resultLines;
@@ -211,17 +213,25 @@ public final class SideBySideDiffCreator {
    * @return Updated row offset
    */
   private int applyDeleted(final DiffSegment.Side side, final DiffSegment diffSegment, final List<SourceLine> resultLines, final int offset) {
-    int deletedLines = 0;
-    for (int i = diffSegment.getLineIntervalStart(LEFT); i <= diffSegment.getLineIntervalEnd(LEFT); i++) {
-      if (side == LEFT) {
-        final SourceLine sourceLine = resultLines.get(i - 1);
-        resultLines.set(i - 1, sourceLine.changeAction(DELETED));
-      } else {
-        resultLines.add(i - 1, new SourceLine(null, DELETED, ""));
-        deletedLines++;
-      }
+    int newOffset = offset;
+    switch (side) {
+      case RIGHT:
+        int deletedLines = 0;
+        int startLine = diffSegment.getLineIntervalStart(side) + newOffset;
+        for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++) {
+          resultLines.add(startLine++ - 1, new SourceLine(null, DELETED, ""));
+          deletedLines++;
+        }
+        newOffset += deletedLines;
+        break;
+      case LEFT:
+        for (int i = diffSegment.getLineIntervalStart(side); i <= diffSegment.getLineIntervalEnd(side); i++) {
+          final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
+          resultLines.set(i - 1 + newOffset, sourceLine.changeAction(DELETED));
+        }
+        break;
     }
-    return offset + deletedLines;
+    return newOffset;
   }
 
   /**
@@ -250,6 +260,7 @@ public final class SideBySideDiffCreator {
           final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
           resultLines.set(i - 1 + newOffset, sourceLine.changeAction(ADDED));
         }
+        break;
     }
     return newOffset;
   }
