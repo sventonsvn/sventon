@@ -42,6 +42,8 @@ public final class DiffProducer {
    */
   private final String encoding;
 
+  private final Map generatorProperties = new HashMap();
+
   static {
     QDiffNormalGenerator.setup();
     QDiffUniGenerator.setup();
@@ -55,9 +57,24 @@ public final class DiffProducer {
    * @param encoding Encoding to use.
    */
   public DiffProducer(final InputStream left, final InputStream right, final String encoding) {
+    this(left, right, encoding, null);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param left                The left (old) InputStream.
+   * @param right               The right (new) InputStream.
+   * @param encoding            Encoding to use.
+   * @param generatorProperties Generator properties, see {@link de.regnis.q.sequence.line.diff.QDiffGeneratorFactory}.
+   */
+  public DiffProducer(final InputStream left, final InputStream right, final String encoding, Map generatorProperties) {
     this.left = left;
     this.right = right;
     this.encoding = encoding;
+    if (generatorProperties != null) {
+      this.generatorProperties.putAll(generatorProperties);
+    }
   }
 
   /**
@@ -76,7 +93,7 @@ public final class DiffProducer {
    * @param output Result output
    * @throws IOException if IO error occurs.
    */
-  public void doUniDiff(final OutputStream output) throws IOException {
+  public void doUnifiedDiff(final OutputStream output) throws IOException {
     doDiff(output, QDiffUniGenerator.TYPE);
   }
 
@@ -88,7 +105,6 @@ public final class DiffProducer {
    * @throws IOException if IO error occurs.
    */
   private void doDiff(final OutputStream output, final String generatorType) throws IOException {
-    final Map<String, String> generatorProperties = new HashMap<String, String>();
     final QDiffGenerator generator = QDiffManager.getDiffGenerator(generatorType, generatorProperties);
     final Writer writer = new OutputStreamWriter(output);
     QDiffManager.generateTextDiff(left, right, encoding, writer, generator);

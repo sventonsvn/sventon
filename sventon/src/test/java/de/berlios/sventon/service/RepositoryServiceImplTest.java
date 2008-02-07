@@ -5,6 +5,7 @@ import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
 import de.berlios.sventon.diff.SourceLine;
+import de.berlios.sventon.model.InlineDiffRow;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.util.WebUtils;
@@ -153,6 +154,60 @@ public class RepositoryServiceImplTest extends TestCase {
 
     final String s = service.diffUnified(repository, diffCommand, ENCODING, configuration);
     assertEquals("@@ -1 +1 @@" + BR + "-test left file contents" + BR + "+test right file contents", s.trim());
+  }
+
+  public void testDiffInline() throws Exception {
+    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+      private boolean firstTime = true;
+
+      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+        final String leftFileContents =
+            "row one" + BR +
+                "row two" + BR +
+                "test left file contents" + BR +
+                "last row" + BR;
+
+        final String rightFileContents =
+            "row one" + BR +
+                "test right file contents" + BR +
+                "last row" + BR;
+
+        if (contents != null) {
+          try {
+            if (firstTime) {
+              contents.write(leftFileContents.getBytes());
+              firstTime = false;
+            } else {
+              contents.write(rightFileContents.getBytes());
+            }
+          } catch (IOException e) {
+            throw new RuntimeException("FAILED!");
+          }
+        }
+        return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
+      }
+    };
+
+    final RepositoryService service = new RepositoryServiceImpl();
+    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+
+    final String[] revisions = new String[]{
+        "/bug/code/try2/OrderDetailModel.java;;91",
+        "/bug/code/try2/OrderDetailModel.java;;90"};
+    final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
+
+    final List<InlineDiffRow> list = service.diffInline(repository, diffCommand, ENCODING, configuration);
+
+    assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
+    assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
+    assertEquals("InlineDiffRow[line=test left file contents,rowNumberLeft=3,rowNumberRight=<null>,action=DELETED]", list.get(2).toString());
+    assertEquals("InlineDiffRow[line=test right file contents,rowNumberLeft=<null>,rowNumberRight=2,action=ADDED]", list.get(3).toString());
+    assertEquals("InlineDiffRow[line=last row,rowNumberLeft=4,rowNumberRight=3,action=UNCHANGED]", list.get(4).toString());
+    assertEquals(5, list.size());
   }
 
   public void testDiffSideBySideBinaryFile() throws Exception {

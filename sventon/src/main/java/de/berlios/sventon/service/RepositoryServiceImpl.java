@@ -16,10 +16,7 @@ import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
-import de.berlios.sventon.model.AnnotatedTextFile;
-import de.berlios.sventon.model.ImageMetadata;
-import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.model.TextFile;
+import de.berlios.sventon.model.*;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
@@ -27,6 +24,8 @@ import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.DiffCommand;
+import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
@@ -385,7 +384,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
           new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
 
-      diffProducer.doUniDiff(diffResult);
+      diffProducer.doUnifiedDiff(diffResult);
 
       diffResultString = diffResult.toString(charset);
       if ("".equals(diffResultString)) {
@@ -397,6 +396,68 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
 
     return diffResultString;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
+                                              final InstanceConfiguration configuration) throws SVNException, DiffException {
+
+    assertNotBinary(repository, diffCommand);
+    assertFileEntries(repository, diffCommand);
+
+    String diffResultString;
+    final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
+
+    try {
+      final TextFile leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
+      final TextFile rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+
+      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+      final Map generatorProperties = new HashMap();
+      final int maxLines = Math.max(leftFile.getRows().size(), rightFile.getRows().size());
+      //noinspection unchecked
+      generatorProperties.put(QDiffGeneratorFactory.GUTTER_PROPERTY, maxLines);
+      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
+          new ByteArrayInputStream(rightFile.getContent().getBytes()), charset, generatorProperties);
+
+      diffProducer.doUnifiedDiff(diffResult);
+
+      diffResultString = diffResult.toString(charset);
+      if ("".equals(diffResultString)) {
+        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+      }
+
+      int rowNumberLeft = 1;
+      int rowNumberRight = 1;
+      //noinspection unchecked
+      for (final String row : (List<String>) IOUtils.readLines(new StringReader(diffResultString))) {
+        if (!row.startsWith("@@")) {
+          final char action = row.charAt(0);
+          switch (action) {
+            case' ':
+              resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
+              rowNumberLeft++;
+              rowNumberRight++;
+              break;
+            case'+':
+              resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
+              rowNumberRight++;
+              break;
+            case'-':
+              resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
+              rowNumberLeft++;
+              break;
+            default:
+              throw new IllegalArgumentException("Unknown action: " + action);
+          }
+        }
+      }
+    } catch (final IOException ioex) {
+      throw new DiffException("Unable to produce inline diff", ioex);
+    }
+    return resultRows;
   }
 
   /**
