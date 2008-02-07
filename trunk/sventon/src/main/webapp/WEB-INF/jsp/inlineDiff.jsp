@@ -25,7 +25,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
   <sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/>
-  <sventon:functionLinks pageName="showDiff"/>
+  <sventon:functionLinks pageName="showInlineDiff"/>
 
   <c:choose>
     <c:when test="${isIdentical}">
@@ -45,15 +45,20 @@
                 </a>
               </th>
               <th class="lineNo">&nbsp;</th>
+              <th class="lineNo">&nbsp;</th>
+              <th style="background-color: white;">&nbsp;</th>              
+              <th width="100%" style="background-color: white;">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
+            </tr>
+            <tr>
               <th style="background-color: white;">&nbsp;</th>
-              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.fromTarget} @ revision ${diffCommand.fromRevision}</th>
+              <th class="lineNo">&nbsp;</th>
               <th class="lineNo">&nbsp;</th>
               <th style="background-color: white;">&nbsp;</th>
-              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
+              <th width="100%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
             </tr>
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">
-              <jsp:useBean id="row" type="de.berlios.sventon.model.SideBySideDiffRow"/>
+              <jsp:useBean id="row" type="de.berlios.sventon.model.InlineDiffRow"/>
               <tr>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">
@@ -66,33 +71,26 @@
                 </td>
 
                 <td class="lineNo">
-                  <%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber() != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber().toString() : "" %>
+                  <%= row.getRowNumberLeft() != null ? row.getRowNumberLeft().toString() : "" %>
                 </td>
-                <td style="text-align: center; background-color: white;">
-                  <b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b>
-                </td>
-                <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
-                  <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
-                    <%
-                      String line = row.getSide(SideBySideDiffRow.Side.LEFT).getLine();
-                      out.print("".equals(line) ? "&nbsp;" : line);
-                    %>
-                  </span>
-                </td>
+
                 <td class="lineNo">
-                  <%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber() != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber().toString() : "" %>
+                  <%= row.getRowNumberRight() != null ? row.getRowNumberRight().toString() : "" %>
                 </td>
+
                 <td style="text-align: center; background-color: white;">
-                  <b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b>
+                  <b><%= row.getAction().getSymbol() %></b>
                 </td>
-                <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
-                  <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
+
+                <td class="<%= row.getAction().getCSSClass() %>">
+                  <span title="<%= row.getAction().getDescription() %>">
                     <%
-                      line = row.getSide(SideBySideDiffRow.Side.RIGHT).getLine();
+                      String line = row.getLine();
                       out.print("".equals(line) ? "&nbsp;" : line);
                     %>
                   </span>
                 </td>
+
               </tr>
             </c:forEach>
           </table>

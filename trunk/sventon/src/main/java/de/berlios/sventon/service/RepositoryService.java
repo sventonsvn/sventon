@@ -15,10 +15,7 @@ import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
-import de.berlios.sventon.model.AnnotatedTextFile;
-import de.berlios.sventon.model.ImageMetadata;
-import de.berlios.sventon.model.SideBySideDiffRow;
-import de.berlios.sventon.model.TextFile;
+import de.berlios.sventon.model.*;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
@@ -280,6 +277,8 @@ public interface RepositoryService {
                                   final int maxThumbnailSize, final OutputStream out) throws SVNException;
 
   /**
+   * Creates a side-by-side diff.
+   *
    * @param repository    The repository
    * @param diffCommand   DiffCommand.
    * @param charset       The charset to use.
@@ -293,6 +292,8 @@ public interface RepositoryService {
       throws SVNException, DiffException;
 
   /**
+   * Creates a unified diff.
+   *
    * @param repository    The repository
    * @param diffCommand   DiffCommand
    * @param charset       The charset to use.
@@ -304,6 +305,20 @@ public interface RepositoryService {
   String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
                      final InstanceConfiguration configuration)
       throws SVNException, DiffException;
+
+  /**
+   * Creates an inline diff.
+   *
+   * @param repository    The repository
+   * @param diffCommand   DiffCommand
+   * @param charset       The charset to use.
+   * @param configuration The instance configuration.
+   * @return The inline diff.
+   * @throws SVNException  if a subversion error occur
+   * @throws DiffException if unable to produce diff.
+   */
+  List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
+                                 final InstanceConfiguration configuration) throws SVNException, DiffException;
 
   /**
    * Blame (annotates) the given file.

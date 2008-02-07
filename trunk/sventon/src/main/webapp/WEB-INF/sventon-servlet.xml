@@ -129,8 +129,6 @@
   <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
   <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController"
         parent="abstractController"/>
-  <bean id="unifiedDiffController" class="de.berlios.sventon.web.ctrl.UnifiedDiffController"
-        parent="abstractController"/>
 
   <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
@@ -212,7 +210,6 @@
         <prop key="/showthumbs.svn">showThumbnailsController</prop>
         <prop key="/diff.svn">diffController</prop>
         <prop key="/diffprev.svn">diffPreviousController</prop>
-        <prop key="/unifieddiff.svn">unifiedDiffController</prop>
         <prop key="/goto.svn">goToController</prop>
         <prop key="/revinfo.svn">revInfoController</prop>
         <prop key="/showlocks.svn">showLocksController</prop>

@@ -34,8 +34,8 @@
         <c:when test="${!isBinary}">
           <b>
             <br>Unified diff between:
-            <br>${diffCommand.fromPath} (revision ${diffCommand.fromRevision})
-            <br>${diffCommand.toPath} (revision ${diffCommand.toRevision})
+            <br>${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}
+            <br>${diffCommand.toPath} @ revision ${diffCommand.toRevision}
           </b>
 
           <pre class="codeBlock"><c:out value="${diffResult}" escapeXml="false"/></pre>

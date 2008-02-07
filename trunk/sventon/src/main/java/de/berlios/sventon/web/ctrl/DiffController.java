@@ -13,12 +13,14 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
+import de.berlios.sventon.model.InlineDiffRow;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import de.berlios.sventon.web.support.RequestParameterParser;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -38,6 +40,10 @@ import java.util.Map;
  */
 public final class DiffController extends AbstractSVNTemplateController implements Controller {
 
+  private static final String SIDE_BY_SIDE = "sidebyside";
+  private static final String UNIFIED = "unified";
+  private static final String INLINE = "inline";
+
   /**
    * {@inheritDoc}
    */
@@ -47,18 +53,35 @@ public final class DiffController extends AbstractSVNTemplateController implemen
                                    final BindException exception) throws Exception {
 
     final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
-    logger.debug("Diffing file (side-by-side): " + entries);
+    final String style = ServletRequestUtils.getStringParameter(request, "style", SIDE_BY_SIDE);
+    logger.debug("Diffing [" + style + "]: " + entries);
+
     final Map<String, Object> model = new HashMap<String, Object>();
 
     final DiffCommand diffCommand = new DiffCommand(entries);
     model.put("diffCommand", diffCommand);
     logger.debug("Using: " + diffCommand);
 
+    ModelAndView modelAndView = null;
     try {
-      final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-          userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
-
-      model.put("diffResult", diffResult);
+      if (SIDE_BY_SIDE.equals(style)) {
+        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
+            userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+        model.put("diffResult", diffResult);
+        modelAndView = new ModelAndView("diff");
+      } else if (UNIFIED.equals(style)) {
+        final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userRepositoryContext.getCharset(),
+            getInstanceConfiguration(svnCommand.getName()));
+        model.put("diffResult", diffResult);
+        modelAndView = new ModelAndView("unifiedDiff");
+      } else if (INLINE.equals(style)) {
+        final List<InlineDiffRow> diffResult = getRepositoryService().diffInline(repository, diffCommand, userRepositoryContext.getCharset(),
+            getInstanceConfiguration(svnCommand.getName()));
+        model.put("diffResult", diffResult);
+        modelAndView = new ModelAndView("inlineDiff");
+      } else {
+        throw new IllegalStateException();
+      }
       model.put("isIdentical", false);
       model.put("isBinary", false);
     } catch (final IdenticalFilesException ife) {
@@ -69,7 +92,8 @@ public final class DiffController extends AbstractSVNTemplateController implemen
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
 
-    return new ModelAndView("diff", model);
+    modelAndView.addAllObjects(model);
+    return modelAndView;
   }
 
 }

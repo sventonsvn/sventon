@@ -153,23 +153,7 @@
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showDirLinkUrl}"/>';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
   </c:when>
 
-  <c:when test="${pageName == 'showDiff'}">
-    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showLogLinkUrl}"/>';">
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
-
-    <c:url value="unifieddiff.svn" var="unifiedDiffUrl">
-      <c:param name="path" value="${command.path}${entry.name}" />
-      <c:param name="revision" value="${command.revision}" />
-      <c:param name="name" value="${command.name}" />
-      <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
-      <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
-    </c:url>
-    <input type="button" class="btn" value="<spring:message code="unifieddiff.button.text"/>" onmouseover="Tip('<spring:message code="unifieddiff.button.tooltip"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${unifiedDiffUrl}"/>';">
-    <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
-    <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
-  </c:when>
-
-  <c:when test="${pageName == 'showUnifiedDiff'}">
+  <c:when test="${pageName == 'showDiff' || pageName == 'showUnifiedDiff' || pageName == 'showInlineDiff'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showLogLinkUrl}"/>';">
     <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
 
@@ -180,7 +164,15 @@
       <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
     </c:url>
-    <input type="button" class="btn" value="<spring:message code="diff.button.text"/>" onmouseover="Tip('<spring:message code="diff.button.tooltip"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${diffUrl}"/>';">
+    <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
+    <select name="diffStyle" class="sventonSelect" onchange="parent.location=this.options[this.selectedIndex].value;">
+      <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=inline"
+          ${pageName == 'showInlineDiff' ? 'selected' : ''}>Inline</option>
+      <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=sidebyside"
+          ${pageName == 'showDiff' ? 'selected' : ''}>Side By Side</option>
+      <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=unified"
+          ${pageName == 'showUnifiedDiff' ? 'selected' : ''}>Unified</option>
+    </select>
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>
 
