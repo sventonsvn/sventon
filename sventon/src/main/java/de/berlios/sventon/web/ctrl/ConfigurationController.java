@@ -120,6 +120,7 @@ public final class ConfigurationController extends AbstractFormController {
       model.put("command", confCommand);
       return new ModelAndView("config", model);
     } else {
+      logger.debug("Adding configuration from command: " + confCommand);
       final InstanceConfiguration instanceConfiguration = confCommand.createInstanceConfiguration();
       application.addInstance(instanceConfiguration);
       model.put("latestAddedInstance", confCommand.getName());

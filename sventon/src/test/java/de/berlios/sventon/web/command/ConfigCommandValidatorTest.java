@@ -2,6 +2,7 @@ package de.berlios.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
 public class ConfigCommandValidatorTest extends TestCase {
 
@@ -87,7 +88,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setName("default");
     command.setPwd("");
     command.setUid("");
-    command.setEnableAccessControl(true);
+    command.setAccessMethod(USER);
     command.setConnectionTestUid("admin");
     command.setConnectionTestPwd("super-secret-pwd123");
     validator.validate(command, exception);
