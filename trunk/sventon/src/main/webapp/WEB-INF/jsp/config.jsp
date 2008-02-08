@@ -19,11 +19,21 @@
   <title>sventon repository browser</title>
   <script type="text/javascript">
     function toggleAccessControl() {
-      var accessControl = $('accessControlCheckbox');
-      ['global-uid', 'global-pwd', 'caching'].each(function(input) {
-        return accessControl.checked ? Field.disable(input) : Field.enable(input);
-      });
-      ['connection-test-uid', 'connection-test-pwd'].each(accessControl.checked ? Element.show : Element.hide);
+      var global = $('global_btn');
+      var user = $('user_btn');
+
+      ['access_method_user', 'access_method_global', 'access_method_anon', 'cache'].each(Element.show);
+
+      if (user.checked) {
+        ['access_method_anon', 'access_method_global', 'cache'].each(Element.hide);
+      } else if (global.checked) {
+        ['access_method_anon', 'access_method_user'].each(Element.hide);
+      } else {
+        ['access_method_user', 'access_method_global'].each(Element.hide);
+      }
+
+//alert(acm);
+
     }
     window.onload = toggleAccessControl;
   </script>
@@ -34,170 +44,159 @@
 
 <br>
 
-<p>
-<form name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
-<table class="configFormTable">
-<tr>
-  <td class="configHeaderBig" colspan="3">Repository details</td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Repository name:</td>
-  <td>
-    <spring:bind path="command.name">
-      <input type="text" name="name" size="60" value="${status.value}" class="configHeaderSmall">
-      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-    </spring:bind>
-    <p>
-      <b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i>
-    </p>
-  </td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Subversion repository root URL:</td>
-  <td>
-    <spring:bind path="command.repositoryUrl">
-      <input type="text" name="repositoryUrl" size="60" value="${status.value}" class="configHeaderSmall">
-      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-    </spring:bind>
-    <p>
-      <b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or <i>svn+ssh://domain/project/</i>
-    </p>
-  </td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">User name:</td>
-  <td>
-    <spring:bind path="command.uid">
-      <input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-    </spring:bind>
-    <p>
-      Leave blank for anonymous
-    </p>
-  </td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Password:</td>
-  <td>
-    <spring:bind path="command.pwd">
-      <input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-      <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-    </spring:bind>
-    <p>
-      Leave blank for anonymous
-    </p>
-  </td>
-</tr>
-<tr>
-  <td class="configHeaderBig" colspan="3">Application configuration</td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Enable user based access control:</td>
-  <td>
-    <spring:bind path="command.enableAccessControl">
-      <input type="checkbox" name="${status.expression}" id="accessControlCheckbox"
-      <c:if test="${status.value}"> checked</c:if> onclick="toggleAccessControl();">
-    </spring:bind>
-    <p>
-      Controls whether user based access control should be enabled. This should be used if access control is
-      enabled on the repository and each sventon user should authenticate them self individually. Do not check
-      this box if anonymus read access is enabled on the repository or if you have set a global user and
-      password above.
-    </p>
 
-    <p>
-      If enabled, all features relying on the repository cache, such as the search and directory flattening features and the log message
-      search, will be <i>disabled</i>.
-    </p>
+<div id="configured_repos">
 
-    <p>
-      Note that enabling user based access control stores user id and password in the user session, this could
-      be considered a security problem.
-    </p>
-    <table class="configFormTable">
-      <tr id="connection-test-uid">
-        <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">User name for connection test:</td>
-        <td>
-          <spring:bind path="command.connectionTestUid">
-            <input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-            <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+  <ul>
+    <c:forEach var="instance" items="${addedInstances}">
+      <li>${instance}</li>
+    </c:forEach>
+  </ul>
+
+</div>
+
+<div id="config_main">
+<form id="config_form" name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
+<div class="config_group">
+  <div id="repository_location">
+    <img src="images/1.png"/>
+
+    <div class="config_settings">
+      <p class="config_key">Repository name: <img class="helpIcon" src="images/icon_help.png"
+                                                  alt="Help"
+                                                  onmouseover="return getHelpText('conf_repository_name_help');">
+      </p>
+
+      <spring:bind path="command.name">
+        <p><input type="text" name="name" size="50" value="${status.value}" class="configHeaderSmall"></p>
+        <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+      </spring:bind>
+      <p><b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i></p>
+
+      <p class="config_key">Subversion repository root URL: <img class="helpIcon"
+                                                                 src="images/icon_help.png"
+                                                                 alt="Help"
+                                                                 onmouseover="return getHelpText('conf_repository_url_help');">
+      </p>
+
+      <spring:bind path="command.repositoryUrl">
+        <p><input type="text" name="repositoryUrl" size="60" value="${status.value}" class="configHeaderSmall"></p>
+        <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+      </spring:bind>
+
+      <p><b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or
+        <i>svn+ssh://domain/project/</i></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="config_group">
+  <div id="access_method">
+    <img src="images/2.png"/>
+
+    <div class="config_settings">
+      <spring:bind path="command.accessMethod">
+      <p class="config_key"><input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS" <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
+                                   onclick="toggleAccessControl();"><label for="anon_btn">anonymous</label>
+        <input id="global_btn" type=radio name="accessMethod" value="GLOBAL"  <c:if test="${status.value eq 'GLOBAL'}"> checked</c:if> onclick="toggleAccessControl();"><label
+         for="global_btn">global</label>
+        <input id="user_btn" type=radio name="accessMethod" value="USER"  <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
+         for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
+                                          onmouseover="return getHelpText('conf_access_method_help');"></p>
+      </spring:bind>
+    </div>
+  </div>
+
+  <div id="access_method_global">
+    <div class="config_settings">
+      <p class="config_key">User name:<br/>
+
+        <spring:bind path="command.uid">
+          <input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
+                 class="configHeaderSmall">
+          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        </spring:bind>
+        <img class="helpIcon" src="images/icon_help.png" alt="Help"
+             onmouseover="return getHelpText('conf_global_uid_help');">
+      </p>
+
+      <p class="config_key">Password:<br/>
+        <spring:bind path="command.pwd">
+          <input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
+                 class="configHeaderSmall">
+          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        </spring:bind></p>
+    </div>
+  </div>
+
+  <div id="access_method_user">
+    <div class="config_settings">
+      <p class="config_key">User name for connection test:<br/>
+        <spring:bind path="command.connectionTestUid">
+          <input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        </spring:bind> <img
+         class="helpIcon" src="images/icon_help.png" alt="Help"
+         onmouseover="return getHelpText('conf_connection_test_uid_help');"></p>
+
+      <p class="config_key">Password for connection test:<br/>
+        <spring:bind path="command.connectionTestPwd">
+          <input type="password" name="${status.expression}" size="30" value="${status.value}"
+                 class="configHeaderSmall">
+          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        </spring:bind></p>
+    </div>
+  </div>
+
+  <div id="access_method_anon">
+
+  </div>
+</div>
+
+<div class="config_group">
+  <div id="application_features">
+    <img src="images/3.png"/>
+
+    <div id="downloads">
+      <div class="config_settings">
+        <p class="config_key"><label for="zip_cbx">Allow download as compressed ZIP: </label>
+          <spring:bind path="command.zippedDownloadsAllowed">
+            <input id="zip_cbx" type="checkbox" name="${status.expression}"
+            <c:if test="${status.value}"> checked</c:if>>
           </spring:bind>
-        </td>
-      </tr>
-      <tr id="connection-test-pwd">
-        <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Password for connection test:</td>
-        <td>
-          <spring:bind path="command.connectionTestPwd">
-            <input type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-            <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-          </spring:bind>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Allow download as compressed ZIP:</td>
-  <td>
-    <spring:bind path="command.zippedDownloadsAllowed">
-      <input type="checkbox" name="${status.expression}"
-      <c:if test="${status.value}"> checked</c:if>>
-    </spring:bind>
-    <p>
-      Enable/disable the 'download as zip' function.
-    </p>
-  </td>
-</tr>
-<tr>
-  <td valign="top" align="right" class="configHeaderSmall" nowrap="nowrap">Use repository caching:</td>
-  <td>
-    <spring:bind path="command.cacheUsed">
-      <input id="caching" type="checkbox" name="${status.expression}"
-      <c:if test="${status.value}"> checked</c:if>>
-    </spring:bind>
-    <p>
-      Controls whether repository caching feature should be used. <br>
-      If enabled, the search and directory flattening features will be available, as well as the log message search.
-    </p>
-  </td>
-</tr>
-<tr>
-  <td></td>
-  <td>
-    <spring:hasBindErrors name="command">
-      <span class="exclamationText">
-        <b>Please fix the errors above!</b>
-      </span>
-    </spring:hasBindErrors>
-  </td>
-</tr>
-<tr>
-  <td></td>
-  <td>
-    <input type="submit" value="Continue" class="cfgbtn">
-  </td>
-</tr>
-<c:if test="${fn:length(addedInstances) > 0}">
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td class="configHeaderSmall"><b>Already added instances:</b></td>
-  </tr>
-  <c:forEach var="instance" items="${addedInstances}">
-    <tr>
-      <td></td>
-      <td class="configHeaderSmall"><i>${instance}</i></td>
-    </tr>
-  </c:forEach>
-</c:if>
-</table>
+          <img class="helpIcon" src="images/icon_help.png" alt="Help"
+               onmouseover="return getHelpText('conf_zipped_downloads_help');"></p>
+      </div>
+    </div>
+
+    <div id="cache">
+      <div class="config_settings">
+        <p class="config_key"><label for="caching">Use repository caching: </label>
+          <spring:bind path="command.cacheUsed">
+            <input id="caching" type="checkbox" name="${status.expression}"
+            <c:if test="${status.value}"> checked</c:if>>
+          </spring:bind> <img
+           class="helpIcon" src="images/icon_help.png" alt="Help"
+           onmouseover="return getHelpText('conf_repository_caching_help');"></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="config_group">
+  <div class="config_settings">
+    <input value="Continue" class="cfgbtn" type="submit">
+  </div>
+</div>
 </form>
-</p>
+
+
 <script language="JavaScript" type="text/javascript">
   document.configForm.name.focus();
 </script>
+<script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
 </body>

@@ -4,6 +4,7 @@ import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
+import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -121,7 +122,7 @@ public class ConfigurationControllerTest extends TestCase {
     final ConfigCommand command = new ConfigCommand();
     command.setName(instanceName);
     command.setRepositoryUrl("http://localhost");
-    command.setEnableAccessControl(true);
+    command.setAccessMethod(USER);
     command.setZippedDownloadsAllowed(true);
     command.setConnectionTestUid("test uid");
     command.setConnectionTestPwd("test pwd");

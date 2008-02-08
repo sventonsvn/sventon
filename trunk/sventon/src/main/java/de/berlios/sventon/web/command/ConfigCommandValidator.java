@@ -14,6 +14,7 @@ package de.berlios.sventon.web.command;
 import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
+import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
@@ -110,9 +111,9 @@ public final class ConfigCommandValidator implements Validator {
         logger.info("Testing repository connection");
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
-        configuration.setUid(command.isEnableAccessControl() ?
+        configuration.setUid(command.getAccessMethod() == USER ?
             command.getConnectionTestUid() : command.getUid());
-        configuration.setPwd(command.isEnableAccessControl() ?
+        configuration.setPwd(command.getAccessMethod() == USER ?
             command.getConnectionTestPwd() : command.getPwd());
 
         SVNRepository repository = null;

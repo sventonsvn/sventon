@@ -26,6 +26,24 @@ import org.springframework.beans.BeanUtils;
  */
 public final class ConfigCommand {
 
+  public enum AccessMethod {
+
+    /**
+     * Anonymous access (no uid/pwd needed)
+     */
+    ANONYMOUS(),
+
+    /**
+     * Global access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user
+     */
+    GLOBAL(),
+
+    /**
+     * User access, each sventon user needs supply it's own uid/pwd for accessing restricted parts of the repository
+     */
+    USER()
+  }
+
   private String name;
   private String repositoryUrl;
   private String uid;
@@ -34,7 +52,7 @@ public final class ConfigCommand {
   private String connectionTestPwd;
   private boolean useCache;
   private boolean zipDownloadsAllowed;
-  private boolean enableAccessControl;
+  private ConfigCommand.AccessMethod accessMethod;
 
   /**
    * Gets the repository URL.
@@ -109,21 +127,21 @@ public final class ConfigCommand {
   }
 
   /**
-   * Checks if access control is enabled.
+   * Get access control method.
    *
-   * @return True if access control is enabled, false if not.
+   * @return Access control method
    */
-  public boolean isEnableAccessControl() {
-    return enableAccessControl;
+  public AccessMethod getAccessMethod() {
+    return accessMethod;
   }
 
   /**
-   * Sets the access control enable flag.
+   * Sets the access control method.
    *
-   * @param enableAccessControl True to enable access control, false if not.
+   * @param accessMethod Access control method
    */
-  public void setEnableAccessControl(final boolean enableAccessControl) {
-    this.enableAccessControl = enableAccessControl;
+  public void setAccessMethod(final AccessMethod accessMethod) {
+    this.accessMethod = accessMethod;
   }
 
   /**
@@ -206,6 +224,7 @@ public final class ConfigCommand {
   public InstanceConfiguration createInstanceConfiguration() {
     InstanceConfiguration configuration = new InstanceConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
+    configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
     return configuration;
   }
 

@@ -124,6 +124,51 @@ input.btn {
   width: 100%;
 }
 
+#configured_repos {
+	float: right;
+	background: #99b6c7 url(images/configured_repos_bottom.png) no-repeat center bottom;
+	width: 219px;
+	margin-right: 20px;
+}
+
+input#global_btn {
+	margin-left: 15px;
+}
+
+input#user_btn {
+	margin-left: 15px;
+}
+
+p.config_key {
+	font-size: 12px;
+}
+
+#configured_repos ul {
+	color: #fff;
+	font-size: 14px;
+	background: url(images/configured_repos_top.png) no-repeat left top;
+	margin: 0;
+	padding-top: 45px;
+	overflow: visible;
+	min-height: 361px;
+	visibility: visible;
+	padding-bottom: 20px;
+}
+
+#configured_repos ul li {
+	margin: .25em 4% 0.25em -4px;
+}
+
+div.config_group {
+	padding-top: 10px;
+	padding-left: 20px;
+	padding-bottom: 40px;
+}
+
+div.config_settings {
+	padding-left: 56px;
+}
+
 .sventonRevision {
   width: 100px;
 }
@@ -423,7 +468,9 @@ input.cfgbtn {
 .configHeaderSmall {
   color: #000000;
   font-family: verdana, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .droparea {

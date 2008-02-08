@@ -10,7 +10,7 @@ public class ConfigCommandTest extends TestCase {
     final ConfigCommand command = new ConfigCommand();
     command.setName("testrepos");
     command.setRepositoryUrl("http://localhost");
-    command.setEnableAccessControl(false);
+    command.setAccessMethod(ConfigCommand.AccessMethod.GLOBAL);
     command.setCacheUsed(true);
     command.setZippedDownloadsAllowed(true);
     command.setConnectionTestUid("test uid");
