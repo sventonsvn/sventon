@@ -24,101 +24,94 @@
 
 <br>
 
-<c:if test="${latestAddedInstance ne null}">
-  <p class="configHeaderBig">
-    Repository added!
-  </p>
 
-  <p class="configHeaderSmall">
-    The repository <b>${latestAddedInstance}</b> has been successfully added to sventon.
-    The configuration parameters will be stored in the file <b>${configFile.absolutePath}</b>.
-  </p>
-</c:if>
+<div id="config_page">
 
-<br>
-<br>
 
-<c:if test="${fn:length(addedInstances) > 1}">
-  <p class="configHeaderSmall"><b>Repositories added so far:</b>
+  <div id="configured_repos">
+
     <ul>
       <c:forEach var="instance" items="${addedInstances}">
-        <li><i><span class="configHeaderSmall">${instance}</span></i></li>
+        <li>${instance}</li>
       </c:forEach>
     </ul>
-  </p>
-</c:if>
 
-<br>
-<br>
+  </div>
 
-<hr>
+  <div id="config_confirmation">
 
-<table class="configFormTable">
-  <tr>
-    <td class="configHeaderBig">Where are the log files stored?</td>
-  </tr>
-  <tr>
-    <td class="configHeaderSmall">By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
-      repository configurations will be stored in the servlet container's temporary directory,
-      <b><%=System.getProperty("java.io.tmpdir")%></b>.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <hr>
-    </td>
-  </tr>
-  <tr>
-    <td class="configHeaderBig">What if I want to change logging granularity or log file location?</td>
-  </tr>
-  <tr>
-    <td class="configHeaderSmall">Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <hr>
-    </td>
-  </tr>
-  <tr>
-    <td class="configHeaderBig">What about UTF-8 support?</td>
-  </tr>
-  <tr>
-    <td class="configHeaderSmall">If this sventon instance will be used with <a href="http://tomcat.apache.org/">Tomcat</a> in a
-      non-US-ASCII environment, making fully use of Subversion's UTF-8 support, modifications must be made to the
-      Coyote HTTP/1.1 connector: In <code>server.xml</code>, either set attribute <code>URIEncoding="UTF-8"</code>
-      and/or set <code>useBodyEncodingForURI="true"</code>.
-    </td>
-  </tr>
-</table>
+    <c:if test="${latestAddedInstance ne null}">
+      <div id="config_success">
+        <h1>
+          Repository successfully configured!
+        </h1>
 
-<hr>
+        <p>
+          The repository <b>sventondump</b> has been successfully added to sventon.
+        </p>
+      </div>
+    </c:if>
 
-<br>
-<br>
+    <div id="config_navigation">
+      <form action="config.svn">
+        <input value="addnew" name="addnew" type="hidden">
+        <input value="Add another repository" class="cfgbtn" type="submit">
+      </form>
 
-<div align="center" class="configHeaderSmall">
-  <table>
-    <tr>
-      <td align="right">
-        <form action="config.svn">
-          <input type="hidden" value="addnew" name="addnew">
-          <input type="submit" value="Add another repository to sventon" class="cfgbtn">
-        </form>
-      </td>
-      <td>or</td>
-      <td>
-        <form action="submitconfig.svn">
-          <input type="submit" value="Complete setup and start browsing" class="cfgbtn">
-        </form>
-      </td>
-    </tr>
-  </table>
-</div>
+      <form action="submitconfig.svn">
+        <input value="Complete setup and start browsing" class="cfgbtn" type="submit">
+      </form>
+    </div>
 
-<br>
-<br>
+    <div id="config_faq">
+      <p>
+        Configuration FAQ
+      </p>
 
-<%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
+      <div class="config_faq_entry">
+        <div class="config_faq_question" onclick="new Element.toggle('faqa1');">
+          <a href="#">Where are the log files stored?</a>
+        </div>
+        <div class="config_faq_answer" id="faqa1" style="display: none;">
+          By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
+          repository configurations will be stored in the servlet container's temporary directory,
+          <b><%=System.getProperty("java.io.tmpdir")%>
+          </b>.
+        </div>
+      </div>
+
+      <div class="config_faq_entry">
+        <div class="config_faq_question" onclick="new Element.toggle('faqa2');">
+          <a href="#">What if I want to change logging granularity or log file location?</a>
+        </div>
+        <div class="config_faq_answer" id="faqa2" style="display:none;">
+          Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
+        </div>
+      </div>
+
+      <div class="config_faq_entry">
+        <div class="config_faq_question" onclick="new Element.toggle('faqa3');">
+          <a href="#">What about UTF-8 support?</a>
+        </div>
+        <div class="config_faq_answer" id="faqa3" style="display:none;">
+          If this sventon instance will be used with <a href="http://tomcat.apache.org/">Tomcat</a> in a
+          non-US-ASCII environment, making fully use of Subversion's UTF-8 support, modifications must be made to the
+          Coyote HTTP/1.1 connector: In <code>server.xml</code>, either set attribute <code>URIEncoding="UTF-8"</code>
+          and/or set <code>useBodyEncodingForURI="true"</code>.
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <br>
+  <br>
+  <script src="js/prototype.js" type="text/javascript"></script>
+  <script src="js/scriptaculous.js" type="text/javascript"></script>
+
+
+  <%@ include file="/WEB-INF/jspf/pageFoot.jspf" %>
 </body>
 </html>
