@@ -360,7 +360,7 @@ div.config_settings {
 
 .srcChg {
   color: #000000;
-  background-color: #ffbebe;
+  background-color: #bebeff;
   font-family: verdana, sans-serif;
   font-size: 9px;
 }
@@ -374,7 +374,7 @@ div.config_settings {
 
 .srcDel {
   color: #000000;
-  background-color: #bebeff;
+  background-color: #ffbebe;
   font-family: verdana, sans-serif;
   font-size: 9px;
 }
