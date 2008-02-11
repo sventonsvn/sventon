@@ -100,7 +100,7 @@
       <p class="config_key"><input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS" <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
                                    onclick="toggleAccessControl();"><label for="anon_btn">anonymous</label>
         <input id="global_btn" type=radio name="accessMethod" value="GLOBAL"  <c:if test="${status.value eq 'GLOBAL'}"> checked</c:if> onclick="toggleAccessControl();"><label
-         for="global_btn">global</label>
+         for="global_btn">sventon</label>
         <input id="user_btn" type=radio name="accessMethod" value="USER"  <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
          for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
                                           onmouseover="return getHelpText('conf_access_method_help');"></p>
@@ -110,7 +110,7 @@
 
   <div id="access_method_global">
     <div class="config_settings">
-      <p class="config_key">User name:<br/>
+      <p class="config_key">Username:<br/>
 
         <spring:bind path="command.uid">
           <input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
@@ -132,7 +132,7 @@
 
   <div id="access_method_user">
     <div class="config_settings">
-      <p class="config_key">User name for connection test:<br/>
+      <p class="config_key">Username for connection test:<br/>
         <spring:bind path="command.connectionTestUid">
           <input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
           <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
