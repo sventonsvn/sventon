@@ -65,7 +65,6 @@ public final class JHighlightColorer implements Colorer {
    *
    * @param fileExtension The file extension.
    * @return The JHighlight <code>Renderer</code> instance.
-   * @throws IllegalArgumentException if file extension is null.
    */
   protected Renderer getRenderer(final String fileExtension) {
     Validate.notNull(fileExtension, "File extension cannot be null");
@@ -73,7 +72,7 @@ public final class JHighlightColorer implements Colorer {
   }
 
   /**
-   * Sets the file extension / renderer mapping
+   * Sets the file extension / renderer mapping.
    *
    * @param rendererMappings The mappings
    */

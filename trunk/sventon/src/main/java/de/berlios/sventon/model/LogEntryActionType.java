@@ -20,9 +20,26 @@ import org.apache.commons.lang.Validate;
  */
 public enum LogEntryActionType {
 
+  /**
+   * Indicating entry was added.
+   */
   ADDED("Added", 'A'),
+
+  /**
+   * Indicating entry was deleted.
+   */
   DELETED("Deleted", 'D'),
+
+  /**
+   * Indicating entry was modified.
+   */
   MODIFIED("Modified", 'M'),
+
+  /**
+   * Indicating entry was replaced (meaning that the object is first deleted,
+   * then another object of the same name is added,
+   * all within a single revision).
+   */
   REPLACED("Replaced", 'R');
 
   /**
@@ -51,7 +68,6 @@ public enum LogEntryActionType {
    *
    * @param code Code to parse
    * @return The LogEntryActionType
-   * @throws IllegalArgumentException if code was null
    */
   public static LogEntryActionType parse(final String code) {
     Validate.notNull(code, "Given code was null");
@@ -63,7 +79,6 @@ public enum LogEntryActionType {
    *
    * @param code Code to parse
    * @return The LogEntryActionType
-   * @throws IllegalArgumentException if unable to parse code.
    */
   public static LogEntryActionType parse(final char code) {
     switch (code) {

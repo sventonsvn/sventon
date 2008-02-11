@@ -68,11 +68,12 @@ public final class DiffProducer {
    * @param encoding            Encoding to use.
    * @param generatorProperties Generator properties, see {@link de.regnis.q.sequence.line.diff.QDiffGeneratorFactory}.
    */
-  public DiffProducer(final InputStream left, final InputStream right, final String encoding, Map generatorProperties) {
+  public DiffProducer(final InputStream left, final InputStream right, final String encoding, final Map generatorProperties) {
     this.left = left;
     this.right = right;
     this.encoding = encoding;
     if (generatorProperties != null) {
+      //noinspection unchecked
       this.generatorProperties.putAll(generatorProperties);
     }
   }

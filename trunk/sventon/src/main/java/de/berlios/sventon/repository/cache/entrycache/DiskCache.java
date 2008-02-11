@@ -28,7 +28,7 @@ import java.util.zip.GZIPOutputStream;
  *
  * @author jesper@users.berlios.de
  */
-public class DiskCache extends EntryCache {
+public final class DiskCache extends EntryCache {
 
   /**
    * Default cache filename.
@@ -123,8 +123,8 @@ public class DiskCache extends EntryCache {
         out.flush();
         out.close();
         logger.debug("Deleting old cache file: " + cacheFile.delete());
-        logger.info("Renaming tempfile [" + tempCacheFile.getName() + "] to [" + cacheFile.getName() + "] - " +
-            tempCacheFile.renameTo(cacheFile));
+        logger.info("Renaming tempfile [" + tempCacheFile.getName() + "] to [" + cacheFile.getName() + "] - "
+            + tempCacheFile.renameTo(cacheFile));
       } catch (IOException ioex) {
         throw new CacheException("Unable to store entryCache to disk", ioex);
       }

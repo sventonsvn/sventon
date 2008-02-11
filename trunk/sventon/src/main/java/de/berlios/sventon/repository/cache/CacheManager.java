@@ -25,7 +25,7 @@ import java.util.Map;
 public abstract class CacheManager<T> {
 
   /**
-   * Logger for this class and subclasses
+   * Logger for this class and subclasses.
    */
   protected final Log logger = LogFactory.getLog(getClass());
 

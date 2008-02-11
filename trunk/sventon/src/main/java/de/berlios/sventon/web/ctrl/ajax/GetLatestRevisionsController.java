@@ -12,8 +12,8 @@
 package de.berlios.sventon.web.ctrl.ajax;
 
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserRepositoryContext;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class GetLatestRevisionsController extends AbstractSVNTemplateController implements Controller {
+public final class GetLatestRevisionsController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

@@ -431,7 +431,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
-      final SourceLine line = row.getSide(SideBySideDiffRow.Side.LEFT);
+      final SourceLine line = row.getLeft();
       sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
@@ -441,7 +441,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
-      final SourceLine line = row.getSide(SideBySideDiffRow.Side.RIGHT);
+      final SourceLine line = row.getRight();
       sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
@@ -509,7 +509,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
-      final SourceLine line = row.getSide(SideBySideDiffRow.Side.LEFT);
+      final SourceLine line = row.getLeft();
       sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());
@@ -519,7 +519,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
-      final SourceLine line = row.getSide(SideBySideDiffRow.Side.RIGHT);
+      final SourceLine line = row.getRight();
       sb.append(line.getRowNumber() != null ? line.getRowNumber() : "");
       sb.append(line.getAction().getCode());
       sb.append(line.getLine());

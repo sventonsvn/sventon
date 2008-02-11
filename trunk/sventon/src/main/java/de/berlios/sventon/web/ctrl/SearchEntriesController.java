@@ -57,9 +57,11 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
       entries.addAll(getCache().findEntry(svnCommand.getName(), searchString, startDir));
     }
 
-    logger.debug("Sort params: " +
-        userRepositoryContext.getSortType().name() + ", " +
-        userRepositoryContext.getSortMode());
+    if (logger.isDebugEnabled()) {
+      logger.debug("Sort params: " + userRepositoryContext.getSortType().name() + ", "
+          + userRepositoryContext.getSortMode());
+    }
+
     new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");

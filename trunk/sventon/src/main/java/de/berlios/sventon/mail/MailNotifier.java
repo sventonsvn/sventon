@@ -38,7 +38,7 @@ import java.util.*;
 /**
  * Class for notifying users about new revisions.
  */
-public class MailNotifier extends AbstractRevisionObserver {
+public final class MailNotifier extends AbstractRevisionObserver {
 
   /**
    * The static logging instance.
@@ -120,8 +120,8 @@ public class MailNotifier extends AbstractRevisionObserver {
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
     if (revisions.size() > revisionCountThreshold) {
-      LOGGER.info("Update contains more than max allowed updates, [" +
-          revisionCountThreshold + "]. No notification mail sent");
+      LOGGER.info("Update contains more than max allowed updates, ["
+          + revisionCountThreshold + "]. No notification mail sent");
       return;
     }
 
@@ -170,7 +170,7 @@ public class MailNotifier extends AbstractRevisionObserver {
    * @param instanceName Instance name.
    * @return Substituted subject string.
    */
-  protected String formatSubject(final String subject, long revision, final String instanceName) {
+  protected String formatSubject(final String subject, final long revision, final String instanceName) {
     String result = subject;
     result = result.replace(REVISION_TOKEN, String.valueOf(revision));
     result = result.replace(NAME_TOKEN, instanceName);
@@ -317,7 +317,7 @@ public class MailNotifier extends AbstractRevisionObserver {
    *                               revisions than the given threshold, no notification
    *                               mail will be sent.
    */
-  public void setRevisionCountThreshold(int revisionCountThreshold) {
+  public void setRevisionCountThreshold(final int revisionCountThreshold) {
     this.revisionCountThreshold = revisionCountThreshold;
   }
 }

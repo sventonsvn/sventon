@@ -39,7 +39,6 @@ public final class Instance {
    * Constructor.
    *
    * @param configuration Instance configuration
-   * @throws IllegalArgumentException if instance name is null or does not match {@link #INSTANCE_NAME_PATTERN}.
    */
   public Instance(final InstanceConfiguration configuration) {
     Validate.notNull(configuration, "Configuration cannot be null");
@@ -60,7 +59,6 @@ public final class Instance {
    *
    * @param instanceName Instance name to validate.
    * @return True if valid, false if not.
-   * @throws IllegalArgumentException if given name was null.
    */
   public static boolean isValidName(final String instanceName) {
     Validate.notNull(instanceName, "Instance name cannot be null");

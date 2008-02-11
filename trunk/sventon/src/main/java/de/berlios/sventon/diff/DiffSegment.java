@@ -22,8 +22,20 @@ import java.util.Map;
  */
 public final class DiffSegment {
 
+  /**
+   * Represents the two sides.
+   */
   public enum Side {
-    LEFT, RIGHT;
+
+    /**
+     * Left side.
+     */
+    LEFT,
+
+    /**
+     * Right side.
+     */
+    RIGHT;
 
     /**
      * Gets the opposite side.

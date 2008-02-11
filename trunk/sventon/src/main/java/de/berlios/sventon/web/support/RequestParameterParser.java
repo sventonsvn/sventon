@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RequestParameterParser {
+public final class RequestParameterParser {
 
   /**
    * The delimiter between the path and the revision values.

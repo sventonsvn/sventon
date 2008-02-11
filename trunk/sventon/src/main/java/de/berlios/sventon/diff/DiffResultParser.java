@@ -25,7 +25,9 @@ import java.util.regex.Pattern;
 public final class DiffResultParser {
 
   /**
-   * This pattern will match the following strings:
+   * Diff pattern.
+   * <p/>
+   * This pattern will match the following strings.
    * <pre>
    * 5c5
    * 10d10

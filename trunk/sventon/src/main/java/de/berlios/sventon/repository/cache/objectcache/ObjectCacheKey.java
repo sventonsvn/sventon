@@ -25,7 +25,14 @@ import java.io.Serializable;
  */
 public final class ObjectCacheKey implements Serializable {
 
+  /**
+   * Path.
+   */
   private final String path;
+
+  /**
+   * Checksum.
+   */
   private final String checksum;
 
   /**
@@ -43,7 +50,7 @@ public final class ObjectCacheKey implements Serializable {
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     return EqualsBuilder.reflectionEquals(this, o);
   }
 

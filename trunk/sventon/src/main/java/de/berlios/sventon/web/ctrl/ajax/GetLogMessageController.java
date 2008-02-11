@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author jesper@users.berlios.de
  */
-public class GetLogMessageController extends AbstractSVNTemplateController implements Controller {
+public final class GetLogMessageController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * {@inheritDoc}

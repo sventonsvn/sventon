@@ -22,10 +22,22 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntrySorter {
+public final class RepositoryEntrySorter {
 
+  /**
+   * Available sort modes.
+   */
   public enum SortMode {
-    ASC, DESC
+
+    /**
+     * Ascending sort.
+     */
+    ASC,
+
+    /**
+     * Descending sort.
+     */
+    DESC
   }
 
   /**
@@ -43,7 +55,6 @@ public class RepositoryEntrySorter {
    *
    * @param sortType Field to sort on.
    * @param sortMode Sort mode, ascending or descending.
-   * @throws IllegalArgumentException if sortBy is null
    */
   public RepositoryEntrySorter(final RepositoryEntryComparator.SortType sortType, final SortMode sortMode) {
     Validate.notNull(sortType, "sortType cannot be null");

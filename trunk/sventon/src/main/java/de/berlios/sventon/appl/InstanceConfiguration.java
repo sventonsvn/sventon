@@ -247,7 +247,7 @@ public final class InstanceConfiguration {
 
   /**
    * Get the SVNURL, this is the typed version of the URL set using method
-   * {@link #setRepositoryUrl(String)}
+   * {@link #setRepositoryUrl(String)}.
    *
    * @return Returns the location.
    */

@@ -32,7 +32,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 public final class ConfigCommandValidator implements Validator {
 
   /**
-   * Logger for this class and subclasses
+   * Logger for this class.
    */
   private final Log logger = LogFactory.getLog(getClass());
 
@@ -111,10 +111,10 @@ public final class ConfigCommandValidator implements Validator {
         logger.info("Testing repository connection");
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
-        configuration.setUid(command.getAccessMethod() == USER ?
-            command.getConnectionTestUid() : command.getUid());
-        configuration.setPwd(command.getAccessMethod() == USER ?
-            command.getConnectionTestPwd() : command.getPwd());
+        configuration.setUid(command.getAccessMethod() == USER
+            ? command.getConnectionTestUid() : command.getUid());
+        configuration.setPwd(command.getAccessMethod() == USER
+            ? command.getConnectionTestPwd() : command.getPwd());
 
         SVNRepository repository = null;
         try {

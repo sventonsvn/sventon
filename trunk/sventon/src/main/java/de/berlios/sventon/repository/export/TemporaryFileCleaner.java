@@ -56,7 +56,7 @@ public final class TemporaryFileCleaner {
    *
    * @param timeThreshold Time in milliseconds.
    */
-  public void setTimeThreshold(long timeThreshold) {
+  public void setTimeThreshold(final long timeThreshold) {
     this.timeThreshold = timeThreshold;
   }
 
@@ -75,7 +75,7 @@ public final class TemporaryFileCleaner {
   }
 
   /**
-   * Returns true if this file is old enough to be deleted
+   * Returns true if this file is old enough to be deleted.
    *
    * @param tempFile Temporary file
    * @return True if file is old enough, according to the threshold value.

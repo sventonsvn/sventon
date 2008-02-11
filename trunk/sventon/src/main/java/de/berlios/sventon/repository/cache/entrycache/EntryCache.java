@@ -66,7 +66,7 @@ public abstract class EntryCache implements Cache {
    *
    * @param entries Entries
    */
-  protected synchronized void setEntries(final Set<RepositoryEntry> entries) {
+  protected final synchronized void setEntries(final Set<RepositoryEntry> entries) {
     this.cachedEntries = entries;
   }
 
@@ -76,7 +76,7 @@ public abstract class EntryCache implements Cache {
    *
    * @return Cached revision number.
    */
-  protected synchronized long getCachedRevision() {
+  protected final synchronized long getCachedRevision() {
     return cachedRevision;
   }
 
@@ -85,7 +85,7 @@ public abstract class EntryCache implements Cache {
    *
    * @return Set of cached entries
    */
-  protected synchronized Set<RepositoryEntry> getCachedEntries() {
+  protected final synchronized Set<RepositoryEntry> getCachedEntries() {
     return cachedEntries;
   }
 
@@ -95,7 +95,7 @@ public abstract class EntryCache implements Cache {
    *
    * @param revision Revision number.
    */
-  protected synchronized void setCachedRevision(final long revision) {
+  protected final synchronized void setCachedRevision(final long revision) {
     this.cachedRevision = revision;
   }
 
@@ -104,7 +104,7 @@ public abstract class EntryCache implements Cache {
    *
    * @return Count
    */
-  public int getSize() {
+  public final synchronized int getSize() {
     return cachedEntries.size();
   }
 
@@ -114,7 +114,7 @@ public abstract class EntryCache implements Cache {
    * @param entry The entry to parse and add
    * @return True if entry was added, false if not.
    */
-  public synchronized boolean add(final RepositoryEntry entry) {
+  public final synchronized boolean add(final RepositoryEntry entry) {
     return cachedEntries.add(entry);
   }
 
@@ -124,7 +124,7 @@ public abstract class EntryCache implements Cache {
    * @param entries The entries to parse and add
    * @return True if entries were added, false if not.
    */
-  public synchronized boolean add(final List<RepositoryEntry> entries) {
+  public final synchronized boolean add(final List<RepositoryEntry> entries) {
     return cachedEntries.addAll(entries);
   }
 
@@ -134,7 +134,7 @@ public abstract class EntryCache implements Cache {
    * @param pathAndName Entry to remove from cache.
    * @param recursive   True if remove should be performed recursively
    */
-  public synchronized void removeByName(final String pathAndName, final boolean recursive) {
+  public final synchronized void removeByName(final String pathAndName, final boolean recursive) {
     final List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
 
     for (RepositoryEntry entry : cachedEntries) {
@@ -155,7 +155,7 @@ public abstract class EntryCache implements Cache {
   /**
    * Clears the entire cache.
    */
-  public synchronized void clear() {
+  public final synchronized void clear() {
     cachedEntries.clear();
   }
 
@@ -166,7 +166,7 @@ public abstract class EntryCache implements Cache {
    * @param kind    Entry kind
    * @return List of entries.
    */
-  public synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
+  public final synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + pattern + "] of kind [" + kind + "]");
     }
@@ -192,7 +192,7 @@ public abstract class EntryCache implements Cache {
    * @param startDir     Directory/path to start in.
    * @return List of entries.
    */
-  public synchronized List<RepositoryEntry> findEntry(final String searchString, final String startDir) {
+  public final synchronized List<RepositoryEntry> findEntry(final String searchString, final String startDir) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
     }

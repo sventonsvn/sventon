@@ -46,7 +46,6 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
    * @param groupDirs <code>true</code> to group directories, this will sort an entry
    *                  of kind <code>SVNNodeKind.DIR</code> before an entries of other
    *                  kinds.
-   * @throws IllegalArgumentException if given sortType is null.
    */
   public RepositoryEntryComparator(final SortType sortType, final boolean groupDirs) {
     Validate.notNull(sortType, "sortType cannot be null");
@@ -61,14 +60,14 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
     if (groupDirs) {
       final RepositoryEntry.Kind kind1 = entry1.getKind();
       final RepositoryEntry.Kind kind2 = entry2.getKind();
-      if (kind1 != kind2) // Not equal kinds, have to inspect.
-      {
+      if (kind1 != kind2) {
+        // Not equal kinds, have to inspect.
         if (RepositoryEntry.Kind.dir == kind1) {
           return -1;
         } else if (RepositoryEntry.Kind.dir == kind2) {
           return 1;
         }
-      }// not equal kind, but neither is DIR
+      } // not equal kind, but neither is DIR
     }
 
     final String entryName1 = entry1.getName();
