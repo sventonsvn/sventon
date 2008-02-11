@@ -19,6 +19,7 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.apache.commons.lang.Validate;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Wrapper class for cache handling.
@@ -128,4 +129,12 @@ public final class ObjectCacheImpl implements ObjectCache {
     }
   }
 
+  /**
+   * Gets a list of keys for cached objects.
+   *
+   * @return List of keys.
+   */
+  public List<Object> getKeys() {
+    return cache.getKeys();
+  }
 }
