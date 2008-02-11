@@ -65,17 +65,20 @@ public final class DiffController extends AbstractSVNTemplateController implemen
     ModelAndView modelAndView = null;
     try {
       if (SIDE_BY_SIDE.equals(style)) {
-        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-            userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+        final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
+            repository, diffCommand, userRepositoryContext.getCharset(), getInstanceConfiguration(
+            svnCommand.getName()));
         model.put("diffResult", diffResult);
         modelAndView = new ModelAndView("diff");
       } else if (UNIFIED.equals(style)) {
-        final String diffResult = getRepositoryService().diffUnified(repository, diffCommand, userRepositoryContext.getCharset(),
+        final String diffResult = getRepositoryService().diffUnified(
+            repository, diffCommand, userRepositoryContext.getCharset(),
             getInstanceConfiguration(svnCommand.getName()));
         model.put("diffResult", diffResult);
         modelAndView = new ModelAndView("unifiedDiff");
       } else if (INLINE.equals(style)) {
-        final List<InlineDiffRow> diffResult = getRepositoryService().diffInline(repository, diffCommand, userRepositoryContext.getCharset(),
+        final List<InlineDiffRow> diffResult = getRepositoryService().diffInline(
+            repository, diffCommand, userRepositoryContext.getCharset(),
             getInstanceConfiguration(svnCommand.getName()));
         model.put("diffResult", diffResult);
         modelAndView = new ModelAndView("inlineDiff");

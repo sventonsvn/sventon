@@ -25,7 +25,7 @@ import java.io.Serializable;
  *
  * @author jesper@users.berlios.de
  */
-public class UserRepositoryContext implements Serializable {
+public final class UserRepositoryContext implements Serializable {
 
   private static final long serialVersionUID = -6699351885300583211L;
 

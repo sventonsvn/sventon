@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author jesper@users.berlios.de
  */
-public class GetFileHistoryController extends AbstractSVNTemplateController implements Controller {
+public final class GetFileHistoryController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Request parameter identifying the arcived entry to display.

@@ -46,7 +46,8 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
   private int pageSize = 50;
 
   /**
-   * Set page size, this is the max number of log entires shown at a time
+   * Set page size.
+   * Max number of log entires shown at a time.
    *
    * @param pageSize Page size.
    */

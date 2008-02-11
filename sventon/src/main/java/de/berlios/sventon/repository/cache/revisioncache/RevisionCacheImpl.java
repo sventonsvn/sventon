@@ -21,13 +21,18 @@ import org.tmatesoft.svn.core.SVNLogEntry;
  *
  * @author jesper@users.berlios.de
  */
-public class RevisionCacheImpl implements RevisionCache {
+public final class RevisionCacheImpl implements RevisionCache {
 
   /**
    * Object cache instance.
    */
   private final ObjectCache objectCache;
 
+  /**
+   * Constructor.
+   *
+   * @param objectCache Object cache instance.
+   */
   public RevisionCacheImpl(final ObjectCache objectCache) {
     this.objectCache = objectCache;
   }
@@ -58,6 +63,19 @@ public class RevisionCacheImpl implements RevisionCache {
    * Class used as revision cache key.
    */
   private static class CacheKey {
+
+    /**
+     * Private.
+     */
+    private CacheKey() {
+    }
+
+    /**
+     * Creates a key string.
+     *
+     * @param revision Revision.
+     * @return Key
+     */
     private static String createKey(final long revision) {
       return "svnRevision-" + revision;
     }

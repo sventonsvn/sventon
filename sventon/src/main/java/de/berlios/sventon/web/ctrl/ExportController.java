@@ -54,7 +54,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
   private static final String FALLBACK_CHARSET = "iso-8859-1";
 
   /**
-   * Sets the export dir to use when exporting files to be zipped from the repository
+   * Sets the export dir to use when exporting files to be zipped from the repository.
    *
    * @param exportDir The directory
    */

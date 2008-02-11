@@ -154,7 +154,7 @@ public final class Application {
   }
 
   /**
-   * Store the instance configurations on file at path {@code configurationDirectory / configurationFilename}
+   * Store the instance configurations on file at path {@code configurationDirectory / configurationFilename}.
    */
   public void storeInstanceConfigurations() {
     final File propertyFile = new File(configurationDirectory, configurationFilename);

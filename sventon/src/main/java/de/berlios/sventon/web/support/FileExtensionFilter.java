@@ -36,7 +36,6 @@ public final class FileExtensionFilter {
    * Constructor.
    *
    * @param filterExtension File extension to filter (i.e. keep).
-   * @throws IllegalArgumentException if given extension was null or blank.
    */
   public FileExtensionFilter(final String filterExtension) {
     Validate.notEmpty(filterExtension, "File extension was null or empty");

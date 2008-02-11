@@ -546,7 +546,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param repositoryService The service instance.
    */
-  public void setRepositoryService(final RepositoryService repositoryService) {
+  public final void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }
 
@@ -601,7 +601,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param repositoryFactory Factory.
    */
-  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
+  public final void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
     this.repositoryFactory = repositoryFactory;
   }
 

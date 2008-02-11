@@ -61,7 +61,9 @@ public final class ListInstancesController extends AbstractController {
       if (session != null) {
         final UserContext userContext = (UserContext) session.getAttribute("userContext");
         final UserRepositoryContext userRepositoryContext = userContext.getRepositoryContext(instanceName);
-        if (userRepositoryContext != null) userRepositoryContext.clearCredentials();
+        if (userRepositoryContext != null) {
+          userRepositoryContext.clearCredentials();
+        }
       }
     }
 

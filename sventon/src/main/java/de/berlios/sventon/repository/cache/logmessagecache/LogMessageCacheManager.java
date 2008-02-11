@@ -23,7 +23,7 @@ import java.io.IOException;
  *
  * @author jesper@users.berlios.de
  */
-public class LogMessageCacheManager extends CacheManager<LogMessageCache> {
+public final class LogMessageCacheManager extends CacheManager<LogMessageCache> {
 
   /**
    * Directory where to store cache files.

@@ -32,8 +32,6 @@ public final class RepositoryEntryKindFilter {
    * Constructor.
    *
    * @param kind Entry kind to filter (i.e. keep).
-   * @throws IllegalArgumentException if given kind was null or {@link RepositoryEntry.Kind#any},
-   *                                  {@link RepositoryEntry.Kind#unknown} or {@link RepositoryEntry.Kind#none}
    */
   public RepositoryEntryKindFilter(final RepositoryEntry.Kind kind) {
     if (kind == null

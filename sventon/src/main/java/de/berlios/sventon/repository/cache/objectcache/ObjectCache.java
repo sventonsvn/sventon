@@ -26,7 +26,6 @@ public interface ObjectCache extends Cache {
    *
    * @param cacheKey The cache cacheKey.
    * @param value    The object to cache.
-   * @throws IllegalArgumentException if cacheKey is null.
    */
   void put(final Object cacheKey, final Object value);
 
@@ -35,7 +34,6 @@ public interface ObjectCache extends Cache {
    *
    * @param cacheKey The key to the object to get.
    * @return The cached object. <code>null</code> if cache miss.
-   * @throws IllegalArgumentException if cacheKey is null.
    */
   Object get(final Object cacheKey);
 

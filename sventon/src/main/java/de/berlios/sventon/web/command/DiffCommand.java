@@ -59,9 +59,7 @@ public final class DiffCommand {
    * @param revisions The list containing at least two <code>SVNFileRevision</code> objects.
    *                  The first is assumed to be the <i>to (i.e. latest)</i> revision,
    *                  the second to be the <i>from (i.e. oldest)</i> revision.
-   * @throws DiffException            if given list does not contain at least two entries.
-   * @throws IllegalArgumentException if argument is null or array does not contain
-   *                                  exactly two entries.
+   * @throws DiffException if given list does not contain at least two entries.
    */
   public DiffCommand(final List<SVNFileRevision> revisions) throws DiffException {
 

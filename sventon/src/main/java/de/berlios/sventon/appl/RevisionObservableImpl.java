@@ -53,7 +53,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
   private ObjectCacheManager objectCacheManager;
 
   /**
-   * Object cache key, <code>lastCachedLogRevision</code>
+   * Object cache key, <code>lastCachedLogRevision</code>.
    */
   private static final String LAST_UPDATED_LOG_REVISION_CACHE_KEY = "lastCachedLogRevision";
 
@@ -187,8 +187,6 @@ public final class RevisionObservableImpl extends Observable implements Revision
 
   /**
    * {@inheritDoc}
-   *
-   * @throws RuntimeException if a subversion error occurs.
    */
   public void update(final String instanceName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
@@ -219,8 +217,6 @@ public final class RevisionObservableImpl extends Observable implements Revision
 
   /**
    * {@inheritDoc}
-   *
-   * @throws RuntimeException if a subversion error occurs.
    */
   public void updateAll() {
     if (application.isConfigured()) {

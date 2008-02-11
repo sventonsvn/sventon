@@ -13,9 +13,9 @@ package de.berlios.sventon.web.ctrl.ajax;
 
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
 import de.berlios.sventon.web.model.RepositoryEntryTray;
 import de.berlios.sventon.web.model.UserRepositoryContext;
-import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@users.berlios.de
  */
-public class RepositoryEntryTrayController extends AbstractSVNTemplateController implements Controller {
+public final class RepositoryEntryTrayController extends AbstractSVNTemplateController implements Controller {
 
   /**
    * Request parameter indicating entry should be added to tray.

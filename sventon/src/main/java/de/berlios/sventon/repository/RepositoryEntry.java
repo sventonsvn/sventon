@@ -50,7 +50,6 @@ public final class RepositoryEntry implements Serializable {
    *
    * @param entry     The <code>SVNDirEntry</code>.
    * @param entryPath The entry repository path.
-   * @throws IllegalArgumentException if any of the parameters are null.
    */
   public RepositoryEntry(final SVNDirEntry entry, final String entryPath) {
 

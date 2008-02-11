@@ -21,6 +21,12 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 public final class SVNUtils {
 
   /**
+   * Private.
+   */
+  private SVNUtils() {
+  }
+
+  /**
    * Checks if given log entry contains accessible information, i.e. it was
    * fetched from the repository by a user with access to the affected paths.
    *

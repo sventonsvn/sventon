@@ -74,7 +74,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
 
     prepareResponse(response, svnCommand);
 
-    final URL fullSizeImageUrl = new URL(getFullSizeImageURL(request));
+    final URL fullSizeImageUrl = new URL(createFullSizeImageURL(request));
     final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
 
     getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), revision.getNumber(),
@@ -85,12 +85,24 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
     return null;
   }
 
+  /**
+   * Prepares the response by setting headers and content type.
+   *
+   * @param response   Response.
+   * @param svnCommand Command.
+   */
   protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
     response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
   }
 
-  private String getFullSizeImageURL(final HttpServletRequest request) {
+  /**
+   * Creates a URL string for accessing the full size image.
+   *
+   * @param request Request.
+   * @return URL string.
+   */
+  private String createFullSizeImageURL(final HttpServletRequest request) {
     final StringBuilder urlString = new StringBuilder(
         request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
     urlString.append("?");

@@ -12,7 +12,7 @@
 package de.berlios.sventon.repository.cache;
 
 /**
- * Cache marker interface
+ * Cache marker interface.
  *
  * @author jesper@users.berlios.de
  */

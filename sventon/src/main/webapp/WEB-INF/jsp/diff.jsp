@@ -1,4 +1,3 @@
-<%@ page import="de.berlios.sventon.model.SideBySideDiffRow" %>
 <%
 /*
  * ====================================================================
@@ -66,29 +65,29 @@
                 </td>
 
                 <td class="lineNo">
-                  <%= row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber() != null ? row.getSide(SideBySideDiffRow.Side.LEFT).getRowNumber().toString() : "" %>
+                  <%= row.getLeft().getRowNumber() != null ? row.getLeft().getRowNumber().toString() : "" %>
                 </td>
                 <td style="text-align: center; background-color: white;">
-                  <b><%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getSymbol() %></b>
+                  <b><%= row.getLeft().getAction().getSymbol() %></b>
                 </td>
-                <td class="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getCSSClass() %>">
-                  <span title="<%= row.getSide(SideBySideDiffRow.Side.LEFT).getAction().getDescription() %>">
+                <td class="<%= row.getLeft().getAction().getCSSClass() %>">
+                  <span title="<%= row.getLeft().getAction().getDescription() %>">
                     <%
-                      String line = row.getSide(SideBySideDiffRow.Side.LEFT).getLine();
+                      String line = row.getLeft().getLine();
                       out.print("".equals(line) ? "&nbsp;" : line);
                     %>
                   </span>
                 </td>
                 <td class="lineNo">
-                  <%= row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber() != null ? row.getSide(SideBySideDiffRow.Side.RIGHT).getRowNumber().toString() : "" %>
+                  <%= row.getRight().getRowNumber() != null ? row.getRight().getRowNumber().toString() : "" %>
                 </td>
                 <td style="text-align: center; background-color: white;">
-                  <b><%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getSymbol() %></b>
+                  <b><%= row.getRight().getAction().getSymbol() %></b>
                 </td>
-                <td class="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getCSSClass() %>">
-                  <span title="<%= row.getSide(SideBySideDiffRow.Side.RIGHT).getAction().getDescription() %>">
+                <td class="<%= row.getRight().getAction().getCSSClass() %>">
+                  <span title="<%= row.getRight().getAction().getDescription() %>">
                     <%
-                      line = row.getSide(SideBySideDiffRow.Side.RIGHT).getLine();
+                      line = row.getRight().getLine();
                       out.print("".equals(line) ? "&nbsp;" : line);
                     %>
                   </span>

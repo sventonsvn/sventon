@@ -116,7 +116,6 @@ public final class SideBySideDiffCreator {
    * @param diffResult Diff result string
    * @param firstList  First list
    * @param secondList Second list
-   * @throws RuntimeException if list size does not match.
    */
   private void assertEqualListSize(final String diffResult, final List<?> firstList, final List<?> secondList) {
     if (firstList.size() != secondList.size()) {

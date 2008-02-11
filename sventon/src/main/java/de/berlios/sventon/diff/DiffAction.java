@@ -64,7 +64,6 @@ public enum DiffAction {
    *
    * @param code Code to parse
    * @return The DiffAction
-   * @throws IllegalArgumentException if code was null
    */
   public static DiffAction parse(final String code) {
     Validate.notNull(code, "Given code was null");
@@ -76,7 +75,6 @@ public enum DiffAction {
    *
    * @param code Code to parse
    * @return The DiffAction
-   * @throws IllegalArgumentException if unable to parse code.
    */
   public static DiffAction parse(final char code) {
     switch (code) {

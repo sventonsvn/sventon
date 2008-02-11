@@ -26,20 +26,23 @@ import org.springframework.beans.BeanUtils;
  */
 public final class ConfigCommand {
 
+  /**
+   * Available access methods.
+   */
   public enum AccessMethod {
 
     /**
-     * Anonymous access (no uid/pwd needed)
+     * Anonymous access (no uid/pwd needed).
      */
     ANONYMOUS(),
 
     /**
-     * Global access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user
+     * Global access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user.
      */
     GLOBAL(),
 
     /**
-     * User access, each sventon user needs supply it's own uid/pwd for accessing restricted parts of the repository
+     * User access, each sventon user needs supply it's own uid/pwd for accessing restricted parts of the repository.
      */
     USER()
   }

@@ -31,13 +31,6 @@ public final class SideBySideDiffRow {
   private final SourceLine right;
 
   /**
-   * Represents the sides.
-   */
-  public enum Side {
-    LEFT, RIGHT
-  }
-
-  /**
    * Constructor.
    *
    * @param left  Left source line
@@ -49,13 +42,21 @@ public final class SideBySideDiffRow {
   }
 
   /**
-   * Gets either of the the row's sides.
+   * Gets the the left row.
    *
-   * @param side Side to get
-   * @return The row side.
+   * @return The left row side.
    */
-  public SourceLine getSide(final Side side) {
-    return (side == Side.LEFT ? left : right);
+  public SourceLine getLeft() {
+    return left;
+  }
+
+  /**
+   * Gets the the right row.
+   *
+   * @return The right row side.
+   */
+  public SourceLine getRight() {
+    return right;
   }
 
   /**

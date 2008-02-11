@@ -44,7 +44,7 @@ public final class UrlFormatterTag extends TagSupport {
   }
 
   /**
-   * Sets the URL
+   * Sets the URL.
    *
    * @param url URL.
    */
