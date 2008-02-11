@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1152] Added: Upgraded to Spring 2.5.1
 [1145] Added: Feature #3999 - Inline diff view.
 [1144] Fixed: Bug #9716 - Incorrect diff.
 [1135] Fixed: Bug #6387 - Markup of changed file in logs view fails if it's renamed.
