@@ -17,7 +17,7 @@
 <head>
   <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
   <title>Show Thumbnails</title>
-  <link rel="stylesheet" type="text/css" href="jhighlight.css" >
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jhighlight.css" >
 </head>
 
 <body>
