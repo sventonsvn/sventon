@@ -55,13 +55,11 @@ public final class SVNBaseCommandValidator implements Validator {
 
     final String revision = command.getRevision();
 
-    if (revision != null) {
-      if (!"HEAD".equals(revision) && !"".equals(revision)) {
-        final SVNRevision parsedRevision = SVNRevision.parse(revision);
-        if (parsedRevision == SVNRevision.UNDEFINED) {
-          command.setRevision("HEAD");
-          errors.rejectValue("revision", "browse.error.illegal-revision", "Not a valid revision");
-        }
+    if (revision != null && !"HEAD".equals(revision) && !"".equals(revision)) {
+      final SVNRevision parsedRevision = SVNRevision.parse(revision);
+      if (parsedRevision == SVNRevision.UNDEFINED) {
+        command.setRevision("HEAD");
+        errors.rejectValue("revision", "browse.error.illegal-revision", "Not a valid revision");
       }
     }
   }
