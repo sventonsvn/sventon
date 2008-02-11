@@ -16,7 +16,9 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
   <title>sventon repository browser</title>
+
   <script type="text/javascript">
     function toggleAccessControl() {
       var global = $('global_btn');
@@ -31,19 +33,15 @@
       } else {
         ['access_method_user', 'access_method_global'].each(Element.hide);
       }
-
-//alert(acm);
-
     }
     window.onload = toggleAccessControl;
   </script>
 </head>
 
 <body>
-<sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
+  <sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
 
 <br>
-
 
 <div id="configured_repos">
 
@@ -191,7 +189,6 @@
   </div>
 </div>
 </form>
-
 
 <script language="JavaScript" type="text/javascript">
   document.configForm.name.focus();

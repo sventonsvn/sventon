@@ -16,6 +16,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
   <title>sventon repository browser</title>
 </head>
 
