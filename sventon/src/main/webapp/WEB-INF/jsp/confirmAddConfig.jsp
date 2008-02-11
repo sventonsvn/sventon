@@ -108,8 +108,6 @@
 
   <br>
   <br>
-  <script src="js/prototype.js" type="text/javascript"></script>
-  <script src="js/scriptaculous.js" type="text/javascript"></script>
 
 
   <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
