@@ -55,7 +55,7 @@ public final class ConfigCommand {
   private String connectionTestPwd;
   private boolean useCache;
   private boolean zipDownloadsAllowed;
-  private ConfigCommand.AccessMethod accessMethod;
+  private ConfigCommand.AccessMethod accessMethod = AccessMethod.ANONYMOUS;
 
   /**
    * Gets the repository URL.
