@@ -11,7 +11,6 @@
  * ====================================================================
  */
 %>
-<br>
 <p>
-  <a href="rss.xml?name=${command.name}&path=${command.path}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
+sventon <%=de.berlios.sventon.Version.getVersion()%>
 </p>

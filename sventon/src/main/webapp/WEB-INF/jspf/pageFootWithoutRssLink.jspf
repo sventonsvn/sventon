@@ -11,17 +11,4 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
-
-<html>
-<head>
-  <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
-  <title>sventon - error</title>
-</head>
-
-<body>
-  <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
-</body>
-
-<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
-</html>
+<%@ include file="/WEB-INF/jspf/version.jspf"%>

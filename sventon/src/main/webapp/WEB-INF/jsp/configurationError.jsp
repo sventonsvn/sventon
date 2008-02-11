@@ -29,5 +29,7 @@
   <p>
     <a href="#" onclick="history.go(-1); return false;">Back...</a>
   </p>
+
+<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>
 </html>

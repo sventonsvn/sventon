@@ -47,7 +47,6 @@
     </c:otherwise>
   </c:choose>
 
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>
