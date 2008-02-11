@@ -24,18 +24,17 @@
 
   <h1>Repository instances</h1>
 
-  <p>
-    <ol>
-      <c:forEach items="${instanceNames}" var="instanceName">
-        <c:url value="repobrowser.svn" var="instanceUrl">
-          <c:param name="name" value="${instanceName}" />
-        </c:url>
-        <li>
-          <a href="${instanceUrl}">${instanceName}</a>
-        </li>
-      </c:forEach>
-    </ol>
-  </p>
-<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+  <ol>
+    <c:forEach items="${instanceNames}" var="instanceName">
+      <c:url value="repobrowser.svn" var="instanceUrl">
+        <c:param name="name" value="${instanceName}" />
+      </c:url>
+      <li>
+        <a href="${instanceUrl}">${instanceName}</a>
+      </li>
+    </c:forEach>
+  </ol>
+
+<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
 </body>
 </html>

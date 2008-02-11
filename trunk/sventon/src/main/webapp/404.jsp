@@ -33,6 +33,6 @@
   %>
   
   Go to <a href="<%= request.getContextPath() %>/index.jsp">sventon start page</a>
-  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
   </body>
 </html>

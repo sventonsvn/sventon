@@ -89,16 +89,12 @@
       </tr>
 
       <tr>
-        <td colspan="2"><input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)"></td>
-        <td>
-          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!">
-        </td>
+        <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
         <td colspan="5"></td>
       </tr>
     </table>
   </form>
 
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

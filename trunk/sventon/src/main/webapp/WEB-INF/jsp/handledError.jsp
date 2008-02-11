@@ -29,5 +29,7 @@
       </td>
     </tr>
   </table>
+
+<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>
 </html>

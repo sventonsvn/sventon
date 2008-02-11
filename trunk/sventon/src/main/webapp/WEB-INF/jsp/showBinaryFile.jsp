@@ -35,7 +35,6 @@
 
   <p>File is in binary format.</p>
 
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

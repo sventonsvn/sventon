@@ -43,7 +43,24 @@
       <c:set var="totalSize" value="0"/>
 
       <c:if test="${!empty command.pathNoLeaf}">
-        <%@ include file="/WEB-INF/jspf/parentDirLinkTableRow.jspf"%>
+        <c:url value="repobrowser.svn" var="backUrl">
+          <c:param name="path" value="${command.pathNoLeaf}"/>
+          <c:param name="revision" value="${command.revision}"/>
+          <c:param name="name" value="${command.name}"/>
+        </c:url>
+
+        <tr class="sventonEntryEven">
+          <td class="sventonCol1"></td>
+          <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"></td>
+          <td class="sventonCol3">
+            <a href="<sventon-ui:formatUrl url='${backUrl}'/> ">..&nbsp;&nbsp;&nbsp;</a>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:if>
 
@@ -126,12 +143,7 @@
         <td></td>
       </tr>
       <tr>
-        <td colspan="2" class="sventonCol1">
-          <input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)">
-        </td>
-        <td nowrap>
-          <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%><input type="submit" class="btn" value="go!">
-        </td>
+        <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
         <td colspan="5"></td>
       </tr>
     </table>
@@ -164,7 +176,6 @@
     Droppables.add('entryTrayContainerDiv', {onDrop:addEntryToTray})
   </script>
 
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

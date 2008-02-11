@@ -83,12 +83,7 @@
     <c:set var="rowCount" value="${rowCount + 1}"/>
     </c:forEach>
     <tr>
-      <td colspan="2" class="sventonCol1">
-        <input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)">
-      </td>
-      <td nowrap>
-        <%@ include file="/WEB-INF/jspf/actionSelectList.jspf" %><input type="submit" class="btn" value="go!">
-      </td>
+      <%@ include file="/WEB-INF/jspf/actionSelectList.jspf" %>
       <td></td>
     </tr>
   </table>

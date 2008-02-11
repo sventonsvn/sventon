@@ -51,7 +51,6 @@
     getFileHistory('${command.path}', '${command.revision}', '${command.name}', '${archivedEntry}');
   </script>
 
-<%@ include file="/WEB-INF/jspf/rssLink.jspf"%>
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

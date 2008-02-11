@@ -70,6 +70,6 @@
 
   <script language="JavaScript" type="text/javascript">document.loginForm.uid.focus();</script>
 
-<%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
 </body>
 </html>

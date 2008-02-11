@@ -37,6 +37,6 @@
   The error has been logged. If this error persists please ask the administator of 
   this sventon installation to file a bug report at <a href="http://sventon.berlios.de">http://sventon.berlios.de</a>.
   
-  <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
   </body>
 </html>
