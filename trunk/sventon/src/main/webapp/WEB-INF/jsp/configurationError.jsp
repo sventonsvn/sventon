@@ -15,6 +15,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
   <title>Configuration error</title>
 </head>
 
