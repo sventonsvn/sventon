@@ -45,6 +45,7 @@ public final class UserContext implements Serializable {
    * @param repositoryName Repository name to use for binding the context.
    * @param urc            Context.
    */
+  //TODO: make repositoryName a type
   public void add(final String repositoryName, final UserRepositoryContext urc) {
     repositoryContexts.put(repositoryName, urc);
   }
@@ -59,4 +60,5 @@ public final class UserContext implements Serializable {
   }
 
   //TODO: Add toString()
+
 }
