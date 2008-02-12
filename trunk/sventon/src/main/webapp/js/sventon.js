@@ -305,34 +305,19 @@ function getFileHistory(path, revision, name, archivedEntry) {
     method: 'post', parameters: urlParams, onFailure: reportAjaxError});
 }
 
-function updateCharsetParameter(charset) {
-  var url = document.location.href;
-  var path = getRequestParameter(url, 'path');
-  var name = getRequestParameter(url, 'name');
-  var revision = getRequestParameter(url, 'revision');
-  var archivedEntry = getRequestParameter(url, 'archivedEntry');
-  url = document.location.pathname + '?path=' + path + '&revision=' + revision + '&name=' + name + '&charset=' + charset;
-  if (archivedEntry != '') {
-    url = url + '&archivedEntry=' + archivedEntry + '&forceDisplay=true';
+function updateCharsetParameter(charset, queryString) {
+  var charsetParameter = '&charset=';
+  var index = queryString.indexOf(charsetParameter);
+  if (index > -1) {
+    queryString = queryString.substring(0, index);
   }
-  document.location.href = url;
+  var newUrl = document.location.pathname + '?' + queryString + charsetParameter + charset;
+  document.location.href = newUrl;
 }
 
 // ===============================================================================================
 // Utility functions
 // ===============================================================================================
-
-function getRequestParameter(url, name) {
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(url);
-  if (results == null) {
-    return "";
-  } else {
-    return results[1];
-  }
-}
 
 function setBackgroundColor(tags, cssName, color) {
   for (var i = 0; i < tags.length; i++) {
