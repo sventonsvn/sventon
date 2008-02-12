@@ -13,17 +13,20 @@ running in no-time!
 <p>
 Some of the features making sventon a great Subversion companion:
 <ul style="margin-left:40px">
-  <li>Browse and download directories and files
-  <li>View logs and blame individual files
-  <li>Diff your repository files, and their properties</li>
+  <li>Browse and download directories and files</li>
+  <li>View logs and blame individual files</li>
+  <li>Diff your repository files, or view their properties</li>
   <li>Support for multiple repositories</li>
+  <li>Several authentication methods supported, including user based</li>
   <li>Easily keep track of changes using the 'latest commit' feature</li>
   <li>Lightning fast search for instantly finding files or log messages, including <a href="http://en.wikipedia.org/wiki/Camel_case">CamelCase</a> Search</li>
   <li>Flattening of directory structures for quickly finding the directory you're looking for</li>
   <li>Browse inside archive files</li>
   <li>View thumbnails of image files stored in the repository</li>
+  <li>Commit notifications via e-mail</li>
   <li>Context sensitive RSS feed support</li>
   <li>Instantly find locked files in the repository</li>
+  <li>Convenient tray for handling entries</li> 
   <li>... and more!</li>
 </ul>
 <p>Have a look at the <a href="index.php?page=screenshots">screenshots</a> and
