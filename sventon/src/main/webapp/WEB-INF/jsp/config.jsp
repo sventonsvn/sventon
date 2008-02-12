@@ -108,48 +108,44 @@
           <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
            for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
                                             onmouseover="return getHelpText('conf_access_method_help');"></p>
+        <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
       </spring:bind>
     </div>
   </div>
 
   <div id="access_method_global">
     <div class="config_settings">
-      <p class="config_key">Username:<br/>
+      <p class="config_key">Username:</p>
 
-        <spring:bind path="command.uid">
-          <input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
-                 class="configHeaderSmall">
-          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+      <spring:bind path="command.uid">
+      <p><input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
+                class="configHeaderSmall">
         </spring:bind>
         <img class="helpIcon" src="images/icon_help.png" alt="Help"
-             onmouseover="return getHelpText('conf_global_uid_help');">
-      </p>
+             onmouseover="return getHelpText('conf_global_uid_help');"></p>
 
-      <p class="config_key">Password:<br/>
-        <spring:bind path="command.pwd">
-          <input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
-                 class="configHeaderSmall">
-          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-        </spring:bind></p>
+      <p class="config_key">Password:</p>
+      <spring:bind path="command.pwd">
+        <p><input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
+                  class="configHeaderSmall"></p>
+      </spring:bind>
     </div>
   </div>
 
   <div id="access_method_user">
     <div class="config_settings">
-      <p class="config_key">Username for connection test:<br/>
-        <spring:bind path="command.connectionTestUid">
-          <input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+      <p class="config_key">Username for connection test:</p>
+      <spring:bind path="command.connectionTestUid">
+      <p><input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
         </spring:bind> <img
          class="helpIcon" src="images/icon_help.png" alt="Help"
          onmouseover="return getHelpText('conf_connection_test_uid_help');"></p>
 
-      <p class="config_key">Password for connection test:<br/>
-        <spring:bind path="command.connectionTestPwd">
-          <input type="password" name="${status.expression}" size="30" value="${status.value}"
-                 class="configHeaderSmall">
-          <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
-        </spring:bind></p>
+      <p class="config_key">Password for connection test:</p>
+      <spring:bind path="command.connectionTestPwd">
+        <p><input type="password" name="${status.expression}" size="30" value="${status.value}"
+                  class="configHeaderSmall"></p>
+      </spring:bind>
     </div>
   </div>
 
