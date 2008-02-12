@@ -39,9 +39,11 @@
 </head>
 
 <body>
-  <sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
+<sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
 
 <br>
+
+<div id="config_page">
 
 <div id="configured_repos">
 
@@ -67,7 +69,7 @@
 
       <spring:bind path="command.name">
         <p><input type="text" name="name" size="50" value="${status.value}" class="configHeaderSmall"></p>
-        <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
       </spring:bind>
       <p><b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i></p>
 
@@ -78,8 +80,8 @@
       </p>
 
       <spring:bind path="command.repositoryUrl">
-        <p><input type="text" name="repositoryUrl" size="60" value="${status.value}" class="configHeaderSmall"></p>
-        <c:if test="${status.error}"><br><span class="exclamationText">${status.errorMessage}</span></c:if>
+        <p><input type="text" name="repositoryUrl" size="50" value="${status.value}" class="configHeaderSmall"></p>
+        <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
       </spring:bind>
 
       <p><b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or
@@ -95,13 +97,17 @@
 
     <div class="config_settings">
       <spring:bind path="command.accessMethod">
-      <p class="config_key"><input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS" <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
-                                   onclick="toggleAccessControl();"><label for="anon_btn">anonymous</label>
-        <input id="global_btn" type=radio name="accessMethod" value="GLOBAL"  <c:if test="${status.value eq 'GLOBAL'}"> checked</c:if> onclick="toggleAccessControl();"><label
-         for="global_btn">sventon</label>
-        <input id="user_btn" type=radio name="accessMethod" value="USER"  <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
-         for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
-                                          onmouseover="return getHelpText('conf_access_method_help');"></p>
+        <p class="config_key"><input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS"
+        <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
+                                                     onclick="toggleAccessControl();"><label
+           for="anon_btn">anonymous</label>
+          <input id="global_btn" type=radio name="accessMethod" value="GLOBAL"
+          <c:if test="${status.value eq 'GLOBAL'}"> checked</c:if> onclick="toggleAccessControl();"><label
+           for="global_btn">sventon</label>
+          <input id="user_btn" type=radio name="accessMethod" value="USER"
+          <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
+           for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
+                                            onmouseover="return getHelpText('conf_access_method_help');"></p>
       </spring:bind>
     </div>
   </div>
@@ -189,6 +195,7 @@
   </div>
 </div>
 </form>
+</div>
 
 <script language="JavaScript" type="text/javascript">
   document.configForm.name.focus();
