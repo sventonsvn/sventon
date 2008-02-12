@@ -36,6 +36,13 @@
 
   <form name="loginForm" action="${action}" method="post">
     <table>
+      <c:if test="${paramValues['uid'] ne null}" >
+      <tr>
+        <td colspan="2" align="center" bgcolor="#E2E4E6">
+          <span class="exclamationText">Authentication failed!</span>
+        </td>
+      </tr>
+      </c:if>
       <tr>
         <td>Username</td>
         <td><input name="uid" type="text" nocache value="${paramValues['uid'][0]}"/></td>
@@ -49,13 +56,6 @@
           <input type="submit" value="log in">
         </td>
       </tr>
-      <c:if test="${paramValues['uid'] ne null}" >
-      <tr>
-        <td colspan="2">
-          <span class="exclamationText">Authentication failed!</span>
-        </td>
-      </tr>
-      </c:if>
     </table>
 
     <c:forEach items="${parameters}" var="paramEntry">
