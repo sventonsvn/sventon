@@ -22,7 +22,7 @@
 <table class="fileHistoryTable">
   <tr>
     <td colspan="2">
-        File History
+        <spring:message code="previous-revisions"/>
         <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
           <c:forEach var="fileRevision" items="${fileRevisions}">
             <c:url value="showfile.svn" var="showFileAtRevisionUrl">

@@ -158,7 +158,10 @@
   <div align="right" class="entryTrayContainer" id="entryTrayContainerDiv">
     <table class="entryTrayHeaderTable">
       <tr>
-        <td>drag&amp;drop tray - <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '[hide]', '[show]'); showHideEntryTray(); return false;"><span id="hideShowTrayLink">[show]</span></a></td>
+        <td>
+          <spring:message code="entrytray.dragdrop.header"/>&nbsp;
+          <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '[hide]', '[show]'); showHideEntryTray(); return false;"><span id="hideShowTrayLink">[show]</span></a>
+        </td>
       </tr>
     </table>
     <div id="entryTrayWrapper" style="display: none">
