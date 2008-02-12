@@ -15,6 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
 <form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this);">
   <!-- Needed by ASVNTC -->
@@ -24,7 +25,9 @@
 
   <table class="entryTrayTable">
     <tr>
-      <td class="droparea" colspan="4">Drag &amp; drop file/dir icons here!</td>
+      <td class="droparea" colspan="4">
+        <spring:message code="entrytray.dragdrop.text"/>
+      </td>
     </tr>
     <tr>
       <td></td>
@@ -76,7 +79,7 @@
           </td>
       <td>
         <a href="#" onclick="removeEntryFromTray('<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>'); return false;">
-          <img align="middle" src="images/delete.png" alt="Delete" title="Delete"/>
+          <img align="middle" src="images/delete.png" alt="<spring:message code="delete.tooltip"/>" title="<spring:message code="delete.tooltip"/>"/>
         </a>
       </td>
     </tr>
