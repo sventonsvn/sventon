@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -110,19 +111,23 @@ public final class ConfigCommandValidator implements Validator {
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
         configuration.setUid(command.getAccessMethod() == USER
-            ? command.getConnectionTestUid() : command.getUid());
+           ? command.getConnectionTestUid() : command.getUid());
         configuration.setPwd(command.getAccessMethod() == USER
-            ? command.getConnectionTestPwd() : command.getPwd());
+           ? command.getConnectionTestPwd() : command.getPwd());
 
         SVNRepository repository = null;
         try {
           repository = repositoryFactory.getRepository(instanceName, configuration.getSVNURL(),
-              configuration.getUid(), configuration.getPwd());
+             configuration.getUid(), configuration.getPwd());
           repository.testConnection();
+        } catch (SVNAuthenticationException e) {
+          logger.warn("Repository authentication failed");
+          errors.rejectValue("accessMethod", "config.error.authentication-error",
+             "Authentication failed, check username and password");
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
           errors.rejectValue("repositoryUrl", "config.error.connection-error",
-              "Unable to connect to repository [" + trimmedURL + "]. Check URL, user name and password.");
+             "Unable to connect to repository [" + trimmedURL + "]. Check URL.");
         } finally {
           if (repository != null) {
             repository.closeSession();
