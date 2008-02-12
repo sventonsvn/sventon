@@ -12,6 +12,11 @@ body {
   padding: 0;
 }
 
+ul li {
+  margin: 0;
+  padding: 0;
+}
+
 th {
   white-space: nowrap;
   font-family: verdana, sans-serif;

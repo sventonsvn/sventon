@@ -95,7 +95,7 @@ div#config_success {
 }
 
 #configured_repos ul li {
-  margin: .25em 4% 0.25em -4px;
+  margin-left: 2em;
 }
 
 div.config_group {
