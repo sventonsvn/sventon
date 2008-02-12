@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style type="text/css">
+    body {
+      margin: 8px;
+      padding: 0;
+    }
+
+    .mainTable {
+      font-family: Verdana,Sans-serif;
+      font-size: 80%;
+      font-weight: normal;
+      padding: 2px;
+    }
+
+    .changedPathsTable {
+      font-family: Verdana,Sans-serif;
+      font-size: 70%;
+      font-weight: normal;
+      padding: 2px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+<table class="mainTable">
+  <tr>
+    <td>Author:</td>
+    <td>${author}</td>
+  </tr>
+  <tr>
+    <td>Date:</td>
+    <td>${date}</td>
+  </tr>
+  <tr>
+    <td colspan="2">${logMessage}</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      ${changedPaths}
+    </td>
+  </tr>
+  <tr>
+    <td><b>Action</b></td>
+    <td><b>Count</b></td>
+  </tr>
+  <tr>
+    <td>Added</td>
+    <td>${addedCount}</td>
+  </tr>
+  <tr>
+    <td>Modified</td>
+    <td>${modifiedCount}</td>
+  </tr>
+  <tr>
+    <td>Replaced</td>
+    <td>${replacedCount}</td>
+  </tr>
+  <tr>
+    <td>Deleted</td>
+    <td>${deletedCount}</td>
+  </tr>
+</table>
+</body>
+</html>
