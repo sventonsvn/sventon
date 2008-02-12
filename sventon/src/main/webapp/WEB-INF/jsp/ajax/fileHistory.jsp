@@ -23,7 +23,7 @@
   <tr>
     <td colspan="2">
         File History
-        <select class="sventonSelect" onchange="document.location=this.options[this.selectedIndex].value;">
+        <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
           <c:forEach var="fileRevision" items="${fileRevisions}">
             <c:url value="showfile.svn" var="showFileAtRevisionUrl">
               <c:param name="path" value="${fileRevision.path}" />

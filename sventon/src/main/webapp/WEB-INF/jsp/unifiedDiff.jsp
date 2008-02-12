@@ -32,13 +32,17 @@
     <c:otherwise>
       <c:choose>
         <c:when test="${!isBinary}">
-          <b>
-            <br>Unified diff between:
-            <br>${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}
-            <br>${diffCommand.toPath} @ revision ${diffCommand.toRevision}
-          </b>
-
-          <pre class="codeBlock"><c:out value="${diffResult}" escapeXml="false"/></pre>
+          <table id="diffTable" class="sventonUnifiedDiffTable" cellspacing="0">
+            <tr>
+              <th width="100%" style="background-color: white;">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
+            </tr>
+            <tr>
+              <th width="100%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
+            </tr>
+            <tr>
+              <td><c:out value="${diffResult}" escapeXml="false"/></td>
+            </tr>
+          </table>
         </c:when>
         <c:otherwise>
           <p><b><spring:message code="diff.error.binary"/></b></p>

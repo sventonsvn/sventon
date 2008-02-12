@@ -100,6 +100,20 @@ input.btn {
   border-bottom: black solid 2px;
 }
 
+.sventonUnifiedDiffTable {
+  width: 100%;
+  font-family: monospace;
+  font-size: 11px;
+  white-space: pre;
+  padding: 0;
+  color: #000000;
+  background-color: #E2E4E6;
+  border-top: black dotted 1px;
+  border-left: black dotted 1px;
+  border-right: black solid 2px;
+  border-bottom: black solid 2px;
+}
+
 .sventonSelect {
   font-family: verdana, sans-serif;
   font-size: 10px;
