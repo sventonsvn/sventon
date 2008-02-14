@@ -14,7 +14,7 @@ public class ExportDirectoryTest extends TestCase {
        "defaultsvn", new File(System.getProperty("java.io.tmpdir")), null);
 
     //Since the output of SDF is dependent on local time zone we need to create the reference string
-    //usin SDF as well.
+    //using SDF as well.
     final String refString = "defaultsvn-" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(date) + ".zip";
     assertEquals(refString, exportDirectory.createTempFilename(date));
   }
