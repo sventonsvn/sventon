@@ -50,7 +50,7 @@ public final class GoToController extends AbstractSVNTemplateController implemen
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    String redirectUrl = null;
+    String redirectUrl;
     final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), revision.getNumber());
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 

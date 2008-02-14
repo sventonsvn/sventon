@@ -37,9 +37,9 @@ public class GoToControllerTest extends TestCase {
     Map model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(0, model.size());
+    assertEquals(3, model.size());
     RedirectView view = (RedirectView) modelAndView.getView();
-    assertEquals("showfile.svn?path=/file.txt&revision=12&name=test", view.getUrl());
+    assertEquals("showfile.svn", view.getUrl());
 
     reset(mockService);
     command.setPath("/dir");
@@ -52,9 +52,9 @@ public class GoToControllerTest extends TestCase {
     model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(0, model.size());
+    assertEquals(3, model.size());
     view = (RedirectView) modelAndView.getView();
-    assertEquals("repobrowser.svn?path=/dir&revision=12&name=test", view.getUrl());
+    assertEquals("repobrowser.svn", view.getUrl());
   }
 
 }
