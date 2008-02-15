@@ -75,7 +75,7 @@
             <a href="<sventon-ui:formatUrl url='${entryTrayShowFileUrl}'/>">${entry.name}</a>&nbsp;
         </c:otherwise>
       </c:choose>
-            (<a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">${entry.revision}</a>)
+            (<a href="${entryTrayShowRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">${entry.revision}</a>)
           </td>
       <td>
         <a href="#" onclick="removeEntryFromTray('<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>'); return false;">
