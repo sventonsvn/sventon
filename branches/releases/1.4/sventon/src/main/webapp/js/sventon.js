@@ -270,14 +270,6 @@ function restoreBlameRev(revision) {
   setBackgroundColor(tags, 'blameRev_' + revision, '#ffffff');
 }
 
-function addEntryToTray(element, dropon, event) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id, {
-    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
-    Element.hide('spinner');
-  }});
-  Element.show('spinner');
-}
-
 function removeEntryFromTray(removeEntryUrl) {
   var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl, {
     method: 'post', onFailure: reportAjaxError, onComplete: function(request) {

@@ -53,12 +53,14 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
+    final long headRevision = getRepositoryService().getLatestRevision(repository);
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", headRevision);
     final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
 
     final RepositoryEntry entry;
     try {
-      entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(), revision.getNumber());
+      entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(), pegRevision);
     } catch (SVNException e) {
       return modelAndView;
     }

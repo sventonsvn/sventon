@@ -104,7 +104,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final void export(final SVNRepository repository, final List<SVNFileRevision> targets,
+  public final void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SVNException {
 
     final long start = System.currentTimeMillis();
@@ -115,7 +115,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
-          SVNRevision.create(fileRevision.getRevision()), SVNRevision.create(fileRevision.getRevision()), null, true, true);
+          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, true);
     }
     logger.debug("PERF: export(): " + (System.currentTimeMillis() - start));
   }
@@ -263,7 +263,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       return repositoryEntry;
     } else {
       logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
-      return null;
+      throw new SVNException(SVNErrorMessage.create(SVNErrorCode.ENTRY_NOT_FOUND));
     }
   }
 

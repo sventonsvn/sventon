@@ -176,7 +176,16 @@
     for (var i = 0; i < entries.length; i++) {
       new Draggable(entries[i].id, {revert:true})
     }
-    Droppables.add('entryTrayContainerDiv', {onDrop:addEntryToTray})
+    Droppables.add('entryTrayContainerDiv', {onDrop:
+        function(element, dropon, event) {
+          var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${!empty numrevision ? numrevision : command.revision}', {
+            method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+            Element.hide('spinner');
+          }
+          });
+          Element.show('spinner');
+        }
+    })
   </script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

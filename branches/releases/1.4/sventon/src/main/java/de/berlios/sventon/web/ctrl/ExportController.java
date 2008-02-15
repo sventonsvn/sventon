@@ -19,6 +19,7 @@ import de.berlios.sventon.web.model.UserRepositoryContext;
 import de.berlios.sventon.web.support.RequestParameterParser;
 import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -70,6 +71,9 @@ public final class ExportController extends AbstractSVNTemplateController implem
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
+    final long headRevision = getRepositoryService().getLatestRevision(repository);
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", headRevision);
+
     ServletOutputStream output = null;
     InputStream fileInputStream = null;
 
@@ -78,7 +82,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
 
     try {
       logger.debug(exportDirectory);
-      getRepositoryService().export(repository, targets, exportDirectory);
+      getRepositoryService().export(repository, targets, pegRevision, exportDirectory);
       final File compressedFile = exportDirectory.compress();
       output = response.getOutputStream();
       response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);
