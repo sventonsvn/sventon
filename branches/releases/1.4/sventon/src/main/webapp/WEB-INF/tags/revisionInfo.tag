@@ -16,7 +16,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="de.berlios.sventon.util.HTMLCreator" %>
-<%@ tag import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
