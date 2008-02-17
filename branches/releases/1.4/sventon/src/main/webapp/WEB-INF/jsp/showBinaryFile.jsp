@@ -24,8 +24,7 @@
 
   <c:choose>
     <c:when test="${archivedEntry ne null}">
-      <c:set var="newTarget" value="${command.target} (${archivedEntry})"/>
-      <sventon:currentTargetHeader title="Show Binary File" target="${newTarget}" hasProperties="false"/>
+      <sventon:currentTargetHeader title="Show Binary File" target="${command.target} (${archivedEntry})" hasProperties="false"/>
     </c:when>
     <c:otherwise>
       <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" hasProperties="true"/>
