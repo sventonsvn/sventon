@@ -26,11 +26,11 @@
   <sventon:functionLinks pageName="repobrowser"/>
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
-    <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="name" value="${command.name}">
-
+    <input type="hidden" name="pegrev" value="${!empty numrevision ? numrevision : command.revision}">
+    
     <c:url value="repobrowser.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
       <c:param name="revision" value="${command.revision}" />

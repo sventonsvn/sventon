@@ -26,6 +26,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -280,45 +281,45 @@ public interface RepositoryService {
   /**
    * Creates a side-by-side diff.
    *
-   * @param repository    The repository
+   * @param repository    The repository.
    * @param diffCommand   DiffCommand.
+   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration.
-   * @return Ordered list of diffed rows.
+   * @param configuration The instance configuration. @return Ordered list of diffed rows.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
-                                         final String charset, final InstanceConfiguration configuration)
+                                         final SVNRevision pegRevision, final String charset, final InstanceConfiguration configuration)
       throws SVNException, DiffException;
 
   /**
    * Creates a unified diff.
    *
-   * @param repository    The repository
-   * @param diffCommand   DiffCommand
+   * @param repository    The repository.
+   * @param diffCommand   DiffCommand.
+   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration.
-   * @return The unified diff as a string.
+   * @param configuration The instance configuration. @return The unified diff as a string.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
+  String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
                      final InstanceConfiguration configuration)
       throws SVNException, DiffException;
 
   /**
    * Creates an inline diff.
    *
-   * @param repository    The repository
-   * @param diffCommand   DiffCommand
+   * @param repository    The repository.
+   * @param diffCommand   DiffCommand.
+   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration.
-   * @return The inline diff.
+   * @param configuration The instance configuration. @return The inline diff.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final String charset,
+  List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
                                  final InstanceConfiguration configuration) throws SVNException, DiffException;
 
   /**
