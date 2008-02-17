@@ -152,16 +152,20 @@ function searchWarning() {
 // Toggles line wrap mode between normal and nowrap
 function toggleWrap() {
   var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
-  var tags = $('diffTable').getElementsByTagName('td');
 
-  for (var i = 0; i < tags.length; i++) {
-    if (classNames.contains(tags[i].className)) {
-      if (tags[i].style.whiteSpace == '') {
-        tags[i].style.whiteSpace = 'nowrap';
-      } else {
-        tags[i].style.whiteSpace = '';
+  try {
+    var tags = $('diffTable').getElementsByTagName('td');
+    for (var i = 0; i < tags.length; i++) {
+      if (classNames.contains(tags[i].className)) {
+        if (tags[i].style.whiteSpace == '') {
+          tags[i].style.whiteSpace = 'nowrap';
+        } else {
+          tags[i].style.whiteSpace = '';
+        }
       }
     }
+  } catch(ex) {
+    //
   }
 }
 
