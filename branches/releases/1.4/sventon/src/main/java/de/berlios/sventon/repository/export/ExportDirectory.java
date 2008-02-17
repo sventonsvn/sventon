@@ -115,4 +115,15 @@ public final class ExportDirectory {
     FileUtils.forceDelete(exportDirectory);
   }
 
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "ExportDirectory{" +
+        "exportDirectory=" + exportDirectory +
+        ", instanceName='" + instanceName + '\'' +
+        '}';
+  }
 }
