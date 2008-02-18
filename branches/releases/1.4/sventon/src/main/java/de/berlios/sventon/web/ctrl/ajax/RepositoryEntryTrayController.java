@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl.ajax;
 
+import de.berlios.sventon.repository.PeggedRepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
@@ -57,6 +58,7 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
     final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", headRevision);
     final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
+    modelAndView.addObject("pegrev", pegRevision);
 
     final RepositoryEntry entry;
     try {
@@ -69,10 +71,10 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
 
     if (PARAMETER_ADD.equals(actionParameter)) {
       logger.debug("Adding entry to tray: " + entry.getFullEntryName());
-      entryTray.add(entry);
+      entryTray.add(new PeggedRepositoryEntry(entry, pegRevision));
     } else if (PARAMETER_REMOVE.equals(actionParameter)) {
       logger.debug("Removing entry from tray: " + entry.getFullEntryName());
-      entryTray.remove(entry);
+      entryTray.remove(new PeggedRepositoryEntry(entry, pegRevision));
     } else {
       throw new UnsupportedOperationException(actionParameter);
     }
