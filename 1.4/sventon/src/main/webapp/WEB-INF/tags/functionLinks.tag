@@ -166,6 +166,9 @@
       <c:if test="${!empty pegrev}">
         <c:param name="pegrev" value="${pegrev}" />
       </c:if>
+      <c:if test="${param.showlatestrevinfo}">
+        <c:param name="showlatestrevinfo" value="true" />
+      </c:if>
     </c:url>
     <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
     <select name="diffStyle" class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
