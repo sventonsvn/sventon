@@ -181,11 +181,11 @@
 
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-scm-plugin</artifactId>
-        <version>1.0</version>
+        <artifactId>maven-release-plugin</artifactId>
         <configuration>
-          <goals>package</goals>
+          <tagBase>
+            https://svn.berlios.de/svnroot/repos/sventon/tags
+          </tagBase>
         </configuration>
       </plugin>
 
