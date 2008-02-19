@@ -1,0 +1,14 @@
+<assembly>
+  <id>src</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <excludes>
+        <exclude>**/target/**</exclude>
+        <exclude>sventon*</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>
