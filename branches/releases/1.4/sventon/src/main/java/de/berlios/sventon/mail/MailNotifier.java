@@ -117,49 +117,56 @@ public final class MailNotifier extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
 
-    final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+    new Thread(new Runnable() {
 
-    if (revisions.size() > revisionCountThreshold) {
-      LOGGER.info("Update contains more than max allowed updates, ["
-          + revisionCountThreshold + "]. No notification mail sent");
-      return;
-    }
+      public void run() {
+        final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
-    for (final SVNLogEntry logEntry : revisions) {
-      if (SVNUtils.isAccessible(logEntry)) {
-        final String instanceName = revisionUpdate.getInstanceName();
-        LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
+        if (revisions.size() > revisionCountThreshold) {
+          LOGGER.info("Update contains more than max allowed updates, ["
+             + revisionCountThreshold + "]. No notification mail sent");
+          return;
+        }
 
-        try {
-          final Message msg = new MimeMessage(session);
-          msg.setFrom(new InternetAddress(from));
-          msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
-          msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
+        for (final SVNLogEntry logEntry : revisions) {
+          if (SVNUtils.isAccessible(logEntry)) {
+            final String instanceName = revisionUpdate.getInstanceName();
+            LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
 
-          msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-              getBodyTemplate(), logEntry, baseUrl, instanceName, dateFormat, null), "text/html")));
+            try {
+              final Message msg = new MimeMessage(session);
+              msg.setFrom(new InternetAddress(from));
+              msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
+              msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
 
-          msg.setHeader("X-Mailer", "sventon");
-          msg.setSentDate(new Date());
+              msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
+                 getBodyTemplate(), logEntry, baseUrl, instanceName, dateFormat, null), "text/html")));
 
-          final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
+              msg.setHeader("X-Mailer", "sventon");
+              msg.setSentDate(new Date());
 
-          try {
-            if (auth) {
-              transport.connect(host, user, password);
-            } else {
-              transport.connect();
+              final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
+
+              try {
+                if (auth) {
+                  transport.connect(host, user, password);
+                } else {
+                  transport.connect();
+                }
+                transport.sendMessage(msg, msg.getAllRecipients());
+              } finally {
+                transport.close();
+              }
+              LOGGER.debug("Notification mail was sent successfully");
+            } catch (Exception e) {
+              LOGGER.error("Unable to send notification mail", e);
             }
-            transport.sendMessage(msg, msg.getAllRecipients());
-          } finally {
-            transport.close();
           }
-          LOGGER.debug("Notification mail was sent successfully");
-        } catch (Exception e) {
-          LOGGER.error("Unable to send notification mail", e);
         }
       }
-    }
+    }).start();
+
+
   }
 
   /**
