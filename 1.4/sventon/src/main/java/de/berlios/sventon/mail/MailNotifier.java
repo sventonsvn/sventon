@@ -104,9 +104,9 @@ public final class MailNotifier extends AbstractRevisionObserver {
    */
   public void init() {
     final Properties mailProperties = new Properties();
-    mailProperties.put("mail.smtp.host", host);
-    mailProperties.put("mail.smtp.port", port);
-    mailProperties.put("mail.smtp.auth", auth ? "true" : "false");
+    mailProperties.setProperty("mail.smtp.host", host);
+    mailProperties.setProperty("mail.smtp.port", String.valueOf(port));
+    mailProperties.setProperty("mail.smtp.auth", auth ? "true" : "false");
 
     session = Session.getInstance(mailProperties, null);
     session.setDebug(LOGGER.isDebugEnabled());
@@ -133,7 +133,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
         try {
           final Message msg = new MimeMessage(session);
           msg.setFrom(new InternetAddress(from));
-          msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[0]));
+          msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
           msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
 
           msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
