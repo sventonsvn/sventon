@@ -9,14 +9,14 @@
     }
 
     .mainTable {
-      font-family: Verdana,Sans-serif;
+      font-family: Verdana, Sans-serif;
       font-size: 80%;
       font-weight: normal;
       padding: 2px;
     }
 
     .changedPathsTable {
-      font-family: Verdana,Sans-serif;
+      font-family: Verdana, Sans-serif;
       font-size: 70%;
       font-weight: normal;
       padding: 2px;
@@ -35,32 +35,38 @@
     <td>${date}</td>
   </tr>
   <tr>
-    <td colspan="2">${logMessage}</td>
+    <td>${logMessage}</td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td>
       ${changedPaths}
     </td>
   </tr>
   <tr>
-    <td><b>Action</b></td>
-    <td><b>Count</b></td>
-  </tr>
-  <tr>
-    <td>Added</td>
-    <td>${addedCount}</td>
-  </tr>
-  <tr>
-    <td>Modified</td>
-    <td>${modifiedCount}</td>
-  </tr>
-  <tr>
-    <td>Replaced</td>
-    <td>${replacedCount}</td>
-  </tr>
-  <tr>
-    <td>Deleted</td>
-    <td>${deletedCount}</td>
+    <td>
+      <table>
+        <tr>
+          <td><b>Action</b></td>
+          <td><b>Count</b></td>
+        </tr>
+        <tr>
+          <td>Added</td>
+          <td>${addedCount}</td>
+        </tr>
+        <tr>
+          <td>Modified</td>
+          <td>${modifiedCount}</td>
+        </tr>
+        <tr>
+          <td>Replaced</td>
+          <td>${replacedCount}</td>
+        </tr>
+        <tr>
+          <td>Deleted</td>
+          <td>${deletedCount}</td>
+        </tr>
+      </table>
+    </td>
   </tr>
 </table>
 </body>
