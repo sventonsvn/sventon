@@ -126,8 +126,8 @@ public final class HTMLCreator {
 
     final StringBuilder sb = new StringBuilder("<table class=\"changedPathsTable\">\n");
     sb.append("  <tr>\n");
-    sb.append("    <th>Action</th>\n");
-    sb.append("    <th>Path</th>\n");
+    sb.append("    <th align=\"left\">Action</th>\n");
+    sb.append("    <th align=\"left\">Path</th>\n");
     sb.append("  </tr>\n");
 
     //noinspection unchecked
