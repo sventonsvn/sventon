@@ -1,0 +1,44 @@
+<p>
+  Controls how restricted access to the repository is handled.
+</p>
+<table border="1">
+  <tr>
+    <th>Access method</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>anonymous</td>
+    <td>Username and password is not needed to access the repository</td>
+  </tr>
+  <tr>
+    <td>sventon</td>
+    <td>Username and password is set once during configuration. Users can browse the repository using sventon without
+      password.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      user
+    </td>
+    <td>
+      sventon user needs to supply username and password when browsing a restricted repository.
+      <br/>
+      <br/>
+      If enabled, all features relying on the repository cache, such as the search and directory flattening features and
+      the log message
+      search, <b>will be disabled</b>.
+    </td>
+  </tr>
+</table>
+<p>
+  <b>A note about security</b>
+</p>
+<p>
+  When using the
+  <i>sventon</i> access method the username and password is stored together with other sventon config information.
+  In a production situation you may want to take appropriate measures to secure this data.
+</p>
+<p>
+  Enabling user based access control stores username and password in the user session, this could
+  be considered a security problem.
+</p>
