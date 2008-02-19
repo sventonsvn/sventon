@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Class for notifying users about new revisions.
@@ -98,6 +100,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
    * Base URL where sventon is located.
    */
   private String baseUrl;
+  private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
   /**
    * Initializes the component.
@@ -117,7 +120,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
    */
   public void update(final RevisionUpdate revisionUpdate) {
 
-    new Thread(new Runnable() {
+    executorService.execute(new Runnable() {
 
       public void run() {
         final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
@@ -164,7 +167,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
           }
         }
       }
-    }).start();
+    });
 
 
   }
