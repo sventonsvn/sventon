@@ -36,7 +36,7 @@ public final class SVNUtils {
   public static boolean isAccessible(final SVNLogEntry logEntry) {
     return logEntry != null
         && logEntry.getDate() != null
-        && logEntry.getAuthor() != null
-        && !logEntry.getChangedPaths().isEmpty();
+        && (logEntry.getChangedPaths() != null
+        && !logEntry.getChangedPaths().isEmpty());
   }
 }
