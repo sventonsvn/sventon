@@ -11,7 +11,6 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
@@ -24,6 +23,8 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * GoToController.
@@ -49,14 +50,14 @@ public final class GoToController extends AbstractSVNTemplateController implemen
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final StringBuilder redirectUrl = new StringBuilder();
+    String redirectUrl;
     final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), revision.getNumber());
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {
-      redirectUrl.append("repobrowser.svn");
+      redirectUrl = "repobrowser.svn";
     } else if (kind == SVNNodeKind.FILE) {
-      redirectUrl.append("showfile.svn");
+      redirectUrl = "showfile.svn";
     } else {
       //Invalid path/rev combo. Forward to error page.
       exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
@@ -64,11 +65,13 @@ public final class GoToController extends AbstractSVNTemplateController implemen
     }
 
     // Add the redirect URL parameters
-    redirectUrl.append("?path=").append(EncodingUtils.encodeUrl(svnCommand.getPath()));
-    redirectUrl.append("&revision=").append(svnCommand.getRevision());
-    redirectUrl.append("&name=").append(svnCommand.getName());
-    logger.debug("Redirecting to: " + redirectUrl.toString());
-    return new ModelAndView(new RedirectView(redirectUrl.toString()));
+    final Map<String, Object> model = new HashMap<String, Object>();
+    model.put("path", svnCommand.getPath());
+    model.put("revision", svnCommand.getRevision());
+    model.put("name", svnCommand.getName());
+    logger.debug("Redirecting to: " + redirectUrl);
+    return new ModelAndView(new RedirectView(redirectUrl), model);
+
   }
 
 }

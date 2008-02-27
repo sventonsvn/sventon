@@ -11,11 +11,12 @@
  */
 package de.berlios.sventon.web.model;
 
-import de.berlios.sventon.repository.RepositoryEntry;
+import de.berlios.sventon.repository.PeggedRepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,8 +33,8 @@ public final class RepositoryEntryTray implements Serializable {
   /**
    * List of entries in tray.
    */
-  private final Set<RepositoryEntry> entries = new TreeSet<RepositoryEntry>(
-      new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true));
+  private final Set<PeggedRepositoryEntry> entries = new TreeSet<PeggedRepositoryEntry>(new PeggedRepositoryEntryComparator());
+
 
   /**
    * Gets the number of entries in the tray.
@@ -50,7 +51,7 @@ public final class RepositoryEntryTray implements Serializable {
    * @param entry Entry to add.
    * @return True if added.
    */
-  public boolean add(final RepositoryEntry entry) {
+  public boolean add(final PeggedRepositoryEntry entry) {
     return entries.add(entry);
   }
 
@@ -60,7 +61,7 @@ public final class RepositoryEntryTray implements Serializable {
    * @param entry Entry to remove
    * @return True if removed.
    */
-  public boolean remove(final RepositoryEntry entry) {
+  public boolean remove(final PeggedRepositoryEntry entry) {
     return entries.remove(entry);
   }
 
@@ -69,7 +70,7 @@ public final class RepositoryEntryTray implements Serializable {
    *
    * @return Entries
    */
-  public Set<RepositoryEntry> getUnmodifiableEntries() {
+  public Set<PeggedRepositoryEntry> getUnmodifiableEntries() {
     return Collections.unmodifiableSet(entries);
   }
 
@@ -78,5 +79,17 @@ public final class RepositoryEntryTray implements Serializable {
    */
   public void removeAll() {
     entries.clear();
+  }
+
+  /**
+   * Comparator for pegged entries.
+   */
+  private static class PeggedRepositoryEntryComparator implements Comparator<PeggedRepositoryEntry>, Serializable {
+
+    private RepositoryEntryComparator comparator = new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true);
+
+    public int compare(final PeggedRepositoryEntry o1, final PeggedRepositoryEntry o2) {
+      return comparator.compare(o1.getEntry(), o2.getEntry());
+    }
   }
 }

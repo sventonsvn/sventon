@@ -17,6 +17,6 @@ public class SVNUtilsTest extends TestCase {
 
     final Map<String, SVNLogEntryPath> map = new HashMap<String, SVNLogEntryPath>();
     map.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    assertTrue(SVNUtils.isAccessible(new SVNLogEntry(map, 12, "", new Date(), null)));
+    assertTrue(SVNUtils.isAccessible(new SVNLogEntry(map, 12, null, new Date(), null)));
   }
 }

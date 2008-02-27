@@ -16,6 +16,7 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.io.ISVNSession;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffUnified(repository, diffCommand, ENCODING, configuration);
+      service.diffUnified(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
@@ -75,7 +76,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffUnified(repository, diffCommand, ENCODING, configuration);
+      service.diffUnified(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -110,7 +111,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffUnified(repository, diffCommand, ENCODING, configuration);
+      service.diffUnified(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -152,7 +153,7 @@ public class RepositoryServiceImplTest extends TestCase {
         "/bug/code/try2/OrderDetailModel.java;;90"};
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
-    final String s = service.diffUnified(repository, diffCommand, ENCODING, configuration);
+    final String s = service.diffUnified(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
     assertEquals("@@ -1 +1 @@" + BR + "-test left file contents" + BR + "+test right file contents", s.trim());
   }
 
@@ -200,7 +201,7 @@ public class RepositoryServiceImplTest extends TestCase {
         "/bug/code/try2/OrderDetailModel.java;;90"};
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
-    final List<InlineDiffRow> list = service.diffInline(repository, diffCommand, ENCODING, configuration);
+    final List<InlineDiffRow> list = service.diffInline(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
 
     assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
     assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
@@ -227,7 +228,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+      service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
@@ -254,7 +255,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+      service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -289,7 +290,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+      service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (DiffException e) {
       // expected
@@ -324,7 +325,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
     try {
-      service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+      service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -342,7 +343,7 @@ public class RepositoryServiceImplTest extends TestCase {
         "/bug/code/try2/OrderDetailModel.java;;90"};
     final DiffCommand diffCommand = new DiffCommand(parameterParser.parseEntries(revisions));
 
-    List<SideBySideDiffRow> diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+    List<SideBySideDiffRow> diff = service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
     assertEquals(1, diff.size());
 
     repository.leftFileContents = "/**\n" +
@@ -427,7 +428,7 @@ public class RepositoryServiceImplTest extends TestCase {
             "21a\n" +
             "22a}\n";
 
-    diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+    diff = service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
@@ -505,7 +506,7 @@ public class RepositoryServiceImplTest extends TestCase {
             "11aOneMore=6\n" +
             "12aOneMore=9\n";
 
-    diff = service.diffSideBySide(repository, diffCommand, ENCODING, configuration);
+    diff = service.diffSideBySide(repository, diffCommand, SVNRevision.UNDEFINED, ENCODING, configuration);
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {

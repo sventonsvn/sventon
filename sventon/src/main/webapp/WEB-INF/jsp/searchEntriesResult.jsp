@@ -26,11 +26,11 @@
   <sventon:functionLinks pageName="repobrowser"/>
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
-    <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="name" value="${command.name}">
-
+    <input type="hidden" name="pegrev" value="${!empty numrevision ? numrevision : command.revision}">
+    
     <c:url value="searchentries.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
       <c:param name="revision" value="${command.revision}" />
@@ -44,7 +44,6 @@
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
       <c:forEach items="${svndir}" var="entry">
-        <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
         <c:url value="repobrowser.svn" var="viewUrl">
           <c:param name="path" value="${entry.fullEntryName}" />
           <c:param name="revision" value="${command.revision}" />

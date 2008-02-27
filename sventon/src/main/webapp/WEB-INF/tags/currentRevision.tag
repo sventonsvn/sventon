@@ -23,8 +23,8 @@ Rev:
       ${command.revision} (${revisionNumber})
   </c:when>
   <c:otherwise>
-      <a class="exclamationText" href="revinfo.svn?revision=${command.revision}&name=${command.name}">
-        ${command.revision}
+      <a href="revinfo.svn?revision=${command.revision}&name=${command.name}">
+        <span class="exclamationText">${command.revision}</span>
       </a>
   </c:otherwise>
 </c:choose>

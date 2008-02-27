@@ -26,11 +26,11 @@
   <sventon:functionLinks pageName="repobrowser"/>
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
-    <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="name" value="${command.name}">
-
+    <input type="hidden" name="pegrev" value="${!empty numrevision ? numrevision : command.revision}">
+    
     <c:url value="repobrowser.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
       <c:param name="revision" value="${command.revision}" />
@@ -65,7 +65,6 @@
       </c:if>
 
       <c:forEach items="${svndir}" var="entry">
-        <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
         <c:url value="repobrowser.svn" var="viewUrl">
           <c:param name="path" value="${entry.fullEntryName}" />
           <c:param name="revision" value="${command.revision}" />
@@ -176,7 +175,16 @@
     for (var i = 0; i < entries.length; i++) {
       new Draggable(entries[i].id, {revert:true})
     }
-    Droppables.add('entryTrayContainerDiv', {onDrop:addEntryToTray})
+    Droppables.add('entryTrayContainerDiv', {onDrop:
+        function(element, dropon, event) {
+          var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${!empty numrevision ? numrevision : command.revision}', {
+            method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+            Element.hide('spinner');
+          }
+          });
+          Element.show('spinner');
+        }
+    })
   </script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

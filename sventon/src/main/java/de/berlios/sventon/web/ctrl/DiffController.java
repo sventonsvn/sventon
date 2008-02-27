@@ -54,6 +54,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
 
     final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
     final String style = ServletRequestUtils.getStringParameter(request, "style", SIDE_BY_SIDE);
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", -1);
     logger.debug("Diffing [" + style + "]: " + entries);
 
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -62,26 +63,26 @@ public final class DiffController extends AbstractSVNTemplateController implemen
     model.put("diffCommand", diffCommand);
     logger.debug("Using: " + diffCommand);
 
-    ModelAndView modelAndView = null;
+    final ModelAndView modelAndView = new ModelAndView();
     try {
       if (SIDE_BY_SIDE.equals(style)) {
+        modelAndView.setViewName("diff");
         final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
-            repository, diffCommand, userRepositoryContext.getCharset(), getInstanceConfiguration(
+            repository, diffCommand, SVNRevision.create(pegRevision), userRepositoryContext.getCharset(), getInstanceConfiguration(
             svnCommand.getName()));
         model.put("diffResult", diffResult);
-        modelAndView = new ModelAndView("diff");
       } else if (UNIFIED.equals(style)) {
+        modelAndView.setViewName("unifiedDiff");
         final String diffResult = getRepositoryService().diffUnified(
-            repository, diffCommand, userRepositoryContext.getCharset(),
+            repository, diffCommand, SVNRevision.create(pegRevision), userRepositoryContext.getCharset(),
             getInstanceConfiguration(svnCommand.getName()));
         model.put("diffResult", diffResult);
-        modelAndView = new ModelAndView("unifiedDiff");
       } else if (INLINE.equals(style)) {
+        modelAndView.setViewName("inlineDiff");
         final List<InlineDiffRow> diffResult = getRepositoryService().diffInline(
-            repository, diffCommand, userRepositoryContext.getCharset(),
+            repository, diffCommand, SVNRevision.create(pegRevision), userRepositoryContext.getCharset(),
             getInstanceConfiguration(svnCommand.getName()));
         model.put("diffResult", diffResult);
-        modelAndView = new ModelAndView("inlineDiff");
       } else {
         throw new IllegalStateException();
       }
@@ -94,7 +95,9 @@ public final class DiffController extends AbstractSVNTemplateController implemen
       logger.info("Binary file(s) detected", iffe);
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
-
+    if (SVNRevision.UNDEFINED != SVNRevision.create(pegRevision)) {
+      model.put("pegrev", pegRevision);
+    }
     modelAndView.addAllObjects(model);
     return modelAndView;
   }
