@@ -11,6 +11,9 @@
  */
 package de.berlios.sventon.web.model;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +62,9 @@ public final class UserContext implements Serializable {
     repositoryContexts.remove(repositoryName);
   }
 
-  //TODO: Add toString()
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
 
 }

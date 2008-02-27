@@ -164,7 +164,7 @@ public abstract class EntryCache implements Cache {
    *
    * @param pattern Entry name pattern to search for
    * @param kind    Entry kind
-   * @return List of entries.
+   * @return List of entries matching given pattern.
    */
   public final synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
     if (logger.isDebugEnabled()) {
@@ -186,11 +186,11 @@ public abstract class EntryCache implements Cache {
   }
 
   /**
-   * Finds entry names based on given regex pattern.
+   * Finds entry names containing given search string.
    *
    * @param searchString Entry name search string.
    * @param startDir     Directory/path to start in.
-   * @return List of entries.
+   * @return List of entries with names matching given search string.
    */
   public final synchronized List<RepositoryEntry> findEntry(final String searchString, final String startDir) {
     if (logger.isDebugEnabled()) {

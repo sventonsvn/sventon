@@ -18,8 +18,6 @@
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
 <c:forEach items="${svndir}" var="entry">
-  <jsp:useBean id="entry" type="de.berlios.sventon.repository.RepositoryEntry" />
-
   <c:url value="showfile.svn" var="showFileUrl">
     <c:param name="path" value="${entry.fullEntryName}" />
     <c:param name="revision" value="${command.revision}" />

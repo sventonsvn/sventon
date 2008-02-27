@@ -32,7 +32,7 @@
   
   %>
   
-  Go to <a href="<%= request.getContextPath() %>/index.jsp">sventon start page</a>
+  Go to <a href="${pageContext.request.contextPath}/index.jsp">sventon start page</a>
   <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
   </body>
 </html>

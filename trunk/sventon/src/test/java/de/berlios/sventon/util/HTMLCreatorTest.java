@@ -14,8 +14,8 @@ public class HTMLCreatorTest extends TestCase {
   public void testCreateChangedPathsTable() throws Exception {
     final String result = "<table class=\"changedPathsTable\">\n" +
         "  <tr>\n" +
-        "    <th>Action</th>\n" +
-        "    <th>Path</th>\n" +
+        "    <th align=\"left\">Action</th>\n" +
+        "    <th align=\"left\">Path</th>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Modified</i></td>\n" +

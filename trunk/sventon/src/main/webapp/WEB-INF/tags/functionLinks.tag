@@ -163,9 +163,15 @@
       <c:param name="name" value="${command.name}" />
       <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
       <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
+      <c:if test="${!empty pegrev}">
+        <c:param name="pegrev" value="${pegrev}" />
+      </c:if>
+      <c:if test="${param.showlatestrevinfo}">
+        <c:param name="showlatestrevinfo" value="true" />
+      </c:if>
     </c:url>
     <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
-    <select name="diffStyle" class="sventonSelect" onchange="parent.location=this.options[this.selectedIndex].value;">
+    <select name="diffStyle" class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
       <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=inline"
           ${pageName == 'showInlineDiff' ? 'selected' : ''}>Inline</option>
       <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=sidebyside"

@@ -88,13 +88,13 @@ public final class ExportDirectory {
   }
 
   /**
-   * Creates a file name based on instance name, current date and time.
+   * Creates a file name based on instance name, and given timestamp.
    *
-   * @param now Current time
+   * @param date Timestamp to use as part of the file name.
    * @return Generated file name.
    */
-  protected String createTempFilename(final Date now) {
-    return instanceName + "-" + DATE_FORMAT.format(now) + ".zip";
+  protected String createTempFilename(final Date date) {
+    return instanceName + "-" + DATE_FORMAT.format(date) + ".zip";
   }
 
   /**
@@ -115,4 +115,15 @@ public final class ExportDirectory {
     FileUtils.forceDelete(exportDirectory);
   }
 
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return "ExportDirectory{" +
+        "exportDirectory=" + exportDirectory +
+        ", instanceName='" + instanceName + '\'' +
+        '}';
+  }
 }

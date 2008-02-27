@@ -152,16 +152,20 @@ function searchWarning() {
 // Toggles line wrap mode between normal and nowrap
 function toggleWrap() {
   var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
-  var tags = $('diffTable').getElementsByTagName('td');
 
-  for (var i = 0; i < tags.length; i++) {
-    if (classNames.contains(tags[i].className)) {
-      if (tags[i].style.whiteSpace == '') {
-        tags[i].style.whiteSpace = 'nowrap';
-      } else {
-        tags[i].style.whiteSpace = '';
+  try {
+    var tags = $('diffTable').getElementsByTagName('td');
+    for (var i = 0; i < tags.length; i++) {
+      if (classNames.contains(tags[i].className)) {
+        if (tags[i].style.whiteSpace == '') {
+          tags[i].style.whiteSpace = 'nowrap';
+        } else {
+          tags[i].style.whiteSpace = '';
+        }
       }
     }
+  } catch(ex) {
+    //
   }
 }
 
@@ -268,14 +272,6 @@ function highlightBlameRev(revision) {
 function restoreBlameRev(revision) {
   var tags = $('blameTable').getElementsByTagName('td');
   setBackgroundColor(tags, 'blameRev_' + revision, '#ffffff');
-}
-
-function addEntryToTray(element, dropon, event) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, element.id, {
-    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
-    Element.hide('spinner');
-  }});
-  Element.show('spinner');
 }
 
 function removeEntryFromTray(removeEntryUrl) {
