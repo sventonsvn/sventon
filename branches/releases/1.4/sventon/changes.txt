@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1218] Fixed: Bug #13244 - Error during population of log message cache.
+
 [1212] Release 1.4 RC1 (2008-02-19)
 [1152] Added: Upgraded to Spring 2.5.1
 [1145] Added: Feature #3999 - Inline diff view.
