@@ -62,6 +62,7 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
     try {
       final LogMessageCache logMessageCache = logMessageCacheManager.getCache(instanceName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
+        LOGGER.info("Clearing cache before population");
         logMessageCache.clear();
       }
       updateInternal(logMessageCache, revisions);
