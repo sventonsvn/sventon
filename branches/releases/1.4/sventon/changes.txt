@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1219] Fixed: Bug #13268 - Peg revision not honored by RSS creator.
 [1218] Fixed: Bug #13244 - Error during population of log message cache.
 
 [1212] Release 1.4 RC1 (2008-02-19)

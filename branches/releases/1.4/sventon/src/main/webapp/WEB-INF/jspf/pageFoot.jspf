@@ -13,6 +13,6 @@
 %>
 <br>
 <p>
-  <a href="rss.xml?name=${command.name}&path=${command.path}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
+  <a href="rss.xml?name=${command.name}&path=${command.path}&revision=${command.revision}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
 </p>
 <%@ include file="/WEB-INF/jspf/version.jspf"%>

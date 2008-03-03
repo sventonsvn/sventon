@@ -92,7 +92,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
       logger.debug("Files are identical");
       model.put("isIdentical", true);
     } catch (final IllegalFileFormatException iffe) {
-      logger.info("Binary file(s) detected", iffe);
+      logger.info(iffe.getMessage());
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
     if (SVNRevision.UNDEFINED != SVNRevision.create(pegRevision)) {
