@@ -51,7 +51,7 @@ import java.util.Set;
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
  * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- *HttpServletRequest,HttpServletResponse,BindException)}</code>.
+ * HttpServletRequest,HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -63,14 +63,14 @@ import java.util.Set;
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
  * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- *HttpServletRequest,HttpServletResponse,BindException)}
+ * HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link de.berlios.sventon.web.command.SVNBaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
  * {@link #svnHandle(SVNRepository,SVNBaseCommand,SVNRevision,UserRepositoryContext,
- *HttpServletRequest,HttpServletResponse,BindException)}
+ * HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
  * <b>Model</b><br>
@@ -261,7 +261,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", getRepositoryService().getLatestRevisions(svnCommand.getName(), repository,
+          model.put("revisions", getRepositoryService().getRevisions(svnCommand.getName(), repository, headRevision, 1, "/",
               repositoryContext.getLatestRevisionsDisplayCount()));
         }
 

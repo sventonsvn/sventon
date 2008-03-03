@@ -187,23 +187,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final List<SVNLogEntry> getLatestRevisions(final String instanceName, final SVNRepository repository,
-                                                    final long revisionCount) throws SVNException, SventonException {
-    return getLatestRevisions(instanceName, "/", repository, revisionCount);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public final List<SVNLogEntry> getLatestRevisions(final String instanceName, final String path, final SVNRepository repository,
-                                                    final long revisionCount) throws SVNException, SventonException {
-    final long headRevision = repository.getLatestRevision();
-    return getRevisions(instanceName, repository, headRevision, 1, path, revisionCount);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
     final long start = System.currentTimeMillis();
@@ -325,8 +308,8 @@ public class RepositoryServiceImpl implements RepositoryService {
                                                       final SVNRevision pegRevision, final String charset,
                                                       final InstanceConfiguration configuration) throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
     assertFileEntries(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
     SideBySideDiffCreator sideBySideDiffCreator;
@@ -383,8 +366,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
                                   final String charset, final InstanceConfiguration configuration) throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
     assertFileEntries(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
 
@@ -425,8 +408,8 @@ public class RepositoryServiceImpl implements RepositoryService {
                                               final String charset, final InstanceConfiguration configuration)
       throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
     assertFileEntries(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
     final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
