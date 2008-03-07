@@ -48,7 +48,7 @@
         </h1>
 
         <p>
-          The repository <b>sventondump</b> has been successfully added to sventon.
+          The repository <b>${latestAddedInstance}</b> has been successfully added to sventon.
         </p>
       </div>
     </c:if>
