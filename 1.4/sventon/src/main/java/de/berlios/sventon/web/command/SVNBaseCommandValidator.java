@@ -41,7 +41,7 @@ public final class SVNBaseCommandValidator implements Validator {
       try {
         RepositoryEntryComparator.SortType.valueOf(command.getSortType());
       } catch (IllegalArgumentException iae) {
-        errors.rejectValue("sortType", "browse.error.illegal-sortType", "Not a valid sort type");
+        errors.rejectValue("sortType", "browse.error.illegal-sortType");
       }
     }
 
@@ -49,7 +49,7 @@ public final class SVNBaseCommandValidator implements Validator {
       try {
         RepositoryEntrySorter.SortMode.valueOf(command.getSortMode());
       } catch (IllegalArgumentException iae) {
-        errors.rejectValue("sortMode", "browse.error.illegal-sortMode", "Not a valid sort mode");
+        errors.rejectValue("sortMode", "browse.error.illegal-sortMode");
       }
     }
 
@@ -59,7 +59,7 @@ public final class SVNBaseCommandValidator implements Validator {
       final SVNRevision parsedRevision = SVNRevision.parse(revision);
       if (parsedRevision == SVNRevision.UNDEFINED) {
         command.setRevision("HEAD");
-        errors.rejectValue("revision", "browse.error.illegal-revision", "Not a valid revision");
+        errors.rejectValue("revision", "browse.error.illegal-revision");
       }
     }
   }
