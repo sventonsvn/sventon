@@ -12,6 +12,7 @@
 package de.berlios.sventon.appl;
 
 import org.apache.commons.lang.Validate;
+import org.springframework.util.StringUtils;
 
 /**
  * Represents a configured Subversion repository instance in sventon.
@@ -19,11 +20,6 @@ import org.apache.commons.lang.Validate;
  * @author jesper@users.berlios.de
  */
 public final class Instance {
-
-  /**
-   * Instance name regex pattern.
-   */
-  public static final String INSTANCE_NAME_PATTERN = "[a-z0-9]+";
 
   /**
    * The instance configuration.
@@ -61,8 +57,7 @@ public final class Instance {
    * @return True if valid, false if not.
    */
   public static boolean isValidName(final String instanceName) {
-    Validate.notNull(instanceName, "Instance name cannot be null");
-    return instanceName.matches(INSTANCE_NAME_PATTERN);
+    return !(instanceName == null || instanceName.length() == 0) && !StringUtils.containsWhitespace(instanceName);
   }
 
   /**
