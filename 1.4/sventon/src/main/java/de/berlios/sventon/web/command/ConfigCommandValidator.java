@@ -91,6 +91,7 @@ public final class ConfigCommandValidator implements Validator {
       final String msg = "Name must be in lower case a-z and/or 0-9";
       logger.warn(msg);
       errors.rejectValue("name", "config.error.illegal-name", msg);
+      return;
     }
 
     // Validate 'repositoryUrl', 'username' and 'password'
