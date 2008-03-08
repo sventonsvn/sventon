@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1228] Fixed: Bug #13308 - Validation error of instance name not handled properly.
+
 [1223] Release 1.4 RC2 (2008-03-06)
 [1219] Fixed: Bug #13268 - Peg revision not honored by RSS creator.
 [1218] Fixed: Bug #13244 - Error during population of log message cache.
