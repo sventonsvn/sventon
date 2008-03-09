@@ -62,10 +62,10 @@
                 ${entry.friendlyFullEntryName}
               </a>
             </td>
-            <td class="sventonCol4"></td>
-            <td class="sventonCol5"></td>
+            <td class="sventonCol4"/>
+            <td class="sventonCol5"/>
             <td class="sventonCol6">
-              <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}');">
+              <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">
                 ${entry.revision}
               </a>
             </td>
@@ -80,16 +80,16 @@
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td colspan="2" align="right"><b>Total:</b></td>
         <td><b>${rowCount} entries</b></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
+        <td/>
       </tr>
 
       <tr>
         <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
-        <td colspan="5"></td>
+        <td colspan="5"/>
       </tr>
     </table>
   </form>

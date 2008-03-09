@@ -31,10 +31,10 @@
       </td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
+      <td/>
+      <td/>
       <td><b>Name</b></td>
-      <td></td>
+      <td/>
     </tr>
     <c:set var="rowCount" value="0"/>
     <c:forEach var="peggedEntry" items="${userRepositoryContext.repositoryEntryTray.unmodifiableEntries}">
@@ -91,7 +91,7 @@
     </c:forEach>
     <tr>
       <%@ include file="/WEB-INF/jspf/actionSelectList.jspf" %>
-      <td></td>
+      <td/>
     </tr>
   </table>
 </form>

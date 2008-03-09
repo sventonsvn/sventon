@@ -38,10 +38,10 @@
     <td class="sventonCol3">
       <a href="<sventon-ui:formatUrl url='${showFileUrl}'/>">${entry.name}</a>
     </td>
-    <td class="sventonCol4"></td>
+    <td class="sventonCol4"/>
     <td class="sventonCol5">${entry.size}</td>
     <td class="sventonCol6">
-      <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}');">
+      <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">
         ${entry.revision}
       </a>
     </td>

@@ -50,16 +50,16 @@
         </c:url>
 
         <tr class="sventonEntryEven">
-          <td class="sventonCol1"></td>
+          <td class="sventonCol1"/>
           <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"></td>
           <td class="sventonCol3">
             <a href="<sventon-ui:formatUrl url='${backUrl}'/> ">..&nbsp;&nbsp;&nbsp;</a>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td/>
+          <td/>
+          <td/>
+          <td/>
+          <td/>
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:if>
@@ -135,15 +135,15 @@
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td colspan="2" class="sventonCol1" align="right"><b>Total:</b></td>
         <td><b>${rowCount} entries</b></td>
-        <td></td>
+        <td/>
         <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td/>
+        <td/>
+        <td/>
       </tr>
       <tr>
         <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
-        <td colspan="5"></td>
+        <td colspan="5"/>
       </tr>
     </table>
   </form>
