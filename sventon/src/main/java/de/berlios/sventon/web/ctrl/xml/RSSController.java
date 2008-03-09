@@ -25,6 +25,7 @@ import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -81,6 +82,7 @@ public final class RSSController extends AbstractController {
 
     final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
+    final String revision = ServletRequestUtils.getStringParameter(request, "revision", "head");
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
@@ -104,8 +106,8 @@ public final class RSSController extends AbstractController {
       }
 
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries = repositoryService.getLatestRevisions(
-          instanceName, path, repository, configuration.getRssItemsCount());
+      final List<SVNLogEntry> logEntries = repositoryService.getRevisions(
+          instanceName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
       feedGenerator.outputFeed(instanceName, logEntries, request, response);
     } catch (SVNAuthenticationException ae) {
       logger.info(ERROR_MESSAGE + " - " + ae.getMessage());

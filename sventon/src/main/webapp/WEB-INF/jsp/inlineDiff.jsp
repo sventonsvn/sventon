@@ -69,19 +69,15 @@
                     </a>
                   </c:if>
                 </td>
-
                 <td class="lineNo">
                   <%= row.getRowNumberLeft() != null ? row.getRowNumberLeft().toString() : "" %>
                 </td>
-
                 <td class="lineNo">
                   <%= row.getRowNumberRight() != null ? row.getRowNumberRight().toString() : "" %>
                 </td>
-
                 <td style="text-align: center; background-color: white;">
                   <b><%= row.getAction().getSymbol() %></b>
                 </td>
-
                 <td class="<%= row.getAction().getCSSClass() %>">
                   <span title="<%= row.getAction().getDescription() %>">
                     <%
@@ -90,7 +86,6 @@
                     %>
                   </span>
                 </td>
-
               </tr>
             </c:forEach>
           </table>

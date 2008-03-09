@@ -34,11 +34,24 @@ public final class ObjectCacheViewer {
 
     for (Object key : keys) {
       System.out.print("Key [" + key + "]:\n" + cache.get(key));
-      System.out.println("--------------------------------------------------------");
+      System.out.println("\n--------------------------------------------------------");
     }
 
-    System.out.println("--------------------------------------------------------");
+    System.out.println("==============");
+
+    for (int i = 1; i < 2000; i++) {
+      String key = "svnRevision-" + String.valueOf(i);
+      Object o = cache.get(key);
+      if (o == null) {
+        throw new IllegalStateException();
+      }
+      System.out.print("Key [" + key + "]:\n" + o);
+      System.out.println("\n--------------------------------------------------------");
+    }
+
     System.out.println("Done.");
+
+
 
   }
 }

@@ -107,7 +107,7 @@ public final class InstanceConfiguration {
    * @param instanceName Instance name.
    */
   public InstanceConfiguration(final String instanceName) {
-    Validate.isTrue(Instance.isValidName(instanceName), "Name must be in lower case a-z and/or 0-9");
+    Validate.isTrue(Instance.isValidName(instanceName), "The name must not contain whitespace");
     this.instanceName = instanceName;
   }
 

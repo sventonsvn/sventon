@@ -88,9 +88,8 @@ public final class ConfigCommandValidator implements Validator {
     // Validate 'repository instance name'
     final String instanceName = command.getName();
     if (instanceName != null && !Instance.isValidName(instanceName)) {
-      final String msg = "Name must be in lower case a-z and/or 0-9";
-      logger.warn(msg);
-      errors.rejectValue("name", "config.error.illegal-name", msg);
+      errors.rejectValue("name", "config.error.illegal-name");
+      return;
     }
 
     // Validate 'repositoryUrl', 'username' and 'password'
@@ -102,12 +101,9 @@ public final class ConfigCommandValidator implements Validator {
       try {
         url = SVNURL.parseURIDecoded(trimmedURL);
       } catch (SVNException ex) {
-        final String msg = "Invalid repository URL";
-        logger.warn(msg);
-        errors.rejectValue("repositoryUrl", "config.error.illegal-url", msg);
+        errors.rejectValue("repositoryUrl", "config.error.illegal-url");
       }
       if (url != null && testConnection) {
-        logger.info("Testing repository connection");
         final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
         configuration.setUid(command.getAccessMethod() == USER
@@ -122,12 +118,10 @@ public final class ConfigCommandValidator implements Validator {
           repository.testConnection();
         } catch (SVNAuthenticationException e) {
           logger.warn("Repository authentication failed");
-          errors.rejectValue("accessMethod", "config.error.authentication-error",
-             "Authentication failed, check username and password");
+          errors.rejectValue("accessMethod", "config.error.authentication-error");
         } catch (SVNException e) {
           logger.warn("Unable to connect to repository", e);
-          errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{trimmedURL},
-             "Unable to connect to repository [" + trimmedURL + "]. Check URL.");
+          errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{trimmedURL}, "Unable to connect to repository [" + trimmedURL + "]. Check URL.");
         } finally {
           if (repository != null) {
             repository.closeSession();

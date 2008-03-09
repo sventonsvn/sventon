@@ -30,7 +30,7 @@
     <c:set var="totalOrigSize" value="0"/>
     <c:set var="totalCompSize" value="0"/>
     <tr>
-      <th></th>
+      <th/>
       <th>Name</th>
       <th>Original size</th>
       <th>Compressed size</th>
