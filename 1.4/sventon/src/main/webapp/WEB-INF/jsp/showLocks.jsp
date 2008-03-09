@@ -28,7 +28,7 @@
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>
     <tr>
-      <th></th>
+      <th/>
       <th>Name</th>
       <th>Owner</th>
       <th>Comment</th>
