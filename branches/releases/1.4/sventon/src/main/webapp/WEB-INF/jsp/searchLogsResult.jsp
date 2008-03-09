@@ -44,7 +44,7 @@
     </c:forEach>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td><b>Total:&nbsp;${rowCount}&nbsp;hits</b></td>
-      <td></td>
+      <td/>
     </tr>
   </table>
 

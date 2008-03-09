@@ -12,8 +12,8 @@
  */
 %>
 <tr>
-  <th></th>
-  <th></th>
+  <th/>
+  <th/>
 
   <c:set var="sortModeArrow" value="${userRepositoryContext.sortMode eq 'ASC' ? 'icon_arrow_up.png' : 'icon_arrow_down.png'}"/>
   <c:set var="opositeSortType" value="${userRepositoryContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
@@ -21,7 +21,7 @@
   <th><a href="<sventon-ui:formatUrl url='${sortUrl}&sortType=FULL_NAME&sortMode=${opositeSortType}'/>" style="color: #000000;">
       <c:if test="${userRepositoryContext.sortType eq 'FULL_NAME'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if>Name</a>
   </th>
-  <th></th>
+  <th/>
   <th><a href="<sventon-ui:formatUrl url='${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}'/>" style="color: #000000;">
     <c:if test="${userRepositoryContext.sortType eq 'SIZE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if>Size (bytes)</a>
   </th>

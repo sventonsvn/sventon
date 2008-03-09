@@ -13,5 +13,4 @@
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 
-<%-- Redirected because we can't set the welcome page to a virtual URL. --%>
 <c:redirect url="/start.svn"/>
