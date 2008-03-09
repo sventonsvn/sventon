@@ -40,7 +40,7 @@
 
   <p>
     <a href="<sventon-ui:formatUrl url='${showUrl}'/>">
-      <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail">
+      <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail" style="border: 1px dashed black;">
     </a>
   </p>
 
