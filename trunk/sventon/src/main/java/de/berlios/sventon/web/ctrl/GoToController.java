@@ -60,7 +60,7 @@ public final class GoToController extends AbstractSVNTemplateController implemen
       redirectUrl = "showfile.svn";
     } else {
       //Invalid path/rev combo. Forward to error page.
-      exception.rejectValue("path", "goto.command.invalidpath", "Invalid path");
+      exception.rejectValue("path", "goto.command.invalidpath");
       return prepareExceptionModelAndView(exception, svnCommand);
     }
 

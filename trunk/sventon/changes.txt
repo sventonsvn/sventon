@@ -1,6 +1,14 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1236] Fixed: Bug #13325 - Search box too far on the right.
+[1230] Added: Feature #4035 - Loosen restrictions on instance name.
+[1228] Fixed: Bug #13308 - Validation error of instance name not handled properly.
+
+[1223] Release 1.4 RC2 (2008-03-06)
+[1219] Fixed: Bug #13268 - Peg revision not honored by RSS creator.
+[1218] Fixed: Bug #13244 - Error during population of log message cache.
+
 [1212] Release 1.4 RC1 (2008-02-19)
 [1152] Added: Upgraded to Spring 2.5.1
 [1145] Added: Feature #3999 - Inline diff view.

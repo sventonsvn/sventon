@@ -16,8 +16,8 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.io.ISVNSession;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,6 +37,10 @@ public class RepositoryServiceImplTest extends TestCase {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
       }
     };
 
@@ -216,6 +220,10 @@ public class RepositoryServiceImplTest extends TestCase {
       public long getFile(String path, long revision, Map properties, OutputStream contents) {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
+      }
+
+      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
+        return SVNNodeKind.FILE;
       }
     };
 

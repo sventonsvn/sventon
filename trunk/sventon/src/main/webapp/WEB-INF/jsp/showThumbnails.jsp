@@ -28,7 +28,7 @@
 
   <br>
 
-  <table border="1">
+  <table style="border-collapse: collapse;">
     <c:forEach items="${thumbnailentries}" var="entry">
       <tr height="160px">
         <c:url value="get.svn" var="downloadUrl" >
@@ -42,11 +42,28 @@
           <c:param name="path" value="${entry.path}" />
           <c:param name="name" value="${command.name}" />
         </c:url>
-        <td valign="top">
-          File: <b>${entry.path}</b><br>
-          Revision: <b>${entry.revision}</b>
+        <c:url value="revinfo.svn" var="showRevInfoUrl">
+          <c:param name="revision" value="${entry.revision}" />
+          <c:param name="name" value="${command.name}" />
+        </c:url>
+        <c:url value="showfile.svn" var="showFileUrl">
+          <c:param name="path" value="${entry.path}" />
+          <c:param name="revision" value="${command.revision}" />
+          <c:param name="name" value="${command.name}" />
+        </c:url>
+
+        <td valign="top" style="border: 1px dashed black;">
+          File:
+          <a href="${showFileUrl}">
+            <b>${entry.path}</b>
+          </a>
+          <br>
+          Revision:
+          <a href="${showRevInfoUrl}">
+            <b>${entry.revision}</b>
+          </a>
         </td>
-        <td width="210px" style="text-align:center;">
+        <td width="210px" style="text-align:center; border: 1px dashed black;">
           <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
             <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry.path} @ ${revision}"></a>
         </td>

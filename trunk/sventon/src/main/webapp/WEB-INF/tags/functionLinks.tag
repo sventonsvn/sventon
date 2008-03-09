@@ -125,15 +125,14 @@
     </c:choose>
     <c:if test="${!isFlatten && !isEntrySearch && !isLogSearch}">
       </td>
-      <td align="right" style="white-space: nowrap;"><spring:message code="filter.text"/></td>
+      <td style="white-space: nowrap; text-align: right;"><spring:message code="filter.text"/></td>
       <td style="white-space: nowrap;">
-        <select name="filterExtension" class="sventonSelect">
+        <select name="filterExtension" class="sventonSelect" onchange="document.location.href='<sventon-ui:formatUrl url='${showDirLinkUrl}'/>&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;">
           <option value="all">&lt;show all&gt;</option>
           <c:forEach items="${existingExtensions}" var="extension">
             <option value="${extension}" ${extension eq filterExtension ? "selected" : ""}>${extension}</option>
           </c:forEach>
         </select>
-        <input type="button" class="btn" value="<spring:message code="filter.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url='${showDirLinkUrl}'/>&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;">
     </c:if>
   </c:when>
 
@@ -204,12 +203,14 @@
 
     </td>
     <c:if test="${useCache}">
-      <td align="right" style="white-space: nowrap;">
-        <spring:message code="search.text"/>
-        <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${userRepositoryContext.searchMode eq 'entries' ? 'checked' : ''}>
-        <label for="entrySearch">entries</label>
-        <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userRepositoryContext.searchMode eq 'logMessages' ? 'checked' : ''}>
-        <label for="logSearch">logs</label>
+      <td style="text-align: right;">
+        <span style="white-space: nowrap;">
+          <spring:message code="search.text"/>
+          <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${userRepositoryContext.searchMode eq 'entries' ? 'checked' : ''}>
+          <label for="entrySearch">entries</label>
+          <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${userRepositoryContext.searchMode eq 'logMessages' ? 'checked' : ''}>
+          <label for="logSearch">logs</label>
+        </span>
         <input type="hidden" name="startDir" value="${command.pathPart}">
 
         <c:choose>
@@ -226,7 +227,7 @@
           <c:otherwise>
             <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('search_help');">
             <input type="text" name="searchString" class="sventonSearchField" value="">
-            <input type="submit" value="go!" onmouseover="Tip('<spring:message code="search.button.tooltip"/>')" class="btn">
+            <input type="submit" value="go!" class="btn">
           </c:otherwise>
         </c:choose>
       </td>

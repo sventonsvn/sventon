@@ -56,7 +56,7 @@
 </div>
 
 <div id="config_main">
-<form id="config_form" name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(configForm);">
+<form id="config_form" name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(this);">
 <div class="config_group">
   <div id="repository_location">
     <img src="images/config_step1.png"/>

@@ -175,7 +175,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
           lastUpdatedRevision = toRevision;
           logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
           objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, lastUpdatedRevision);
-
+          clearCacheBeforeUpdate = false;
           revisionsLeftToFetchCount -= logEntries.size();
         } while (revisionsLeftToFetchCount > 0);
       }
