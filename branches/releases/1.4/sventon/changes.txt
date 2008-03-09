@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1236] Fixed: Bug #13325 - Search box too far on the right.
 [1230] Added: Feature #4035 - Loosen restrictions on instance name.
 [1228] Fixed: Bug #13308 - Validation error of instance name not handled properly.
 
