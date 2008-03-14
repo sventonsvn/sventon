@@ -65,8 +65,8 @@ public final class ConfigurationController extends AbstractFormController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView showForm(final HttpServletRequest request,
-                                  final HttpServletResponse response, final BindException e) throws IOException {
+  protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response, final BindException errors)
+      throws IOException {
 
     logger.debug("showForm() started");
     logger.info("sventon configured: " + application.isConfigured());

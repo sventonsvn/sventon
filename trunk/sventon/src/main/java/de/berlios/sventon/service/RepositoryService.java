@@ -26,6 +26,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNDiffStatus;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
@@ -259,6 +260,7 @@ public interface RepositoryService {
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The instance configuration. @return Ordered list of diffed rows.
+   * @return List of diff rows.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
@@ -274,6 +276,7 @@ public interface RepositoryService {
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The instance configuration. @return The unified diff as a string.
+   * @return Diff result.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
@@ -289,11 +292,26 @@ public interface RepositoryService {
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The instance configuration. @return The inline diff.
+   * @return List of diff rows.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
   List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
                                  final InstanceConfiguration configuration) throws SVNException, DiffException;
+
+  /**
+   * Creates a path diff.
+   *
+   * @param repository    The repository.
+   * @param diffCommand   DiffCommand.
+   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
+   * @param configuration The instance configuration. @return The inline diff.
+   * @return List of diff status.
+   * @throws SVNException  if a subversion error occur
+   * @throws DiffException if unable to produce diff.
+   */
+  List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+                                final InstanceConfiguration configuration) throws SVNException, DiffException;
 
   /**
    * Blame (annotates) the given file.

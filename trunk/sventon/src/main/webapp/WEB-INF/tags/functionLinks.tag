@@ -39,7 +39,7 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showFileLinkUrl" value="showfile.svn">
+<c:url var="gotoLinkUrl" value="goto.svn">
   <c:param name="path" value="${command.path}${entry.name}" />
   <c:param name="revision" value="${command.revision}" />
   <c:param name="name" value="${command.name}" />
@@ -65,13 +65,13 @@
   <c:when test="${pageName == 'showTextFile'}">
     <c:choose>
       <c:when test="${archivedEntry ne null}">
-        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
+        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}"/>';">
       </c:when>
       <c:otherwise>
         <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showLogLinkUrl}"/>';">
         <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${downloadLinkUrl}"/>';">
         <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${blameLinkUrl}"/>';">
-        <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}&format=raw"/>';">
+        <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}&format=raw"/>';">
 
         <c:if test="${!empty committedRevision}">
           <c:url value="diffprev.svn" var="diffPreviousUrl">
@@ -94,7 +94,7 @@
         <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${downloadLinkUrl}"/>';">
       </c:when>
       <c:otherwise>
-        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
+        <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}"/>';">
         <input type="button" class="btn" value="<spring:message code="force-display.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showArchivedFileLinkUrl}"/>';">
       </c:otherwise>
     </c:choose>
@@ -139,7 +139,7 @@
   <c:when test="${pageName == 'showLog'}">
     <c:choose>
       <c:when test="${isFile}">
-        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
+        <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}"/>';">
         <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${downloadLinkUrl}"/>';">
       </c:when>
       <c:otherwise>
@@ -152,9 +152,13 @@
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showDirLinkUrl}"/>';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
   </c:when>
 
+  <c:when test="${pageName == 'showPathDiff'}">
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showDirLinkUrl}"/>';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
+  </c:when>
+
   <c:when test="${pageName == 'showDiff' || pageName == 'showUnifiedDiff' || pageName == 'showInlineDiff'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showLogLinkUrl}"/>';">
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}"/>';">
 
     <c:url value="diff.svn" var="diffUrl">
       <c:param name="path" value="${command.path}${entry.name}" />
@@ -183,7 +187,7 @@
 
   <c:when test="${pageName == 'showBlame'}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="parent.location='<sventon-ui:formatUrl url="${showLogLinkUrl}"/>';">
-    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${showFileLinkUrl}"/>';">
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${gotoLinkUrl}"/>';">
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="parent.location='<sventon-ui:formatUrl url="${downloadLinkUrl}"/>';">
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
   </c:when>

@@ -76,10 +76,10 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
   /**
    * Checks if all characters in given string is in upper case.
    *
-   * @param string String.
+   * @param str String.
    * @return True if all is uppercase.
    */
-  private boolean isAllUpperCase(final String string) {
-    return string.toUpperCase().equals(string);
+  private boolean isAllUpperCase(final String str) {
+    return str.toUpperCase().equals(str);
   }
 }
