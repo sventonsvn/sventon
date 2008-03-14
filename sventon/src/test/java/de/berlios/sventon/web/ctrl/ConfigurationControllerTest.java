@@ -2,7 +2,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.Instance;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
 import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
@@ -50,10 +50,10 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
 
-    final InstanceConfiguration instanceConfig = new InstanceConfiguration("firstinstance");
+    final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("firstinstance");
     final Application application = new Application(new File(TEMPDIR), "filename");
     application.setConfigured(false);
-    application.addInstance(instanceConfig);
+    application.addInstance(repositoryConfig);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
@@ -137,7 +137,7 @@ public class ConfigurationControllerTest extends TestCase {
 
     //assert that the config was created correctly:
     final Instance instance = application.getInstance(instanceName);
-    final InstanceConfiguration configuration = instance.getConfiguration();
+    final RepositoryConfiguration configuration = instance.getConfiguration();
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());

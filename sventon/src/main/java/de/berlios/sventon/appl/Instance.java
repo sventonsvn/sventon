@@ -24,7 +24,7 @@ public final class Instance {
   /**
    * The instance configuration.
    */
-  private final InstanceConfiguration configuration;
+  private final RepositoryConfiguration configuration;
 
   /**
    * Flag that indicates if the cache is being updated.
@@ -36,7 +36,7 @@ public final class Instance {
    *
    * @param configuration Instance configuration
    */
-  public Instance(final InstanceConfiguration configuration) {
+  public Instance(final RepositoryConfiguration configuration) {
     Validate.notNull(configuration, "Configuration cannot be null");
     this.configuration = configuration;
   }
@@ -46,7 +46,7 @@ public final class Instance {
    *
    * @return Configuration
    */
-  public InstanceConfiguration getConfiguration() {
+  public RepositoryConfiguration getConfiguration() {
     return configuration;
   }
 

@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
@@ -67,7 +67,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
     logger.debug("Using: " + diffCommand);
 
     final ModelAndView modelAndView = new ModelAndView();
-    final InstanceConfiguration config = getInstanceConfiguration(svnCommand.getName());
+    final RepositoryConfiguration config = getInstanceConfiguration(svnCommand.getName());
     final String charset = userRepositoryContext.getCharset();
 
     try {

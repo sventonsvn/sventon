@@ -12,7 +12,7 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.SventonException;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
@@ -303,7 +303,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
                                                       final SVNRevision pegRevision, final String charset,
-                                                      final InstanceConfiguration configuration) throws SVNException, DiffException {
+                                                      final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand, pegRevision);
 
@@ -360,7 +360,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                  final String charset, final InstanceConfiguration configuration) throws SVNException, DiffException {
+                                  final String charset, final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand, pegRevision);
 
@@ -400,7 +400,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                              final String charset, final InstanceConfiguration configuration)
+                                              final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException {
 
     assertNotBinary(repository, diffCommand, pegRevision);
@@ -470,7 +470,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                             final InstanceConfiguration configuration) throws SVNException, DiffException {
+                                             final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
     final long start = System.currentTimeMillis();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(

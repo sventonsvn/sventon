@@ -191,7 +191,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
   public void update(final String instanceName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
       final Instance instance = application.getInstance(instanceName);
-      final InstanceConfiguration configuration = instance.getConfiguration();
+      final RepositoryConfiguration configuration = instance.getConfiguration();
 
       if (configuration.isCacheUsed() && !instance.isUpdatingCache()) {
         synchronized (instanceName) {

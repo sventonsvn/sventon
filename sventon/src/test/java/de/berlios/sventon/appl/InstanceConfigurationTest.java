@@ -11,16 +11,16 @@ public class InstanceConfigurationTest extends TestCase {
   public void testCreateInstanceConfigurationTest() throws Exception {
     final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties p = new Properties();
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_PASSWORD, "pwd");
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_USERNAME, "uid");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_PASSWORD, "pwd");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_USERNAME, "uid");
 
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_USE_CACHE, "false");
-    p.setProperty(I + InstanceConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_USE_CACHE, "false");
+    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
 
-    InstanceConfiguration conf = InstanceConfiguration.create(I, p);
+    RepositoryConfiguration conf = RepositoryConfiguration.create(I, p);
 
     assertTrue(conf.isZippedDownloadsAllowed());
     assertTrue(conf.isAccessControlEnabled());
@@ -36,7 +36,7 @@ public class InstanceConfigurationTest extends TestCase {
   }
 
   public void testSetRepositoryUrl() throws Exception {
-    InstanceConfiguration conf = new InstanceConfiguration("test");
+    RepositoryConfiguration conf = new RepositoryConfiguration("test");
 
     conf.setRepositoryUrl("svn://localhost/svn");
     assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
@@ -59,7 +59,7 @@ public class InstanceConfigurationTest extends TestCase {
   }
 
   public void testasdf() {
-    InstanceConfiguration conf = new InstanceConfiguration("test");
+    RepositoryConfiguration conf = new RepositoryConfiguration("test");
     conf.setCacheUsed(true);
     conf.setEnableAccessControl(false);
 
@@ -86,7 +86,7 @@ public class InstanceConfigurationTest extends TestCase {
 
 
   public void testGetAsProperties() throws Exception {
-    final InstanceConfiguration conf = new InstanceConfiguration("test");
+    final RepositoryConfiguration conf = new RepositoryConfiguration("test");
 
     try {
       conf.getAsProperties();

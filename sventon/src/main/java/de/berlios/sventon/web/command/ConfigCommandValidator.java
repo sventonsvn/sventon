@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.appl.Instance;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.apache.commons.logging.Log;
@@ -104,7 +104,7 @@ public final class ConfigCommandValidator implements Validator {
         errors.rejectValue("repositoryUrl", "config.error.illegal-url");
       }
       if (url != null && testConnection) {
-        final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
+        final RepositoryConfiguration configuration = new RepositoryConfiguration(instanceName);
         configuration.setRepositoryUrl(trimmedURL);
         configuration.setUid(command.getAccessMethod() == USER
            ? command.getConnectionTestUid() : command.getUid());

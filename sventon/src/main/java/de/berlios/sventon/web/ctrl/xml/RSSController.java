@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
@@ -93,7 +93,7 @@ public final class RSSController extends AbstractController {
       return null;
     }
 
-    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
 
     SVNRepository repository = null;
     try {

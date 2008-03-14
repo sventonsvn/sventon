@@ -132,7 +132,7 @@ public final class Application {
    * If a config file is found an configuration is successful this instance will be marked as configured. If no file is
    * found initialization will fail silently and the instance will not be marked as configured.
    * <p/>
-   * It is legal to reload an already configured {@link InstanceConfiguration} instance.
+   * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
    * {@code configurationDirectory} and {@code configurationFilename} must be set before calling this method, or bad
    * things will most certainly happen...
    *
@@ -184,7 +184,7 @@ public final class Application {
   protected List<Properties> getConfigurationAsProperties() {
     final List<Properties> propertyList = new ArrayList<Properties>();
     for (final String instanceName : getInstanceNames()) {
-      final InstanceConfiguration configuration = getInstance(instanceName).getConfiguration();
+      final RepositoryConfiguration configuration = getInstance(instanceName).getConfiguration();
       propertyList.add(configuration.getAsProperties());
     }
     return propertyList;
@@ -211,7 +211,7 @@ public final class Application {
 
     for (final String instanceName : instanceNames) {
       logger.info("Configuring instance: " + instanceName);
-      addInstance(InstanceConfiguration.create(instanceName, props));
+      addInstance(RepositoryConfiguration.create(instanceName, props));
     }
 
     if (getInstanceCount() > 0) {
@@ -227,7 +227,7 @@ public final class Application {
    *
    * @param configuration The instance configuration to add.
    */
-  public void addInstance(final InstanceConfiguration configuration) {
+  public void addInstance(final RepositoryConfiguration configuration) {
     instances.put(configuration.getInstanceName(), new Instance(configuration));
   }
 

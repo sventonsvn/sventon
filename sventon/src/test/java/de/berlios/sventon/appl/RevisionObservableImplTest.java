@@ -21,9 +21,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   public void testUpdate() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
     final String instanceName = "defaultsvn";
-    final InstanceConfiguration instanceConfiguration = new InstanceConfiguration(instanceName);
-    instanceConfiguration.setCacheUsed(true);
-    application.addInstance(instanceConfiguration);
+    final RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration(instanceName);
+    repositoryConfiguration.setCacheUsed(true);
+    application.addInstance(repositoryConfiguration);
     application.setConfigured(true);
 
     final ObjectCache cache = createMemoryCache();
