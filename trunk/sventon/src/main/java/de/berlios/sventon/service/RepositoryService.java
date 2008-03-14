@@ -12,7 +12,7 @@
 package de.berlios.sventon.service;
 
 import de.berlios.sventon.SventonException;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.model.*;
@@ -44,7 +44,7 @@ public interface RepositoryService {
 
   /**
    * Gets revision details for a specific revision number.
-   * If caching is enabled in the {@link InstanceConfiguration}, a cached revision will be returned.
+   * If caching is enabled in the {@link de.berlios.sventon.appl.RepositoryConfiguration}, a cached revision will be returned.
    *
    * @param instanceName The instance name
    * @param repository   The repository
@@ -71,7 +71,7 @@ public interface RepositoryService {
 
   /**
    * Gets revision details for given revision interval and a specific path with limit.
-   * If caching is enabled in the {@link InstanceConfiguration}, cached revisions will be returned.
+   * If caching is enabled in the {@link de.berlios.sventon.appl.RepositoryConfiguration}, cached revisions will be returned.
    *
    * @param instanceName The instance name
    * @param repository   The repository
@@ -265,7 +265,7 @@ public interface RepositoryService {
    * @throws DiffException if unable to produce diff.
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
-                                         final SVNRevision pegRevision, final String charset, final InstanceConfiguration configuration)
+                                         final SVNRevision pegRevision, final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException;
 
   /**
@@ -281,7 +281,7 @@ public interface RepositoryService {
    * @throws DiffException if unable to produce diff.
    */
   String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
-                     final InstanceConfiguration configuration)
+                     final RepositoryConfiguration configuration)
       throws SVNException, DiffException;
 
   /**
@@ -297,7 +297,7 @@ public interface RepositoryService {
    * @throws DiffException if unable to produce diff.
    */
   List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
-                                 final InstanceConfiguration configuration) throws SVNException, DiffException;
+                                 final RepositoryConfiguration configuration) throws SVNException, DiffException;
 
   /**
    * Creates a path diff.
@@ -311,7 +311,7 @@ public interface RepositoryService {
    * @throws DiffException if unable to produce diff.
    */
   List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                final InstanceConfiguration configuration) throws SVNException, DiffException;
+                                final RepositoryConfiguration configuration) throws SVNException, DiffException;
 
   /**
    * Blame (annotates) the given file.

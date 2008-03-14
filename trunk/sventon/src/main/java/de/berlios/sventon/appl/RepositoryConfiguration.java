@@ -26,7 +26,7 @@ import java.util.Properties;
  * @author patrikfr@user.berlios.de
  * @author jesper@users.berlios.de
  */
-public final class InstanceConfiguration {
+public final class RepositoryConfiguration {
 
   /**
    * The logging instance.
@@ -106,7 +106,7 @@ public final class InstanceConfiguration {
    *
    * @param instanceName Instance name.
    */
-  public InstanceConfiguration(final String instanceName) {
+  public RepositoryConfiguration(final String instanceName) {
     Validate.isTrue(Instance.isValidName(instanceName), "The name must not contain whitespace");
     this.instanceName = instanceName;
   }
@@ -116,10 +116,10 @@ public final class InstanceConfiguration {
    *
    * @param instanceName Instance name
    * @param properties   Properties
-   * @return The InstanceConfiguration
+   * @return The RepositoryConfiguration
    */
-  public static InstanceConfiguration create(final String instanceName, final Properties properties) {
-    final InstanceConfiguration ic = new InstanceConfiguration(instanceName);
+  public static RepositoryConfiguration create(final String instanceName, final Properties properties) {
+    final RepositoryConfiguration ic = new RepositoryConfiguration(instanceName);
     ic.setRepositoryUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
     ic.setRepositoryDisplayUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
     ic.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));

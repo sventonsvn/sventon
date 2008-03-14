@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.model.AvailableCharsets;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
@@ -219,7 +219,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     SVNRepository repository = null;
     try {
-      final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final RepositoryConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
       final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
 
       if (configuration.isAccessControlEnabled()) {
@@ -429,11 +429,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   @SuppressWarnings("unchecked")
   protected final ModelAndView prepareExceptionModelAndView(final BindException exception,
                                                             final SVNBaseCommand svnCommand) {
-    final InstanceConfiguration instanceConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+    final RepositoryConfiguration repositoryConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
-    model.put("repositoryURL", instanceConfiguration != null ? instanceConfiguration.getRepositoryDisplayUrl() : "");
+    model.put("repositoryURL", repositoryConfiguration != null ? repositoryConfiguration.getRepositoryDisplayUrl() : "");
     model.put("numrevision", null);
     return new ModelAndView("goto", model);
   }
@@ -528,7 +528,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param instanceName Instance name
    * @return ApplicationConfiguration
    */
-  public final InstanceConfiguration getInstanceConfiguration(final String instanceName) {
+  public final RepositoryConfiguration getInstanceConfiguration(final String instanceName) {
     return application.getInstance(instanceName).getConfiguration();
   }
 

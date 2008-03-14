@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
@@ -79,7 +79,7 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
-    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
 
     SVNRepository repository = null;
     try {

@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.BeanUtils;
@@ -220,12 +220,12 @@ public final class ConfigCommand {
   }
 
   /**
-   * Create an populate a InstanceConfiguration based on the contens of this config command instance.
+   * Create an populate a RepositoryConfiguration based on the contens of this config command instance.
    *
-   * @return New, populated InstanceConfiguration
+   * @return New, populated RepositoryConfiguration
    */
-  public InstanceConfiguration createInstanceConfiguration() {
-    InstanceConfiguration configuration = new InstanceConfiguration(getName());
+  public RepositoryConfiguration createInstanceConfiguration() {
+    RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
     configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
     return configuration;

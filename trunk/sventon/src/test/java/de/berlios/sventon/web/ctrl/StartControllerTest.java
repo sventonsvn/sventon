@@ -1,7 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,8 +54,8 @@ public class StartControllerTest extends TestCase {
 
   }
 
-  private InstanceConfiguration createTestInstance(final String instanceName) {
-    final InstanceConfiguration configuration = new InstanceConfiguration(instanceName);
+  private RepositoryConfiguration createTestInstance(final String instanceName) {
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(instanceName);
     configuration.setRepositoryUrl("http://localhost/svn");
     configuration.setCacheUsed(false);
     configuration.setZippedDownloadsAllowed(false);

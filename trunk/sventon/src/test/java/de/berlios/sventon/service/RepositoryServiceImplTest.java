@@ -1,6 +1,6 @@
 package de.berlios.sventon.service;
 
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.diff.IdenticalFilesException;
 import de.berlios.sventon.diff.IllegalFileFormatException;
@@ -45,7 +45,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -72,7 +72,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -107,7 +107,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -150,7 +150,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -198,7 +198,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -228,7 +228,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -255,7 +255,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -290,7 +290,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try1;;91",
@@ -325,7 +325,7 @@ public class RepositoryServiceImplTest extends TestCase {
     };
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",
@@ -344,7 +344,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final TestSVNRepositoryStub repository = new TestSVNRepositoryStub(null, null);
 
     final RepositoryService service = new RepositoryServiceImpl();
-    final InstanceConfiguration configuration = new InstanceConfiguration("test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java;;91",

@@ -12,7 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -121,8 +121,8 @@ public final class ConfigurationController extends AbstractFormController {
       return new ModelAndView("config", model);
     } else {
       logger.debug("Adding configuration from command: " + confCommand);
-      final InstanceConfiguration instanceConfiguration = confCommand.createInstanceConfiguration();
-      application.addInstance(instanceConfiguration);
+      final RepositoryConfiguration repositoryConfiguration = confCommand.createInstanceConfiguration();
+      application.addInstance(repositoryConfiguration);
       model.put("latestAddedInstance", confCommand.getName());
       return new ModelAndView("confirmAddConfig", model);
     }

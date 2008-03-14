@@ -13,7 +13,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.appl.AbstractRevisionObserver;
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.InstanceConfiguration;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryEntry;
@@ -90,7 +90,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     SVNRepository repository = null;
     try {
       final EntryCache entryCache = entryCacheManager.getCache(instanceName);
-      final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+      final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
       repository = repositoryFactory.getRepository(instanceName, configuration.getSVNURL(),
           configuration.getUid(), configuration.getPwd());
       updateInternal(entryCache, repository, revisionUpdate);

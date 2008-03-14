@@ -30,22 +30,22 @@ public class ApplicationTest extends TestCase {
     final File propFile = new File(TEMPDIR, "tmpconfigfilename");
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
-    final InstanceConfiguration instanceConfiguration1 = new InstanceConfiguration("testrepos1");
-    instanceConfiguration1.setRepositoryUrl("http://localhost/1");
-    instanceConfiguration1.setUid("user1");
-    instanceConfiguration1.setPwd("abc123");
-    instanceConfiguration1.setCacheUsed(false);
-    instanceConfiguration1.setZippedDownloadsAllowed(false);
+    final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
+    repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
+    repositoryConfiguration1.setUid("user1");
+    repositoryConfiguration1.setPwd("abc123");
+    repositoryConfiguration1.setCacheUsed(false);
+    repositoryConfiguration1.setZippedDownloadsAllowed(false);
 
-    final InstanceConfiguration instanceConfiguration2 = new InstanceConfiguration("testrepos2");
-    instanceConfiguration2.setRepositoryUrl("http://localhost/2");
-    instanceConfiguration2.setUid("user2");
-    instanceConfiguration2.setPwd("123abc");
-    instanceConfiguration2.setCacheUsed(false);
-    instanceConfiguration2.setZippedDownloadsAllowed(false);
+    final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
+    repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
+    repositoryConfiguration2.setUid("user2");
+    repositoryConfiguration2.setPwd("123abc");
+    repositoryConfiguration2.setCacheUsed(false);
+    repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance(instanceConfiguration1);
-    application.addInstance(instanceConfiguration2);
+    application.addInstance(repositoryConfiguration1);
+    application.addInstance(repositoryConfiguration2);
 
     try {
       assertFalse(propFile.exists());
@@ -61,12 +61,12 @@ public class ApplicationTest extends TestCase {
   public void testGetConfigurationAsProperties() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
 
-    final InstanceConfiguration config1 = new InstanceConfiguration("test1");
+    final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
     config1.setUid("");
     config1.setPwd("");
 
-    final InstanceConfiguration config2 = new InstanceConfiguration("test2");
+    final RepositoryConfiguration config2 = new RepositoryConfiguration("test2");
     config2.setRepositoryUrl("http://repo2");
     config2.setUid("");
     config2.setPwd("");
