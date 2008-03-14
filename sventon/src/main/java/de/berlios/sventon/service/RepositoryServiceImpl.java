@@ -31,10 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNLogClient;
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.wc.*;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -308,7 +305,6 @@ public class RepositoryServiceImpl implements RepositoryService {
                                                       final SVNRevision pegRevision, final String charset,
                                                       final InstanceConfiguration configuration) throws SVNException, DiffException {
 
-    assertFileEntries(repository, diffCommand, pegRevision);
     assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
@@ -366,7 +362,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
                                   final String charset, final InstanceConfiguration configuration) throws SVNException, DiffException {
 
-    assertFileEntries(repository, diffCommand, pegRevision);
     assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
@@ -408,7 +403,6 @@ public class RepositoryServiceImpl implements RepositoryService {
                                               final String charset, final InstanceConfiguration configuration)
       throws SVNException, DiffException {
 
-    assertFileEntries(repository, diffCommand, pegRevision);
     assertNotBinary(repository, diffCommand, pegRevision);
 
     String diffResultString;
@@ -448,16 +442,16 @@ public class RepositoryServiceImpl implements RepositoryService {
         if (!row.startsWith("@@")) {
           final char action = row.charAt(0);
           switch (action) {
-            case' ':
+            case ' ':
               resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
               rowNumberLeft++;
               rowNumberRight++;
               break;
-            case'+':
+            case '+':
               resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
               rowNumberRight++;
               break;
-            case'-':
+            case '-':
               resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
               rowNumberLeft++;
               break;
@@ -470,6 +464,35 @@ public class RepositoryServiceImpl implements RepositoryService {
       throw new DiffException("Unable to produce inline diff", ioex);
     }
     return resultRows;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+                                             final InstanceConfiguration configuration) throws SVNException, DiffException {
+
+    final long start = System.currentTimeMillis();
+    final SVNDiffClient diffClient = SVNClientManager.newInstance(
+        null, repository.getAuthenticationManager()).getDiffClient();
+
+    final List<SVNDiffStatus> result = new ArrayList<SVNDiffStatus>();
+
+    final String repoRoot = repository.getLocation().toDecodedString();
+    diffClient.doDiffStatus(
+        SVNURL.parseURIDecoded(repoRoot + diffCommand.getFromPath()), diffCommand.getFromRevision(),
+        SVNURL.parseURIDecoded(repoRoot + diffCommand.getToPath()), diffCommand.getToRevision(),
+        true, false, new ISVNDiffStatusHandler() {
+      public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
+        if (diffStatus.getModificationType() == SVNStatusType.STATUS_NONE && !diffStatus.isPropertiesModified()) {
+          return;
+        } else {
+          result.add(diffStatus);
+        }
+      }
+    });
+    logger.debug("PERF: diffPaths(): " + (System.currentTimeMillis() - start));
+    return result;
   }
 
   /**
@@ -532,28 +555,6 @@ public class RepositoryServiceImpl implements RepositoryService {
       throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getFromPath());
     } else if (!isRightFileTextType) {
       throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getToPath());
-    }
-  }
-
-  private void assertFileEntries(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision)
-      throws SVNException, DiffException {
-
-    final SVNNodeKind entry1;
-    final SVNNodeKind entry2;
-    if (SVNRevision.UNDEFINED == pegRevision) {
-      entry1 = getNodeKind(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-      entry2 = getNodeKind(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
-    } else {
-      entry1 = getNodeKind(repository, diffCommand.getFromPath(), pegRevision.getNumber());
-      entry2 = getNodeKind(repository, diffCommand.getToPath(), pegRevision.getNumber());
-    }
-
-    final String message = "Only files can be diffed. [";
-    if (SVNNodeKind.FILE != entry1) {
-      throw new DiffException(message + diffCommand.getFromPath() + "] is a directory");
-    }
-    if (SVNNodeKind.FILE != entry2) {
-      throw new DiffException(message + diffCommand.getToPath() + "] is a directory");
     }
   }
 

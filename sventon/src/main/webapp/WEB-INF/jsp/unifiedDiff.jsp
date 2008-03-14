@@ -27,7 +27,7 @@
 
   <c:choose>
     <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical"/></b></p>
+      <p><b><spring:message code="diff.error.identical.files"/></b></p>
     </c:when>
     <c:otherwise>
       <c:choose>

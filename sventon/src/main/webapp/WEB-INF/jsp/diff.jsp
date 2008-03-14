@@ -28,14 +28,11 @@
 
   <c:choose>
     <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical"/></b></p>
+      <p><b><spring:message code="diff.error.identical.files"/></b></p>
     </c:when>
     <c:otherwise>
       <c:choose>
         <c:when test="${!isBinary}">
-          <c:set var="diffResult" value="${diffResult}" />
-          <jsp:useBean id="diffResult" type="java.util.ArrayList" />
-
           <table id="diffTable" class="sventonDiffTable" cellspacing="0">
             <tr>
               <th style="background-color: white;">
