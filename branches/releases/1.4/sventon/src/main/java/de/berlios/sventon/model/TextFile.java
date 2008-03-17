@@ -72,8 +72,9 @@ public final class TextFile {
       processedContent = content;
     }
 
-    processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
-
+    if (colorer != null) {
+      processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
+    }
     final String[] fileRows = processedContent.split(WebUtils.NL_REGEXP);
     int count = 0;
     for (final String fileRow : fileRows) {
