@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1249] Fixed: Bug #13388 - Keywords are not expanded in raw file view.
 [1248] Fixed: Bug #13389 - Keyword expansion values not properly escaped.
 
 [1242] Release 1.4 RC3 (2008-03-10)

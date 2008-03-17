@@ -23,7 +23,7 @@ public class GetThumbnailControllerTest extends TestCase {
     ctrl.prepareResponse(response, command);
 
     final MockHttpServletResponse mockRsp = (MockHttpServletResponse) response;
-    assertTrue(((String) mockRsp.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).indexOf("target.jpg") > -1);
+    assertTrue(((String) mockRsp.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).contains("target.jpg"));
   }
 
 }
