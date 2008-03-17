@@ -19,6 +19,7 @@ import org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Handler class for subversion keyword substitution.
@@ -91,7 +92,7 @@ public final class KeywordHandler {
       logger.debug(keyword + "=" + value);
       final Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");
       substitutedContent = keywordPattern.matcher(substitutedContent).replaceAll("\\$"
-          + keyword + ": " + value + " \\$");
+          + keyword + ": " + Matcher.quoteReplacement(value) + " \\$");
     }
     return substitutedContent;
   }
