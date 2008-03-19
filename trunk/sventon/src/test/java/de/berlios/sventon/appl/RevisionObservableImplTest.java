@@ -15,15 +15,15 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
   private ObjectCache createMemoryCache() throws Exception {
-    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
+    return new ObjectCacheImpl(new RepositoryName("sventonTestCache"), null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
     final Application application = new Application(new File(TEMPDIR), "filename");
-    final String instanceName = "defaultsvn";
-    final RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration(instanceName);
-    repositoryConfiguration.setCacheUsed(true);
-    application.addInstance(repositoryConfiguration);
+    final String name = "defaultsvn";
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(name);
+    configuration.setCacheUsed(true);
+    application.addRepository(configuration);
     application.setConfigured(true);
 
     final ObjectCache cache = createMemoryCache();
@@ -35,9 +35,9 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       revisionObservable.setMaxRevisionCountPerUpdate(3);
       revisionObservable.setApplication(application);
       revisionObservable.setRepositoryService(new RepositoryServiceImpl());
-      assertFalse(application.getInstance(instanceName).isUpdatingCache());
-      revisionObservable.update(instanceName, new TestRepository(), cache, false);
-      assertFalse(application.getInstance(instanceName).isUpdatingCache());
+      assertFalse(application.isUpdating(configuration.getName()));
+      revisionObservable.update(configuration.getName(), new TestRepository(), cache, false);
+      assertFalse(application.isUpdating(configuration.getName()));
     } finally {
       cache.shutdown();
     }

@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.util;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
 import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
@@ -54,16 +55,17 @@ public final class HTMLCreator {
   /**
    * Creates a string containing the details for a given revision.
    *
-   * @param bodyTemplate Body template string.
-   * @param logEntry     log entry revision.
-   * @param baseURL      Application base URL.
-   * @param instanceName Instance name
-   * @param response     Response, null if n/a.
-   * @param dateFormat   Date formatter instance.
+   * @param bodyTemplate   Body template string.
+   * @param logEntry       log entry revision.
+   * @param baseURL        Application base URL.
+   * @param repositoryName Repository name.
+   * @param response       Response, null if n/a.
+   * @param dateFormat     Date formatter instance.
    * @return Result
    */
   public static String createRevisionDetailBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
-                                                final String instanceName, final DateFormat dateFormat, final HttpServletResponse response) {
+                                                final RepositoryName repositoryName, final DateFormat dateFormat,
+                                                final HttpServletResponse response) {
 
     final Map<String, String> valueMap = new HashMap<String, String>();
 
@@ -102,7 +104,7 @@ public final class HTMLCreator {
     valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logEntry.getAuthor())));
     valueMap.put(DATE_KEY, dateFormat.format(logEntry.getDate()));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, null, baseURL, instanceName, false, false, response)));
+        logEntry, null, baseURL, repositoryName, false, false, response)));
 
     final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
     return substitutor.replace(bodyTemplate);
@@ -114,14 +116,14 @@ public final class HTMLCreator {
    * @param logEntry          Log entry revision
    * @param pathAtRevision    The target's path at current revision or <tt>null</tt> if unknown.
    * @param baseURL           Base application URL.
-   * @param instanceName      Instance name
+   * @param repositoryName    Repository name.
    * @param showLatestRevInfo If true, the latest revision details DIV will be displayed.
    * @param linkToHead        If true, navigation links will be pointing at HEAD if applicable.
    * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
   public static String createChangedPathsTable(final SVNLogEntry logEntry, final String pathAtRevision, final String baseURL,
-                                               final String instanceName, final boolean showLatestRevInfo,
+                                               final RepositoryName repositoryName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {
 
     final StringBuilder sb = new StringBuilder("<table class=\"changedPathsTable\">\n");
@@ -149,7 +151,7 @@ public final class HTMLCreator {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead);
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), repositoryName, linkToHead);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
@@ -166,7 +168,7 @@ public final class HTMLCreator {
           break;
         case MODIFIED:
           // diffUrl
-          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), instanceName, linkToHead);
+          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), repositoryName, linkToHead);
           if (response != null) {
             diffUrl = response.encodeURL(diffUrl);
           }
@@ -183,7 +185,7 @@ public final class HTMLCreator {
           break;
         case DELETED:
           // del
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, instanceName, false);
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, repositoryName, false);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
@@ -194,7 +196,7 @@ public final class HTMLCreator {
 
       if (logEntryPath.getCopyPath() != null) {
         sb.append("<br><b>Copy from</b> ");
-        goToUrl = createGoToUrl(baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), instanceName, false);
+        goToUrl = createGoToUrl(baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), repositoryName, false);
         if (response != null) {
           goToUrl = response.encodeURL(goToUrl);
         }
@@ -203,7 +205,7 @@ public final class HTMLCreator {
           sb.append("&showlatestrevinfo=true");
         }
         sb.append("\" title=\"Show\">").append(logEntryPath.getCopyPath()).append("</a>").append(" @ ");
-        String revInfoUrl = createRevInfoUrl(baseURL, logEntryPath.getCopyRevision(), instanceName);
+        String revInfoUrl = createRevInfoUrl(baseURL, logEntryPath.getCopyRevision(), repositoryName);
         if (response != null) {
           revInfoUrl = response.encodeURL(revInfoUrl);
         }
@@ -221,36 +223,36 @@ public final class HTMLCreator {
   /**
    * Creates a <i>goto</i> URL based on given parameters.
    *
-   * @param baseURL      Base application URL
-   * @param path         Path
-   * @param revision     Revision
-   * @param instanceName Instance name
-   * @param linkToHead   If true, the navigation link will point to head.
+   * @param baseURL        Base application URL
+   * @param path           Path
+   * @param revision       Revision
+   * @param repositoryName Repository name.
+   * @param linkToHead     If true, the navigation link will point to head.
    * @return The URL
    */
   protected static String createGoToUrl(final String baseURL, final String path, final long revision,
-                                        final String instanceName, final boolean linkToHead) {
+                                        final RepositoryName repositoryName, final boolean linkToHead) {
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(GOTO_URL);
     sb.append("?path=").append(encodeUrl(path));
     sb.append("&revision=").append(linkToHead ? "head" : revision);
-    sb.append("&name=").append(encode(instanceName));
+    sb.append("&name=").append(encode(repositoryName.toString()));
     return sb.toString();
   }
 
   /**
    * Creates a <i>diff</i> URL based on given parameters.
    *
-   * @param baseURL      Base application URL
-   * @param path         Path
-   * @param revision     Revision
-   * @param instanceName Instance name
-   * @param linkToHead   If true, the navigation link will point to head.
+   * @param baseURL        Base application URL
+   * @param path           Path
+   * @param revision       Revision
+   * @param repositoryName Repository name.
+   * @param linkToHead     If true, the navigation link will point to head.
    * @return The URL
    */
   protected static String createDiffUrl(final String baseURL, final String path, final long revision,
-                                        final String instanceName, final boolean linkToHead) {
+                                        final RepositoryName repositoryName, final boolean linkToHead) {
 
     final String entry1 = path + ";;" + revision;
     final String entry2 = path + ";;" + (revision - 1);
@@ -259,7 +261,7 @@ public final class HTMLCreator {
     sb.append(DIFF_URL);
     sb.append("?path=").append(encodeUrl(path));
     sb.append("&revision=").append(linkToHead ? "head" : revision);
-    sb.append("&name=").append(encode(instanceName));
+    sb.append("&name=").append(encode(repositoryName.toString()));
     sb.append("&entry=").append(encodeUrl(entry1));
     sb.append("&entry=").append(encodeUrl(entry2));
     return sb.toString();
@@ -268,16 +270,16 @@ public final class HTMLCreator {
   /**
    * Creates a <i>revision info</i> URL based on given parameters.
    *
-   * @param baseURL      Base application URL
-   * @param revision     Revision
-   * @param instanceName Instance name
+   * @param baseURL        Base application URL
+   * @param revision       Revision
+   * @param repositoryName Repository name.
    * @return The URL
    */
-  protected static String createRevInfoUrl(final String baseURL, final long revision, final String instanceName) {
+  protected static String createRevInfoUrl(final String baseURL, final long revision, final RepositoryName repositoryName) {
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(REV_INFO_URL);
     sb.append("?revision=").append(encode(String.valueOf(revision)));
-    sb.append("&name=").append(encode(instanceName));
+    sb.append("&name=").append(encode(repositoryName.toString()));
     return sb.toString();
   }
 

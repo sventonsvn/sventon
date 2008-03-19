@@ -67,7 +67,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
     logger.debug("Using: " + diffCommand);
 
     final ModelAndView modelAndView = new ModelAndView();
-    final RepositoryConfiguration config = getInstanceConfiguration(svnCommand.getName());
+    final RepositoryConfiguration config = getRepositoryConfiguration(svnCommand.getName());
     final String charset = userRepositoryContext.getCharset();
 
     try {

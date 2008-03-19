@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.export;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.util.ZipUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -51,9 +52,9 @@ public final class ExportDirectory {
   private final File exportDirectory;
 
   /**
-   * The instance name.
+   * Repository name.
    */
-  private final String instanceName;
+  private final RepositoryName repositoryName;
 
   private final Charset charset;
 
@@ -61,12 +62,12 @@ public final class ExportDirectory {
    * Creates an export directory in given parent directory using the name format
    * <code>sventon-[currentTimeMillis] </code>.
    *
-   * @param instanceName Instance name
-   * @param parentDir    Parent dir
-   * @param charset      The charset to use for filenames and comments in compressed archive file.
+   * @param repositoryName Repository name.
+   * @param parentDir      Parent dir
+   * @param charset        The charset to use for filenames and comments in compressed archive file.
    */
-  public ExportDirectory(final String instanceName, final File parentDir, final Charset charset) {
-    this.instanceName = instanceName;
+  public ExportDirectory(final RepositoryName repositoryName, final File parentDir, final Charset charset) {
+    this.repositoryName = repositoryName;
     this.charset = charset;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());
     exportDirectory.mkdirs();
@@ -88,13 +89,13 @@ public final class ExportDirectory {
   }
 
   /**
-   * Creates a file name based on instance name, and given timestamp.
+   * Creates a file name based on repository name, and given timestamp.
    *
    * @param date Timestamp to use as part of the file name.
    * @return Generated file name.
    */
   protected String createTempFilename(final Date date) {
-    return instanceName + "-" + DATE_FORMAT.format(date) + ".zip";
+    return repositoryName + "-" + DATE_FORMAT.format(date) + ".zip";
   }
 
   /**
@@ -123,7 +124,7 @@ public final class ExportDirectory {
   public String toString() {
     return "ExportDirectory{" +
         "exportDirectory=" + exportDirectory +
-        ", instanceName='" + instanceName + '\'' +
+        ", repositoryName='" + repositoryName + '\'' +
         '}';
   }
 }

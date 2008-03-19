@@ -13,6 +13,7 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.support.SVNUtils;
@@ -74,15 +75,15 @@ public final class SyndFeedGenerator implements FeedGenerator {
   /**
    * {@inheritDoc}
    */
-  public void outputFeed(final String instanceName, final List<SVNLogEntry> logEntries,
+  public void outputFeed(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries,
                          final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
     final SyndFeed feed = new SyndFeedImpl();
     final String baseURL = WebUtils.extractBaseURLFromRequest(request);
-    feed.setTitle(instanceName + " sventon feed - " + baseURL);
+    feed.setTitle(repositoryName + " sventon feed - " + baseURL);
     feed.setLink(baseURL);
-    feed.setDescription("sventon feed for " + instanceName + " - " + logEntries.size() + " latest repository changes");
-    feed.setEntries(createEntries(instanceName, logEntries, baseURL, response));
+    feed.setDescription("sventon feed for " + repositoryName + " - " + logEntries.size() + " latest repository changes");
+    feed.setEntries(createEntries(repositoryName, logEntries, baseURL, response));
     feed.setFeedType(feedType);
     new SyndFeedOutput().output(feed, response.getWriter());
   }
@@ -91,14 +92,14 @@ public final class SyndFeedGenerator implements FeedGenerator {
   /**
    * Create the entries, one for each revision.
    *
-   * @param instanceName Instance name
-   * @param logEntries   List of log entries (revisions)
-   * @param baseURL      Application base URL
-   * @param response     Response
+   * @param repositoryName Repository name.
+   * @param logEntries     List of log entries (revisions)
+   * @param baseURL        Application base URL
+   * @param response       Response
    * @return List of RSS feed items
    * @throws IOException if unable to produce feed items.
    */
-  private List<SyndEntry> createEntries(final String instanceName, final List<SVNLogEntry> logEntries,
+  private List<SyndEntry> createEntries(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries,
                                         final String baseURL, final HttpServletResponse response) throws IOException {
 
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
@@ -106,7 +107,7 @@ public final class SyndFeedGenerator implements FeedGenerator {
     SyndEntry entry;
     SyndContent description;
 
-    logger.debug("Generating [" + logEntries.size() + "] RSS feed items for instance [" + instanceName + "]");
+    logger.debug("Generating [" + logEntries.size() + "] RSS feed items for instance [" + repositoryName + "]");
 
     // One logEntry is one commit (or revision)
     for (final SVNLogEntry logEntry : logEntries) {
@@ -115,13 +116,13 @@ public final class SyndFeedGenerator implements FeedGenerator {
         entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
             StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));
         entry.setAuthor(logEntry.getAuthor());
-        entry.setLink(baseURL + "revinfo.svn?name=" + instanceName + "&revision=" + logEntry.getRevision());
+        entry.setLink(baseURL + "revinfo.svn?name=" + repositoryName + "&revision=" + logEntry.getRevision());
         entry.setPublishedDate(logEntry.getDate());
 
         description = new SyndContentImpl();
         description.setType("text/html");
         description.setValue(HTMLCreator.createRevisionDetailBody(
-            getBodyTemplate(), logEntry, baseURL, instanceName, dateFormat, response));
+            getBodyTemplate(), logEntry, baseURL, repositoryName, dateFormat, response));
         entry.setDescription(description);
         entries.add(entry);
       }

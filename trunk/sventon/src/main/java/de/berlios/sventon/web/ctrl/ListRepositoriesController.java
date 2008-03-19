@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -26,11 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Controller that creates a list of all configured repository instance.
+ * Controller that creates a list of all configured repositories.
  *
  * @author jesper@users.berlios.de
  */
-public final class ListInstancesController extends AbstractController {
+public final class ListRepositoriesController extends AbstractController {
 
   /**
    * The application.
@@ -50,17 +51,17 @@ public final class ListInstancesController extends AbstractController {
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("instanceNames", application.getInstanceNames());
+    model.put("repositoryNames", application.getRepositoryNames());
 
     //Clear uid and pwd if logout param is supplied
     final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
-    final String instanceName = ServletRequestUtils.getStringParameter(request, "instanceName", "");
 
     if (logout) {
+      final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "repositoryName"));
       final HttpSession session = request.getSession(false);
       if (session != null) {
         final UserContext userContext = (UserContext) session.getAttribute("userContext");
-        final UserRepositoryContext userRepositoryContext = userContext.getRepositoryContext(instanceName);
+        final UserRepositoryContext userRepositoryContext = userContext.getRepositoryContext(repositoryName);
         if (userRepositoryContext != null) {
           userRepositoryContext.clearCredentials();
         }

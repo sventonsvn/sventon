@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import static de.berlios.sventon.repository.RepositoryEntry.Kind.dir;
@@ -81,10 +82,10 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir)
+  public List<RepositoryEntry> findEntryByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
       throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+    final EntryCache cache = entryCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     String rootDir = startDir;
     if (rootDir.endsWith("/")) {
       rootDir = rootDir.substring(0, rootDir.length() - 1);
@@ -95,46 +96,46 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir)
+  public List<RepositoryEntry> findEntry(final RepositoryName repositoryName, final String searchString, final String startDir)
       throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+    final EntryCache cache = entryCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     return cache.findEntry(searchString, startDir);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath) throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+  public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
+    final EntryCache cache = entryCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), dir);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final String instanceName, final String queryString) throws CacheException {
-    final LogMessageCache cache = logMessageCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+  public List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
+    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
 
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final String instanceName, final long revision) throws CacheException {
-    final RevisionCache cache = revisionCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException {
+    final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     return cache.get(revision);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getRevisions(final String instanceName, final List<Long> revisions) throws CacheException {
-    final RevisionCache cache = revisionCacheManager.getCache(instanceName);
-    assertCacheExists(cache, instanceName);
+  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException {
+    final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
     final List<SVNLogEntry> cachedRevisions = new ArrayList<SVNLogEntry>();
     for (final Long revision : revisions) {
       cachedRevisions.add(cache.get(revision));
@@ -142,9 +143,9 @@ public final class CacheGatewayImpl implements CacheGateway {
     return cachedRevisions;
   }
 
-  private void assertCacheExists(final Cache cache, final String instanceName) throws CacheException {
+  private void assertCacheExists(final Cache cache, final RepositoryName repositoryName) throws CacheException {
     if (cache == null) {
-      throw new CacheException("There is no cache instance named [" + instanceName + "]");
+      throw new CacheException("There is no cache repository named [" + repositoryName + "]");
     }
   }
 }

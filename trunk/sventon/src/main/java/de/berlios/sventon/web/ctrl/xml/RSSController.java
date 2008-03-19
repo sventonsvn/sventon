@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
@@ -80,7 +81,7 @@ public final class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
+    final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
     final String revision = ServletRequestUtils.getStringParameter(request, "revision", "head");
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
@@ -93,22 +94,22 @@ public final class RSSController extends AbstractController {
       return null;
     }
 
-    final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
 
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+        repository = repositoryFactory.getRepository(configuration.getName(),
             configuration.getSVNURL(), uid, pwd);
       } else {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+        repository = repositoryFactory.getRepository(configuration.getName(),
             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
       }
 
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = repositoryService.getRevisions(
-          instanceName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
-      feedGenerator.outputFeed(instanceName, logEntries, request, response);
+          repositoryName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
+      feedGenerator.outputFeed(repositoryName, logEntries, request, response);
     } catch (SVNAuthenticationException ae) {
       logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());

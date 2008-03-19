@@ -68,8 +68,8 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     repositoryConfiguration2.setCacheUsed(false);
     repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance(repositoryConfiguration1);
-    application.addInstance(repositoryConfiguration2);
+    application.addRepository(repositoryConfiguration1);
+    application.addRepository(repositoryConfiguration2);
     application.setConfigured(false);
     controller.setApplication(application);
 

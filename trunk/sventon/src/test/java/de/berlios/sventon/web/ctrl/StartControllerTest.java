@@ -37,7 +37,7 @@ public class StartControllerTest extends TestCase {
     }
 
     // Configured with one instance
-    application.addInstance(createTestInstance("test1"));
+    application.addRepository(createTestInstance("test1"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
@@ -45,17 +45,17 @@ public class StartControllerTest extends TestCase {
     assertEquals("repobrowser.svn?name=test1", view.getUrl());
 
     // Configured with two instances
-    application.addInstance(createTestInstance("test2"));
+    application.addRepository(createTestInstance("test2"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
     view = (RedirectView) modelAndView.getView();
-    assertEquals("listinstances.svn", view.getUrl());
+    assertEquals("listrepos.svn", view.getUrl());
 
   }
 
-  private RepositoryConfiguration createTestInstance(final String instanceName) {
-    final RepositoryConfiguration configuration = new RepositoryConfiguration(instanceName);
+  private RepositoryConfiguration createTestInstance(final String repositoryName) {
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
     configuration.setRepositoryUrl("http://localhost/svn");
     configuration.setCacheUsed(false);
     configuration.setZippedDownloadsAllowed(false);

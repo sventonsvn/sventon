@@ -1,5 +1,7 @@
 package de.berlios.sventon.repository.cache.objectcache;
 
+import de.berlios.sventon.appl.RepositoryName;
+
 import java.io.File;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public final class ObjectCacheViewer {
     final String cacheFile = args[1] + File.separator + args[0];
     System.out.println("Viewing cache file: " + cacheFile);
 
-    final ObjectCacheImpl cache = new ObjectCacheImpl(args[0], cacheFile, 1000, true, true, 0, 0, true, 120);
+    final ObjectCacheImpl cache = new ObjectCacheImpl(new RepositoryName(args[0]), cacheFile, 1000, true, true, 0, 0, true, 120);
     final List<Object> keys = cache.getKeys();
 
     System.out.println("Number of cached entries: " + keys.size());
@@ -50,7 +52,6 @@ public final class ObjectCacheViewer {
     }
 
     System.out.println("Done.");
-
 
 
   }

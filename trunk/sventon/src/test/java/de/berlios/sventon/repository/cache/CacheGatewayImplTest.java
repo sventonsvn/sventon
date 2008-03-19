@@ -1,58 +1,59 @@
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
-import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
+import de.berlios.sventon.repository.cache.entrycache.MemoryCache;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
-import java.util.*;
 import java.io.File;
+import java.util.*;
 
 public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryInPath() throws Exception {
-    final String instanceName = "testCache";
+    final RepositoryName repositoryName = new RepositoryName("testRepos");
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache(instanceName, entryCache);
+    cacheManager.addCache(repositoryName, entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(1, cache.findEntry(instanceName, "html", "/trunk/src/").size());
+    assertEquals(1, cache.findEntry(repositoryName, "html", "/trunk/src/").size());
 
-    assertEquals(5, cache.findEntry(instanceName, "java", "/").size());
-    assertEquals(1, cache.findEntry(instanceName, "code", "/").size());
+    assertEquals(5, cache.findEntry(repositoryName, "java", "/").size());
+    assertEquals(1, cache.findEntry(repositoryName, "code", "/").size());
   }
 
   public void testFindEntryByCamelCase() throws Exception {
-    final String instanceName = "testCache";
+    final RepositoryName repositoryName = new RepositoryName("testRepos");
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache(instanceName, entryCache);
+    cacheManager.addCache(repositoryName, entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
     final CamelCasePattern ccPattern = new CamelCasePattern("DF");
-    assertEquals(2, cache.findEntryByCamelCase(instanceName, ccPattern, "/trunk/").size());
+    assertEquals(2, cache.findEntryByCamelCase(repositoryName, ccPattern, "/trunk/").size());
   }
 
   public void testFindDirectories() throws Exception {
-    final String instanceName = "testCache";
+    final RepositoryName repositoryName = new RepositoryName("testRepos");
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
-    cacheManager.addCache(instanceName, entryCache);
+    cacheManager.addCache(repositoryName, entryCache);
     entryCache.add(getEntryTemplateList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
-    assertEquals(4, cache.findDirectories(instanceName, "/").size());
+    assertEquals(4, cache.findDirectories(repositoryName, "/").size());
 
-    assertEquals(2, cache.findDirectories(instanceName, "/trunk/").size());
+    assertEquals(2, cache.findDirectories(repositoryName, "/trunk/").size());
   }
 
   private List<RepositoryEntry> getEntryTemplateList() {

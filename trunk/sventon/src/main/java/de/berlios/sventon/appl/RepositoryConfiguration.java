@@ -21,7 +21,7 @@ import java.util.Properties;
 
 /**
  * Sventon application configuration class holding configuration parameters
- * and repository connection information for a single configured repository instance.
+ * and repository connection information for a single configured repositories.
  *
  * @author patrikfr@user.berlios.de
  * @author jesper@users.berlios.de
@@ -34,9 +34,9 @@ public final class RepositoryConfiguration {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Instance name.
+   * Repository name.
    */
-  private final String instanceName;
+  private final RepositoryName repositoryName;
 
   /**
    * The repository URL.
@@ -104,33 +104,33 @@ public final class RepositoryConfiguration {
   /**
    * Constructor.
    *
-   * @param instanceName Instance name.
+   * @param repositoryName Repository name.
    */
-  public RepositoryConfiguration(final String instanceName) {
-    Validate.isTrue(Instance.isValidName(instanceName), "The name must not contain whitespace");
-    this.instanceName = instanceName;
+  public RepositoryConfiguration(final String repositoryName) {
+    Validate.isTrue(RepositoryName.isValid(repositoryName), "The name must not contain whitespace");
+    this.repositoryName = new RepositoryName(repositoryName);
   }
 
   /**
    * Creates an instance using given name and properties.
    *
-   * @param instanceName Instance name
-   * @param properties   Properties
+   * @param repositoryName Repository name
+   * @param properties     Properties
    * @return The RepositoryConfiguration
    */
-  public static RepositoryConfiguration create(final String instanceName, final Properties properties) {
-    final RepositoryConfiguration ic = new RepositoryConfiguration(instanceName);
-    ic.setRepositoryUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_URL));
-    ic.setRepositoryDisplayUrl((String) properties.get(instanceName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
-    ic.setUid((String) properties.get(instanceName + PROPERTY_KEY_USERNAME));
-    ic.setPwd((String) properties.get(instanceName + PROPERTY_KEY_PASSWORD));
-    ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_USE_CACHE)));
+  public static RepositoryConfiguration create(final String repositoryName, final Properties properties) {
+    final RepositoryConfiguration ic = new RepositoryConfiguration(repositoryName);
+    ic.setRepositoryUrl((String) properties.get(repositoryName + PROPERTY_KEY_REPOSITORY_URL));
+    ic.setRepositoryDisplayUrl((String) properties.get(repositoryName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
+    ic.setUid((String) properties.get(repositoryName + PROPERTY_KEY_USERNAME));
+    ic.setPwd((String) properties.get(repositoryName + PROPERTY_KEY_PASSWORD));
+    ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+        Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(
-        Boolean.parseBoolean((String) properties.get(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+        Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     ic.rssItemsCount = Integer.parseInt(
-        properties.getProperty(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+        properties.getProperty(repositoryName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
     return ic;
   }
 
@@ -141,18 +141,18 @@ public final class RepositoryConfiguration {
    */
   public Properties getAsProperties() {
     final Properties properties = new Properties();
-    properties.put(instanceName + PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
-    properties.put(instanceName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
+    properties.put(repositoryName + PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
+    properties.put(repositoryName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
     if (getUid() != null) {
-      properties.put(instanceName + PROPERTY_KEY_USERNAME, getUid());
+      properties.put(repositoryName + PROPERTY_KEY_USERNAME, getUid());
     }
     if (getPwd() != null) {
-      properties.put(instanceName + PROPERTY_KEY_PASSWORD, getPwd());
+      properties.put(repositoryName + PROPERTY_KEY_PASSWORD, getPwd());
     }
-    properties.put(instanceName + PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
-    properties.put(instanceName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
-    properties.put(instanceName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
-    properties.put(instanceName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
+    properties.put(repositoryName + PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
+    properties.put(repositoryName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
+    properties.put(repositoryName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
+    properties.put(repositoryName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
     return properties;
   }
 
@@ -320,11 +320,11 @@ public final class RepositoryConfiguration {
   }
 
   /**
-   * Gets the instance name.
+   * Gets the repository name.
    *
-   * @return Instance name.
+   * @return Repository name.
    */
-  public String getInstanceName() {
-    return instanceName;
+  public RepositoryName getName() {
+    return repositoryName;
   }
 }

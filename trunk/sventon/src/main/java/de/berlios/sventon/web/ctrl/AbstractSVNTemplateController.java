@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.model.AvailableCharsets;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
@@ -25,6 +26,7 @@ import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
@@ -43,6 +45,7 @@ import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.beans.PropertyEditor;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -184,13 +187,18 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   private RepositoryFactory repositoryFactory;
 
+  private PropertyEditor nameEditor;
+
+  public void setNameEditor(final PropertyEditor editor) {
+    this.nameEditor =editor;
+  }
 
   /**
-   * Constructor.
+   * {@inheritDoc}
    */
-  protected AbstractSVNTemplateController() {
-    setCommandClass(SVNBaseCommand.class);
-    setCacheSeconds(0); // Tell Spring to generate no-cache headers.
+  @Override
+  protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
+    binder.registerCustomEditor(RepositoryName.class, nameEditor);
   }
 
   /**
@@ -207,10 +215,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("config.svn"));
     }
 
-    final Set<String> instanceNames = application.getInstanceNames();
-    if (svnCommand.getName() == null || !instanceNames.contains(svnCommand.getName())) {
-      logger.debug("InstanceName [" + svnCommand.getName() + "] does not exist, redirecting to 'listinstances.svn'");
-      return new ModelAndView(new RedirectView("listinstances.svn"));
+    final Set<RepositoryName> repositoryNames = application.getRepositoryNames();
+    if (svnCommand.getName() == null || !repositoryNames.contains(svnCommand.getName())) {
+      logger.debug("RepositoryName [" + svnCommand.getName() + "] does not exist, redirecting to 'listrepos.svn'");
+      return new ModelAndView(new RedirectView("listrepos.svn"));
     }
 
     if (errors.hasErrors()) {
@@ -219,14 +227,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     SVNRepository repository = null;
     try {
-      final RepositoryConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
+      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(svnCommand.getName());
       final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
 
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(), configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getName(), configuration.getSVNURL(),
             repositoryContext.getUid(), repositoryContext.getPwd());
       } else {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(), configuration.getSVNURL(),
+        repository = repositoryFactory.getRepository(configuration.getName(), configuration.getSVNURL(),
             configuration.getUid(), configuration.getPwd());
       }
 
@@ -250,10 +258,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("repositoryURL", configuration.getRepositoryDisplayUrl());
         model.put("numrevision", (requestedRevision == HEAD ? Long.toString(headRevision) : null));
         model.put("isHead", requestedRevision == HEAD);
-        model.put("isUpdating", application.getInstance(svnCommand.getName()).isUpdatingCache());
+        model.put("isUpdating", application.isUpdating(svnCommand.getName()));
         model.put("useCache", configuration.isCacheUsed());
         model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
-        model.put("instanceNames", application.getInstanceNames());
+        model.put("repositoryNames", application.getRepositoryNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("headRevision", headRevision);
         model.put("charsets", availableCharsets.getCharsets());
@@ -371,12 +379,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * <code>userContext</code> does not exists, a new instance will be
    * created and added to the session.
    *
-   * @param request      The HTTP request.
-   * @param instanceName Instance name.
+   * @param request        The HTTP request.
+   * @param repositoryName Repository name.
    * @return The UserContext instance.
    * @see UserContext
    */
-  protected final UserRepositoryContext getUserContext(final HttpServletRequest request, final String instanceName) {
+  protected final UserRepositoryContext getUserContext(final HttpServletRequest request, final RepositoryName repositoryName) {
     final HttpSession session = request.getSession(true);
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
@@ -387,10 +395,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       session.setAttribute("userContext", userContext);
     }
 
-    UserRepositoryContext repositoryContext = userContext.getRepositoryContext(instanceName);
+    UserRepositoryContext repositoryContext = userContext.getRepositoryContext(repositoryName);
     if (repositoryContext == null) {
       repositoryContext = new UserRepositoryContext();
-      userContext.add(instanceName, repositoryContext);
+      userContext.add(repositoryName, repositoryContext);
     }
 
     if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
@@ -429,7 +437,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   @SuppressWarnings("unchecked")
   protected final ModelAndView prepareExceptionModelAndView(final BindException exception,
                                                             final SVNBaseCommand svnCommand) {
-    final RepositoryConfiguration repositoryConfiguration = application.getInstance(svnCommand.getName()).getConfiguration();
+    final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     logger.debug("'command' set to: " + svnCommand);
     model.put("command", svnCommand);
@@ -447,7 +455,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * word HEAD, if revision was <code>null</code> or empty <code>String</code>.
    *
    * @param svnCommand Command object.
-   * @param repository Repository instance.
+   * @param repository Repository.
    * @return The converted SVN revision.
    * @throws SVNException if unable to get dated revision.
    */
@@ -525,11 +533,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   /**
    * Get current application configuration.
    *
-   * @param instanceName Instance name
+   * @param name Repository name
    * @return ApplicationConfiguration
    */
-  public final RepositoryConfiguration getInstanceConfiguration(final String instanceName) {
-    return application.getInstance(instanceName).getConfiguration();
+  public final RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
+    return application.getRepositoryConfiguration(name);
   }
 
   /**

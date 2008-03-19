@@ -1,5 +1,6 @@
 package de.berlios.sventon.web.ctrl.ajax;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
@@ -24,7 +25,7 @@ public class GetLogMessageControllerTest extends TestCase {
     final SVNLogEntry logEntry = new SVNLogEntry(null, revision.getNumber(), null, null, "The Message");
 
     final SVNBaseCommand command = new SVNBaseCommand();
-    command.setName("test");
+    command.setName(new RepositoryName("test"));
 
     final GetLogMessageController ctrl = new GetLogMessageController();
     ctrl.setRepositoryService(mockService);

@@ -32,8 +32,8 @@
   <div id="configured_repos">
 
     <ul>
-      <c:forEach var="instance" items="${addedInstances}">
-        <li>${instance}</li>
+      <c:forEach var="repos" items="${addedRepositories}">
+        <li>${repos}</li>
       </c:forEach>
     </ul>
 
@@ -41,14 +41,14 @@
 
   <div id="config_confirmation">
 
-    <c:if test="${latestAddedInstance ne null}">
+    <c:if test="${latestAddedRepositories ne null}">
       <div id="config_success">
         <h1>
           Repository successfully configured!
         </h1>
 
         <p>
-          The repository <b>${latestAddedInstance}</b> has been successfully added to sventon.
+          The repository <b>${latestAddedRepository}</b> has been successfully added to sventon.
         </p>
       </div>
     </c:if>

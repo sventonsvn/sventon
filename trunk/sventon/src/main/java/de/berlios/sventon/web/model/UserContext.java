@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.web.model;
 
+import de.berlios.sventon.appl.RepositoryName;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -30,7 +31,7 @@ public final class UserContext implements Serializable {
 
   private static final long serialVersionUID = 6749054345534594360L;
 
-  private final Map<String, UserRepositoryContext> repositoryContexts = new HashMap<String, UserRepositoryContext>();
+  private final Map<RepositoryName, UserRepositoryContext> repositoryContexts = new HashMap<RepositoryName, UserRepositoryContext>();
 
   /**
    * Get a user context given the repository name.
@@ -38,7 +39,7 @@ public final class UserContext implements Serializable {
    * @param repositoryName Repository name.
    * @return Matching instance, {@code null} if not found.
    */
-  public UserRepositoryContext getRepositoryContext(final String repositoryName) {
+  public UserRepositoryContext getRepositoryContext(final RepositoryName repositoryName) {
     return repositoryContexts.get(repositoryName);
   }
 
@@ -48,8 +49,7 @@ public final class UserContext implements Serializable {
    * @param repositoryName Repository name to use for binding the context.
    * @param urc            Context.
    */
-  //TODO: make repositoryName a type
-  public void add(final String repositoryName, final UserRepositoryContext urc) {
+  public void add(final RepositoryName repositoryName, final UserRepositoryContext urc) {
     repositoryContexts.put(repositoryName, urc);
   }
 
@@ -58,7 +58,7 @@ public final class UserContext implements Serializable {
    *
    * @param repositoryName Repository name for context to remove.
    */
-  public void remove(final String repositoryName) {
+  public void remove(final RepositoryName repositoryName) {
     repositoryContexts.remove(repositoryName);
   }
 

@@ -12,6 +12,7 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.RepositoryName;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -23,13 +24,13 @@ import javax.servlet.http.HttpServletResponse;
  * The {@code StartController} is the class that handles all entry point calls to the
  * application, i.e. it handles calls to sventon where no request parameters are given.
  * <p/>
- * {@code StartController} checks how many repository instances are configured and
- * redirects to appropriate page. If only one instance is configured
+ * {@code StartController} checks how many repositories are configured and
+ * redirects to appropriate page. If only one repository is configured
  * the controller will redirect to the repository browser view.
- * In any other case, the {@link ListInstancesController} will be called
- * so that the user can choose which repository instance to browse.
+ * In any other case, the {@link ListRepositoriesController} will be called
+ * so that the user can choose which repository to browse.
  * <p/>
- * If no repository instance has been configured the user will be redirected to
+ * If no repository has been configured the user will be redirected to
  * the config page.
  *
  * @author jesper@users.berlios.de
@@ -50,11 +51,11 @@ public final class StartController extends AbstractController {
     final ModelAndView modelAndView;
     if (!application.isConfigured()) {
       modelAndView = new ModelAndView(new RedirectView("config.svn"));
-    } else if (application.getInstanceCount() > 1) {
-      modelAndView = new ModelAndView(new RedirectView("listinstances.svn"));
-    } else if (application.getInstanceCount() == 1) {
-      final String instanceName = application.getInstanceNames().iterator().next();
-      modelAndView = new ModelAndView(new RedirectView("repobrowser.svn?name=" + instanceName));
+    } else if (application.getRepositoryCount() > 1) {
+      modelAndView = new ModelAndView(new RedirectView("listrepos.svn"));
+    } else if (application.getRepositoryCount() == 1) {
+      final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
+      modelAndView = new ModelAndView(new RedirectView("repobrowser.svn?name=" + repositoryName));
     } else {
       throw new IllegalStateException("No instance has been configured!");
     }

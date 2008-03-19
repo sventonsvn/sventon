@@ -13,6 +13,7 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.Application;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
@@ -64,16 +65,15 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()
-        && !application.getInstance(instanceName).isUpdatingCache()) {
+    if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
       logger.debug("Fetching cached revision: " + revision);
-      logEntry = cacheGateway.getRevision(instanceName, revision);
+      logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {
-      logEntry = super.getRevision(instanceName, repository, revision);
+      logEntry = super.getRevision(repositoryName, repository, revision);
     }
     return logEntry;
   }
@@ -85,13 +85,12 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
+  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit) throws SVNException, SventonException {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (application.getInstance(instanceName).getConfiguration().isCacheUsed()
-        && !application.getInstance(instanceName).isUpdatingCache()) {
+    if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
       // To be able to return cached revisions, we first have to get the revision numbers
       // Doing a logs-call, skipping the details, to get them.
       final List<Long> revisions = new ArrayList<Long>();
@@ -101,9 +100,9 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
         }
       });
       logger.debug("Fetching [" + limit + "] cached revisions in the interval [" + toRevision + "-" + fromRevision + "]");
-      logEntries.addAll(cacheGateway.getRevisions(instanceName, revisions));
+      logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getRevisions(instanceName, repository, fromRevision, toRevision, path, limit));
+      logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit));
     }
     return logEntries;
   }

@@ -82,13 +82,13 @@ public enum LogEntryActionType {
    */
   public static LogEntryActionType parse(final char code) {
     switch (code) {
-      case'D':
+      case 'D':
         return DELETED;
-      case'M':
+      case 'M':
         return MODIFIED;
-      case'A':
+      case 'A':
         return ADDED;
-      case'R':
+      case 'R':
         return REPLACED;
       default:
         throw new IllegalArgumentException("Unable to parse code: " + code);

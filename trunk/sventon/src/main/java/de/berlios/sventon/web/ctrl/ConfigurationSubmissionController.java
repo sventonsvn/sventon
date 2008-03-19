@@ -75,12 +75,12 @@ public final class ConfigurationSubmissionController extends AbstractController 
       throw new IllegalStateException("sventon is already configured!");
     }
 
-    if (application.getInstanceCount() == 0) {
+    if (application.getRepositoryCount() == 0) {
       logger.warn("No instance has been configured and added");
       return new ModelAndView("configurationError");
     }
 
-    application.storeInstanceConfigurations();
+    application.storeRepositoryConfigurations();
     application.setConfigured(true);
     application.initCaches();
 

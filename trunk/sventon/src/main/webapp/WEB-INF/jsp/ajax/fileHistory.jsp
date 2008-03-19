@@ -14,9 +14,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
-<%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
 <c:if test="${fn:length(fileRevisions) > 1}">
 <table class="fileHistoryTable">

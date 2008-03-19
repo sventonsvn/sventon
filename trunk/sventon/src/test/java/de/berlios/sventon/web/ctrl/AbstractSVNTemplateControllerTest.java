@@ -4,6 +4,7 @@ import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindException;
@@ -21,14 +22,15 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
   public void testGetUserContext() throws Exception {
     final AbstractSVNTemplateController ctrl = new TestController();
 
+    final RepositoryName name = new RepositoryName("instance1");
     final HttpServletRequest request = new MockHttpServletRequest();
     assertNull(request.getSession().getAttribute("userContext"));
-    final UserRepositoryContext userRepositoryContext = ctrl.getUserContext(request, "instance1");
+    final UserRepositoryContext userRepositoryContext = ctrl.getUserContext(request, name);
     assertNotNull(request.getSession());
     final Object o = request.getSession().getAttribute("userContext");
     assertNotNull(o);
     assertTrue(o instanceof UserContext);
-    final UserRepositoryContext contextFromSession = ((UserContext) o).getRepositoryContext("instance1");
+    final UserRepositoryContext contextFromSession = ((UserContext) o).getRepositoryContext(name);
     assertSame(contextFromSession, userRepositoryContext);
   }
 

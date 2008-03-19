@@ -1,8 +1,8 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.Instance;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.web.command.ConfigCommand;
 import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
@@ -53,7 +53,7 @@ public class ConfigurationControllerTest extends TestCase {
     final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("firstinstance");
     final Application application = new Application(new File(TEMPDIR), "filename");
     application.setConfigured(false);
-    application.addInstance(repositoryConfig);
+    application.addRepository(repositoryConfig);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
@@ -93,34 +93,35 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
     final Application application = new Application(new File(TEMPDIR), "filename");
-    assertEquals(0, application.getInstanceCount());
+    assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
-    command.setName("testrepos");
+    final String repositoryName = "testrepos";
+    command.setName(repositoryName);
     command.setRepositoryUrl("http://localhost");
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
     assertEquals("confirmAddConfig", modelAndView.getViewName());
-    assertEquals(1, application.getInstanceCount());
+    assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
-    assertEquals("testrepos", ((Set) model.get("addedInstances")).iterator().next());
+    assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
   }
 
   public void testProcessFormSubmissionNonConfiguredUserBasedAccessControl() throws Exception {
-    final String instanceName = "testrepos";
+    final String repositoryName = "testrepos";
 
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
     final Application application = new Application(new File(TEMPDIR), "filename");
-    assertEquals(0, application.getInstanceCount());
+    assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
-    command.setName(instanceName);
+    command.setName(repositoryName);
     command.setRepositoryUrl("http://localhost");
     command.setAccessMethod(USER);
     command.setZippedDownloadsAllowed(true);
@@ -130,14 +131,13 @@ public class ConfigurationControllerTest extends TestCase {
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
     assertEquals("confirmAddConfig", modelAndView.getViewName());
-    assertEquals(1, application.getInstanceCount());
+    assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
-    assertEquals(instanceName, ((Set) model.get("addedInstances")).iterator().next());
+    assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
 
     //assert that the config was created correctly:
-    final Instance instance = application.getInstance(instanceName);
-    final RepositoryConfiguration configuration = instance.getConfiguration();
+    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(new RepositoryName(repositoryName));
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());

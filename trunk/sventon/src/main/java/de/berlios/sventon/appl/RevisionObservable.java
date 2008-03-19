@@ -19,18 +19,18 @@ package de.berlios.sventon.appl;
 public interface RevisionObservable {
 
   /**
-   * Updates the observable. For each configured repository instance, polls the repository
+   * Updates the observable. For each configured repository, polls the repository
    * and looks for new revisions to fetch and publish to registered observers.
    */
   void updateAll();
 
   /**
-   * Updates the observable for a single configured repository instance, polls the repository
+   * Updates the observable for a single configured repository, polls the repository
    * and looks for new revisions to fetch and publish to registered observers.
    *
-   * @param instanceName     Instance name
+   * @param repositoryName   Repository name
    * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  void update(final String instanceName, boolean flushAfterUpdate);
+  void update(final RepositoryName repositoryName, boolean flushAfterUpdate);
 
 }

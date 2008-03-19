@@ -1,5 +1,6 @@
 package de.berlios.sventon.rss;
 
+import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -48,7 +49,7 @@ public class SyndFeedGeneratorTest extends TestCase {
       }
     };
 
-    generator.outputFeed("defaultsvn", logEntries, req, res);
+    generator.outputFeed(new RepositoryName("defaultsvn"), logEntries, req, res);
     pw.flush();
     pw.close();
 

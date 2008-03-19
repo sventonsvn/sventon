@@ -117,21 +117,21 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * Update.
    *
-   * @param instanceName     The instance name.
+   * @param name             The Repository name
    * @param repository       Repository to use for update.
    * @param objectCache      ObjectCache instance to read/write information about last observed revisions.
    * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  protected void update(final String instanceName, final SVNRepository repository, final ObjectCache objectCache,
+  protected void update(final RepositoryName name, final SVNRepository repository, final ObjectCache objectCache,
                         final boolean flushAfterUpdate) {
 
     try {
-      Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName);
+      Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name);
       boolean clearCacheBeforeUpdate = false;
 
       if (lastUpdatedRevision == null) {
         logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
-            + instanceName);
+            + name);
         clearCacheBeforeUpdate = true;
         lastUpdatedRevision = 0L;
       }
@@ -159,7 +159,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           logEntries.addAll(repositoryService.getRevisionsFromRepository(
               repository, fromRevision, toRevision));
-          logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + instanceName);
+          logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + name);
           setChanged();
           final StringBuffer notification = new StringBuffer();
           notification.append("Notifying observers about [");
@@ -170,11 +170,11 @@ public final class RevisionObservableImpl extends Observable implements Revision
           notification.append(toRevision);
           notification.append("]");
           logger.info(notification.toString());
-          notifyObservers(new RevisionUpdate(instanceName, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
+          notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
 
           lastUpdatedRevision = toRevision;
           logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
-          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + instanceName, lastUpdatedRevision);
+          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
           clearCacheBeforeUpdate = false;
           revisionsLeftToFetchCount -= logEntries.size();
         } while (revisionsLeftToFetchCount > 0);
@@ -188,28 +188,25 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * {@inheritDoc}
    */
-  public void update(final String instanceName, final boolean flushAfterUpdate) {
+  public void update(final RepositoryName name, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
-      final Instance instance = application.getInstance(instanceName);
-      final RepositoryConfiguration configuration = instance.getConfiguration();
+      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(name);
 
-      if (configuration.isCacheUsed() && !instance.isUpdatingCache()) {
-        synchronized (instanceName) {
-          instance.setUpdatingCache(true);
-          SVNRepository repository = null;
-          try {
-            repository = repositoryFactory.getRepository(configuration.getInstanceName(),
-                configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
-            final ObjectCache objectCache = objectCacheManager.getCache(instanceName);
-            update(instanceName, repository, objectCache, flushAfterUpdate);
-          } catch (final Exception ex) {
-            logger.warn("Unable to establish repository connection", ex);
-          } finally {
-            if (repository != null) {
-              repository.closeSession();
-            }
-            instance.setUpdatingCache(false);
+      if (configuration.isCacheUsed() && !application.isUpdating(name)) {
+        application.setUpdatingCache(name, true);
+        SVNRepository repository = null;
+        try {
+          repository = repositoryFactory.getRepository(configuration.getName(),
+              configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+          final ObjectCache objectCache = objectCacheManager.getCache(name);
+          update(name, repository, objectCache, flushAfterUpdate);
+        } catch (final Exception ex) {
+          logger.warn("Unable to establish repository connection", ex);
+        } finally {
+          if (repository != null) {
+            repository.closeSession();
           }
+          application.setUpdatingCache(name, false);
         }
       }
     }
@@ -220,8 +217,8 @@ public final class RevisionObservableImpl extends Observable implements Revision
    */
   public void updateAll() {
     if (application.isConfigured()) {
-      for (final Instance instance : application.getInstances()) {
-        update(instance.getConfiguration().getInstanceName(), true);
+      for (final RepositoryName name : application.getRepositoryNames()) {
+        update(name, true);
       }
     }
   }

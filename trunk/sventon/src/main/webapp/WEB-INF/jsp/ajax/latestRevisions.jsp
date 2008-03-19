@@ -14,8 +14,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
 <select class="sventonSelect" name="latestRevisionsSelect" onChange="latestRevisionsCount = this.options[this.selectedIndex].value; getLatestRevisions('${command.name}', latestRevisionsCount);">
   <option class="sventonSelectOption" value="1">1</option>

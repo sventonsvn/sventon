@@ -48,8 +48,8 @@
 <div id="configured_repos">
 
   <ul>
-    <c:forEach var="instance" items="${addedInstances}">
-      <li>${instance}</li>
+    <c:forEach var="repos" items="${addedRepositories}">
+      <li>${repos}</li>
     </c:forEach>
   </ul>
 

@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache.logmessagecache;
 
 import de.berlios.sventon.appl.AbstractRevisionObserver;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.cache.CacheException;
@@ -54,20 +55,20 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
-    final String instanceName = revisionUpdate.getInstanceName();
+    final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + instanceName);
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + repositoryName);
 
     try {
-      final LogMessageCache logMessageCache = logMessageCacheManager.getCache(instanceName);
+      final LogMessageCache logMessageCache = logMessageCacheManager.getCache(repositoryName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
         LOGGER.info("Clearing cache before population");
         logMessageCache.clear();
       }
       updateInternal(logMessageCache, revisions);
     } catch (final Exception ex) {
-      LOGGER.warn("Could not update cache instance [" + instanceName + "]", ex);
+      LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
     }
   }
 

@@ -13,8 +13,8 @@ package de.berlios.sventon.web.ctrl.ajax;
 
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserRepositoryContext;
 import de.berlios.sventon.web.ctrl.AbstractSVNTemplateController;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;

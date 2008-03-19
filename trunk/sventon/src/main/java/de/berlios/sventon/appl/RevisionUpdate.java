@@ -20,13 +20,13 @@ import java.util.List;
 /**
  * A RevisionUpdate object will be created when a repository change has been detected.
  * The object will be communicated to all {@link RevisionObserver}s and contains the
- * new revisions including repository instance information.
+ * new revisions including repository information.
  *
  * @author jesper@users.berlios.de
  */
 public final class RevisionUpdate {
 
-  private final String instanceName;
+  private final RepositoryName repositoryName;
   private final List<SVNLogEntry> logEntries;
   private final boolean flushAfterUpdate;
   private final boolean clearCacheBeforeUpdate;
@@ -34,14 +34,14 @@ public final class RevisionUpdate {
   /**
    * Constructor.
    *
-   * @param instanceName           Instance name
+   * @param repositoryName         Repository name
    * @param logEntries             The new log entries
    * @param flushAfterUpdate       If <tt>true</tt>, caches will be flushed after update.
    * @param clearCacheBeforeUpdate Clear cache before update, to make sure we don't get duplicates.
    */
-  public RevisionUpdate(final String instanceName, final List<SVNLogEntry> logEntries, final boolean flushAfterUpdate,
+  public RevisionUpdate(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries, final boolean flushAfterUpdate,
                         final boolean clearCacheBeforeUpdate) {
-    this.instanceName = instanceName;
+    this.repositoryName = repositoryName;
     this.logEntries = logEntries;
     this.flushAfterUpdate = flushAfterUpdate;
     this.clearCacheBeforeUpdate = clearCacheBeforeUpdate;
@@ -57,12 +57,12 @@ public final class RevisionUpdate {
   }
 
   /**
-   * Gets the instance name.
+   * Gets the repository name.
    *
-   * @return The instance name
+   * @return The repository name.
    */
-  public String getInstanceName() {
-    return instanceName;
+  public RepositoryName getRepositoryName() {
+    return repositoryName;
   }
 
   /**

@@ -38,12 +38,12 @@
   <c:set var="latestChangedPaths" value="${details.changedPaths}"/>
   <jsp:useBean id="latestChangedPaths" type="java.util.Map"/>
 
-  <c:set var="instanceName" value="${command.name}"/>
-  <jsp:useBean id="instanceName" type="java.lang.String"/>
+  <c:set var="repositoryName" value="${command.name}"/>
+  <jsp:useBean id="repositoryName" type="de.berlios.sventon.appl.RepositoryName"/>
 
   <tr>
     <td colspan="2">
-      <%=HTMLCreator.createChangedPathsTable(details, null, "", instanceName, keepVisible.booleanValue(), linkToHead.booleanValue(), response)%>
+      <%=HTMLCreator.createChangedPathsTable(details, null, "", repositoryName, keepVisible, linkToHead, response)%>
     </td>
   </tr>
 </table>

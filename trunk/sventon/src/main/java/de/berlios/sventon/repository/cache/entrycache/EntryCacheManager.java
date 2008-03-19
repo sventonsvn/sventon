@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheManager;
 
@@ -41,13 +42,13 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
   /**
    * Creates a new cache instance using given name and default settings.
    *
-   * @param cacheName Name of cache instance.
+   * @param repositoryName Name of cache instance.
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  protected EntryCache createCache(final String cacheName) throws CacheException {
-    logger.debug("Creating cache: " + cacheName);
-    return new DiskCache(new File(rootDirectory, cacheName));
+  protected EntryCache createCache(final RepositoryName repositoryName) throws CacheException {
+    logger.debug("Creating cache: " + repositoryName);
+    return new DiskCache(new File(rootDirectory, repositoryName.toString()));
   }
 
 

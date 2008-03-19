@@ -16,21 +16,21 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
-  <title>Repository instances</title>
+  <title>Repositories</title>
 </head>
 
 <body>
   <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 
-  <h1>Repository instances</h1>
+  <h1>Repositories</h1>
 
   <ol>
-    <c:forEach items="${instanceNames}" var="instanceName">
-      <c:url value="repobrowser.svn" var="instanceUrl">
-        <c:param name="name" value="${instanceName}" />
+    <c:forEach items="${repositoryNames}" var="repositoryName">
+      <c:url value="repobrowser.svn" var="repositoryUrl">
+        <c:param name="name" value="${repositoryName}" />
       </c:url>
       <li>
-        <a href="${instanceUrl}">${instanceName}</a>
+        <a href="${repositoryUrl}">${repositoryName}</a>
       </li>
     </c:forEach>
   </ol>
