@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.repository.RepositoryEntry;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -27,63 +28,63 @@ public interface CacheGateway {
   /**
    * Searches the cached entries for given string CamelCase name.
    *
-   * @param instanceName Cache instance name
-   * @param pattern      CamelCase pattern to search for
-   * @param startDir     Directory where to start search
+   * @param repositoryName Repository name
+   * @param pattern        CamelCase pattern to search for
+   * @param startDir       Directory where to start search
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntryByCamelCase(final String instanceName, final CamelCasePattern pattern, final String startDir) throws CacheException;
+  List<RepositoryEntry> findEntryByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for given string (name fragment) starting from given directory.
    *
-   * @param instanceName Cache instance name
-   * @param searchString String to search for
-   * @param startDir     Start path
+   * @param repositoryName Cache repository name
+   * @param searchString   String to search for
+   * @param startDir       Start path
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntry(final String instanceName, final String searchString, final String startDir) throws CacheException;
+  List<RepositoryEntry> findEntry(final RepositoryName repositoryName, final String searchString, final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.
    *
-   * @param instanceName Cache instance name
-   * @param fromPath     Start path
+   * @param repositoryName Repository name
+   * @param fromPath       Start path
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findDirectories(final String instanceName, final String fromPath) throws CacheException;
+  List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException;
 
   /**
    * Searches the cached log messages for given string.
    *
-   * @param instanceName Cache instance name
-   * @param queryString  String to search for.
+   * @param repositoryName Repository name
+   * @param queryString    String to search for.
    * @return List of log messages.
    * @throws CacheException if error
    */
-  List<LogMessage> find(final String instanceName, final String queryString) throws CacheException;
+  List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
 
   /**
    * Gets a revision by number.
    *
-   * @param instanceName Cache instance name
-   * @param revision     Revision number of revision to get.
+   * @param repositoryName Repository name
+   * @param revision       Revision number of revision to get.
    * @return The revision info
    * @throws CacheException if error.
    */
-  SVNLogEntry getRevision(final String instanceName, final long revision) throws CacheException;
+  SVNLogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException;
 
   /**
    * Gets multiple revisions by number.
    *
-   * @param instanceName Cache instance name
-   * @param revisions    List of revision numbers to get.
+   * @param repositoryName Repository name
+   * @param revisions      List of revision numbers to get.
    * @return List containing the revisions
    * @throws CacheException if error.
    */
-  List<SVNLogEntry> getRevisions(final String instanceName, final List<Long> revisions) throws CacheException;
+  List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException;
 
 }

@@ -13,6 +13,7 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
@@ -53,7 +54,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
     final long start = System.currentTimeMillis();
@@ -83,7 +84,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
+  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit) throws SVNException, SventonException {
 

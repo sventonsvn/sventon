@@ -13,6 +13,7 @@ package de.berlios.sventon.mail;
 
 import com.sun.mail.smtp.SMTPTransport;
 import de.berlios.sventon.appl.AbstractRevisionObserver;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.web.support.SVNUtils;
@@ -58,9 +59,9 @@ public final class MailNotifier extends AbstractRevisionObserver {
   private static final String REVISION_TOKEN = "@@revision@@";
 
   /**
-   * Text replacement token for the instance name.
+   * Text replacement token for the repository name
    */
-  private static final String NAME_TOKEN = "@@instanceName@@";
+  private static final String NAME_TOKEN = "@@repositoryName@@";
 
   /**
    * Cached HTML mail body template.
@@ -127,23 +128,23 @@ public final class MailNotifier extends AbstractRevisionObserver {
 
         if (revisions.size() > revisionCountThreshold) {
           LOGGER.info("Update contains more than max allowed updates, ["
-             + revisionCountThreshold + "]. No notification mail sent");
+              + revisionCountThreshold + "]. No notification mail sent");
           return;
         }
 
         for (final SVNLogEntry logEntry : revisions) {
           if (SVNUtils.isAccessible(logEntry)) {
-            final String instanceName = revisionUpdate.getInstanceName();
-            LOGGER.info("Sending notification mail for [" + instanceName + "], revision: " + logEntry.getRevision());
+            final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
+            LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
 
             try {
               final Message msg = new MimeMessage(session);
               msg.setFrom(new InternetAddress(from));
               msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
-              msg.setSubject(formatSubject(subject, logEntry.getRevision(), instanceName));
+              msg.setSubject(formatSubject(subject, logEntry.getRevision(), repositoryName));
 
               msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-                 getBodyTemplate(), logEntry, baseUrl, instanceName, dateFormat, null), "text/html")));
+                  getBodyTemplate(), logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
 
               msg.setHeader("X-Mailer", "sventon");
               msg.setSentDate(new Date());
@@ -175,15 +176,15 @@ public final class MailNotifier extends AbstractRevisionObserver {
   /**
    * Creates the mail subject.
    *
-   * @param subject      Subject string.
-   * @param revision     Revision.
-   * @param instanceName Instance name.
+   * @param subject        Subject string.
+   * @param revision       Revision.
+   * @param repositoryName Repository name.
    * @return Substituted subject string.
    */
-  protected String formatSubject(final String subject, final long revision, final String instanceName) {
+  protected String formatSubject(final String subject, final long revision, final RepositoryName repositoryName) {
     String result = subject;
     result = result.replace(REVISION_TOKEN, String.valueOf(revision));
-    result = result.replace(NAME_TOKEN, instanceName);
+    result = result.replace(NAME_TOKEN, repositoryName.toString());
     return result;
   }
 

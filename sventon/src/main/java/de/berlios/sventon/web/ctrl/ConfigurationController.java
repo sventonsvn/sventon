@@ -45,15 +45,6 @@ public final class ConfigurationController extends AbstractFormController {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Constructor.
-   */
-  protected ConfigurationController() {
-    setCommandClass(ConfigCommand.class);
-    setBindOnNewForm(true);
-    setSessionForm(false);
-  }
-
-  /**
    * Sets the application.
    *
    * @param application Application
@@ -77,9 +68,9 @@ public final class ConfigurationController extends AbstractFormController {
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("addedInstances", application.getInstanceNames());
+    model.put("addedRepositories", application.getRepositoryNames());
 
-    if (!application.getInstanceNames().isEmpty() && request.getParameter("addnew") == null) {
+    if (!application.getRepositoryNames().isEmpty() && request.getParameter("addnew") == null) {
       //Config url is invoked with at least one repository already added
       return new ModelAndView("confirmAddConfig", model);
     } else {
@@ -109,7 +100,7 @@ public final class ConfigurationController extends AbstractFormController {
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("addedInstances", application.getInstanceNames());
+    model.put("addedRepositories", application.getRepositoryNames());
     model.put("configFile", application.getConfigurationFile());
 
     final ConfigCommand confCommand = (ConfigCommand) command;
@@ -121,8 +112,8 @@ public final class ConfigurationController extends AbstractFormController {
       return new ModelAndView("config", model);
     } else {
       logger.debug("Adding configuration from command: " + confCommand);
-      final RepositoryConfiguration repositoryConfiguration = confCommand.createInstanceConfiguration();
-      application.addInstance(repositoryConfiguration);
+      final RepositoryConfiguration repositoryConfiguration = confCommand.createRepositoryConfiguration();
+      application.addRepository(repositoryConfiguration);
       model.put("latestAddedInstance", confCommand.getName());
       return new ModelAndView("confirmAddConfig", model);
     }

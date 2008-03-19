@@ -21,12 +21,12 @@ public class ApplicationTest extends TestCase {
 
     final Application application = new Application(new File(TEMPDIR), "filename");
     assertFalse(application.isConfigured());
-    assertEquals(0, application.getInstanceCount());
+    assertEquals(0, application.getRepositoryCount());
     assertNotNull(application.getConfigurationFile());
     assertEquals(new File(TEMPDIR, "filename"), application.getConfigurationFile());
   }
 
-  public void testStoreInstanceConfigurations() throws Exception {
+  public void testStoreRepositoryConfigurations() throws Exception {
     final File propFile = new File(TEMPDIR, "tmpconfigfilename");
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
@@ -44,12 +44,12 @@ public class ApplicationTest extends TestCase {
     repositoryConfiguration2.setCacheUsed(false);
     repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addInstance(repositoryConfiguration1);
-    application.addInstance(repositoryConfiguration2);
+    application.addRepository(repositoryConfiguration1);
+    application.addRepository(repositoryConfiguration2);
 
     try {
       assertFalse(propFile.exists());
-      application.storeInstanceConfigurations();
+      application.storeRepositoryConfigurations();
 
       //File should now be written
       assertTrue(propFile.exists());
@@ -71,8 +71,8 @@ public class ApplicationTest extends TestCase {
     config2.setUid("");
     config2.setPwd("");
 
-    application.addInstance(config1);
-    application.addInstance(config2);
+    application.addRepository(config1);
+    application.addRepository(config2);
 
     final List<Properties> configurations = application.getConfigurationAsProperties();
     Properties props = configurations.get(0);
@@ -81,7 +81,7 @@ public class ApplicationTest extends TestCase {
     assertEquals(8, props.size());
   }
 
-  public void testLoadInstanceConfigurations() throws Exception {
+  public void testLoadRepositoryConfigurations() throws Exception {
     final Properties testConfig = new Properties();
     testConfig.put("defaultsvn.root", "http://localhost");
     testConfig.put("defaultsvn.uid", "username");
@@ -91,7 +91,7 @@ public class ApplicationTest extends TestCase {
 
     final Application application = new Application(
         new File(System.getProperty("java.io.tmpdir")), "sventon-config-test.tmp");
-    assertEquals(0, application.getInstanceCount());
+    assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
 
     final File tempConfigFile = application.getConfigurationFile();
@@ -103,9 +103,9 @@ public class ApplicationTest extends TestCase {
       testConfig.store(os, null);
 
       is = new FileInputStream(tempConfigFile);
-      application.loadInstanceConfigurations();
+      application.loadRepositoryConfigurations();
 
-      assertEquals(1, application.getInstanceCount());
+      assertEquals(1, application.getRepositoryCount());
       assertTrue(application.isConfigured());
     } finally {
       IOUtils.closeQuietly(is);

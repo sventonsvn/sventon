@@ -14,8 +14,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
-<%@ taglib prefix="spring" uri="/WEB-INF/spring.tld" %>
 
 <form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this);">
   <!-- Needed by ASVNTC -->

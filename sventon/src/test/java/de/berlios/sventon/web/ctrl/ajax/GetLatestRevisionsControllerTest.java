@@ -3,6 +3,7 @@ package de.berlios.sventon.web.ctrl.ajax;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
@@ -27,7 +28,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     ctrl.setRepositoryService(mockService);
 
     final SVNBaseCommand command = new SVNBaseCommand();
-    command.setName("test");
+    command.setName(new RepositoryName("test"));
 
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
     revisions.add(new SVNLogEntry(null, 1, null, null, null));

@@ -166,18 +166,18 @@ public final class ConfigCommand {
   }
 
   /**
-   * Gets the instance name.
+   * Gets the repository name.
    *
-   * @return Name of instance.
+   * @return Name of repository.
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Sets the instance name.
+   * Sets the repository name.
    *
-   * @param name Name of instance.
+   * @param name Name of repository.
    */
   public void setName(final String name) {
     this.name = name;
@@ -224,8 +224,8 @@ public final class ConfigCommand {
    *
    * @return New, populated RepositoryConfiguration
    */
-  public RepositoryConfiguration createInstanceConfiguration() {
-    RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
+  public RepositoryConfiguration createRepositoryConfiguration() {
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
     configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
     return configuration;

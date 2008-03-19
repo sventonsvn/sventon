@@ -11,7 +11,7 @@ public class KeywordHandlerTest extends TestCase {
   public void testSubstitute() throws Exception {
     final Map<String, String> keywordsMap = new HashMap<String, String>();
     keywordsMap.put(SVNProperty.KEYWORDS, "Author Date Revision URL");
-    keywordsMap.put(SVNProperty.LAST_AUTHOR, null);
+    keywordsMap.put(SVNProperty.LAST_AUTHOR, "domain\\user");
     keywordsMap.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");
     keywordsMap.put(SVNProperty.COMMITTED_REVISION, "33");
 

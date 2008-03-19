@@ -76,8 +76,8 @@ function doSearch(formName) {
 }
 
 // function to handle flatten submissions
-function doFlatten(url, instanceName) {
-  var flattenURL = 'flatten.svn?name=' + instanceName + '&path='
+function doFlatten(url, repositoryName) {
+  var flattenURL = 'flatten.svn?name=' + repositoryName + '&path='
   var result = true;
   if (url == '/') {
     result = flatteningWarning();
@@ -90,7 +90,7 @@ function doFlatten(url, instanceName) {
   return true;
 }
 
-// function to validate url during instance configuration submisson
+// function to validate url during repository configuration submisson
 function validateUrl(formName) {
   var input = $(formName)['repositoryUrl'];
   var url = $F(input).toLocaleLowerCase();
@@ -248,9 +248,9 @@ function getHelpText(id) {
 }
 
 // Gets the log message for given revision.
-function getLogMessage(revision, instanceName, date) {
+function getLogMessage(revision, repositoryName, date) {
   var url = 'getmessage.ajax';
-  var urlParams = 'revision=' + revision + '&name=' + instanceName;
+  var urlParams = 'revision=' + revision + '&name=' + repositoryName;
   var divName = 'msg' + revision + 'Div';
 
   var ajax = new Ajax.Request(url, {

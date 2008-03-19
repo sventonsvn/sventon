@@ -2,6 +2,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
@@ -22,7 +23,7 @@ public class GoToControllerTest extends TestCase {
 
     final SVNRevision revision = SVNRevision.create(12);
     final SVNBaseCommand command = new SVNBaseCommand();
-    command.setName("test");
+    command.setName(new RepositoryName("test"));
     command.setPath("/file.txt");
     command.setRevision(String.valueOf(revision.getNumber()));
 

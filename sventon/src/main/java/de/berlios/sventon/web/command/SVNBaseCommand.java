@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.util.PathUtil;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -41,9 +42,9 @@ public final class SVNBaseCommand {
   private String revision = null;
 
   /**
-   * Repository instance name.
+   * Repository name.
    */
-  private String name;
+  private RepositoryName name;
 
   /**
    * The sort type.
@@ -185,20 +186,20 @@ public final class SVNBaseCommand {
   }
 
   /**
-   * Sets the repository instance name.
+   * Sets the repository name.
    *
-   * @param name Repository instance name
+   * @param name Repository name
    */
-  public void setName(final String name) {
+  public void setName(final RepositoryName name) {
     this.name = name;
   }
 
   /**
-   * Gets the repository instance name.
+   * Gets the repository name.
    *
-   * @return The repository instance name.
+   * @return The repository name.
    */
-  public String getName() {
+  public RepositoryName getName() {
     return name;
   }
 

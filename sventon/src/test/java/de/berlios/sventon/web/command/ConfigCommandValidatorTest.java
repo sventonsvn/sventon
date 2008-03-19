@@ -22,7 +22,7 @@ public class ConfigCommandValidatorTest extends TestCase {
     // An empty command is valid
     assertEquals(0, exception.getAllErrors().size());
 
-    // Invalid repository instance name
+    // Invalid repository name
     command.setName("Illegal whitespace in name");
     command.setRepositoryUrl("svn://domain.com/svn/");
     command.setPwd("");

@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.objectcache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheManager;
 
@@ -69,17 +70,17 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
   /**
    * Creates a new cache instance using given name and default settings.
    *
-   * @param cacheName Name of cache instance.
+   * @param repositoryName Name of cache instance.
    * @return The created cache instance.
    * @throws de.berlios.sventon.repository.cache.CacheException
    *          if unable to create cache.
    */
-  protected ObjectCache createCache(final String cacheName) throws CacheException {
-    logger.debug("Creating cache: " + cacheName);
-    final File cachePath = new File(rootDirectory, cacheName);
+  protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
+    logger.debug("Creating cache: " + repositoryName);
+    final File cachePath = new File(rootDirectory, repositoryName.toString());
     cachePath.mkdirs();
     return new ObjectCacheImpl(
-        cacheName,
+        repositoryName,
         cachePath.getAbsolutePath(),
         maxElementsInMemory,
         overflowToDisk,

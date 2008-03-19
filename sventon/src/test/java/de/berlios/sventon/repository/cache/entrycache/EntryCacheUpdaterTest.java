@@ -2,6 +2,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RevisionUpdate;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
@@ -34,7 +35,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
     cacheUpdater.updateInternal(entryCache, new TestRepository(),
-        new RevisionUpdate("defaultsvn", logEntries, false, false));
+        new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
 
     assertEquals(4, entryCache.getSize());
   }

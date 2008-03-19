@@ -23,7 +23,7 @@
   <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 
   <h3>
-    No instance configuration has been added.
+    No repository has been added.
     Make sure to <i>add</i> at least one configuration before <i>submitting</i>.
   </h3>
 

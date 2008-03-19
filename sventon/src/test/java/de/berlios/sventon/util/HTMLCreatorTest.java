@@ -1,5 +1,6 @@
 package de.berlios.sventon.util;
 
+import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -42,23 +43,23 @@ public class HTMLCreatorTest extends TestCase {
     changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
     final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
 
-    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "/file1.java", "", "sandbox", false, false, new MockHttpServletResponse()));
+    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "/file1.java", "", new RepositoryName("sandbox"), false, false, new MockHttpServletResponse()));
   }
 
   public void testCreateGoToUrl() throws Exception {
     assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=1&name=sandbox",
-        HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, "sandbox", false));
+        HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), false));
     assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=head&name=sandbox",
-        HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, "sandbox", true));
+        HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), true));
   }
 
   public void testCreateRevInfoUrl() throws Exception {
     assertEquals("http://localhost/revinfo.svn?revision=1&name=sandbox",
-        HTMLCreator.createRevInfoUrl("http://localhost/", 1, "sandbox"));
+        HTMLCreator.createRevInfoUrl("http://localhost/", 1, new RepositoryName("sandbox")));
   }
 
   public void testCreateDiffUrl() throws Exception {
     assertEquals("http://localhost/diff.svn?path=/a.txt&revision=2&name=sandbox&entry=/a.txt;;2&entry=/a.txt;;1",
-        HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, "sandbox", false));
+        HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, new RepositoryName("sandbox"), false));
   }
 }

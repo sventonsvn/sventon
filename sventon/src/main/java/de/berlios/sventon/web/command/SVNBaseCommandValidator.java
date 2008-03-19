@@ -34,8 +34,8 @@ public final class SVNBaseCommandValidator implements Validator {
   /**
    * {@inheritDoc}
    */
-  public void validate(final Object obj, final Errors errors) {
-    final SVNBaseCommand command = (SVNBaseCommand) obj;
+  public void validate(final Object target, final Errors errors) {
+    final SVNBaseCommand command = (SVNBaseCommand) target;
 
     if (command.getSortType() != null) {
       try {

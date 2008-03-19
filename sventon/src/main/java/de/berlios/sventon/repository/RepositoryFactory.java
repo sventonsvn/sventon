@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository;
 
+import de.berlios.sventon.appl.RepositoryName;
 import org.apache.commons.lang.Validate;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -45,18 +46,18 @@ public final class RepositoryFactory {
   }
 
   /**
-   * Gets a repository instance configured using given connection info.
+   * Gets a repository connection configured using given connection info.
    * <p/>
    * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
    *
-   * @param instanceName Instance name.
-   * @param svnUrl       Subversion repository URL
-   * @param uid          User id
-   * @param pwd          Password
-   * @return The repository instance.
-   * @throws SVNException if unable to create repository instance.
+   * @param repositoryName Repository name.
+   * @param svnUrl         Subversion repository URL
+   * @param uid            User id
+   * @param pwd            Password
+   * @return The repository connection.
+   * @throws SVNException if unable to create repository connection.
    */
-  public SVNRepository getRepository(final String instanceName, final SVNURL svnUrl, final String uid, final String pwd)
+  public SVNRepository getRepository(final RepositoryName repositoryName, final SVNURL svnUrl, final String uid, final String pwd)
       throws SVNException {
 
     if (svnUrl == null) {
@@ -64,7 +65,7 @@ public final class RepositoryFactory {
     }
 
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
-    final File configDirectory = new File(configurationRootDirectory, instanceName);
+    final File configDirectory = new File(configurationRootDirectory, repositoryName.toString());
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd, false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;

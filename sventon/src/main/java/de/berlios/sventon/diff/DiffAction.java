@@ -78,13 +78,13 @@ public enum DiffAction {
    */
   public static DiffAction parse(final char code) {
     switch (code) {
-      case'd':
+      case 'd':
         return DELETED;
-      case'c':
+      case 'c':
         return CHANGED;
-      case'a':
+      case 'a':
         return ADDED;
-      case'u':
+      case 'u':
         return UNCHANGED;
       default:
         throw new IllegalArgumentException("Unable to parse code: " + code);

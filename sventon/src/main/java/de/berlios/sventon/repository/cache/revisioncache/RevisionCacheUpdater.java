@@ -12,6 +12,7 @@
 package de.berlios.sventon.repository.cache.revisioncache;
 
 import de.berlios.sventon.appl.AbstractRevisionObserver;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.repository.cache.CacheException;
 import org.apache.commons.logging.Log;
@@ -53,16 +54,16 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
-    final String instanceName = revisionUpdate.getInstanceName();
+    final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + instanceName);
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + repositoryName);
 
     try {
-      final RevisionCache revisionCache = revisionCacheManager.getCache(instanceName);
+      final RevisionCache revisionCache = revisionCacheManager.getCache(repositoryName);
       updateInternal(revisionCache, revisions);
     } catch (final CacheException ex) {
-      LOGGER.warn("Could not update cache instance [" + instanceName + "]", ex);
+      LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
     }
   }
 

@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl.xml;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
@@ -75,19 +76,19 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
+    final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
-    final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
 
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+        repository = repositoryFactory.getRepository(configuration.getName(),
             configuration.getSVNURL(), uid, pwd);
       } else {
-        repository = repositoryFactory.getRepository(configuration.getInstanceName(),
+        repository = repositoryFactory.getRepository(configuration.getName(),
             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
       }
 
@@ -96,7 +97,7 @@ public final class ShowLatestCommitInfoController extends AbstractController {
 
       response.getWriter().write(XMLDocumentHelper.getAsString(
           XMLDocumentHelper.createXML(repositoryService.getRevision(
-              instanceName, repository, headRevision), datePattern), encoding));
+              repositoryName, repository, headRevision), datePattern), encoding));
     } catch (SVNAuthenticationException ae) {
       logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());

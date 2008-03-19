@@ -13,6 +13,7 @@ package de.berlios.sventon.service;
 
 import de.berlios.sventon.SventonException;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
 import de.berlios.sventon.model.*;
@@ -46,14 +47,14 @@ public interface RepositoryService {
    * Gets revision details for a specific revision number.
    * If caching is enabled in the {@link de.berlios.sventon.appl.RepositoryConfiguration}, a cached revision will be returned.
    *
-   * @param instanceName The instance name
-   * @param repository   The repository
-   * @param revision     Revision number
+   * @param repositoryName Repository name.
+   * @param repository     The repository
+   * @param revision       Revision number
    * @return The log entry
    * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
-  SVNLogEntry getRevision(final String instanceName, final SVNRepository repository, final long revision)
+  SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException;
 
   /**
@@ -73,17 +74,17 @@ public interface RepositoryService {
    * Gets revision details for given revision interval and a specific path with limit.
    * If caching is enabled in the {@link de.berlios.sventon.appl.RepositoryConfiguration}, cached revisions will be returned.
    *
-   * @param instanceName The instance name
-   * @param repository   The repository
-   * @param fromRevision From revision
-   * @param toRevision   To revision
-   * @param path         The repository path
-   * @param limit        Revision limit
+   * @param repositoryName Repository name.
+   * @param repository     The repository
+   * @param fromRevision   From revision
+   * @param toRevision     To revision
+   * @param path           The repository path
+   * @param limit          Revision limit
    * @return The log entries
    * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
-  List<SVNLogEntry> getRevisions(final String instanceName, final SVNRepository repository,
+  List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                  final long fromRevision, final long toRevision, final String path,
                                  final long limit) throws SVNException, SventonException;
 

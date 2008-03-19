@@ -61,7 +61,7 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
 
     try {
       final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
-          SVNRevision.UNDEFINED, userRepositoryContext.getCharset(), getInstanceConfiguration(svnCommand.getName()));
+          SVNRevision.UNDEFINED, userRepositoryContext.getCharset(), getRepositoryConfiguration(svnCommand.getName()));
 
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);

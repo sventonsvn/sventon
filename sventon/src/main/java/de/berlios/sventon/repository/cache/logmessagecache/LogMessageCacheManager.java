@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.logmessagecache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheManager;
 import org.apache.lucene.store.FSDirectory;
@@ -53,15 +54,15 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
   /**
    * Creates a new cache instance using given name and default settings.
    *
-   * @param cacheName Name of cache instance.
+   * @param repositoryName Name of cache instance.
    * @return The created cache instance.
    * @throws CacheException if unable to create cache or unable to load analyzer.
    */
-  protected LogMessageCache createCache(final String cacheName) throws CacheException {
-    logger.debug("Creating cache: " + cacheName);
+  protected LogMessageCache createCache(final RepositoryName repositoryName) throws CacheException {
+    logger.debug("Creating cache: " + repositoryName);
     final FSDirectory fsDirectory;
     try {
-      final File cachePath = new File(rootDirectory, cacheName);
+      final File cachePath = new File(rootDirectory, repositoryName.toString());
       cachePath.mkdirs();
       fsDirectory = FSDirectory.getDirectory(cachePath);
       logger.debug("Log cache dir: " + fsDirectory.getFile().getAbsolutePath());

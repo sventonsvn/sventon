@@ -49,9 +49,9 @@ public final class Application {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Set of added subversion repository instances.
+   * Set of added subversion repository names.
    */
-  private final Map<String, Instance> instances = new TreeMap<String, Instance>();
+  private final Map<RepositoryName, RepositoryConfiguration> repositories = new HashMap<RepositoryName, RepositoryConfiguration>();
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -72,6 +72,8 @@ public final class Application {
   private LogMessageCacheManager logMessageCacheManager;
   private ObjectCacheManager objectCacheManager;
   private RevisionCacheManager revisionCacheManager;
+
+  private final List<RepositoryName> updating = Collections.synchronizedList(new ArrayList<RepositoryName>());
 
   /**
    * Constructor.
@@ -100,7 +102,7 @@ public final class Application {
    */
   public void init() throws IOException, CacheException {
     initSvnSupport();
-    loadInstanceConfigurations();
+    loadRepositoryConfigurations();
     initCaches();
   }
 
@@ -111,16 +113,16 @@ public final class Application {
    */
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
-    for (final Instance instance : getInstances()) {
-      final String instanceName = instance.getConfiguration().getInstanceName();
-      if (instance.getConfiguration().isCacheUsed()) {
-        logger.debug("Registering caches for instance: " + instanceName);
-        entryCacheManager.register(instanceName);
-        logMessageCacheManager.register(instanceName);
-        objectCacheManager.register(instanceName);
-        revisionCacheManager.register(instanceName);
+    for (final RepositoryConfiguration repositoryConfiguration : repositories.values()) {
+      final RepositoryName name = repositoryConfiguration.getName();
+      if (repositoryConfiguration.isCacheUsed()) {
+        logger.debug("Registering caches for instance: " + name);
+        entryCacheManager.register(name);
+        logMessageCacheManager.register(name);
+        objectCacheManager.register(name);
+        revisionCacheManager.register(name);
       } else {
-        logger.debug("Caches have not been enabled for instance: " + instanceName);
+        logger.debug("Caches have not been enabled for instance: " + name);
       }
     }
     logger.info("Caches initialized ok");
@@ -139,7 +141,7 @@ public final class Application {
    * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()
    */
-  protected void loadInstanceConfigurations() throws IOException {
+  protected void loadRepositoryConfigurations() throws IOException {
     InputStream is = null;
     final File configFile = new File(configurationDirectory, configurationFilename);
     try {
@@ -156,7 +158,7 @@ public final class Application {
   /**
    * Store the instance configurations on file at path {@code configurationDirectory / configurationFilename}.
    */
-  public void storeInstanceConfigurations() {
+  public void storeRepositoryConfigurations() {
     final File propertyFile = new File(configurationDirectory, configurationFilename);
     logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
 
@@ -183,8 +185,7 @@ public final class Application {
    */
   protected List<Properties> getConfigurationAsProperties() {
     final List<Properties> propertyList = new ArrayList<Properties>();
-    for (final String instanceName : getInstanceNames()) {
-      final RepositoryConfiguration configuration = getInstance(instanceName).getConfiguration();
+    for (final RepositoryConfiguration configuration : repositories.values()) {
       propertyList.add(configuration.getAsProperties());
     }
     return propertyList;
@@ -199,23 +200,23 @@ public final class Application {
    * @throws IOException if IO error occurs.
    */
   private void initConfiguration(final InputStream input) throws IOException {
-    final Set<String> instanceNames = new HashSet<String>();
+    final Set<String> repositoryNames = new HashSet<String>();
     final Properties props = new Properties();
     props.load(input);
 
     for (final Object object : props.keySet()) {
       final String key = (String) object;
-      final String instanceName = key.substring(0, key.indexOf("."));
-      instanceNames.add(instanceName);
+      final String repositoryName = key.substring(0, key.indexOf("."));
+      repositoryNames.add(repositoryName);
     }
 
-    for (final String instanceName : instanceNames) {
-      logger.info("Configuring instance: " + instanceName);
-      addInstance(RepositoryConfiguration.create(instanceName, props));
+    for (final String repositoryName : repositoryNames) {
+      logger.info("Configuring repository: " + repositoryName);
+      addRepository(RepositoryConfiguration.create(repositoryName, props));
     }
 
-    if (getInstanceCount() > 0) {
-      logger.info(getInstanceCount() + " instance(s) configured");
+    if (getRepositoryCount() > 0) {
+      logger.info(getRepositoryCount() + " instance(s) configured");
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
@@ -227,8 +228,8 @@ public final class Application {
    *
    * @param configuration The instance configuration to add.
    */
-  public void addInstance(final RepositoryConfiguration configuration) {
-    instances.put(configuration.getInstanceName(), new Instance(configuration));
+  public void addRepository(final RepositoryConfiguration configuration) {
+    repositories.put(configuration.getName(), configuration);
   }
 
   /**
@@ -244,53 +245,32 @@ public final class Application {
   }
 
   /**
-   * Gets an instance by name.
+   * Gets the repository names.
    *
-   * @param instanceName Name of instance.
-   * @return Instance.
+   * @return Collection of repository names.
    */
-  public Instance getInstance(final String instanceName) {
-    final Instance instance = instances.get(instanceName);
-    if (instance == null) {
-      throw new RuntimeException("No instance configuration for name: " + instanceName);
-    }
-    return instance;
+  public Set<RepositoryName> getRepositoryNames() {
+    return repositories.keySet();
   }
 
   /**
-   * Performs a shutdown on the application and all its repository instances.
+   * Gets the repository configuration for given repository.
+   *
+   * @param name Repository name.
+   * @return Collection of repository names.
    */
-  public void shutdown() {
-    for (final Instance instance : instances.values()) {
-      instance.shutdown();
-    }
+  public RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
+    return repositories.get(name);
   }
 
   /**
-   * Gets the instance.
+   * Returns the number of configured repositories
+   * .
    *
-   * @return Collection of instances.
+   * @return Number of repositories.
    */
-  public Collection<Instance> getInstances() {
-    return instances.values();
-  }
-
-  /**
-   * Gets a set of the instance names.
-   *
-   * @return Set of names.
-   */
-  public Set<String> getInstanceNames() {
-    return instances.keySet();
-  }
-
-  /**
-   * Returns the number of configured instances.
-   *
-   * @return Number of instances.
-   */
-  public int getInstanceCount() {
-    return instances.size();
+  public int getRepositoryCount() {
+    return repositories.size();
   }
 
   /**
@@ -300,6 +280,32 @@ public final class Application {
    */
   public boolean isConfigured() {
     return configured;
+  }
+
+  /**
+   * Checks if a repository is being updated.
+   *
+   * @param name Repository name.
+   * @return <tt>true</tt> if repository is being updated.
+   */
+  public synchronized boolean isUpdating(final RepositoryName name) {
+    return updating.contains(name);
+  }
+
+  /**
+   * Sets the cache updating status.
+   * <p/>
+   * Note: This method is package protected by design.
+   *
+   * @param name     Repository name.
+   * @param updating True or false.
+   */
+  synchronized void setUpdatingCache(final RepositoryName name, final boolean updating) {
+    if (updating) {
+      this.updating.add(name);
+    } else {
+      this.updating.remove(name);
+    }
   }
 
   /**

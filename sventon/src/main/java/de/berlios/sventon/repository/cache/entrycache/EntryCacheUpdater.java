@@ -11,10 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.entrycache;
 
-import de.berlios.sventon.appl.AbstractRevisionObserver;
-import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.RepositoryConfiguration;
-import de.berlios.sventon.appl.RevisionUpdate;
+import de.berlios.sventon.appl.*;
 import de.berlios.sventon.model.LogEntryActionType;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryFactory;
@@ -82,20 +79,20 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revisionUpdate The updated revisions.
    */
   public void update(final RevisionUpdate revisionUpdate) {
-    final String instanceName = revisionUpdate.getInstanceName();
+    final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
 
     LOGGER.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
-        + instanceName);
+        + repositoryName);
 
     SVNRepository repository = null;
     try {
-      final EntryCache entryCache = entryCacheManager.getCache(instanceName);
-      final RepositoryConfiguration configuration = application.getInstance(instanceName).getConfiguration();
-      repository = repositoryFactory.getRepository(instanceName, configuration.getSVNURL(),
+      final EntryCache entryCache = entryCacheManager.getCache(repositoryName);
+      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+      repository = repositoryFactory.getRepository(repositoryName, configuration.getSVNURL(),
           configuration.getUid(), configuration.getPwd());
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
-      LOGGER.warn("Could not update cache instance [" + instanceName + "]", ex);
+      LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
     } finally {
       if (repository != null) {
         repository.closeSession();
@@ -116,8 +113,8 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * </td><td>Entry's details are updated</td></tr>
    * </table>
    *
-   * @param entryCache     EntryCache instance
-   * @param repository     Repository instance
+   * @param entryCache     EntryCache.
+   * @param repository     Repository.
    * @param revisionUpdate Update
    */
   protected void updateInternal(final EntryCache entryCache, final SVNRepository repository,
@@ -129,7 +126,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
     if (revisionCount > 0 && firstRevision == 1) {
-      LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getInstanceName());
+      LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getRepositoryName());
       try {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);

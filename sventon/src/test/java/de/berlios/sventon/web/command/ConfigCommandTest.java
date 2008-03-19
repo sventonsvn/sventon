@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 public class ConfigCommandTest extends TestCase {
 
-  public void testCreateInstanceConfiguration() {
+  public void testCreateRepositoryConfiguration() {
 
     final ConfigCommand command = new ConfigCommand();
     command.setName("testrepos");
@@ -18,7 +18,7 @@ public class ConfigCommandTest extends TestCase {
     command.setUid("uid");
     command.setPwd("pwd");
 
-    final RepositoryConfiguration configuration = command.createInstanceConfiguration();
+    final RepositoryConfiguration configuration = command.createRepositoryConfiguration();
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertFalse(configuration.isAccessControlEnabled());
     assertTrue(configuration.isCacheUsed());

@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.repository.cache.revisioncache;
 
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.CacheManager;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
@@ -40,13 +41,13 @@ public final class RevisionCacheManager extends CacheManager<RevisionCache> {
   /**
    * Creates a new cache instance using given name and default settings.
    *
-   * @param cacheName Name of cache instance.
+   * @param repositoryName Name of cache instance.
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  protected RevisionCache createCache(final String cacheName) throws CacheException {
-    logger.debug("Creating cache: " + cacheName);
-    return new RevisionCacheImpl(objectCacheManager.getCache(cacheName));
+  protected RevisionCache createCache(final RepositoryName repositoryName) throws CacheException {
+    logger.debug("Creating cache: " + repositoryName);
+    return new RevisionCacheImpl(objectCacheManager.getCache(repositoryName));
   }
 
 }

@@ -15,17 +15,17 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
-  <title><fmt:message key="${errorHeadingKey}"/></title>
+  <title><spring:message code="${errorHeadingKey}"/></title>
 </head>
 
 <body>
-  <h3><fmt:message key="${errorHeadingKey}"/></h3>
+  <h3><spring:message code="${errorHeadingKey}"/></h3>
 
   <p/>
   <table class="sventonErrorMessageTable">
     <tr>
       <td>
-        <fmt:message key="${errorMessageKey}"/>
+        <spring:message code="${errorMessageKey}"/>
       </td>
     </tr>
   </table>
