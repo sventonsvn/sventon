@@ -23,9 +23,9 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.activation.FileTypeMap;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.net.URL;
 
 /**
@@ -65,7 +65,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
 
     logger.debug("Getting file as 'thumbnail'");
 
-    final ServletOutputStream output = response.getOutputStream();
+    final OutputStream output = response.getOutputStream();
 
     if (!mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
       logger.error("File '" + svnCommand.getTarget() + "' is not a image file");

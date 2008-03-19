@@ -26,13 +26,9 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -74,7 +70,7 @@ public final class ExportController extends AbstractSVNTemplateController implem
     final long headRevision = getRepositoryService().getLatestRevision(repository);
     final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", headRevision);
 
-    ServletOutputStream output = null;
+    OutputStream output = null;
     InputStream fileInputStream = null;
 
     final List<SVNFileRevision> targets = new RequestParameterParser().parseEntries(request);
