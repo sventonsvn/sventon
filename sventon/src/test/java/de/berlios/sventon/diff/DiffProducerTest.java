@@ -4,8 +4,8 @@ import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -52,8 +52,8 @@ public class DiffProducerTest extends TestCase {
             ">OneMore=3" + LINE_BREAK +
             ">" + LINE_BREAK;
 
-    final InputStream left = new ByteArrayInputStream(leftString.getBytes());
-    final InputStream right = new ByteArrayInputStream(rightString.getBytes());
+    final InputStream left = IOUtils.toInputStream(leftString);
+    final InputStream right = IOUtils.toInputStream(rightString);
 
     final DiffProducer diffProducer = new DiffProducer(left, right, null);
     final OutputStream output = new ByteArrayOutputStream();
@@ -137,8 +137,8 @@ public class DiffProducerTest extends TestCase {
             ">" + LINE_BREAK +
             ">}" + LINE_BREAK;
 
-    final InputStream left = new ByteArrayInputStream(leftString.getBytes());
-    final InputStream right = new ByteArrayInputStream(rightString.getBytes());
+    final InputStream left = IOUtils.toInputStream(leftString);
+    final InputStream right = IOUtils.toInputStream(rightString);
 
     final DiffProducer diffProducer = new DiffProducer(left, right, null);
     final OutputStream output = new ByteArrayOutputStream();
@@ -179,8 +179,8 @@ public class DiffProducerTest extends TestCase {
         "More!" + LINE_BREAK +
             "Even more!" + LINE_BREAK;
 
-    final InputStream left = new ByteArrayInputStream(leftString.getBytes());
-    final InputStream right = new ByteArrayInputStream(rightString.getBytes());
+    final InputStream left = IOUtils.toInputStream(leftString);
+    final InputStream right = IOUtils.toInputStream(rightString);
 
     final DiffProducer diffProducer = new DiffProducer(left, right, null);
     final OutputStream output = new ByteArrayOutputStream();
@@ -222,8 +222,9 @@ public class DiffProducerTest extends TestCase {
             "+OneMore=3" + LINE_BREAK +
             "+" + LINE_BREAK;
 
-    final InputStream left = new ByteArrayInputStream(leftString.getBytes());
-    final InputStream right = new ByteArrayInputStream(rightString.getBytes());
+
+    final InputStream left = IOUtils.toInputStream(leftString);
+    final InputStream right = IOUtils.toInputStream(rightString);
 
     final Map props = new HashMap();
     props.put(QDiffGeneratorFactory.GUTTER_PROPERTY, 0);

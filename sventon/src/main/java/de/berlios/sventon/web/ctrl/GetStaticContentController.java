@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import org.apache.log4j.lf5.util.StreamUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
@@ -48,7 +48,7 @@ public final class GetStaticContentController extends AbstractController {
     if (is != null) {
       try {
         out = response.getOutputStream();
-        StreamUtils.copy(is, out);
+        IOUtils.copy(is, out);
       } catch (IOException ioex) {
         logger.error(ioex);
       } finally {

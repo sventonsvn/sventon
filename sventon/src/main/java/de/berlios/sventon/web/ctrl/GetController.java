@@ -23,9 +23,9 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.activation.FileTypeMap;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 /**
  * Controller used when downloading single files.
@@ -83,7 +83,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   }
 
   private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-    final ServletOutputStream output = response.getOutputStream();
+    final OutputStream output = response.getOutputStream();
     response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
@@ -93,7 +93,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
   }
 
   private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-    final ServletOutputStream output = response.getOutputStream();
+    final OutputStream output = response.getOutputStream();
     String mimeType = null;
 
     try {

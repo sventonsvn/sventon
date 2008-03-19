@@ -14,6 +14,7 @@ package de.berlios.sventon.repository.cache.entrycache;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.cache.CacheException;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.Collections;
@@ -74,16 +75,10 @@ public final class DiskCache extends EntryCache {
    * @throws CacheException if unable to read cache file.
    */
   private void load() throws CacheException {
-    ObjectInputStream inputStream;
+    ObjectInputStream inputStream = null;
     if (cacheFile.exists()) {
       try {
-        try {
-          inputStream = new ObjectInputStream(new GZIPInputStream(new FileInputStream(cacheFile)));
-        } catch (IOException ioex) {
-          logger.info("Error while loading gzipped data", ioex);
-          logger.info("Trying to read old data file format");
-          inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
-        }
+        inputStream = new ObjectInputStream(new GZIPInputStream(new FileInputStream(cacheFile)));
         setCachedRevision(inputStream.readLong());
         //noinspection unchecked
         setEntries((Set<RepositoryEntry>) inputStream.readObject());
@@ -91,6 +86,8 @@ public final class DiskCache extends EntryCache {
         logger.debug("Revision: " + getCachedRevision());
       } catch (Exception ex) {
         throw new CacheException("Unable to read entryCache file", ex);
+      } finally {
+        IOUtils.closeQuietly(inputStream);
       }
     } else {
       // No serialized cachefile excisted - initialize an empty one.
@@ -114,7 +111,7 @@ public final class DiskCache extends EntryCache {
     if (getSize() > 0) {
       final File tempCacheFile = new File(cacheFile.getAbsolutePath() + ".tmp");
       logger.info("Saving entryCache to disk, " + tempCacheFile);
-      final ObjectOutputStream out;
+      ObjectOutputStream out = null;
       try {
         // Write to a temp file first, to keep the old file just in case.
         out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(tempCacheFile)));
@@ -127,6 +124,8 @@ public final class DiskCache extends EntryCache {
             + tempCacheFile.renameTo(cacheFile));
       } catch (IOException ioex) {
         throw new CacheException("Unable to store entryCache to disk", ioex);
+      } finally {
+        IOUtils.closeQuietly(out);
       }
     }
   }
