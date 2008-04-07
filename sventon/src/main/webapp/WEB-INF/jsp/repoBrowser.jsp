@@ -29,8 +29,8 @@
     <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="name" value="${command.name}">
-    <input type="hidden" name="pegrev" value="${!empty numrevision ? numrevision : command.revision}">
-    
+    <input type="hidden" name="pegrev" value="${command.revisionNumber}">
+
     <c:url value="repobrowser.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
       <c:param name="revision" value="${command.revision}" />
@@ -177,7 +177,7 @@
     }
     Droppables.add('entryTrayContainerDiv', {onDrop:
         function(element, dropon, event) {
-          var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${!empty numrevision ? numrevision : command.revision}', {
+          var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${command.revisionNumber}', {
             method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
             Element.hide('spinner');
           }

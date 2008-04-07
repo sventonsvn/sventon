@@ -83,7 +83,7 @@ public final class RSSController extends AbstractController {
 
     final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
-    final String revision = ServletRequestUtils.getStringParameter(request, "revision", "head");
+    final String revision = ServletRequestUtils.getStringParameter(request, "revision", "HEAD");
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
 
@@ -95,6 +95,12 @@ public final class RSSController extends AbstractController {
     }
 
     final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+    if (configuration == null) {
+      String errorMessage = "Repository [" + repositoryName + "] does not exist!";
+      logger.error(errorMessage);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+      return null;
+    }
 
     SVNRepository repository = null;
     try {

@@ -1,23 +1,22 @@
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.repository.SVNRepositoryStub;
 import junit.framework.TestCase;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import java.util.Map;
+import java.util.Date;
 
 public class SVNBaseCommandTest extends TestCase {
 
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(SVNBaseCommandTest.class);
-  }
-
   public void testDefaultValues() {
-    SVNBaseCommand command = new SVNBaseCommand();
+    final SVNBaseCommand command = new SVNBaseCommand();
     assertEquals("/", command.getPath());
-    assertNull(command.getRevision());
+    assertEquals(SVNRevision.HEAD, command.getRevision());
   }
 
   public void testSetPath() {
-    SVNBaseCommand command = new SVNBaseCommand();
+    final SVNBaseCommand command = new SVNBaseCommand();
 
     //null is OK, will be converted to "/"
     command.setPath(null);
@@ -28,38 +27,66 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("/", command.getPath());
 
     command.setPath("Asdf.java");
-    assertEquals("Asdf.java", command.getPath());
-
+    assertEquals("/Asdf.java", command.getPath());
   }
 
   public void testSetRevision() {
-    SVNBaseCommand command = new SVNBaseCommand();
-    command.setRevision(null);
-    assertNull(command.getRevision());
+    final SVNBaseCommand command = new SVNBaseCommand();
+    try {
+      command.setRevision(null);
+      fail("Should throw IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // expected
+    }
+    assertEquals(SVNRevision.HEAD, command.getRevision());
 
-    command.setRevision("2");
-    assertEquals("2", command.getRevision());
+    command.setRevision(SVNRevision.parse("2"));
+    assertEquals(SVNRevision.create(2), command.getRevision());
 
     //Drutten is accepted as a revision here, but not by the SVNBaseCommandValidator
-    command.setRevision("Drutten");
-    assertEquals("Drutten", command.getRevision());
+    command.setRevision(SVNRevision.parse("Drutten"));
+    assertEquals(SVNRevision.UNDEFINED, command.getRevision());
 
     //HEAD in different cases are converted to HEAD
-    command.setRevision("HEAD");
-    assertEquals("HEAD", command.getRevision());
+    command.setRevision(SVNRevision.parse("HEAD"));
+    assertEquals(SVNRevision.HEAD, command.getRevision());
 
-    command.setRevision("head");
-    assertEquals("HEAD", command.getRevision());
+    command.setRevision(SVNRevision.parse("head"));
+    assertEquals(SVNRevision.HEAD, command.getRevision());
 
-    command.setRevision("HEad");
-    assertEquals("HEAD", command.getRevision());
-
+    command.setRevision(SVNRevision.parse("HEad"));
+    assertEquals(SVNRevision.HEAD, command.getRevision());
   }
 
   public void testGetCompletePath() {
-    SVNBaseCommand command = new SVNBaseCommand();
+    final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("trunk/src/File.java");
-    assertEquals("trunk/src/File.java", command.getPath());
+    assertEquals("/trunk/src/File.java", command.getPath());
+  }
+
+  public void testTranslateRevision() throws Exception {
+    final SVNBaseCommand command = new SVNBaseCommand();
+    command.setRevision(SVNRevision.parse("head"));
+    command.translateRevision(100, null);
+    assertEquals(SVNRevision.HEAD, command.getRevision());
+    assertEquals(100, command.getRevisionNumber());
+
+    command.setRevision(SVNRevision.parse(""));
+    command.translateRevision(100, null);
+    assertEquals(SVNRevision.UNDEFINED, command.getRevision());
+    assertEquals(100, command.getRevisionNumber());
+
+    command.setRevision(SVNRevision.parse("123"));
+    command.translateRevision(200, null);
+    assertEquals(SVNRevision.create(123), command.getRevision());
+
+    command.setRevision(SVNRevision.parse("{2007-01-01}"));
+    command.translateRevision(200, new SVNRepositoryStub(null, null) {
+      public long getDatedRevision(final Date date) throws SVNException {
+        return 123;
+      }
+    });
+    assertEquals(123, command.getRevisionNumber());
   }
 
 }

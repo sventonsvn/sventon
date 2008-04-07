@@ -20,7 +20,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +58,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -77,7 +76,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
     final URL fullSizeImageUrl = new URL(createFullSizeImageURL(request));
     final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
 
-    getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), revision.getNumber(),
+    getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), svnCommand.getRevisionNumber(),
         fullSizeImageUrl, imageFormatName, maxThumbnailSize, output);
 
     output.flush();

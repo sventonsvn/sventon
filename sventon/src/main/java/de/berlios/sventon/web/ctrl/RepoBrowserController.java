@@ -22,7 +22,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,11 +41,11 @@ public final class RepoBrowserController extends ListDirectoryContentsController
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, revision, userRepositoryContext, request,
+    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, headRevision, userRepositoryContext, request,
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();
@@ -63,7 +62,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
         logger.debug("Bypassing empty directory: " + svnCommand.getPath());
         svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
         final ModelAndView bypassedModelAndView =
-            svnHandle(repository, svnCommand, revision, userRepositoryContext, request, response, exception);
+            svnHandle(repository, svnCommand, headRevision, userRepositoryContext, request, response, exception);
         bypassedModelAndView.getModel().put("bypassed", true);
         return bypassedModelAndView;
       }

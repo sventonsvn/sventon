@@ -58,8 +58,8 @@ public class RepositoryServiceImpl implements RepositoryService {
       throws SVNException, SventonException {
 
     final long start = System.currentTimeMillis();
-    final SVNLogEntry logEntry;
-    logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision, true, false).iterator().next();
+    final SVNLogEntry logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
+        true, false).iterator().next();
     logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
     return logEntry;
   }
@@ -318,7 +318,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final Map leftFileProperties;
       final Map rightFileProperties;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (SVNRevision.HEAD == pegRevision) {
         leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
         leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
@@ -371,7 +371,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (SVNRevision.HEAD == pegRevision) {
         leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
       } else {
@@ -413,7 +413,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (SVNRevision.HEAD == pegRevision) {
         leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
       } else {
@@ -502,9 +502,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
                                        final String charset, final Colorer colorer) throws SVNException {
 
-    long blameRevision = revision;
-    if (blameRevision == -1) {
+    final long blameRevision;
+    if (SVNRevision.HEAD.equals(revision)) {
       blameRevision = repository.getLatestRevision();
+    } else {
+      blameRevision = revision;
     }
 
     final long start = System.currentTimeMillis();
@@ -542,7 +544,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
-    if (SVNRevision.UNDEFINED == pegRevision) {
+    if (SVNRevision.HEAD.equals(pegRevision)) {
       isLeftFileTextType = isTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
       isRightFileTextType = isTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
     } else {

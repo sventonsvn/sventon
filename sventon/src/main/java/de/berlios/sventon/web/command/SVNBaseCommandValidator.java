@@ -11,8 +11,6 @@
  */
 package de.berlios.sventon.web.command;
 
-import de.berlios.sventon.repository.RepositoryEntryComparator;
-import de.berlios.sventon.repository.RepositoryEntrySorter;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -37,30 +35,9 @@ public final class SVNBaseCommandValidator implements Validator {
   public void validate(final Object target, final Errors errors) {
     final SVNBaseCommand command = (SVNBaseCommand) target;
 
-    if (command.getSortType() != null) {
-      try {
-        RepositoryEntryComparator.SortType.valueOf(command.getSortType());
-      } catch (IllegalArgumentException iae) {
-        errors.rejectValue("sortType", "browse.error.illegal-sortType");
-      }
-    }
-
-    if (command.getSortMode() != null) {
-      try {
-        RepositoryEntrySorter.SortMode.valueOf(command.getSortMode());
-      } catch (IllegalArgumentException iae) {
-        errors.rejectValue("sortMode", "browse.error.illegal-sortMode");
-      }
-    }
-
-    final String revision = command.getRevision();
-
-    if (revision != null && !"HEAD".equals(revision) && !"".equals(revision)) {
-      final SVNRevision parsedRevision = SVNRevision.parse(revision);
-      if (parsedRevision == SVNRevision.UNDEFINED) {
-        command.setRevision("HEAD");
-        errors.rejectValue("revision", "browse.error.illegal-revision");
-      }
+    if (SVNRevision.UNDEFINED.equals(command.getRevision())) {
+      command.setRevision(SVNRevision.HEAD);
+      errors.rejectValue("revision", "browse.error.illegal-revision");
     }
   }
 }

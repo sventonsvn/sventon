@@ -236,7 +236,7 @@ public final class HTMLCreator {
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(GOTO_URL);
     sb.append("?path=").append(encodeUrl(path));
-    sb.append("&revision=").append(linkToHead ? "head" : revision);
+    sb.append("&revision=").append(linkToHead ? "HEAD" : revision);
     sb.append("&name=").append(encode(repositoryName.toString()));
     return sb.toString();
   }
@@ -260,7 +260,7 @@ public final class HTMLCreator {
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append(DIFF_URL);
     sb.append("?path=").append(encodeUrl(path));
-    sb.append("&revision=").append(linkToHead ? "head" : revision);
+    sb.append("&revision=").append(linkToHead ? "HEAD" : revision);
     sb.append("&name=").append(encode(repositoryName.toString()));
     sb.append("&entry=").append(encodeUrl(entry1));
     sb.append("&entry=").append(encodeUrl(entry2));

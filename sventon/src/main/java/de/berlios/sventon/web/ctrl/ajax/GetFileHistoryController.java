@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +42,7 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -53,9 +52,8 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
 
     final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
 
-    final long targetRevision = SVNRevision.HEAD != revision ? revision.getNumber() : getRepositoryService().getLatestRevision(repository);
     final List<SVNFileRevision> fileRevisions = getRepositoryService().getFileRevisions(
-        repository, svnCommand.getPath(), targetRevision);
+        repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
 
     if (logger.isDebugEnabled()) {
       final List<Long> fileRevisionNumbers = new ArrayList<Long>();
@@ -66,7 +64,7 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
     }
 
     Collections.reverse(fileRevisions);
-    model.put("currentRevision", revision.getNumber());
+    model.put("currentRevision", svnCommand.getRevisionNumber());
     model.put("fileRevisions", fileRevisions);
     if (archivedEntry != null) {
       model.put(ARCHIVED_ENTRY, archivedEntry);

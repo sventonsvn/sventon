@@ -12,7 +12,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -39,7 +38,7 @@ public class GetControllerTest extends TestCase {
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
     final MockHttpServletResponse res = new MockHttpServletResponse();
-    modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, null, req, res, null);
+    modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, req, res, null);
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
@@ -58,7 +57,7 @@ public class GetControllerTest extends TestCase {
     mockRequest.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, (String) null);
 
     final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-    final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(), command, SVNRevision.HEAD, null, mockRequest, mockResponse, null);
+    final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, mockRequest, mockResponse, null);
 
     assertNull(modelAndView);
 

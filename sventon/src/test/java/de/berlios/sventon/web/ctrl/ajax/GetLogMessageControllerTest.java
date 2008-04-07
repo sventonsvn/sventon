@@ -20,27 +20,26 @@ public class GetLogMessageControllerTest extends TestCase {
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 
-    final SVNRevision revision = SVNRevision.create(12);
-
-    final SVNLogEntry logEntry = new SVNLogEntry(null, revision.getNumber(), null, null, "The Message");
-
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setName(new RepositoryName("test"));
+    command.setRevision(SVNRevision.create(12));
+
+    final SVNLogEntry logEntry = new SVNLogEntry(null, command.getRevisionNumber(), null, null, "The Message");
 
     final GetLogMessageController ctrl = new GetLogMessageController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getRevision(command.getName(), null, revision.getNumber())).andStubReturn(logEntry);
-
+    expect(mockService.getRevision(command.getName(), null, command.getRevisionNumber())).andStubReturn(logEntry);
     replay(mockService);
-    final ModelAndView modelAndView = ctrl.svnHandle(null, command, revision, null, null, null, null);
+
+    final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
     final Map model = modelAndView.getModel();
     verify(mockService);
 
     assertEquals(1, model.size());
     final LogMessage logMessage = (LogMessage) model.get("logMessage");
     assertEquals(logEntry.getMessage(), logMessage.getMessage());
-    assertEquals(revision.getNumber(), logMessage.getRevision());
+    assertEquals(command.getRevisionNumber(), logMessage.getRevision());
     assertEquals("ajax/logMessage", modelAndView.getViewName());
   }
 }

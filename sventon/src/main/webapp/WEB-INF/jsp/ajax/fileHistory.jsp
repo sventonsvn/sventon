@@ -34,7 +34,7 @@
                 <c:param name="forceDisplay" value="true" />
               </c:if>
             </c:url>
-            <option ${currentRevision == fileRevision.revision ? 'selected' : ''}
+            <option ${currentRevision eq fileRevision.revision ? 'selected' : ''}
                 value="<sventon-ui:formatUrl url="${showFileAtRevisionUrl}"/>">${fileRevision.revision}</option>
           </c:forEach>
         </select>
