@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
     final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(),
-        command, SVNRevision.HEAD, null, req, null, null);
+        command, 100, null, req, null, null);
 
     final Map model = modelAndView.getModel();
     final List entries = (List) model.get("thumbnailentries");

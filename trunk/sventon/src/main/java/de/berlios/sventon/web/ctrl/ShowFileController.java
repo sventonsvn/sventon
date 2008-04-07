@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +93,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -105,7 +104,8 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final Map fileProperties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
+    final Map fileProperties = getRepositoryService().getFileProperties(
+        repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
 
     logger.debug(fileProperties);
 
@@ -123,7 +123,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     } else if (isArchiveFileExtension(svnCommand)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
-        getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+        getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
         model.put("entries", archiveFile.getEntries());
         modelAndView = new ModelAndView("showArchiveFile", model);
@@ -134,7 +134,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
         logger.debug("Detected content-type: " + contentType);
 
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
-          getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+          getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
           final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + svnCommand.getPath() + "]");
           final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
@@ -149,7 +149,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
       logger.debug("File identified as a binary file");
       modelAndView = new ModelAndView("showBinaryFile", model);
     } else if (isTextFileExtension(svnCommand) || isTextMimeType(fileProperties)) {
-      getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), outStream);
+      getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);

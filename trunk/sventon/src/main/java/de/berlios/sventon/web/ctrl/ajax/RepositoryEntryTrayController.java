@@ -23,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,13 +49,13 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long headRevision = getRepositoryService().getLatestRevision(repository);
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", headRevision);
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", svnCommand.getRevisionNumber());
+
     final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
     modelAndView.addObject("pegrev", pegRevision);
 

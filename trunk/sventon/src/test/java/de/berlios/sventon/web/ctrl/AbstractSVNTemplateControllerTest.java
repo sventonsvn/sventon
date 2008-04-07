@@ -1,10 +1,12 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
-import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindException;
@@ -35,43 +37,27 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
   }
 
   public void testParseAndUpdateSortParameters() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
     final UserRepositoryContext userRepositoryContext = new UserRepositoryContext();
     final AbstractSVNTemplateController ctrl = new TestController();
+    final SVNBaseCommand svnCommand = new SVNBaseCommand();
+
     assertNull(userRepositoryContext.getSortMode());
     assertNull(userRepositoryContext.getSortType());
-    ctrl.parseAndUpdateSortParameters(request, userRepositoryContext);
+    ctrl.parseAndUpdateSortParameters(svnCommand, userRepositoryContext);
     assertEquals("ASC", userRepositoryContext.getSortMode().toString());
     assertEquals("FULL_NAME", userRepositoryContext.getSortType().toString());
 
-    request.addParameter("sortType", "SIZE");
-    request.addParameter("sortMode", "DESC");
-    ctrl.parseAndUpdateSortParameters(request, userRepositoryContext);
+    svnCommand.setSortType(RepositoryEntryComparator.SortType.SIZE);
+    svnCommand.setSortMode(RepositoryEntrySorter.SortMode.DESC);
+
+    ctrl.parseAndUpdateSortParameters(svnCommand, userRepositoryContext);
     assertEquals("DESC", userRepositoryContext.getSortMode().toString());
     assertEquals("SIZE", userRepositoryContext.getSortType().toString());
   }
 
-  public void testConvertAndUpdateRevision() throws Exception {
-    final AbstractSVNTemplateController ctrl = new TestController();
-
-    final SVNBaseCommand command = new SVNBaseCommand();
-    command.setRevision("head");
-    assertEquals(SVNRevision.HEAD, ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("");
-    assertEquals(SVNRevision.HEAD, ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("123");
-    assertEquals(SVNRevision.create(123), ctrl.convertAndUpdateRevision(command, null));
-    command.setRevision("{2007-01-01}");
-    assertEquals(SVNRevision.create(321), ctrl.convertAndUpdateRevision(command, new SVNRepositoryStub(null, null) {
-      public long getDatedRevision(Date date) throws SVNException {
-        return 321;
-      }
-    }));
-  }
-
   private static class TestController extends AbstractSVNTemplateController {
     protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                     final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                     final long headRevision, final UserRepositoryContext userRepositoryContext,
                                      final HttpServletRequest request, final HttpServletResponse response,
                                      final BindException exception) throws Exception {
       return new ModelAndView();

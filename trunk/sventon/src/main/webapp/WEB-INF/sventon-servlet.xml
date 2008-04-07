@@ -49,6 +49,8 @@
 
   <bean id="nameEditor" class="de.berlios.sventon.web.support.RepositoryNameEditor"/>
 
+  <bean id="revisionEditor" class="de.berlios.sventon.web.support.RevisionEditor"/>
+
   <bean id="repositoryFactory" class="de.berlios.sventon.repository.RepositoryFactory" scope="prototype">
     <constructor-arg ref="sventonCacheDir"/>
   </bean>
@@ -84,6 +86,7 @@
     <property name="availableCharsets" ref="availableCharsets"/>
     <property name="repositoryFactory" ref="repositoryFactory"/>
     <property name="nameEditor" ref="nameEditor"/>
+    <property name="revisionEditor" ref="revisionEditor"/>
   </bean>
 
   <bean name="/rss.xml" class="de.berlios.sventon.web.ctrl.xml.RSSController">

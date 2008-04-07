@@ -19,7 +19,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,20 +35,14 @@ public final class FlattenController extends AbstractSVNTemplateController imple
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
-    // Make sure the path starts with a slash as that is the path structure of the entry cache.
-    String fromPath = svnCommand.getPath();
-    if (!fromPath.startsWith("/")) {
-      fromPath = "/" + fromPath;
-    }
-
-    logger.debug("Flattening directories below: " + fromPath);
-    entries.addAll(getCache().findDirectories(svnCommand.getName(), fromPath));
+    logger.debug("Flattening directories below: " + svnCommand.getPath());
+    entries.addAll(getCache().findDirectories(svnCommand.getName(), svnCommand.getPath()));
     logger.debug(entries.size() + " entries found");
 
     final Map<String, Object> model = new HashMap<String, Object>();

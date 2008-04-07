@@ -18,19 +18,19 @@ public class ShowFileControllerTest extends TestCase {
 
   public void testIsArchiveFileExtension() throws Exception {
     final SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("file.zip");
+    command.setPath("/file.zip");
     assertTrue(ctrl.isArchiveFileExtension(command));
-    command.setPath("file.jar");
+    command.setPath("/file.jar");
     assertTrue(ctrl.isArchiveFileExtension(command));
-    command.setPath("file.war");
+    command.setPath("/file.war");
     assertTrue(ctrl.isArchiveFileExtension(command));
-    command.setPath("file.ear");
+    command.setPath("/file.ear");
     assertTrue(ctrl.isArchiveFileExtension(command));
-    command.setPath("file.EAR");
+    command.setPath("/file.EAR");
     assertTrue(ctrl.isArchiveFileExtension(command));
-    command.setPath("file");
+    command.setPath("/file");
     assertFalse(ctrl.isArchiveFileExtension(command));
-    command.setPath("filezip");
+    command.setPath("/filezip");
     assertFalse(ctrl.isArchiveFileExtension(command));
     command.setPath("");
     assertFalse(ctrl.isArchiveFileExtension(command));

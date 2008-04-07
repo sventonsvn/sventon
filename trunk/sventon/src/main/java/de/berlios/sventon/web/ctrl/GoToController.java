@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,12 +46,12 @@ public final class GoToController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     String redirectUrl;
-    final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), revision.getNumber());
+    final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {
@@ -67,11 +67,10 @@ public final class GoToController extends AbstractSVNTemplateController implemen
     // Add the redirect URL parameters
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("path", svnCommand.getPath());
-    model.put("revision", svnCommand.getRevision());
+    model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : svnCommand.getRevisionNumber());
     model.put("name", svnCommand.getName().toString());
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl), model);
-
   }
 
 }

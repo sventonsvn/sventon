@@ -53,12 +53,13 @@ public final class DiffController extends AbstractSVNTemplateController implemen
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", -1);
+    final SVNRevision pegRevision = SVNRevision.create(ServletRequestUtils.getLongParameter(
+        request, "pegrev", svnCommand.getRevisionNumber()));
 
     final Map<String, Object> model = new HashMap<String, Object>();
 
@@ -71,13 +72,13 @@ public final class DiffController extends AbstractSVNTemplateController implemen
     final String charset = userRepositoryContext.getCharset();
 
     try {
-      final SVNNodeKind nodeKind = getNodeKind(repository, diffCommand, SVNRevision.create(pegRevision));
+      final SVNNodeKind nodeKind = getNodeKind(repository, diffCommand, pegRevision);
 
       if (SVNNodeKind.DIR == nodeKind) {
         logger.debug("Diffing dirs");
         modelAndView.setViewName("pathDiff");
         final List<SVNDiffStatus> diffResult = getRepositoryService().diffPaths(
-            repository, diffCommand, SVNRevision.create(pegRevision), config);
+            repository, diffCommand, pegRevision, config);
         logger.debug("Number of path diffs: " + diffResult.size());
         model.put("isIdentical", diffResult.isEmpty());
         model.put("diffResult", diffResult);
@@ -88,17 +89,17 @@ public final class DiffController extends AbstractSVNTemplateController implemen
         if (SIDE_BY_SIDE.equals(style)) {
           modelAndView.setViewName("diff");
           final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
-              repository, diffCommand, SVNRevision.create(pegRevision), charset, config);
+              repository, diffCommand, pegRevision, charset, config);
           model.put("diffResult", diffResult);
         } else if (UNIFIED.equals(style)) {
           modelAndView.setViewName("unifiedDiff");
           final String diffResult = getRepositoryService().diffUnified(
-              repository, diffCommand, SVNRevision.create(pegRevision), charset, config);
+              repository, diffCommand, pegRevision, charset, config);
           model.put("diffResult", diffResult);
         } else if (INLINE.equals(style)) {
           modelAndView.setViewName("inlineDiff");
           final List<InlineDiffRow> diffResult = getRepositoryService().diffInline(
-              repository, diffCommand, SVNRevision.create(pegRevision), charset, config);
+              repository, diffCommand, pegRevision, charset, config);
           model.put("diffResult", diffResult);
         } else {
           throw new IllegalStateException();
@@ -113,8 +114,8 @@ public final class DiffController extends AbstractSVNTemplateController implemen
       logger.info(iffe.getMessage());
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
-    if (SVNRevision.UNDEFINED != SVNRevision.create(pegRevision)) {
-      model.put("pegrev", pegRevision);
+    if (SVNRevision.UNDEFINED != pegRevision) {
+      model.put("pegrev", pegRevision.getNumber());
     }
     modelAndView.addAllObjects(model);
     return modelAndView;
@@ -125,7 +126,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
 
     final SVNNodeKind nodeKind1;
     final SVNNodeKind nodeKind2;
-    if (SVNRevision.UNDEFINED == pegRevision) {
+    if (SVNRevision.HEAD.equals(pegRevision)) {
       nodeKind1 = getRepositoryService().getNodeKind(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
       nodeKind2 = getRepositoryService().getNodeKind(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
     } else {

@@ -20,7 +20,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
@@ -66,15 +65,15 @@ public class GetController extends AbstractSVNTemplateController implements Cont
 
     if (displayType == null) {
       logger.debug("Getting file as 'attachment'");
-      getAsAttachment(repository, svnCommand, revision, request, response);
+      getAsAttachment(repository, svnCommand, request, response);
     } else if (DISPLAY_TYPE_INLINE.equals(displayType)) {
       logger.debug("Getting file as 'inline'");
 
       if (mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
-        getAsInlineImage(repository, svnCommand, revision, request, response);
+        getAsInlineImage(repository, svnCommand, request, response);
       } else {
         logger.warn("File [" + svnCommand.getTarget() + "] is not an image file - unable to display it 'inline'");
-        getAsAttachment(repository, svnCommand, revision, request, response);
+        getAsAttachment(repository, svnCommand, request, response);
       }
     } else {
       throw new IllegalArgumentException("Illegal parameter '" + DISPLAY_REQUEST_PARAMETER + "':" + displayType);
@@ -82,17 +81,17 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     return null;
   }
 
-  private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+  private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final OutputStream output = response.getOutputStream();
     response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);
+    getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), output);
     output.flush();
     output.close();
   }
 
-  private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+  private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand svnCommand, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final OutputStream output = response.getOutputStream();
     String mimeType = null;
 
@@ -109,7 +108,7 @@ public class GetController extends AbstractSVNTemplateController implements Cont
     }
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), output);
+    getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), output);
     output.flush();
     output.close();
   }

@@ -17,6 +17,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.apache.commons.lang.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,11 +84,11 @@ public final class XMLDocumentHelper {
       entry.addContent(element);
 
       element = new Element("copypath");
-      element.setText(logEntryPath.getCopyPath() == null ? "" : logEntryPath.getCopyPath());
+      element.setText(StringUtils.trimToEmpty(logEntryPath.getCopyPath()));
       entry.addContent(element);
 
       element = new Element("copyrevision");
-      element.setText(logEntryPath.getCopyPath() == null ? "" : Long.toString(logEntryPath.getCopyRevision()));
+      element.setText(StringUtils.trimToEmpty(logEntryPath.getCopyPath()));
       entry.addContent(element);
 
       entries.addContent(entry);

@@ -15,12 +15,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ attribute name="command" required="true" type="de.berlios.sventon.web.command.SVNBaseCommand" %>
-<%@ attribute name="revisionNumber" required="true" type="java.lang.String" %>
+<%@ attribute name="headRevision" required="true" type="java.lang.Long" %>
 
 Rev:
 <c:choose>
-  <c:when test="${!empty revisionNumber}">
-      ${command.revision} (${revisionNumber})
+  <c:when test="${(headRevision == command.revisionNumber)}">
+      HEAD (${command.revisionNumber})
   </c:when>
   <c:otherwise>
       <a href="revinfo.svn?revision=${command.revision}&name=${command.name}">

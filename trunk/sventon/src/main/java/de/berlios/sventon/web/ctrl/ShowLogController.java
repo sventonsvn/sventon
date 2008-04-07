@@ -24,7 +24,6 @@ import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
-import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,9 +40,9 @@ import java.util.*;
 public final class ShowLogController extends AbstractSVNTemplateController implements Controller {
 
   /**
-   * Max entries per page, default set to 50.
+   * Max entries per page, default set to 20.
    */
-  private int pageSize = 50;
+  private int pageSize = 20;
 
   /**
    * Set page size.
@@ -59,49 +58,29 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    String path = svnCommand.getPath();
+    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", svnCommand.getPath());
+    final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "HEAD"));
 
-    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", null);
-    final String nextRevParam = ServletRequestUtils.getStringParameter(request, "nextRevision", null);
-
-    final String targetPath;
     final long revNumber;
-
-    if (!path.startsWith("/")) {
-      path = "/" + path;
-    }
-
-    if (nextPathParam == null || nextRevParam == null) {
-      targetPath = path;
-      revNumber = revision == HEAD ? getRepositoryService().getLatestRevision(repository) : revision.getNumber();
+    if (SVNRevision.HEAD.equals(nextRevParam)) {
+      revNumber = headRevision;
     } else {
-      targetPath = nextPathParam;
-      if ("HEAD".equals(nextRevParam)) {
-        revNumber = getRepositoryService().getLatestRevision(repository);
-      } else {
-        try {
-          revNumber = Long.parseLong(nextRevParam);
-        } catch (final NumberFormatException nfe) {
-          exception.reject("log.command.invalidpath", "Invalid revision/path combination for logs");
-          return prepareExceptionModelAndView(exception, svnCommand);
-        }
-      }
+      revNumber = nextRevParam.getNumber();
     }
 
     final List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
-    final long toRevision = 1;
 
-    logger.debug("Assembling logs data revision [" + revNumber + " - " + toRevision + "] limit: " + pageSize);
+    logger.debug("Assembling logs data [" + revNumber + " - " + FIRST_REVISION + "] limit: " + pageSize);
 
     // TODO: Safer parsing would be nice.
-    final List<SVNLogEntry> logEntries =
-        getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, toRevision, targetPath, pageSize);
+    final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(
+        svnCommand.getName(), repository, revNumber, FIRST_REVISION, nextPathParam, pageSize);
 
-    String pathAtRevision = targetPath;
+    String pathAtRevision = nextPathParam;
 
     for (final SVNLogEntry logEntry : logEntries) {
       logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
@@ -128,7 +107,7 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
 
     model.put("logEntriesPage", logEntryBundles);
     model.put("pageSize", pageSize);
-    model.put("isFile", getRepositoryService().getNodeKind(repository, path, revision.getNumber()) == SVNNodeKind.FILE);
+    model.put("isFile", getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryBundles.size() == pageSize);
     return new ModelAndView("showLog", model);
   }

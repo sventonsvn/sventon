@@ -19,8 +19,8 @@
 
 <select class="sventonSelect" name="latestRevisionsSelect" onChange="latestRevisionsCount = this.options[this.selectedIndex].value; getLatestRevisions('${command.name}', latestRevisionsCount);">
   <option class="sventonSelectOption" value="1">1</option>
-  <c:forEach var="i" begin="${2}" end="${maxRevisionsCount}">
-    <option ${userRepositoryContext.latestRevisionsDisplayCount == i ? 'selected' : ''} value="${i}">${i}</option>
+  <c:forEach var="i" begin="2" end="${maxRevisionsCount}">
+    <option ${userRepositoryContext.latestRevisionsDisplayCount eq i ? 'selected' : ''} value="${i}">${i}</option>
   </c:forEach>
 </select>
 <span><spring:message code="latest-revisions.text"/></span>
@@ -29,7 +29,7 @@
     <td>
       <c:set var="revCount" value="0"/>
       <c:forEach var="revision" items="${revisions}">
-        <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="${revision.revision == headRevision ? 'true' : 'false'}" />
+        <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="${revision.revision eq headRevision ? 'true' : 'false'}" />
         <c:set var="revCount" value="${revCount + 1}"/>
         <c:if test="${revCount lt fn:length(revisions)}"><hr/></c:if>
       </c:forEach>

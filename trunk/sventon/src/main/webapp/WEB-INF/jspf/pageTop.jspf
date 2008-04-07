@@ -19,7 +19,7 @@
 </script>
 <table class="sventonTopTable">
   <tr>
-    <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount);">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo == 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
+    <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount);">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     <td align="right">
     <form name="gotoForm" method="post" action="goto.svn">
         <table class="sventonRepositoryFunctionsTable">
@@ -50,14 +50,14 @@
   </tr>
   <tr>
     <td colspan="2">
-      <div id="latestCommitInfoDiv" ${param.showlatestrevinfo == null || param.showlatestrevinfo == 'false' ? 'style="display:none"' : ''} >
+      <div id="latestCommitInfoDiv" ${param.showlatestrevinfo eq null || param.showlatestrevinfo eq 'false' ? 'style="display:none"' : ''} >
         <%@ include file="/WEB-INF/jsp/ajax/latestRevisions.jsp"%>
       </div>
     </td>
   </tr>
   <tr>
     <td class="sventonHeadlines" colspan="2">
-      <sventon:currentRevision command="${command}" revisionNumber="${numrevision}"/> -
+      <sventon:currentRevision command="${command}" headRevision="${headRevision}"/> -
       <sventon:clickableUrl command="${command}" url="${repositoryURL}"/>
     </td>
   </tr>

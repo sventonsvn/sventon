@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,19 +38,16 @@ public final class GetLogMessageController extends AbstractSVNTemplateController
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    logger.debug("Getting log message from revision [" + revision.getNumber() + "]");
-
-    final SVNLogEntry logEntry = getRepositoryService().getRevision(svnCommand.getName(), repository,
-        revision.getNumber());
-    final LogMessage logMessage = new LogMessage(revision.getNumber(), logEntry.getMessage());
+    logger.debug("Getting log message from revision [" + svnCommand.getRevisionNumber() + "]");
+    final SVNLogEntry logEntry = getRepositoryService().getRevision(svnCommand.getName(), repository, svnCommand.getRevisionNumber());
+    final LogMessage logMessage = new LogMessage(svnCommand.getRevisionNumber(), logEntry.getMessage());
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("logMessage", logMessage);
-
     return new ModelAndView("ajax/logMessage", model);
   }
 }

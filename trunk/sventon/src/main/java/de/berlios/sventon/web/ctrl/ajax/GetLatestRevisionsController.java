@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,14 +38,14 @@ public final class GetLatestRevisionsController extends AbstractSVNTemplateContr
    */
   @SuppressWarnings("unchecked")
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
-                                   final SVNRevision revision, final UserRepositoryContext userRepositoryContext,
+                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     long revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
     logger.debug("Getting [" + revisionCount + "] latest revisions");
     final List<SVNLogEntry> revisions = getRepositoryService().getRevisions(
-        svnCommand.getName(), repository, -1, 1, "/", revisionCount);
+        svnCommand.getName(), repository, -1, FIRST_REVISION, "/", revisionCount);
     logger.debug("Got [" + revisions.size() + "] revisions");
 
     final Map<String, Object> model = new HashMap<String, Object>();

@@ -12,11 +12,20 @@
 package de.berlios.sventon.web.command;
 
 import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.repository.RepositoryEntryComparator;
+import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.util.PathUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * SVNBaseCommand.
@@ -39,7 +48,12 @@ public final class SVNBaseCommand {
   /**
    * The revision.
    */
-  private String revision = null;
+  private SVNRevision revision = SVNRevision.HEAD;
+
+  /**
+   * The revision number.
+   */
+  private long revisionNumber = -1;
 
   /**
    * Repository name.
@@ -49,12 +63,17 @@ public final class SVNBaseCommand {
   /**
    * The sort type.
    */
-  private String sortType;
+  private RepositoryEntryComparator.SortType sortType;
 
   /**
    * Sort mode.
    */
-  private String sortMode;
+  private RepositoryEntrySorter.SortMode sortMode;
+
+  /**
+   * Logger for this class.
+   */
+  private static final Log LOGGER = LogFactory.getLog(SVNBaseCommand.class);
 
   /**
    * Gets the path.
@@ -72,17 +91,21 @@ public final class SVNBaseCommand {
    * @param path The path to set.
    */
   public void setPath(final String path) {
-    if (path == null || "".equals(path)) {
+    if (StringUtils.isEmpty(path)) {
       this.path = "/";
     } else {
-      this.path = path.trim();
+      if (path.startsWith("/")) {
+        this.path = path;
+      } else {
+        this.path = "/" + path;
+      }
     }
   }
 
   /**
    * @return Returns the revision.
    */
-  public String getRevision() {
+  public SVNRevision getRevision() {
     return revision;
   }
 
@@ -95,15 +118,23 @@ public final class SVNBaseCommand {
    *
    * @param revision The revision to set.
    */
-  public void setRevision(final String revision) {
-    if (revision != null) {
-      final String trimmedRevision = revision.trim();
-      if ("HEAD".equalsIgnoreCase(trimmedRevision)) {
-        this.revision = "HEAD";
-      } else {
-        this.revision = trimmedRevision;
-      }
+  public void setRevision(final SVNRevision revision) {
+    Validate.notNull(revision);
+    this.revision = revision;
+    if (this.revision.getNumber() > -1) {
+      revisionNumber = revision.getNumber();
+    } else {
+      revisionNumber = -1;
     }
+  }
+
+  /**
+   * Returns the revision number.
+   *
+   * @return Revision number.
+   */
+  public long getRevisionNumber() {
+    return revision.getNumber() < 0 ? revisionNumber : revision.getNumber();
   }
 
   /**
@@ -150,7 +181,7 @@ public final class SVNBaseCommand {
    *
    * @return Sort type
    */
-  public String getSortType() {
+  public RepositoryEntryComparator.SortType getSortType() {
     return sortType;
   }
 
@@ -159,7 +190,7 @@ public final class SVNBaseCommand {
    *
    * @param sortType Sort type
    */
-  public void setSortType(final String sortType) {
+  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
     if (sortType != null) {
       this.sortType = sortType;
     }
@@ -170,7 +201,7 @@ public final class SVNBaseCommand {
    *
    * @return Sort mode
    */
-  public String getSortMode() {
+  public RepositoryEntrySorter.SortMode getSortMode() {
     return sortMode;
   }
 
@@ -179,7 +210,7 @@ public final class SVNBaseCommand {
    *
    * @param sortMode Sort mode
    */
-  public void setSortMode(final String sortMode) {
+  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
@@ -207,8 +238,8 @@ public final class SVNBaseCommand {
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(final Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(final Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj);
   }
 
   /**
@@ -217,6 +248,31 @@ public final class SVNBaseCommand {
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
+  }
+
+  /**
+   * Translates the revision into a number, if needed.
+   * <p/>
+   * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
+   * by getting the closest revision number before or at the specified datestamp.
+   *
+   * @param headRevision The current HEAD revision.
+   * @param repository   Repository instance.
+   * @return The revision number.
+   * @throws SVNException if unable to communicate with repository.
+   */
+  public long translateRevision(long headRevision, final SVNRepository repository) throws SVNException {
+    if (revision.getNumber() < 0 && revisionNumber < 0) {
+      if (SVNRevision.HEAD.equals(revision)) {
+        revisionNumber = headRevision;
+      } else if (revision.getNumber() == -1 && revision.getDate() != null) {
+        revisionNumber = repository.getDatedRevision(revision.getDate());
+      } else {
+        LOGGER.warn("Unexpected revision: " + revision);
+        revisionNumber = headRevision;
+      }
+    }
+    return revisionNumber;
   }
 
   /**

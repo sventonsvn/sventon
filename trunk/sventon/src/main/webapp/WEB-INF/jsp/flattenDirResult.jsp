@@ -28,7 +28,7 @@
     <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="name" value="${command.name}">
-    <input type="hidden" name="pegrev" value="${!empty numrevision ? numrevision : command.revision}">
+    <input type="hidden" name="pegrev" value="${command.revisionNumber}">
 
     <c:url value="flatten.svn" var="sortUrl">
       <c:param name="path" value="${command.path}" />
