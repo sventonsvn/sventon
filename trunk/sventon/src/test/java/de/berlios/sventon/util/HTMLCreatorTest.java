@@ -49,7 +49,7 @@ public class HTMLCreatorTest extends TestCase {
   public void testCreateGoToUrl() throws Exception {
     assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=1&name=sandbox",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), false));
-    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=head&name=sandbox",
+    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=HEAD&name=sandbox",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), true));
   }
 
