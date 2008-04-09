@@ -35,7 +35,7 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
   /**
    * Request parameter identifying the arcived entry to display.
    */
-  private static final String ARCHIVED_ENTRY = "archivedEntry";
+  protected static final String ARCHIVED_ENTRY = "archivedEntry";
 
   /**
    * {@inheritDoc}
