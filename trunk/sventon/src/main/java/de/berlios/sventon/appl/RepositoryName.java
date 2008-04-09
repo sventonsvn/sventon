@@ -15,12 +15,16 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * Represents a repository name.
  *
  * @author jesper@users.berlios.de
  */
-public final class RepositoryName {
+public final class RepositoryName implements Serializable {
+
+  private static final long serialVersionUID = 5044457892450351810L;
 
   /**
    * Name of the repository.
@@ -45,8 +49,8 @@ public final class RepositoryName {
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(final Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj);
   }
 
   /**
