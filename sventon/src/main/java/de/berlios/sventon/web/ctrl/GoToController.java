@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,9 +65,9 @@ public final class GoToController extends AbstractSVNTemplateController implemen
     }
 
     // Add the redirect URL parameters
-    final Map<String, Object> model = new HashMap<String, Object>();
+    final Map<String, String> model = new HashMap<String, String>();
     model.put("path", svnCommand.getPath());
-    model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : svnCommand.getRevisionNumber());
+    model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : String.valueOf(svnCommand.getRevisionNumber()));
     model.put("name", svnCommand.getName().toString());
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl), model);
