@@ -1,4 +1,4 @@
-package de.berlios.sventon.web.ctrl.ajax;
+package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryEntry;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ListFilesControllerTest extends TestCase {
+public class ListDirectoryContentsControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
@@ -34,7 +34,7 @@ public class ListFilesControllerTest extends TestCase {
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 
-    final ListFilesController ctrl = new ListFilesController();
+    final ListDirectoryContentsController ctrl = new ListDirectoryContentsController();
     ctrl.setRepositoryService(mockService);
 
     expect(mockService.list(null, command.getPath(), command.getRevisionNumber(), new HashMap())).andStubReturn(entries);
@@ -44,9 +44,9 @@ public class ListFilesControllerTest extends TestCase {
     final Map model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(3, model.size());
-    assertEquals(12, model.get("rowNumber"));
+    assertEquals(2, model.size());
     assertEquals(entries.get(0), ((List<RepositoryEntry>) model.get("svndir")).get(0));
-    assertEquals("ajax/listFiles", modelAndView.getViewName());
+    assertNull(modelAndView.getViewName());
   }
+
 }
