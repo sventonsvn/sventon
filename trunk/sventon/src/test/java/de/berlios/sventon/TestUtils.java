@@ -1,11 +1,16 @@
 package de.berlios.sventon;
 
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.RepositoryEntry;
 import org.tmatesoft.svn.core.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public final class TestUtils {
+
+  public static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
   private static final Map<String, SVNLogEntryPath> ONE_CHANED_PATH = new HashMap<String, SVNLogEntryPath>();
   private static final long DEFAULT_REVISION = 123;
@@ -14,6 +19,10 @@ public final class TestUtils {
 
   static {
     ONE_CHANED_PATH.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
+  }
+
+  public static Application getApplicationStub() throws IOException {
+    return new Application(new File(TEMPDIR), "filename");
   }
 
   public static SVNLogEntry getLogEntryStub() {

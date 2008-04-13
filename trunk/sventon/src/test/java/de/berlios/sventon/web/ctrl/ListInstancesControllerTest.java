@@ -1,5 +1,6 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.web.model.UserContext;
@@ -11,18 +12,14 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.File;
-
 public class ListInstancesControllerTest extends TestCase {
-
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
 
     final ListRepositoriesController controller = new ListRepositoriesController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     controller.setApplication(application);
 
     ModelAndView modelAndView = controller.handleRequestInternal(request, response);
@@ -60,7 +57,7 @@ public class ListInstancesControllerTest extends TestCase {
     request.setSession(session);
 
     final ListRepositoriesController controller = new ListRepositoriesController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
 

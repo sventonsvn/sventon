@@ -1,7 +1,9 @@
 package de.berlios.sventon.web.ctrl;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -12,13 +14,11 @@ import java.io.File;
 
 public class ConfigurationSubmissionControllerTest extends TestCase {
 
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-
   public void testHandleRequestInternalConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
     try {
@@ -33,7 +33,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     controller.setApplication(application);
 

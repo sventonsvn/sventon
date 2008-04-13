@@ -1,5 +1,7 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.TestUtils;
+import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
@@ -8,6 +10,7 @@ import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -27,6 +30,10 @@ public class GoToControllerTest extends TestCase {
     command.setRevision(SVNRevision.create(12));
 
     final GoToController ctrl = new GoToController();
+    final Application application = TestUtils.getApplicationStub();
+    application.setConfigured(true);
+    ctrl.setApplication(application);
+
     ctrl.setRepositoryService(mockService);
 
     // Test NodeKind.FILE
@@ -55,6 +62,22 @@ public class GoToControllerTest extends TestCase {
     assertEquals(3, model.size());
     view = (RedirectView) modelAndView.getView();
     assertEquals("repobrowser.svn", view.getUrl());
+
+    reset(mockService);
+
+    // Test NodeKind.UNKNOWN
+    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(SVNNodeKind.UNKNOWN);
+    replay(mockService);
+
+    final BindException errors = new BindException(command, "test");
+    assertEquals(0, errors.getAllErrors().size());
+
+    modelAndView = ctrl.svnHandle(null, command, 100, null, mockRequest, null, errors);
+    model = modelAndView.getModel();
+    verify(mockService);
+
+    assertEquals(4, model.size());
+    assertEquals("goto", modelAndView.getViewName());
   }
 
 }

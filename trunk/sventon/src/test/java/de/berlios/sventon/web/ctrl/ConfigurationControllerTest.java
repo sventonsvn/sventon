@@ -1,10 +1,12 @@
 package de.berlios.sventon.web.ctrl;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.web.command.ConfigCommand;
 import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -19,13 +21,11 @@ import java.util.Set;
 
 public class ConfigurationControllerTest extends TestCase {
 
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-
   public void testShowFormNonConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setApplication(new Application(new File(TEMPDIR), "filename"));
+    ctrl.setApplication(TestUtils.getApplicationStub());
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
     assertEquals("config", modelAndView.getViewName());
@@ -35,7 +35,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
@@ -51,7 +51,7 @@ public class ConfigurationControllerTest extends TestCase {
     final ConfigurationController ctrl = new ConfigurationController();
 
     final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("firstinstance");
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     application.addRepository(repositoryConfig);
     ctrl.setApplication(application);
@@ -64,7 +64,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
@@ -78,7 +78,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setApplication(new Application(new File(TEMPDIR), "filename"));
+    ctrl.setApplication(TestUtils.getApplicationStub());
     final ConfigCommand command = new ConfigCommand();
     final BindException exception = new BindException(command, "test");
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
@@ -92,7 +92,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     ctrl.setApplication(application);
@@ -116,7 +116,7 @@ public class ConfigurationControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     ctrl.setApplication(application);

@@ -1,5 +1,7 @@
 package de.berlios.sventon.appl;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 
@@ -9,8 +11,6 @@ import java.util.Properties;
 
 public class ApplicationTest extends TestCase {
 
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-
   public void testApplication() throws Exception {
     try {
       new Application(null, null);
@@ -19,7 +19,7 @@ public class ApplicationTest extends TestCase {
       // exptected
     }
 
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     assertFalse(application.isConfigured());
     assertEquals(0, application.getRepositoryCount());
     assertNotNull(application.getConfigurationFile());
@@ -59,8 +59,7 @@ public class ApplicationTest extends TestCase {
   }
 
   public void testGetConfigurationAsProperties() throws Exception {
-    final Application application = new Application(new File(TEMPDIR), "filename");
-
+    final Application application = TestUtils.getApplicationStub();
     final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
     config1.setUid("");
