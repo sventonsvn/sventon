@@ -1,8 +1,7 @@
-package de.berlios.sventon.web.ctrl.ajax;
+package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.RepositoryName;
-import de.berlios.sventon.repository.LogMessage;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
@@ -11,25 +10,25 @@ import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import java.util.Collection;
 import java.util.Map;
 
-public class GetLogMessageControllerTest extends TestCase {
+public class ShowLocksControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 
     final SVNBaseCommand command = new SVNBaseCommand();
+    command.setPath("trunk/test");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 
-    final SVNLogEntry logEntry = TestUtils.getLogEntryStub(command.getRevisionNumber());
-    final GetLogMessageController ctrl = new GetLogMessageController();
+    final ShowLocksController ctrl = new ShowLocksController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getRevision(command.getName(), null, command.getRevisionNumber())).andStubReturn(logEntry);
+    expect(mockService.getLocks(null, command.getPath() + "/")).andStubReturn(TestUtils.getLocksStub(command.getPath()));
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
@@ -37,9 +36,8 @@ public class GetLogMessageControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    final LogMessage logMessage = (LogMessage) model.get("logMessage");
-    assertEquals(logEntry.getMessage(), logMessage.getMessage());
-    assertEquals(command.getRevisionNumber(), logMessage.getRevision());
-    assertEquals("ajax/logMessage", modelAndView.getViewName());
+    final Collection locks = (Collection) model.get("currentLocks");
+    assertEquals(1, locks.size());
+    assertEquals("showLocks", modelAndView.getViewName());
   }
 }
