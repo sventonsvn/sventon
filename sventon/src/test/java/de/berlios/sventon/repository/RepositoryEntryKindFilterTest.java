@@ -1,21 +1,15 @@
 package de.berlios.sventon.repository;
 
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RepositoryEntryKindFilterTest extends TestCase {
 
   public void testFilter() throws Exception {
 
-    final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
-
+    final List<RepositoryEntry> list = TestUtils.getDirectoryList();
     List<RepositoryEntry> filteredList;
 
     try {
@@ -40,10 +34,10 @@ public class RepositoryEntryKindFilterTest extends TestCase {
     }
 
     filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.dir).filter(list);
-    assertEquals(2, filteredList.size());
+    assertEquals(4, filteredList.size());
 
     filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file).filter(list);
-    assertEquals(1, filteredList.size());
+    assertEquals(9, filteredList.size());
 
     try {
       new RepositoryEntryKindFilter(null).filter(list);

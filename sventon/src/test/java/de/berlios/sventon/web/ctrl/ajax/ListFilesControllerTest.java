@@ -1,5 +1,6 @@
 package de.berlios.sventon.web.ctrl.ajax;
 
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.service.RepositoryService;
@@ -11,11 +12,8 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +25,7 @@ public class ListFilesControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     request.setParameter("rowNumber", "12");
 
-    final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    final List<RepositoryEntry> entries = TestUtils.getFileEntriesDirectoryList();
 
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setName(new RepositoryName("test"));

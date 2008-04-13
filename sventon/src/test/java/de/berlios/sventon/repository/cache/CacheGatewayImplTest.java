@@ -1,7 +1,7 @@
 package de.berlios.sventon.repository.cache;
 
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.RepositoryName;
-import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.entrycache.EntryCache;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
@@ -19,7 +19,7 @@ public class CacheGatewayImplTest extends TestCase {
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(repositoryName, entryCache);
-    entryCache.add(getEntryTemplateList());
+    entryCache.add(TestUtils.getDirectoryList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
@@ -34,7 +34,7 @@ public class CacheGatewayImplTest extends TestCase {
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(repositoryName, entryCache);
-    entryCache.add(getEntryTemplateList());
+    entryCache.add(TestUtils.getDirectoryList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
@@ -47,34 +47,13 @@ public class CacheGatewayImplTest extends TestCase {
     final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
     final EntryCache entryCache = new MemoryCache();
     cacheManager.addCache(repositoryName, entryCache);
-    entryCache.add(getEntryTemplateList());
+    entryCache.add(TestUtils.getDirectoryList());
 
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
     assertEquals(4, cache.findDirectories(repositoryName, "/").size());
 
     assertEquals(2, cache.findDirectories(repositoryName, "/trunk/").size());
-  }
-
-  private List<RepositoryEntry> getEntryTemplateList() {
-    final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tags", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/"));
-
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "code", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "src", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1_in_trunk.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "TestDirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
-
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/"));
-
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/trunk/code/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/trunk/src/"));
-    return entries;
   }
 
   static class TestRepository extends SVNRepositoryStub {
