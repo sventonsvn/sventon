@@ -35,6 +35,10 @@ import java.util.Map;
  */
 public final class SearchLogsController extends AbstractSVNTemplateController implements Controller {
 
+  public static final String SEARCH_STRING_PARAMETER = "searchString";
+
+  public static final String START_DIR_PARAMETER = "startDir";
+
   /**
    * {@inheritDoc}
    */
@@ -43,8 +47,8 @@ public final class SearchLogsController extends AbstractSVNTemplateController im
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String searchString = ServletRequestUtils.getRequiredStringParameter(request, "searchString");
-    final String startDir = ServletRequestUtils.getRequiredStringParameter(request, "startDir");
+    final String searchString = ServletRequestUtils.getRequiredStringParameter(request, SEARCH_STRING_PARAMETER);
+    final String startDir = ServletRequestUtils.getRequiredStringParameter(request, START_DIR_PARAMETER);
 
     logger.debug("Searching logMessages for: " + searchString);
 
@@ -52,9 +56,9 @@ public final class SearchLogsController extends AbstractSVNTemplateController im
     Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
     final Map<String, Object> model = new HashMap<String, Object>();
+    model.put(SEARCH_STRING_PARAMETER, searchString);
+    model.put(START_DIR_PARAMETER, startDir);
     model.put("logMessages", logMessages);
-    model.put("searchString", searchString);
-    model.put("startDir", startDir);
     model.put("isLogSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView("searchLogsResult", model);
   }

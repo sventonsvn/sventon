@@ -1,5 +1,6 @@
 package de.berlios.sventon.web.ctrl.ajax;
 
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.web.command.SVNBaseCommand;
@@ -33,8 +34,8 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     command.setName(new RepositoryName("test"));
 
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
-    revisions.add(new SVNLogEntry(null, 1, null, null, null));
-    revisions.add(new SVNLogEntry(null, 2, null, null, null));
+    revisions.add(TestUtils.getLogEntryStub(1));
+    revisions.add(TestUtils.getLogEntryStub(2));
 
     expect(mockService.getRevisions(command.getName(), null, SVNRevision.HEAD.getNumber(), FIRST_REVISION, "/",
         userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);

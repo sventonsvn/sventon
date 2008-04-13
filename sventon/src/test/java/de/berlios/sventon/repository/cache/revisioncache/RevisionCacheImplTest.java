@@ -1,13 +1,12 @@
 package de.berlios.sventon.repository.cache.revisioncache;
 
 
+import de.berlios.sventon.TestUtils;
+import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
-import de.berlios.sventon.appl.RepositoryName;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNLogEntry;
-
-import java.util.Date;
 
 public class RevisionCacheImplTest extends TestCase {
 
@@ -19,17 +18,14 @@ public class RevisionCacheImplTest extends TestCase {
     final ObjectCache cache = createMemoryCache();
     final RevisionCacheImpl revisionCache = new RevisionCacheImpl(cache);
     try {
-      assertNull(revisionCache.get(1));
-
-      final SVNLogEntry logEntry = new SVNLogEntry(null, 1, "author", new Date(), "a log message");
-      revisionCache.add(logEntry);
-
-      SVNLogEntry result = revisionCache.get(1);
+      assertNull(revisionCache.get(123));
+      revisionCache.add(TestUtils.getLogEntryStub());
+      final SVNLogEntry result = revisionCache.get(123);
       assertNotNull(result);
-      assertEquals(1, result.getRevision());
-      assertEquals("author", result.getAuthor());
+      assertEquals(123, result.getRevision());
+      assertEquals("TestAuthor", result.getAuthor());
       assertNotNull(result.getDate());
-      assertEquals("a log message", result.getMessage());
+      assertEquals("TestMessage", result.getMessage());
     } finally {
       cache.shutdown();
     }
