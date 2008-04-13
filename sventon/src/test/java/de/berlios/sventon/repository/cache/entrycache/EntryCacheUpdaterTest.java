@@ -1,10 +1,12 @@
 package de.berlios.sventon.repository.cache.entrycache;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.appl.Application;
-import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.appl.RevisionUpdate;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -12,8 +14,6 @@ import java.io.File;
 import java.util.*;
 
 public class EntryCacheUpdaterTest extends TestCase {
-
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
 
   public void testUpdate() throws Exception {
     final EntryCache entryCache = new MemoryCache();
@@ -31,7 +31,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     changedPaths2.put("/branch/file3.def", new SVNLogEntryPath("/branch/file3.def", 'D', null, -1));
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
 
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
     cacheUpdater.updateInternal(entryCache, new TestRepository(),

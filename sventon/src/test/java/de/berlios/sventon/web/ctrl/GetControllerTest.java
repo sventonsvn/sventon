@@ -1,10 +1,12 @@
 package de.berlios.sventon.web.ctrl;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.service.RepositoryServiceImpl;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -19,10 +21,8 @@ import java.util.Map;
 
 public class GetControllerTest extends TestCase {
 
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-
   public void testSvnHandleGetImageAsInline() throws Exception {
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     final GetController ctrl = new GetController();
@@ -46,7 +46,7 @@ public class GetControllerTest extends TestCase {
   }
 
   public void testSvnHandleGetFileAsAttachment() throws Exception {
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     final GetController ctrl = new GetController();

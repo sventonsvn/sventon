@@ -1,9 +1,11 @@
 package de.berlios.sventon.appl;
 
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
+import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
@@ -12,14 +14,12 @@ import java.util.*;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
-  private static final String TEMPDIR = System.getProperty("java.io.tmpdir");
-
   private ObjectCache createMemoryCache() throws Exception {
     return new ObjectCacheImpl(new RepositoryName("sventonTestCache"), null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
-    final Application application = new Application(new File(TEMPDIR), "filename");
+    final Application application = TestUtils.getApplicationStub();
     final String name = "defaultsvn";
     final RepositoryConfiguration configuration = new RepositoryConfiguration(name);
     configuration.setCacheUsed(true);
