@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1263] Fixed: Bug #13622 - Diff with previous revision not working for moved files.
 [1249] Fixed: Bug #13388 - Keywords are not expanded in raw file view.
 [1248] Fixed: Bug #13389 - Keyword expansion values not properly escaped.
 

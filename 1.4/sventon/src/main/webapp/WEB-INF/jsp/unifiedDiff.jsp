@@ -27,7 +27,7 @@
 
   <c:choose>
     <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical"/></b></p>
+      <p><b><spring:message code="diff.error.identical" arguments="${diffCommand.fromTarget},${diffCommand.fromRevision},${diffCommand.toTarget},${diffCommand.toRevision}"/></b></p>
     </c:when>
     <c:otherwise>
       <c:choose>

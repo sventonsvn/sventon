@@ -115,8 +115,6 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     logger.debug("Using charset encoding: " + charset);
 
     model.put("properties", fileProperties);
-    model.put("committedRevision", fileProperties.get(SVNProperty.COMMITTED_REVISION));
-
     final ModelAndView modelAndView;
 
     if (isImageFileExtension(svnCommand)) {
