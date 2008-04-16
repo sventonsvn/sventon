@@ -261,6 +261,14 @@ public class RepositoryServiceImpl implements RepositoryService {
     final List<SVNFileRevision> svnFileRevisions =
         (List<SVNFileRevision>) repository.getFileRevisions(path, null, 0, revision);
 
+    if (logger.isDebugEnabled()) {
+      final List<Long> fileRevisionNumbers = new ArrayList<Long>();
+      for (final SVNFileRevision fileRevision : svnFileRevisions) {
+        fileRevisionNumbers.add(fileRevision.getRevision());
+      }
+      logger.debug("Found revisions: " + fileRevisionNumbers);
+    }
+
     logger.debug("PERF: getFileRevisions(): " + (System.currentTimeMillis() - start));
     return svnFileRevisions;
   }
@@ -448,16 +456,16 @@ public class RepositoryServiceImpl implements RepositoryService {
         if (!row.startsWith("@@")) {
           final char action = row.charAt(0);
           switch (action) {
-            case' ':
+            case ' ':
               resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
               rowNumberLeft++;
               rowNumberRight++;
               break;
-            case'+':
+            case '+':
               resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
               rowNumberRight++;
               break;
-            case'-':
+            case '-':
               resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
               rowNumberLeft++;
               break;
