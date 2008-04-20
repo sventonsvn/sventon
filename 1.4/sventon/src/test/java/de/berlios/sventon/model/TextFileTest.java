@@ -19,6 +19,13 @@ public class TextFileTest extends TestCase {
     assertEquals("Line one" + BR + "Line two" + BR, textFile.getContent());
   }
 
+  public void testTextFilePlainInitialBR() throws Exception {
+    final String content = BR + "Line one" + BR + "Line two";
+    final TextFile textFile = new TextFile(content);
+    assertEquals(3, textFile.size());
+    assertEquals(BR + "Line one" + BR + "Line two" + BR, textFile.getContent());
+  }
+
   public void testTextFilePlainWebsafe() throws Exception {
     final String content = "Line&one" + BR + "Line<two>";
     final TextFile textFile = new TextFile(content);

@@ -11,7 +11,6 @@ public class WebUtilsTest extends TestCase {
   }
 
   public void testReplaceLeadingSpaces() throws Exception {
-
     try {
       WebUtils.replaceLeadingSpaces(null);
     } catch (NullPointerException npe) {
@@ -23,17 +22,25 @@ public class WebUtilsTest extends TestCase {
   }
 
   public void testReplaceLeadingSpacesMultiline() throws Exception {
-    final String line = " one " +
+    String line = " one " +
         BR + "  two  " +
         BR + "          " +
-        BR + " three  four";
-    final String result = WebUtils.replaceLeadingSpaces(line);
+        BR + " three  four" + BR;
 
-    final String expected = "&nbsp;one " +
+    String expected = "&nbsp;one " +
         BR + "&nbsp;&nbsp;two  " +
         BR + "          " +
-        BR + "&nbsp;three  four";
-    assertEquals(expected, result.trim());
+        BR + "&nbsp;three  four" + BR;
+
+    assertEquals(expected, WebUtils.replaceLeadingSpaces(line));
+
+    line = BR + " one " +
+        BR + "  two  ";
+
+    expected = BR + "&nbsp;one " +
+        BR + "&nbsp;&nbsp;two  " + BR;
+
+    assertEquals(expected, WebUtils.replaceLeadingSpaces(line));
   }
 
   public void testExtractBaseURLFromRequest() throws Exception {
