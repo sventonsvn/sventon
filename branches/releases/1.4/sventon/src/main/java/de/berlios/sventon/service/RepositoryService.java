@@ -217,8 +217,9 @@ public interface RepositoryService {
    * @param repository The repository
    * @param path       The entry path
    * @param revision   The entry revision
-   * @return Entry or <tt>null</tt> if no entry exists at given path and revision
-   * @throws SVNException if a subversion error occur
+   * @return Entry
+   * @throws SVNException if a subversion error occur. If the SVNErrorMessage SVNErrorCode is set to ENTRY_NOT_FOUND,
+   *                      no entry exists at given path and revision.
    */
   RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
