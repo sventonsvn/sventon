@@ -76,13 +76,16 @@ public final class WebUtils {
         for (int i = 0; i < removedSpacesCount; i++) {
           result = NBSP + result;
         }
-        sb.append(result).append(BR);
+        sb.append(result);
       } else {
-        sb.append(line).append(BR);
+        sb.append(line);
       }
-
+      // Make sure to only append NEWLINE when multiple lines.
+      if (lines.length > 1) {
+        sb.append(BR);
+      }
     }
-    return sb.toString().trim();
+    return sb.toString();
   }
 
   /**

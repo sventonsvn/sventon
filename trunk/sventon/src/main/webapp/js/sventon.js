@@ -24,13 +24,13 @@ function doAction(formName) {
   if (selectedValue == 'thumb') {
     // One or more entries must be checked
     if (getCheckedCount(formName) > 0) {
-      formName.action = 'showthumbs.svn'
+      formName.action = 'showthumbs.svn';
       return true;
     }
   } else if (selectedValue == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(formName) == 2) {
-      formName.action = 'diff.svn'
+      formName.action = 'diff.svn';
       return true;
     } else {
       alert('Two entries must be selected');
@@ -38,7 +38,7 @@ function doAction(formName) {
   } else if (selectedValue == 'export') {
     // One or more entries must be checked
     if (getCheckedCount(formName) > 0) {
-      formName.action = 'export.svn'
+      formName.action = 'export.svn';
       return true;
     }
   }

@@ -18,7 +18,6 @@ import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -47,13 +46,11 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long commitRev = ServletRequestUtils.getRequiredLongParameter(request, "committedRevision");
     logger.debug("Diffing file (previous): " + svnCommand);
-    logger.debug("committed-rev: " + commitRev);
-    final Map<String, Object> model = new HashMap<String, Object>();
 
-    final List<SVNFileRevision> revisions =
-        getRepositoryService().getFileRevisions(repository, svnCommand.getPath(), commitRev);
+    final Map<String, Object> model = new HashMap<String, Object>();
+    final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
+        repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
 
     final DiffCommand diffCommand = new DiffCommand(revisions);
     model.put("diffCommand", diffCommand);

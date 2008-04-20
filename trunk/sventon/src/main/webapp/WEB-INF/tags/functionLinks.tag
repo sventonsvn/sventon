@@ -73,15 +73,12 @@
         <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="document.location.href='<sventon-ui:formatUrl url="${blameLinkUrl}"/>';">
         <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="document.location.href='<sventon-ui:formatUrl url="${gotoLinkUrl}&format=raw"/>';">
 
-        <c:if test="${!empty committedRevision}">
           <c:url value="diffprev.svn" var="diffPreviousUrl">
             <c:param name="path" value="${command.path}${entry.name}" />
             <c:param name="revision" value="${command.revision}" />
             <c:param name="name" value="${command.name}" />
-            <c:param name="committedRevision" value="${committedRevision}" />
           </c:url>
-          <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${committedRevision}"/>')" onclick="document.location.href='<sventon-ui:formatUrl url="${diffPreviousUrl}"/>';">
-        </c:if>
+        <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.path},${command.revision}"/>')" onclick="document.location.href='<sventon-ui:formatUrl url="${diffPreviousUrl}"/>';">
       </c:otherwise>
     </c:choose>
     <%@ include file="/WEB-INF/jspf/charsetSelectList.jspf"%>
@@ -174,6 +171,14 @@
       </c:if>
     </c:url>
     <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
+
+    <c:url value="diffprev.svn" var="diffPreviousUrl">
+      <c:param name="path" value="${diffCommand.fromPath}" />
+      <c:param name="revision" value="${diffCommand.fromRevision}" />
+      <c:param name="name" value="${command.name}" />
+    </c:url>
+    <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${diffCommand.fromPath},${diffCommand.fromRevision}"/>')" onclick="document.location.href='<sventon-ui:formatUrl url="${diffPreviousUrl}"/>';">
+
     <select name="diffStyle" class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
       <option value="<sventon-ui:formatUrl url="${diffUrl}"/>&style=inline"
           ${pageName eq 'showInlineDiff' ? 'selected' : ''}>Inline</option>

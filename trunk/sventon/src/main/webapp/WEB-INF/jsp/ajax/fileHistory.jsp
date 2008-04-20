@@ -35,6 +35,7 @@
               </c:if>
             </c:url>
             <option ${currentRevision eq fileRevision.revision ? 'selected' : ''}
+                onmouseover="Tip('${fileRevision.path}@${fileRevision.revision}', LEFT, true, OFFSETX, 40)"
                 value="<sventon-ui:formatUrl url="${showFileAtRevisionUrl}"/>">${fileRevision.revision}</option>
           </c:forEach>
         </select>
