@@ -17,7 +17,6 @@ import static de.berlios.sventon.diff.DiffSegment.Side.LEFT;
 import static de.berlios.sventon.diff.DiffSegment.Side.RIGHT;
 import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
-import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -61,12 +60,8 @@ public final class SideBySideDiffCreator {
                                final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
 
-    final String leftString = WebUtils.replaceLeadingSpaces(
-        appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset));
-
-    final String rightString = WebUtils.replaceLeadingSpaces(
-        appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset));
-
+    final String leftString = appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset);
+    final String rightString = appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset);
     leftSourceLines = IOUtils.readLines(new StringReader(leftString));
     rightSourceLines = IOUtils.readLines(new StringReader(rightString));
   }
@@ -85,7 +80,7 @@ public final class SideBySideDiffCreator {
 
     final List<SideBySideDiffRow> diff = new ArrayList<SideBySideDiffRow>();
 
-    for (int i = 0; i < leftLinesList.size(); i++) {
+    for (int i = 0; i < Math.max(leftLinesList.size(), rightLinesList.size()); i++) {
       diff.add(new SideBySideDiffRow(leftLinesList.get(i), rightLinesList.get(i)));
     }
     return diff;
