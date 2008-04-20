@@ -22,6 +22,7 @@ import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -248,10 +249,18 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
                                   final RepositoryService repositoryService) throws SVNException {
 
     // Have to find out if deleted entry was a file or directory
-    final RepositoryEntry deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision - 1);
-    if (deletedEntry == null) {
-      LOGGER.debug("Entry has not yet been added - nothing to remove");
-      return;
+    final long previousRevision = revision - 1;
+    RepositoryEntry deletedEntry = null;
+
+    try {
+      deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), previousRevision);
+    } catch (SVNException e) {
+      if (SVNErrorCode.ENTRY_NOT_FOUND.equals(e.getErrorMessage().getErrorCode())) {
+        LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
+        return;
+      } else {
+        throw e;
+      }
     }
 
     if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
