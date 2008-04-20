@@ -170,6 +170,20 @@ public class DiffProducerTest extends TestCase {
     assertEquals("DiffSegment: ADDED, left: 10-10, right: 18-22", action.toString());
   }
 
+  public void testDoNormalDiffIII() throws Exception {
+    final String leftString = "\r\ntest\r\n";
+    final String rightString = "test\r\n";
+    final String result = "1d1\r\n<\r\n";
+
+    final InputStream left = new ByteArrayInputStream(leftString.getBytes());
+    final InputStream right = new ByteArrayInputStream(rightString.getBytes());
+
+    final DiffProducer diffProducer = new DiffProducer(left, right, null);
+    final OutputStream output = new ByteArrayOutputStream();
+    diffProducer.doNormalDiff(output);
+    assertEquals(result, output.toString());
+  }
+
   public void testDoNormalDiffNoDiff() throws Exception {
     final String leftString =
         "More!" + LINE_BREAK +
