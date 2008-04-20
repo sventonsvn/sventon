@@ -4,6 +4,12 @@ sventon change history
 [1252] Added: Upgraded to Spring 2.5.2.
 [1246] Added: Feature #3499 - Diff tags.
 
+[1270] Release 1.4 RC4 (2008-04-20)
+[1265] Fixed: Bug #13640 - Diff crashes if the file starts with a new line character.
+[1263] Fixed: Bug #13622 - Diff with previous revision not working for moved files.
+[1249] Fixed: Bug #13388 - Keywords are not expanded in raw file view.
+[1248] Fixed: Bug #13389 - Keyword expansion values not properly escaped.
+
 [1242] Release 1.4 RC3 (2008-03-10)
 [1236] Fixed: Bug #13325 - Search box too far on the right.
 [1230] Added: Feature #4035 - Loosen restrictions on instance name.

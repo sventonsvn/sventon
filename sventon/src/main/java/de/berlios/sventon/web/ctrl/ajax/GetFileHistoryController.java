@@ -55,14 +55,6 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
     final List<SVNFileRevision> fileRevisions = getRepositoryService().getFileRevisions(
         repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
 
-    if (logger.isDebugEnabled()) {
-      final List<Long> fileRevisionNumbers = new ArrayList<Long>();
-      for (final SVNFileRevision fileRevision : fileRevisions) {
-        fileRevisionNumbers.add(fileRevision.getRevision());
-      }
-      logger.debug("Found revisions: " + fileRevisionNumbers);
-    }
-
     Collections.reverse(fileRevisions);
     model.put("currentRevision", svnCommand.getRevisionNumber());
     model.put("fileRevisions", fileRevisions);

@@ -10,7 +10,7 @@ public class KeywordHandlerTest extends TestCase {
 
   public void testSubstitute() throws Exception {
     final Map<String, String> keywordsMap = new HashMap<String, String>();
-    keywordsMap.put(SVNProperty.KEYWORDS, "Author Date Revision URL");
+    keywordsMap.put(SVNProperty.KEYWORDS, "Id Author Date Revision URL");
     keywordsMap.put(SVNProperty.LAST_AUTHOR, "domain\\user");
     keywordsMap.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");
     keywordsMap.put(SVNProperty.COMMITTED_REVISION, "33");
@@ -29,8 +29,9 @@ public class KeywordHandlerTest extends TestCase {
     sb.append("}\n");
 
     final String result = handler.substitute(sb.toString(), "UTF-8");
-    assertTrue(result.indexOf("file.dat") > -1);
-    assertTrue(result.indexOf("$Rev: 33 $") > -1);
+    assertTrue(result.contains("file.dat"));
+    assertTrue(result.contains("$Rev: 33 $"));
+    assertTrue(result.contains("Author: domain\\user $"));
   }
 
   public void testComputeKeywordsNull() throws Exception {

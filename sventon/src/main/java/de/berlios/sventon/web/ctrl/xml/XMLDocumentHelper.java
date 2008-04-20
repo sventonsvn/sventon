@@ -11,13 +11,13 @@
  */
 package de.berlios.sventon.web.ctrl.xml;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.apache.commons.lang.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

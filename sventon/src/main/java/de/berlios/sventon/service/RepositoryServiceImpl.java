@@ -259,6 +259,14 @@ public class RepositoryServiceImpl implements RepositoryService {
     final List<SVNFileRevision> svnFileRevisions =
         (List<SVNFileRevision>) repository.getFileRevisions(path, null, 0, revision);
 
+    if (logger.isDebugEnabled()) {
+      final List<Long> fileRevisionNumbers = new ArrayList<Long>();
+      for (final SVNFileRevision fileRevision : svnFileRevisions) {
+        fileRevisionNumbers.add(fileRevision.getRevision());
+      }
+      logger.debug("Found revisions: " + fileRevisionNumbers);
+    }
+
     logger.debug("PERF: getFileRevisions(): " + (System.currentTimeMillis() - start));
     return svnFileRevisions;
   }

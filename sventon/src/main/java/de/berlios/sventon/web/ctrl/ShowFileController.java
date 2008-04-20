@@ -16,8 +16,10 @@ import de.berlios.sventon.model.ArchiveFile;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.util.ZipUtils;
+import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
+import de.berlios.sventon.content.KeywordHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -113,8 +115,6 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     logger.debug("Using charset encoding: " + charset);
 
     model.put("properties", fileProperties);
-    model.put("committedRevision", fileProperties.get(SVNProperty.COMMITTED_REVISION));
-
     final ModelAndView modelAndView;
 
     if (isImageFileExtension(svnCommand)) {
@@ -152,8 +152,13 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
       getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
+        final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
+            repository.getLocation().toDecodedString() + svnCommand.getPath());
+        final String content = keywordHandler.substitute(outStream.toString(charset), charset);
+        response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
+            "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
-        response.getOutputStream().write(outStream.toByteArray());
+        response.getOutputStream().write(content.getBytes(charset));
         return null;
       } else {
         final TextFile textFile = new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
