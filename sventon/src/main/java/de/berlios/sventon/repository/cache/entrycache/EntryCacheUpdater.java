@@ -132,11 +132,9 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision, repositoryService);
-        entryCache.setCachedRevision(lastRevision);
       } catch (SVNException svnex) {
         LOGGER.error("Unable to populate cache", svnex);
       }
-      LOGGER.info("Cache population done");
     } else {
       // Initial population has already been performed - only apply changes for now.
 
@@ -181,19 +179,17 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
             LOGGER.error("Unable to update entryCache", svnex);
           }
         }
-        entryCache.setCachedRevision(lastRevision);
-
-        if (revisionUpdate.isFlushAfterUpdate()) {
-          try {
-            entryCache.flush();
-          } catch (final CacheException ce) {
-            LOGGER.error("Unable to flush cache", ce);
-          }
-        }
-
-        LOGGER.debug("Update completed");
       }
     }
+    entryCache.setCachedRevision(lastRevision);
+    if (revisionUpdate.isFlushAfterUpdate()) {
+      try {
+        entryCache.flush();
+      } catch (final CacheException ce) {
+        LOGGER.error("Unable to flush cache", ce);
+      }
+    }
+    LOGGER.debug("Update completed");
   }
 
   /**
