@@ -188,25 +188,25 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * {@inheritDoc}
    */
-  public void update(final RepositoryName name, final boolean flushAfterUpdate) {
+  public void update(final RepositoryName repositoryName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
-      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(name);
+      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
 
-      if (configuration.isCacheUsed() && !application.isUpdating(name)) {
-        application.setUpdatingCache(name, true);
+      if (configuration.isCacheUsed() && !application.isUpdating(repositoryName)) {
+        application.setUpdatingCache(repositoryName, true);
         SVNRepository repository = null;
         try {
           repository = repositoryFactory.getRepository(configuration.getName(),
               configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
-          final ObjectCache objectCache = objectCacheManager.getCache(name);
-          update(name, repository, objectCache, flushAfterUpdate);
+          final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
+          update(repositoryName, repository, objectCache, flushAfterUpdate);
         } catch (final Exception ex) {
           logger.warn("Unable to establish repository connection", ex);
         } finally {
           if (repository != null) {
             repository.closeSession();
           }
-          application.setUpdatingCache(name, false);
+          application.setUpdatingCache(repositoryName, false);
         }
       }
     }
@@ -217,8 +217,8 @@ public final class RevisionObservableImpl extends Observable implements Revision
    */
   public void updateAll() {
     if (application.isConfigured()) {
-      for (final RepositoryName name : application.getRepositoryNames()) {
-        update(name, true);
+      for (final RepositoryName repositoryName : application.getRepositoryNames()) {
+        update(repositoryName, true);
       }
     }
   }

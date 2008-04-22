@@ -48,7 +48,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
    */
   protected EntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
-    return new DiskCache(new File(rootDirectory, repositoryName.toString()));
+    return new DiskCache(new File(new File(rootDirectory, repositoryName.toString()), "cache"));
   }
 
 
