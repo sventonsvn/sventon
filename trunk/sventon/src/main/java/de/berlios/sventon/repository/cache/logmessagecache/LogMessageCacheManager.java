@@ -62,7 +62,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
     logger.debug("Creating cache: " + repositoryName);
     final FSDirectory fsDirectory;
     try {
-      final File cachePath = new File(rootDirectory, repositoryName.toString());
+      final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
       cachePath.mkdirs();
       fsDirectory = FSDirectory.getDirectory(cachePath);
       logger.debug("Log cache dir: " + fsDirectory.getFile().getAbsolutePath());

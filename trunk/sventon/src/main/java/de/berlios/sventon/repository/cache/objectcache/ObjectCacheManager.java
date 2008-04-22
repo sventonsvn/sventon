@@ -39,7 +39,8 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
   /**
    * Constructor.
    *
-   * @param rootDirectory       Root directory for cache files.
+   * @param rootDirectory       Root repository temp directory.
+   *                            Cache files will be stored in a sub dir called <tt>cache</tt>.
    * @param maxElementsInMemory Max elements in memory
    * @param overflowToDisk      Overflow to disk
    * @param eternal             If true, objects never expire
@@ -77,7 +78,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
    */
   protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
-    final File cachePath = new File(rootDirectory, repositoryName.toString());
+    final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
     cachePath.mkdirs();
     return new ObjectCacheImpl(
         repositoryName,

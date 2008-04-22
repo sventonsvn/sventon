@@ -27,17 +27,17 @@
 
   <bean id="sventonDir" class="java.io.File" init-method="mkdirs">
     <constructor-arg index="0" value="${java.io.tmpdir}"/>
-    <constructor-arg index="1" value="sventon"/>
-  </bean>
-
-  <bean id="sventonCacheDir" class="java.io.File" init-method="mkdirs">
-    <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" value="cache"/>
+    <constructor-arg index="1" value="sventon_temp"/>
   </bean>
 
   <bean id="sventonExportDir" class="java.io.File" init-method="mkdirs">
     <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" value="export"/>
+    <constructor-arg index="1" value="export_temp"/>
+  </bean>
+
+  <bean id="repositoriesDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg index="0" ref="sventonDir"/>
+    <constructor-arg index="1" value="repositories"/>
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -52,7 +52,7 @@
   <bean id="revisionEditor" class="de.berlios.sventon.web.support.RevisionEditor"/>
 
   <bean id="repositoryFactory" class="de.berlios.sventon.repository.RepositoryFactory" scope="prototype">
-    <constructor-arg ref="sventonCacheDir"/>
+    <constructor-arg ref="repositoriesDir"/>
   </bean>
 
   <bean id="application" class="de.berlios.sventon.appl.Application" init-method="init">
@@ -196,7 +196,7 @@
 
   <bean id="objectCacheManager" class="de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager"
         destroy-method="shutdown">
-    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="0" ref="repositoriesDir"/>
     <constructor-arg index="1" value="1000"/>
     <constructor-arg index="2" value="true"/>
     <constructor-arg index="3" value="true"/>
@@ -311,11 +311,11 @@
 
   <bean id="entryCacheManager" class="de.berlios.sventon.repository.cache.entrycache.EntryCacheManager"
         destroy-method="shutdown">
-    <constructor-arg ref="sventonCacheDir"/>
+    <constructor-arg ref="repositoriesDir"/>
   </bean>
 
   <bean id="logMessageCacheManager" class="de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager">
-    <constructor-arg index="0" ref="sventonCacheDir"/>
+    <constructor-arg index="0" ref="repositoriesDir"/>
     <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
   </bean>
 
