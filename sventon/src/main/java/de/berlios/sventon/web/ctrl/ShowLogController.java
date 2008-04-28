@@ -63,7 +63,7 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
                                    final BindException exception) throws Exception {
 
     final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", svnCommand.getPath());
-    final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "HEAD"));
+    final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "head"));
 
     final long revNumber;
     if (SVNRevision.HEAD.equals(nextRevParam)) {

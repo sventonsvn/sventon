@@ -58,8 +58,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
                                    final BindException exception) throws Exception {
 
     final List<SVNFileRevision> entries = new RequestParameterParser().parseEntries(request);
-    final SVNRevision pegRevision = SVNRevision.create(ServletRequestUtils.getLongParameter(
-        request, "pegrev", svnCommand.getRevisionNumber()));
+    final SVNRevision pegRevision = SVNRevision.create(ServletRequestUtils.getLongParameter(request, "pegrev", -1));
 
     final Map<String, Object> model = new HashMap<String, Object>();
 
@@ -84,7 +83,16 @@ public final class DiffController extends AbstractSVNTemplateController implemen
         model.put("diffResult", diffResult);
       } else if (SVNNodeKind.FILE == nodeKind) {
         final String style = ServletRequestUtils.getStringParameter(request, "style", SIDE_BY_SIDE);
-        logger.debug("Diffing files [" + style + "]: " + entries);
+        if (logger.isDebugEnabled()) {
+          final StringBuilder sb = new StringBuilder();
+          for (SVNFileRevision entry : entries) {
+            sb.append(entry.getPath());
+            sb.append("@");
+            sb.append(entry.getRevision());
+            sb.append(", ");
+          }
+          logger.debug("Diffing files [" + style + "]: " + entries);
+        }
 
         if (SIDE_BY_SIDE.equals(style)) {
           modelAndView.setViewName("diff");
@@ -126,7 +134,7 @@ public final class DiffController extends AbstractSVNTemplateController implemen
 
     final SVNNodeKind nodeKind1;
     final SVNNodeKind nodeKind2;
-    if (SVNRevision.HEAD.equals(pegRevision)) {
+    if (SVNRevision.UNDEFINED.equals(pegRevision)) {
       nodeKind1 = getRepositoryService().getNodeKind(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
       nodeKind2 = getRepositoryService().getNodeKind(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
     } else {
