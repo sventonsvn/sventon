@@ -39,7 +39,7 @@ public final class BlameController extends AbstractSVNTemplateController impleme
   /**
    * First revision in repository.
    */
-  private static final SVNRevision FIRST_REVISION = SVNRevision.parse("1");
+  private static final SVNRevision FIRST_REVISION = SVNRevision.create(1);
 
   /**
    * The colorer instance.
