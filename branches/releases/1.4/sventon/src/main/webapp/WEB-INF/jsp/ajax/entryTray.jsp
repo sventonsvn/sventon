@@ -57,7 +57,7 @@
       </c:url>
       <c:url value="entrytray.ajax" var="entryTrayRemoveUrl">
         <c:param name="path" value="${trayEntry.fullEntryName}" />
-        <c:param name="revision" value="${trayEntry.revision}" />
+        <c:param name="revision" value="${peggedEntry.pegRevision}" />
         <c:param name="name" value="${command.name}" />
         <c:param name="action" value="remove" />
       </c:url>
