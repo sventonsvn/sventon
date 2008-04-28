@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1276] Fixed: Bug #13707 - Entry tray remove link broken for non-head entries.
+
 [1270] Release 1.4 RC4 (2008-04-20)
 [1265] Fixed: Bug #13640 - Diff crashes if the file starts with a new line character.
 [1263] Fixed: Bug #13622 - Diff with previous revision not working for moved files.
