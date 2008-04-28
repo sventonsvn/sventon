@@ -18,6 +18,8 @@ package de.berlios.sventon.diff;
  */
 public final class IdenticalFilesException extends DiffException {
 
+  private static final long serialVersionUID = 5879577101437011341L;
+
   /**
    * Constructor.
    *
