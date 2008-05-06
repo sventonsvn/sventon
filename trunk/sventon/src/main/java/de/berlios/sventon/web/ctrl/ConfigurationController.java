@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +102,6 @@ public final class ConfigurationController extends AbstractFormController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("addedRepositories", application.getRepositoryNames());
-    model.put("configFile", application.getConfigurationFile());
 
     final ConfigCommand confCommand = (ConfigCommand) command;
 

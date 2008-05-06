@@ -106,10 +106,8 @@ public final class ConfigCommandValidator implements Validator {
       if (url != null && testConnection) {
         final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
         configuration.setRepositoryUrl(trimmedURL);
-        configuration.setUid(command.getAccessMethod() == USER
-            ? command.getConnectionTestUid() : command.getUid());
-        configuration.setPwd(command.getAccessMethod() == USER
-            ? command.getConnectionTestPwd() : command.getPwd());
+        configuration.setUid(command.getAccessMethod() == USER ? command.getConnectionTestUid() : command.getUid());
+        configuration.setPwd(command.getAccessMethod() == USER ? command.getConnectionTestPwd() : command.getPwd());
 
         SVNRepository repository = null;
         try {

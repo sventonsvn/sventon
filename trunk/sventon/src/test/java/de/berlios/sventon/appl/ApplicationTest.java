@@ -1,12 +1,15 @@
 package de.berlios.sventon.appl;
 
-import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.TestUtils;
+import static de.berlios.sventon.TestUtils.TEMPDIR;
 import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class ApplicationTest extends TestCase {
@@ -22,13 +25,11 @@ public class ApplicationTest extends TestCase {
     final Application application = TestUtils.getApplicationStub();
     assertFalse(application.isConfigured());
     assertEquals(0, application.getRepositoryCount());
-    assertNotNull(application.getConfigurationFile());
-    assertEquals(new File(TEMPDIR, "filename"), application.getConfigurationFile());
   }
 
   public void testStoreRepositoryConfigurations() throws Exception {
-    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
-    final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
+    final String configFilename = "tmpconfigfilename";
+    final Application application = new Application(new File(TEMPDIR), configFilename);
 
     final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
     repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
@@ -47,14 +48,19 @@ public class ApplicationTest extends TestCase {
     application.addRepository(repositoryConfiguration1);
     application.addRepository(repositoryConfiguration2);
 
-    try {
-      assertFalse(propFile.exists());
-      application.storeRepositoryConfigurations();
+    final File repos1 = new File(TEMPDIR, "testrepos1");
+    final File repos2 = new File(TEMPDIR, "testrepos2");
 
+    try {
+      assertFalse(new File(repos1, configFilename).exists());
+      assertFalse(new File(repos2, configFilename).exists());
+      application.storeRepositoryConfigurations();
       //File should now be written
-      assertTrue(propFile.exists());
+      assertTrue(new File(repos1, configFilename).exists());
+      assertTrue(new File(repos2, configFilename).exists());
     } finally {
-      propFile.delete();
+      FileUtils.deleteDirectory(repos1);
+      FileUtils.deleteDirectory(repos2);
     }
   }
 
@@ -70,38 +76,38 @@ public class ApplicationTest extends TestCase {
     config2.setUid("");
     config2.setPwd("");
 
+    assertEquals(0, application.getRepositoryCount());
     application.addRepository(config1);
+    assertEquals(1, application.getRepositoryCount());
     application.addRepository(config2);
-
-    final List<Properties> configurations = application.getConfigurationAsProperties();
-    Properties props = configurations.get(0);
-    assertEquals(8, props.size());
-    props = configurations.get(1);
-    assertEquals(8, props.size());
+    assertEquals(2, application.getRepositoryCount());
   }
 
   public void testLoadRepositoryConfigurations() throws Exception {
     final Properties testConfig = new Properties();
-    testConfig.put("defaultsvn.root", "http://localhost");
-    testConfig.put("defaultsvn.uid", "username");
-    testConfig.put("defaultsvn.pwd", "abc123");
-    testConfig.put("defaultsvn.useCache", "false");
-    testConfig.put("defaultsvn.allowZipDownloads", "false");
+    testConfig.put("root", "http://localhost");
+    testConfig.put("uid", "username");
+    testConfig.put("pwd", "abc123");
+    testConfig.put("useCache", "false");
+    testConfig.put("allowZipDownloads", "false");
 
-    final Application application = new Application(
-        new File(System.getProperty("java.io.tmpdir")), "sventon-config-test.tmp");
+    final File configRootDirectory = new File(TEMPDIR);
+    final String configFilename = "sventon-config-test.tmp";
+    final Application application = new Application(configRootDirectory, configFilename);
+
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
 
-    final File tempConfigFile = application.getConfigurationFile();
-
     OutputStream os = null;
     InputStream is = null;
+
+    final File configDir = new File(configRootDirectory, "defaultsvn");
+    configDir.mkdirs();
+
     try {
-      os = new FileOutputStream(tempConfigFile);
+      os = new FileOutputStream(new File(configDir, configFilename));
       testConfig.store(os, null);
 
-      is = new FileInputStream(tempConfigFile);
       application.loadRepositoryConfigurations();
 
       assertEquals(1, application.getRepositoryCount());
@@ -109,7 +115,7 @@ public class ApplicationTest extends TestCase {
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
-      tempConfigFile.delete();
+      FileUtils.deleteDirectory(configDir);
     }
   }
 
