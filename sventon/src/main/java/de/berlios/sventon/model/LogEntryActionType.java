@@ -70,7 +70,7 @@ public enum LogEntryActionType {
    * @return The LogEntryActionType
    */
   public static LogEntryActionType parse(final String code) {
-    Validate.notNull(code, "Given code was null");
+    Validate.notEmpty(code, "Given code was null or empty");
     return parse(code.charAt(0));
   }
 

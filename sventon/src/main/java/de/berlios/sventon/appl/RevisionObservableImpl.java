@@ -79,8 +79,9 @@ public final class RevisionObservableImpl extends Observable implements Revision
    */
   public RevisionObservableImpl(final List<RevisionObserver> observers) {
     logger.info("Starting revision observable");
-    logger.debug("Adding [" + observers.size() + "] observers");
+
     for (final RevisionObserver revisionObserver : observers) {
+      logger.debug("Adding observer: " + revisionObserver.getClass().getName());
       addObserver(revisionObserver);
     }
   }
