@@ -66,7 +66,7 @@ public enum DiffAction {
    * @return The DiffAction
    */
   public static DiffAction parse(final String code) {
-    Validate.notNull(code, "Given code was null");
+    Validate.notEmpty(code, "Given code was null or empty");
     return parse(code.charAt(0));
   }
 

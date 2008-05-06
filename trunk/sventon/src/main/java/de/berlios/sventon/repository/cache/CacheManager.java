@@ -64,7 +64,9 @@ public abstract class CacheManager<T> {
     if (cache != null) {
       throw new IllegalStateException("Cache [" + repositoryName + "] has already been registered");
     }
-    addCache(repositoryName, createCache(repositoryName));
+    cache = createCache(repositoryName);
+    logger.debug("Adding cache, type [" + cache.getClass().getName() + "] name, [" + repositoryName + "]");
+    addCache(repositoryName, cache);
   }
 
   /**
