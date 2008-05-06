@@ -53,7 +53,7 @@ public final class ImageScaler {
    * @param maxSize Maximum size (height and width)
    * @return The thumbnail.
    */
-  public BufferedImage getThumbnail(final int maxSize) {
+  public BufferedImage createThumbnail(final int maxSize) {
     final Dimension thumbnailSize = getThumbnailSize(width, height, maxSize);
 
     // Resize image.

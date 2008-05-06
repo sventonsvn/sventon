@@ -274,42 +274,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache,
-                                               final String path, final long revision,
-                                               final URL fullSizeImageUrl, final String imageFormatName,
-                                               final int maxThumbnailSize, final OutputStream out) throws SVNException {
-
-    // Check if the thumbnail exists on the cache
-    final String checksum = getFileChecksum(repository, path, revision);
-    final ObjectCacheKey cacheKey = new ObjectCacheKey(path, checksum);
-    logger.debug("Using cachekey: " + cacheKey);
-    final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
-
-    try {
-      if (thumbnailData != null) {
-        // Writing cached thumbnail image to output stream
-        out.write(thumbnailData);
-      } else {
-        // Thumbnail was not in the cache - create it.
-        logger.debug("Getting full size image from url: " + fullSizeImageUrl);
-        final ImageScaler imageScaler = new ImageScaler(ImageIO.read(fullSizeImageUrl));
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, baos);
-
-        // Putting created thumbnail image into the cache.
-        logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
-        objectCache.put(cacheKey, baos.toByteArray());
-        out.write(baos.toByteArray());
-      }
-    } catch (final IOException ioex) {
-      logger.warn("Unable to get thumbnail for: " + path, ioex);
-    }
-    return null;  //TODO: Return instance of ImageMetadata
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
                                                       final SVNRevision pegRevision, final String charset,
                                                       final RepositoryConfiguration configuration) throws SVNException, DiffException {

@@ -237,24 +237,6 @@ public interface RepositoryService {
   List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
-   * Gets a thumbnail image from given full size image url.
-   *
-   * @param repository       The repository
-   * @param objectCache      Cache instance
-   * @param path             The entry path
-   * @param revision         The entry revision
-   * @param fullSizeImageUrl Image URL
-   * @param imageFormatName  Format name
-   * @param maxThumbnailSize Size
-   * @param out              Destination output stream
-   * @return null
-   * @throws SVNException if a subversion error occur
-   */
-  ImageMetadata getThumbnailImage(final SVNRepository repository, final ObjectCache objectCache, final String path,
-                                  final long revision, final URL fullSizeImageUrl, final String imageFormatName,
-                                  final int maxThumbnailSize, final OutputStream out) throws SVNException;
-
-  /**
    * Creates a side-by-side diff.
    *
    * @param repository    The repository.

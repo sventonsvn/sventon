@@ -12,7 +12,9 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
+import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
@@ -22,9 +24,13 @@ import org.springframework.web.servlet.mvc.Controller;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -73,15 +79,55 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
 
     prepareResponse(response, svnCommand);
 
-    final URL fullSizeImageUrl = new URL(createFullSizeImageURL(request));
-    final ObjectCache objectCache = objectCacheManager.getCache(svnCommand.getName());
+    final URL fullSizeImageUrl = createFullSizeImageURL(request);
+    final boolean cacheUsed = getRepositoryConfiguration(svnCommand.getName()).isCacheUsed();
 
-    getRepositoryService().getThumbnailImage(repository, objectCache, svnCommand.getPath(), svnCommand.getRevisionNumber(),
-        fullSizeImageUrl, imageFormatName, maxThumbnailSize, output);
+    ObjectCache objectCache = null;
+    ObjectCacheKey cacheKey = null;
 
+    if (cacheUsed) {
+      final String checksum = getRepositoryService().getFileChecksum(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
+      objectCache = objectCacheManager.getCache(svnCommand.getName());
+      cacheKey = new ObjectCacheKey(svnCommand.getPath(), checksum);
+      logger.debug("Using cachekey: " + cacheKey);
+      final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
+      // Check if the thumbnail exists on the cache
+      if (thumbnailData != null) {
+        // Writing cached thumbnail image to output stream
+        output.write(thumbnailData);
+      }
+    }
+
+    final byte[] thumbnailData = createThumbnail(fullSizeImageUrl);
+
+    if (cacheUsed) {
+      // Putting created thumbnail image into the cache.
+      logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+      objectCache.put(cacheKey, thumbnailData);
+    }
+
+    output.write(thumbnailData);
     output.flush();
     output.close();
     return null;
+  }
+
+  /**
+   * Creates a thumbnail version of a full size image.
+   *
+   * @param fullSizeImageUrl URL to the full size version of the image.
+   * @return array  of image bytes
+   */
+  private byte[] createThumbnail(final URL fullSizeImageUrl) {
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      logger.debug("Getting full size image from url: " + fullSizeImageUrl);
+      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(fullSizeImageUrl));
+      ImageIO.write(imageScaler.createThumbnail(maxThumbnailSize), imageFormatName, baos);
+    } catch (final IOException ioex) {
+      logger.warn("Unable to get thumbnail", ioex);
+    }
+    return baos.toByteArray();
   }
 
   /**
@@ -99,14 +145,15 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * Creates a URL string for accessing the full size image.
    *
    * @param request Request.
-   * @return URL string.
+   * @return URL.
+   * @throws MalformedURLException if unable to construct URL.
    */
-  private String createFullSizeImageURL(final HttpServletRequest request) {
+  private URL createFullSizeImageURL(final HttpServletRequest request) throws MalformedURLException {
     final StringBuilder urlString = new StringBuilder(
         request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
     urlString.append("?");
     urlString.append(request.getQueryString());
-    return urlString.toString();
+    return new URL(urlString.toString());
   }
 
   /**
