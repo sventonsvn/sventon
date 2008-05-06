@@ -61,7 +61,7 @@ public final class Application {
   /**
    * Application configuration directory.
    */
-  private final File configurationDirectory;
+  private final File configurationRootDirectory;
 
   /**
    * Application configuration file name.
@@ -78,18 +78,18 @@ public final class Application {
   /**
    * Constructor.
    *
-   * @param configurationDirectory Configuration root directory. Directory will be created if it does not already exist,
-   *                               not {@code null} Configuration settings will be stored in this directory.
-   * @param configurationFilename  Path and file name of sventon configuration file, not {@code null}
+   * @param configurationRootDirectory Configuration root directory. Directory will be created if it does not already exist,
+   *                                   not {@code null} Configuration settings will be stored in this directory.
+   * @param configurationFilename      Path and file name of sventon configuration file, not {@code null}
    * @throws IOException if IO error occur
    */
-  public Application(final File configurationDirectory, final String configurationFilename) throws IOException {
-    Validate.notNull(configurationDirectory, "Config directory cannot be null");
+  public Application(final File configurationRootDirectory, final String configurationFilename) throws IOException {
+    Validate.notNull(configurationRootDirectory, "Config directory cannot be null");
     Validate.notNull(configurationFilename, "Config filename cannot be null");
 
-    this.configurationDirectory = configurationDirectory;
-    if (!this.configurationDirectory.exists() && !this.configurationDirectory.mkdirs()) {
-      throw new RuntimeException("Unable to create temporary directory: " + this.configurationDirectory.getAbsolutePath());
+    this.configurationRootDirectory = configurationRootDirectory;
+    if (!this.configurationRootDirectory.exists() && !this.configurationRootDirectory.mkdirs()) {
+      throw new RuntimeException("Unable to create temporary directory: " + this.configurationRootDirectory.getAbsolutePath());
     }
     this.configurationFilename = configurationFilename;
   }
@@ -129,90 +129,41 @@ public final class Application {
   }
 
   /**
-   * Loads the instance configurations from the file at path {@code configurationDirectory / configurationFilename}
+   * Loads the repository configurations from the file at path
+   * {@code configurationRootDirectory / [repository name] / configurationFilename}
    * <p/>
-   * If a config file is found an configuration is successful this instance will be marked as configured. If no file is
-   * found initialization will fail silently and the instance will not be marked as configured.
+   * If a config file is found an configuration is successful this instance will be marked as configured.
+   * If no file is found initialization will fail silently and the instance will not be marked as configured.
    * <p/>
    * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
-   * {@code configurationDirectory} and {@code configurationFilename} must be set before calling this method, or bad
+   * {@code configurationRootDirectory} and {@code configurationFilename} must be set before calling this method, or bad
    * things will most certainly happen...
    *
    * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()
    */
   protected void loadRepositoryConfigurations() throws IOException {
-    InputStream is = null;
-    final File configFile = new File(configurationDirectory, configurationFilename);
-    try {
-      is = new FileInputStream(configFile);
-      initConfiguration(is);
-    } catch (FileNotFoundException fnfe) {
-      logger.debug("Configuration file [" + configFile.getAbsolutePath() + "] was not found");
-      logger.info("No instance has been configured yet. Access sventon web application for setup");
-    } finally {
-      IOUtils.closeQuietly(is);
+    final File[] configDirs = configurationRootDirectory.listFiles(
+        new SventonConfigDirectoryFileFilter(configurationFilename));
+
+    if (configDirs.length == 0) {
+      logger.debug("No configuration files were found below: " + configurationRootDirectory.getAbsolutePath());
+      logger.info("No repository has been configured yet. Access sventon web application to start the setup");
+      return;
     }
-  }
 
-  /**
-   * Store the instance configurations on file at path {@code configurationDirectory / configurationFilename}.
-   */
-  public void storeRepositoryConfigurations() {
-    final File propertyFile = new File(configurationDirectory, configurationFilename);
-    logger.info("Storing configuration properties in: " + propertyFile.getAbsolutePath());
-
-    FileOutputStream fileOutputStream = null;
-    try {
-      fileOutputStream = new FileOutputStream(propertyFile);
-      for (final Properties properties : getConfigurationAsProperties()) {
-        logger.debug("Storing: " + properties);
-        properties.store(fileOutputStream, null); //This is to get the properites grouped by instance in a file.
-        fileOutputStream.flush();
+    for (final File configDir : configDirs) {
+      InputStream is = null;
+      try {
+        final Properties properties = new Properties();
+        is = new FileInputStream(new File(configDir, configurationFilename));
+        properties.load(is);
+        final String repositoryName = configDir.getName();
+        logger.info("Configuring repository: " + repositoryName);
+        addRepository(RepositoryConfiguration.create(repositoryName, properties));
+      } finally {
+        IOUtils.closeQuietly(is);
       }
-    } catch (IOException ioe) {
-      throw new RuntimeException(ioe);
-    } finally {
-      IOUtils.closeQuietly(fileOutputStream);
-    }
-  }
-
-  /**
-   * Creates and populates a List of <code>Properties</code> instances with relevant
-   * configuration values extracted from given <code>ApplicationConfiguration</code>.
-   *
-   * @return List of populated Properties.
-   */
-  protected List<Properties> getConfigurationAsProperties() {
-    final List<Properties> propertyList = new ArrayList<Properties>();
-    for (final RepositoryConfiguration configuration : repositories.values()) {
-      propertyList.add(configuration.getAsProperties());
-    }
-    return propertyList;
-  }
-
-  /**
-   * Initializes the application configuration.
-   * Reads given input stream and populates the global application configuration
-   * with all instance configuration parameters.
-   *
-   * @param input InputStream
-   * @throws IOException if IO error occurs.
-   */
-  private void initConfiguration(final InputStream input) throws IOException {
-    final Set<String> repositoryNames = new HashSet<String>();
-    final Properties props = new Properties();
-    props.load(input);
-
-    for (final Object object : props.keySet()) {
-      final String key = (String) object;
-      final String repositoryName = key.substring(0, key.indexOf("."));
-      repositoryNames.add(repositoryName);
-    }
-
-    for (final String repositoryName : repositoryNames) {
-      logger.info("Configuring repository: " + repositoryName);
-      addRepository(RepositoryConfiguration.create(repositoryName, props));
     }
 
     if (getRepositoryCount() > 0) {
@@ -220,6 +171,33 @@ public final class Application {
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
+    }
+  }
+
+  /**
+   * Store the repository configurations on file at path
+   * {@code configurationRootDirectory / [repository name] / configurationFilename}.
+   *
+   * @throws IOException if IO error occur during file operations.
+   */
+  public void storeRepositoryConfigurations() throws IOException {
+    for (final RepositoryConfiguration configuration : repositories.values()) {
+      final File configDir = new File(configurationRootDirectory, configuration.getName().toString());
+      configDir.mkdirs();
+
+      final File configFile = new File(configDir, configurationFilename);
+      logger.info("Storing configuration: " + configFile.getAbsolutePath());
+
+      FileOutputStream fileOutputStream = null;
+      try {
+        fileOutputStream = new FileOutputStream(configFile);
+        final Properties configProperties = configuration.getAsProperties();
+        logger.debug("Storing properties: " + configProperties);
+        configProperties.store(fileOutputStream, "");
+        fileOutputStream.flush();
+      } finally {
+        IOUtils.closeQuietly(fileOutputStream);
+      }
     }
   }
 
@@ -320,10 +298,11 @@ public final class Application {
   /**
    * Gets the configuration file.
    *
-   * @return The file.
+   * @param repositoryName Name of repository to get config file for.
+   * @return The config file.
    */
-  public File getConfigurationFile() {
-    return new File(configurationDirectory, configurationFilename);
+  public File getConfigurationFileForRepository(final String repositoryName) {
+    return new File(new File(configurationRootDirectory, repositoryName), configurationFilename);
   }
 
   /**

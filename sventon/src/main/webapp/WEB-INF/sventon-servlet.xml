@@ -21,23 +21,19 @@
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-  <bean id="sventonConfigFile" class="java.lang.String">
-    <constructor-arg value="sventon.properties"/>
+  <bean id="sventonTempRootDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg value="${java.io.tmpdir}"/>
+    <constructor-arg value="sventon_temp"/>
   </bean>
 
-  <bean id="sventonDir" class="java.io.File" init-method="mkdirs">
-    <constructor-arg index="0" value="${java.io.tmpdir}"/>
-    <constructor-arg index="1" value="sventon_temp"/>
-  </bean>
-
-  <bean id="sventonExportDir" class="java.io.File" init-method="mkdirs">
-    <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" value="export_temp"/>
+  <bean id="sventonTempExportDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg ref="sventonTempRootDir"/>
+    <constructor-arg value="export_temp"/>
   </bean>
 
   <bean id="repositoriesDir" class="java.io.File" init-method="mkdirs">
-    <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" value="repositories"/>
+    <constructor-arg ref="sventonTempRootDir"/>
+    <constructor-arg value="repositories"/>
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -56,8 +52,8 @@
   </bean>
 
   <bean id="application" class="de.berlios.sventon.appl.Application" init-method="init">
-    <constructor-arg index="0" ref="sventonDir"/>
-    <constructor-arg index="1" ref="sventonConfigFile"/>
+    <constructor-arg ref="repositoriesDir"/>
+    <constructor-arg value="sventon_config.properties"/>
     <property name="entryCacheManager" ref="entryCacheManager"/>
     <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
@@ -159,7 +155,7 @@
   </bean>
 
   <bean name="/export.svn" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
-    <property name="exportDir" ref="sventonExportDir"/>
+    <property name="exportDir" ref="sventonTempExportDir"/>
     <property name="archiveFileCharset" value="cp850"/>
   </bean>
 
@@ -320,7 +316,7 @@
   </bean>
 
   <bean id="tempFileCleaner" class="de.berlios.sventon.repository.export.TemporaryFileCleaner">
-    <property name="exportRootDir" ref="sventonExportDir"/>
+    <property name="exportRootDir" ref="sventonTempExportDir"/>
     <property name="timeThreshold" value="600000"/>
   </bean>
 

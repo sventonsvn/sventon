@@ -91,14 +91,14 @@ public final class RepositoryConfiguration {
    */
   public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
 
-  public static final String PROPERTY_KEY_REPOSITORY_URL = ".root";
-  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = ".displayRoot";
-  public static final String PROPERTY_KEY_USERNAME = ".uid";
-  public static final String PROPERTY_KEY_PASSWORD = ".pwd";
-  public static final String PROPERTY_KEY_USE_CACHE = ".useCache";
-  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = ".allowZipDownloads";
-  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = ".enableAccessControl";
-  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = ".rssItemsCount";
+  public static final String PROPERTY_KEY_REPOSITORY_URL = "root";
+  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "displayRoot";
+  public static final String PROPERTY_KEY_USERNAME = "uid";
+  public static final String PROPERTY_KEY_PASSWORD = "pwd";
+  public static final String PROPERTY_KEY_USE_CACHE = "useCache";
+  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
+  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
+  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = "rssItemsCount";
 
 
   /**
@@ -120,17 +120,14 @@ public final class RepositoryConfiguration {
    */
   public static RepositoryConfiguration create(final String repositoryName, final Properties properties) {
     final RepositoryConfiguration ic = new RepositoryConfiguration(repositoryName);
-    ic.setRepositoryUrl((String) properties.get(repositoryName + PROPERTY_KEY_REPOSITORY_URL));
-    ic.setRepositoryDisplayUrl((String) properties.get(repositoryName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
-    ic.setUid((String) properties.get(repositoryName + PROPERTY_KEY_USERNAME));
-    ic.setPwd((String) properties.get(repositoryName + PROPERTY_KEY_PASSWORD));
-    ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_USE_CACHE)));
-    ic.setZippedDownloadsAllowed(
-        Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
-    ic.setEnableAccessControl(
-        Boolean.parseBoolean((String) properties.get(repositoryName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
-    ic.rssItemsCount = Integer.parseInt(
-        properties.getProperty(repositoryName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT)));
+    ic.setRepositoryUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_URL));
+    ic.setRepositoryDisplayUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
+    ic.setUid((String) properties.get(PROPERTY_KEY_USERNAME));
+    ic.setPwd((String) properties.get(PROPERTY_KEY_PASSWORD));
+    ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
+    ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
+    ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+    ic.setRssItemsCount(Integer.parseInt(properties.getProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT))));
     return ic;
   }
 
@@ -141,18 +138,18 @@ public final class RepositoryConfiguration {
    */
   public Properties getAsProperties() {
     final Properties properties = new Properties();
-    properties.put(repositoryName + PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
-    properties.put(repositoryName + PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
+    properties.put(PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
+    properties.put(PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
     if (getUid() != null) {
-      properties.put(repositoryName + PROPERTY_KEY_USERNAME, getUid());
+      properties.put(PROPERTY_KEY_USERNAME, getUid());
     }
     if (getPwd() != null) {
-      properties.put(repositoryName + PROPERTY_KEY_PASSWORD, getPwd());
+      properties.put(PROPERTY_KEY_PASSWORD, getPwd());
     }
-    properties.put(repositoryName + PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
-    properties.put(repositoryName + PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
-    properties.put(repositoryName + PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
-    properties.put(repositoryName + PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
+    properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
+    properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
+    properties.put(PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
+    properties.put(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
     return properties;
   }
 
@@ -209,7 +206,7 @@ public final class RepositoryConfiguration {
    * @param repositoryUrl The root url.
    */
   public void setRepositoryUrl(String repositoryUrl) {
-
+    Validate.notEmpty(repositoryUrl);
     repositoryUrl = repositoryUrl.trim();
 
     // Strip last slash if any.
@@ -317,6 +314,15 @@ public final class RepositoryConfiguration {
    */
   public int getRssItemsCount() {
     return rssItemsCount;
+  }
+
+  /**
+   * Sets the number of rss items.
+   *
+   * @param count Count.
+   */
+  private void setRssItemsCount(final int count) {
+    rssItemsCount = count;
   }
 
   /**

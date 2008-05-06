@@ -1,10 +1,11 @@
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.TestUtils;
 import static de.berlios.sventon.TestUtils.TEMPDIR;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
-import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -51,7 +52,6 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
       }
     });
 
-
     final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
     final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
@@ -73,17 +73,23 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     application.setConfigured(false);
     controller.setApplication(application);
 
-    final File propFile = new File(TEMPDIR, "tmpconfigfilename");
-    assertFalse(propFile.exists());
+    final File configFile1 = new File(TEMPDIR, "testrepos1");
+    final File configFile2 = new File(TEMPDIR, "testrepos2");
+
+    assertFalse(configFile1.exists());
+    assertFalse(configFile2.exists());
 
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
     assertNotNull(modelAndView);
     assertNull(modelAndView.getViewName()); // Will be null as it is a redirect view.
 
     //File should now be written
-    assertTrue(propFile.exists());
-    propFile.delete();
-    assertFalse(propFile.exists());
+    assertTrue(configFile1.exists());
+    assertTrue(configFile2.exists());
+    FileUtils.deleteDirectory(configFile1);
+    FileUtils.deleteDirectory(configFile2);
+    assertFalse(configFile1.exists());
+    assertFalse(configFile2.exists());
     assertTrue(application.isConfigured());
   }
 }

@@ -84,7 +84,6 @@ public class ConfigurationControllerTest extends TestCase {
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals((File) modelAndView.getModelMap().get("configFile"), new File(TEMPDIR, "filename"));
     assertEquals("config", modelAndView.getViewName());
   }
 
