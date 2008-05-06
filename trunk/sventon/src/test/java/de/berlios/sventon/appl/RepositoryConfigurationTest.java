@@ -1,26 +1,26 @@
 package de.berlios.sventon.appl;
 
+import static de.berlios.sventon.appl.RepositoryConfiguration.*;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.Properties;
 
-public class InstanceConfigurationTest extends TestCase {
-  private static final String I = "test";
+public class RepositoryConfigurationTest extends TestCase {
 
   public void testCreateInstanceConfigurationTest() throws Exception {
     final String repositoryUrl = "svn://repositoryserver/repository";
-    final Properties p = new Properties();
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_PASSWORD, "pwd");
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_USERNAME, "uid");
+    final Properties props = new Properties();
+    props.setProperty(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
+    props.setProperty(PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
+    props.setProperty(PROPERTY_KEY_PASSWORD, "pwd");
+    props.setProperty(PROPERTY_KEY_USERNAME, "uid");
 
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_USE_CACHE, "false");
-    p.setProperty(I + RepositoryConfiguration.PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
+    props.setProperty(PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
+    props.setProperty(PROPERTY_KEY_USE_CACHE, "false");
+    props.setProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
 
-    RepositoryConfiguration conf = RepositoryConfiguration.create(I, p);
+    RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
 
     assertTrue(conf.isZippedDownloadsAllowed());
     assertTrue(conf.isAccessControlEnabled());
@@ -32,7 +32,6 @@ public class InstanceConfigurationTest extends TestCase {
 
     assertFalse(conf.isCacheUsed());
     assertEquals(20, conf.getRssItemsCount());
-
   }
 
   public void testSetRepositoryUrl() throws Exception {
@@ -96,7 +95,20 @@ public class InstanceConfigurationTest extends TestCase {
     }
 
     conf.setRepositoryUrl("http://localhost");
-    assertEquals(6, conf.getAsProperties().size());
 
+    final Properties props = conf.getAsProperties();
+    assertEquals(6, props.size());
+
+    assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_URL));
+    assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
+
+    assertNull(props.get(PROPERTY_KEY_USERNAME));
+    assertNull(props.get(PROPERTY_KEY_PASSWORD));
+
+    assertEquals("false", props.get(PROPERTY_KEY_USE_CACHE));
+    assertEquals("false", props.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS));
+
+    assertEquals("false", props.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL));
+    assertEquals("20", props.get(PROPERTY_KEY_RSS_ITEMS_COUNT));
   }
 }
