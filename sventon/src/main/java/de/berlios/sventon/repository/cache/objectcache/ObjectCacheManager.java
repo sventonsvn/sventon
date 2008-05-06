@@ -81,7 +81,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
     final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
     cachePath.mkdirs();
     return new ObjectCacheImpl(
-        repositoryName,
+        "objectcache",
         cachePath.getAbsolutePath(),
         maxElementsInMemory,
         overflowToDisk,

@@ -1,21 +1,19 @@
 package de.berlios.sventon.appl;
 
-import static de.berlios.sventon.TestUtils.TEMPDIR;
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.repository.SVNRepositoryStub;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheImpl;
 import de.berlios.sventon.service.RepositoryServiceImpl;
-import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
-import java.io.File;
 import java.util.*;
 
 public class RevisionObservableImplTest extends TestCase implements RevisionObserver {
 
   private ObjectCache createMemoryCache() throws Exception {
-    return new ObjectCacheImpl(new RepositoryName("sventonTestCache"), null, 1000, false, false, 0, 0, false, 0);
+    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
