@@ -11,7 +11,6 @@
  */
 package de.berlios.sventon.repository.cache.objectcache;
 
-import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.cache.CacheException;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -43,7 +42,7 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * Constructor.
    *
-   * @param repositoryName      Name of the cache.
+   * @param cacheName           Name of the cache.
    * @param diskStorePath       Path where to store cache files
    * @param maxElementsInMemory Max elements in memory
    * @param overflowToDisk      Overflow to disk
@@ -55,7 +54,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    *                            Expiry thread interval
    * @throws CacheException if unable to create cache.
    */
-  public ObjectCacheImpl(final RepositoryName repositoryName,
+  public ObjectCacheImpl(final String cacheName,
                          final String diskStorePath,
                          final int maxElementsInMemory,
                          final boolean overflowToDisk,
@@ -66,7 +65,7 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
       cacheManager = CacheManager.create();
-      cache = new Cache(repositoryName.toString(), maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
+      cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
       cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
