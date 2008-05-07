@@ -65,7 +65,7 @@
         </td>
         <td width="210px" style="text-align:center; border: 1px dashed black;">
           <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
-            <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry.path} @ ${revision}"></a>
+            <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry.path} @ ${entry.revision}"></a>
         </td>
       </tr>
     </c:forEach>
