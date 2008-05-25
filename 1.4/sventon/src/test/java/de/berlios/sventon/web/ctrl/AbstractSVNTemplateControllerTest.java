@@ -23,12 +23,12 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
 
     final HttpServletRequest request = new MockHttpServletRequest();
     assertNull(request.getSession().getAttribute("userContext"));
-    final UserRepositoryContext userRepositoryContext = ctrl.getUserContext(request, "instance1");
+    final UserRepositoryContext userRepositoryContext = UserRepositoryContext.getContext(request, "instance1");
     assertNotNull(request.getSession());
     final Object o = request.getSession().getAttribute("userContext");
     assertNotNull(o);
     assertTrue(o instanceof UserContext);
-    final UserRepositoryContext contextFromSession = ((UserContext) o).getRepositoryContext("instance1");
+    final UserRepositoryContext contextFromSession = ((UserContext) o).getUserRepositoryContext("instance1");
     assertSame(contextFromSession, userRepositoryContext);
   }
 
