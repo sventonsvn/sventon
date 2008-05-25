@@ -38,7 +38,7 @@ public final class UserContext implements Serializable {
    * @param repositoryName Repository name.
    * @return Matching instance, {@code null} if not found.
    */
-  public UserRepositoryContext getRepositoryContext(final String repositoryName) {
+  public UserRepositoryContext getUserRepositoryContext(final String repositoryName) {
     return repositoryContexts.get(repositoryName);
   }
 

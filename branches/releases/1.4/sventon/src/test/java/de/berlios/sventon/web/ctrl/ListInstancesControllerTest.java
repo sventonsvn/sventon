@@ -63,11 +63,11 @@ public class ListInstancesControllerTest extends TestCase {
     assertEquals("listInstances", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     UserContext uCFromSession = (UserContext) session.getAttribute("userContext");
-    UserRepositoryContext uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    UserRepositoryContext uRC1FromSession = uCFromSession.getUserRepositoryContext("repo1");
     assertEquals("UID1", uRC1FromSession.getUid());
     assertEquals("PWD1", uRC1FromSession.getPwd());
 
-    UserRepositoryContext uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    UserRepositoryContext uRC2FromSession = uCFromSession.getUserRepositoryContext("repo2");
     assertEquals("UID2", uRC2FromSession.getUid());
     assertEquals("PWD2", uRC2FromSession.getPwd());
 
@@ -78,11 +78,11 @@ public class ListInstancesControllerTest extends TestCase {
     assertEquals("listInstances", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
-    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    uRC1FromSession = uCFromSession.getUserRepositoryContext("repo1");
     assertEquals("UID1", uRC1FromSession.getUid());
     assertEquals("PWD1", uRC1FromSession.getPwd());
 
-    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    uRC2FromSession = uCFromSession.getUserRepositoryContext("repo2");
     assertEquals("UID2", uRC2FromSession.getUid());
     assertEquals("PWD2", uRC2FromSession.getPwd());
 
@@ -93,11 +93,11 @@ public class ListInstancesControllerTest extends TestCase {
     assertEquals("listInstances", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
-    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    uRC1FromSession = uCFromSession.getUserRepositoryContext("repo1");
     assertEquals("UID1", uRC1FromSession.getUid());
     assertEquals("PWD1", uRC1FromSession.getPwd());
 
-    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    uRC2FromSession = uCFromSession.getUserRepositoryContext("repo2");
     assertEquals("UID2", uRC2FromSession.getUid());
     assertEquals("PWD2", uRC2FromSession.getPwd());
 
@@ -108,11 +108,11 @@ public class ListInstancesControllerTest extends TestCase {
     assertEquals("listInstances", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
-    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    uRC1FromSession = uCFromSession.getUserRepositoryContext("repo1");
     assertEquals("UID1", uRC1FromSession.getUid());
     assertEquals("PWD1", uRC1FromSession.getPwd());
 
-    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    uRC2FromSession = uCFromSession.getUserRepositoryContext("repo2");
     assertEquals("UID2", uRC2FromSession.getUid());
     assertEquals("PWD2", uRC2FromSession.getPwd());
 
@@ -124,11 +124,11 @@ public class ListInstancesControllerTest extends TestCase {
 
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
-    uRC1FromSession = uCFromSession.getRepositoryContext("repo1");
+    uRC1FromSession = uCFromSession.getUserRepositoryContext("repo1");
     assertNull(uRC1FromSession.getUid());
     assertNull(uRC1FromSession.getPwd());
 
-    uRC2FromSession = uCFromSession.getRepositoryContext("repo2");
+    uRC2FromSession = uCFromSession.getUserRepositoryContext("repo2");
     assertEquals("UID2", uRC2FromSession.getUid());
     assertEquals("PWD2", uRC2FromSession.getPwd());
 

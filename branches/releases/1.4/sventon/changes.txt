@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1288] Fixed: Bug #13881 - RSS component not working when using user based auth.
 [1286] Fixed: Bug #13870 - Not possible to link to a specific row.
 [1276] Fixed: Bug #13707 - Entry tray remove link broken for non-head entries.
 

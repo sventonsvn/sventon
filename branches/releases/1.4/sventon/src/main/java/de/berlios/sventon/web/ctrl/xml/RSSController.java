@@ -16,6 +16,7 @@ import de.berlios.sventon.appl.InstanceConfiguration;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.rss.FeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -80,11 +81,10 @@ public final class RSSController extends AbstractController {
     response.setContentType(mimeType);
     response.setHeader("Cache-Control", "no-cache");
 
-    final String instanceName = ServletRequestUtils.getRequiredStringParameter(request, "name");
+    final String repositoryName = ServletRequestUtils.getRequiredStringParameter(request, "name");
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
     final String revision = ServletRequestUtils.getStringParameter(request, "revision", "head");
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
+    final UserRepositoryContext userRepositoryContext = UserRepositoryContext.getContext(request, repositoryName);
 
     if (!application.isConfigured()) {
       String errorMessage = "sventon has not been configured yet!";
@@ -93,13 +93,13 @@ public final class RSSController extends AbstractController {
       return null;
     }
 
-    final InstanceConfiguration configuration = application.getInstance(instanceName).getConfiguration();
+    final InstanceConfiguration configuration = application.getInstance(repositoryName).getConfiguration();
 
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryFactory.getRepository(configuration.getInstanceName(),
-            configuration.getSVNURL(), uid, pwd);
+            configuration.getSVNURL(), userRepositoryContext.getUid(), userRepositoryContext.getPwd());
       } else {
         repository = repositoryFactory.getRepository(configuration.getInstanceName(),
             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
@@ -107,8 +107,8 @@ public final class RSSController extends AbstractController {
 
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = repositoryService.getRevisions(
-          instanceName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
-      feedGenerator.outputFeed(instanceName, logEntries, request, response);
+          repositoryName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
+      feedGenerator.outputFeed(repositoryName, logEntries, request, response);
     } catch (SVNAuthenticationException ae) {
       logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());

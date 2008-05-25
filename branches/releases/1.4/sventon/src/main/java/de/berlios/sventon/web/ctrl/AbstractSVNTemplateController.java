@@ -21,9 +21,7 @@ import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
-import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,7 +35,6 @@ import static org.tmatesoft.svn.core.wc.SVNRevision.HEAD;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.HashMap;
@@ -220,7 +217,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     SVNRepository repository = null;
     try {
       final InstanceConfiguration configuration = application.getInstance(svnCommand.getName()).getConfiguration();
-      final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
+      final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, svnCommand.getName());
 
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryFactory.getRepository(configuration.getInstanceName(), configuration.getSVNURL(),
@@ -363,42 +360,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     } else if (userContext.getSortMode() == null) {
       userContext.setSortMode(RepositoryEntrySorter.SortMode.ASC);
     }
-  }
-
-  /**
-   * Gets the UserContext instance from the user's HTTPSession.
-   * If session does not exist, it will be created. If the attribute
-   * <code>userContext</code> does not exists, a new instance will be
-   * created and added to the session.
-   *
-   * @param request      The HTTP request.
-   * @param instanceName Instance name.
-   * @return The UserContext instance.
-   * @see UserContext
-   */
-  protected final UserRepositoryContext getUserContext(final HttpServletRequest request, final String instanceName) {
-    final HttpSession session = request.getSession(true);
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
-
-    UserContext userContext = (UserContext) session.getAttribute("userContext");
-    if (userContext == null) {
-      userContext = new UserContext();
-      session.setAttribute("userContext", userContext);
-    }
-
-    UserRepositoryContext repositoryContext = userContext.getRepositoryContext(instanceName);
-    if (repositoryContext == null) {
-      repositoryContext = new UserRepositoryContext();
-      userContext.add(instanceName, repositoryContext);
-    }
-
-    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      repositoryContext.setUid(uid);
-      repositoryContext.setPwd(pwd);
-    }
-
-    return repositoryContext;
   }
 
   /**
