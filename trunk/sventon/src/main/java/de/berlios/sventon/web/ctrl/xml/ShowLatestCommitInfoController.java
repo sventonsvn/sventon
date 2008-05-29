@@ -16,6 +16,7 @@ import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.service.RepositoryService;
+import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -77,16 +78,14 @@ public final class ShowLatestCommitInfoController extends AbstractController {
     response.setHeader("Cache-Control", "no-cache");
 
     final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
-
+    final UserRepositoryContext userRepositoryContext = UserRepositoryContext.getContext(request, repositoryName);
     final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
 
     SVNRepository repository = null;
     try {
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryFactory.getRepository(configuration.getName(),
-            configuration.getSVNURL(), uid, pwd);
+            configuration.getSVNURL(), userRepositoryContext.getUid(), userRepositoryContext.getPwd());
       } else {
         repository = repositoryFactory.getRepository(configuration.getName(),
             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());

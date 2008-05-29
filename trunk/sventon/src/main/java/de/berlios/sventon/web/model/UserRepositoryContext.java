@@ -13,10 +13,15 @@ package de.berlios.sventon.web.model;
 
 import de.berlios.sventon.repository.RepositoryEntryComparator;
 import de.berlios.sventon.repository.RepositoryEntrySorter;
+import de.berlios.sventon.appl.RepositoryName;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.web.bind.ServletRequestUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 /**
@@ -71,6 +76,41 @@ public final class UserRepositoryContext implements Serializable {
    * Password.
    */
   private String pwd;
+
+  /**
+   * Gets the UserContext instance from the user's HTTPSession.
+   * If session does not exist, it will be created. If the attribute
+   * <code>userContext</code> does not exists, a new instance will be
+   * created and added to the session.
+   *
+   * @param request      The HTTP request.
+   * @param repositoryName Instance name.
+   * @return The UserContext instance.
+   * @see UserContext
+   */
+  public static UserRepositoryContext getContext(final HttpServletRequest request, final RepositoryName repositoryName) {
+    final HttpSession session = request.getSession(true);
+    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
+    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
+
+    UserContext userContext = (UserContext) session.getAttribute("userContext");
+    if (userContext == null) {
+      userContext = new UserContext();
+      session.setAttribute("userContext", userContext);
+    }
+
+    UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(repositoryName);
+    if (userRepositoryContext == null) {
+      userRepositoryContext = new UserRepositoryContext();
+      userContext.add(repositoryName, userRepositoryContext);
+    }
+
+    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
+      userRepositoryContext.setUid(uid);
+      userRepositoryContext.setPwd(pwd);
+    }
+    return userRepositoryContext;
+  }
 
   /**
    * Gets the sort type, i.e. the field to sort on.

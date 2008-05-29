@@ -391,7 +391,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       session.setAttribute("userContext", userContext);
     }
 
-    UserRepositoryContext repositoryContext = userContext.getRepositoryContext(repositoryName);
+    UserRepositoryContext repositoryContext = userContext.getUserRepositoryContext(repositoryName);
     if (repositoryContext == null) {
       repositoryContext = new UserRepositoryContext();
       userContext.add(repositoryName, repositoryContext);

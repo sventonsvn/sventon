@@ -56,7 +56,7 @@
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">
               <jsp:useBean id="row" type="de.berlios.sventon.model.InlineDiffRow"/>
-              <tr>
+              <tr <%= row.getRowNumberRight() != null ? "id=\"l" + row.getRowNumberRight().toString() + "\"" : "" %>>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">
                     <a name="diff${diffCount}"/>

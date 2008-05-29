@@ -61,7 +61,7 @@ public final class ListRepositoriesController extends AbstractController {
       final HttpSession session = request.getSession(false);
       if (session != null) {
         final UserContext userContext = (UserContext) session.getAttribute("userContext");
-        final UserRepositoryContext userRepositoryContext = userContext.getRepositoryContext(repositoryName);
+        final UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(repositoryName);
         if (userRepositoryContext != null) {
           userRepositoryContext.clearCredentials();
         }
