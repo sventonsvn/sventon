@@ -39,7 +39,7 @@
 
   <table id="textFileTable" class="codeBlock" cellspacing="0">
     <c:forEach items="${file.rows}" var="row">
-      <tr>
+      <tr id="l${row.rowNumber}">
         <td class="lineNo">${row.rowNumber}&nbsp;</td>
         <td class="lineContent">${row.content}</td>
       </tr>

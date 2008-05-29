@@ -4,6 +4,11 @@ sventon change history
 [1252] Added: Upgraded to Spring 2.5.2.
 [1246] Added: Feature #3499 - Diff tags.
 
+[1291] Release 1.4 RC5 (2008-05-25)
+[1288] Fixed: Bug #13881 - RSS component not working when using user based auth.
+[1286] Fixed: Bug #13870 - Not possible to link to a specific row.
+[1276] Fixed: Bug #13707 - Entry tray remove link broken for non-head entries.
+
 [1270] Release 1.4 RC4 (2008-04-20)
 [1265] Fixed: Bug #13640 - Diff crashes if the file starts with a new line character.
 [1263] Fixed: Bug #13622 - Diff with previous revision not working for moved files.
