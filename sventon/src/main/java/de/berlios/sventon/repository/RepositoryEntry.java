@@ -39,7 +39,6 @@ public final class RepositoryEntry implements Serializable {
   private Date entryCreatedDate;
   private String entryLastAuthor;
   private String entryLogMessage;
-  private String url;
 
   public enum Kind {
     dir, file, none, unknown, any
@@ -233,7 +232,6 @@ public final class RepositoryEntry implements Serializable {
     entryPath = entryPath.intern();
     entryName = entryName.intern();
     entryLastAuthor = entryLastAuthor == null ? null : entryLastAuthor.intern();
-    url = null;
   }
 
   /**
