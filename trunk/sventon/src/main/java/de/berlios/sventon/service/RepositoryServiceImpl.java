@@ -17,12 +17,12 @@ import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.diff.*;
-import de.berlios.sventon.model.*;
+import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.InlineDiffRow;
+import de.berlios.sventon.model.SideBySideDiffRow;
+import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
-import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.export.ExportDirectory;
-import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
@@ -34,9 +34,7 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.*;
 
-import javax.imageio.ImageIO;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -457,9 +455,7 @@ public class RepositoryServiceImpl implements RepositoryService {
         SVNURL.parseURIDecoded(repoRoot + diffCommand.getToPath()), diffCommand.getToRevision(),
         true, false, new ISVNDiffStatusHandler() {
       public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
-        if (diffStatus.getModificationType() == SVNStatusType.STATUS_NONE && !diffStatus.isPropertiesModified()) {
-          return;
-        } else {
+        if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
           result.add(diffStatus);
         }
       }

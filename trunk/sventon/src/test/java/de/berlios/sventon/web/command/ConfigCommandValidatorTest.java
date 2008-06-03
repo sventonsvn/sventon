@@ -1,20 +1,22 @@
 package de.berlios.sventon.web.command;
 
+import de.berlios.sventon.TestUtils;
+import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
-import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
 public class ConfigCommandValidatorTest extends TestCase {
 
   public void testSupports() {
-    ConfigCommandValidator validator = new ConfigCommandValidator(false);
+    final ConfigCommandValidator validator = new ConfigCommandValidator(false);
     assertTrue(validator.supports(ConfigCommand.class));
   }
 
   public void testValidate() throws Exception {
-    ConfigCommandValidator validator = new ConfigCommandValidator(false);
+    final ConfigCommandValidator validator = new ConfigCommandValidator(false);
+    validator.setApplication(TestUtils.getApplicationStub());
 
-    ConfigCommand command = new ConfigCommand();
+    final ConfigCommand command = new ConfigCommand();
 
     BindException exception = new BindException(command, "test");
     validator.validate(command, exception);
@@ -93,7 +95,6 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setConnectionTestPwd("super-secret-pwd123");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
-
   }
 
 }
