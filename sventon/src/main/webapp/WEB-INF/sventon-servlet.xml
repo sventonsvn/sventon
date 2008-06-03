@@ -64,6 +64,7 @@
 
   <bean id="configCommandValidator" class="de.berlios.sventon.web.command.ConfigCommandValidator">
     <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="application" ref="application"/>
   </bean>
 
   <bean id="repositoryService" class="de.berlios.sventon.service.CacheAwareRepositoryServiceImpl">
