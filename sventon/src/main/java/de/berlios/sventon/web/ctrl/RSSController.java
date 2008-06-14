@@ -15,7 +15,7 @@ import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.repository.RepositoryFactory;
-import de.berlios.sventon.rss.FeedGenerator;
+import de.berlios.sventon.rss.RssFeedGenerator;
 import de.berlios.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,7 +57,7 @@ public final class RSSController extends AbstractController {
   /**
    * The feed generator.
    */
-  private FeedGenerator feedGenerator;
+  private RssFeedGenerator rssFeedGenerator;
 
   /**
    * Service.
@@ -115,7 +115,7 @@ public final class RSSController extends AbstractController {
       logger.debug("Outputting feed for [" + path + "]");
       final List<SVNLogEntry> logEntries = repositoryService.getRevisions(
           repositoryName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
-      feedGenerator.outputFeed(repositoryName, logEntries, request, response);
+      rssFeedGenerator.outputFeed(repositoryName, logEntries, request, response);
     } catch (SVNAuthenticationException ae) {
       logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());
@@ -160,10 +160,10 @@ public final class RSSController extends AbstractController {
   /**
    * Sets the feed generator.
    *
-   * @param feedGenerator The generator.
+   * @param rssFeedGenerator The generator.
    */
-  public void setFeedGenerator(final FeedGenerator feedGenerator) {
-    this.feedGenerator = feedGenerator;
+  public void setRssFeedGenerator(final RssFeedGenerator rssFeedGenerator) {
+    this.rssFeedGenerator = rssFeedGenerator;
   }
 
   /**

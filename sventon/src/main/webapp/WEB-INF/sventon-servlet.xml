@@ -90,11 +90,11 @@
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
-    <property name="feedGenerator" ref="syndFeedGenerator"/>
+    <property name="rssFeedGenerator" ref="rssFeedGenerator"/>
     <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
-  <bean id="syndFeedGenerator" class="de.berlios.sventon.rss.SyndFeedGenerator">
+  <bean id="rssFeedGenerator" class="de.berlios.sventon.rss.RssFeedGeneratorImpl">
     <property name="feedType" value="rss_2.0"/>
     <property name="logMessageLength" value="40"/>
     <property name="bodyTemplateFile" value="/rsstemplate.html"/>

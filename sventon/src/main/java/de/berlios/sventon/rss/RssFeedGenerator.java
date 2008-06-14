@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public interface FeedGenerator {
+public interface RssFeedGenerator {
 
   /**
    * Outputs the generated feed to given writer.

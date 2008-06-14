@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author jesper@users.berlios.de
  */
-public final class SyndFeedGenerator implements FeedGenerator {
+public final class RssFeedGeneratorImpl implements RssFeedGenerator {
 
   /**
    * The generated feed type, default set to <tt>rss_2.0</tt>.
