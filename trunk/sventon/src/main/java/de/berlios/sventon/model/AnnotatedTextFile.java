@@ -104,7 +104,7 @@ public final class AnnotatedTextFile {
     final String colorizedContent = colorer.getColorizedContent(
         processedContent, FilenameUtils.getExtension(path), encoding);
 
-    final String[] fileRows = colorizedContent.split(WebUtils.NL_REGEXP);
+    final String[] fileRows = WebUtils.NL_REGEXP.split(colorizedContent);
     int count = 0;
     for (final String fileRow : fileRows) {
       rows.get(count++).setContent(fileRow);

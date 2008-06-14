@@ -15,6 +15,7 @@ package de.berlios.sventon.util;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Pattern;
 
 /**
  * Web related utility methods.
@@ -33,7 +34,7 @@ public final class WebUtils {
 
   public static final String BR = System.getProperty("line.separator");
   public static final String NBSP = "&nbsp;";
-  public static final String NL_REGEXP = "(\r\n|\r|\n|\n\r)";
+  public static final Pattern NL_REGEXP = Pattern.compile("(\r\n|\r|\n|\n\r)");
 
   /**
    * Private constructor to prevent instantiation.
@@ -51,7 +52,7 @@ public final class WebUtils {
     if (StringUtils.isEmpty(string)) {
       return string;
     }
-    return string.replaceAll(NL_REGEXP, "<br>");
+    return NL_REGEXP.matcher(string).replaceAll("<br>");
   }
 
   /**
@@ -66,7 +67,7 @@ public final class WebUtils {
     }
 
     final StringBuilder sb = new StringBuilder();
-    final String[] lines = string.split(NL_REGEXP);
+    final String[] lines = NL_REGEXP.split(string);
 
     for (final String line : lines) {
       if (!StringUtils.isWhitespace(line)) {
