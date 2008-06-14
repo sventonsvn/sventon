@@ -75,7 +75,7 @@ public final class TextFile {
     if (colorer != null) {
       processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
     }
-    final String[] fileRows = processedContent.split(WebUtils.NL_REGEXP);
+    final String[] fileRows = WebUtils.NL_REGEXP.split(processedContent);
     int count = 0;
     for (final String fileRow : fileRows) {
       rows.add(new TextFileRow(++count, WebUtils.replaceLeadingSpaces(fileRow)));
