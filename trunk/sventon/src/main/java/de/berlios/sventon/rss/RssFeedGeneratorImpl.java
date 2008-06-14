@@ -13,11 +13,11 @@ package de.berlios.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.support.SVNUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -26,9 +26,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,16 +56,6 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   protected final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Cached rss HTML body template.
-   */
-  private String bodyTemplate = null;
-
-  /**
-   * The rss body template file. Default set to <tt>rsstemplate.html</tt> in classpath root.
-   */
-  private String bodyTemplateFile = "/rsstemplate.html";
-
-  /**
    * The date formatter instance.
    */
   private DateFormat dateFormat;
@@ -75,15 +63,16 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   /**
    * {@inheritDoc}
    */
-  public void outputFeed(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries,
+  public void outputFeed(final RepositoryConfiguration configuration, final List<SVNLogEntry> logEntries,
                          final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
     final SyndFeed feed = new SyndFeedImpl();
     final String baseURL = WebUtils.extractBaseURLFromRequest(request);
+    final RepositoryName repositoryName = configuration.getName();
     feed.setTitle(repositoryName + " sventon feed - " + baseURL);
     feed.setLink(baseURL);
     feed.setDescription("sventon feed for " + repositoryName + " - " + logEntries.size() + " latest repository changes");
-    feed.setEntries(createEntries(repositoryName, logEntries, baseURL, response));
+    feed.setEntries(createEntries(configuration, logEntries, baseURL, response));
     feed.setFeedType(feedType);
     new SyndFeedOutput().output(feed, response.getWriter());
   }
@@ -92,17 +81,18 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   /**
    * Create the entries, one for each revision.
    *
-   * @param repositoryName Repository name.
-   * @param logEntries     List of log entries (revisions)
-   * @param baseURL        Application base URL
-   * @param response       Response
+   * @param configuration Repository name.
+   * @param logEntries    List of log entries (revisions)
+   * @param baseURL       Application base URL
+   * @param response      Response
    * @return List of RSS feed items
    * @throws IOException if unable to produce feed items.
    */
-  private List<SyndEntry> createEntries(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries,
+  private List<SyndEntry> createEntries(final RepositoryConfiguration configuration, final List<SVNLogEntry> logEntries,
                                         final String baseURL, final HttpServletResponse response) throws IOException {
 
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
+    final RepositoryName repositoryName = configuration.getName();
 
     SyndEntry entry;
     SyndContent description;
@@ -121,8 +111,8 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
 
         description = new SyndContentImpl();
         description.setType("text/html");
-        description.setValue(HTMLCreator.createRevisionDetailBody(
-            getBodyTemplate(), logEntry, baseURL, repositoryName, dateFormat, response));
+        description.setValue(HTMLCreator.createRevisionDetailBody(configuration.getRssTemplate(), logEntry, baseURL,
+            configuration.getName(), dateFormat, response));
         entry.setDescription(description);
         entries.add(entry);
       }
@@ -140,23 +130,6 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   }
 
   /**
-   * Gets the rss item HTML body template.
-   *
-   * @return The template.
-   * @throws IOException if unable to load template.
-   */
-  protected String getBodyTemplate() throws IOException {
-    if (bodyTemplate == null) {
-      final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
-      if (is == null) {
-        throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
-      }
-      bodyTemplate = IOUtils.toString(is);
-    }
-    return bodyTemplate;
-  }
-
-  /**
    * Gets the abbreviated version of given log message.
    *
    * @param message The original log message
@@ -169,15 +142,6 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
     } else {
       return StringUtils.abbreviate(message, length);
     }
-  }
-
-  /**
-   * Sets the file that should be used as the rss item body template.
-   *
-   * @param bodyTemplateFile Template file.
-   */
-  public void setBodyTemplateFile(final String bodyTemplateFile) {
-    this.bodyTemplateFile = bodyTemplateFile;
   }
 
   /**

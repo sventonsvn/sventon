@@ -11,12 +11,16 @@
  */
 package de.berlios.sventon.appl;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -27,6 +31,32 @@ import java.util.Properties;
  * @author jesper@users.berlios.de
  */
 public final class RepositoryConfiguration {
+
+  /**
+   * Default number of RSS feed items (20).
+   */
+  public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
+
+  /**
+   * Default template, /rsstemplate.html
+   */
+  public static final String DEFAULT_RSS_TEMPLATE_FILE = "/rsstemplate.html";
+
+  /**
+   * Default template, /mailtemplate.html
+   */
+  public static final String DEFAULT_MAIL_TEMPLATE_FILE = "/mailtemplate.html";
+
+  public static final String PROPERTY_KEY_REPOSITORY_URL = "root";
+  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "displayRoot";
+  public static final String PROPERTY_KEY_USERNAME = "uid";
+  public static final String PROPERTY_KEY_PASSWORD = "pwd";
+  public static final String PROPERTY_KEY_USE_CACHE = "useCache";
+  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
+  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
+  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = "rssItemsCount";
+  public static final String PROPERTY_KEY_RSS_TEMPLATE_FILE = "rssTemplateFile";
+  public static final String PROPERTY_KEY_MAIL_TEMPLATE_FILE = "mailTemplateFile";
 
   /**
    * The logging instance.
@@ -86,19 +116,13 @@ public final class RepositoryConfiguration {
    */
   private int rssItemsCount = DEFAULT_RSS_ITEMS_COUNT;
 
-  /**
-   * Default number of RSS feed items (20).
-   */
-  public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
+  private String rssTemplateFile = DEFAULT_RSS_TEMPLATE_FILE;
 
-  public static final String PROPERTY_KEY_REPOSITORY_URL = "root";
-  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "displayRoot";
-  public static final String PROPERTY_KEY_USERNAME = "uid";
-  public static final String PROPERTY_KEY_PASSWORD = "pwd";
-  public static final String PROPERTY_KEY_USE_CACHE = "useCache";
-  public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
-  public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
-  public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = "rssItemsCount";
+  private String rssTemplate;
+
+  private String mailTemplateFile = DEFAULT_MAIL_TEMPLATE_FILE;
+
+  private String mailTemplate;
 
 
   /**
@@ -128,6 +152,8 @@ public final class RepositoryConfiguration {
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
     ic.setRssItemsCount(Integer.parseInt(properties.getProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT))));
+    ic.setRssTemplateFile((String) properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE));
+    ic.setMailTemplateFile((String) properties.get(PROPERTY_KEY_MAIL_TEMPLATE_FILE));
     return ic;
   }
 
@@ -150,6 +176,8 @@ public final class RepositoryConfiguration {
     properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
     properties.put(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
+    properties.put(PROPERTY_KEY_RSS_TEMPLATE_FILE, getRssTemplateFile());
+    properties.put(PROPERTY_KEY_MAIL_TEMPLATE_FILE, getMailTemplateFile());
     return properties;
   }
 
@@ -333,4 +361,44 @@ public final class RepositoryConfiguration {
   public RepositoryName getName() {
     return repositoryName;
   }
+
+  public void setRssTemplateFile(final String rssTemplateFile) {
+    this.rssTemplateFile = rssTemplateFile;
+  }
+
+  public void setMailTemplateFile(final String mailTemplateFile) {
+    this.mailTemplateFile = mailTemplateFile;
+  }
+
+  public String getRssTemplateFile() {
+    return rssTemplateFile;
+  }
+
+  public String getMailTemplateFile() {
+    return mailTemplateFile;
+  }
+
+  private String getTemplate(final String name) throws IOException {
+    final InputStream is = this.getClass().getResourceAsStream(name);
+    if (is == null) {
+      throw new FileNotFoundException("Unable to find: " + name);
+    }
+    return IOUtils.toString(is);
+  }
+
+  public String getRssTemplate() throws IOException {
+    if (rssTemplate == null) {
+      rssTemplate = getTemplate(rssTemplateFile);
+    }
+    return rssTemplate;
+  }
+
+  public String getMailTemplate() throws IOException {
+    if (mailTemplate == null) {
+      mailTemplate = getTemplate(mailTemplateFile);
+    }
+    return mailTemplate;
+  }
+
 }
+

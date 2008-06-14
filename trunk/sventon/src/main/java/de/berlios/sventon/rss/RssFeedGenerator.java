@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.rss;
 
-import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +28,13 @@ public interface RssFeedGenerator {
   /**
    * Outputs the generated feed to given writer.
    *
-   * @param repositoryName Repository name.
-   * @param logEntries     The log entries.
-   * @param request        Servlet request.
-   * @param response       Servlet response.
+   * @param repositoryConfiguration Repository configuration.
+   * @param logEntries              The log entries.
+   * @param request                 Servlet request.
+   * @param response                Servlet response.
    * @throws Exception if unable to output feed.
    */
-  void outputFeed(final RepositoryName repositoryName,
+  void outputFeed(final RepositoryConfiguration repositoryConfiguration,
                   final List<SVNLogEntry> logEntries,
                   final HttpServletRequest request,
                   final HttpServletResponse response) throws Exception;
