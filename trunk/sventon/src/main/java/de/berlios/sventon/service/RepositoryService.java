@@ -16,9 +16,11 @@ import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.colorer.Colorer;
 import de.berlios.sventon.diff.DiffException;
-import de.berlios.sventon.model.*;
+import de.berlios.sventon.model.AnnotatedTextFile;
+import de.berlios.sventon.model.InlineDiffRow;
+import de.berlios.sventon.model.SideBySideDiffRow;
+import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
-import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
@@ -32,7 +34,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -310,4 +311,14 @@ public interface RepositoryService {
    */
   AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision, final String charset,
                           final Colorer colorer) throws SVNException;
+
+  /**
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The entry revision
+   * @return Map of properties
+   * @throws SVNException if a subversion error occur
+   */
+  Map<String, String> getPathProperties(final SVNRepository repository, final String path, final long revision)
+      throws SVNException;
 }
