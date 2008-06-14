@@ -1,6 +1,6 @@
 package de.berlios.sventon.rss;
 
-import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -49,7 +49,7 @@ public class RssFeedGeneratorTest extends TestCase {
       }
     };
 
-    generator.outputFeed(new RepositoryName("defaultsvn"), logEntries, req, res);
+    generator.outputFeed(new RepositoryConfiguration("defaultsvn"), logEntries, req, res);
     pw.flush();
     pw.close();
 

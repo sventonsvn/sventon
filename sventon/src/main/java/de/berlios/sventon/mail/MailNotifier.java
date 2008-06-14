@@ -12,12 +12,9 @@
 package de.berlios.sventon.mail;
 
 import com.sun.mail.smtp.SMTPTransport;
-import de.berlios.sventon.appl.AbstractRevisionObserver;
-import de.berlios.sventon.appl.RepositoryName;
-import de.berlios.sventon.appl.RevisionUpdate;
+import de.berlios.sventon.appl.*;
 import de.berlios.sventon.util.HTMLCreator;
 import de.berlios.sventon.web.support.SVNUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -29,9 +26,6 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +43,11 @@ public final class MailNotifier extends AbstractRevisionObserver {
   private static final Log LOGGER = LogFactory.getLog(MailNotifier.class);
 
   /**
+   * The application.
+   */
+  private Application application;
+
+  /**
    * Set of receivers.
    */
   private final Set<InternetAddress> receivers = new HashSet<InternetAddress>();
@@ -64,11 +63,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
   private static final String NAME_TOKEN = "@@repositoryName@@";
 
   /**
-   * Cached HTML mail body template.
-   */
-  private String bodyTemplate = null;
-
-  /**
    * Date formatter instance.
    */
   private DateFormat dateFormat;
@@ -77,11 +71,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
    * Threshold value that decides if an update is too big to send notification mails.
    */
   private int revisionCountThreshold;
-
-  /**
-   * The mail body template file. Default set to <tt>mailtemplate.html</tt> in classpath root.
-   */
-  private String bodyTemplateFile = "/mailtemplate.html";
 
   private String host;
   private int port;
@@ -135,6 +124,8 @@ public final class MailNotifier extends AbstractRevisionObserver {
         for (final SVNLogEntry logEntry : revisions) {
           if (SVNUtils.isAccessible(logEntry)) {
             final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
+            final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+
             LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
 
             try {
@@ -144,7 +135,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
               msg.setSubject(formatSubject(subject, logEntry.getRevision(), repositoryName));
 
               msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-                  getBodyTemplate(), logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
+                  configuration.getMailTemplate(), logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
 
               msg.setHeader("X-Mailer", "sventon");
               msg.setSentDate(new Date());
@@ -189,23 +180,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
   }
 
   /**
-   * Gets the HTML mail body template.
-   *
-   * @return The template.
-   * @throws IOException if unable to load template.
-   */
-  protected String getBodyTemplate() throws IOException {
-    if (bodyTemplate == null) {
-      final InputStream is = this.getClass().getResourceAsStream(bodyTemplateFile);
-      if (is == null) {
-        throw new FileNotFoundException("Unable to find: " + bodyTemplateFile);
-      }
-      bodyTemplate = IOUtils.toString(is);
-    }
-    return bodyTemplate;
-  }
-
-  /**
    * Sets the base URL used when creating HTML anchor links back to
    * the installed sventon application.
    *
@@ -222,15 +196,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
    */
   public void setDateFormat(final String dateFormat) {
     this.dateFormat = new SimpleDateFormat(dateFormat);
-  }
-
-  /**
-   * Sets the file that should be used as the mail body template.
-   *
-   * @param bodyTemplateFile Template file.
-   */
-  public void setBodyTemplateFile(final String bodyTemplateFile) {
-    this.bodyTemplateFile = bodyTemplateFile;
   }
 
   /**
@@ -331,4 +296,14 @@ public final class MailNotifier extends AbstractRevisionObserver {
   public void setRevisionCountThreshold(final int revisionCountThreshold) {
     this.revisionCountThreshold = revisionCountThreshold;
   }
+
+  /**
+   * Sets the application.
+   *
+   * @param application Application
+   */
+  public void setApplication(final Application application) {
+    this.application = application;
+  }
+
 }

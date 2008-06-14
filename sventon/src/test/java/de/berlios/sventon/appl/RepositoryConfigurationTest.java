@@ -97,7 +97,7 @@ public class RepositoryConfigurationTest extends TestCase {
     conf.setRepositoryUrl("http://localhost");
 
     final Properties props = conf.getAsProperties();
-    assertEquals(6, props.size());
+    assertEquals(8, props.size());
 
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_URL));
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
@@ -110,5 +110,8 @@ public class RepositoryConfigurationTest extends TestCase {
 
     assertEquals("false", props.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL));
     assertEquals("20", props.get(PROPERTY_KEY_RSS_ITEMS_COUNT));
+
+    assertEquals("/rsstemplate.html", props.get(PROPERTY_KEY_RSS_TEMPLATE_FILE));
+    assertEquals("/mailtemplate.html", props.get(PROPERTY_KEY_MAIL_TEMPLATE_FILE));
   }
 }
