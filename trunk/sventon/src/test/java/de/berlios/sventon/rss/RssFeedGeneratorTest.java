@@ -12,10 +12,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-public class SyndFeedGeneratorTest extends TestCase {
+public class RssFeedGeneratorTest extends TestCase {
 
   public void testGenerateFeedRSS20() throws Exception {
-    final SyndFeedGenerator generator = new SyndFeedGenerator();
+    final RssFeedGeneratorImpl generator = new RssFeedGeneratorImpl();
     generator.setFeedType("rss_2.0");
     generator.setLogMessageLength(20);
     generator.setDateFormat("yyyyMMdd HH:mm:ss");
@@ -61,7 +61,7 @@ public class SyndFeedGeneratorTest extends TestCase {
   }
 
   public void testGetAbbreviatedLogMessage() throws Exception {
-    final SyndFeedGenerator generator = new SyndFeedGenerator();
+    final RssFeedGeneratorImpl generator = new RssFeedGeneratorImpl();
     assertEquals("this is...", generator.getAbbreviatedLogMessage("this is a message", 10));
     assertEquals("this is a mes...", generator.getAbbreviatedLogMessage("this is a message", 16));
     assertEquals("this is a message", generator.getAbbreviatedLogMessage("this is a message", 17));
