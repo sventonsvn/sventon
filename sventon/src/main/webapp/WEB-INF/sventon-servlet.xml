@@ -86,7 +86,7 @@
     <property name="revisionEditor" ref="revisionEditor"/>
   </bean>
 
-  <bean name="/rss.xml" class="de.berlios.sventon.web.ctrl.xml.RSSController">
+  <bean name="/rss.xml" class="de.berlios.sventon.web.ctrl.RSSController">
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
@@ -99,14 +99,6 @@
     <property name="logMessageLength" value="40"/>
     <property name="bodyTemplateFile" value="/rsstemplate.html"/>
     <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
-  </bean>
-
-  <bean name="/latest.xml" class="de.berlios.sventon.web.ctrl.xml.ShowLatestCommitInfoController">
-    <property name="application" ref="application"/>
-    <property name="repositoryService" ref="repositoryService"/>
-    <property name="encoding" ref="defaultEncoding"/>
-    <property name="datePattern" value="yyyy-MM-dd HH:mm:ss"/>
-    <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
   <bean name="/listfiles.ajax" class="de.berlios.sventon.web.ctrl.ajax.ListFilesController" parent="abstractController"/>
