@@ -218,6 +218,18 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
+  public Map<String, String> getPathProperties(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
+    final long start = System.currentTimeMillis();
+    final Map<String, String> properties = new HashMap<String, String>();
+    repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
+    logger.debug("PERF: getPathProperties(): " + (System.currentTimeMillis() - start));
+    return properties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
                                           final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
