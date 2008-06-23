@@ -11,7 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
-import de.berlios.sventon.model.LogEntryBundle;
+import de.berlios.sventon.model.LogEntryWrapper;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.apache.commons.lang.StringUtils;
@@ -72,7 +72,7 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
       revNumber = nextRevParam.getNumber();
     }
 
-    final List<LogEntryBundle> logEntryBundles = new ArrayList<LogEntryBundle>();
+    final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
     logger.debug("Assembling logs data [" + revNumber + " - " + FIRST_REVISION + "] limit: " + pageSize);
 
@@ -83,7 +83,7 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
     String pathAtRevision = nextPathParam;
 
     for (final SVNLogEntry logEntry : logEntries) {
-      logEntryBundles.add(new LogEntryBundle(logEntry, pathAtRevision));
+      logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
       //noinspection unchecked
       final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
       final Set<String> changedPaths = allChangedPaths.keySet();
@@ -105,10 +105,10 @@ public final class ShowLogController extends AbstractSVNTemplateController imple
 
     final Map<String, Object> model = new HashMap<String, Object>();
 
-    model.put("logEntriesPage", logEntryBundles);
+    model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
     model.put("isFile", getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber()) == SVNNodeKind.FILE);
-    model.put("morePages", logEntryBundles.size() == pageSize);
+    model.put("morePages", logEntryWrappers.size() == pageSize);
     return new ModelAndView("showLog", model);
   }
 }

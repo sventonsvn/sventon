@@ -55,40 +55,41 @@
       <% pageContext.setAttribute("br", "\n"); %>
       <c:forEach items="${logEntriesPage}" var="entry">
         <c:set var="nextPath" value="${entry.pathAtRevision}"/>
-        <c:set var="nextRev" value="${entry.svnLogEntry.revision}"/>
+        <c:set var="nextRev" value="${entry.revision}"/>
 
-        <jsp:useBean id="entry" type="de.berlios.sventon.model.LogEntryBundle" />
+        <jsp:useBean id="entry" type="de.berlios.sventon.model.LogEntryWrapper" />
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
             <c:when test="${isFile}">
               <c:url value="showfile.svn" var="showUrl">
                 <c:param name="path" value="${entry.pathAtRevision}" />
-                <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                <c:param name="revision" value="${entry.revision}" />
                 <c:param name="name" value="${command.name}" />
               </c:url>
-              <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.svnLogEntry.revision}" onClick="verifyCheckBox(this)"></td>
-              <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${entry.svnLogEntry.revision}</a></td>
+              <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.revision}" onClick="verifyCheckBox(this)"></td>
+              <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
               <c:url value="revinfo.svn" var="showRevInfoUrl">
-                <c:param name="revision" value="${entry.svnLogEntry.revision}" />
+                <c:param name="revision" value="${entry.revision}" />
                 <c:param name="name" value="${command.name}" />
               </c:url>
-              <td><a href="${showRevInfoUrl}">${entry.svnLogEntry.revision}</a></td>
+              <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
           </c:choose>
-          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${fn:replace(fn:escapeXml(entry.svnLogEntry.message), br, '<br>')}</a></td>
+          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${fn:replace(fn:escapeXml(entry.message), br, '<br>')}</a></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
-          <td>${entry.svnLogEntry.author}</td>
-          <td nowrap><fmt:formatDate type="both" value="${entry.svnLogEntry.date}" dateStyle="short" timeStyle="short"/></td>
+          <td>${entry.author}</td>
+          <td nowrap><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
           <c:if test="${isFile}">
             <td>&nbsp;</td>
           </c:if>
           <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
-            <%=HTMLCreator.createChangedPathsTable(entry.getSvnLogEntry(), entry.getPathAtRevision(), "", command.getName(), false, false, response)%>
+            <%=HTMLCreator.createChangedPathsTable(entry.getChangedPaths(), entry.getRevision(),
+                entry.getPathAtRevision(), "", command.getName(), false, false, response)%>
           </td>
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>

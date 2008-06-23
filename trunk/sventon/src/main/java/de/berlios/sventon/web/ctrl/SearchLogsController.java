@@ -53,6 +53,7 @@ public final class SearchLogsController extends AbstractSVNTemplateController im
     logger.debug("Searching logMessages for: " + searchString);
 
     final List<LogMessage> logMessages = getCache().find(svnCommand.getName(), searchString);
+    //TODO: Parse to apply Bugtraq links
     Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
     final Map<String, Object> model = new HashMap<String, Object>();

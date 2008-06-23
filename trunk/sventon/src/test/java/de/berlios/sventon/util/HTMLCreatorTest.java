@@ -44,7 +44,8 @@ public class HTMLCreatorTest extends TestCase {
 
     final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
 
-    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry, "/file1.java", "", new RepositoryName("sandbox"), false, false, new MockHttpServletResponse()));
+    assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry.getChangedPaths(), logEntry.getRevision(),
+        "/file1.java", "", new RepositoryName("sandbox"), false, false, new MockHttpServletResponse()));
   }
 
   public void testCreateGoToUrl() throws Exception {

@@ -12,13 +12,17 @@
 package de.berlios.sventon.model;
 
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
- * LogEntryBundle.
+ * LogEntryWrapper.
  *
  * @author patrikfr@users.berlios.de
  */
-public final class LogEntryBundle {
+public final class LogEntryWrapper {
 
   /**
    * Subversion log entry.
@@ -34,7 +38,7 @@ public final class LogEntryBundle {
    * @param logEntry       The log entry
    * @param pathAtRevision The path
    */
-  public LogEntryBundle(final SVNLogEntry logEntry, final String pathAtRevision) {
+  public LogEntryWrapper(final SVNLogEntry logEntry, final String pathAtRevision) {
     svnLogEntry = logEntry;
     this.pathAtRevision = pathAtRevision;
   }
@@ -48,13 +52,25 @@ public final class LogEntryBundle {
     return pathAtRevision;
   }
 
-  /**
-   * Gets the log entry.
-   *
-   * @return Returns the svnLogEntry.
-   */
-  public SVNLogEntry getSvnLogEntry() {
-    return svnLogEntry;
+  public Map<String, SVNLogEntryPath> getChangedPaths() {
+    //noinspection unchecked
+    return svnLogEntry.getChangedPaths();
+  }
+
+  public long getRevision() {
+    return svnLogEntry.getRevision();
+  }
+
+  public String getAuthor() {
+    return svnLogEntry.getAuthor();
+  }
+
+  public Date getDate() {
+    return svnLogEntry.getDate();
+  }
+
+  public String getMessage() {
+    return svnLogEntry.getMessage();
   }
 
 }
