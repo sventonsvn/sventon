@@ -8,6 +8,27 @@ import java.util.Properties;
 
 public class RepositoryConfigurationTest extends TestCase {
 
+  public void testDefault() {
+    final String repositoryUrl = "svn://repositoryserver/repository";
+    final Properties props = new Properties();
+    props.setProperty(PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
+    final RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
+
+    assertNull(conf.getUid());
+    assertNull(conf.getPwd());
+    assertEquals("test", conf.getName().toString());
+    assertEquals("svn://repositoryserver/repository", conf.getRepositoryDisplayUrl());
+    assertEquals("svn://repositoryserver/repository", conf.getRepositoryUrl());
+    assertEquals("/mailtemplate.html", conf.getMailTemplateFile());
+    assertEquals("/rsstemplate.html", conf.getRssTemplateFile());
+    assertEquals(20, conf.getRssItemsCount());
+
+    assertFalse(conf.isAccessControlEnabled());
+    assertFalse(conf.isCacheUsed());
+    assertFalse(conf.isIssueTrackerIntegrationEnabled());
+    assertFalse(conf.isZippedDownloadsAllowed());
+  }
+
   public void testCreateInstanceConfigurationTest() throws Exception {
     final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties props = new Properties();
@@ -20,7 +41,7 @@ public class RepositoryConfigurationTest extends TestCase {
     props.setProperty(PROPERTY_KEY_USE_CACHE, "false");
     props.setProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, "20");
 
-    RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
+    final RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
 
     assertTrue(conf.isZippedDownloadsAllowed());
     assertTrue(conf.isAccessControlEnabled());
@@ -57,7 +78,7 @@ public class RepositoryConfigurationTest extends TestCase {
 
   }
 
-  public void testasdf() {
+  public void testCacheUsedAndAccessControlEnabledCombinations() {
     RepositoryConfiguration conf = new RepositoryConfiguration("test");
     conf.setCacheUsed(true);
     conf.setEnableAccessControl(false);
@@ -97,7 +118,7 @@ public class RepositoryConfigurationTest extends TestCase {
     conf.setRepositoryUrl("http://localhost");
 
     final Properties props = conf.getAsProperties();
-    assertEquals(8, props.size());
+    assertEquals(9, props.size());
 
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_URL));
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
@@ -107,6 +128,7 @@ public class RepositoryConfigurationTest extends TestCase {
 
     assertEquals("false", props.get(PROPERTY_KEY_USE_CACHE));
     assertEquals("false", props.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS));
+    assertEquals("false", props.get(PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION));
 
     assertEquals("false", props.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL));
     assertEquals("20", props.get(PROPERTY_KEY_RSS_ITEMS_COUNT));

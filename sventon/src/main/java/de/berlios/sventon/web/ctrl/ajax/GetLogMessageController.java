@@ -44,7 +44,7 @@ public final class GetLogMessageController extends AbstractSVNTemplateController
 
     logger.debug("Getting log message from revision [" + svnCommand.getRevisionNumber() + "]");
     final SVNLogEntry logEntry = getRepositoryService().getRevision(svnCommand.getName(), repository, svnCommand.getRevisionNumber());
-    final LogMessage logMessage = new LogMessage(svnCommand.getRevisionNumber(), logEntry.getMessage());
+    final LogMessage logMessage = new LogMessage(svnCommand.getRevisionNumber(), logEntry.getMessage()); //TODO: Parse to apply Bugtraq link
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("logMessage", logMessage);

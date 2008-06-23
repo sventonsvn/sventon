@@ -54,6 +54,7 @@ public final class RepositoryConfiguration {
   public static final String PROPERTY_KEY_USE_CACHE = "useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
   public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
+  public static final String PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION = "enableIssueTrackerIntegration";
   public static final String PROPERTY_KEY_RSS_ITEMS_COUNT = "rssItemsCount";
   public static final String PROPERTY_KEY_RSS_TEMPLATE_FILE = "rssTemplateFile";
   public static final String PROPERTY_KEY_MAIL_TEMPLATE_FILE = "mailTemplateFile";
@@ -112,6 +113,11 @@ public final class RepositoryConfiguration {
   private boolean enableAccessControl;
 
   /**
+   * Decides wheter the issue tracker integration should be used.
+   */
+  private boolean enableIssueTrackerIntegration;
+
+  /**
    * Number of items in the generated RSS feed.
    */
   private int rssItemsCount = DEFAULT_RSS_ITEMS_COUNT;
@@ -151,9 +157,16 @@ public final class RepositoryConfiguration {
     ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
+    ic.setEnableIssueTrackerIntegration(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION)));
     ic.setRssItemsCount(Integer.parseInt(properties.getProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT))));
-    ic.setRssTemplateFile((String) properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE));
-    ic.setMailTemplateFile((String) properties.get(PROPERTY_KEY_MAIL_TEMPLATE_FILE));
+
+    if (properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE) != null) {
+      ic.setRssTemplateFile((String) properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE));
+    }
+
+    if (properties.get(PROPERTY_KEY_MAIL_TEMPLATE_FILE) != null) {
+      ic.setMailTemplateFile((String) properties.get(PROPERTY_KEY_MAIL_TEMPLATE_FILE));
+    }
     return ic;
   }
 
@@ -175,6 +188,7 @@ public final class RepositoryConfiguration {
     properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ENABLE_ACCESS_CONTROL, isAccessControlEnabled() ? "true" : "false");
+    properties.put(PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION, isIssueTrackerIntegrationEnabled() ? "true" : "false");
     properties.put(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(getRssItemsCount()));
     properties.put(PROPERTY_KEY_RSS_TEMPLATE_FILE, getRssTemplateFile());
     properties.put(PROPERTY_KEY_MAIL_TEMPLATE_FILE, getMailTemplateFile());
@@ -234,7 +248,7 @@ public final class RepositoryConfiguration {
    * @param repositoryUrl The root url.
    */
   public void setRepositoryUrl(String repositoryUrl) {
-    Validate.notEmpty(repositoryUrl);
+    Validate.notEmpty(repositoryUrl, "Repository URL cannot be empty");
     repositoryUrl = repositoryUrl.trim();
 
     // Strip last slash if any.
@@ -360,6 +374,24 @@ public final class RepositoryConfiguration {
    */
   public RepositoryName getName() {
     return repositoryName;
+  }
+
+  /**
+   * Checks if the issue tracker integration is enabled.
+   *
+   * @return {@code true} if enabled.
+   */
+  public boolean isIssueTrackerIntegrationEnabled() {
+    return enableIssueTrackerIntegration;
+  }
+
+  /**
+   * Enables or disables the issue tracker integration.
+   *
+   * @param enableIssueTrackerIntegration True or false.
+   */
+  public void setEnableIssueTrackerIntegration(final boolean enableIssueTrackerIntegration) {
+    this.enableIssueTrackerIntegration = enableIssueTrackerIntegration;
   }
 
   public void setRssTemplateFile(final String rssTemplateFile) {

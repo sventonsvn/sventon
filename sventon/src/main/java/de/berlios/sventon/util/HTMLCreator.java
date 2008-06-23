@@ -100,11 +100,11 @@ public final class HTMLCreator {
     valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
     valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
     valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
-        WebUtils.nl2br(StringEscapeUtils.escapeHtml(logEntry.getMessage())))));
+        WebUtils.nl2br(StringEscapeUtils.escapeHtml(logEntry.getMessage()))))); //TODO: Parse to apply Bugtraq link
     valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logEntry.getAuthor())));
     valueMap.put(DATE_KEY, dateFormat.format(logEntry.getDate()));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
-        logEntry, null, baseURL, repositoryName, false, false, response)));
+        logEntry.getChangedPaths(), logEntry.getRevision(), null, baseURL, repositoryName, false, false, response)));
 
     final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
     return substitutor.replace(bodyTemplate);
@@ -113,7 +113,8 @@ public final class HTMLCreator {
   /**
    * Creates a HTML table containing the changed paths for given revision.
    *
-   * @param logEntry          Log entry revision
+   * @param changedPaths      Paths changed in this revision.
+   * @param revision          Revision.
    * @param pathAtRevision    The target's path at current revision or <tt>null</tt> if unknown.
    * @param baseURL           Base application URL.
    * @param repositoryName    Repository name.
@@ -122,7 +123,8 @@ public final class HTMLCreator {
    * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
-  public static String createChangedPathsTable(final SVNLogEntry logEntry, final String pathAtRevision, final String baseURL,
+  public static String createChangedPathsTable(final Map<String, SVNLogEntryPath> changedPaths, final long revision,
+                                               final String pathAtRevision, final String baseURL,
                                                final RepositoryName repositoryName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {
 
@@ -132,13 +134,11 @@ public final class HTMLCreator {
     sb.append("    <th align=\"left\">Path</th>\n");
     sb.append("  </tr>\n");
 
-    //noinspection unchecked
-    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
-    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
+    final List<String> latestPathsList = new ArrayList<String>(changedPaths.keySet());
     Collections.sort(latestPathsList);
 
     for (final String path : latestPathsList) {
-      final SVNLogEntryPath logEntryPath = latestChangedPaths.get(path);
+      final SVNLogEntryPath logEntryPath = changedPaths.get(path);
       final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
 
       sb.append("  <tr>\n");
@@ -151,7 +151,7 @@ public final class HTMLCreator {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), repositoryName, linkToHead);
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), revision, repositoryName, linkToHead);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
@@ -168,7 +168,7 @@ public final class HTMLCreator {
           break;
         case MODIFIED:
           // diffUrl
-          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision(), repositoryName, linkToHead);
+          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), revision, repositoryName, linkToHead);
           if (response != null) {
             diffUrl = response.encodeURL(diffUrl);
           }
@@ -185,7 +185,7 @@ public final class HTMLCreator {
           break;
         case DELETED:
           // del
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), logEntry.getRevision() - 1, repositoryName, false);
+          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), revision - 1, repositoryName, false);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
