@@ -43,7 +43,7 @@
 
   <tr>
     <td colspan="2">
-      <%=HTMLCreator.createChangedPathsTable(details, null, "", repositoryName, keepVisible, linkToHead, response)%>
+      <%=HTMLCreator.createChangedPathsTable(details.getChangedPaths(), details.getRevision(), null, "", repositoryName, keepVisible, linkToHead, response)%>
     </td>
   </tr>
 </table>
