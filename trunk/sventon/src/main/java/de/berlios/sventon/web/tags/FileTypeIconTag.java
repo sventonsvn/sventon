@@ -50,6 +50,8 @@ public final class FileTypeIconTag extends TagSupport {
    */
   private static final String DEFAULT_FILE_ICON = "images/icon_file.png";
 
+  private String fallbackIcon = DEFAULT_FILE_ICON;
+
   /**
    * {@inheritDoc}
    */
@@ -118,14 +120,23 @@ public final class FileTypeIconTag extends TagSupport {
    * Extracts icon path and name from mapping string.
    *
    * @param mapping Mapping string.
-   * @return Icon path and name or {@link #DEFAULT_FILE_ICON} if mapping was null.
+   * @return Icon path and name or {@link #fallbackIcon} if mapping was null.
    */
   protected String extractIconFromMapping(final String mapping) {
     if (mapping == null) {
-      return DEFAULT_FILE_ICON;
+      return fallbackIcon;
     }
     final String[] s = mapping.trim().split(";");
-    return StringUtils.isEmpty(s[0]) ? DEFAULT_FILE_ICON : s[0];
+    return StringUtils.isEmpty(s[0]) ? fallbackIcon : s[0];
+  }
+
+  /**
+   * Sets the fallback icon to use when no specific mapping exists.
+   *
+   * @param fallbackIcon Path to fallback icon.
+   */
+  public void setFallbackIcon(final String fallbackIcon) {
+    this.fallbackIcon = fallbackIcon;
   }
 
   /**
