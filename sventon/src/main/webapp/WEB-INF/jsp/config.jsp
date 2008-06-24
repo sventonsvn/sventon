@@ -59,7 +59,7 @@
 <form id="config_form" name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(this);">
 <div class="config_group">
   <div id="repository_location">
-    <img src="images/config_step1.png"/>
+    <img alt="Step 1" src="images/config_step1.png"/>
 
     <div class="config_settings">
       <p class="config_key">Repository name: <img class="helpIcon" src="images/icon_help.png"
@@ -93,7 +93,7 @@
 
 <div class="config_group">
   <div id="access_method">
-    <img src="images/config_step2.png"/>
+    <img alt="Step 2" src="images/config_step2.png"/>
 
     <div class="config_settings">
       <spring:bind path="command.accessMethod">
@@ -156,7 +156,7 @@
 
 <div class="config_group">
   <div id="application_features">
-    <img src="images/config_step3.png"/>
+    <img alt="Step 3" src="images/config_step3.png"/>
 
     <div id="downloads">
       <div class="config_settings">
