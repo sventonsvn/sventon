@@ -17,6 +17,8 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -54,9 +56,14 @@ public final class JHighlightColorer implements Colorer {
     if (renderer == null) {
       return StringEscapeUtils.escapeXml(content);
     }
+
+    final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    final ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(encoding));
+    renderer.highlight(null, in, out, encoding, true);
+
     // Sorry Geert, but we need to remove the trailing BR-tags
     // and the initial comment, as it messes up the line numbering.
-    return renderer.highlight(null, content, encoding, true).substring(73).replace("<br />", "").trim();
+    return out.toString(encoding).substring(73).replace("<br />", "").trim();
   }
 
   /**

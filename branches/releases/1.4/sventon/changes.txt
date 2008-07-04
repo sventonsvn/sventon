@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1308] Fixed: Bug #14129 - Multi-byte characters not correctly rendered in source files.
+
 [1291] Release 1.4 RC5 (2008-05-25)
 [1288] Fixed: Bug #13881 - RSS component not working when using user based auth.
 [1286] Fixed: Bug #13870 - Not possible to link to a specific row.
