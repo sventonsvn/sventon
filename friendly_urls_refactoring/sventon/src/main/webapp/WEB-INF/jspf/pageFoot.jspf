@@ -13,6 +13,9 @@
 %>
 <br>
 <p>
-  <a href="rss.xml?name=${command.name}&path=${command.path}&revision=${command.revision}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
+  <c:url value="/xml/${command.name}/rss${command.path}" var="rssUrl">
+    <c:param name="revision" value="${command.revision}" />
+  </c:url>
+  <a href="${rssUrl}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
 </p>
 <%@ include file="/WEB-INF/jspf/version.jspf"%>

@@ -25,16 +25,12 @@
   <sventon:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/>
   <sventon:functionLinks pageName="repobrowser"/>
 
-  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
-    <input type="hidden" name="path" value="${command.path}">
+  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
     <input type="hidden" name="revision" value="${command.revision}">
-    <input type="hidden" name="name" value="${command.name}">
     <input type="hidden" name="pegrev" value="${command.revisionNumber}">
 
-    <c:url value="repobrowser.svn" var="sortUrl">
-      <c:param name="path" value="${command.path}" />
+    <c:url value="/repos/${command.name}/browse${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
-      <c:param name="name" value="${command.name}" />
     </c:url>
 
     <table class="sventonEntriesTable">
@@ -43,17 +39,15 @@
       <c:set var="totalSize" value="0"/>
 
       <c:if test="${!empty command.pathNoLeaf}">
-        <c:url value="repobrowser.svn" var="backUrl">
-          <c:param name="path" value="${command.pathNoLeaf}"/>
+        <c:url value="/repos/${command.name}/browse${command.pathNoLeaf}" var="backUrl">
           <c:param name="revision" value="${command.revision}"/>
-          <c:param name="name" value="${command.name}"/>
         </c:url>
 
         <tr class="sventonEntryEven">
           <td class="sventonCol1"/>
           <td class="sventonCol2"><img src="images/icon_folder.png" alt="dir"></td>
           <td class="sventonCol3">
-            <a href="<sventon-ui:formatUrl url='${backUrl}'/> ">..&nbsp;&nbsp;&nbsp;</a>
+            <a href="${backUrl}">..&nbsp;&nbsp;&nbsp;</a>
           </td>
           <td/>
           <td/>
@@ -65,25 +59,18 @@
       </c:if>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="repobrowser.svn" var="viewUrl">
-          <c:param name="path" value="${entry.fullEntryName}" />
+        <c:url value="/repos/${command.name}/browse${entry.fullEntryName}" var="viewUrl">
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="name" value="${command.name}" />
           <c:param name="bypassEmpty" value="true" />
         </c:url>
-        <c:url value="showfile.svn" var="showFileUrl">
-          <c:param name="path" value="${entry.fullEntryName}" />
+        <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="revinfo.svn" var="showRevInfoUrl">
+        <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="entrytray.ajax" var="entryTrayAddUrl">
-          <c:param name="path" value="${entry.fullEntryName}" />
+        <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
           <c:param name="revision" value="${entry.revision}" />
-          <c:param name="name" value="${command.name}" />
           <c:param name="action" value="add" />
         </c:url>
 
@@ -96,11 +83,11 @@
           <c:choose>
             <c:when test="${'dir' eq entry.kind}">
               <td class="sventonCol2">
-                <div id="<sventon-ui:formatUrl url='${entryTrayAddUrl}'/>" class="entry">
+                <div id="${entryTrayAddUrl}" class="entry">
                   <img src="images/icon_folder.png" alt="dir">
                 </div>
               </td>
-              <td class="sventonCol3"><a href="<sventon-ui:formatUrl url='${viewUrl}'/>">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="${viewUrl}">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">
@@ -108,14 +95,14 @@
                   <sventon-ui:fileTypeIcon filename="${entry.name}"/>
                 </div>
               </td>
-              <td class="sventonCol3"><a href="<sventon-ui:formatUrl url="${showFileUrl}" />">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="${showFileUrl}">${entry.name}</a></td>
             </c:otherwise>
           </c:choose>
           <td class="sventonCol4" align="center">
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
               <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
-              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
+              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img alt="Lock" src="images/icon_lock.png"></span>
             </c:if>
           </td>
           <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>

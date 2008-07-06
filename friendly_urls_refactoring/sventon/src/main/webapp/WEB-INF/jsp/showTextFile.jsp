@@ -47,7 +47,7 @@
   </table>
 
   <script type="text/javascript">
-    getFileHistory('${command.path}', '${command.revision}', '${command.name}', '${archivedEntry}');
+    getFileHistory('${command.name}', '${command.path}', '${command.revision}', '${archivedEntry}');
   </script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

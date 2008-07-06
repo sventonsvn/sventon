@@ -54,12 +54,12 @@
     </c:if>
 
     <div id="config_navigation">
-      <form action="config.svn">
+      <form action="${pageContext.request.contextPath}/repos/config">
         <input value="addnew" name="addnew" type="hidden">
         <input value="Add another repository" class="cfgbtn" type="submit">
       </form>
 
-      <form action="submitconfig.svn">
+      <form action="${pageContext.request.contextPath}/repos/submitconfig">
         <input value="Complete setup and start browsing" class="cfgbtn" type="submit">
       </form>
     </div>
@@ -71,19 +71,19 @@
 
       <div class="config_faq_entry">
         <div class="config_faq_question" onclick="new Element.toggle('faqa1');">
-          <a href="#">Where are the log files stored?</a>
+          <a href="#" onclick="return false;">Where are the log files stored?</a>
         </div>
         <div class="config_faq_answer" id="faqa1" style="display: none;">
           By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
-          repository configurations will be stored in the servlet container's temporary directory,
-          <b><%=System.getProperty("java.io.tmpdir")%>
+          repository configurations will be stored in a directory called <code>sventon_temp</code> below the servlet
+          container's temporary directory, <b><%=System.getProperty("java.io.tmpdir")%>
           </b>.
         </div>
       </div>
 
       <div class="config_faq_entry">
         <div class="config_faq_question" onclick="new Element.toggle('faqa2');">
-          <a href="#">What if I want to change logging granularity or log file location?</a>
+          <a href="#" onclick="return false;">What if I want to change logging granularity or log file location?</a>
         </div>
         <div class="config_faq_answer" id="faqa2" style="display:none;">
           Logging properties and log file location can be changed by customizing the properties in the file <b>svn/WEB-INF/classes/log4j.properties</b>
@@ -92,7 +92,7 @@
 
       <div class="config_faq_entry">
         <div class="config_faq_question" onclick="new Element.toggle('faqa3');">
-          <a href="#">What about UTF-8 support?</a>
+          <a href="#" onclick="return false;">What about UTF-8 support?</a>
         </div>
         <div class="config_faq_answer" id="faqa3" style="display:none;">
           If this sventon instance will be used with <a href="http://tomcat.apache.org/">Tomcat</a> in a
@@ -101,15 +101,11 @@
           and/or set <code>useBodyEncodingForURI="true"</code>.
         </div>
       </div>
-
-
     </div>
   </div>
 
-
   <br>
   <br>
-
 
   <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>

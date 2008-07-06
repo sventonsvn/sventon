@@ -20,12 +20,14 @@
 Rev:
 <c:choose>
   <c:when test="${(headRevision == command.revisionNumber)}">
-      HEAD (${command.revisionNumber})
+    HEAD (${command.revisionNumber})
   </c:when>
   <c:otherwise>
-      <a href="revinfo.svn?revision=${command.revision}&name=${command.name}">
-        <span class="exclamationText">${command.revision}</span>
-      </a>
+    <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
+      <c:param name="revision" value="${command.revision}"/>
+    </c:url>
+
+    <a href="${showRevInfoUrl}"><span class="exclamationText">${command.revision}</span></a>
   </c:otherwise>
 </c:choose>
 

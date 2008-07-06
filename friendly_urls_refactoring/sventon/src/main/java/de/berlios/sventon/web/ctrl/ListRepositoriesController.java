@@ -46,8 +46,8 @@ public final class ListRepositoriesController extends AbstractController {
 
     // If application config is not ok - redirect to config.jsp
     if (!application.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to 'config.svn'");
-      return new ModelAndView(new RedirectView("config.svn"));
+      logger.debug("sventon not configured, redirecting to '/repos/config'");
+      return new ModelAndView(new RedirectView("/repos/config", true));
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -68,7 +68,7 @@ public final class ListRepositoriesController extends AbstractController {
       }
     }
 
-    return new ModelAndView("listInstances", model);
+    return new ModelAndView("listRepositories", model);
   }
 
   /**

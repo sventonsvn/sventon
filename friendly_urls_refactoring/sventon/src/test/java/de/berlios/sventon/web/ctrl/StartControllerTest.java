@@ -1,21 +1,20 @@
 package de.berlios.sventon.web.ctrl;
 
-import static de.berlios.sventon.TestUtils.TEMPDIR;
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
-import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.io.File;
 
 public class StartControllerTest extends TestCase {
 
   public void testHandleRequestInternal() throws Exception {
     final Application application = TestUtils.getApplicationStub();
     final StartController ctrl = new StartController();
+    ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);
 
     final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -25,7 +24,7 @@ public class StartControllerTest extends TestCase {
     ModelAndView modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
     RedirectView view = (RedirectView) modelAndView.getView();
-    assertEquals("config.svn", view.getUrl());
+    assertEquals("/repos/config", view.getUrl());
 
     // Configured - but without added instances (should not be possible)
     application.setConfigured(true);
@@ -42,7 +41,7 @@ public class StartControllerTest extends TestCase {
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
     view = (RedirectView) modelAndView.getView();
-    assertEquals("repobrowser.svn?name=test1", view.getUrl());
+    assertEquals("/repos/test1/browse/", view.getUrl());
 
     // Configured with two instances
     application.addRepository(createTestInstance("test2"));
@@ -50,7 +49,7 @@ public class StartControllerTest extends TestCase {
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
     view = (RedirectView) modelAndView.getView();
-    assertEquals("listrepos.svn", view.getUrl());
+    assertEquals("/repos/list", view.getUrl());
 
   }
 

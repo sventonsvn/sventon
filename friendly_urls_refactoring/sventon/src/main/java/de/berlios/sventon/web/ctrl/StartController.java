@@ -49,13 +49,14 @@ public final class StartController extends AbstractController {
       throws Exception {
 
     final ModelAndView modelAndView;
+    final String contextPath = getServletContext().getContextPath();
     if (!application.isConfigured()) {
-      modelAndView = new ModelAndView(new RedirectView("config.svn"));
+      modelAndView = new ModelAndView(new RedirectView("/repos/config", true));
     } else if (application.getRepositoryCount() > 1) {
-      modelAndView = new ModelAndView(new RedirectView("listrepos.svn"));
+      modelAndView = new ModelAndView(new RedirectView("/repos/list", true));
     } else if (application.getRepositoryCount() == 1) {
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
-      modelAndView = new ModelAndView(new RedirectView("repobrowser.svn?name=" + repositoryName));
+      modelAndView = new ModelAndView(new RedirectView("/repos/" + repositoryName + "/browse/", true));
     } else {
       throw new IllegalStateException("No instance has been configured!");
     }

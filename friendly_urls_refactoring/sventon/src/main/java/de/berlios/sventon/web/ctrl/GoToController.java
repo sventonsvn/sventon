@@ -55,9 +55,9 @@ public final class GoToController extends AbstractSVNTemplateController implemen
     logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
 
     if (kind == SVNNodeKind.DIR) {
-      redirectUrl = "repobrowser.svn";
+      redirectUrl = "/repos/" + svnCommand.getName().toString() + "/browse" + svnCommand.getPath();
     } else if (kind == SVNNodeKind.FILE) {
-      redirectUrl = "showfile.svn";
+      redirectUrl = "/repos/" + svnCommand.getName().toString() + "/view" + svnCommand.getPath();
     } else {
       //Invalid path/rev combo. Forward to error page.
       exception.rejectValue("path", "goto.command.invalidpath");
@@ -66,11 +66,10 @@ public final class GoToController extends AbstractSVNTemplateController implemen
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("path", svnCommand.getPath());
     model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : String.valueOf(svnCommand.getRevisionNumber()));
-    model.put("name", svnCommand.getName().toString());
+
     logger.debug("Redirecting to: " + redirectUrl);
-    return new ModelAndView(new RedirectView(redirectUrl), model);
+    return new ModelAndView(new RedirectView(redirectUrl, true), model);
   }
 
 }

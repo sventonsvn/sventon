@@ -11,8 +11,8 @@
  */
 
 // function to handle action submissions in repo browser view
-function doAction(formName) {
-  var input = $(formName)['actionSelect'];
+function doAction(form, name, path) {
+  var input = $(form)['actionSelect'];
   var selectedValue = $F(input);
 
   // If no option value is selected, no action is taken.
@@ -23,49 +23,59 @@ function doAction(formName) {
   // Check which action to execute
   if (selectedValue == 'thumb') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 0) {
-      formName.action = 'showthumbs.svn';
+    if (getCheckedCount(form) > 0) {
+      form.action = contextPath + '/repos/' + name + '/showthumbnails' + path;
       return true;
     }
   } else if (selectedValue == 'diff') {
     // Exactly two entries must be checked
-    if (getCheckedCount(formName) == 2) {
-      formName.action = 'diff.svn';
+    if (getCheckedCount(form) == 2) {
+      form.action = contextPath + '/repos/' + name + '/diff' + path;
       return true;
     } else {
       alert('Two entries must be selected');
     }
   } else if (selectedValue == 'export') {
     // One or more entries must be checked
-    if (getCheckedCount(formName) > 0) {
-      formName.action = 'export.svn';
+    if (getCheckedCount(form) > 0) {
+      form.action = contextPath + '/repos/' + name + '/export' + path;
       return true;
     }
   }
   return false;
 }
 
+function goto(form) {
+  prepareGotoForm(form);
+  form.submit();
+}
+
 // sets the value of the revision input text field to 'HEAD'
 function goToHeadRevision(form) {
+  prepareGotoForm(form);
   form.elements['revisionInput'].value = 'HEAD';
   form.submit();
 }
 
-// function to handle search submission
-function doSearch(formName) {
+function prepareGotoForm(form) {
+  var path = form.elements['pathInput'].value;
+  var name = form.elements['nameInput'].value;
+  form.action = contextPath + '/repos/' + name + '/goto' + path;
+}
 
-  var input = $(formName)['searchString'];
+// function to handle search submission
+function doSearch(form, name, path) {
+  var input = $(form)['searchString'];
   var searchStr = $F(input);
 
   // If no search string is entered, no action is taken.
   if (searchStr == '') {
     return false;
   } else {
-
-    if (getCheckedValue(formName.elements['searchMode']) == 'entries') {
-      formName.action = 'searchentries.svn';
+    if (getCheckedValue(form.elements['searchMode']) == 'entries') {
+      form.action = contextPath + '/repos/' + name + '/searchentries' + path;
     } else {
-      formName.action = 'searchlogs.svn';
+      form.action = contextPath + '/repos/' + name + '/searchlogs' + path;
     }
     if (searchStr.length < 3) {
       return searchWarning();
@@ -76,23 +86,21 @@ function doSearch(formName) {
 }
 
 // function to handle flatten submissions
-function doFlatten(url, repositoryName) {
-  var flattenURL = 'flatten.svn?name=' + repositoryName + '&path='
+function doFlatten(path, name) {
   var result = true;
-  if (url == '/') {
+  if (path == '/') {
     result = flatteningWarning();
   }
   if (result) {
-    location.href = flattenURL + url;
-  } else {
-    return false;
+    location.href = contextPath + '/repos/' + name + '/flatten' + path;
+    return true;
   }
-  return true;
+  return false;
 }
 
 // function to validate url during repository configuration submisson
-function validateUrl(formName) {
-  var input = $(formName)['repositoryUrl'];
+function validateUrl(form) {
+  var input = $(form)['repositoryUrl'];
   var url = $F(input).toLocaleLowerCase();
   if (url.indexOf('trunk') > -1
       || url.indexOf('tags') > -1
@@ -104,16 +112,14 @@ function validateUrl(formName) {
 }
 
 // function to handle diff submissions
-function doDiff(formName) {
-
+function doDiff(form) {
   // Check if any entry is checked
   var checkedEntry = 0;
-  for (i = 0; i < formName.entry.length; i++) {
-    if (formName.entry[i].type == 'checkbox' && formName.entry[i].checked) {
+  for (i = 0; i < form.entry.length; i++) {
+    if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
       checkedEntry++;
     }
   }
-
   // Two boxes must be checked else no action is taken.
   return checkedEntry == 2;
 }
@@ -170,7 +176,7 @@ function toggleWrap() {
 }
 
 // Requests directory contents in given path
-function listFiles(rowNumber, path, name) {
+function listFiles(rowNumber, name, path) {
   var iconElement = $('dirIcon' + rowNumber);
 
   if (iconElement.className == 'minus') {
@@ -183,10 +189,10 @@ function listFiles(rowNumber, path, name) {
     iconElement.className = 'plus';
   } else {
     // Do the ajax call
-    var url = 'listfiles.ajax';
-    var urlParams = 'path=' + path + '&revision=head&name=' + name + "&rowNumber=" + rowNumber;
+    var url = contextPath + '/ajax/' + name + '/listfiles' + path;
+    var urlParams = 'revision=head&rowNumber=' + rowNumber;
     var elementId = 'dir' + rowNumber;
-    var ajax = new Ajax.Updater({success: elementId}, url, {
+    new Ajax.Updater({success: elementId}, url, {
       method: 'post', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After, onComplete:
         function(response) {
           iconElement.src = 'images/icon_folder.png';
@@ -213,10 +219,10 @@ function hideLatestRevisions() {
 // Requests the N latest revisions
 function getLatestRevisions(name, count) {
   // Do the ajax call
-  var url = 'latestrevisions.ajax';
-  var urlParams = 'path=/&revision=head&name=' + name + "&revcount=" + count;
+  var url = contextPath + '/ajax/' + name + '/latestrevisions';
+  var urlParams = 'revision=head&revcount=' + count;
 
-  var ajax = new Ajax.Updater({success: $('latestCommitInfoDiv')}, url, {
+  new Ajax.Updater({success: $('latestCommitInfoDiv')}, url, {
     method: 'post', parameters: urlParams, onFailure: reportAjaxError, onSuccess: function(request) {
     Element.show('latestCommitInfoDiv');
     Element.update('latestCommitLink', 'hide');
@@ -233,11 +239,11 @@ function reportAjaxError(request) {
 }
 
 function getHelpText(id) {
-  var url = 'static.ajax';
+  var url = contextPath + '/ajax/static';
   var urlParams = 'id=' + id;
   var divName = 'help' + id + 'Div';
 
-  var ajax = new Ajax.Request(url, {
+  new Ajax.Request(url, {
     method: 'post',
     parameters: urlParams,
     onFailure: reportAjaxError,
@@ -248,12 +254,12 @@ function getHelpText(id) {
 }
 
 // Gets the log message for given revision.
-function getLogMessage(revision, repositoryName, date) {
-  var url = 'getmessage.ajax';
-  var urlParams = 'revision=' + revision + '&name=' + repositoryName;
+function getLogMessage(revision, name, date) {
+  var url = contextPath + '/ajax/' + name + '/getmessage';
+  var urlParams = 'revision=' + revision;
   var divName = 'msg' + revision + 'Div';
 
-  var ajax = new Ajax.Request(url, {
+  new Ajax.Request(url, {
     method: 'post',
     parameters: urlParams,
     onFailure: reportAjaxError,
@@ -275,7 +281,7 @@ function restoreBlameRev(revision) {
 }
 
 function removeEntryFromTray(removeEntryUrl) {
-  var ajax = new Ajax.Updater({success: $('entryTray')}, removeEntryUrl, {
+  new Ajax.Updater({success: $('entryTray')}, removeEntryUrl, {
     method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
     Element.hide('spinner');
   }});
@@ -290,14 +296,14 @@ function showHideEntryTray() {
   }
 }
 
-function getFileHistory(path, revision, name, archivedEntry) {
-  var url = 'filehistory.ajax';
-  var urlParams = 'path=' + path + '&revision=' + revision + '&name=' + name;
+function getFileHistory(name, path, revision, archivedEntry) {
+  var url = contextPath + '/ajax/' + name + '/filehistory' + path;
+  var urlParams = 'revision=' + revision;
   if (archivedEntry != '') {
     urlParams = urlParams + '&archivedEntry=' + archivedEntry;
   }
 
-  var ajax = new Ajax.Updater({success: $('fileHistoryContainerDiv')}, url, {
+  new Ajax.Updater({success: $('fileHistoryContainerDiv')}, url, {
     method: 'post', parameters: urlParams, onFailure: reportAjaxError});
 }
 
@@ -307,8 +313,7 @@ function updateCharsetParameter(charset, queryString) {
   if (index > -1) {
     queryString = queryString.substring(0, index);
   }
-  var newUrl = document.location.pathname + '?' + queryString + charsetParameter + charset;
-  document.location.href = newUrl;
+  document.location.href = document.location.pathname + '?' + queryString + charsetParameter + charset;
 }
 
 // ===============================================================================================
@@ -333,9 +338,9 @@ function toggleInnerHTML(id, text1, text2) {
 }
 
 // function to toggle the entry checkboxes
-function toggleEntryFields(formName) {
-  for (var i = 0; i < formName.length; i++) {
-    var fieldObj = formName.elements[i];
+function toggleEntryFields(form) {
+  for (var i = 0; i < form.length; i++) {
+    var fieldObj = form.elements[i];
     if (fieldObj.type == 'checkbox') {
       fieldObj.checked = !fieldObj.checked;
     }
@@ -365,17 +370,17 @@ function getCheckedValue(radioObj) {
 }
 
 // returns number of checked entries.
-function getCheckedCount(formName) {
+function getCheckedCount(form) {
   var undefined;
   var checkedEntriesCount = 0;
 
   // Check if only one entry exists - and whether it's checked
-  if (formName.entry.length == undefined) {
-    checkedEntriesCount = formName.entry.checked ? 1 : 0;
+  if (form.entry.length == undefined) {
+    checkedEntriesCount = form.entry.checked ? 1 : 0;
   } else {
     // More than one entry exists - Check how many are checked
-    for (var i = 0; i < formName.entry.length; i++) {
-      if (formName.entry[i].checked) {
+    for (var i = 0; i < form.entry.length; i++) {
+      if (form.entry[i].checked) {
         checkedEntriesCount++;
       }
     }

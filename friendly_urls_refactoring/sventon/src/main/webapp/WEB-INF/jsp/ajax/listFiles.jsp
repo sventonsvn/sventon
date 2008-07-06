@@ -18,14 +18,11 @@
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
 <c:forEach items="${svndir}" var="entry">
-  <c:url value="showfile.svn" var="showFileUrl">
-    <c:param name="path" value="${entry.fullEntryName}" />
+  <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
     <c:param name="revision" value="${command.revision}" />
-    <c:param name="name" value="${command.name}" />
   </c:url>
-  <c:url value="revinfo.svn" var="showRevInfoUrl">
+  <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
     <c:param name="revision" value="${entry.revision}" />
-    <c:param name="name" value="${command.name}" />
   </c:url>
 
   <tr class="sventonFileEntryTableRow expandedDir${rowNumber}">
@@ -36,7 +33,7 @@
       <sventon-ui:fileTypeIcon filename="${entry.name}"/>
     </td>
     <td class="sventonCol3">
-      <a href="<sventon-ui:formatUrl url='${showFileUrl}'/>">${entry.name}</a>
+      <a href="${showFileUrl}">${entry.name}</a>
     </td>
     <td class="sventonCol4"/>
     <td class="sventonCol5">${entry.size}</td>

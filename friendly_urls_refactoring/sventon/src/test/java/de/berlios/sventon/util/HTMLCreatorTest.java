@@ -20,19 +20,19 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Modified</i></td>\n" +
-        "    <td><a href=\"diff.svn?path=/file1.java&revision=1&name=sandbox&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\"><i>/file1.java</i></a></td>\n" +
+        "    <td><a href=\"repos/sandbox/diff/file1.java?revision=1&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\"><i>/file1.java</i></a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Deleted</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=/file2.html&revision=0&name=sandbox\" title=\"Show previous revision\"><del>/file2.html</del></a></td>\n" +
+        "    <td><a href=\"repos/sandbox/goto/file2.html?revision=0\" title=\"Show previous revision\"><del>/file2.html</del></a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Added</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=/file3.abc&revision=1&name=sandbox\" title=\"Show\">/file3.abc</a><br><b>Copy from</b> <a href=\"goto.svn?path=/branch/file3.abc&revision=1&name=sandbox\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"revinfo.svn?revision=1&name=sandbox\">1</a></td>\n" +
+        "    <td><a href=\"repos/sandbox/goto/file3.abc?revision=1\" title=\"Show\">/file3.abc</a><br><b>Copy from</b> <a href=\"repos/sandbox/goto/branch/file3.abc?revision=1\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"repos/sandbox/revinfo?revision=1\">1</a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Replaced</i></td>\n" +
-        "    <td><a href=\"goto.svn?path=/file4.def&revision=1&name=sandbox\" title=\"Show\">/file4.def</a></td>\n" +
+        "    <td><a href=\"repos/sandbox/goto/file4.def?revision=1\" title=\"Show\">/file4.def</a></td>\n" +
         "  </tr>\n" +
         "</table>";
 
@@ -49,19 +49,19 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testCreateGoToUrl() throws Exception {
-    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=1&name=sandbox",
+    assertEquals("http://localhost/repos/sandbox/goto/trunk/a.txt?revision=1",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), false));
-    assertEquals("http://localhost/goto.svn?path=/trunk/a.txt&revision=HEAD&name=sandbox",
+    assertEquals("http://localhost/repos/sandbox/goto/trunk/a.txt?revision=HEAD",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), true));
   }
 
   public void testCreateRevInfoUrl() throws Exception {
-    assertEquals("http://localhost/revinfo.svn?revision=1&name=sandbox",
+    assertEquals("http://localhost/repos/sandbox/revinfo?revision=1",
         HTMLCreator.createRevInfoUrl("http://localhost/", 1, new RepositoryName("sandbox")));
   }
 
   public void testCreateDiffUrl() throws Exception {
-    assertEquals("http://localhost/diff.svn?path=/a.txt&revision=2&name=sandbox&entry=/a.txt;;2&entry=/a.txt;;1",
+    assertEquals("http://localhost/repos/sandbox/diff/a.txt?revision=2&entry=/a.txt;;2&entry=/a.txt;;1",
         HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, new RepositoryName("sandbox"), false));
   }
 }
