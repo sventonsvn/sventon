@@ -28,7 +28,7 @@
   </developers>
 
   <properties>
-    <spring.version>2.5.2</spring.version>
+    <spring.version>2.5.5</spring.version>
   </properties>
 
   <dependencies>

@@ -28,30 +28,30 @@ public class ApplicationTest extends TestCase {
   }
 
   public void testStoreRepositoryConfigurations() throws Exception {
-    final String configFilename = "tmpconfigfilename";
-    final Application application = new Application(new File(TEMPDIR), configFilename);
-
-    final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
-    repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
-    repositoryConfiguration1.setUid("user1");
-    repositoryConfiguration1.setPwd("abc123");
-    repositoryConfiguration1.setCacheUsed(false);
-    repositoryConfiguration1.setZippedDownloadsAllowed(false);
-
-    final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
-    repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
-    repositoryConfiguration2.setUid("user2");
-    repositoryConfiguration2.setPwd("123abc");
-    repositoryConfiguration2.setCacheUsed(false);
-    repositoryConfiguration2.setZippedDownloadsAllowed(false);
-
-    application.addRepository(repositoryConfiguration1);
-    application.addRepository(repositoryConfiguration2);
-
     final File repos1 = new File(TEMPDIR, "testrepos1");
     final File repos2 = new File(TEMPDIR, "testrepos2");
 
     try {
+      final String configFilename = "tmpconfigfilename";
+      final Application application = new Application(new File(TEMPDIR), configFilename);
+
+      final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
+      repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
+      repositoryConfiguration1.setUid("user1");
+      repositoryConfiguration1.setPwd("abc123");
+      repositoryConfiguration1.setCacheUsed(false);
+      repositoryConfiguration1.setZippedDownloadsAllowed(false);
+
+      final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
+      repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
+      repositoryConfiguration2.setUid("user2");
+      repositoryConfiguration2.setPwd("123abc");
+      repositoryConfiguration2.setCacheUsed(false);
+      repositoryConfiguration2.setZippedDownloadsAllowed(false);
+
+      application.addRepository(repositoryConfiguration1);
+      application.addRepository(repositoryConfiguration2);
+
       assertFalse(new File(repos1, configFilename).exists());
       assertFalse(new File(repos2, configFilename).exists());
       application.storeRepositoryConfigurations();

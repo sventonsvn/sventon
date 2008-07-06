@@ -14,7 +14,6 @@ package de.berlios.sventon.util;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.model.LogEntryActionType;
 import static de.berlios.sventon.util.EncodingUtils.encode;
-import static de.berlios.sventon.util.EncodingUtils.encodeUrl;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
@@ -32,10 +31,6 @@ import java.util.regex.Matcher;
  * @author jesper@users.berlios.de
  */
 public final class HTMLCreator {
-
-  private static final String GOTO_URL = "goto.svn";
-  private static final String REV_INFO_URL = "revinfo.svn";
-  private static final String DIFF_URL = "diff.svn";
 
   public static final String LOG_MESSAGE_KEY = "logMessage";
   public static final String AUTHOR_KEY = "author";
@@ -234,10 +229,11 @@ public final class HTMLCreator {
                                         final RepositoryName repositoryName, final boolean linkToHead) {
 
     final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append(GOTO_URL);
-    sb.append("?path=").append(encodeUrl(path));
-    sb.append("&revision=").append(linkToHead ? "HEAD" : revision);
-    sb.append("&name=").append(encode(repositoryName.toString()));
+    sb.append("repos/");
+    sb.append(encode(repositoryName.toString()));
+    sb.append("/goto");
+    sb.append(path);
+    sb.append("?revision=").append(linkToHead ? "HEAD" : revision);
     return sb.toString();
   }
 
@@ -258,12 +254,13 @@ public final class HTMLCreator {
     final String entry2 = path + ";;" + (revision - 1);
 
     final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append(DIFF_URL);
-    sb.append("?path=").append(encodeUrl(path));
-    sb.append("&revision=").append(linkToHead ? "HEAD" : revision);
-    sb.append("&name=").append(encode(repositoryName.toString()));
-    sb.append("&entry=").append(encodeUrl(entry1));
-    sb.append("&entry=").append(encodeUrl(entry2));
+    sb.append("repos/");
+    sb.append(encode(repositoryName.toString()));
+    sb.append("/diff");
+    sb.append(path);
+    sb.append("?revision=").append(linkToHead ? "HEAD" : revision);
+    sb.append("&entry=").append(entry1);
+    sb.append("&entry=").append(entry2);
     return sb.toString();
   }
 
@@ -277,9 +274,10 @@ public final class HTMLCreator {
    */
   protected static String createRevInfoUrl(final String baseURL, final long revision, final RepositoryName repositoryName) {
     final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append(REV_INFO_URL);
+    sb.append("repos/");
+    sb.append(encode(repositoryName.toString()));
+    sb.append("/revinfo");
     sb.append("?revision=").append(encode(String.valueOf(revision)));
-    sb.append("&name=").append(encode(repositoryName.toString()));
     return sb.toString();
   }
 

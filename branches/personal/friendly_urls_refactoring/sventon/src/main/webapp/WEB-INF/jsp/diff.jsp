@@ -36,7 +36,7 @@
           <table id="diffTable" class="sventonDiffTable" cellspacing="0">
             <tr>
               <th style="background-color: white;">
-                <a href="#diff0">
+                <a href="javascript:;" onclick="document.location.hash='#diff0';">
                   <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff">
                 </a>
               </th>
@@ -53,9 +53,9 @@
               <tr <%= row.getRight().getRowNumber() != null ? "id=\"l" + row.getRight().getRowNumber().toString() + "\"" : "" %>>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">
-                    <a name="diff${diffCount}"/>
+                    <a name="diff${diffCount}"></a>
                     <c:set var="diffCount" value="${diffCount + 1}"/>
-                    <a href="#diff${diffCount}">
+                    <a href="javascript:;" onclick="document.location.hash='#diff${diffCount}';">
                       <img src="images/icon_nextdiff.png" alt="Next diff" title="Next diff">
                     </a>
                   </c:if>

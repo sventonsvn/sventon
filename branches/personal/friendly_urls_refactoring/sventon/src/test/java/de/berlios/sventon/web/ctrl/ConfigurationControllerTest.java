@@ -1,12 +1,11 @@
 package de.berlios.sventon.web.ctrl;
 
-import static de.berlios.sventon.TestUtils.TEMPDIR;
+import de.berlios.sventon.TestUtils;
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryConfiguration;
 import de.berlios.sventon.appl.RepositoryName;
 import de.berlios.sventon.web.command.ConfigCommand;
 import static de.berlios.sventon.web.command.ConfigCommand.AccessMethod.USER;
-import de.berlios.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -15,7 +14,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.File;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +42,7 @@ public class ConfigurationControllerTest extends TestCase {
   }
 
   //Test what happens if an instance is partially configured and the config view is invoked
-  //this could happen if one started to configure sventon and then called repobrowser.svn.
+  //this could happen if one started to configure sventon and then called 'browse'.
   public void testShowFormConfiguredII() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
@@ -71,7 +69,7 @@ public class ConfigurationControllerTest extends TestCase {
     assertNotNull(modelAndView);
     assertTrue(modelAndView.getView() instanceof RedirectView);
     RedirectView rv = (RedirectView) modelAndView.getView();
-    assertEquals("repobrowser.svn", rv.getUrl());
+    assertEquals("/repos/list", rv.getUrl());
   }
 
   public void testProcessFormSubmissionNonConfiguredValidationError() throws Exception {

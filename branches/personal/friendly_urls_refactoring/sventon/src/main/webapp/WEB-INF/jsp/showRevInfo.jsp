@@ -25,14 +25,12 @@
   <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
   <sventon:functionLinks pageName="showRevInfo"/>
 
-  <c:url value="revinfo.svn" var="showPrevRevInfoUrl">
+  <c:url value="/repos/${command.name}/revinfo" var="showPrevRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber - 1}" />
-    <c:param name="name" value="${command.name}" />
   </c:url>
 
-  <c:url value="revinfo.svn" var="showNextRevInfoUrl">
+  <c:url value="/repos/${command.name}/revinfo" var="showNextRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber + 1}" />
-    <c:param name="name" value="${command.name}" />
   </c:url>
 
   <c:if test="${command.revisionNumber - 1 gt 0}">

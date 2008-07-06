@@ -25,16 +25,12 @@
   <sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
   <sventon:functionLinks pageName="repobrowser"/>
 
-  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this);">
-    <input type="hidden" name="path" value="${command.path}">
+  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
     <input type="hidden" name="revision" value="${command.revision}">
-    <input type="hidden" name="name" value="${command.name}">
     <input type="hidden" name="pegrev" value="${command.revisionNumber}">
     
-    <c:url value="searchentries.svn" var="sortUrl">
-      <c:param name="path" value="${command.path}" />
+    <c:url value="/repos/${command.name}/searchentries${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
-      <c:param name="name" value="${command.name}" />
       <c:param name="searchString" value="${searchString}" />
       <c:param name="startDir" value="${startDir}" />
     </c:url>
@@ -44,19 +40,14 @@
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="repobrowser.svn" var="viewUrl">
-          <c:param name="path" value="${entry.fullEntryName}" />
+        <c:url value="/repos/${command.name}/browse${entry.fullEntryName}" var="viewUrl">
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="showfile.svn" var="showFileUrl">
-          <c:param name="path" value="${entry.fullEntryName}" />
+        <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="revinfo.svn" var="showRevInfoUrl">
+        <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
 
         <c:set var="totalSize" value="${totalSize + entry.size}"/>
@@ -71,7 +62,7 @@
                 <img src="images/icon_folder.png" alt="dir">
               </td>
               <td class="sventonCol3">
-                <a href="<sventon-ui:formatUrl url='${viewUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                 </a>
               </td>
@@ -81,7 +72,7 @@
                 <sventon-ui:fileTypeIcon filename="${entry.name}"/>
               </td>
               <td class="sventonCol3">
-                <a href="<sventon-ui:formatUrl url='${showFileUrl}'/>" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                 </a>
               </td>
@@ -91,7 +82,7 @@
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
               <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
-              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img src="images/icon_lock.png"></span>
+              <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img alt="Lock" src="images/icon_lock.png"></span>
             </c:if>
           </td>
           <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>

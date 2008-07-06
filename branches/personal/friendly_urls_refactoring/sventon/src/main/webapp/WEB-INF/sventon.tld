@@ -53,16 +53,4 @@
     </attribute>
   </tag>
 
-  <tag>
-    <name>formatUrl</name>
-    <tag-class>de.berlios.sventon.web.tags.UrlFormatterTag</tag-class>
-    <body-content>JSP</body-content>
-    <description>Tag that unescapes legal URL characters (i.e. slash and colon).</description>
-    <attribute>
-      <name>url</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-  </tag>
-
 </taglib>

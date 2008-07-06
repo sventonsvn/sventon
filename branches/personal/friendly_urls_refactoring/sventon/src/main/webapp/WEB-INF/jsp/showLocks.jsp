@@ -38,15 +38,13 @@
     <c:forEach items="${currentLocks}" var="lock">
       <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
 
-      <c:url value="showfile.svn" var="showUrl">
-        <c:param name="path" value="${lock.path}" />
+      <c:url value="/repos/${command.name}/view${lock.path}" var="showUrl">
         <c:param name="revision" value="${command.revision}" />
-        <c:param name="name" value="${command.name}" />
       </c:url>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
-        <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${lock.path}</a></td>
+        <td><a href="${showUrl}">${lock.path}</a></td>
         <td>${lock.owner}</td>
         <td>${lock.comment}</td>
         <td><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td>

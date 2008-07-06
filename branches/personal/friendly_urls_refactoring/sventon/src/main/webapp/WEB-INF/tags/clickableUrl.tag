@@ -19,18 +19,19 @@
 <%@ attribute name="url" required="true" type="java.lang.String" %>
 
 <span id="clickableUrl">
-<a href="repobrowser.svn?path=/&revision=${command.revision}&name=${command.name}"> ${url} </a> /
+  <c:url value="/repos/${command.name}/browse/" var="basePathUrl">
+    <c:param name="revision" value="${command.revision}" />
+  </c:url>
+  <a href="${basePathUrl}">${url}</a> /
   <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
         <c:when test="${hasErrors}">${pathSegment}</c:when>
         <c:otherwise>
-          <c:url value="repobrowser.svn" var="pathUrl">
-            <c:param name="path" value="/${accuPath}" />
+          <c:url value="/repos/${command.name}/browse/${accuPath}" var="pathUrl">
             <c:param name="revision" value="${command.revision}" />
-            <c:param name="name" value="${command.name}" />
           </c:url>
-          <a href="<sventon-ui:formatUrl url='${pathUrl}'/>">${pathSegment}</a>
+          <a href="${pathUrl}">${pathSegment}</a>
         </c:otherwise>
       </c:choose>
     /

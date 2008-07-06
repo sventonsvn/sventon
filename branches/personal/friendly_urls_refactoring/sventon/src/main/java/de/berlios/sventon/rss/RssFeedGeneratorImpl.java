@@ -106,7 +106,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
         entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
             StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));
         entry.setAuthor(logEntry.getAuthor());
-        entry.setLink(baseURL + "revinfo.svn?name=" + repositoryName + "&revision=" + logEntry.getRevision());
+        entry.setLink(baseURL + "repos/" + repositoryName + "/revinfo?revision=" + logEntry.getRevision());
         entry.setPublishedDate(logEntry.getDate());
 
         description = new SyndContentImpl();

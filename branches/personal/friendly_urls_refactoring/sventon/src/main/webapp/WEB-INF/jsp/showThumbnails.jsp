@@ -31,25 +31,18 @@
   <table style="border-collapse: collapse;">
     <c:forEach items="${thumbnailentries}" var="entry">
       <tr height="160px">
-        <c:url value="get.svn" var="downloadUrl" >
+        <c:url value="/repos/${command.name}/get${entry.path}" var="downloadUrl" >
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="path" value="${entry.path}" />
-          <c:param name="name" value="${command.name}" />
           <c:param name="disp" value="inline" />
         </c:url>
-        <c:url value="getthumb.svn" var="getThumbUrl" >
+        <c:url value="/repos/${command.name}/getthumbnail${entry.path}" var="getThumbUrl" >
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="path" value="${entry.path}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="revinfo.svn" var="showRevInfoUrl">
+        <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
-        <c:url value="showfile.svn" var="showFileUrl">
-          <c:param name="path" value="${entry.path}" />
+        <c:url value="/repos/${command.name}/view${entry.path}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
-          <c:param name="name" value="${command.name}" />
         </c:url>
 
         <td valign="top" style="border: 1px dashed black;">
@@ -64,8 +57,8 @@
           </a>
         </td>
         <td width="210px" style="text-align:center; border: 1px dashed black;">
-          <a href="<sventon-ui:formatUrl url='${downloadUrl}'/>">
-            <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail of ${entry.path} @ ${entry.revision}"></a>
+          <a href="${downloadUrl}">
+            <img src="${getThumbUrl}" alt="Thumbnail of ${entry.path} @ ${entry.revision}"></a>
         </td>
       </tr>
     </c:forEach>

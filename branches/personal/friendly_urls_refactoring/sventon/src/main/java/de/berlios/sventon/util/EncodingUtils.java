@@ -49,24 +49,6 @@ public final class EncodingUtils {
   }
 
   /**
-   * Encodes given URL string using default encoding (UTF-8).
-   * The characters slash and colon will be untouched as they are URL safe.
-   *
-   * @param str String to encode.
-   * @return Encoded string.
-   */
-  public static String encodeUrl(final String str) {
-    String result = str;
-    // un-encode colons
-    result = result.replaceAll("(?i)%3A", ":");
-    // un-encode semi colons
-    result = result.replaceAll("(?i)%3B", ";");
-    // un-encode forward slashes
-    result = result.replaceAll("(?i)%2F", "/");
-    return result;
-  }
-
-  /**
    * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
    * File name will be returned as-is if unable to parse <code>USER-AGENT</code>.
    *

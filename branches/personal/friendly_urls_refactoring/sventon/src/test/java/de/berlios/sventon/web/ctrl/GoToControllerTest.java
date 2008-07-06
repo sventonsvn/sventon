@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -32,8 +33,8 @@ public class GoToControllerTest extends TestCase {
     final GoToController ctrl = new GoToController();
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
+    ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);
-
     ctrl.setRepositoryService(mockService);
 
     // Test NodeKind.FILE
@@ -44,9 +45,9 @@ public class GoToControllerTest extends TestCase {
     Map model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(3, model.size());
+    assertEquals(1, model.size());
     RedirectView view = (RedirectView) modelAndView.getView();
-    assertEquals("showfile.svn", view.getUrl());
+    assertEquals("/repos/test/view/file.txt", view.getUrl());
 
     reset(mockService);
     command.setPath("/dir");
@@ -59,9 +60,9 @@ public class GoToControllerTest extends TestCase {
     model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(3, model.size());
+    assertEquals(1, model.size());
     view = (RedirectView) modelAndView.getView();
-    assertEquals("repobrowser.svn", view.getUrl());
+    assertEquals("/repos/test/browse/dir", view.getUrl());
 
     reset(mockService);
 
