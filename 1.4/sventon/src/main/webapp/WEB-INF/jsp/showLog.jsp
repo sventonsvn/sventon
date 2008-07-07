@@ -26,7 +26,7 @@
   <sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/>
   <sventon:functionLinks pageName="showLog"/>
 
-  <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">
+  <form action="diff.svn" method="get" name="logForm" onsubmit="return doDiff(logForm);">
 
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="path" value="${command.path}">

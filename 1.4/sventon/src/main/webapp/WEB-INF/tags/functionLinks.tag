@@ -57,7 +57,7 @@
   <c:param name="forceDisplay" value="true" />
 </c:url>
 
-<form name="searchForm" action="#" method="post" onsubmit="return doSearch(searchForm);">
+<form name="searchForm" action="#" method="get" onsubmit="return doSearch(searchForm);">
 <table class="sventonFunctionLinksTable">
   <tr><td style="white-space: nowrap;">
 
