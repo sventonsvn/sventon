@@ -30,6 +30,7 @@ function doAction(formName) {
   } else if (selectedValue == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(formName) == 2) {
+      formName.method = 'get';
       formName.action = 'diff.svn';
       return true;
     } else {
