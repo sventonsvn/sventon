@@ -13,6 +13,7 @@ package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.appl.Application;
 import de.berlios.sventon.appl.RepositoryName;
+import de.berlios.sventon.util.EncodingUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -49,14 +50,14 @@ public final class StartController extends AbstractController {
       throws Exception {
 
     final ModelAndView modelAndView;
-    final String contextPath = getServletContext().getContextPath();
     if (!application.isConfigured()) {
       modelAndView = new ModelAndView(new RedirectView("/repos/config", true));
     } else if (application.getRepositoryCount() > 1) {
       modelAndView = new ModelAndView(new RedirectView("/repos/list", true));
     } else if (application.getRepositoryCount() == 1) {
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
-      modelAndView = new ModelAndView(new RedirectView("/repos/" + repositoryName + "/browse/", true));
+      final String redirectUrl = EncodingUtils.encodeUrl("/repos/" + repositoryName + "/browse/");
+      modelAndView = new ModelAndView(new RedirectView(redirectUrl, true));
     } else {
       throw new IllegalStateException("No instance has been configured!");
     }

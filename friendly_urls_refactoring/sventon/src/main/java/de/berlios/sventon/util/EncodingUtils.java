@@ -49,6 +49,17 @@ public final class EncodingUtils {
   }
 
   /**
+   * Encodes given url string using default encoding (UTF-8).
+   * Preserves forward slashes.
+   *
+   * @param url URL string to encode.
+   * @return Encoded string with preserved forward slashes.
+   */
+  public static String encodeUrl(final String url) {
+    return encode(url).replaceAll("%2F", "/");
+  }
+
+  /**
    * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
    * File name will be returned as-is if unable to parse <code>USER-AGENT</code>.
    *

@@ -11,6 +11,7 @@
  */
 package de.berlios.sventon.web.ctrl;
 
+import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
@@ -68,6 +69,7 @@ public final class GoToController extends AbstractSVNTemplateController implemen
     final Map<String, String> model = new HashMap<String, String>();
     model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : String.valueOf(svnCommand.getRevisionNumber()));
 
+    redirectUrl = EncodingUtils.encodeUrl(redirectUrl);
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl, true), model);
   }
