@@ -4,13 +4,16 @@ import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class GetThumbnailControllerTest extends TestCase {
 
   public void testPrepareResponse() throws Exception {
+    final HttpServletRequest request = new MockHttpServletRequest();
     final HttpServletResponse response = new MockHttpServletResponse();
     final GetThumbnailController ctrl = new GetThumbnailController();
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
@@ -20,7 +23,7 @@ public class GetThumbnailControllerTest extends TestCase {
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/test/target.jpg");
 
-    ctrl.prepareResponse(response, command);
+    ctrl.prepareResponse(request, response, command);
 
     final MockHttpServletResponse mockRsp = (MockHttpServletResponse) response;
     assertTrue(((String) mockRsp.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).contains("target.jpg"));
