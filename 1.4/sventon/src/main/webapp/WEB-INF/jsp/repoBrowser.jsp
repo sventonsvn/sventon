@@ -41,8 +41,10 @@
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
+      <c:set var="backLinkVisible" value="false"/>
 
       <c:if test="${!empty command.pathNoLeaf}">
+        <c:set var="backLinkVisible" value="true"/>
         <c:url value="repobrowser.svn" var="backUrl">
           <c:param name="path" value="${command.pathNoLeaf}"/>
           <c:param name="revision" value="${command.revision}"/>
@@ -134,7 +136,7 @@
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td colspan="2" class="sventonCol1" align="right"><b>Total:</b></td>
-        <td><b>${rowCount} entries</b></td>
+        <td><b>${backLinkVisible ? rowCount - 1 : rowCount} entries</b></td>
         <td/>
         <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
         <td/>
