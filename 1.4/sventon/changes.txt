@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1314] Fixed: Bug #14151 - Thumbnails are not shown when cache is disabled.
 [1308] Fixed: Bug #14129 - Multi-byte characters not correctly rendered in source files.
 
 [1291] Release 1.4 RC5 (2008-05-25)
