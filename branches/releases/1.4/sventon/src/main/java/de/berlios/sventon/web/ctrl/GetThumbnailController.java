@@ -14,8 +14,9 @@ package de.berlios.sventon.web.ctrl;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCache;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheKey;
 import de.berlios.sventon.repository.cache.objectcache.ObjectCacheManager;
+import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.ImageScaler;
-import de.berlios.sventon.util.WebUtils;
+import static de.berlios.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
 import org.springframework.validation.BindException;
@@ -28,11 +29,9 @@ import javax.activation.FileTypeMap;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Controller used when downloading single image files as thumbnails.
@@ -78,9 +77,8 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
       return null;
     }
 
-    prepareResponse(response, svnCommand);
+    prepareResponse(request, response, svnCommand);
 
-    final URL fullSizeImageUrl = createFullSizeImageURL(request);
     final boolean cacheUsed = getInstanceConfiguration(svnCommand.getName()).isCacheUsed();
 
     ObjectCache objectCache = null;
@@ -99,7 +97,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
       }
     }
 
-    final byte[] thumbnailData = createThumbnail(fullSizeImageUrl);
+    final byte[] thumbnailData = createThumbnail(repository, svnCommand, revision);
 
     if (cacheUsed) {
       // Putting created thumbnail image into the cache.
@@ -116,45 +114,37 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
   /**
    * Creates a thumbnail version of a full size image.
    *
-   * @param fullSizeImageUrl URL to the full size version of the image.
-   * @return array  of image bytes
+   * @param repository Repository
+   * @param svnCommand Command
+   * @param revision   Revision
+   * @return array of image bytes
    */
-  private byte[] createThumbnail(final URL fullSizeImageUrl) {
-    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+  private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand svnCommand, final SVNRevision revision) {
+    logger.debug("Getting image file: " + svnCommand.getPath());
+    final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
+    final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
     try {
-      logger.debug("Getting full size image from url: " + fullSizeImageUrl);
-      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(fullSizeImageUrl));
-      ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, baos);
-    } catch (final IOException ioex) {
-      logger.warn("Unable to get thumbnail", ioex);
+      getRepositoryService().getFile(repository, svnCommand.getPath(), revision.getNumber(), fullSizeImageData);
+      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(new ByteArrayInputStream(
+          fullSizeImageData.toByteArray())));
+      ImageIO.write(imageScaler.getThumbnail(maxThumbnailSize), imageFormatName, thumbnailImageData);
+    } catch (final Exception ex) {
+      logger.warn("Unable to create thumbnail", ex);
     }
-    return baos.toByteArray();
+    return thumbnailImageData.toByteArray();
   }
 
   /**
    * Prepares the response by setting headers and content type.
    *
+   * @param request    Request.
    * @param response   Response.
    * @param svnCommand Command.
    */
-  protected void prepareResponse(final HttpServletResponse response, final SVNBaseCommand svnCommand) {
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + svnCommand.getTarget() + "\"");
+  protected void prepareResponse(final HttpServletRequest request, final HttpServletResponse response,
+                                 final SVNBaseCommand svnCommand) {
+    response.setHeader(CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
     response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
-  }
-
-  /**
-   * Creates a URL string for accessing the full size image.
-   *
-   * @param request Request.
-   * @return URL.
-   * @throws MalformedURLException if unable to construct URL.
-   */
-  private URL createFullSizeImageURL(final HttpServletRequest request) throws MalformedURLException {
-    final StringBuilder urlString = new StringBuilder(
-        request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
-    urlString.append("?");
-    urlString.append(request.getQueryString());
-    return new URL(urlString.toString());
   }
 
   /**
