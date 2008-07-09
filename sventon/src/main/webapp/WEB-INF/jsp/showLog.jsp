@@ -26,12 +26,10 @@
   <sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/>
   <sventon:functionLinks pageName="showLog"/>
 
-  <form action="diff.svn" method="post" name="logForm" onsubmit="return doDiff(logForm);">
+  <form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="post" name="logForm" onsubmit="return doDiff(this);">
 
     <!-- Needed by ASVNTC -->
-    <input type="hidden" name="path" value="${command.path}">
     <input type="hidden" name="revision" value="${command.revision}">
-    <input type="hidden" name="name" value="${command.name}">
 
     <c:set var="command" value="${command}"/>
     <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
@@ -62,18 +60,15 @@
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
             <c:when test="${isFile}">
-              <c:url value="showfile.svn" var="showUrl">
-                <c:param name="path" value="${entry.pathAtRevision}" />
+              <c:url value="/repos/${command.name}/view${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
-                <c:param name="name" value="${command.name}" />
               </c:url>
               <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.revision}" onClick="verifyCheckBox(this)"></td>
-              <td><a href="<sventon-ui:formatUrl url='${showUrl}'/>">${entry.revision}</a></td>
+              <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
-              <c:url value="revinfo.svn" var="showRevInfoUrl">
+              <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
                 <c:param name="revision" value="${entry.revision}" />
-                <c:param name="name" value="${command.name}" />
               </c:url>
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
@@ -94,19 +89,17 @@
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
-      <c:url value="showlog.svn" var="showNextLogUrl">
+      <c:url value="/repos/${command.name}/showlog${command.path}" var="showNextLogUrl">
         <c:param name="nextPath" value="${nextPath}" />
         <c:param name="nextRevision" value="${nextRev}" />
-        <c:param name="path" value="${command.path}"/>
         <c:param name="revision" value="${command.revision}"/>
-        <c:param name="name" value="${command.name}" />
       </c:url>
 
       <c:choose>
         <c:when test="${morePages}">
           <tr>
             <td colspan="5" align="center">
-              <a href="<sventon-ui:formatUrl url='${showNextLogUrl}'/>">Next ${pageSize}</a>&nbsp;
+              <a href="${showNextLogUrl}">Next ${pageSize}</a>&nbsp;
             </td>
           </tr>
         </c:when>

@@ -20,7 +20,6 @@ import de.berlios.sventon.repository.RepositoryEntrySorter;
 import de.berlios.sventon.repository.RepositoryFactory;
 import de.berlios.sventon.repository.cache.CacheGateway;
 import de.berlios.sventon.service.RepositoryService;
-import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserContext;
 import de.berlios.sventon.web.model.UserRepositoryContext;
@@ -209,14 +208,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
     // If application config is not ok - redirect to config.jsp
     if (!application.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to 'config.svn'");
-      return new ModelAndView(new RedirectView("config.svn"));
+      logger.debug("sventon not configured, redirecting to '/repos/config'");
+      return new ModelAndView(new RedirectView("/repos/config", true));
     }
 
     final Set<RepositoryName> repositoryNames = application.getRepositoryNames();
     if (svnCommand.getName() == null || !repositoryNames.contains(svnCommand.getName())) {
-      logger.debug("RepositoryName [" + svnCommand.getName() + "] does not exist, redirecting to 'listrepos.svn'");
-      return new ModelAndView(new RedirectView("listrepos.svn"));
+      logger.debug("RepositoryName [" + svnCommand.getName() + "] does not exist, redirecting to '/repos/list'");
+      return new ModelAndView(new RedirectView("/repos/list", true));
     }
 
     if (errors.hasErrors()) {
@@ -417,7 +416,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private ModelAndView forwardToAuthenticationFailureView(final HttpServletRequest request) {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("parameters", request.getParameterMap());
-    model.put("action", WebUtils.extractServletNameFromRequest(request));
+    model.put("action", request.getRequestURL());
     logger.debug("Forwarding to 'authenticationfailure' view");
     return new ModelAndView("authenticationFailure", model);
   }

@@ -72,6 +72,12 @@
     <property name="application" ref="application"/>
   </bean>
 
+  <bean id="rssFeedGenerator" class="de.berlios.sventon.rss.RssFeedGeneratorImpl">
+    <property name="feedType" value="rss_2.0"/>
+    <property name="logMessageLength" value="40"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+  </bean>
+
   <bean id="abstractController" class="de.berlios.sventon.web.ctrl.AbstractSVNTemplateController" abstract="true">
     <property name="commandClass" value="de.berlios.sventon.web.command.SVNBaseCommand"/>
     <property name="cacheSeconds" value="0"/>
@@ -85,8 +91,8 @@
     <property name="nameEditor" ref="nameEditor"/>
     <property name="revisionEditor" ref="revisionEditor"/>
   </bean>
-
-  <bean name="/rss.xml" class="de.berlios.sventon.web.ctrl.RSSController">
+  
+  <bean id="rssController" class="de.berlios.sventon.web.ctrl.RSSController">
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
@@ -94,36 +100,30 @@
     <property name="repositoryFactory" ref="repositoryFactory"/>
   </bean>
 
-  <bean id="rssFeedGenerator" class="de.berlios.sventon.rss.RssFeedGeneratorImpl">
-    <property name="feedType" value="rss_2.0"/>
-    <property name="logMessageLength" value="40"/>
-    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
-  </bean>
-
-  <bean name="/listfiles.ajax" class="de.berlios.sventon.web.ctrl.ajax.ListFilesController" parent="abstractController"/>
-  <bean name="/latestrevisions.ajax" class="de.berlios.sventon.web.ctrl.ajax.GetLatestRevisionsController" parent="abstractController"/>
-  <bean name="/getmessage.ajax" class="de.berlios.sventon.web.ctrl.ajax.GetLogMessageController" parent="abstractController"/>
-  <bean name="/entrytray.ajax" class="de.berlios.sventon.web.ctrl.ajax.RepositoryEntryTrayController" parent="abstractController"/>
-  <bean name="/filehistory.ajax" class="de.berlios.sventon.web.ctrl.ajax.GetFileHistoryController" parent="abstractController"/>
-  <bean name="/static.ajax" class="de.berlios.sventon.web.ctrl.GetStaticContentController">
+  <bean id="listFilesController" class="de.berlios.sventon.web.ctrl.ajax.ListFilesController" parent="abstractController"/>
+  <bean id="latestRevisionsController" class="de.berlios.sventon.web.ctrl.ajax.GetLatestRevisionsController" parent="abstractController"/>
+  <bean id="logMessageController" class="de.berlios.sventon.web.ctrl.ajax.GetLogMessageController" parent="abstractController"/>
+  <bean id="entryTrayController" class="de.berlios.sventon.web.ctrl.ajax.RepositoryEntryTrayController" parent="abstractController"/>
+  <bean id="fileHistoryController" class="de.berlios.sventon.web.ctrl.ajax.GetFileHistoryController" parent="abstractController"/>
+  <bean id="getStaticContentController" class="de.berlios.sventon.web.ctrl.GetStaticContentController">
     <property name="path" value="/WEB-INF/static"/>
   </bean>
 
-  <bean name="/repobrowser.svn" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
-  <bean name="/showlocks.svn" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
-  <bean name="/searchlogs.svn" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
-  <bean name="/flatten.svn" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
-  <bean name="/revinfo.svn" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
-  <bean name="/goto.svn" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
-  <bean name="/searchentries.svn" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
-  <bean name="/diff.svn" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
-  <bean name="/diffprev.svn" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
+  <bean id="repoBrowserController" class="de.berlios.sventon.web.ctrl.RepoBrowserController" parent="abstractController"/>
+  <bean id="revInfoController" class="de.berlios.sventon.web.ctrl.ShowRevisionInfoController" parent="abstractController"/>
+  <bean id="showLocksController" class="de.berlios.sventon.web.ctrl.ShowLocksController" parent="abstractController"/>
+  <bean id="searchLogsController" class="de.berlios.sventon.web.ctrl.SearchLogsController" parent="abstractController"/>
+  <bean id="flattenController" class="de.berlios.sventon.web.ctrl.FlattenController" parent="abstractController"/>
+  <bean id="goToController" class="de.berlios.sventon.web.ctrl.GoToController" parent="abstractController"/>
+  <bean id="searchEntriesController" class="de.berlios.sventon.web.ctrl.SearchEntriesController" parent="abstractController"/>
+  <bean id="diffController" class="de.berlios.sventon.web.ctrl.DiffController" parent="abstractController"/>
+  <bean id="diffPreviousController" class="de.berlios.sventon.web.ctrl.DiffPreviousController" parent="abstractController"/>
 
-  <bean name="/showlog.svn" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
+  <bean id="showLogsController" class="de.berlios.sventon.web.ctrl.ShowLogController" parent="abstractController">
     <property name="pageSize" value="20"/>
   </bean>
 
-  <bean name="/showfile.svn" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
+  <bean id="showFileController" class="de.berlios.sventon.web.ctrl.ShowFileController" parent="abstractController">
     <property name="textFileExtensionPattern" value=""/>
     <property name="binaryFileExtensionPattern" value="(bin|exe|pdf)"/>
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
@@ -131,39 +131,39 @@
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
-  <bean name="/showthumbs.svn" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController" parent="abstractController">
+  <bean id="getController" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
-  <bean name="/get.svn" class="de.berlios.sventon.web.ctrl.GetController" parent="abstractController">
+  <bean id="showThumbnailsController" class="de.berlios.sventon.web.ctrl.ShowThumbnailsController" parent="abstractController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
-  <bean name="/getthumb.svn" class="de.berlios.sventon.web.ctrl.GetThumbnailController" parent="abstractController">
+  <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController" parent="abstractController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>
     <property name="maxThumbnailSize" value="200"/>
   </bean>
 
-  <bean name="/export.svn" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
+  <bean id="exportController" class="de.berlios.sventon.web.ctrl.ExportController" parent="abstractController">
     <property name="exportDir" ref="sventonTempExportDir"/>
     <property name="archiveFileCharset" value="cp850"/>
   </bean>
 
-  <bean name="/blame.svn" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">
+  <bean id="blameController" class="de.berlios.sventon.web.ctrl.BlameController" parent="abstractController">
     <property name="colorer" ref="colorer"/>
   </bean>
 
-  <bean name="/listrepos.svn" class="de.berlios.sventon.web.ctrl.ListRepositoriesController">
+  <bean id="listRepositoriesController" class="de.berlios.sventon.web.ctrl.ListRepositoriesController">
     <property name="application" ref="application"/>
   </bean>
 
-  <bean name="/start.svn" class="de.berlios.sventon.web.ctrl.StartController">
+  <bean id="startController" class="de.berlios.sventon.web.ctrl.StartController">
     <property name="application" ref="application"/>
   </bean>
 
-  <bean name="/config.svn" class="de.berlios.sventon.web.ctrl.ConfigurationController">
+  <bean id="configurationController" class="de.berlios.sventon.web.ctrl.ConfigurationController">
     <property name="commandClass" value="de.berlios.sventon.web.command.ConfigCommand"/>
     <property name="sessionForm" value="false"/>
     <property name="bindOnNewForm" value="true"/>
@@ -171,9 +171,56 @@
     <property name="validator" ref="configCommandValidator"/>
   </bean>
 
-  <bean name="/submitconfig.svn" class="de.berlios.sventon.web.ctrl.ConfigurationSubmissionController">
+  <bean id="configurationSubmissionController" class="de.berlios.sventon.web.ctrl.ConfigurationSubmissionController">
     <property name="application" ref="application"/>
     <property name="scheduler" ref="scheduler"/>
+  </bean>
+
+  <bean id="urlMapping" class="carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping">
+    <property name="alwaysUseFullPath" value="true"/>
+    <property name="mappings">
+      <props>
+        <prop key="/repos/">listRepositoriesController</prop>
+        <prop key="/repos/list">listRepositoriesController</prop>
+        <prop key="/repos/start">startController</prop>
+        <prop key="/repos/config">configurationController</prop>
+        <prop key="/repos/submitconfig">configurationSubmissionController</prop>
+
+        <prop key="/repos/(*:name)/revinfo">revInfoController</prop>
+        <prop key="/repos/(*:name)/browse/(**/*:path)*">repoBrowserController</prop>
+
+        <prop key="/repos/(*:name)/view/(**/*:path)*">showFileController</prop>
+        <prop key="/repos/(*:name)/blame/(**/*:path)*">blameController</prop>
+        <prop key="/repos/(*:name)/showlog/(**/*:path)*">showLogsController</prop>
+
+        <prop key="/repos/(*:name)/get/(**/*:path)*">getController</prop>
+        <prop key="/repos/(*:name)/showlocks/(**/*:path)*">showLocksController</prop>
+        <prop key="/repos/(*:name)/getthumbnail/(**/*:path)*">getThumbnailController</prop>
+
+        <prop key="/repos/(*:name)/showthumbnails/(**/*:path)*">showThumbnailsController</prop>
+        <prop key="/repos/(*:name)/export/(**/*:path)*">exportController</prop>
+        <prop key="/repos/(*:name)/diff/(**/*:path)*">diffController</prop>
+
+        <prop key="/repos/(*:name)/searchentries/(**/*:path)*">searchEntriesController</prop>
+        <prop key="/repos/(*:name)/searchlogs/(**/*:path)*">searchLogsController</prop>
+        <prop key="/repos/(*:name)/flatten/(**/*:path)*">flattenController</prop>
+
+        <prop key="/repos/(*:name)/diffprev/(**/*:path)*">diffPreviousController</prop>
+
+        <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
+
+        <!-- url mappings for xml producers -->
+        <prop key="/xml/(*:name)/rss/(**/*:path)*">rssController</prop>
+
+        <!-- url mappings for ajax controllers -->
+        <prop key="/ajax/static">getStaticContentController</prop>
+        <prop key="/ajax/(*:name)/getmessage">logMessageController</prop>
+        <prop key="/ajax/(*:name)/latestrevisions">latestRevisionsController</prop>
+        <prop key="/ajax/(*:name)/listfiles/(**/*:path)*">listFilesController</prop>
+        <prop key="/ajax/(*:name)/entrytray/(**/*:path)*">entryTrayController</prop>
+        <prop key="/ajax/(*:name)/filehistory/(**/*:path)*">fileHistoryController</prop>
+      </props>
+    </property>
   </bean>
 
   <bean id="availableCharsets" class="de.berlios.sventon.model.AvailableCharsets">

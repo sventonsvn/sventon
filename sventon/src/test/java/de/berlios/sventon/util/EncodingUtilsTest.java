@@ -10,13 +10,8 @@ public class EncodingUtilsTest extends TestCase {
   }
 
   public void testEncodeUrl() throws Exception {
-    assertEquals("http://localhost/svn/repobrowser.svn?path=/trunk&revision=HEAD&name=test",
-        EncodingUtils.encodeUrl("http://localhost/svn/repobrowser.svn?path=%2ftrunk&revision=HEAD&name=test"));
-
-    assertEquals("http://localhost/svn/showfile.svn?path=/trunk/public/%c3%a5%c3%a4%c3%b6.txt&revision=HEAD&name=test",
-        EncodingUtils.encodeUrl("http://localhost/svn/showfile.svn?path=%2ftrunk%2fpublic%2f%c3%a5%c3%a4%c3%b6.txt&revision=HEAD&name=test"));
-
-    assertEquals(";", EncodingUtils.encodeUrl("%3b"));
+    assertEquals("/%C3%BC.txt", EncodingUtils.encodeUrl("/ь.txt"));
+    assertEquals("/%C3%A5%C3%A4%C3%B6.txt", EncodingUtils.encodeUrl("/едц.txt"));
   }
 
 }

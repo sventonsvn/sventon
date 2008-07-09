@@ -26,9 +26,7 @@
 
   <ol>
     <c:forEach items="${repositoryNames}" var="repositoryName">
-      <c:url value="repobrowser.svn" var="repositoryUrl">
-        <c:param name="name" value="${repositoryName}" />
-      </c:url>
+      <c:url value="/repos/${repositoryName}/browse/" var="repositoryUrl" />
       <li>
         <a href="${repositoryUrl}">${repositoryName}</a>
       </li>

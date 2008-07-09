@@ -49,21 +49,14 @@ public final class EncodingUtils {
   }
 
   /**
-   * Encodes given URL string using default encoding (UTF-8).
-   * The characters slash and colon will be untouched as they are URL safe.
+   * Encodes given url string using default encoding (UTF-8).
+   * Preserves forward slashes.
    *
-   * @param str String to encode.
-   * @return Encoded string.
+   * @param url URL string to encode.
+   * @return Encoded string with preserved forward slashes.
    */
-  public static String encodeUrl(final String str) {
-    String result = str;
-    // un-encode colons
-    result = result.replaceAll("(?i)%3A", ":");
-    // un-encode semi colons
-    result = result.replaceAll("(?i)%3B", ";");
-    // un-encode forward slashes
-    result = result.replaceAll("(?i)%2F", "/");
-    return result;
+  public static String encodeUrl(final String url) {
+    return encode(url).replaceAll("%2F", "/");
   }
 
   /**

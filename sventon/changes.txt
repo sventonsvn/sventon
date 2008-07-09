@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1321] Added: Feature #4182 - Friendly URLs.
 [1252] Added: Upgraded to Spring 2.5.2.
 [1246] Added: Feature #3499 - Diff tags.
 

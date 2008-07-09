@@ -62,22 +62,17 @@
                   }
                 %>
                 <tr>
-                  <c:url value="goto.svn" var="goToUrl">
-                    <c:param name="path" value="${diffCommand.toPath}/${row.path}"/>
-                    <c:param name="name" value="${command.name}"/>
-                  </c:url>
+                  <c:url value="/repos/${command.name}/goto${diffCommand.toPath}/${row.path}" var="goToUrl"/>
 
-                  <c:url value="diff.svn" var="diffUrl">
-                    <c:param name="path" value="${diffCommand.toPath}/${row.path}"/>
+                  <c:url value="/repos/${command.name}/diff${diffCommand.toPath}/${row.path}" var="diffUrl">
                     <c:param name="revision" value="${diffCommand.toRevision}"/>
-                    <c:param name="name" value="${command.name}"/>
                   </c:url>
 
                   <td valign="top"><i><%= actionType == null ? "" : actionType %></i></td>
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
-                  <td><a href="${goToUrl}&revision=${diffCommand.toRevision}" title="Show file">${row.path}</a></td>
+                  <td><a href="${goToUrl}?revision=${diffCommand.toRevision}" title="Show file">${row.path}</a></td>
                   <% } else if (LogEntryActionType.DELETED == actionType) { %>
-                  <td><a href="${goToUrl}&revision=${diffCommand.fromRevision}" title="Show file">${row.path}</a></td>
+                  <td><a href="${goToUrl}?revision=${diffCommand.fromRevision}" title="Show file">${row.path}</a></td>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
                   <td><a href="${diffUrl}&entry=${diffCommand.fromPath}/${row.path};;${diffCommand.fromRevision}&entry=${diffCommand.toPath}/${row.path};;${diffCommand.toRevision}" title="Show Diff">${row.path}</a></td>
                   <% } else { %>

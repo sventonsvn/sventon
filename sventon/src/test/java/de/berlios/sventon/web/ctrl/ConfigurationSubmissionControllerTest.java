@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
@@ -45,9 +46,9 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
+    final ConfigurationSubmissionController ctrl = new ConfigurationSubmissionController();
 
-    controller.setScheduler(new StdScheduler(null, null) {
+    ctrl.setScheduler(new StdScheduler(null, null) {
       public void triggerJob(final String string, final String string1) {
       }
     });
@@ -71,7 +72,8 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     application.addRepository(repositoryConfiguration1);
     application.addRepository(repositoryConfiguration2);
     application.setConfigured(false);
-    controller.setApplication(application);
+    ctrl.setApplication(application);
+    ctrl.setServletContext(new MockServletContext());
 
     final File configFile1 = new File(TEMPDIR, "testrepos1");
     final File configFile2 = new File(TEMPDIR, "testrepos2");
@@ -79,7 +81,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     assertFalse(configFile1.exists());
     assertFalse(configFile2.exists());
 
-    final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
+    final ModelAndView modelAndView = ctrl.handleRequestInternal(request, response);
     assertNotNull(modelAndView);
     assertNull(modelAndView.getViewName()); // Will be null as it is a redirect view.
 

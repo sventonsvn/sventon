@@ -13,4 +13,4 @@
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 
-<c:redirect url="/start.svn"/>
+<c:redirect url="/repos/start"/>

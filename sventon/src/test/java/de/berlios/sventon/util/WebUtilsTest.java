@@ -57,9 +57,4 @@ public class WebUtilsTest extends TestCase {
     assertEquals("http://www.test.com:123/", WebUtils.extractBaseURLFromRequest(request));
   }
 
-  public void testExtractServletNameFromRequest() throws Exception {
-    MockHttpServletRequest request = new MockHttpServletRequest("GET", "log.svn");
-    request.setServletPath("/svn/log.svn");
-    assertEquals("log.svn", WebUtils.extractServletNameFromRequest(request));
-  }
 }
