@@ -17,12 +17,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
-<form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this);">
-  <!-- Needed by ASVNTC -->
-  <input type="hidden" name="path" value="${command.path}">
+<form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
   <!-- The last dragged entry's peg revision will rule -->
   <input type="hidden" name="revision" value="${pegrev}">
-  <input type="hidden" name="name" value="${command.name}">
 
   <table class="entryTrayTable">
     <tr>
@@ -41,24 +38,17 @@
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="de.berlios.sventon.repository.RepositoryEntry"/>
       
-      <c:url value="repobrowser.svn" var="entryTrayViewUrl">
-        <c:param name="path" value="${trayEntry.fullEntryName}" />
+      <c:url value="/repos/${command.name}/browse${trayEntry.fullEntryName}" var="entryTrayViewUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
-        <c:param name="name" value="${command.name}" />
       </c:url>
-      <c:url value="showfile.svn" var="entryTrayShowFileUrl">
-        <c:param name="path" value="${trayEntry.fullEntryName}" />
+      <c:url value="/repos/${command.name}/view${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
-        <c:param name="name" value="${command.name}" />
       </c:url>
-      <c:url value="revinfo.svn" var="entryTrayShowRevInfoUrl">
+      <c:url value="/repos/${command.name}/revinfo" var="entryTrayShowRevInfoUrl">
         <c:param name="revision" value="${trayEntry.revision}" />
-        <c:param name="name" value="${command.name}" />
       </c:url>
-      <c:url value="entrytray.ajax" var="entryTrayRemoveUrl">
-        <c:param name="path" value="${trayEntry.fullEntryName}" />
+      <c:url value="/ajax/${command.name}/entrytray${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
-        <c:param name="name" value="${command.name}" />
         <c:param name="action" value="remove" />
       </c:url>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
@@ -69,20 +59,20 @@
             <img src="images/icon_folder.png" alt="dir">
           </td>
           <td>
-            <a href="<sventon-ui:formatUrl url='${entryTrayViewUrl}'/>">${trayEntry.name}</a>&nbsp;
+            <a href="${entryTrayViewUrl}">${trayEntry.name}</a>&nbsp;
         </c:when>
         <c:otherwise>
           <td>
             <sventon-ui:fileTypeIcon filename="${trayEntry.name}"/>
           </td>
           <td>
-            <a href="<sventon-ui:formatUrl url='${entryTrayShowFileUrl}'/>">${trayEntry.name}</a>&nbsp;
+            <a href="${entryTrayShowFileUrl}">${trayEntry.name}</a>&nbsp;
         </c:otherwise>
       </c:choose>
             (<a href="${entryTrayShowRevInfoUrl}" onmouseover="getLogMessage(${trayEntry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${trayEntry.date}" dateStyle="short" timeStyle="short"/>');">${trayEntry.revision}</a>)
           </td>
       <td>
-        <a href="#" onclick="removeEntryFromTray('<sventon-ui:formatUrl url='${entryTrayRemoveUrl}'/>'); return false;">
+        <a href="#" onclick="removeEntryFromTray('${entryTrayRemoveUrl}'); return false;">
           <img align="middle" src="images/delete.png" alt="<spring:message code="delete.tooltip"/>" title="<spring:message code="delete.tooltip"/>">
         </a>
       </td>

@@ -19,9 +19,9 @@
 </script>
 <table class="sventonTopTable">
   <tr>
-    <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount);">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
+    <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount); return false;">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
     <td align="right">
-    <form name="gotoForm" method="post" action="goto.svn">
+    <form name="gotoForm" method="post" action="#" onsubmit="return goto(this);">
         <table class="sventonRepositoryFunctionsTable">
           <tr>
             <td>&nbsp;</td>
@@ -42,7 +42,7 @@
               <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('revision_help');">
             </td>
             <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${status.value}"></spring:bind></td>
-            <td><input type="hidden" name="name" value="${command.name}"><input type="submit" class="btn" value="go!"></td>
+            <td><input type="hidden" id="nameInput" name="name" value="${command.name}"><input type="submit" class="btn" value="go!"></td>
           </tr>
         </table>
       </form>

@@ -39,10 +39,8 @@
     </tr>
     <c:forEach items="${entries}" var="zipEntry">
 
-      <c:url value="showfile.svn" var="showFileUrl">
-        <c:param name="path" value="${command.path}" />
+      <c:url value="/repos/${command.name}/view${command.path}" var="showFileUrl">
         <c:param name="revision" value="${command.revision}" />
-        <c:param name="name" value="${command.name}" />
         <c:param name="archivedEntry" value="${zipEntry.name}" />
       </c:url>
 
@@ -57,7 +55,7 @@
           </c:when>
           <c:otherwise>
             <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
-            <td><a href="<sventon-ui:formatUrl url='${showFileUrl}'/>">${zipEntry.name}</a></td>
+            <td><a href="${showFileUrl}">${zipEntry.name}</a></td>
           </c:otherwise>
         </c:choose>
         <td class="sventonColRightAlign">${zipEntry.size}</td>

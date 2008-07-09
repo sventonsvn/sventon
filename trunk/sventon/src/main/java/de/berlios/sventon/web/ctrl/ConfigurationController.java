@@ -63,8 +63,8 @@ public final class ConfigurationController extends AbstractFormController {
     logger.info("sventon configured: " + application.isConfigured());
 
     if (application.isConfigured()) {
-      logger.debug("Already configured - returning to browser view");
-      return new ModelAndView(new RedirectView("repobrowser.svn"));
+      logger.debug("Already configured - returning to list repos view");
+      return new ModelAndView(new RedirectView("/repos/list", true));
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -95,8 +95,8 @@ public final class ConfigurationController extends AbstractFormController {
     logger.info("sventon configuration OK: " + application.isConfigured());
 
     if (application.isConfigured()) {
-      logger.debug("Already configured - returning to browser view");
-      return new ModelAndView(new RedirectView("repobrowser.svn"));
+      logger.debug("Already configured - returning to list repos view");
+      return new ModelAndView(new RedirectView("/repos/list", true));
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();

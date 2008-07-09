@@ -25,22 +25,18 @@
   <sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/>
   <sventon:functionLinks pageName="showImageFile"/>
 
-  <c:url value="get.svn" var="showUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
+  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="showUrl">
     <c:param name="revision" value="${command.revision}" />
-    <c:param name="name" value="${command.name}" />
     <c:param name="disp" value="inline" />
   </c:url>
 
-  <c:url value="getthumb.svn" var="getThumbUrl">
-    <c:param name="path" value="${command.path}${entry.name}" />
+  <c:url value="/repos/${command.name}/getthumbnail${command.path}${entry.name}" var="getThumbUrl">
     <c:param name="revision" value="${command.revision}" />
-    <c:param name="name" value="${command.name}" />
   </c:url>
 
   <p>
-    <a href="<sventon-ui:formatUrl url='${showUrl}'/>">
-      <img src="<sventon-ui:formatUrl url='${getThumbUrl}'/>" alt="Thumbnail" style="border: 1px dashed black;">
+    <a href="${showUrl}">
+      <img src="${getThumbUrl}" alt="Thumbnail" style="border: 1px dashed black;">
     </a>
   </p>
 

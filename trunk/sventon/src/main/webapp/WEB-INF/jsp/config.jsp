@@ -56,7 +56,7 @@
 </div>
 
 <div id="config_main">
-<form id="config_form" name="configForm" method="post" action="config.svn" onsubmit="return validateUrl(this);">
+<form id="config_form" name="configForm" method="post" action="${pageContext.request.contextPath}/repos/config" onsubmit="return validateUrl(this);">
 <div class="config_group">
   <div id="repository_location">
     <img alt="Step 1" src="images/config_step1.png"/>
@@ -196,7 +196,7 @@
 <script language="JavaScript" type="text/javascript">
   document.configForm.name.focus();
 </script>
-<script language="JavaScript" type="text/javascript" src="js/wz_tooltip.js"></script>
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
 
 <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>

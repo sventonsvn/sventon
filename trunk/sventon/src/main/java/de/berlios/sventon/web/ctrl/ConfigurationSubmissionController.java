@@ -92,6 +92,6 @@ public final class ConfigurationSubmissionController extends AbstractController 
     }
 
     logger.info("Configuration done!");
-    return new ModelAndView(new RedirectView("start.svn"));
+    return new ModelAndView(new RedirectView("/repos/start", true));
   }
 }

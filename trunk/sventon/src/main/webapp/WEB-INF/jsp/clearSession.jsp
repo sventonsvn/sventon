@@ -24,7 +24,7 @@
   <p>
 The session has been cleared.
   </p>
-  <a href="repobrowser.svn">sventon</a>
+  <a href="/repos/list">sventon</a>
 
 <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>

@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -18,19 +19,20 @@ public class ListRepositoriesControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
 
-    final ListRepositoriesController controller = new ListRepositoriesController();
+    final ListRepositoriesController ctrl = new ListRepositoriesController();
     final Application application = TestUtils.getApplicationStub();
-    controller.setApplication(application);
+    ctrl.setServletContext(new MockServletContext());
+    ctrl.setApplication(application);
 
-    ModelAndView modelAndView = controller.handleRequestInternal(request, response);
+    ModelAndView modelAndView = ctrl.handleRequestInternal(request, response);
 
     // Not configured
     assertTrue(modelAndView.getView() instanceof RedirectView);
 
     application.setConfigured(true);
 
-    modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    modelAndView = ctrl.handleRequestInternal(request, response);
+    assertEquals("listRepositories", modelAndView.getViewName());
   }
 
   public void testHandleRequestInternalLogout() throws Exception {
@@ -62,7 +64,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     controller.setApplication(application);
 
     ModelAndView modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    assertEquals("listRepositories", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     UserContext uCFromSession = (UserContext) session.getAttribute("userContext");
     UserRepositoryContext uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
@@ -77,7 +79,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setParameter("logout", "true");
     request.setParameter("repositoryName", "repoWRONG");
     modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    assertEquals("listRepositories", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
@@ -91,7 +93,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     //Now try again, this time with no repository name
     request.setParameter("logout", "true");
     modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    assertEquals("listRepositories", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
@@ -106,7 +108,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setParameter("logout", "");
     request.setParameter("repositoryName", "repo1");
     modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    assertEquals("listRepositories", modelAndView.getViewName());
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
@@ -121,7 +123,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setParameter("logout", "true");
     request.setParameter("repositoryName", "repo1");
     modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("listInstances", modelAndView.getViewName());
+    assertEquals("listRepositories", modelAndView.getViewName());
 
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");

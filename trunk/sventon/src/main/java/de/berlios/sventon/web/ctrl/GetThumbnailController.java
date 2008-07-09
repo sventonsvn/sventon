@@ -149,8 +149,8 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * @throws MalformedURLException if unable to construct URL.
    */
   private URL createFullSizeImageURL(final HttpServletRequest request) throws MalformedURLException {
-    final StringBuilder urlString = new StringBuilder(
-        request.getRequestURL().toString().replaceAll("getthumb.svn", "get.svn"));  //TODO: remove ugly hard-coding!
+    final StringBuilder urlString = new StringBuilder();
+    urlString.append(request.getRequestURL().toString().replaceFirst("/getthumbnail/", "/get/"));  //TODO: remove ugly hard-coding!
     urlString.append("?");
     urlString.append(request.getQueryString());
     return new URL(urlString.toString());
