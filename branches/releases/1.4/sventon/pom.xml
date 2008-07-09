@@ -4,16 +4,16 @@
   <groupId>de.berlios.sventon</groupId>
   <artifactId>sventon</artifactId>
   <name>sventon</name>
-  <version>1.4-rc6-SNAPSHOT</version>
+  <version>1.4-rc6</version>
   <packaging>war</packaging>
   <description>sventon is a web client for browsing Subversion repositories</description>
   <url>http://www.sventon.org/</url>
   <inceptionYear>2005</inceptionYear>
 
   <scm>
-    <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</connection>
-    <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</developerConnection>
-    <url>http://svn.sventon.org/</url>
+    <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-1.4-rc6</connection>
+    <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-1.4-rc6</developerConnection>
+    <url>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-1.4-rc6</url>
   </scm>
 
   <developers>
