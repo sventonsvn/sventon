@@ -5,6 +5,11 @@ sventon change history
 [1252] Added: Upgraded to Spring 2.5.2.
 [1246] Added: Feature #3499 - Diff tags.
 
+[1319] Release 1.4 RC6 (2008-07-09)
+[1315] Fixed: Bug #14171 - Thumbnails are not shown when using user based auth.
+[1314] Fixed: Bug #14151 - Thumbnails are not shown when cache is disabled.
+[1308] Fixed: Bug #14129 - Multi-byte characters not correctly rendered in source files.
+
 [1291] Release 1.4 RC5 (2008-05-25)
 [1288] Fixed: Bug #13881 - RSS component not working when using user based auth.
 [1286] Fixed: Bug #13870 - Not possible to link to a specific row.

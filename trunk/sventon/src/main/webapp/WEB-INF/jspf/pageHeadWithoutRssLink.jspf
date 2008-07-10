@@ -15,7 +15,8 @@
 <meta name="Googlebot" content="nofollow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/sventon.css">
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
 <script language="javascript" type="text/javascript">
   var contextPath = "${pageContext.request.contextPath}";
 </script>

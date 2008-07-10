@@ -132,6 +132,13 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision, repositoryService);
+        if (revisionUpdate.isFlushAfterUpdate()) {
+          try {
+            entryCache.flush();
+          } catch (final CacheException ce) {
+            LOGGER.error("Unable to flush cache", ce);
+          }
+        }
       } catch (SVNException svnex) {
         LOGGER.error("Unable to populate cache", svnex);
       }
@@ -179,17 +186,17 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
             LOGGER.error("Unable to update entryCache", svnex);
           }
         }
+        entryCache.setCachedRevision(lastRevision);
+        if (revisionUpdate.isFlushAfterUpdate()) {
+          try {
+            entryCache.flush();
+          } catch (final CacheException ce) {
+            LOGGER.error("Unable to flush cache", ce);
+          }
+        }
+        LOGGER.debug("Update completed");
       }
     }
-    entryCache.setCachedRevision(lastRevision);
-    if (revisionUpdate.isFlushAfterUpdate()) {
-      try {
-        entryCache.flush();
-      } catch (final CacheException ce) {
-        LOGGER.error("Unable to flush cache", ce);
-      }
-    }
-    LOGGER.debug("Update completed");
   }
 
   /**
@@ -243,7 +250,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     // Have to find out if deleted entry was a file or directory
     final long previousRevision = revision - 1;
-    RepositoryEntry deletedEntry = null;
+    RepositoryEntry deletedEntry;
 
     try {
       deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), previousRevision);
