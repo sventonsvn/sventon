@@ -43,7 +43,7 @@
   <c:param name="forceDisplay" value="true" />
 </c:url>
 
-<form name="searchForm" action="#" method="post" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+<form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
 <table class="sventonFunctionLinksTable">
   <tr><td style="white-space: nowrap;">
 

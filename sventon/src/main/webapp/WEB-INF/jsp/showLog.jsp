@@ -26,7 +26,7 @@
   <sventon:currentTargetHeader title="Log Messages" target="${command.target}" hasProperties="false"/>
   <sventon:functionLinks pageName="showLog"/>
 
-  <form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="post" name="logForm" onsubmit="return doDiff(this);">
+  <form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
 
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="revision" value="${command.revision}">

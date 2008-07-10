@@ -30,6 +30,7 @@ function doAction(form, name, path) {
   } else if (selectedValue == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(form) == 2) {
+      formName.method = 'get';
       form.action = contextPath + '/repos/' + name + '/diff' + path;
       return true;
     } else {
