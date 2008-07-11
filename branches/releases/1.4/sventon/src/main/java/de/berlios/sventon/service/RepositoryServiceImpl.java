@@ -22,7 +22,6 @@ import de.berlios.sventon.model.SideBySideDiffRow;
 import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.export.ExportDirectory;
-import de.berlios.sventon.util.ImageScaler;
 import de.berlios.sventon.util.PathUtil;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
@@ -37,9 +36,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNLogClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import javax.imageio.ImageIO;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 /**
