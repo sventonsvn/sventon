@@ -15,7 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ tag import="de.berlios.sventon.util.HTMLCreator" %>
+<%@ tag import="org.sventon.util.HTMLCreator" %>
 
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
@@ -39,7 +39,7 @@
   <jsp:useBean id="latestChangedPaths" type="java.util.Map"/>
 
   <c:set var="repositoryName" value="${command.name}"/>
-  <jsp:useBean id="repositoryName" type="de.berlios.sventon.appl.RepositoryName"/>
+  <jsp:useBean id="repositoryName" type="org.sventon.model.RepositoryName"/>
 
   <tr>
     <td colspan="2">

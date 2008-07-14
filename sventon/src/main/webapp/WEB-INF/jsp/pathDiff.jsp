@@ -12,7 +12,7 @@
   */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
-<%@ page import="de.berlios.sventon.model.LogEntryActionType" %>
+<%@ page import="org.sventon.model.LogEntryActionType" %>
 <%@ page import="org.apache.commons.lang.BooleanUtils" %>
 
 <html>

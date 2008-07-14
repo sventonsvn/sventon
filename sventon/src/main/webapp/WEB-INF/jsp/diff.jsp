@@ -49,7 +49,7 @@
             </tr>
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">
-              <jsp:useBean id="row" type="de.berlios.sventon.model.SideBySideDiffRow"/>
+              <jsp:useBean id="row" type="org.sventon.model.SideBySideDiffRow"/>
               <tr <%= row.getRight().getRowNumber() != null ? "id=\"l" + row.getRight().getRowNumber().toString() + "\"" : "" %>>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">
