@@ -24,4 +24,4 @@
 <script language="javascript" src="${pageContext.request.contextPath}/js/sventon.js" type="text/javascript"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/js/prototype.js" type="text/javascript"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/js/scriptaculous.js?load=effects,dragdrop" type="text/javascript"></script>
-<base href="<%=de.berlios.sventon.util.WebUtils.extractBaseURLFromRequest(request)%>">
+<base href="<%=org.sventon.util.WebUtils.extractBaseURLFromRequest(request)%>">

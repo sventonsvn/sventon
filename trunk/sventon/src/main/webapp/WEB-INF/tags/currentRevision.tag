@@ -14,7 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ attribute name="command" required="true" type="de.berlios.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="headRevision" required="true" type="java.lang.Long" %>
 
 Rev:

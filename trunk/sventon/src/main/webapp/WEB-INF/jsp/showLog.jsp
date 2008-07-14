@@ -12,7 +12,7 @@
  */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
-<%@ page import="de.berlios.sventon.util.HTMLCreator" %>
+<%@ page import="org.sventon.util.HTMLCreator" %>
 
 <html>
 <head>
@@ -32,7 +32,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
 
     <c:set var="command" value="${command}"/>
-    <jsp:useBean id="command" type="de.berlios.sventon.web.command.SVNBaseCommand" />
+    <jsp:useBean id="command" type="org.sventon.web.command.SVNBaseCommand" />
 
     <table class="sventonLogEntriesTable">
       <c:set var="rowCount" value="0"/>
@@ -55,7 +55,7 @@
         <c:set var="nextPath" value="${entry.pathAtRevision}"/>
         <c:set var="nextRev" value="${entry.revision}"/>
 
-        <jsp:useBean id="entry" type="de.berlios.sventon.model.LogEntryWrapper" />
+        <jsp:useBean id="entry" type="org.sventon.model.LogEntryWrapper" />
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>

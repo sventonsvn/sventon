@@ -12,5 +12,5 @@
  */
 %>
 <p>
-sventon <%=de.berlios.sventon.Version.getVersion()%>
+sventon <%=org.sventon.Version.getVersion()%>
 </p>

@@ -1,4 +1,4 @@
-<%@ page import="de.berlios.sventon.model.SideBySideDiffRow" %>
+<%@ page import="org.sventon.model.SideBySideDiffRow" %>
 <%
 /*
  * ====================================================================
@@ -55,7 +55,7 @@
             </tr>
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">
-              <jsp:useBean id="row" type="de.berlios.sventon.model.InlineDiffRow"/>
+              <jsp:useBean id="row" type="org.sventon.model.InlineDiffRow"/>
               <tr <%= row.getRowNumberRight() != null ? "id=\"l" + row.getRowNumberRight().toString() + "\"" : "" %>>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">

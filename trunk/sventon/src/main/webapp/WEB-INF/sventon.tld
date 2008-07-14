@@ -26,7 +26,7 @@
 
   <tag>
     <name>formatBytes</name>
-    <tag-class>de.berlios.sventon.web.tags.ByteFormatterTag</tag-class>
+    <tag-class>org.sventon.web.tags.ByteFormatterTag</tag-class>
     <body-content>JSP</body-content>
     <description>Tag for formatting bytes size values.</description>
     <attribute>
@@ -43,7 +43,7 @@
 
   <tag>
     <name>fileTypeIcon</name>
-    <tag-class>de.berlios.sventon.web.tags.FileTypeIconTag</tag-class>
+    <tag-class>org.sventon.web.tags.FileTypeIconTag</tag-class>
     <body-content>JSP</body-content>
     <description>Tag that returns appropriate file type icon for given file extension.</description>
     <attribute>
