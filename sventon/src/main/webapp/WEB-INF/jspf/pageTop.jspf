@@ -58,7 +58,7 @@
   <tr>
     <td class="sventonHeadlines" colspan="2">
       <sventon:currentRevision command="${command}" headRevision="${headRevision}"/> -
-      <sventon:clickableUrl command="${command}" url="${repositoryURL}"/>
+      <sventon:clickableUrl command="${command}" url="${repositoryURL}" clickable="${!hasErrors}"/>
     </td>
   </tr>
 </table>

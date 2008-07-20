@@ -17,6 +17,7 @@
 
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
+<%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
 
 <span id="clickableUrl">
   <c:url value="/repos/${command.name}/browse/" var="basePathUrl">
@@ -26,13 +27,13 @@
   <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
-        <c:when test="${hasErrors}">${pathSegment}</c:when>
-        <c:otherwise>
+        <c:when test="${clickable}">
           <c:url value="/repos/${command.name}/browse/${accuPath}" var="pathUrl">
             <c:param name="revision" value="${command.revision}" />
           </c:url>
           <a href="${pathUrl}">${pathSegment}</a>
-        </c:otherwise>
+        </c:when>
+        <c:otherwise>${pathSegment}</c:otherwise>
       </c:choose>
     /
   </c:forTokens>
