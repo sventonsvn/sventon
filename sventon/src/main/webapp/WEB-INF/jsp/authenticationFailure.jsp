@@ -24,7 +24,7 @@
   <h2>
     Authentication required for
     <c:choose>
-      <c:when test="${paramValues['path'] eq null}">
+      <c:when test="${empty(paramValues['path'][0])}">
         repository
       </c:when>
       <c:otherwise>
