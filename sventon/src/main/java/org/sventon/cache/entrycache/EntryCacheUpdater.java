@@ -136,6 +136,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision, repositoryService);
+        entryCache.setCachedRevision(lastRevision);
         if (revisionUpdate.isFlushAfterUpdate()) {
           try {
             entryCache.flush();
