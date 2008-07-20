@@ -11,9 +11,9 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.colorer.Colorer;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.colorer.Colorer;
 import org.sventon.model.AnnotatedTextFile;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.SVNBaseCommand;

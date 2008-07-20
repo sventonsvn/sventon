@@ -11,13 +11,13 @@
  */
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.appl.AbstractRevisionObserver;
-import org.sventon.model.RepositoryName;
-import org.sventon.appl.RevisionUpdate;
-import org.sventon.model.LogMessage;
-import org.sventon.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.appl.AbstractRevisionObserver;
+import org.sventon.appl.RevisionUpdate;
+import org.sventon.cache.CacheException;
+import org.sventon.model.LogMessage;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;

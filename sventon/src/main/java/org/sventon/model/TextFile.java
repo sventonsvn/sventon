@@ -11,11 +11,11 @@
  */
 package org.sventon.model;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.sventon.colorer.Colorer;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

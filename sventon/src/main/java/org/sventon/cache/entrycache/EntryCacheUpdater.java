@@ -11,15 +11,18 @@
  */
 package org.sventon.cache.entrycache;
 
-import org.sventon.appl.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.sventon.RepositoryFactory;
+import org.sventon.appl.AbstractRevisionObserver;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.appl.RevisionUpdate;
+import org.sventon.cache.CacheException;
 import org.sventon.model.LogEntryActionType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
-import org.sventon.RepositoryFactory;
-import org.sventon.cache.CacheException;
 import org.sventon.service.RepositoryService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;

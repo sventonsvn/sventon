@@ -18,8 +18,8 @@ import org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Handler class for subversion keyword substitution.

@@ -11,17 +11,16 @@
  */
 package org.sventon.web.ctrl.template;
 
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheKey;
 import org.sventon.cache.objectcache.ObjectCacheManager;
+import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.ImageScaler;
 import static org.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
 import org.sventon.web.command.SVNBaseCommand;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.ctrl.template.AbstractSVNTemplateController;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;

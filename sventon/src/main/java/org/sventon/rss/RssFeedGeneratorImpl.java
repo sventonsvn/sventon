@@ -13,11 +13,11 @@ package org.sventon.rss;
 
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.SyndFeedOutput;
-import org.sventon.appl.RepositoryConfiguration;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
 import org.sventon.util.HTMLCreator;
 import org.sventon.util.SVNUtils;

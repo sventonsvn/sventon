@@ -13,8 +13,8 @@ package org.sventon.appl;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.sventon.model.RepositoryName;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 

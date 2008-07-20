@@ -11,18 +11,18 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.model.LogMessage;
-import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.dir;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.cache.revisioncache.RevisionCacheManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.sventon.model.LogMessage;
+import org.sventon.model.RepositoryEntry;
+import static org.sventon.model.RepositoryEntry.Kind.dir;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;

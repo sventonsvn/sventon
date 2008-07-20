@@ -11,10 +11,10 @@
  */
 package org.sventon.web.command;
 
-import org.sventon.diff.DiffException;
-import org.sventon.util.PathUtil;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.sventon.diff.DiffException;
+import org.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 

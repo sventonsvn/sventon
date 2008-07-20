@@ -11,9 +11,9 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.RepositoryName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.RepositoryName;
 
 import java.util.HashMap;
 import java.util.Map;

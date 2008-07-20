@@ -11,9 +11,9 @@
  */
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.model.LogMessage;
 import org.sventon.cache.Cache;
 import org.sventon.cache.CacheException;
+import org.sventon.model.LogMessage;
 
 import java.util.List;
 

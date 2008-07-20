@@ -11,7 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.DiffAction;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 

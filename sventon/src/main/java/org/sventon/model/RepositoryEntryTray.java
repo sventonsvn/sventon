@@ -11,7 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.PeggedRepositoryEntry;
 import org.sventon.util.RepositoryEntryComparator;
 
 import java.io.Serializable;

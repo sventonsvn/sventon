@@ -11,9 +11,9 @@
  */
 package org.sventon.util;
 
-import org.sventon.model.RepositoryEntry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.Validate;
+import org.sventon.model.RepositoryEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;

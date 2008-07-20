@@ -11,13 +11,12 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.util.EncodingUtils;
-import org.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.ctrl.template.AbstractSVNTemplateController;
+import org.sventon.util.EncodingUtils;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;

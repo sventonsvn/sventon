@@ -11,10 +11,10 @@
  */
 package org.sventon.cache.entrycache;
 
+import org.apache.commons.io.IOUtils;
+import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.cache.CacheException;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.Collections;

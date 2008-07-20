@@ -13,7 +13,6 @@ package org.sventon.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.sventon.model.DiffAction;
 
 /**
  * Source line bean. Represents one line of text including

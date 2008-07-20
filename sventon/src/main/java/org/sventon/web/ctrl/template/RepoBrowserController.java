@@ -11,16 +11,15 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.model.FileExtensionList;
-import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
-import org.sventon.util.FileExtensionFilter;
-import org.sventon.web.ctrl.template.ListDirectoryContentsController;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.model.FileExtensionList;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
+import org.sventon.util.FileExtensionFilter;
+import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;

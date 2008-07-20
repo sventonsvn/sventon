@@ -11,10 +11,10 @@
  */
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.model.RepositoryName;
+import org.apache.lucene.store.FSDirectory;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
-import org.apache.lucene.store.FSDirectory;
+import org.sventon.model.RepositoryName;
 
 import java.io.File;
 import java.io.IOException;

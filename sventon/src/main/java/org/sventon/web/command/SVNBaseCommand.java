@@ -11,10 +11,6 @@
  */
 package org.sventon.web.command;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.util.PathUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -23,6 +19,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.RepositoryName;
+import org.sventon.util.PathUtil;
+import org.sventon.util.RepositoryEntryComparator;
+import org.sventon.util.RepositoryEntrySorter;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;

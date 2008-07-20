@@ -11,12 +11,11 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.web.command.SVNBaseCommand;
-import org.sventon.util.RequestParameterParser;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.ctrl.template.AbstractSVNTemplateController;
+import org.sventon.util.RequestParameterParser;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 

@@ -15,9 +15,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
-import org.sventon.model.RepositoryName;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

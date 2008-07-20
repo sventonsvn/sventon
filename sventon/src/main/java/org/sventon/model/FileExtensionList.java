@@ -11,7 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.RepositoryEntry;
 import org.apache.commons.io.FilenameUtils;
 
 import java.util.List;

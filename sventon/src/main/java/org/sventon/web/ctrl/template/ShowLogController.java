@@ -11,14 +11,13 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.web.command.SVNBaseCommand;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.ctrl.template.AbstractSVNTemplateController;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNNodeKind;

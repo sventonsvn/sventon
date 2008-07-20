@@ -13,15 +13,10 @@ package org.sventon.service;
 
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
-import org.sventon.model.AnnotatedTextFile;
-import org.sventon.model.RepositoryEntry;
-import org.sventon.model.InlineDiffRow;
-import org.sventon.model.SideBySideDiffRow;
-import org.sventon.model.TextFile;
 import org.sventon.export.ExportDirectory;
+import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLock;
