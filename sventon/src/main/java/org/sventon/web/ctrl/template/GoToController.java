@@ -17,6 +17,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -51,15 +53,27 @@ public final class GoToController extends AbstractSVNTemplateController {
                                    final BindException exception) throws Exception {
 
     String redirectUrl;
-    final SVNNodeKind kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
-    logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
+    SVNNodeKind kind = null;
 
-    if (kind == SVNNodeKind.DIR) {
+    try {
+      kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
+      logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        logger.info(svnex.getMessage());
+      } else {
+        logger.error(svnex.getMessage());
+      }
+    }
+
+    if (SVNNodeKind.DIR == kind) {
       redirectUrl = "/repos/" + svnCommand.getName().toString() + "/browse" + svnCommand.getPath();
-    } else if (kind == SVNNodeKind.FILE) {
+    } else if (SVNNodeKind.FILE == kind) {
       redirectUrl = "/repos/" + svnCommand.getName().toString() + "/view" + svnCommand.getPath();
+    } else if (kind == null) {
+      exception.rejectValue("revision", "goto.command.invalidrevision");
+      return prepareExceptionModelAndView(exception, svnCommand);
     } else {
-      //Invalid path/rev combo. Forward to error page.
       exception.rejectValue("path", "goto.command.invalidpath");
       return prepareExceptionModelAndView(exception, svnCommand);
     }
