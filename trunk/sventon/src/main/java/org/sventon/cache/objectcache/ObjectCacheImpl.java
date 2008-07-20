@@ -11,12 +11,12 @@
  */
 package org.sventon.cache.objectcache;
 
-import org.sventon.cache.CacheException;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.apache.commons.lang.Validate;
+import org.sventon.cache.CacheException;
 
 import java.io.Serializable;
 import java.util.List;

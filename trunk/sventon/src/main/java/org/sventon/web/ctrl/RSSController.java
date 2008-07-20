@@ -11,17 +11,17 @@
  */
 package org.sventon.web.ctrl;
 
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
-import org.sventon.RepositoryFactory;
-import org.sventon.rss.RssFeedGenerator;
-import org.sventon.service.RepositoryService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+import org.sventon.RepositoryFactory;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.RepositoryName;
+import org.sventon.rss.RssFeedGenerator;
+import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;

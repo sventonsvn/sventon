@@ -11,15 +11,15 @@
  */
 package org.sventon.web.ctrl;
 
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.web.command.ConfigCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.web.command.ConfigCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

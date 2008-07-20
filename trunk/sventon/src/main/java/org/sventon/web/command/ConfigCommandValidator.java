@@ -11,15 +11,15 @@
  */
 package org.sventon.web.command;
 
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
-import org.sventon.RepositoryFactory;
-import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.sventon.RepositoryFactory;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.RepositoryName;
+import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;

@@ -11,11 +11,11 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.appl.RevisionObservable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.MethodBeforeAdvice;
+import org.sventon.appl.RevisionObservable;
+import org.sventon.model.RepositoryName;
 
 import java.lang.reflect.Method;
 

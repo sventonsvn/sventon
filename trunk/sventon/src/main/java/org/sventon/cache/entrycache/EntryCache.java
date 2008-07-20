@@ -11,12 +11,12 @@
  */
 package org.sventon.cache.entrycache;
 
-import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.any;
-import org.sventon.cache.Cache;
-import org.sventon.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.cache.Cache;
+import org.sventon.cache.CacheException;
+import org.sventon.model.RepositoryEntry;
+import static org.sventon.model.RepositoryEntry.Kind.any;
 
 import java.util.ArrayList;
 import java.util.Collections;

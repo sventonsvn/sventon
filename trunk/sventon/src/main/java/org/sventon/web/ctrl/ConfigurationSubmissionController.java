@@ -11,7 +11,6 @@
  */
 package org.sventon.web.ctrl;
 
-import org.sventon.appl.Application;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -19,6 +18,7 @@ import org.quartz.SchedulerException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.appl.Application;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -11,10 +11,10 @@
  */
 package org.sventon.cache.revisioncache;
 
-import org.sventon.model.RepositoryName;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
 import org.sventon.cache.objectcache.ObjectCacheManager;
+import org.sventon.model.RepositoryName;
 
 /**
  * Handles RevisionCache instances.

@@ -11,14 +11,14 @@
  */
 package org.sventon.diff;
 
-import org.sventon.util.KeywordHandler;
-import static org.sventon.model.DiffAction.*;
+import org.apache.commons.io.IOUtils;
 import static org.sventon.diff.DiffSegment.Side.LEFT;
 import static org.sventon.diff.DiffSegment.Side.RIGHT;
+import static org.sventon.model.DiffAction.*;
 import org.sventon.model.SideBySideDiffRow;
-import org.sventon.model.TextFile;
 import org.sventon.model.SourceLine;
-import org.apache.commons.io.IOUtils;
+import org.sventon.model.TextFile;
+import org.sventon.util.KeywordHandler;
 
 import java.io.IOException;
 import java.io.StringReader;

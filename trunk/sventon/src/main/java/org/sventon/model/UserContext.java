@@ -11,7 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.RepositoryName;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 

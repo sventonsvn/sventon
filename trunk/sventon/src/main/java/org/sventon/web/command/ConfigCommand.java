@@ -11,10 +11,10 @@
  */
 package org.sventon.web.command;
 
-import org.sventon.appl.RepositoryConfiguration;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.BeanUtils;
+import org.sventon.appl.RepositoryConfiguration;
 
 /**
  * ConfigCommand.

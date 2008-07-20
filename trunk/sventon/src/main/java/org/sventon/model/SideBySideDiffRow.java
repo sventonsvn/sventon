@@ -11,8 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.SourceLine;
-
 /**
  * Represents a row in a side-by-side diff view.
  *

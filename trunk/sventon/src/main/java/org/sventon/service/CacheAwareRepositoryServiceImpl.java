@@ -13,8 +13,8 @@ package org.sventon.service;
 
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
-import org.sventon.model.RepositoryName;
 import org.sventon.cache.CacheGateway;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;

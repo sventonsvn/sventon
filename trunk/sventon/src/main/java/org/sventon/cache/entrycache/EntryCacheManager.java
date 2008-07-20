@@ -11,9 +11,9 @@
  */
 package org.sventon.cache.entrycache;
 
-import org.sventon.model.RepositoryName;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
+import org.sventon.model.RepositoryName;
 
 import java.io.File;
 

@@ -11,8 +11,8 @@
  */
 package org.sventon;
 
-import org.sventon.model.RepositoryName;
 import org.apache.commons.lang.Validate;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;

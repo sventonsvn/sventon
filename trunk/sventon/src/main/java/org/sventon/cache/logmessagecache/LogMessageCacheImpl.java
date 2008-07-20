@@ -11,8 +11,6 @@
  */
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.model.LogMessage;
-import org.sventon.cache.CacheException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.Analyzer;
@@ -28,6 +26,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
+import org.sventon.cache.CacheException;
+import org.sventon.model.LogMessage;
 
 import java.io.IOException;
 import java.io.StringReader;

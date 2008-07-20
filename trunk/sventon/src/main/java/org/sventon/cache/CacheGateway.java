@@ -11,9 +11,9 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.RepositoryName;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;

@@ -11,15 +11,14 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.sventon.diff.IdenticalFilesException;
-import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.web.command.DiffCommand;
-import org.sventon.web.command.SVNBaseCommand;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.diff.IdenticalFilesException;
+import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.ctrl.template.AbstractSVNTemplateController;
+import org.sventon.web.command.DiffCommand;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;

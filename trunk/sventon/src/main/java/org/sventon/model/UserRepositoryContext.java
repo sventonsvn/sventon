@@ -11,14 +11,13 @@
  */
 package org.sventon.model;
 
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.model.RepositoryName;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.sventon.util.RepositoryEntryComparator;
+import org.sventon.util.RepositoryEntrySorter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
