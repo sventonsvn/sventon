@@ -16,6 +16,7 @@
 
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="headRevision" required="true" type="java.lang.Long" %>
+<%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
 
 Rev:
 <c:choose>
@@ -26,8 +27,14 @@ Rev:
     <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
       <c:param name="revision" value="${command.revision}"/>
     </c:url>
-
-    <a href="${showRevInfoUrl}"><span class="exclamationText">${command.revision}</span></a>
+    <c:choose>
+      <c:when test="${clickable}">
+        <a href="${showRevInfoUrl}"><span class="exclamationText">${command.revision}</span></a>
+      </c:when>
+      <c:otherwise>
+        <span class="exclamationText">${command.revision}</span>
+      </c:otherwise>
+    </c:choose>
   </c:otherwise>
 </c:choose>
 
