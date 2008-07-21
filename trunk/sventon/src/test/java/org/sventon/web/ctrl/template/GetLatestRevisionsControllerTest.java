@@ -1,17 +1,17 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.TestUtils;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
-import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
+import org.sventon.model.RepositoryName;
+import org.sventon.model.UserRepositoryContext;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
+import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -46,7 +46,8 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    assertSame(revisions, model.get("revisions"));
+    assertEquals(revisions, model.get("revisions"));
+    assertEquals(2, ((List) model.get("revisions")).size());
     assertEquals("ajax/latestRevisions", modelAndView.getViewName());
   }
 }

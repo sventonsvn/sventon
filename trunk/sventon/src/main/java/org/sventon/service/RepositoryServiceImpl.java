@@ -81,6 +81,7 @@ public class RepositoryServiceImpl implements RepositoryService {
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit) throws SVNException, SventonException {
 
+    logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
     final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
