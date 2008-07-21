@@ -18,9 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.SVNBaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -73,32 +71,40 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
-    logger.debug("Assembling logs data [" + revNumber + " - " + FIRST_REVISION + "] limit: " + pageSize);
-
     // TODO: Safer parsing would be nice.
-    final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(
-        svnCommand.getName(), repository, revNumber, FIRST_REVISION, nextPathParam, pageSize);
+    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
-    String pathAtRevision = nextPathParam;
+    try {
+      logEntries.addAll(getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, FIRST_REVISION,
+          nextPathParam, pageSize));
 
-    for (final SVNLogEntry logEntry : logEntries) {
-      logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
-      //noinspection unchecked
-      final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
-      final Set<String> changedPaths = allChangedPaths.keySet();
-      for (String entryPath : changedPaths) {
-        int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
-        if (i == -1) { // Same path
-          final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
-          if (logEntryPath.getCopyPath() != null) {
-            pathAtRevision = logEntryPath.getCopyPath();
-          }
-        } else if (entryPath.length() == i) { // Part path, can be a branch
-          final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
-          if (logEntryPath.getCopyPath() != null) {
-            pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
+      String pathAtRevision = nextPathParam;
+
+      for (final SVNLogEntry logEntry : logEntries) {
+        logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
+        //noinspection unchecked
+        final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
+        final Set<String> changedPaths = allChangedPaths.keySet();
+        for (String entryPath : changedPaths) {
+          int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
+          if (i == -1) { // Same path
+            final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
+            if (logEntryPath.getCopyPath() != null) {
+              pathAtRevision = logEntryPath.getCopyPath();
+            }
+          } else if (entryPath.length() == i) { // Part path, can be a branch
+            final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
+            if (logEntryPath.getCopyPath() != null) {
+              pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
+            }
           }
         }
+      }
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        logger.info(svnex.getMessage());
+      } else {
+        logger.error(svnex.getMessage());
       }
     }
 

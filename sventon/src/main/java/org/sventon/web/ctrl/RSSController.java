@@ -22,7 +22,9 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.service.RepositoryService;
+import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -30,6 +32,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,8 +66,6 @@ public final class RSSController extends AbstractController {
    * Service.
    */
   private RepositoryService repositoryService;
-
-  private static final String ERROR_MESSAGE = "Unable to generate RSS feed";
 
   /**
    * The repository factory.
@@ -103,6 +104,7 @@ public final class RSSController extends AbstractController {
     }
 
     SVNRepository repository = null;
+    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryFactory.getRepository(configuration.getName(),
@@ -113,20 +115,26 @@ public final class RSSController extends AbstractController {
       }
 
       logger.debug("Outputting feed for [" + path + "]");
-      final List<SVNLogEntry> logEntries = repositoryService.getRevisions(
-          repositoryName, repository, SVNRevision.parse(revision).getNumber(), 1, path, configuration.getRssItemsCount());
-      rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
-    } catch (SVNAuthenticationException ae) {
-      logger.info(ERROR_MESSAGE + " - " + ae.getMessage());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ae.getMessage());
-    } catch (SVNException ex) {
-      logger.warn(ERROR_MESSAGE, ex);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ERROR_MESSAGE);
+      final long revisionNumber = SVNRevision.parse(revision).getNumber();
+      logEntries.addAll(repositoryService.getRevisions(repositoryName, repository, revisionNumber, FIRST_REVISION, path,
+          configuration.getRssItemsCount()));
+    } catch (SVNAuthenticationException aex) {
+      logger.info(aex.getMessage());
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, aex.getMessage());
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        logger.info(svnex.getMessage());
+      } else {
+        logger.error(svnex.getMessage());
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
+      }
     } finally {
       if (repository != null) {
         repository.closeSession();
       }
     }
+
+    rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     return null;
   }
 

@@ -31,6 +31,9 @@ import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -40,9 +43,7 @@ import javax.servlet.http.HttpSession;
 import java.beans.PropertyEditor;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -266,8 +267,18 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          model.put("revisions", getRepositoryService().getRevisions(svnCommand.getName(), repository, headRevision,
-              FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount()));
+          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+          try {
+            logEntries.addAll(getRepositoryService().getRevisions(svnCommand.getName(), repository, headRevision,
+                FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount()));
+          } catch (SVNException svnex) {
+            if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+              logger.info(svnex.getMessage());
+            } else {
+              logger.error(svnex.getMessage());
+            }
+          }
+          model.put("revisions", logEntries);
         }
 
         modelAndView.addAllObjects(model);

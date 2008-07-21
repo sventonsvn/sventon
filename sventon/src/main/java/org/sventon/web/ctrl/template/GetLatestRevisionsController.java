@@ -15,11 +15,14 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,15 +43,26 @@ public final class GetLatestRevisionsController extends AbstractSVNTemplateContr
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    long revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
-    logger.debug("Getting [" + revisionCount + "] latest revisions");
-    final List<SVNLogEntry> revisions = getRepositoryService().getRevisions(
-        svnCommand.getName(), repository, -1, FIRST_REVISION, "/", revisionCount);
-    logger.debug("Got [" + revisions.size() + "] revisions");
-
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("revisions", revisions);
+    final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
+    final long revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
 
+    try {
+      logger.debug("Getting [" + revisionCount + "] latest revisions");
+      revisions.addAll(getRepositoryService().getRevisions(
+          svnCommand.getName(), repository, -1, FIRST_REVISION, "/", revisionCount));
+      logger.debug("Got [" + revisions.size() + "] revisions");
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        logger.info(svnex.getMessage());
+        model.put("errorMessage", "There are no commits in this repository yet.");
+      } else {
+        logger.error(svnex.getMessage());
+        model.put("errorMessage", svnex.getMessage());
+      }
+    }
+
+    model.put("revisions", revisions);
     return new ModelAndView("ajax/latestRevisions", model);
   }
 }
