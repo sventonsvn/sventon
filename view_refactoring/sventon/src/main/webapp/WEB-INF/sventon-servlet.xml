@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * ====================================================================
+ * Copyright (c) 2005-2008 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+  <bean id="sventonTempRootDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg value="${java.io.tmpdir}"/>
+    <constructor-arg value="sventon_temp"/>
+  </bean>
+
+  <bean id="sventonTempExportDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg ref="sventonTempRootDir"/>
+    <constructor-arg value="export_temp"/>
+  </bean>
+
+  <bean id="repositoriesDir" class="java.io.File" init-method="mkdirs">
+    <constructor-arg ref="sventonTempRootDir"/>
+    <constructor-arg value="repositories"/>
+  </bean>
+
+  <bean id="defaultEncoding" class="java.lang.String">
+    <constructor-arg value="UTF-8"/>
+  </bean>
+
+  <!-- property placeholder post-processor -->
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+  <bean id="nameEditor" class="org.sventon.util.RepositoryNameEditor"/>
+
+  <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
+
+  <bean id="repositoryFactory" class="org.sventon.RepositoryFactory" scope="prototype">
+    <constructor-arg ref="repositoriesDir"/>
+  </bean>
+
+  <bean id="application" class="org.sventon.appl.Application" init-method="init">
+    <constructor-arg ref="repositoriesDir"/>
+    <constructor-arg value="sventon_config.properties"/>
+    <property name="entryCacheManager" ref="entryCacheManager"/>
+    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="revisionCacheManager" ref="revisionCacheManager"/>
+  </bean>
+
+  <bean id="svnBaseCommandValidator" class="org.sventon.web.command.SVNBaseCommandValidator"/>
+
+  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="application" ref="application"/>
+  </bean>
+
+  <bean id="repositoryService" class="org.sventon.service.CacheAwareRepositoryServiceImpl">
+    <property name="cacheGateway" ref="cacheGatewayBean"/>
+    <property name="application" ref="application"/>
+  </bean>
+
+  <bean id="rssFeedGenerator" class="org.sventon.rss.RssFeedGeneratorImpl">
+    <property name="feedType" value="rss_2.0"/>
+    <property name="logMessageLength" value="40"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+  </bean>
+
+  <bean id="abstractController" class="org.sventon.web.ctrl.template.AbstractSVNTemplateController" abstract="true">
+    <property name="commandClass" value="org.sventon.web.command.SVNBaseCommand"/>
+    <property name="cacheSeconds" value="0"/>
+    <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="cacheGateway" ref="cacheGatewayBean"/>
+    <property name="validator" ref="svnBaseCommandValidator"/>
+    <property name="maxRevisionsCount" value="10"/>
+    <property name="availableCharsets" ref="availableCharsets"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="nameEditor" ref="nameEditor"/>
+    <property name="revisionEditor" ref="revisionEditor"/>
+  </bean>
+  
+  <bean id="rssController" class="org.sventon.web.ctrl.RSSController">
+    <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="mimeType" value="application/xml; charset=UTF-8"/>
+    <property name="rssFeedGenerator" ref="rssFeedGenerator"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+  </bean>
+
+  <bean id="listFilesController" class="org.sventon.web.ctrl.template.ListFilesController" parent="abstractController"/>
+  <bean id="latestRevisionsController" class="org.sventon.web.ctrl.template.GetLatestRevisionsController" parent="abstractController"/>
+  <bean id="logMessageController" class="org.sventon.web.ctrl.template.GetLogMessageController" parent="abstractController"/>
+  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractController"/>
+  <bean id="fileHistoryController" class="org.sventon.web.ctrl.template.GetFileHistoryController" parent="abstractController"/>
+  <bean id="getStaticContentController" class="org.sventon.web.ctrl.GetStaticContentController">
+    <property name="path" value="/WEB-INF/static"/>
+  </bean>
+
+  <bean id="repoBrowserController" class="org.sventon.web.ctrl.template.RepoBrowserController" parent="abstractController"/>
+  <bean id="revInfoController" class="org.sventon.web.ctrl.template.ShowRevisionInfoController" parent="abstractController"/>
+  <bean id="showLocksController" class="org.sventon.web.ctrl.template.ShowLocksController" parent="abstractController"/>
+  <bean id="searchLogsController" class="org.sventon.web.ctrl.template.SearchLogsController" parent="abstractController"/>
+  <bean id="flattenController" class="org.sventon.web.ctrl.template.FlattenController" parent="abstractController"/>
+  <bean id="goToController" class="org.sventon.web.ctrl.template.GoToController" parent="abstractController"/>
+  <bean id="searchEntriesController" class="org.sventon.web.ctrl.template.SearchEntriesController" parent="abstractController"/>
+  <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractController"/>
+  <bean id="diffPreviousController" class="org.sventon.web.ctrl.template.DiffPreviousController" parent="abstractController"/>
+
+  <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractController">
+    <property name="pageSize" value="20"/>
+  </bean>
+
+  <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractController">
+    <property name="textFileExtensionPattern" value=""/>
+    <property name="binaryFileExtensionPattern" value="(bin|exe|pdf)"/>
+    <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
+    <property name="colorer" ref="colorer"/>
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+  </bean>
+
+  <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractController">
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+  </bean>
+
+  <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractController">
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+  </bean>
+
+  <bean id="getThumbnailController" class="org.sventon.web.ctrl.template.GetThumbnailController" parent="abstractController">
+    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="imageFormatName" value="png"/>
+    <property name="maxThumbnailSize" value="200"/>
+  </bean>
+
+  <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
+    <property name="exportDir" ref="sventonTempExportDir"/>
+    <property name="archiveFileCharset" value="cp850"/>
+  </bean>
+
+  <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractController">
+    <property name="colorer" ref="colorer"/>
+  </bean>
+
+  <bean id="listRepositoriesController" class="org.sventon.web.ctrl.ListRepositoriesController">
+    <property name="application" ref="application"/>
+  </bean>
+
+  <bean id="startController" class="org.sventon.web.ctrl.StartController">
+    <property name="application" ref="application"/>
+  </bean>
+
+  <bean id="configurationController" class="org.sventon.web.ctrl.ConfigurationController">
+    <property name="commandClass" value="org.sventon.web.command.ConfigCommand"/>
+    <property name="sessionForm" value="false"/>
+    <property name="bindOnNewForm" value="true"/>
+    <property name="application" ref="application"/>
+    <property name="validator" ref="configCommandValidator"/>
+  </bean>
+
+  <bean id="configurationSubmissionController" class="org.sventon.web.ctrl.ConfigurationSubmissionController">
+    <property name="application" ref="application"/>
+    <property name="scheduler" ref="scheduler"/>
+  </bean>
+
+  <bean id="urlMapping" class="carbonfive.spring.web.pathparameter.ParameterizedUrlHandlerMapping">
+    <property name="alwaysUseFullPath" value="true"/>
+    <property name="mappings">
+      <props>
+        <prop key="/repos/">listRepositoriesController</prop>
+        <prop key="/repos/list">listRepositoriesController</prop>
+        <prop key="/repos/start">startController</prop>
+        <prop key="/repos/config">configurationController</prop>
+        <prop key="/repos/submitconfig">configurationSubmissionController</prop>
+
+        <prop key="/repos/(*:name)/revinfo">revInfoController</prop>
+        <prop key="/repos/(*:name)/browse/(**/*:path)*">repoBrowserController</prop>
+
+        <prop key="/repos/(*:name)/view/(**/*:path)*">showFileController</prop>
+        <prop key="/repos/(*:name)/blame/(**/*:path)*">blameController</prop>
+        <prop key="/repos/(*:name)/showlog/(**/*:path)*">showLogsController</prop>
+
+        <prop key="/repos/(*:name)/get/(**/*:path)*">getController</prop>
+        <prop key="/repos/(*:name)/showlocks/(**/*:path)*">showLocksController</prop>
+        <prop key="/repos/(*:name)/getthumbnail/(**/*:path)*">getThumbnailController</prop>
+
+        <prop key="/repos/(*:name)/showthumbnails/(**/*:path)*">showThumbnailsController</prop>
+        <prop key="/repos/(*:name)/export/(**/*:path)*">exportController</prop>
+        <prop key="/repos/(*:name)/diff/(**/*:path)*">diffController</prop>
+
+        <prop key="/repos/(*:name)/searchentries/(**/*:path)*">searchEntriesController</prop>
+        <prop key="/repos/(*:name)/searchlogs/(**/*:path)*">searchLogsController</prop>
+        <prop key="/repos/(*:name)/flatten/(**/*:path)*">flattenController</prop>
+
+        <prop key="/repos/(*:name)/diffprev/(**/*:path)*">diffPreviousController</prop>
+
+        <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
+
+        <!-- url mappings for xml producers -->
+        <prop key="/xml/(*:name)/rss/(**/*:path)*">rssController</prop>
+
+        <!-- url mappings for ajax controllers -->
+        <prop key="/ajax/static">getStaticContentController</prop>
+        <prop key="/ajax/(*:name)/getmessage">logMessageController</prop>
+        <prop key="/ajax/(*:name)/latestrevisions">latestRevisionsController</prop>
+        <prop key="/ajax/(*:name)/listfiles/(**/*:path)*">listFilesController</prop>
+        <prop key="/ajax/(*:name)/entrytray/(**/*:path)*">entryTrayController</prop>
+        <prop key="/ajax/(*:name)/filehistory/(**/*:path)*">fileHistoryController</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="availableCharsets" class="org.sventon.model.AvailableCharsets">
+    <constructor-arg ref="defaultEncoding"/>
+  </bean>
+
+  <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
+
+  <bean id="objectCacheManager" class="org.sventon.cache.objectcache.ObjectCacheManager"
+        destroy-method="shutdown">
+    <constructor-arg index="0" ref="repositoriesDir"/>
+    <constructor-arg index="1" value="1000"/>
+    <constructor-arg index="2" value="true"/>
+    <constructor-arg index="3" value="true"/>
+    <constructor-arg index="4" value="0"/>
+    <constructor-arg index="5" value="0"/>
+    <constructor-arg index="6" value="true"/>
+    <constructor-arg index="7" value="120"/>
+  </bean>
+
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="classpath:messages"/>
+    <property name="useCodeAsDefaultMessage" value="true"/>
+    <property name="cacheSeconds" value="-1"/>
+  </bean>
+
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+  <!-- Gateway class for accessing the caches -->
+  <!-- Bean configuration -->
+  <bean id="cacheGatewayBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="org.sventon.cache.CacheGateway"/>
+    <property name="target" ref="cacheGateway"/>
+    <property name="interceptorNames">
+      <list>
+        <value>cacheBeforeAdvisor</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Advisor pointcut definition for before advice -->
+  <bean id="cacheBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="cacheBeforeAdvice"/>
+    <property name="pattern" value=".*"/>
+  </bean>
+
+  <!-- Advice classes -->
+  <bean id="cacheBeforeAdvice" class="org.sventon.cache.CacheBeforeAdvice">
+    <property name="revisionObservable" ref="revisionObservable"/>
+  </bean>
+
+  <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl">
+    <property name="entryCacheManager" ref="entryCacheManager"/>
+    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
+    <property name="revisionCacheManager" ref="revisionCacheManager"/>
+  </bean>
+
+  <!-- Monitors the repository and polls for changes -->
+  <bean id="revisionObservable" class="org.sventon.appl.RevisionObservableImpl">
+    <constructor-arg ref="observerList"/>
+    <property name="application" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="maxRevisionCountPerUpdate" value="500"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+  </bean>
+
+  <!-- List of RevisionObservers registered to observe repository changes -->
+  <util:list id="observerList">
+    <ref local="entryCacheUpdater"/>
+    <ref local="logMessageCacheUpdater"/>
+    <ref local="revisionCacheUpdater"/>
+    <!--<ref local="mailNotifier"/>-->
+  </util:list>
+
+  <!-- NOTE: Make sure to change the parameters below! -->
+  <bean id="mailNotifier" class="org.sventon.mail.MailNotifier" init-method="init">
+    <property name="application" ref="application"/>
+    <property name="baseUrl" value="http://yourserver.com/svn/"/>
+    <property name="host" value="smtp.yourserver.com"/>
+    <property name="from" value="sventon@yourserver.com"/>
+    <property name="subject" value="@@repositoryName@@ - revision @@revision@@"/>
+    <property name="port" value="25"/>
+    <property name="receivers" ref="mailNotificationReceivers"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+    <property name="revisionCountThreshold" value="100"/>
+    <property name="auth" value="false"/>
+    <property name="ssl" value="false"/>
+    <property name="user" value=""/>
+    <property name="password" value=""/>
+  </bean>
+
+  <!-- List of notification mail receivers -->
+  <util:list id="mailNotificationReceivers">
+    <value>you@yourserver.org</value>
+  </util:list>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="revisionCacheUpdater" class="org.sventon.cache.revisioncache.RevisionCacheUpdater">
+    <constructor-arg index="0" ref="revisionCacheManager"/>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="entryCacheUpdater" class="org.sventon.cache.entrycache.EntryCacheUpdater">
+    <constructor-arg index="0" ref="entryCacheManager"/>
+    <constructor-arg index="1" ref="application"/>
+    <property name="repositoryService" ref="repositoryService"/>
+    <property name="repositoryFactory" ref="repositoryFactory"/>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="logMessageCacheUpdater" class="org.sventon.cache.logmessagecache.LogMessageCacheUpdater">
+    <constructor-arg index="0" ref="logMessageCacheManager"/>
+  </bean>
+
+  <bean id="revisionCacheManager" class="org.sventon.cache.revisioncache.RevisionCacheManager">
+    <constructor-arg index="0" ref="objectCacheManager"/>
+  </bean>
+
+  <bean id="entryCacheManager" class="org.sventon.cache.entrycache.EntryCacheManager"
+        destroy-method="shutdown">
+    <constructor-arg ref="repositoriesDir"/>
+  </bean>
+
+  <bean id="logMessageCacheManager" class="org.sventon.cache.logmessagecache.LogMessageCacheManager">
+    <constructor-arg index="0" ref="repositoriesDir"/>
+    <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+  </bean>
+
+  <bean id="tempFileCleaner" class="org.sventon.export.TemporaryFileCleaner">
+    <property name="exportRootDir" ref="sventonTempExportDir"/>
+    <property name="timeThreshold" value="600000"/>
+  </bean>
+
+  <bean id="colorer" class="org.sventon.colorer.JHighlightColorer">
+    <property name="rendererMappings">
+      <map>
+        <entry key="java" value-ref="javaXhtmlRenderer"/>
+        <entry key="beanshell" value-ref="javaXhtmlRenderer"/>
+        <entry key="bsh" value-ref="javaXhtmlRenderer"/>
+        <entry key="html" value-ref="xmlXhtmlRenderer"/>
+        <entry key="htm" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xhtml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="lzx" value-ref="xmlXhtmlRenderer"/>
+        <entry key="cpp" value-ref="cppXhtmlRenderer"/>
+        <entry key="cxx" value-ref="cppXhtmlRenderer"/>
+        <entry key="c++" value-ref="cppXhtmlRenderer"/>
+        <entry key="c" value-ref="cppXhtmlRenderer"/>
+        <entry key="groovy" value-ref="groovyXhtmlRenderer"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer"/>
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer"/>
+  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
+  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
+
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    <property name="triggers">
+      <list>
+        <ref local="cacheUpdateTrigger"/>
+        <ref local="tempFileCleanerTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="cacheUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="cacheUpdateJobDetail"/>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="revisionObservable"/>
+    <property name="targetMethod" value="updateAll"/>
+  </bean>
+
+  <bean id="tempFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="tempFileCleanerJobDetail"/>
+    <property name="startDelay" value="300000"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="tempFileCleanerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="tempFileCleaner"/>
+    <property name="targetMethod" value="clean"/>
+  </bean>
+
+</beans>
