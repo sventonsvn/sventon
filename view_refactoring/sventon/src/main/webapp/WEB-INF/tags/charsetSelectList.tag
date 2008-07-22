@@ -11,8 +11,13 @@
  * ====================================================================
  */
 %>
+<%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ attribute name="charsets" required="true" type="java.util.Set" %>
+<%@ attribute name="currentCharset" required="true" type="java.lang.String" %>
+
 <select class="sventonSelect" name="charsetSelect" onchange="updateCharsetParameter(this.form.charsetSelect.options[selectedIndex].value, '${pageContext.request.queryString}');">
   <c:forEach items="${charsets}" var="charset">
-    <option ${userRepositoryContext.charset eq charset ? 'selected' : ''} value="${charset}">${charset}</option>
+    <option ${charset eq currentCharset ? 'selected' : ''} value="${charset}">${charset}</option>
   </c:forEach>
 </select>

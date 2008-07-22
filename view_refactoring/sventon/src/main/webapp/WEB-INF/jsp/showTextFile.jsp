@@ -21,17 +21,37 @@
 </head>
 
 <body>
+  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
   <c:choose>
     <c:when test="${archivedEntry ne null}">
-      <sventon:currentTargetHeader title="Show File" target="${command.target} (${archivedEntry})" hasProperties="false"/>
+      <sventon:currentTargetHeader title="Show File" target="${command.target} (${archivedEntry})" properties="${properties}"/>
     </c:when>
     <c:otherwise>
-      <sventon:currentTargetHeader title="Show File" target="${command.target}" hasProperties="true"/>
+      <sventon:currentTargetHeader title="Show File" target="${command.target}" properties="${properties}"/>
     </c:otherwise>
   </c:choose>
-  <sventon:functionLinks pageName="showTextFile"/>
+
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:textFileFunctionButtons command="${command}" isArchivedEntry="${archivedEntry ne null}"/>
+        <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <div id="fileHistoryContainerDiv" class="fileHistoryContainer">
     <img src="images/spinner.gif" alt="spinner" style="border: 1px solid">

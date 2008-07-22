@@ -20,10 +20,29 @@
 </head>
 
 <body>
+  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 
-  <sventon:currentTargetHeader title="Show Archive File" target="${command.target}" hasProperties="true"/>
-  <sventon:functionLinks pageName="showArchiveFile"/>
+  <sventon:currentTargetHeader title="Show Archive File" target="${command.target}" properties="${properties}"/>
+
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:fileFunctionButtons command="${command}" isArchivedEntry="${archivedEntry ne null}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>

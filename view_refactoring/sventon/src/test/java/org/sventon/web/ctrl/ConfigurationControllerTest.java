@@ -26,7 +26,7 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(TestUtils.getApplicationStub());
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
-    assertEquals("config", modelAndView.getViewName());
+    assertEquals("config/config", modelAndView.getViewName());
   }
 
   public void testShowFormConfigured() throws Exception {
@@ -55,7 +55,7 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
-    assertEquals("confirmAddConfig", modelAndView.getViewName());
+    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
   }
 
   public void testProcessFormSubmissionConfigured() throws Exception {
@@ -82,7 +82,7 @@ public class ConfigurationControllerTest extends TestCase {
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals("config", modelAndView.getViewName());
+    assertEquals("config/config", modelAndView.getViewName());
   }
 
   public void testProcessFormSubmissionNonConfigured() throws Exception {
@@ -100,7 +100,7 @@ public class ConfigurationControllerTest extends TestCase {
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals("confirmAddConfig", modelAndView.getViewName());
+    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
     assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
@@ -127,7 +127,7 @@ public class ConfigurationControllerTest extends TestCase {
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals("confirmAddConfig", modelAndView.getViewName());
+    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
     assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();

@@ -25,7 +25,8 @@
     <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
   </head>
   <body>
-  <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
 
   <h1>An unhandled internal application error has occured</h1>
   <p/>

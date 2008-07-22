@@ -72,7 +72,7 @@ public final class ConfigurationController extends AbstractFormController {
 
     if (!application.getRepositoryNames().isEmpty() && request.getParameter("addnew") == null) {
       //Config url is invoked with at least one repository already added
-      return new ModelAndView("confirmAddConfig", model);
+      return new ModelAndView("config/confirmAddConfig", model);
     } else {
       //Config URL invoked for the first time in a non-configured sventon instance
       final ConfigCommand configCommand = new ConfigCommand();
@@ -80,7 +80,7 @@ public final class ConfigurationController extends AbstractFormController {
       model.put("command", configCommand);
 
       logger.debug("Displaying the config page");
-      return new ModelAndView("config", model);
+      return new ModelAndView("config/config", model);
     }
   }
 
@@ -108,13 +108,13 @@ public final class ConfigurationController extends AbstractFormController {
       //noinspection unchecked
       model.putAll(errors.getModel());
       model.put("command", confCommand);
-      return new ModelAndView("config", model);
+      return new ModelAndView("config/config", model);
     } else {
       logger.debug("Adding configuration from command: " + confCommand);
       final RepositoryConfiguration repositoryConfiguration = confCommand.createRepositoryConfiguration();
       application.addRepository(repositoryConfiguration);
       model.put("latestAddedInstance", confCommand.getName());
-      return new ModelAndView("confirmAddConfig", model);
+      return new ModelAndView("config/confirmAddConfig", model);
     }
 
   }

@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
 <script type="text/javascript">
   var latestRevisionsCount = ${userRepositoryContext.latestRevisionsDisplayCount};
 </script>
+
 <table class="sventonTopTable">
   <tr>
     <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount); return false;">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
