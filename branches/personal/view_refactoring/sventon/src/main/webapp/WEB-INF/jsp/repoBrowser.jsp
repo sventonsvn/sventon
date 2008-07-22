@@ -20,10 +20,38 @@
   <title>sventon repository browser - ${repositoryURL}</title>
 </head>
 <body>
+  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 
-  <sventon:currentTargetHeader title="Repository Browser" target="${command.target}" hasProperties="true"/>
-  <sventon:functionLinks pageName="repobrowser"/>
+  <sventon:currentTargetHeader title="Repository Browser" target="${command.target}" properties="${properties}"/>
+
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:browseFunctionButtons command="${command}"/>
+        <c:choose>
+          <c:when test="${useCache}">
+            <sventon:flattenButton command="${command}" isHead="${isHead}" isUpdating="${isUpdating}"/>
+          </c:when>
+        </c:choose>
+      </td>
+      <td style="white-space: nowrap; text-align: right;"><spring:message code="filter.text"/></td>
+      <td style="white-space: nowrap;">
+        <sventon:extensionFilterList command="${command}" existingExtensions="${existingExtensions}" filterExtension="${filterExtension}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
     <input type="hidden" name="revision" value="${command.revision}">

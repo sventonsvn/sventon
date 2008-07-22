@@ -31,7 +31,7 @@
         <td>
           <c:set var="revCount" value="0"/>
           <c:forEach var="revision" items="${revisions}">
-            <sventon:revisionInfo details="${revision}" keepVisible="true" linkToHead="${revision.revision eq headRevision ? 'true' : 'false'}"/>
+            <sventon:revisionInfo name="${command.name}" details="${revision}" keepVisible="true" linkToHead="${revision.revision eq headRevision ? 'true' : 'false'}"/>
             <c:set var="revCount" value="${revCount + 1}"/>
             <c:if test="${revCount lt fn:length(revisions)}">
               <hr/>

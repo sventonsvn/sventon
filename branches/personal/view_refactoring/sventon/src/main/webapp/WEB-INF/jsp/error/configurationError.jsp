@@ -20,7 +20,8 @@
 </head>
 
 <body>
-  <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
 
   <h3>
     No repository has been added.

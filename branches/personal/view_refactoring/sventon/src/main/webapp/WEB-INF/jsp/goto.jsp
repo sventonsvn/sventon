@@ -20,6 +20,9 @@
 </head>
 
 <body>
+  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 </body>
 

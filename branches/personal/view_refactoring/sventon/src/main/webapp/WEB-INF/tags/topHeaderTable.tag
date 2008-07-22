@@ -11,17 +11,22 @@
   * ====================================================================
   */
 %>
-<div id="spinner" style="display: none; position: absolute; left: 0; top: 0; padding: 1em;">
-  <img src="images/spinner.gif" alt="spinner">
-</div>
+<%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="repositoryNames" required="true" type="java.util.Set" %>
+
 <table class="sventonHeader">
   <tr>
-    <td>sventon subversion web client - <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a>
+    <td>
+      sventon subversion web client -
+      <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a>
     </td>
     <td align="right">
-      <c:url value="/repos/list" var="changeRepos"/>
+      <c:url value="/repos/list" var="changeReposUrl"/>
       <c:if test="${not empty repositoryNames && fn:length(repositoryNames) > 1}">
-        <a class="sventonHeaderLink" href="${changeRepos}">[change repository]</a>
+        <a class="sventonHeaderLink" href="${changeReposUrl}">[change repository]</a>
       </c:if>
       <c:if test="${userRepositoryContext.uid ne null}">
         <c:url value="/repos/list" var="logout">
@@ -33,4 +38,3 @@
     </td>
   </tr>
 </table>
-<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>

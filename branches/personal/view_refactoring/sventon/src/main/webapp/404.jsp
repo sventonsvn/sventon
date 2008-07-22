@@ -24,14 +24,11 @@
     <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
   </head>
   <body>
-  <%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
+  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
 
   <h1>The requested view does not exist</h1>
   <p/>
-  <%
-  
-  %>
-  
   Go to <a href="${pageContext.request.contextPath}/index.jsp">sventon start page</a>
   <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
   </body>
