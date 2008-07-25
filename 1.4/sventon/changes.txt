@@ -1,7 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
-[1338] Release 1.4.0 (2008-07-25)
+[1339] Release 1.4.0 (2008-07-25)
 
 [1319] Release 1.4 RC6 (2008-07-09)
 [1315] Fixed: Bug #14171 - Thumbnails are not shown when using user based auth.
