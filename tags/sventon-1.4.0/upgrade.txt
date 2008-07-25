@@ -1,0 +1,17 @@
+UPGRADING FROM A PREVIOUS SVENTON VERSION
+
+1. Stop the servlet container.
+2. Locate the container's temp directory and the sub directory 'sventon'.
+3. Delete the sub directory 'sventon/cache'.
+3. Replace the svn.war file in the container's webapps install folder.
+4. Start the servlet container.
+
+If the repository cache has been enabled during setup, the background
+cache/indexing process of the revisions and the files in HEAD will start.
+If you have a repository with many files (and/or tags or branches),
+this can take quite some time. You will be able to use sventon during the
+indexing process, but the search and flatten buttons will be disabled until
+indexing is completed.
+
+Support
+See http://www.sventon.org
