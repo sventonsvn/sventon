@@ -19,6 +19,7 @@ import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.DiffCommand;
 import org.sventon.web.command.SVNBaseCommand;
+import static org.sventon.web.ctrl.template.DiffController.SIDE_BY_SIDE;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -59,6 +60,7 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
       final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(repository, diffCommand,
           SVNRevision.UNDEFINED, userRepositoryContext.getCharset(), getRepositoryConfiguration(svnCommand.getName()));
 
+      model.put("style", SIDE_BY_SIDE);
       model.put("diffResult", diffResult);
       model.put("isIdentical", false);
       model.put("isBinary", false);
@@ -69,8 +71,7 @@ public final class DiffPreviousController extends AbstractSVNTemplateController 
       logger.info("Binary file(s) detected", iffe);
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
     }
-
-    return new ModelAndView("diff", model);
+    return new ModelAndView("sideBySideDiff", model);
   }
 
 }

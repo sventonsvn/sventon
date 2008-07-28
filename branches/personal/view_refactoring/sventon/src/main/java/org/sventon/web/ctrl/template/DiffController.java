@@ -44,9 +44,9 @@ import java.util.Map;
  */
 public final class DiffController extends AbstractSVNTemplateController {
 
-  private static final String SIDE_BY_SIDE = "sidebyside";
-  private static final String UNIFIED = "unified";
-  private static final String INLINE = "inline";
+  public static final String SIDE_BY_SIDE = "sidebyside";
+  public static final String UNIFIED = "unified";
+  public static final String INLINE = "inline";
 
   /**
    * {@inheritDoc}
@@ -82,6 +82,7 @@ public final class DiffController extends AbstractSVNTemplateController {
         model.put("diffResult", diffResult);
       } else if (SVNNodeKind.FILE == nodeKind) {
         final String style = ServletRequestUtils.getStringParameter(request, "style", SIDE_BY_SIDE);
+        model.put("style", style);
         if (logger.isDebugEnabled()) {
           final StringBuilder sb = new StringBuilder();
           for (SVNFileRevision entry : entries) {
@@ -94,7 +95,7 @@ public final class DiffController extends AbstractSVNTemplateController {
         }
 
         if (SIDE_BY_SIDE.equals(style)) {
-          modelAndView.setViewName("diff");
+          modelAndView.setViewName("sideBySideDiff");
           final List<SideBySideDiffRow> diffResult = getRepositoryService().diffSideBySide(
               repository, diffCommand, pegRevision, charset, config);
           model.put("diffResult", diffResult);

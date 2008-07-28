@@ -20,18 +20,14 @@
 </head>
 
 <body>
-  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
-  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
-  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
-  <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
-
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
-        <sventon:diffFunctionButtons command="${command}" diffCommand="${diffCommand}"/>
+        <sventon:diffFunctionButtons command="${command}" diffCommand="${diffCommand}" diffStyle="${style}" pegrev="${pegrev}"/>
         <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
       </td>
       <td style="text-align: right;">
