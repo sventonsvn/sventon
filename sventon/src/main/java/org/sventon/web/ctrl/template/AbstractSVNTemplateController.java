@@ -260,6 +260,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("isUpdating", application.isUpdating(svnCommand.getName()));
         model.put("useCache", configuration.isCacheUsed());
         model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
+        model.put("isEntryTrayEnabled", configuration.isEntryTrayEnabled());
         model.put("repositoryNames", application.getRepositoryNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("charsets", availableCharsets.getCharsets());

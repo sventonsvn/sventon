@@ -89,9 +89,6 @@ public final class Application {
     Validate.notNull(configurationFilename, "Config filename cannot be null");
 
     this.configurationRootDirectory = configurationRootDirectory;
-    if (!this.configurationRootDirectory.exists() && !this.configurationRootDirectory.mkdirs()) {
-      throw new RuntimeException("Unable to create temporary directory: " + this.configurationRootDirectory.getAbsolutePath());
-    }
     this.configurationFilename = configurationFilename;
   }
 
@@ -102,6 +99,10 @@ public final class Application {
    * @throws CacheException if unable to initalize caches.
    */
   public void init() throws IOException, CacheException {
+    if (!this.configurationRootDirectory.exists() && !this.configurationRootDirectory.mkdirs()) {
+      throw new RuntimeException("Unable to create temporary directory: " + this.configurationRootDirectory.getAbsolutePath());
+    }
+
     initSvnSupport();
     loadRepositoryConfigurations();
     initCaches();

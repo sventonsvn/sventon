@@ -1,7 +1,7 @@
 package org.sventon.appl;
 
-import static org.sventon.appl.RepositoryConfiguration.*;
 import junit.framework.TestCase;
+import static org.sventon.appl.RepositoryConfiguration.*;
 import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.Properties;
@@ -27,6 +27,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertFalse(conf.isCacheUsed());
     assertFalse(conf.isIssueTrackerIntegrationEnabled());
     assertFalse(conf.isZippedDownloadsAllowed());
+    assertFalse(conf.isEntryTrayEnabled());
   }
 
   public void testCreateInstanceConfigurationTest() throws Exception {
@@ -79,7 +80,7 @@ public class RepositoryConfigurationTest extends TestCase {
   }
 
   public void testCacheUsedAndAccessControlEnabledCombinations() {
-    RepositoryConfiguration conf = new RepositoryConfiguration("test");
+    final RepositoryConfiguration conf = new RepositoryConfiguration("test");
     conf.setCacheUsed(true);
     conf.setEnableAccessControl(false);
 
@@ -118,7 +119,7 @@ public class RepositoryConfigurationTest extends TestCase {
     conf.setRepositoryUrl("http://localhost");
 
     final Properties props = conf.getAsProperties();
-    assertEquals(9, props.size());
+    assertEquals(10, props.size());
 
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_URL));
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));

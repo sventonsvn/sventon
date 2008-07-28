@@ -14,10 +14,8 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.model.PeggedRepositoryEntry;
-import org.sventon.model.RepositoryEntry;
-import org.sventon.model.RepositoryEntryTray;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.*;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -51,6 +49,7 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
+    assertEntryTrayEnabled(svnCommand.getName());
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
     final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", svnCommand.getRevisionNumber());
 
@@ -76,5 +75,12 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
       throw new UnsupportedOperationException(actionParameter);
     }
     return modelAndView;
+  }
+
+  protected void assertEntryTrayEnabled(final RepositoryName name) {
+    final RepositoryConfiguration configuration = getRepositoryConfiguration(name);
+    if (!configuration.isEntryTrayEnabled()) {
+      throw new UnsupportedOperationException("The EntryTray is disabled in the config file for repository " + name);
+    }
   }
 }
