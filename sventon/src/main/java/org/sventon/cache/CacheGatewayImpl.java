@@ -21,7 +21,7 @@ import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.cache.revisioncache.RevisionCacheManager;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.dir;
+import static org.sventon.model.RepositoryEntry.Kind.DIR;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -90,7 +90,7 @@ public final class CacheGatewayImpl implements CacheGateway {
     if (rootDir.endsWith("/")) {
       rootDir = rootDir.substring(0, rootDir.length() - 1);
     }
-    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.any);
+    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
   }
 
   /**
@@ -109,7 +109,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), dir);
+    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), DIR);
   }
 
   /**

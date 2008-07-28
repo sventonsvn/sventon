@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sventon.cache.Cache;
 import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.any;
+import static org.sventon.model.RepositoryEntry.Kind.ANY;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -174,7 +174,7 @@ public abstract class EntryCache implements Cache {
 
     for (final RepositoryEntry entry : cachedEntries) {
       final Matcher matcher = pattern.matcher(entry.getFullEntryName());
-      if (matcher.matches() && (entry.getKind() == kind || kind == any)) {
+      if (matcher.matches() && (entry.getKind() == kind || kind == ANY)) {
         result.add(entry);
       }
     }

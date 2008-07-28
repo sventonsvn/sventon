@@ -41,7 +41,7 @@ public final class RepositoryEntry implements Serializable {
   private String entryLogMessage;
 
   public enum Kind {
-    dir, file, none, unknown, any
+    DIR, FILE, NONE, UNKNOWN, ANY
   }
 
   /**
@@ -86,7 +86,7 @@ public final class RepositoryEntry implements Serializable {
     this.entryLastAuthor = entry.getAuthor() == null ? null : entry.getAuthor().intern();
     this.entryLogMessage = entry.getCommitMessage();
     this.entryCreatedDate = entry.getDate();
-    this.entryKind = Kind.valueOf(entry.getKind().toString());
+    this.entryKind = Kind.valueOf(entry.getKind().toString().toUpperCase());
     this.entryName = entry.getName().intern();
     this.entryFirstRevision = entry.getRevision();
     this.entrySize = entry.getSize();
@@ -109,16 +109,6 @@ public final class RepositoryEntry implements Serializable {
    */
   public String getEntryPath() {
     return entryPath;
-  }
-
-  /**
-   * Gets the entry url.
-   *
-   * @return The entry url
-   * @deprecated Throws <tt>UnsupportedOperationException</tt> since sventon 1.2 RC3.
-   */
-  public String getUrl() {
-    throw new UnsupportedOperationException();
   }
 
   /**

@@ -63,9 +63,9 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
       final RepositoryEntry.Kind kind2 = entry2.getKind();
       if (kind1 != kind2) {
         // Not equal kinds, have to inspect.
-        if (RepositoryEntry.Kind.dir == kind1) {
+        if (RepositoryEntry.Kind.DIR == kind1) {
           return -1;
-        } else if (RepositoryEntry.Kind.dir == kind2) {
+        } else if (RepositoryEntry.Kind.DIR == kind2) {
           return 1;
         }
       } // not equal kind, but neither is DIR

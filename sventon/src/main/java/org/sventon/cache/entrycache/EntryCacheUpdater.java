@@ -268,7 +268,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       }
     }
 
-    if (deletedEntry.getKind() == RepositoryEntry.Kind.dir) {
+    if (deletedEntry.getKind() == RepositoryEntry.Kind.DIR) {
       // Directory node deleted
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
       entryCache.removeByName(logEntryPath.getPath(), true);
@@ -299,7 +299,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     // a moved or copied directory (branch). In that case we have to recursively
     // add the entry. If entry is a directory but does not have a copyPath
     // the contents will be added one by one as single entries.
-    if (addedEntry.getKind() == RepositoryEntry.Kind.dir && logEntryPath.getCopyPath() != null) {
+    if (addedEntry.getKind() == RepositoryEntry.Kind.DIR && logEntryPath.getCopyPath() != null) {
       // Directory node added
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       entryCache.add(addedEntry);
@@ -332,7 +332,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       if (!entryCache.add(entry)) {
         LOGGER.warn("Unable to add already existing entry to cache: " + entry.toString());
       }
-      if (entry.getKind() == RepositoryEntry.Kind.dir) {
+      if (entry.getKind() == RepositoryEntry.Kind.DIR) {
         final String pathToAdd = path + entry.getName() + "/";
         LOGGER.debug("Adding: " + pathToAdd);
         addDirectories(entryCache, repository, pathToAdd, revision, repositoryService);
