@@ -54,7 +54,7 @@
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td><input type="checkbox" name="entry" value="${trayEntry.fullEntryName};;${peggedEntry.pegRevision}"></td>
       <c:choose>
-        <c:when test="${'dir' eq trayEntry.kind}">
+        <c:when test="${'DIR' eq trayEntry.kind}">
           <td>
             <img src="images/icon_folder.png" alt="dir">
           </td>
