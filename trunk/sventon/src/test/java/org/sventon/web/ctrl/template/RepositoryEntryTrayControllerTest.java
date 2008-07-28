@@ -1,10 +1,5 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.model.RepositoryEntry;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
@@ -12,10 +7,18 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.RepositoryEntry;
+import org.sventon.model.RepositoryName;
+import org.sventon.model.UserRepositoryContext;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import java.io.File;
 import java.util.Map;
 
 public class RepositoryEntryTrayControllerTest extends TestCase {
@@ -28,6 +31,11 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
   private UserRepositoryContext context;
 
   protected void setUp() throws Exception {
+    final Application application = new Application(new File("."), "test");
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+    configuration.setEnableEntryTray(true);
+    application.addRepository(configuration);
+
     entry = new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
 
     command.setPath("/trunk/test");
@@ -38,6 +46,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
     request = new MockHttpServletRequest();
     ctrl = new RepositoryEntryTrayController();
     ctrl.setRepositoryService(mockService);
+    ctrl.setApplication(application);
     context = new UserRepositoryContext();
   }
 
