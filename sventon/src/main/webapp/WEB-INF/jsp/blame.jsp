@@ -22,9 +22,25 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Blame" target="${command.target}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Blame" target="${command.target}" hasProperties="false"/>
-  <sventon:functionLinks pageName="showBlame"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+    <table class="sventonFunctionLinksTable">
+      <tr>
+        <td style="white-space: nowrap;">
+          <sventon:blameFunctionButtons command="${command}"/>
+          <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
+        </td>
+        <td style="text-align: right;">
+          <c:if test="${useCache}">
+            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+          </c:if>
+        </td>
+      </tr>
+    </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <table id="blameTable" class="codeBlock" cellspacing="0">
     <tr>
@@ -35,7 +51,6 @@
     </tr>
 
     <c:forEach items="${annotatedFile.unmodifiableRows}" var="row">
-
       <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
         <c:param name="revision" value="${row.revision}" />
       </c:url>

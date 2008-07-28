@@ -17,13 +17,13 @@
 
 <%@ attribute name="title" required="true" type="java.lang.String" %>
 <%@ attribute name="target" required="true" type="java.lang.String" %>
-<%@ attribute name="hasProperties" required="true" type="java.lang.Boolean" %>
+<%@ attribute name="properties" required="true" type="java.util.Map" %>
 
 <div id="sventonHeaderDiv">
   <table class="sventonHeader">
     <tr>
       <c:choose>
-        <c:when test="${hasProperties}">
+        <c:when test="${properties ne null}">
           <td>${title} - ${target}&nbsp;
             <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', 'show', 'hide'); return false;">
               [<span id="propertiesLink">show</span> properties]
@@ -37,7 +37,7 @@
     </tr>
   </table>
 </div>
-<c:if test="${hasProperties}">
+<c:if test="${properties ne null}">
   <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
     <br>
       <table class="sventonPropertiesTable">

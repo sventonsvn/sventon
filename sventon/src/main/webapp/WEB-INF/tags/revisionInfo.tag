@@ -17,6 +17,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 
+<%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
 <%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
@@ -38,12 +39,9 @@
   <c:set var="latestChangedPaths" value="${details.changedPaths}"/>
   <jsp:useBean id="latestChangedPaths" type="java.util.Map"/>
 
-  <c:set var="repositoryName" value="${command.name}"/>
-  <jsp:useBean id="repositoryName" type="org.sventon.model.RepositoryName"/>
-
   <tr>
     <td colspan="2">
-      <%=HTMLCreator.createChangedPathsTable(details.getChangedPaths(), details.getRevision(), null, "", repositoryName, keepVisible, linkToHead, response)%>
+      <%=HTMLCreator.createChangedPathsTable(details.getChangedPaths(), details.getRevision(), null, "", name, keepVisible, linkToHead, response)%>
     </td>
   </tr>
 </table>

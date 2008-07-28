@@ -77,7 +77,7 @@ public final class ConfigurationSubmissionController extends AbstractController 
 
     if (application.getRepositoryCount() == 0) {
       logger.warn("No instance has been configured and added");
-      return new ModelAndView("configurationError");
+      return new ModelAndView("error/configurationError");
     }
 
     application.storeRepositoryConfigurations();
