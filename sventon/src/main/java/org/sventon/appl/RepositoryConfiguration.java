@@ -117,7 +117,7 @@ public final class RepositoryConfiguration {
   /**
    * Decides whether the <i>entry tray</i> is enabled.
    */
-  private boolean enableEntryTray;
+  private boolean enableEntryTray = true;
 
   /**
    * Decides wheter the issue tracker integration should be used.
@@ -164,9 +164,12 @@ public final class RepositoryConfiguration {
     ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
-    ic.setEnableEntryTray(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY)));
     ic.setEnableIssueTrackerIntegration(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION)));
     ic.setRssItemsCount(Integer.parseInt(properties.getProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT))));
+
+    if (properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY) != null) {
+        ic.setEnableEntryTray(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY)));
+    }
 
     if (properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE) != null) {
       ic.setRssTemplateFile((String) properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE));
