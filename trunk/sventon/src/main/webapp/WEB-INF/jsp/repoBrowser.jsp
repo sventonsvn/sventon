@@ -106,7 +106,7 @@
             <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
           </td>
           <c:choose>
-            <c:when test="${'dir' eq entry.kind}">
+            <c:when test="${'DIR' eq entry.kind}">
               <td class="sventonCol2">
                 <div id="${entryTrayAddUrl}" class="entry">
                   <img src="images/icon_folder.png" alt="dir">
@@ -130,7 +130,7 @@
               <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img alt="Lock" src="images/icon_lock.png"></span>
             </c:if>
           </td>
-          <td class="sventonCol5"><c:if test="${'file' eq entry.kind}">${entry.size}</c:if></td>
+          <td class="sventonCol5"><c:if test="${'FILE' eq entry.kind}">${entry.size}</c:if></td>
           <td class="sventonCol6">
             <a href="${showRevInfoUrl}" onmouseover="getLogMessage(${entry.revision}, '${command.name}', '<fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>');">
               ${entry.revision}
