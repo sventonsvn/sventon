@@ -19,11 +19,7 @@
   <title>sventon repository browser - ${repositoryURL}</title>
 </head>
 <body>
-  <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
-  <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
-  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-
   <sventon:currentTargetHeader title="Search result for" target="${searchString}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">

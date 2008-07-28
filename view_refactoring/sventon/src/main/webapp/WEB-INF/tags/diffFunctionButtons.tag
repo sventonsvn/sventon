@@ -16,6 +16,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="diffCommand" required="true" type="org.sventon.web.command.DiffCommand" %>
+<%@ attribute name="diffStyle" required="true" type="java.lang.String" %>
+<%@ attribute name="pegrev" required="true" type="java.lang.Long" %>
 
 <c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
   <c:param name="revision" value="${command.revision}" />
@@ -31,7 +33,7 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="entry" value="${diffCommand.toPath};;${diffCommand.toRevision}" />
   <c:param name="entry" value="${diffCommand.fromPath};;${diffCommand.fromRevision}" />
-  <c:if test="${!empty pegrev}">
+  <c:if test="${pegrev > 0}">
     <c:param name="pegrev" value="${pegrev}" />
   </c:if>
   <c:if test="${param.showlatestrevinfo}">
@@ -46,10 +48,7 @@
 <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${diffCommand.fromPath},${diffCommand.fromRevision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
 
 <select name="diffStyle" class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
-  <option value="${diffUrl}&style=inline"
-      ${pageName eq 'showInlineDiff' ? 'selected' : ''}>Inline</option>
-  <option value="${diffUrl}&style=sidebyside"
-      ${pageName eq 'showDiff' ? 'selected' : ''}>Side By Side</option>
-  <option value="${diffUrl}&style=unified"
-      ${pageName eq 'showUnifiedDiff' ? 'selected' : ''}>Unified</option>
+  <option value="${diffUrl}&style=sidebyside" ${diffStyle eq 'sidebyside' ? 'selected' : ''}>Side By Side</option>
+  <option value="${diffUrl}&style=unified" ${diffStyle eq 'unified' ? 'selected' : ''}>Unified</option>
+  <option value="${diffUrl}&style=inline" ${diffStyle eq 'inline' ? 'selected' : ''}>Inline</option>
 </select>

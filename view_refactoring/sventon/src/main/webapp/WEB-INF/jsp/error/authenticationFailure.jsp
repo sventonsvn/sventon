@@ -21,7 +21,7 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
-  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}"/>
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" hasCredentials="${userRepositoryContext.uid ne null}"/>
   <h2>
     Authentication required for
     <c:choose>

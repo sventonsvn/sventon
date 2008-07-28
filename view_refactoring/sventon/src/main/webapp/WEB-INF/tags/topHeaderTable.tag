@@ -16,6 +16,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="repositoryNames" required="true" type="java.util.Set" %>
+<%@ attribute name="hasCredentials" required="true" type="java.lang.Boolean" %>
 
 <table class="sventonHeader">
   <tr>
@@ -28,7 +29,7 @@
       <c:if test="${not empty repositoryNames && fn:length(repositoryNames) > 1}">
         <a class="sventonHeaderLink" href="${changeReposUrl}">[change repository]</a>
       </c:if>
-      <c:if test="${userRepositoryContext.uid ne null}">
+      <c:if test="${hasCredentials}">
         <c:url value="/repos/list" var="logout">
           <c:param name="logout" value="true"/>
           <c:param name="repositoryName" value="${command.name}"/>
