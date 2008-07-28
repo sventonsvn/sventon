@@ -27,7 +27,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertFalse(conf.isCacheUsed());
     assertFalse(conf.isIssueTrackerIntegrationEnabled());
     assertFalse(conf.isZippedDownloadsAllowed());
-    assertFalse(conf.isEntryTrayEnabled());
+    assertTrue(conf.isEntryTrayEnabled());
   }
 
   public void testCreateInstanceConfigurationTest() throws Exception {
