@@ -37,9 +37,9 @@ public final class RepositoryEntryKindFilter {
    */
   public RepositoryEntryKindFilter(final RepositoryEntry.Kind kind) {
     if (kind == null
-        || RepositoryEntry.Kind.any == kind
-        || RepositoryEntry.Kind.unknown == kind
-        || RepositoryEntry.Kind.none == kind) {
+        || RepositoryEntry.Kind.ANY == kind
+        || RepositoryEntry.Kind.UNKNOWN == kind
+        || RepositoryEntry.Kind.NONE == kind) {
       throw new IllegalArgumentException("Illegal kind: " + kind);
     }
 

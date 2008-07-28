@@ -57,7 +57,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
 
     if (bypassEmpty && entries.size() == 1) {
       final RepositoryEntry entry = entries.get(0);
-      if (RepositoryEntry.Kind.dir == entry.getKind()) {
+      if (RepositoryEntry.Kind.DIR == entry.getKind()) {
         logger.debug("Bypassing empty directory: " + svnCommand.getPath());
         svnCommand.setPath(svnCommand.getPath() + entry.getName() + "/");
         final ModelAndView bypassedModelAndView =

@@ -79,18 +79,18 @@ public class EntryCacheTest extends TestCase {
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());
 
-    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), any).size());
-    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), file).size());
-    assertEquals(0, cache.findByPattern(Pattern.compile(".*[12].*"), dir).size());
+    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), ANY).size());
+    assertEquals(5, cache.findByPattern(Pattern.compile(".*[12].*"), FILE).size());
+    assertEquals(0, cache.findByPattern(Pattern.compile(".*[12].*"), DIR).size());
 
-    assertEquals(8, cache.findByPattern(Pattern.compile(".*trunk.*"), any).size());
-    assertEquals(3, cache.findByPattern(Pattern.compile(".*trunk.*"), dir).size());
+    assertEquals(8, cache.findByPattern(Pattern.compile(".*trunk.*"), ANY).size());
+    assertEquals(3, cache.findByPattern(Pattern.compile(".*trunk.*"), DIR).size());
 
-    assertEquals(4, cache.findByPattern(Pattern.compile(".*"), dir).size());
+    assertEquals(4, cache.findByPattern(Pattern.compile(".*"), DIR).size());
 
-    assertEquals(1, cache.findByPattern(Pattern.compile(".*/trunk/src/.*"), file).size());
+    assertEquals(1, cache.findByPattern(Pattern.compile(".*/trunk/src/.*"), FILE).size());
 
-    assertEquals(1, cache.findByPattern(Pattern.compile(".*/TrUnK/sRc/.*", Pattern.CASE_INSENSITIVE), file).size());
+    assertEquals(1, cache.findByPattern(Pattern.compile(".*/TrUnK/sRc/.*", Pattern.CASE_INSENSITIVE), FILE).size());
   }
 
   private void print(List<RepositoryEntry> entries) {

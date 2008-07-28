@@ -47,7 +47,7 @@ public final class ListFilesController extends ListDirectoryContentsController {
 
     final Map<String, Object> model = modelAndView.getModel();
     final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
-    final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.file);
+    final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.FILE);
     final int rowNumber = ServletRequestUtils.getRequiredIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
