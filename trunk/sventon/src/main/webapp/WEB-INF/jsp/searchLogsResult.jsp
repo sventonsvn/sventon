@@ -20,9 +20,25 @@
 </head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Search result for" target="${searchString}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Search result for" target="${searchString}" hasProperties="false"/>
-  <sventon:functionLinks pageName="repobrowser"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+    <table class="sventonFunctionLinksTable">
+      <tr>
+        <td style="white-space: nowrap;">
+          <sventon:searchResultFunctionButtons command="${command}"/>
+          <sventon:flattenButton command="${command}" isHead="${isHead}" isUpdating="${isUpdating}"/>
+        </td>
+        <td style="text-align: right;">
+          <c:if test="${useCache}">
+            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+          </c:if>
+        </td>
+      </tr>
+    </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <% pageContext.setAttribute("br", "\n"); %>
   <table class="sventonEntriesTable">

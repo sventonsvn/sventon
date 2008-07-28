@@ -21,9 +21,24 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Show Image File" target="${command.target}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Show Image File" target="${command.target}" hasProperties="true"/>
-  <sventon:functionLinks pageName="showImageFile"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:fileFunctionButtons command="${command}" isArchivedEntry="${archivedEntry ne null}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="showUrl">
     <c:param name="revision" value="${command.revision}" />

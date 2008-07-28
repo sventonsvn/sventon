@@ -21,9 +21,24 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" hasProperties="false"/>
-  <sventon:functionLinks pageName="showRevInfo"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:revInfoFunctionButtons command="${command}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <c:url value="/repos/${command.name}/revinfo" var="showPrevRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber - 1}" />
@@ -45,7 +60,7 @@
   <table class="sventonLatestCommitInfoTable">
     <tr>
       <td>
-        <sventon:revisionInfo details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+        <sventon:revisionInfo name="${command.name}" details="${revisionInfo}" keepVisible="false" linkToHead="false" />
       </td>
     </tr>
   </table>

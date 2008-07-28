@@ -23,9 +23,25 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Diff View" target="${command.target}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Diff View" target="${command.target}" hasProperties="false"/>
-  <sventon:functionLinks pageName="showInlineDiff"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+    <table class="sventonFunctionLinksTable">
+      <tr>
+        <td style="white-space: nowrap;">
+          <sventon:diffFunctionButtons command="${command}" diffCommand="${diffCommand}" diffStyle="${style}" pegrev="${pegrev}"/>
+          <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
+        </td>
+        <td style="text-align: right;">
+          <c:if test="${useCache}">
+            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+          </c:if>
+        </td>
+      </tr>
+    </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <c:choose>
     <c:when test="${isIdentical}">

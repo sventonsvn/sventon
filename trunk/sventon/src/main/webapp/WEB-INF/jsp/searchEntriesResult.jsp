@@ -21,9 +21,25 @@
 </head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Search result for" target="${searchString} (directory '${startDir}' and below)" hasProperties="false"/>
-  <sventon:functionLinks pageName="repobrowser"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+    <table class="sventonFunctionLinksTable">
+      <tr>
+        <td style="white-space: nowrap;">
+          <sventon:searchResultFunctionButtons command="${command}"/>
+          <sventon:flattenButton command="${command}" isHead="${isHead}" isUpdating="${isUpdating}"/>
+        </td>
+        <td style="text-align: right;">
+          <c:if test="${useCache}">
+            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+          </c:if>
+        </td>
+      </tr>
+    </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
     <input type="hidden" name="revision" value="${command.revision}">

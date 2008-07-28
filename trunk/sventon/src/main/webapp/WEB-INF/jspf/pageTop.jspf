@@ -11,12 +11,16 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/topHeaderTable.jspf"%>
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+<%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+<sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" hasCredentials="${userRepositoryContext.uid ne null}"/>
+
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 
 <script type="text/javascript">
   var latestRevisionsCount = ${userRepositoryContext.latestRevisionsDisplayCount};
 </script>
+
 <table class="sventonTopTable">
   <tr>
     <td valign="bottom" colspan="1"><a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount); return false;">[<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}">hide</c:when><c:otherwise>show</c:otherwise></c:choose></span> latest commit info]</a></td>
@@ -50,7 +54,7 @@
   </tr>
   <tr>
     <td colspan="2">
-      <div id="latestCommitInfoDiv" ${param.showlatestrevinfo eq null || param.showlatestrevinfo eq 'false' ? 'style="display:none"' : ''} >
+      <div id="latestCommitInfoDiv" ${param.showlatestrevinfo eq null or param.showlatestrevinfo eq 'false' ? 'style="display:none"' : ''} >
         <%@ include file="/WEB-INF/jsp/ajax/latestRevisions.jsp"%>
       </div>
     </td>
@@ -65,6 +69,12 @@
 
 <spring:hasBindErrors name="command">
   <table class="sventonSpringErrorMessageTable">
-    <tr><td><span class="exclamationText"><spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/></span></td></tr>
+    <tr>
+      <td>
+        <span class="exclamationText">
+          <spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/>
+        </span>
+      </td>
+    </tr>
   </table>
 </spring:hasBindErrors>

@@ -21,22 +21,19 @@
 </head>
 
 <body>
-<sventon:currentTargetHeader title="sventon repository browser" target="configuration" hasProperties="false"/>
+<sventon:currentTargetHeader title="sventon repository browser" target="configuration" properties="${properties}"/>
 
 <br>
 
 
 <div id="config_page">
 
-
   <div id="configured_repos">
-
     <ul>
       <c:forEach var="repos" items="${addedRepositories}">
         <li>${repos}</li>
       </c:forEach>
     </ul>
-
   </div>
 
   <div id="config_confirmation">
@@ -46,7 +43,6 @@
         <h1>
           Repository successfully configured!
         </h1>
-
         <p>
           The repository <b>${latestAddedRepository}</b> has been successfully added to sventon.
         </p>

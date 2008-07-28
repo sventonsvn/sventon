@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
+  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
 </body>
 
 <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>

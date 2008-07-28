@@ -40,7 +40,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     controller.setApplication(application);
 
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
-    assertEquals("configurationError", modelAndView.getViewName());
+    assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
   public void testHandleRequestInternal() throws Exception {

@@ -21,9 +21,24 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
+  <sventon:currentTargetHeader title="Show Locks" target="${command.target}" properties="${properties}"/>
 
-  <sventon:currentTargetHeader title="Show Locks" target="${command.target}" hasProperties="false"/>
-  <sventon:functionLinks pageName="showLock"/>
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <table class="sventonFunctionLinksTable">
+    <tr>
+      <td style="white-space: nowrap;">
+        <sventon:locksFunctionButtons command="${command}"/>
+      </td>
+      <td style="text-align: right;">
+        <c:if test="${useCache}">
+          <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+    <!-- Needed by ASVNTC -->
+    <input type="hidden" name="revision" value="${command.revision}">
+  </form>
 
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>
