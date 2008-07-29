@@ -38,7 +38,7 @@
 
   <div id="config_confirmation">
 
-    <c:if test="${latestAddedRepositories ne null}">
+    <c:if test="${latestAddedRepository ne null}">
       <div id="config_success">
         <h1>
           Repository successfully configured!

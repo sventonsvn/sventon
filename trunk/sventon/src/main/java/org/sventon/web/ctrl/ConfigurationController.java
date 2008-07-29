@@ -113,7 +113,7 @@ public final class ConfigurationController extends AbstractFormController {
       logger.debug("Adding configuration from command: " + confCommand);
       final RepositoryConfiguration repositoryConfiguration = confCommand.createRepositoryConfiguration();
       application.addRepository(repositoryConfiguration);
-      model.put("latestAddedInstance", confCommand.getName());
+      model.put("latestAddedRepository", confCommand.getName());
       return new ModelAndView("config/confirmAddConfig", model);
     }
 
