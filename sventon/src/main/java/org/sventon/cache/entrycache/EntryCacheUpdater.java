@@ -13,7 +13,7 @@ package org.sventon.cache.entrycache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.RepositoryFactory;
+import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.AbstractRevisionObserver;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
@@ -64,7 +64,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * The repository factory.
    */
-  private RepositoryFactory repositoryFactory;
+  private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
    * Constructor.
@@ -93,7 +93,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     try {
       final EntryCache entryCache = entryCacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
-      repository = repositoryFactory.getRepository(repositoryName, configuration.getSVNURL(),
+      repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           configuration.getUid(), configuration.getPwd());
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
@@ -341,12 +341,12 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   }
 
   /**
-   * Sets the repository factory instance.
+   * Sets the repository connection factory instance.
    *
-   * @param repositoryFactory Factory.
+   * @param repositoryConnectionFactory Factory instance.
    */
-  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
-    this.repositoryFactory = repositoryFactory;
+  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
+    this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
 
   /**

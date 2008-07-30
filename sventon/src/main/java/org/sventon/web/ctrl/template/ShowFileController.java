@@ -20,10 +20,10 @@ import org.sventon.colorer.Colorer;
 import org.sventon.model.ArchiveFile;
 import org.sventon.model.TextFile;
 import org.sventon.model.UserRepositoryContext;
+import org.sventon.model.ZipFileWrapper;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
-import org.sventon.util.ZipUtils;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -31,11 +31,9 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipInputStream;
 
 /**
  * ShowFileController.
@@ -135,9 +133,9 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
 
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
           getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
-          final ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outStream.toByteArray()));
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + svnCommand.getPath() + "]");
-          final TextFile textFile = new TextFile(new String(ZipUtils.extractFile(zis, archivedEntry), charset),
+          final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
+          final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
               archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
           model.put("file", textFile);
           modelAndView = new ModelAndView("showTextFile", model);

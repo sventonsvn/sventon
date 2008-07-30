@@ -26,7 +26,7 @@ import java.io.File;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryFactory {
+public final class RepositoryConnectionFactory {
 
   /**
    * Root directory where to place the svn config files.
@@ -39,7 +39,7 @@ public final class RepositoryFactory {
    * @param configurationRootDirectory Root directory where to place the svn config files.
    *                                   If the directory does not exist, it will be created.
    */
-  public RepositoryFactory(final File configurationRootDirectory) {
+  public RepositoryConnectionFactory(final File configurationRootDirectory) {
     Validate.notNull(configurationRootDirectory, "Configuration root dir cannot be null!");
     configurationRootDirectory.mkdirs();
     this.configurationRootDirectory = configurationRootDirectory;
@@ -57,7 +57,7 @@ public final class RepositoryFactory {
    * @return The repository connection.
    * @throws SVNException if unable to create repository connection.
    */
-  public SVNRepository getRepository(final RepositoryName repositoryName, final SVNURL svnUrl, final String uid, final String pwd)
+  public SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl, final String uid, final String pwd)
       throws SVNException {
 
     if (svnUrl == null) {

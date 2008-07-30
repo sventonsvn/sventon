@@ -15,7 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.model.RepositoryName;
-import org.sventon.util.ZipUtils;
+import org.sventon.model.ZipFileWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,8 +84,9 @@ public final class ExportDirectory {
     final File zipFile = new File(exportDirectory.getParentFile(), createTempFilename(new Date()));
 
     logger.debug("Creating temporary zip file: " + zipFile.getAbsolutePath());
-    new ZipUtils(charset).zipDir(zipFile, exportDirectory);
-    return zipFile;
+    final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(zipFile, charset);
+    zipFileWrapper.add(exportDirectory);
+    return zipFileWrapper.getZipFile();
   }
 
   /**
