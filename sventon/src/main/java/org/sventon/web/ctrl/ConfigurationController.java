@@ -59,7 +59,6 @@ public final class ConfigurationController extends AbstractFormController {
   protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response, final BindException errors)
       throws IOException {
 
-    logger.debug("showForm() started");
     logger.info("sventon configured: " + application.isConfigured());
 
     if (application.isConfigured()) {
@@ -78,8 +77,6 @@ public final class ConfigurationController extends AbstractFormController {
       final ConfigCommand configCommand = new ConfigCommand();
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
-
-      logger.debug("Displaying the config page");
       return new ModelAndView("config/config", model);
     }
   }
@@ -91,7 +88,6 @@ public final class ConfigurationController extends AbstractFormController {
                                                final HttpServletResponse response, final Object command,
                                                final BindException errors) throws IOException {
 
-    logger.debug("processFormSubmission() started");
     logger.info("sventon configuration OK: " + application.isConfigured());
 
     if (application.isConfigured()) {
@@ -116,7 +112,6 @@ public final class ConfigurationController extends AbstractFormController {
       model.put("latestAddedRepository", confCommand.getName());
       return new ModelAndView("config/confirmAddConfig", model);
     }
-
   }
 
 }
