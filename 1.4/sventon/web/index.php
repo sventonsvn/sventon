@@ -153,17 +153,31 @@
             </td>
           </tr>
         </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
+          <tr>
+            <td align="center">
+              <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_partner_badge"></script>
+              <br>
+              <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_users_logo"></script>
+            </td>
+          </tr>
+        </table>
+
       </td>
     </tr>
   </table>
   <p>&nbsp;</p>
 </div>
 
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
-  _uacct = "UA-206174-3";
-  urchinTracker();
+var pageTracker = _gat._getTracker("UA-206174-3");
+pageTracker._initData();
+pageTracker._trackPageview();
 </script>
 
 </body>
