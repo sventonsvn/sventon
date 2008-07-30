@@ -47,7 +47,7 @@
 
   <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
 
-  <bean id="repositoryFactory" class="org.sventon.RepositoryFactory" scope="prototype">
+  <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactory" scope="prototype">
     <constructor-arg ref="repositoriesDir"/>
   </bean>
 
@@ -63,7 +63,7 @@
   <bean id="svnBaseCommandValidator" class="org.sventon.web.command.SVNBaseCommandValidator"/>
 
   <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
-    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
     <property name="application" ref="application"/>
   </bean>
 
@@ -87,7 +87,7 @@
     <property name="validator" ref="svnBaseCommandValidator"/>
     <property name="maxRevisionsCount" value="10"/>
     <property name="availableCharsets" ref="availableCharsets"/>
-    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
     <property name="nameEditor" ref="nameEditor"/>
     <property name="revisionEditor" ref="revisionEditor"/>
   </bean>
@@ -97,7 +97,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="rssFeedGenerator" ref="rssFeedGenerator"/>
-    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
   </bean>
 
   <bean id="listFilesController" class="org.sventon.web.ctrl.template.ListFilesController" parent="abstractController"/>
@@ -289,7 +289,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="maxRevisionCountPerUpdate" value="500"/>
-    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
   </bean>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
@@ -332,7 +332,7 @@
     <constructor-arg index="0" ref="entryCacheManager"/>
     <constructor-arg index="1" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
-    <property name="repositoryFactory" ref="repositoryFactory"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->

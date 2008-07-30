@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.sventon.RepositoryFactory;
+import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
@@ -46,7 +46,7 @@ public final class ConfigCommandValidator implements Validator {
   /**
    * The repository factory.
    */
-  private RepositoryFactory repositoryFactory;
+  private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
    * The application.
@@ -86,12 +86,12 @@ public final class ConfigCommandValidator implements Validator {
   }
 
   /**
-   * Sets the repository factory instance.
+   * Sets the repository connection factory instance.
    *
-   * @param repositoryFactory Factory.
+   * @param repositoryConnectionFactory Factory instance.
    */
-  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
-    this.repositoryFactory = repositoryFactory;
+  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
+    this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
 
   /**
@@ -124,8 +124,8 @@ public final class ConfigCommandValidator implements Validator {
 
           SVNRepository repository = null;
           try {
-            repository = repositoryFactory.getRepository(new RepositoryName(repositoryName), configuration.getSVNURL(),
-                configuration.getUid(), configuration.getPwd());
+            repository = repositoryConnectionFactory.createConnection(new RepositoryName(repositoryName),
+                configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
             repository.testConnection();
           } catch (SVNAuthenticationException e) {
             logger.warn("Repository authentication failed");

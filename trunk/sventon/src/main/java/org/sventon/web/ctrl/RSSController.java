@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
-import org.sventon.RepositoryFactory;
+import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
@@ -70,7 +70,7 @@ public final class RSSController extends AbstractController {
   /**
    * The repository factory.
    */
-  private RepositoryFactory repositoryFactory;
+  private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
    * {@inheritDoc}
@@ -107,10 +107,10 @@ public final class RSSController extends AbstractController {
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryFactory.getRepository(configuration.getName(),
+        repository = repositoryConnectionFactory.createConnection(configuration.getName(),
             configuration.getSVNURL(), uid, pwd);
       } else {
-        repository = repositoryFactory.getRepository(configuration.getName(),
+        repository = repositoryConnectionFactory.createConnection(configuration.getName(),
             configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
       }
 
@@ -139,12 +139,12 @@ public final class RSSController extends AbstractController {
   }
 
   /**
-   * Sets the repository factory instance.
+   * Sets the repository connection factory instance.
    *
-   * @param repositoryFactory Factory.
+   * @param repositoryConnectionFactory Factory instance.
    */
-  public void setRepositoryFactory(final RepositoryFactory repositoryFactory) {
-    this.repositoryFactory = repositoryFactory;
+  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
+    this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
 
   /**
