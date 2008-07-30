@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Cache aware subclassed implementation of RepositoryService.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl {
 

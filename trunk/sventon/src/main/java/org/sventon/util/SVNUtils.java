@@ -16,7 +16,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 /**
  * Misc SVNKit utilities.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SVNUtils {
 

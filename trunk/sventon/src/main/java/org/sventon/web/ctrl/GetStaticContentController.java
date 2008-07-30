@@ -26,7 +26,7 @@ import java.io.OutputStream;
 /**
  * Gets static content and writes it to the response stream.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class GetStaticContentController extends AbstractController {
 

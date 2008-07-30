@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Web related utility methods.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class WebUtils {
 

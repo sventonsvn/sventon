@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * ShowLockController.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ShowLocksController extends AbstractSVNTemplateController implements Controller {
 

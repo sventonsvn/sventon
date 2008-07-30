@@ -24,7 +24,7 @@ import java.util.zip.GZIPInputStream;
 /**
  * Simple viewer utility for the sventon entry cache file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class EntryCacheViewer {
 

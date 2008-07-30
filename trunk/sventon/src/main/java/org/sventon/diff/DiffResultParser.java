@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 /**
  * Diff result parser.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 final class DiffResultParser {
 

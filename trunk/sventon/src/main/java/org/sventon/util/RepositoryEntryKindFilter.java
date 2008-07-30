@@ -21,7 +21,7 @@ import java.util.List;
  * RepositoryEntryKind filter.
  * Filters out given entry kind and removes entries with non-matching kinds.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntryKindFilter {
 

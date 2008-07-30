@@ -20,7 +20,7 @@ import java.util.Map;
  * Diff segment bean. Represents one result segment produced by
  * {@link org.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 final class DiffSegment {
 

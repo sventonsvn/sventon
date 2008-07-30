@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Gets the <i>N</i> latest revision details.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class GetLatestRevisionsController extends AbstractSVNTemplateController {
 

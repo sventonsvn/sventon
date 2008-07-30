@@ -21,7 +21,7 @@ import java.util.TreeSet;
  * Memory persistend repository entry cache.
  * Contains a cached set of the repository entries for a specific revision and URL.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class MemoryCache extends EntryCache {
 

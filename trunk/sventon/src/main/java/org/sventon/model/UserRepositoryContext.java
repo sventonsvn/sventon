@@ -27,7 +27,7 @@ import java.io.Serializable;
  * Class containing user specific data, the data is stored per configured repository if more than
  * one repository is configured.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class UserRepositoryContext implements Serializable {
 

@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * Service class for accessing the subversion repository.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface RepositoryService {
 

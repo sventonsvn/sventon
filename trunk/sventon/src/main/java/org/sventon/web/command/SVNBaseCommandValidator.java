@@ -18,7 +18,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 /**
  * SVNBaseCommandValidator.
  *
- * @author patrikfr@users.berlios.de
+ * @author patrik@sventon.org
  */
 public final class SVNBaseCommandValidator implements Validator {
 

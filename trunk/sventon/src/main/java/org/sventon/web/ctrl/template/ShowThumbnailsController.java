@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Controller for showing selected repository entries as thumbnails.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ShowThumbnailsController extends AbstractSVNTemplateController {
 

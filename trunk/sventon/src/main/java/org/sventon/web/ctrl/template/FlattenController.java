@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * Controller used when flatting directory structure.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class FlattenController extends AbstractSVNTemplateController {
 

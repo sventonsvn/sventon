@@ -28,7 +28,7 @@ import java.util.List;
  * <p/>
  * Command class used to parse and bundle diffing from/to details.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class DiffCommand {
 

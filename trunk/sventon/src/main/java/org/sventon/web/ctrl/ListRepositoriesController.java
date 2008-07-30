@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Controller that creates a list of all configured repositories.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ListRepositoriesController extends AbstractController {
 

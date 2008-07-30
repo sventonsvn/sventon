@@ -38,8 +38,8 @@ import java.util.*;
  * and repository access. It should be instanciated once (and only once), when
  * the application starts.
  *
- * @author jesper@users.berlios.de
- * @author patrikfr@users.berlios.de
+ * @author jesper@sventon.org
+ * @author patrik@sventon.org
  * @see <a href="http://www.svnkit.com">SVNKit</a>
  */
 public final class Application {

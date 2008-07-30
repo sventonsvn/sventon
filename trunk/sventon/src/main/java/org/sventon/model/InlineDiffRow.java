@@ -17,7 +17,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 /**
  * Represents a row in an inline diff view.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class InlineDiffRow {
 

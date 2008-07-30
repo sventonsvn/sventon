@@ -27,7 +27,7 @@ import java.util.zip.GZIPOutputStream;
  * Disk persistend repository entry cache.
  * Contains a cached set of the repository entries for a specific revision and URL.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class DiskCache extends EntryCache {
 

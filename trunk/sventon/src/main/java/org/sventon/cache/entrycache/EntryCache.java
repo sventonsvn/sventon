@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 /**
  * Contains a cached set of the repository entries for a specific revision and URL.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public abstract class EntryCache implements Cache {
 

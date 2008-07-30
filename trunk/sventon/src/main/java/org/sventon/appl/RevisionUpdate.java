@@ -23,7 +23,7 @@ import java.util.List;
  * The object will be communicated to all {@link RevisionObserver}s and contains the
  * new revisions including repository information.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RevisionUpdate {
 

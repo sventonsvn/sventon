@@ -24,7 +24,7 @@ import java.util.Set;
  * <p/>
  * The comparator can be configured during construction to tweak sorting behavior.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class LogMessageComparator implements Comparator<LogMessage>, Serializable {
 

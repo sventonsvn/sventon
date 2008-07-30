@@ -14,7 +14,7 @@ package org.sventon.diff;
 /**
  * Interval.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 final class Interval {
 

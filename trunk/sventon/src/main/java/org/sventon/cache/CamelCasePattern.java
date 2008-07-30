@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 /**
  * CamelCase regex pattern class.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class CamelCasePattern {
 

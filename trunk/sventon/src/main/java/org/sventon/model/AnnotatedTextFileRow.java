@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Represents a row of an annotated file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class AnnotatedTextFileRow {
 

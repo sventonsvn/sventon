@@ -14,7 +14,7 @@ package org.sventon.cache;
 /**
  * Cache marker interface.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface Cache {
 }

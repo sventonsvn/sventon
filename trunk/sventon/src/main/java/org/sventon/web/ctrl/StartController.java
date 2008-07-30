@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  * If no repository has been configured the user will be redirected to
  * the config page.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class StartController extends AbstractController {
 

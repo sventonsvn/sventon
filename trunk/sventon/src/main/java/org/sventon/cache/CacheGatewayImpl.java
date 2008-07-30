@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * Gateway class used to access the caches.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class CacheGatewayImpl implements CacheGateway {
 

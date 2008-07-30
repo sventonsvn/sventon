@@ -27,7 +27,7 @@ import java.util.Date;
 /**
  * Represents a temporary export directory.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ExportDirectory {
 

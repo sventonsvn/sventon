@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Controller used when searching for log messages.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SearchLogsController extends AbstractSVNTemplateController {
 

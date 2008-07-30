@@ -40,7 +40,7 @@ import java.util.Map;
 /**
  * The DiffController generates a Side-by-side diff between two repository entries.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class DiffController extends AbstractSVNTemplateController {
 

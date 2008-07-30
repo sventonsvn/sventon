@@ -14,7 +14,7 @@ package org.sventon.model;
 /**
  * LogMessage.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class LogMessage {
 

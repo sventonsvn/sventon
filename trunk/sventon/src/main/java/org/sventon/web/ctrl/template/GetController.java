@@ -39,7 +39,7 @@ import java.io.OutputStream;
  * application/octetstream. A download dialog will appear in browser.</li>
  * </ul>
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class GetController extends AbstractSVNTemplateController {
 

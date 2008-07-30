@@ -21,7 +21,7 @@ import java.util.Locale;
 /**
  * JSP Tag for formatting bytes size values.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  * @see org.sventon.util.ByteFormatter
  */
 public final class ByteFormatterTag extends TagSupport {

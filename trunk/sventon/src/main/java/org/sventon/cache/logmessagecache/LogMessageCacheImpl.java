@@ -38,7 +38,7 @@ import java.util.List;
  * Contains cached log messages.
  * This implementation uses <a href="http://lucene.apache.org">Lucene</a> internally.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class LogMessageCacheImpl implements LogMessageCache {
 

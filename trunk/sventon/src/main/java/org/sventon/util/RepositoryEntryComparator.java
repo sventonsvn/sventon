@@ -24,8 +24,8 @@ import java.util.Date;
  * <p/>
  * The comparator can be configured during construction to tweak sorting behavior.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
 

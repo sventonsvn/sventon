@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * LogEntryWrapper.
  *
- * @author patrikfr@users.berlios.de
+ * @author patrik@sventon.org
  */
 public final class LogEntryWrapper {
 

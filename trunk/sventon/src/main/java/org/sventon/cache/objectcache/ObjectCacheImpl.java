@@ -25,7 +25,7 @@ import java.util.List;
  * Wrapper class for cache handling.
  * Uses <a href="http://ehcache.sourceforge.net/">ehcache</a> behind the scenes.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ObjectCacheImpl implements ObjectCache {
 

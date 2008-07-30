@@ -22,7 +22,7 @@ import java.io.IOException;
 /**
  * Handles LogMessageCache instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class LogMessageCacheManager extends CacheManager<LogMessageCache> {
 

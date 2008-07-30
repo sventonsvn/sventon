@@ -19,7 +19,7 @@ import java.io.Serializable;
 /**
  * Represents a pegged repository entry.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class PeggedRepositoryEntry implements Serializable {
 

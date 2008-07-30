@@ -21,7 +21,7 @@ import java.io.Serializable;
 /**
  * Cachekey class.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ObjectCacheKey implements Serializable {
 

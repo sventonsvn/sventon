@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Simple viewer utility for the sventon object cache.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ObjectCacheViewer {
 

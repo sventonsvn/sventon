@@ -18,7 +18,7 @@ import java.util.Locale;
 /**
  * Formatter for byte size values.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ByteFormatter {
 

@@ -19,7 +19,7 @@ import java.util.TreeSet;
 /**
  * Keeps information about available charsets.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class AvailableCharsets {
 

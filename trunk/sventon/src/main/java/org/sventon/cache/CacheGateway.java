@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Gateway class used to access the caches.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface CacheGateway {
 

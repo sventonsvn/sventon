@@ -36,7 +36,7 @@ import java.util.List;
  * Class to generate <code>RSS</code> feeds from Subversion log information.
  * Uses the <a href="https://rome.dev.java.net/">ROME</a> library.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RssFeedGeneratorImpl implements RssFeedGenerator {
 

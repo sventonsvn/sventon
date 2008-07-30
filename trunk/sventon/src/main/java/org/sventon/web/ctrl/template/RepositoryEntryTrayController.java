@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Controller for the repository entry tray.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntryTrayController extends AbstractSVNTemplateController {
 

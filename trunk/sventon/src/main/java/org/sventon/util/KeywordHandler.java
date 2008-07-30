@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  * <tr><td>Id</td></tr>
  * </table>
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  * @see org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator
  */
 public final class KeywordHandler {

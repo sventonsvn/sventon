@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Sorts collections of <code>RepositoryEntry</code> instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntrySorter {
 

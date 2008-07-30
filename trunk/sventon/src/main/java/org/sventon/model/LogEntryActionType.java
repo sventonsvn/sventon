@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 /**
  * Type enum for log entry actions.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public enum LogEntryActionType {
 

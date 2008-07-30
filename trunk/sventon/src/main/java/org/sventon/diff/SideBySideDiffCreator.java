@@ -31,7 +31,7 @@ import java.util.List;
  * Creates diff results by parsing diff produced by
  * {@link org.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SideBySideDiffCreator {
 

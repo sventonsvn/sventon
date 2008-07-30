@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Gets the log message for given revision.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class GetLogMessageController extends AbstractSVNTemplateController {
 

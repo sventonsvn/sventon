@@ -22,7 +22,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Represents an archive file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ArchiveFile {
 

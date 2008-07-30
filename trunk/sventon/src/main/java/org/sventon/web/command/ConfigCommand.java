@@ -21,7 +21,7 @@ import org.sventon.appl.RepositoryConfiguration;
  * <p/>
  * Command class used to bind and pass servlet parameter arguments for sventon configuration.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  * @author patrik@sventon.org
  */
 public final class ConfigCommand {

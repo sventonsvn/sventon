@@ -30,7 +30,7 @@ import java.util.zip.ZipInputStream;
  * Utility class for handling ZIP actions.
  * Uses the <a href="https://truezip.dev.java.net/">TrueZip</a> library.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ZipUtils {
 

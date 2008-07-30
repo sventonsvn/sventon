@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Colorer interface. Used for converting source files into colorized <code>HTML</code> code.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface Colorer {
 
