@@ -68,7 +68,7 @@ public class ConfigurationControllerTest extends TestCase {
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
     assertNotNull(modelAndView);
     assertTrue(modelAndView.getView() instanceof RedirectView);
-    RedirectView rv = (RedirectView) modelAndView.getView();
+    final RedirectView rv = (RedirectView) modelAndView.getView();
     assertEquals("/repos/list", rv.getUrl());
   }
 
