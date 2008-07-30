@@ -31,8 +31,8 @@ import java.util.*;
  * <p/>
  * The log entries will be paged if the number of entries exceeds max page size, {@link #pageSize}.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class ShowLogController extends AbstractSVNTemplateController {
 

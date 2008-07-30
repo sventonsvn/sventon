@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Gets the file revision history for a given entry.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class GetFileHistoryController extends AbstractSVNTemplateController {
 

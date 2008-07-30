@@ -18,7 +18,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 /**
  * Contains cached revisions.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface RevisionCache extends Cache {
 

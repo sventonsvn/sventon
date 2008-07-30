@@ -14,7 +14,7 @@ package org.sventon.model;
 /**
  * Represents a row in a side-by-side diff view.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SideBySideDiffRow {
 

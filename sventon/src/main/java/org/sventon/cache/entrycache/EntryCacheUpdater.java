@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * Class responsible for updating one or more entry cache instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class EntryCacheUpdater extends AbstractRevisionObserver {
 

@@ -14,7 +14,7 @@ package org.sventon.util;
 /**
  * Utility class for path handling.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class PathUtil {
 

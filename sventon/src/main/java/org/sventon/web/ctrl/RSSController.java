@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Controller used for generating RSS feeds.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RSSController extends AbstractController {
 

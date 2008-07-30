@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Interface to be implemented by feed generators.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface RssFeedGenerator {
 

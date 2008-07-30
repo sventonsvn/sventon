@@ -14,7 +14,7 @@ package org.sventon.diff;
 /**
  * Exception thrown to indicate that a given files are identical.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class IdenticalFilesException extends DiffException {
 

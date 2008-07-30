@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * Represents an annotated (blamed) file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class AnnotatedTextFile {
 

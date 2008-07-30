@@ -40,8 +40,8 @@ import java.util.zip.ZipInputStream;
 /**
  * ShowFileController.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class ShowFileController extends AbstractSVNTemplateController implements Controller {
 

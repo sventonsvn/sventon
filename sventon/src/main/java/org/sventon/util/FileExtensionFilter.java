@@ -23,7 +23,7 @@ import java.util.List;
  * File extension filter.
  * Filters out given extension and removes entries with non-matching extension.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class FileExtensionFilter {
 

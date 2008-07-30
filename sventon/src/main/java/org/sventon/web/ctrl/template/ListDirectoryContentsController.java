@@ -34,7 +34,7 @@ import java.util.Map;
  * </ul>
  * Note: Sub classes must specify <code>viewName</code> property.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class ListDirectoryContentsController extends AbstractSVNTemplateController {
 

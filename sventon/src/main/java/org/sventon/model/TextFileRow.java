@@ -17,7 +17,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 /**
  * Represents a row in a text file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class TextFileRow {
 

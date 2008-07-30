@@ -16,7 +16,7 @@ import java.awt.*;
 /**
  * Class for storing image metadata.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class ImageMetadata {
 

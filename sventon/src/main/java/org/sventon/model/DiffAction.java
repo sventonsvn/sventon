@@ -16,7 +16,7 @@ import org.apache.commons.lang.Validate;
 /**
  * Type enum for diff segment actions.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public enum DiffAction {
   DELETED("Deleted", 'd', "-", "srcDel"),

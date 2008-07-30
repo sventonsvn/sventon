@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Controller for exporting and downloading files or directories as a zip file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ExportController extends AbstractSVNTemplateController {
 

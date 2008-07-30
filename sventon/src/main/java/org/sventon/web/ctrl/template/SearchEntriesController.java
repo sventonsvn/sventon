@@ -28,7 +28,7 @@ import java.util.*;
 /**
  * Controller used when searching for file or directory entries in the repository.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SearchEntriesController extends AbstractSVNTemplateController {
 

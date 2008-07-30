@@ -23,7 +23,7 @@ import java.util.TreeSet;
  * Class representing the user's entry tray.
  * The entry tray will be stored on the user's HTTPSession.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntryTray implements Serializable {
 

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * Controller for persisting application configuration.
  * Called after one or more instances have been submitted to {@link ConfigurationController}.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ConfigurationSubmissionController extends AbstractController {
 

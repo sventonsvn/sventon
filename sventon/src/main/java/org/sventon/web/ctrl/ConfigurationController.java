@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Controller handling addition of instance configurations.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ConfigurationController extends AbstractFormController {
 

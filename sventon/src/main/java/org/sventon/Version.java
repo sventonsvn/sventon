@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * Represents the sventon application version details.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class Version {
 

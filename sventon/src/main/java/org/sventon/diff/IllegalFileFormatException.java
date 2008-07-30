@@ -15,7 +15,7 @@ package org.sventon.diff;
  * Exception thrown to indicate that a given file has an illegal file format.
  * Typically, this exception will be thrown if user tries to diff a binary file.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class IllegalFileFormatException extends DiffException {
 

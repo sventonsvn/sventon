@@ -20,7 +20,7 @@ import java.io.File;
 /**
  * Handles EntryCache instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class EntryCacheManager extends CacheManager<EntryCache> {
 

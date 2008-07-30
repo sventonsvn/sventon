@@ -35,8 +35,8 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  * A newly created instance is initialized to have path <code>/</code> and
  * revision <code>null</code>.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class SVNBaseCommand {
 

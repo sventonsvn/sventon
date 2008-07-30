@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Represents a file in plain text format.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class TextFile {
 

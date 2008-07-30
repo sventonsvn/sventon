@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Class responsible for updating one or more revision cache instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RevisionCacheUpdater extends AbstractRevisionObserver {
 

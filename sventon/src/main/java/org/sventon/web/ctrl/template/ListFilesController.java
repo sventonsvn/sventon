@@ -28,8 +28,8 @@ import java.util.Map;
 /**
  * ListFilesController.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class ListFilesController extends ListDirectoryContentsController {
 

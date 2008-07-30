@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Contains cached log messages.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public interface LogMessageCache extends Cache {
 

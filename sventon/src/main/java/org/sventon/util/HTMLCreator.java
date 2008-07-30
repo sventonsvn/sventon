@@ -28,7 +28,7 @@ import java.util.regex.Matcher;
 /**
  * Class responsible for creating HTML formatted content.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class HTMLCreator {
 

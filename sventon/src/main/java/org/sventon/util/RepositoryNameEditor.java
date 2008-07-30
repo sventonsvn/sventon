@@ -18,7 +18,7 @@ import java.beans.PropertyEditorSupport;
 /**
  * Custom property editor for repository name.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class RepositoryNameEditor extends PropertyEditorSupport {
 

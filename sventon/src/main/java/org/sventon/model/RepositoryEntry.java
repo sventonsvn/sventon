@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Represents an entry in the repository.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryEntry implements Serializable {
 

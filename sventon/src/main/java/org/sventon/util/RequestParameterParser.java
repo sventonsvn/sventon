@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * RequestParameterParser.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RequestParameterParser {
 

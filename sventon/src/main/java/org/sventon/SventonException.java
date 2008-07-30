@@ -14,7 +14,7 @@ package org.sventon;
 /**
  * SventonException.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class SventonException extends Exception {
 

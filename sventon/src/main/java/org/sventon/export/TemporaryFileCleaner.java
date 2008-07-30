@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * Temporary export file cleaner.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class TemporaryFileCleaner {
 

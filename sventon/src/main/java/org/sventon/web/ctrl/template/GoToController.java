@@ -39,8 +39,8 @@ import java.util.Map;
  * called as a GET request. This gives a somewhat ugly redundancy that probably
  * should be rmoved.
  *
- * @author patrikfr@users.berlios.de
- * @author jesper@users.berlios.de
+ * @author patrik@sventon.org
+ * @author jesper@sventon.org
  */
 public final class GoToController extends AbstractSVNTemplateController {
 

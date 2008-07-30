@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * Represents a repository name.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryName implements Serializable {
 

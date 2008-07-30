@@ -29,7 +29,7 @@ import java.util.Properties;
  * and repository connection information for a single configured repositories.
  *
  * @author patrikfr@user.berlios.de
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryConfiguration {
 

@@ -14,7 +14,7 @@ package org.sventon.diff;
 /**
  * Exception thrown if diff exceptions occurs.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class DiffException extends Exception {
 

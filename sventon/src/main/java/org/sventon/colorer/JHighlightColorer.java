@@ -25,7 +25,7 @@ import java.util.Properties;
 /**
  * Colorizes given input using the JHighlight syntax highlighting library.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  * @link http://jhighlight.dev.java.net
  */
 public final class JHighlightColorer implements Colorer {

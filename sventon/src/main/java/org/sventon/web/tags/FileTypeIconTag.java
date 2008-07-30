@@ -26,7 +26,7 @@ import java.util.Properties;
 /**
  * JSP tag that returns appropriate file type icon for given file extension.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class FileTypeIconTag extends TagSupport {
 

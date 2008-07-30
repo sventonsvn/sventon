@@ -19,7 +19,7 @@ import org.sventon.model.RepositoryName;
 /**
  * Handles RevisionCache instances.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RevisionCacheManager extends CacheManager<RevisionCache> {
 

@@ -24,7 +24,7 @@ import java.io.File;
 /**
  * Factory class for creating subversion repository connections.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RepositoryFactory {
 

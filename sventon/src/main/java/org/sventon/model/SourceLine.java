@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Source line bean. Represents one line of text including
  * the line's {@link DiffAction}.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class SourceLine {
 

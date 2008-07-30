@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * Controller to fetch details for a specific revision.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class ShowRevisionInfoController extends AbstractSVNTemplateController {
 

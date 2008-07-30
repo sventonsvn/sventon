@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Class for producing normal or unified diff results.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class DiffProducer {
 

@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
  * Before advice that checks if the cache needs to be updated before any method
  * of class {@link CacheGatewayImpl} is execuded.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class CacheBeforeAdvice implements MethodBeforeAdvice {
 

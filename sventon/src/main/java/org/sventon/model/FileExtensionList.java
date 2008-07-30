@@ -20,7 +20,7 @@ import java.util.TreeSet;
 /**
  * Creates a set of file extensions existing in given collection of entries.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class FileExtensionList {
 

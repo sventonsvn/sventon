@@ -34,7 +34,7 @@ import java.io.OutputStream;
 /**
  * Controller used when downloading single image files as thumbnails.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class GetThumbnailController extends AbstractSVNTemplateController {
 

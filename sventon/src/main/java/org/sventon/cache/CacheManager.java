@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Abstract CacheManager class. To be subclasses by the cache specific managers.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public abstract class CacheManager<T> {
 

@@ -28,7 +28,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 /**
  * ConfigCommandValidator.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  * @author patrik@sventon.org
  */
 public final class ConfigCommandValidator implements Validator {

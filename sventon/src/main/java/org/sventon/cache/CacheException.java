@@ -16,7 +16,7 @@ import org.sventon.SventonException;
 /**
  * Exception thrown by <code>Cache</code>.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class CacheException extends SventonException {
 

@@ -34,7 +34,7 @@ import java.util.Map;
  * The DiffPreviousController generates a Side-by-side diff between a given entry
  * and its previous entry in history.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public final class DiffPreviousController extends AbstractSVNTemplateController {
 
