@@ -42,7 +42,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * Logger for this class and subclasses.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  final Log logger = LogFactory.getLog(getClass());
 
   /**
    * {@inheritDoc}
@@ -128,16 +128,8 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final void getFile(final SVNRepository repository, final String path, final long revision,
                             final OutputStream output) throws SVNException {
-    getFile(repository, path, revision, output, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public final void getFile(final SVNRepository repository, final String path, final long revision,
-                            final OutputStream output, final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
-    repository.getFile(path, revision, properties, output);
+    repository.getFile(path, revision, null, output);
     logger.debug("PERF: getFile(): " + (System.currentTimeMillis() - start));
   }
 
@@ -205,7 +197,7 @@ public class RepositoryServiceImpl implements RepositoryService {
         locks.put(lock.getPath(), lock);
       }
     } catch (SVNException svne) {
-      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD");
+      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
     }
     logger.debug("PERF: getLocks(): " + (System.currentTimeMillis() - start));
     return locks;
@@ -449,7 +441,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                             final RepositoryConfiguration configuration) throws SVNException, DiffException {
+                                             final RepositoryConfiguration configuration) throws SVNException {
 
     final long start = System.currentTimeMillis();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(

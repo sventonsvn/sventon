@@ -35,7 +35,7 @@ public abstract class EntryCache implements Cache {
   /**
    * The logging instance.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The cached entries.
@@ -66,7 +66,7 @@ public abstract class EntryCache implements Cache {
    *
    * @param entries Entries
    */
-  protected final synchronized void setEntries(final Set<RepositoryEntry> entries) {
+  final synchronized void setEntries(final Set<RepositoryEntry> entries) {
     this.cachedEntries = entries;
   }
 
@@ -85,7 +85,7 @@ public abstract class EntryCache implements Cache {
    *
    * @return Set of cached entries
    */
-  protected final synchronized Set<RepositoryEntry> getCachedEntries() {
+  final synchronized Set<RepositoryEntry> getCachedEntries() {
     return cachedEntries;
   }
 
@@ -95,7 +95,7 @@ public abstract class EntryCache implements Cache {
    *
    * @param revision Revision number.
    */
-  protected final synchronized void setCachedRevision(final long revision) {
+  final synchronized void setCachedRevision(final long revision) {
     this.cachedRevision = revision;
   }
 

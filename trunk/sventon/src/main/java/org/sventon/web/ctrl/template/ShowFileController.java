@@ -177,7 +177,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param properties The svn properties for given file.
    * @return True if text file, false if not.
    */
-  protected boolean isTextMimeType(final Map properties) {
+  boolean isTextMimeType(final Map properties) {
     return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
   }
 
@@ -187,7 +187,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param svnCommand Command
    * @return True if text file, false if not.
    */
-  protected boolean isTextFileExtension(final SVNBaseCommand svnCommand) {
+  boolean isTextFileExtension(final SVNBaseCommand svnCommand) {
     return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(textFileExtensionPattern);
   }
 
@@ -197,7 +197,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param svnCommand Command
    * @return True if binary file, false if not.
    */
-  protected boolean isBinaryFileExtension(final SVNBaseCommand svnCommand) {
+  boolean isBinaryFileExtension(final SVNBaseCommand svnCommand) {
     return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(binaryFileExtensionPattern);
   }
 

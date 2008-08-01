@@ -31,7 +31,7 @@ public final class TemporaryFileCleaner {
   /**
    * The logging instance.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 

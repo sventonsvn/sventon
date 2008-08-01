@@ -94,7 +94,8 @@ public final class MailNotifier extends AbstractRevisionObserver {
    * Base URL where sventon is located.
    */
   private String baseUrl;
-  private ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+  private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
   /**
    * Initializes the component.

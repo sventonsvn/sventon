@@ -40,14 +40,14 @@ public final class RevisionCacheImpl implements RevisionCache {
   /**
    * {@inheritDoc}
    */
-  public SVNLogEntry get(final long revision) throws CacheException {
+  public SVNLogEntry get(final long revision) {
     return (SVNLogEntry) objectCache.get(CacheKey.createKey(revision));
   }
 
   /**
    * {@inheritDoc}
    */
-  public void add(final SVNLogEntry logEntry) throws CacheException {
+  public void add(final SVNLogEntry logEntry) {
     Validate.notNull(logEntry, "Given logEntry was null");
     objectCache.put(CacheKey.createKey(logEntry.getRevision()), logEntry);
   }

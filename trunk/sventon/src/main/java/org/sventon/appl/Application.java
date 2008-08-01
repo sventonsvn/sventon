@@ -216,7 +216,7 @@ public final class Application {
    * Initializes the logger and the SVNKit library.
    */
   private void initSvnSupport() {
-    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
+    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter());
     logger.info("Initializing sventon version " + Version.getVersion());
 
     SVNRepositoryFactoryImpl.setup();

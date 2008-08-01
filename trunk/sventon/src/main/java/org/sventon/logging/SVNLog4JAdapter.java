@@ -29,11 +29,9 @@ public final class SVNLog4JAdapter extends SVNDebugLogAdapter {
 
   /**
    * Constructor.
-   *
-   * @param namespace Logging name space to use.
    */
-  public SVNLog4JAdapter(final String namespace) {
-    logger = LogFactory.getLog(namespace);
+  public SVNLog4JAdapter() {
+    logger = LogFactory.getLog("sventon.svnkit");
   }
 
   /**

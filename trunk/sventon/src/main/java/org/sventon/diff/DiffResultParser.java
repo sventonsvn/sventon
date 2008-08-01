@@ -40,7 +40,7 @@ final class DiffResultParser {
    * 10,12c3,4
    * </pre>
    */
-  static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)");
+  private static final Pattern DIFF_PATTERN = Pattern.compile("^(\\d*),*(\\d*)([acd])(\\d*),*(\\d*)");
 
   /**
    * Private constructor.

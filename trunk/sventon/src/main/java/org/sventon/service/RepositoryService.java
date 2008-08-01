@@ -123,19 +123,6 @@ public interface RepositoryService {
       throws SVNException;
 
   /**
-   * Gets a file from the repository.
-   *
-   * @param repository The repository
-   * @param path       Target to get
-   * @param revision   The revision
-   * @param output     Output stream to write contents to
-   * @param properties The map to be populated with the file's properties
-   * @throws SVNException if a subversion error occur
-   */
-  void getFile(final SVNRepository repository, final String path, final long revision, final OutputStream output,
-               final Map properties) throws SVNException;
-
-  /**
    * Gets a file's properties from the repository.
    *
    * @param repository The repository
@@ -288,10 +275,9 @@ public interface RepositoryService {
    * @param configuration The instance configuration. @return The inline diff.
    * @return List of diff status.
    * @throws SVNException  if a subversion error occur
-   * @throws DiffException if unable to produce diff.
    */
   List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
-                                final RepositoryConfiguration configuration) throws SVNException, DiffException;
+                                final RepositoryConfiguration configuration) throws SVNException;
 
   /**
    * Blame (annotates) the given file.

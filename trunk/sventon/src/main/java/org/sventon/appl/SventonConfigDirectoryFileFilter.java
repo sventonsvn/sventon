@@ -19,12 +19,12 @@ import java.io.FileFilter;
 /**
  * File filter that accepts sventon configuration directories.
  */
-public class SventonConfigDirectoryFileFilter implements FileFilter {
+class SventonConfigDirectoryFileFilter implements FileFilter {
 
   /**
    * The name of the sventon configuration file.
    */
-  private String configurationFilename;
+  private final String configurationFilename;
 
   /**
    * Constructor.

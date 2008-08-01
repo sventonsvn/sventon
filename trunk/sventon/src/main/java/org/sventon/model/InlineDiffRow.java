@@ -39,7 +39,7 @@ public final class InlineDiffRow {
   /**
    * The line's diff action.
    */
-  private DiffAction action;
+  private final DiffAction action;
 
   /**
    * Constructor.

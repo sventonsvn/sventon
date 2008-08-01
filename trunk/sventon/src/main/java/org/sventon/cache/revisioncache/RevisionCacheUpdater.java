@@ -74,13 +74,9 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
    * @param revisions     Revisions
    */
   protected void updateInternal(final RevisionCache revisionCache, final List<SVNLogEntry> revisions) {
-    try {
-      for (final SVNLogEntry svnLogEntry : revisions) {
-        revisionCache.add(svnLogEntry);
-        revisionCache.flush();
-      }
-    } catch (CacheException ce) {
-      LOGGER.error("Unable to update revisionCache", ce);
+    for (final SVNLogEntry svnLogEntry : revisions) {
+      revisionCache.add(svnLogEntry);
+      revisionCache.flush();
     }
   }
 }

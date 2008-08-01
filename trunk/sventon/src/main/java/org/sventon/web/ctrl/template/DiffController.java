@@ -129,7 +129,7 @@ public final class DiffController extends AbstractSVNTemplateController {
     return modelAndView;
   }
 
-  protected SVNNodeKind getNodeKind(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision)
+  SVNNodeKind getNodeKind(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision)
       throws SVNException, DiffException {
 
     final SVNNodeKind nodeKind1;
