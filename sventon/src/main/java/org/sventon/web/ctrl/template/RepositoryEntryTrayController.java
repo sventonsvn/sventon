@@ -77,7 +77,7 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
     return modelAndView;
   }
 
-  protected void assertEntryTrayEnabled(final RepositoryName name) {
+  void assertEntryTrayEnabled(final RepositoryName name) {
     final RepositoryConfiguration configuration = getRepositoryConfiguration(name);
     if (!configuration.isEntryTrayEnabled()) {
       throw new UnsupportedOperationException("The EntryTray is disabled in the config file for repository " + name);

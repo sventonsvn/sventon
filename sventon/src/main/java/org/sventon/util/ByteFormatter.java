@@ -22,10 +22,10 @@ import java.util.Locale;
  */
 public final class ByteFormatter {
 
-  public static final long s1kB = 1024L;
-  public static final long s1MB = 1024L * 1024L;
-  public static final long s1GB = 1024L * 1024L * 1024L;
-  public static final long s1TB = 1024L * 1024L * 1024L * 1024L;
+  private static final long s1kB = 1024L;
+  private static final long s1MB = 1024L * 1024L;
+  private static final long s1GB = 1024L * 1024L * 1024L;
+  private static final long s1TB = 1024L * 1024L * 1024L * 1024L;
 
   /**
    * Private - not supposed to instantiate.

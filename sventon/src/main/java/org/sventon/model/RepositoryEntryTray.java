@@ -85,7 +85,8 @@ public final class RepositoryEntryTray implements Serializable {
    */
   private static class PeggedRepositoryEntryComparator implements Comparator<PeggedRepositoryEntry>, Serializable {
 
-    private RepositoryEntryComparator comparator = new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true);
+    private final RepositoryEntryComparator comparator =
+        new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true);
 
     public int compare(final PeggedRepositoryEntry o1, final PeggedRepositoryEntry o2) {
       return comparator.compare(o1.getEntry(), o2.getEntry());

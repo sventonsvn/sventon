@@ -53,7 +53,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   /**
    * Logging instance.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The date formatter instance.

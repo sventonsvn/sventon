@@ -442,7 +442,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  protected final ModelAndView prepareExceptionModelAndView(final BindException exception,
+  final ModelAndView prepareExceptionModelAndView(final BindException exception,
                                                             final SVNBaseCommand svnCommand) {
     final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
@@ -492,7 +492,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return The instance.
    */
-  public final CacheGateway getCache() {
+  final CacheGateway getCache() {
     return cacheGateway;
   }
 
@@ -511,7 +511,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param name Repository name
    * @return ApplicationConfiguration
    */
-  public final RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
+  final RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
     return application.getRepositoryConfiguration(name);
   }
 
@@ -520,7 +520,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return Repository service
    */
-  public final RepositoryService getRepositoryService() {
+  final RepositoryService getRepositoryService() {
     return repositoryService;
   }
 
@@ -548,7 +548,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @return Count
    */
-  protected final int getMaxRevisionsCount() {
+  final int getMaxRevisionsCount() {
     return maxRevisionsCount;
   }
 
