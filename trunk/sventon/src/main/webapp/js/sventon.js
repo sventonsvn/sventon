@@ -116,7 +116,7 @@ function validateUrl(form) {
 function doDiff(form) {
   // Check if any entry is checked
   var checkedEntry = 0;
-  for (i = 0; i < form.entry.length; i++) {
+  for (var i = 0; i < form.entry.length; i++) {
     if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
       checkedEntry++;
     }
