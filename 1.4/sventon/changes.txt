@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1358] Fixed bug #14342 - Version number not displayed properly on Glassfish.
+
 [1339] Release 1.4.0 (2008-07-25)
 
 [1319] Release 1.4 RC6 (2008-07-09)
