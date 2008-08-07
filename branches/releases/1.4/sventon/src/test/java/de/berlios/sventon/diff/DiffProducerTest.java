@@ -171,9 +171,9 @@ public class DiffProducerTest extends TestCase {
   }
 
   public void testDoNormalDiffIII() throws Exception {
-    final String leftString = "\r\ntest\r\n";
-    final String rightString = "test\r\n";
-    final String result = "1d1\r\n<\r\n";
+    final String leftString = LINE_BREAK + "test" + LINE_BREAK;
+    final String rightString = "test" + LINE_BREAK;
+    final String result = "1d1" + LINE_BREAK + "<" + LINE_BREAK;
 
     final InputStream left = new ByteArrayInputStream(leftString.getBytes());
     final InputStream right = new ByteArrayInputStream(rightString.getBytes());
