@@ -58,7 +58,7 @@ public final class Version {
   private static synchronized void assertMappingsLoaded() {
     if (VERSION_PROPERTIES.isEmpty()) {
       try {
-        final InputStream is = Version.class.getResourceAsStream(VERSION_PROPERTIES_PATH);
+        final InputStream is = Version.class.getClassLoader().getResourceAsStream(VERSION_PROPERTIES_PATH);
         VERSION_PROPERTIES.load(is);
       } catch (Exception e) {
         // ignored - using defaults
