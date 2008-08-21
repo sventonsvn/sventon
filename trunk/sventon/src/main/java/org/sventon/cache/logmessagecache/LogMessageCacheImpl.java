@@ -59,17 +59,24 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    */
   private final Class<? extends Analyzer> analyzer;
 
+  private final SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter("<span class=\"searchHit\">", "</span>");
+
   /**
    * Constructor.
-   * Initializes the log message cache.
    *
    * @param directory The <i>lucene</i> directory.
    * @param analyzer  Analyzer to use.
-   * @throws CacheException if unable to start up cache.
    */
-  public LogMessageCacheImpl(final Directory directory, final Class<? extends Analyzer> analyzer) throws CacheException {
-    logger.debug("Initializing cache");
+  public LogMessageCacheImpl(final Directory directory, final Class<? extends Analyzer> analyzer) {
     this.analyzer = analyzer;
+    this.directory = directory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void init() throws CacheException {
+    logger.debug("Initializing cache");
 
     IndexWriter writer = null;
     try {
@@ -77,7 +84,6 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         writer = new IndexWriter(directory, analyzer.newInstance(), true);
         writer.close();
       }
-      this.directory = directory;
     } catch (final Exception ioex) {
       throw new CacheException("Unable to startup lucene index", ioex);
     } finally {
@@ -126,8 +132,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
       query = query.rewrite(reader);
       final Hits hits = searcher.search(query);
 
-      final SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter("<span class=\"searchHit\">", "</span>");
-      final Highlighter highlighter = new Highlighter(simpleHTMLFormatter, new QueryScorer(query));
+      final Highlighter highlighter = new Highlighter(getFormatter(), new QueryScorer(query));
       highlighter.setTextFragmenter(new NullFragmenter());
       highlighter.setEncoder(new SimpleHTMLEncoder());
 
@@ -146,19 +151,15 @@ public final class LogMessageCacheImpl implements LogMessageCache {
     } catch (final Exception ex) {
       throw new CacheException("Unable to perform lucene search", ex);
     } finally {
-      if (searcher != null) {
-        try {
+      try {
+        if (searcher != null) {
           searcher.close();
-        } catch (final IOException ioex) {
-          logger.error("Unable to close lucene index searcher", ioex);
         }
-      }
-      if (reader != null) {
-        try {
+        if (reader != null) {
           reader.close();
-        } catch (final IOException ioex) {
-          logger.error("Unable to close lucene index reader", ioex);
         }
+      } catch (final IOException ioex) {
+        logger.error("Unable to close lucene index", ioex);
       }
     }
     return result;
@@ -238,4 +239,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
     }
   }
 
+  public Formatter getFormatter() {
+    return htmlFormatter;
+  }
 }

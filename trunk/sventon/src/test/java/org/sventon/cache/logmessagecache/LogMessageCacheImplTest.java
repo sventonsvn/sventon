@@ -1,22 +1,31 @@
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.model.LogMessage;
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.sventon.model.LogMessage;
 
 import java.util.List;
 
 public class LogMessageCacheImplTest extends TestCase {
 
-  public void testAdd() throws Exception {
-    final Directory directory = new RAMDirectory();
+  private LogMessageCacheImpl cache = null;
+  private Directory directory = null;
 
+  protected void setUp() throws Exception {
+    directory = new RAMDirectory();
+    cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
+    cache.init();
+  }
+
+  protected void tearDown() throws Exception {
+    directory.close();
+  }
+
+  public void testAdd() throws Exception {
     //final String tempDir = System.getProperty("java.io.tmpdir") + "sventonCacheTest";
     //final Directory directory = FSDirectory.getDirectory(tempDir, true);
-
-    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
 
     cache.add(new LogMessage(123, "First message XYZ-123."));
 
@@ -94,16 +103,11 @@ public class LogMessageCacheImplTest extends TestCase {
   }
 
   public void testAddEmptyAndNull() throws Exception {
-    final Directory directory = new RAMDirectory();
-    final LogMessageCacheImpl cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
-
     cache.add(new LogMessage(123, ""));
     assertEquals(1, cache.getSize());
 
     cache.add(new LogMessage(123, null));
     assertEquals(2, cache.getSize());
-
-    directory.close();
   }
 
 }

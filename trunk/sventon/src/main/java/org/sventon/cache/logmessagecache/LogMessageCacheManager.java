@@ -78,7 +78,9 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
       throw new CacheException("Unable to load analyzer [" + analyzerClassName + "]", cnfe);
     }
     //noinspection unchecked
-    return new LogMessageCacheImpl(fsDirectory, (Class) analyzer);
+    final LogMessageCacheImpl cache = new LogMessageCacheImpl(fsDirectory, (Class) analyzer);
+    cache.init();
+    return cache;
   }
 
 }

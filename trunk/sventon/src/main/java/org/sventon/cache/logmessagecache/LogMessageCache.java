@@ -25,6 +25,13 @@ import java.util.List;
 public interface LogMessageCache extends Cache {
 
   /**
+   * Initializes the log message cache.
+   *
+   * @throws CacheException if unable to start up cache.
+   */
+  public void init() throws CacheException;
+
+  /**
    * Finds occurencies of given search string among the cached log messages.
    *
    * @param queryString Index query string.

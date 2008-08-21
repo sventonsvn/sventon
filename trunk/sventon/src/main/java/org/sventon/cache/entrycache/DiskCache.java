@@ -39,19 +39,9 @@ public final class DiskCache extends EntryCache {
   /**
    * The cache file.
    */
-  private final File cacheFile;
+  private File cacheFile;
 
-  /**
-   * Constructor.
-   * Loads the persisted cache from disk, if it exists.
-   * If not, a new empty cache will be created.
-   *
-   * @param cacheDirectoryPath The path where the cache file is located.
-   * @throws CacheException if unable to load cache file.
-   */
-  public DiskCache(final String cacheDirectoryPath) throws CacheException {
-    this(new File(cacheDirectoryPath));
-  }
+  private File cacheDirectory;
 
   /**
    * Constructor.
@@ -62,10 +52,17 @@ public final class DiskCache extends EntryCache {
    * @throws CacheException if unable to load cache file.
    */
   public DiskCache(final File cacheDirectory) throws CacheException {
+    this.cacheDirectory = cacheDirectory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void init() throws CacheException {
     logger.info("Initializing DiskCache");
     logger.debug("Using directory: " + cacheDirectory.getAbsolutePath());
-    cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
     cacheDirectory.mkdirs();
+    cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
     load();
   }
 

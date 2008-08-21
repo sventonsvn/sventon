@@ -26,10 +26,9 @@ import java.util.TreeSet;
 public final class MemoryCache extends EntryCache {
 
   /**
-   * Constructor.
-   * Initializes the memory cache.
+   * {@inheritDoc}
    */
-  public MemoryCache() {
+  public void init() {
     logger.info("Initializing Memorycache");
     setEntries(Collections.checkedSet(new TreeSet<RepositoryEntry>(
         new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false)),
