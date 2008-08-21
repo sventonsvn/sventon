@@ -48,6 +48,13 @@ public abstract class EntryCache implements Cache {
   private long cachedRevision = 0;
 
   /**
+   * Initializes the cache.
+   *
+   * @throws CacheException if unable to load cache.
+   */
+  public abstract void init() throws CacheException;
+
+  /**
    * Shuts down the cache.
    *
    * @throws CacheException if unable to shut down cache instance.

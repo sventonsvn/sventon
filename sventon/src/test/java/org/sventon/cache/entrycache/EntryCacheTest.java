@@ -1,9 +1,10 @@
 package org.sventon.cache.entrycache;
 
+import junit.framework.TestCase;
 import org.sventon.TestUtils;
+import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryEntry;
 import static org.sventon.model.RepositoryEntry.Kind.*;
-import junit.framework.TestCase;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,15 +12,19 @@ import java.util.regex.Pattern;
 public class EntryCacheTest extends TestCase {
 
   public void testEntryCache() throws Exception {
-    final EntryCache cache = new MemoryCache();
-
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getCachedRevision());
     assertEquals(0, cache.getSize());
   }
 
-  public void testEntryCacheClear() throws Exception {
+  private EntryCache createCache() throws CacheException {
     final EntryCache cache = new MemoryCache();
+    cache.init();
+    return cache;
+  }
 
+  public void testEntryCacheClear() throws Exception {
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getSize());
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());
@@ -28,16 +33,14 @@ public class EntryCacheTest extends TestCase {
   }
 
   public void testEntryCacheAdd() throws Exception {
-    final EntryCache cache = new MemoryCache();
-
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getSize());
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());
   }
 
   public void testFindEntry() throws Exception {
-    final EntryCache cache = new MemoryCache();
-
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getSize());
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());
@@ -46,8 +49,7 @@ public class EntryCacheTest extends TestCase {
   }
 
   public void testEntryCacheRemove() throws Exception {
-    final EntryCache cache = new MemoryCache();
-
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getSize());
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());
@@ -73,8 +75,7 @@ public class EntryCacheTest extends TestCase {
   }
 
   public void testEntryCacheFindPattern() throws Exception {
-    final EntryCache cache = new MemoryCache();
-
+    final EntryCache cache = createCache();
     assertEquals(0, cache.getSize());
     cache.add(TestUtils.getDirectoryList());
     assertEquals(13, cache.getSize());

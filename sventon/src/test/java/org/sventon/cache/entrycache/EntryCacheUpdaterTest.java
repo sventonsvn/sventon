@@ -1,12 +1,12 @@
 package org.sventon.cache.entrycache;
 
-import org.sventon.appl.Application;
-import org.sventon.model.RepositoryName;
-import org.sventon.appl.RevisionUpdate;
-import org.sventon.SVNRepositoryStub;
-import org.sventon.service.RepositoryServiceImpl;
-import org.sventon.TestUtils;
 import junit.framework.TestCase;
+import org.sventon.SVNRepositoryStub;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.appl.RevisionUpdate;
+import org.sventon.model.RepositoryName;
+import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
@@ -15,6 +15,7 @@ public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
     final EntryCache entryCache = new MemoryCache();
+    entryCache.init();
     assertEquals(0, entryCache.getSize());
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();

@@ -1,10 +1,10 @@
 package org.sventon.cache.logmessagecache;
 
-import org.sventon.TestUtils;
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.sventon.TestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ public class LogMessageCacheUpdaterTest extends TestCase {
   public void testUpdate() throws Exception {
     final Directory directory = new RAMDirectory();
     final LogMessageCache cache = new LogMessageCacheImpl(directory, StandardAnalyzer.class);
+    cache.init();
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     logEntries.add(TestUtils.getLogEntryStub(123, "Log message for revision 123."));
