@@ -34,7 +34,7 @@
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
-        <sventon:fileFunctionButtons command="${command}" isArchivedEntry="${archivedEntry ne null}"/>
+        <sventon:fileFunctionButtons command="${command}" archivedEntry="${archivedEntry}"/>
       </td>
       <td style="text-align: right;">
         <c:if test="${useCache}">

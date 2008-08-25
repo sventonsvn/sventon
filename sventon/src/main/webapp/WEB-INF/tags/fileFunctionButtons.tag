@@ -15,7 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
-<%@ attribute name="isArchivedEntry" required="true" type="java.lang.Boolean" %>
+<%@ attribute name="archivedEntry" required="true" type="java.lang.String" %>
 
 <c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
   <c:param name="revision" value="${command.revision}" />
@@ -28,12 +28,12 @@
 </c:url>
 <c:url var="showArchivedFileLinkUrl" value="/repos/${command.name}/view${command.path}">
   <c:param name="revision" value="${command.revision}"/>
-  <c:param name="archivedEntry" value="${isArchivedEntry}"/>
+  <c:param name="archivedEntry" value="${archivedEntry}"/>
   <c:param name="forceDisplay" value="true"/>
 </c:url>
 
 <c:choose>
-  <c:when test="${isArchivedEntry}">
+  <c:when test="${empty archivedEntry}">
     <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="document.location.href='${downloadLinkUrl}';">
   </c:when>
