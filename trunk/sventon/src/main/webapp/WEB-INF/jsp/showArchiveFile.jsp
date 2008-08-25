@@ -27,7 +27,7 @@
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
-        <sventon:fileFunctionButtons command="${command}" isArchivedEntry="${archivedEntry ne null}"/>
+        <sventon:fileFunctionButtons command="${command}" archivedEntry="${archivedEntry}"/>
       </td>
       <td style="text-align: right;">
         <c:if test="${useCache}">
@@ -59,8 +59,8 @@
         <c:param name="archivedEntry" value="${zipEntry.name}" />
       </c:url>
 
-      <jsp:useBean id="zipEntry" type="java.util.zip.ZipEntry" />
       <jsp:useBean id="entryDate" class="java.util.Date" />
+      <c:set target="${entryDate}" property="time" value="${zipEntry.time}"/>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <c:choose>
@@ -75,8 +75,7 @@
         </c:choose>
         <td class="sventonColRightAlign">${zipEntry.size}</td>
         <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
-        <td class="sventonColNoWrap"><fmt:formatDate type="both" value="<%=new java.util.Date(zipEntry.getTime())%>"
-            dateStyle="short" timeStyle="short"/>
+        <td class="sventonColNoWrap"><fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/>
         </td>
         <td>${zipEntry.crc}</td>
       </tr>
