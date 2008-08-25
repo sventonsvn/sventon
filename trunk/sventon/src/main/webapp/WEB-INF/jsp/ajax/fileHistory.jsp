@@ -14,9 +14,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="org.tmatesoft.svn.core.SVNRevisionProperty" %>
+<%@ page import="org.sventon.web.ctrl.template.GetFileHistoryController" %>
 
 <c:if test="${fn:length(fileRevisions) > 1}">
 <table class="fileHistoryTable">
@@ -32,9 +36,14 @@
                 <c:param name="forceDisplay" value="true" />
               </c:if>
             </c:url>
-            <option ${currentRevision eq fileRevision.revision ? 'selected' : ''}
-                onmouseover="Tip('${fileRevision.path}@${fileRevision.revision}', LEFT, true, OFFSETX, 40)"
-                value="${showFileAtRevisionUrl}">${fileRevision.revision}</option>
+            <jsp:useBean id="fileRevision" type="org.tmatesoft.svn.core.io.SVNFileRevision"/>
+            <%
+              final String dateString = (String) fileRevision.getRevisionProperties().get(SVNRevisionProperty.DATE);
+              final Date revDate = GetFileHistoryController.ISO8601_FORMAT.parse(dateString);
+            %>
+            <option value="${showFileAtRevisionUrl}">
+              <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>
+            </option>
           </c:forEach>
         </select>
     </td>
