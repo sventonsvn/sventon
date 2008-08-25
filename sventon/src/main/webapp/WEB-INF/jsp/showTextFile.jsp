@@ -63,6 +63,7 @@
   </table>
 
   <script type="text/javascript">
+    new Draggable($('fileHistoryContainerDiv'));
     getFileHistory('${command.name}', '${command.path}', '${command.revision}', '${archivedEntry}');
   </script>
 
