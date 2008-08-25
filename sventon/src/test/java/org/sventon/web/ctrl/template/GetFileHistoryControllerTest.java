@@ -1,8 +1,5 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
@@ -10,6 +7,9 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.model.RepositoryName;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -73,4 +73,8 @@ public class GetFileHistoryControllerTest extends TestCase {
     assertEquals("zippedTestFile", model.get(GetFileHistoryController.ARCHIVED_ENTRY));
   }
 
+  public void testDateFormat() throws Exception {
+    final String source = "2008-08-19T11:12:38.765624Z";
+    GetFileHistoryController.ISO8601_FORMAT.parse(source);
+  }
 }
