@@ -15,6 +15,7 @@ import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
 
 /**
  * Encoding/decoding utility function class.
@@ -26,6 +27,8 @@ public final class EncodingUtils {
    */
   private EncodingUtils() {
   }
+
+  private static final Pattern FORWARD_SLASH_PATTERN = Pattern.compile("%2F");
 
   /**
    * Default charset, UTF-8.
@@ -56,7 +59,7 @@ public final class EncodingUtils {
    * @return Encoded string with preserved forward slashes.
    */
   public static String encodeUrl(final String url) {
-    return encode(url).replaceAll("%2F", "/");
+    return FORWARD_SLASH_PATTERN.matcher(encode(url)).replaceAll("/");
   }
 
   /**
