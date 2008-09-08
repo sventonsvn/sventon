@@ -9,6 +9,7 @@
 
 
   <target name="deploy" description="Deploy application">
+    <echo message="Copying [${web.dir}]"/>
     <copy todir="${deploy.path}/${name}" preservelastmodified="true">
       <fileset dir="${web.dir}">
         <include name="**/*.*"/>
