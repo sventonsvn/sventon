@@ -24,7 +24,7 @@
     <c:param name="revision" value="${command.revision}" />
   </c:url>
   <a href="${basePathUrl}">${url}</a> /
-  <c:forTokens items="${command.pathNoLeaf}" delims="/" var="pathSegment">
+  <c:forTokens items="${command.parentPath}" delims="/" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
         <c:when test="${clickable}">

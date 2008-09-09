@@ -38,7 +38,7 @@
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="org.sventon.model.RepositoryEntry"/>
       
-      <c:url value="/repos/${command.name}/browse${trayEntry.fullEntryName}" var="entryTrayViewUrl">
+      <c:url value="/repos/${command.name}/browse${trayEntry.fullEntryName}/" var="entryTrayViewUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
       <c:url value="/repos/${command.name}/view${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">

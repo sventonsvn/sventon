@@ -1,7 +1,7 @@
 package org.sventon.web.command;
 
-import org.sventon.SVNRepositoryStub;
 import junit.framework.TestCase;
+import org.sventon.SVNRepositoryStub;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -89,4 +89,47 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals(123, command.getRevisionNumber());
   }
 
+  public void testGetParentPath() {
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+
+    cmd.setPath("/trunk/src/File.java");
+    assertEquals("/trunk/src/", cmd.getParentPath());
+
+    cmd.setPath("/trunk/src/File.java");
+    assertEquals("/trunk/src/", cmd.getParentPath());
+
+    cmd.setPath("/trunk/src/");
+    assertEquals("/trunk/", cmd.getParentPath());
+
+    cmd.setPath("");
+    assertEquals("/", cmd.getParentPath());
+
+    cmd.setPath("/");
+    assertEquals("/", cmd.getParentPath());
+
+    cmd.setPath(null);
+    assertEquals("/", cmd.getParentPath());
+  }
+
+  public void testGetPathPart() {
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+
+    cmd.setPath("/trunk/src/File.java");
+    assertEquals("/trunk/src/", cmd.getPathPart());
+
+    cmd.setPath("/trunk/src/");
+    assertEquals("/trunk/src/", cmd.getPathPart());
+
+    cmd.setPath("/trunk/src");
+    assertEquals("/trunk/", cmd.getPathPart());  // 'src' will be treated as a target leaf
+
+    cmd.setPath("");
+    assertEquals("/", cmd.getPathPart());
+
+    cmd.setPath("/");
+    assertEquals("/", cmd.getPathPart());
+
+    cmd.setPath(null);
+    assertEquals("/", cmd.getPathPart());
+  }
 }

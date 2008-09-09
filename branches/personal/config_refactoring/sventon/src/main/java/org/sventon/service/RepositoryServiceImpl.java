@@ -12,6 +12,7 @@
 package org.sventon.service;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +23,6 @@ import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.util.KeywordHandler;
-import org.sventon.util.PathUtil;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -237,7 +237,7 @@ public class RepositoryServiceImpl implements RepositoryService {
     final long start = System.currentTimeMillis();
     final SVNDirEntry dirEntry = repository.info(path, revision);
     if (dirEntry != null) {
-      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, PathUtil.getPathPart(path));
+      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, FilenameUtils.getFullPath(path));
       logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
       return repositoryEntry;
     } else {
