@@ -137,6 +137,8 @@ public final class RepositoryConfiguration {
 
   private String mailTemplate;
 
+  private boolean initialized;
+
 
   /**
    * Constructor.
@@ -462,5 +464,12 @@ public final class RepositoryConfiguration {
     return mailTemplate;
   }
 
+  public void setInitialized(final boolean initialized) {
+    this.initialized = initialized;
+  }
+
+  public boolean isInitialized() {
+    return initialized;
+  }
 }
 

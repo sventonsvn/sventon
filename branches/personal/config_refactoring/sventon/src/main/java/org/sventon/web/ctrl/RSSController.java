@@ -43,11 +43,6 @@ import java.util.List;
 public final class RSSController extends AbstractController {
 
   /**
-   * Logger for this class and subclasses.
-   */
-  private final Log logger = LogFactory.getLog(getClass());
-
-  /**
    * RSS mime type, default set to <tt>application/xml; charset=UTF-8</tt>.
    */
   private String mimeType = "application/xml; charset=UTF-8";

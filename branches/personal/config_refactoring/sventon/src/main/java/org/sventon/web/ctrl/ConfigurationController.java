@@ -11,19 +11,16 @@
  */
 package org.sventon.web.ctrl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
-import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.web.command.ConfigCommand;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,11 +37,6 @@ public final class ConfigurationController extends AbstractFormController {
   private Application application;
 
   /**
-   * Logger for this class and subclasses.
-   */
-  private final Log logger = LogFactory.getLog(getClass());
-
-  /**
    * Sets the application.
    *
    * @param application Application
@@ -56,15 +48,9 @@ public final class ConfigurationController extends AbstractFormController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response, final BindException errors)
-      throws IOException {
-
-    logger.info("sventon configured: " + application.isConfigured());
-
-    if (application.isConfigured()) {
-      logger.debug("Already configured - returning to list repos view");
-      return new ModelAndView(new RedirectView("/repos/list", true));
-    }
+  @Override
+  protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response,
+                                  final BindException errors) throws ServletException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("addedRepositories", application.getRepositoryNames());
@@ -84,16 +70,10 @@ public final class ConfigurationController extends AbstractFormController {
   /**
    * {@inheritDoc}
    */
+  @Override
   protected ModelAndView processFormSubmission(final HttpServletRequest request,
                                                final HttpServletResponse response, final Object command,
-                                               final BindException errors) throws IOException {
-
-    logger.info("sventon configuration OK: " + application.isConfigured());
-
-    if (application.isConfigured()) {
-      logger.debug("Already configured - returning to list repos view");
-      return new ModelAndView(new RedirectView("/repos/list", true));
-    }
+                                               final BindException errors) throws ServletException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("addedRepositories", application.getRepositoryNames());

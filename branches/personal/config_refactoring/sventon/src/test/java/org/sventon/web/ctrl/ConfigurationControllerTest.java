@@ -1,44 +1,32 @@
 package org.sventon.web.ctrl;
 
-import org.sventon.TestUtils;
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
-import org.sventon.web.command.ConfigCommand;
-import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.RepositoryName;
+import org.sventon.web.command.ConfigCommand;
+import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
 import java.util.Map;
 import java.util.Set;
 
 public class ConfigurationControllerTest extends TestCase {
 
-  public void testShowFormNonConfigured() throws Exception {
+  public void testShowForm() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationController ctrl = new ConfigurationController();
     ctrl.setApplication(TestUtils.getApplicationStub());
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
+    assertEquals(2, modelAndView.getModel().size());
     assertEquals("config/config", modelAndView.getViewName());
-  }
-
-  public void testShowFormConfigured() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = TestUtils.getApplicationStub();
-    application.setConfigured(true);
-    ctrl.setApplication(application);
-    final ModelAndView modelAndView = ctrl.showForm(request, response, null);
-    assertNotNull(modelAndView);
-    assertEquals(null, modelAndView.getViewName());
   }
 
   //Test what happens if an instance is partially configured and the config view is invoked
@@ -55,21 +43,8 @@ public class ConfigurationControllerTest extends TestCase {
     ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.showForm(request, response, null);
     assertNotNull(modelAndView);
+    assertEquals(1, modelAndView.getModel().size());
     assertEquals("config/confirmAddConfig", modelAndView.getViewName());
-  }
-
-  public void testProcessFormSubmissionConfigured() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
-    final Application application = TestUtils.getApplicationStub();
-    application.setConfigured(true);
-    ctrl.setApplication(application);
-    final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, null, null);
-    assertNotNull(modelAndView);
-    assertTrue(modelAndView.getView() instanceof RedirectView);
-    final RedirectView rv = (RedirectView) modelAndView.getView();
-    assertEquals("/repos/list", rv.getUrl());
   }
 
   public void testProcessFormSubmissionNonConfiguredValidationError() throws Exception {
@@ -82,6 +57,7 @@ public class ConfigurationControllerTest extends TestCase {
     exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
+    assertEquals(4, modelAndView.getModel().size());
     assertEquals("config/config", modelAndView.getViewName());
   }
 
@@ -100,6 +76,7 @@ public class ConfigurationControllerTest extends TestCase {
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
     assertNotNull(modelAndView);
+    assertEquals(2, modelAndView.getModel().size());
     assertEquals("config/confirmAddConfig", modelAndView.getViewName());
     assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
@@ -140,7 +117,6 @@ public class ConfigurationControllerTest extends TestCase {
     assertTrue(configuration.isZippedDownloadsAllowed());
     assertNull(configuration.getUid()); //UID only for connection testing, not stored
     assertNull(configuration.getPwd()); //PWD only for connection testing, not stored
-
   }
 
 }

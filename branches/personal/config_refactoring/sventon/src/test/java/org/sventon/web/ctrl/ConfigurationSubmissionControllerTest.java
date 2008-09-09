@@ -1,9 +1,5 @@
 package org.sventon.web.ctrl;
 
-import org.sventon.TestUtils;
-import static org.sventon.TestUtils.TEMPDIR;
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.quartz.impl.StdScheduler;
@@ -11,6 +7,10 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
+import static org.sventon.TestUtils.TEMPDIR;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
 
 import java.io.File;
 
@@ -23,12 +23,8 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
-    try {
-      controller.handleRequestInternal(request, response);
-      fail("Should throw IllegalStateException");
-    } catch (IllegalStateException ise) {
-      // expected
-    }
+    final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
   public void testHandleRequestInternalNoAddedInstance() throws Exception {
