@@ -293,21 +293,21 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
                                final RepositoryService repositoryService) throws SVNException {
 
     // Have to find out if added entry was a file or directory
-    final RepositoryEntry addedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision);
+    final RepositoryEntry entryToAdd = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision);
 
     // If the entry is a directory and a copyPath exists, the entry is
     // a moved or copied directory (branch). In that case we have to recursively
     // add the entry. If entry is a directory but does not have a copyPath
     // the contents will be added one by one as single entries.
-    if (addedEntry.getKind() == RepositoryEntry.Kind.DIR && logEntryPath.getCopyPath() != null) {
+    if (entryToAdd.getKind() == RepositoryEntry.Kind.DIR && logEntryPath.getCopyPath() != null) {
       // Directory node added
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
-      entryCache.add(addedEntry);
+      entryCache.add(entryToAdd);
       // Add directory contents
       addDirectories(entryCache, repository, logEntryPath.getPath() + "/", revision, repositoryService);
     } else {
       // Single entry added
-      entryCache.add(addedEntry);
+      entryCache.add(entryToAdd);
     }
   }
 

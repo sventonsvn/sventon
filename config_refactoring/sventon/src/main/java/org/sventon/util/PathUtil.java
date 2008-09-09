@@ -38,62 +38,13 @@ public final class PathUtil {
     if (fullpath == null) {
       return "";
     }
-
-    final String[] splittedString = fullpath.split("/");
-    final int length = splittedString.length;
+    final String[] splitString = fullpath.split("/");
+    final int length = splitString.length;
     if (length == 0) {
       return "";
     } else {
-      return splittedString[splittedString.length - 1];
+      return splitString[splitString.length - 1];
     }
   }
 
-  /**
-   * Gets the path, excluding the target leaf.
-   * <p/>
-   * The returned string will have a final "/". If the path info is empty or null, ""
-   * (empty string) will be returned.
-   *
-   * @param fullpath Path, e.g. <tt>/trunk/src/File.java</tt>
-   * @return Path excluding taget leaf, e.g. <tt>/trunk/src/</tt>
-   */
-  public static String getPathPart(final String fullpath) {
-    if (fullpath == null) {
-      return "";
-    }
-
-    final int lastIndex = fullpath.lastIndexOf('/');
-    if (lastIndex == -1) {
-      return "";
-    } else {
-      return fullpath.substring(0, lastIndex) + "/";
-    }
-  }
-
-  /**
-   * Gets the path, excluding the end/leaf.
-   * <p/>
-   * The returned string will have a final "/". If the path info is empty or null, ""
-   * (empty string) will be returned.
-   *
-   * @param fullpath Path
-   * @return Path excluding taget (end/leaf).
-   */
-  public static String getPathNoLeaf(final String fullpath) {
-    if (fullpath == null) {
-      return "";
-    }
-
-    String work = fullpath;
-    if (work.endsWith("/")) {
-      work = work.substring(0, work.length() - 1);
-    }
-
-    final int lastIndex = work.lastIndexOf('/');
-    if (lastIndex == -1) {
-      return "";
-    } else {
-      return work.substring(0, lastIndex) + "/";
-    }
-  }
 }
