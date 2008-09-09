@@ -1,10 +1,5 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.TestUtils;
-import org.sventon.appl.Application;
-import org.sventon.model.RepositoryName;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
@@ -14,6 +9,11 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.model.RepositoryName;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -62,7 +62,7 @@ public class GoToControllerTest extends TestCase {
 
     assertEquals(1, model.size());
     view = (RedirectView) modelAndView.getView();
-    assertEquals("/repos/test/browse/dir", view.getUrl());
+    assertEquals("/repos/test/browse/dir/", view.getUrl());
 
     reset(mockService);
 
@@ -79,6 +79,30 @@ public class GoToControllerTest extends TestCase {
 
     assertEquals(4, model.size());
     assertEquals("goto", modelAndView.getViewName());
+  }
+
+  public void testCreateBrowseUrl() {
+    final GoToController ctrl = new GoToController();
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+    cmd.setName(new RepositoryName("test"));
+
+    cmd.setPath("/test/dir");
+    assertEquals("/repos/test/browse/test/dir/", ctrl.createBrowseUrl(cmd));
+
+    cmd.setPath("/test/dir/");
+    assertEquals("/repos/test/browse/test/dir/", ctrl.createBrowseUrl(cmd));
+  }
+
+  public void testCreateViewUrl() {
+    final GoToController ctrl = new GoToController();
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+    cmd.setName(new RepositoryName("test"));
+
+    cmd.setPath("/test/file");
+    assertEquals("/repos/test/view/test/file", ctrl.createViewUrl(cmd));
+
+    cmd.setPath("/test/file/");
+    assertEquals("/repos/test/view/test/file", ctrl.createViewUrl(cmd));
   }
 
 }

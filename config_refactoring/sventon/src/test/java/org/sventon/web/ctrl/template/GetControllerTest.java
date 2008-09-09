@@ -1,14 +1,14 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.TestUtils;
-import org.sventon.appl.Application;
-import org.sventon.SVNRepositoryStub;
-import org.sventon.service.RepositoryServiceImpl;
 import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNRepositoryStub;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.service.RepositoryServiceImpl;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNException;

@@ -70,6 +70,16 @@ public abstract class CacheManager<T> {
   }
 
   /**
+   * Checks if given repository name is registered.
+   *
+   * @param repositoryName Name
+   * @return True if registered, false if not.
+   */
+  public boolean isRegistered(final RepositoryName repositoryName) {
+    return caches.get(repositoryName) != null;
+  }
+
+  /**
    * Creates a new cache instance using given name and default settings.
    *
    * @param repositoryName Name of cache instance.

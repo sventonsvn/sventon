@@ -60,7 +60,7 @@ public final class SideBySideDiffCreator {
   public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
                                final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
-
+    // TODO: Break this into two classes
     final String leftString = appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset);
     final String rightString = appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset);
     leftSourceLines = IOUtils.readLines(new StringReader(leftString));

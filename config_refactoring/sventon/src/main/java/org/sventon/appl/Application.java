@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.CacheManager;
 import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.objectcache.ObjectCacheManager;
@@ -27,6 +28,7 @@ import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.util.SVNDebugLog;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.*;
@@ -68,6 +70,16 @@ public final class Application {
    * Application configuration file name.
    */
   private final String configurationFilename;
+
+  /**
+   * Toggles the possibility to edit the config after initial setup.
+   */
+  private boolean editableConfig;
+
+  /**
+   * Password needed to access the config pages.
+   */
+  private String configPassword;
 
   private EntryCacheManager entryCacheManager;
   private LogMessageCacheManager logMessageCacheManager;
@@ -116,18 +128,24 @@ public final class Application {
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
     for (final RepositoryConfiguration repositoryConfiguration : repositories.values()) {
-      final RepositoryName name = repositoryConfiguration.getName();
+      final RepositoryName repositoryName = repositoryConfiguration.getName();
       if (repositoryConfiguration.isCacheUsed()) {
-        logger.debug("Registering caches for instance: " + name);
-        entryCacheManager.register(name);
-        logMessageCacheManager.register(name);
-        objectCacheManager.register(name);
-        revisionCacheManager.register(name);
+        register(entryCacheManager, repositoryName);
+        register(logMessageCacheManager, repositoryName);
+        register(objectCacheManager, repositoryName);
+        register(revisionCacheManager, repositoryName);
       } else {
-        logger.debug("Caches have not been enabled for instance: " + name);
+        logger.debug("Caches have not been enabled for instance: " + repositoryName);
       }
     }
     logger.info("Caches initialized ok");
+  }
+
+  private void register(final CacheManager manager, final RepositoryName repositoryName) throws CacheException {
+    if (!manager.isRegistered(repositoryName)) {
+      logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
+      manager.register(repositoryName);
+    }
   }
 
   /**
@@ -179,26 +197,31 @@ public final class Application {
   /**
    * Store the repository configurations on file at path
    * {@code configurationRootDirectory / [repository name] / configurationFilename}.
+   * <p/>
+   * Note: Already stored configurations will be untouched.
    *
    * @throws IOException if IO error occur during file operations.
    */
   public void storeRepositoryConfigurations() throws IOException {
-    for (final RepositoryConfiguration configuration : repositories.values()) {
-      final File configDir = new File(configurationRootDirectory, configuration.getName().toString());
-      configDir.mkdirs();
+    for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
+      if (!repositoryConfig.isInitialized()) {
+        final File configDir = new File(configurationRootDirectory, repositoryConfig.getName().toString());
+        configDir.mkdirs();
 
-      final File configFile = new File(configDir, configurationFilename);
-      logger.info("Storing configuration: " + configFile.getAbsolutePath());
+        final File configFile = new File(configDir, configurationFilename);
+        logger.info("Storing configuration: " + configFile.getAbsolutePath());
 
-      FileOutputStream fileOutputStream = null;
-      try {
-        fileOutputStream = new FileOutputStream(configFile);
-        final Properties configProperties = configuration.getAsProperties();
-        logger.debug("Storing properties: " + configProperties);
-        configProperties.store(fileOutputStream, "");
-        fileOutputStream.flush();
-      } finally {
-        IOUtils.closeQuietly(fileOutputStream);
+        FileOutputStream fileOutputStream = null;
+        try {
+          fileOutputStream = new FileOutputStream(configFile);
+          final Properties configProperties = repositoryConfig.getAsProperties();
+          logger.debug("Storing properties: " + configProperties);
+          configProperties.store(fileOutputStream, "");
+          fileOutputStream.flush();
+          repositoryConfig.setInitialized(true);
+        } finally {
+          IOUtils.closeQuietly(fileOutputStream);
+        }
       }
     }
   }
@@ -273,6 +296,25 @@ public final class Application {
   }
 
   /**
+   * Sets the password for the config pages.
+   *
+   * @param configPassword Password.
+   */
+  public void setConfigPassword(final String configPassword) {
+    this.configPassword = configPassword;
+  }
+
+  /**
+   * Checks if given password matches the configuration password.
+   *
+   * @param configPassword Password to match.
+   * @return True if password matches, false if not.
+   */
+  public boolean isValidConfigPassword(final String configPassword) {
+    return this.configPassword != null && this.configPassword.equals(configPassword);
+  }
+
+  /**
    * Sets the cache updating status.
    * <p/>
    * Note: This method is package protected by design.
@@ -343,4 +385,19 @@ public final class Application {
     this.revisionCacheManager = revisionCacheManager;
   }
 
+  /**
+   * Enables or disables the possibility to edit the instance configuration.
+   *
+   * @param editableConfig True or false
+   */
+  public void setEditableConfig(final boolean editableConfig) {
+    this.editableConfig = editableConfig;
+  }
+
+  /**
+   * @return true if the instance configuration is editable, false if not.
+   */
+  public boolean isEditableConfig() {
+    return editableConfig;
+  }
 }

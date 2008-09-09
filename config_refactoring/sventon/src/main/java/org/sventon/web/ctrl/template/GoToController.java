@@ -67,9 +67,9 @@ public final class GoToController extends AbstractSVNTemplateController {
     }
 
     if (SVNNodeKind.DIR == kind) {
-      redirectUrl = "/repos/" + svnCommand.getName().toString() + "/browse" + svnCommand.getPath();
+      redirectUrl = createBrowseUrl(svnCommand);
     } else if (SVNNodeKind.FILE == kind) {
-      redirectUrl = "/repos/" + svnCommand.getName().toString() + "/view" + svnCommand.getPath();
+      redirectUrl = createViewUrl(svnCommand);
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");
       return prepareExceptionModelAndView(exception, svnCommand);
@@ -87,4 +87,35 @@ public final class GoToController extends AbstractSVNTemplateController {
     return new ModelAndView(new RedirectView(redirectUrl, true), model);
   }
 
+  /**
+   * Creates a redirect url for browsing a directory.
+   * <p/>
+   * Note: A trailing slash ("/") will be appended if missing on path.
+   *
+   * @param svnCommand Command
+   * @return Url
+   */
+  protected String createBrowseUrl(final SVNBaseCommand svnCommand) {
+    String path = svnCommand.getPath();
+    if (!path.endsWith("/")) {
+      path += "/";
+    }
+    return "/repos/" + svnCommand.getName().toString() + "/browse" + path;
+  }
+
+  /**
+   * Creates a redirect url for viewing a file.
+   * <p/>
+   * Note: A trailing slash ("/") will be removed if found on path.
+   *
+   * @param svnCommand Command
+   * @return Url
+   */
+  protected String createViewUrl(final SVNBaseCommand svnCommand) {
+    String path = svnCommand.getPath();
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length() - 1);
+    }
+    return "/repos/" + svnCommand.getName().toString() + "/view" + path;
+  }
 }
