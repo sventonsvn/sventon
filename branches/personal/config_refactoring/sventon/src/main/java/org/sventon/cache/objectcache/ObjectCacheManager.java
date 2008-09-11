@@ -77,11 +77,11 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
    *          if unable to create cache.
    */
   protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
-    logger.debug("Creating cache: " + repositoryName);
     final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
     cachePath.mkdirs();
+    logger.debug("Creating cache: " + cachePath.getAbsolutePath());
     return new ObjectCacheImpl(
-        "objectcache",
+        repositoryName.toString(),
         cachePath.getAbsolutePath(),
         maxElementsInMemory,
         overflowToDisk,
