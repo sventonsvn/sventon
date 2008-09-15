@@ -69,7 +69,7 @@ public final class ConfigurationSubmissionController extends AbstractController 
       return new ModelAndView("error/configurationError");
     }
 
-    application.storeRepositoryConfigurations();
+    application.persistRepositoryConfigurations();
     application.initCaches();
 
     if (!application.isConfigured()) {

@@ -172,7 +172,7 @@
     <property name="application" ref="application"/>
     <property name="commandClass" value="org.sventon.web.command.ConfigLoginCommand"/>
     <property name="formView" value="config/login"/>
-    <property name="successView" value="config/confirmAddConfig"/>
+    <property name="successView" value="redirect:config"/>
   </bean>
 
 </beans>

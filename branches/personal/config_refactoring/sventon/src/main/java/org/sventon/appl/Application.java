@@ -179,7 +179,9 @@ public final class Application {
         properties.load(is);
         final String repositoryName = configDir.getName();
         logger.info("Configuring repository: " + repositoryName);
-        addRepository(RepositoryConfiguration.create(repositoryName, properties));
+        final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
+        configuration.setPersisted();
+        addRepository(configuration);
       } finally {
         IOUtils.closeQuietly(is);
       }
@@ -201,9 +203,9 @@ public final class Application {
    *
    * @throws IOException if IO error occur during file operations.
    */
-  public void storeRepositoryConfigurations() throws IOException {
+  public void persistRepositoryConfigurations() throws IOException {
     for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
-      if (!repositoryConfig.isInitialized()) {
+      if (!repositoryConfig.isPersisted()) {
         final File configDir = new File(configurationRootDirectory, repositoryConfig.getName().toString());
         configDir.mkdirs();
 
@@ -217,7 +219,7 @@ public final class Application {
           logger.debug("Storing properties: " + configProperties);
           configProperties.store(fileOutputStream, "");
           fileOutputStream.flush();
-          repositoryConfig.setInitialized(true);
+          repositoryConfig.setPersisted();
         } finally {
           IOUtils.closeQuietly(fileOutputStream);
         }

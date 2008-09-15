@@ -1,6 +1,7 @@
 package org.sventon.web.ctrl;
 
 import org.sventon.TestUtils;
+import org.sventon.model.RepositoryName;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
@@ -60,5 +61,11 @@ public class StartControllerTest extends TestCase {
     configuration.setZippedDownloadsAllowed(false);
     configuration.setEnableAccessControl(false);
     return configuration;
+  }
+
+  public void testCreateBrowseUrl() {
+    final StartController ctrl = new StartController();
+    assertEquals("/repos/test/browse/", ctrl.createBrowseUrl(new RepositoryName("test")));
+    assertEquals("/repos/%C3%BC/browse/", ctrl.createBrowseUrl(new RepositoryName("\u00fc")));
   }
 }

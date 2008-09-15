@@ -137,7 +137,7 @@ public final class RepositoryConfiguration {
 
   private String mailTemplate;
 
-  private boolean initialized;
+  private boolean persisted;
 
 
   /**
@@ -442,34 +442,34 @@ public final class RepositoryConfiguration {
     return mailTemplateFile;
   }
 
-  private String getTemplate(final String name) throws IOException {
-    final InputStream is = this.getClass().getResourceAsStream(name);
+  private String loadTemplateFile(final String filename) throws IOException {
+    final InputStream is = this.getClass().getResourceAsStream(filename);
     if (is == null) {
-      throw new FileNotFoundException("Unable to find: " + name);
+      throw new FileNotFoundException("Unable to find: " + filename);
     }
     return IOUtils.toString(is);
   }
 
   public String getRssTemplate() throws IOException {
     if (rssTemplate == null) {
-      rssTemplate = getTemplate(rssTemplateFile);
+      rssTemplate = loadTemplateFile(rssTemplateFile);
     }
     return rssTemplate;
   }
 
   public String getMailTemplate() throws IOException {
     if (mailTemplate == null) {
-      mailTemplate = getTemplate(mailTemplateFile);
+      mailTemplate = loadTemplateFile(mailTemplateFile);
     }
     return mailTemplate;
   }
 
-  public void setInitialized(final boolean initialized) {
-    this.initialized = initialized;
+  public void setPersisted() {
+    this.persisted = true;
   }
 
-  public boolean isInitialized() {
-    return initialized;
+  public boolean isPersisted() {
+    return persisted;
   }
 }
 
