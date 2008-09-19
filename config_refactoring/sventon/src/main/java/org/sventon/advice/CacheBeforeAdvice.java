@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache;
+package org.sventon.advice;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +20,7 @@ import org.sventon.model.RepositoryName;
 import java.lang.reflect.Method;
 
 /**
- * Before advice that checks if the cache needs to be updated before any method
- * of class {@link CacheGatewayImpl} is execuded.
+ * Before advice that checks if the cache needs to be updated before proceeding.
  *
  * @author jesper@sventon.org
  */
