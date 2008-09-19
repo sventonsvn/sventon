@@ -122,9 +122,16 @@
     <property name="target" ref="cacheGateway"/>
     <property name="interceptorNames">
       <list>
+        <value>stopWatchAroundAdvisor</value>
         <value>cacheBeforeAdvisor</value>
       </list>
     </property>
+  </bean>
+
+  <!-- Advisor pointcut definition for before advice -->
+  <bean id="stopWatchAroundAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="stopWatchAroundAdvice"/>
+    <property name="pattern" value=".*"/>
   </bean>
 
   <!-- Advisor pointcut definition for before advice -->
@@ -133,10 +140,13 @@
     <property name="pattern" value=".*"/>
   </bean>
 
-  <!-- Advice classes -->
-  <bean id="cacheBeforeAdvice" class="org.sventon.cache.CacheBeforeAdvice">
+  <!-- Advice class -->
+  <bean id="cacheBeforeAdvice" class="org.sventon.advice.CacheBeforeAdvice">
     <property name="revisionObservable" ref="revisionObservable"/>
   </bean>
+
+  <!-- Advice class -->
+  <bean id="stopWatchAroundAdvice" class="org.sventon.advice.StopWatchAroundAdvice"/>
 
   <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl">
     <property name="entryCacheManager" ref="entryCacheManager"/>

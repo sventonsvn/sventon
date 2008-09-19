@@ -1,4 +1,4 @@
-package org.sventon.cache;
+package org.sventon.advice;
 
 import org.sventon.model.RepositoryName;
 import org.sventon.appl.RevisionObservable;
