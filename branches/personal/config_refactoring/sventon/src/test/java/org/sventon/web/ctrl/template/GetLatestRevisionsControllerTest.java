@@ -48,6 +48,5 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     assertEquals(1, model.size());
     assertEquals(revisions, model.get("revisions"));
     assertEquals(2, ((List) model.get("revisions")).size());
-    assertEquals("ajax/latestRevisions", modelAndView.getViewName());
   }
 }

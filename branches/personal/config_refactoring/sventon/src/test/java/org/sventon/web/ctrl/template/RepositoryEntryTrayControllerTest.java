@@ -59,7 +59,6 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, context, request, null, null);
     verify(mockService);
-    assertEquals("ajax/entryTray", modelAndView.getViewName());
     return modelAndView.getModel();
   }
 

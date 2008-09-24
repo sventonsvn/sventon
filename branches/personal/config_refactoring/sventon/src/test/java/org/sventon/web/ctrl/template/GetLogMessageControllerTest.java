@@ -40,6 +40,5 @@ public class GetLogMessageControllerTest extends TestCase {
     final LogMessage logMessage = (LogMessage) model.get("logMessage");
     assertEquals(logEntry.getMessage(), logMessage.getMessage());
     assertEquals(command.getRevisionNumber(), logMessage.getRevision());
-    assertEquals("ajax/logMessage", modelAndView.getViewName());
   }
 }

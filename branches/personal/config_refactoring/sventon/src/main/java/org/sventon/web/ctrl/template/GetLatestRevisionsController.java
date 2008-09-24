@@ -63,6 +63,6 @@ public final class GetLatestRevisionsController extends AbstractSVNTemplateContr
     }
 
     model.put("revisions", revisions);
-    return new ModelAndView("ajax/latestRevisions", model);
+    return new ModelAndView(getViewName(), model);
   }
 }
