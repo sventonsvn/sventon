@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.RepositoryName;
@@ -49,7 +51,6 @@ public class GetFileHistoryControllerTest extends TestCase {
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
     verify(mockService);
-    assertEquals("ajax/fileHistory", modelAndView.getViewName());
     return modelAndView.getModel();
   }
 

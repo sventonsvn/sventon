@@ -80,7 +80,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
     model.put("locks", getRepositoryService().getLocks(repository, svnCommand.getPath()));
     model.put("existingExtensions", new FileExtensionList(entries).getExtensions());
     model.put("filterExtension", filterExtension);
-    modelAndView.setViewName("repoBrowser");
+    modelAndView.setViewName(getViewName());
     return modelAndView;
   }
 }

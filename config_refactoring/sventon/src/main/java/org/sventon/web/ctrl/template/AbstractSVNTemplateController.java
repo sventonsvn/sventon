@@ -117,6 +117,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private int maxEntriesCount;
 
   /**
+   * Destination view name.
+   */
+  private String viewName;
+
+  /**
    * Cached available charsets.
    */
   private AvailableCharsets availableCharsets;
@@ -443,7 +448,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   final ModelAndView prepareExceptionModelAndView(final BindException exception,
-                                                            final SVNBaseCommand svnCommand) {
+                                                  final SVNBaseCommand svnCommand) {
     final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     model.put("command", svnCommand);
@@ -586,6 +591,24 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
+  }
+
+  /**
+   * Sets the destination view name.
+   *
+   * @param viewName View name.
+   */
+  public void setViewName(final String viewName) {
+    this.viewName = viewName;
+  }
+
+  /**
+   * Gets the destination view name.
+   *
+   * @return View name.
+   */
+  public String getViewName() {
+    return viewName;
   }
 
 }

@@ -72,6 +72,6 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
     if (archivedEntry != null) {
       model.put(ARCHIVED_ENTRY, archivedEntry);
     }
-    return new ModelAndView("ajax/fileHistory", model);
+    return new ModelAndView(getViewName(), model);
   }
 }

@@ -38,6 +38,5 @@ public class ShowLocksControllerTest extends TestCase {
     assertEquals(1, model.size());
     final Collection locks = (Collection) model.get("currentLocks");
     assertEquals(1, locks.size());
-    assertEquals("showLocks", modelAndView.getViewName());
   }
 }

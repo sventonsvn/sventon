@@ -62,7 +62,7 @@ public final class ShowThumbnailsController extends AbstractSVNTemplateControlle
     }
     logger.debug(imageEntries.size() + " entries out of " + entries.size() + " are image files");
     model.put("thumbnailentries", imageEntries);
-    return new ModelAndView("showThumbnails", model);
+    return new ModelAndView(getViewName(), model);
   }
 
   /**

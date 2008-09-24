@@ -67,6 +67,6 @@ public final class BlameController extends AbstractSVNTemplateController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("annotatedFile", annotatedFile);
-    return new ModelAndView("blame", model);
+    return new ModelAndView(getViewName(), model);
   }
 }
