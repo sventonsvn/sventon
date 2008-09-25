@@ -24,15 +24,7 @@
   <servlet-mapping>
     <servlet-name>sventon</servlet-name>
     <url-pattern>/repos/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>sventon</servlet-name>
     <url-pattern>/ajax/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>sventon</servlet-name>
     <url-pattern>/xml/*</url-pattern>
   </servlet-mapping>
 
@@ -81,22 +73,12 @@
   <filter-mapping>
     <filter-name>PathParameterFilter</filter-name>
     <url-pattern>/repos/*</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>PathParameterFilter</filter-name>
     <url-pattern>/ajax/*</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>PathParameterFilter</filter-name>
     <url-pattern>/xml/*</url-pattern>
   </filter-mapping>
 
   <welcome-file-list>
-    <welcome-file>
-      index.jsp
-    </welcome-file>
+    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
   <error-page>
