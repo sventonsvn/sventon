@@ -53,7 +53,8 @@ public final class Application {
   /**
    * Set of added subversion repository names.
    */
-  private final Map<RepositoryName, RepositoryConfiguration> repositories = new HashMap<RepositoryName, RepositoryConfiguration>();
+  private final Map<RepositoryName, RepositoryConfiguration> repositories = Collections.synchronizedMap(
+      new HashMap<RepositoryName, RepositoryConfiguration>());
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -234,6 +235,15 @@ public final class Application {
    */
   public void addRepository(final RepositoryConfiguration configuration) {
     repositories.put(configuration.getName(), configuration);
+  }
+
+  /**
+   * Removes a repository from the sventon configuration.
+   *
+   * @param name Name of repository to remove.
+   */
+  public void removeRepository(final RepositoryName name) {
+    repositories.remove(name);
   }
 
   /**
