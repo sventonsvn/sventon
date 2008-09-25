@@ -12,17 +12,13 @@ import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.web.command.DiffCommand;
 import de.berlios.sventon.web.support.RequestParameterParser;
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNProperty;
-import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.ISVNSession;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 public class RepositoryServiceImplTest extends TestCase {
 
@@ -34,7 +30,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffUnifiedBinaryFile() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
@@ -62,7 +58,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffUnifiedIdenticalFiles1() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         return 0;
       }
 
@@ -89,7 +85,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffUnifiedIdenticalFiles2() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
           try {
@@ -126,7 +122,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
       private boolean firstTime = true;
 
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String leftFileContents = "test left file contents" + BR;
         final String rightFileContents = "test right file contents" + BR;
         if (contents != null) {
@@ -165,7 +161,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
       private boolean firstTime = true;
 
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String leftFileContents =
             "row one" + BR +
                 "row two" + BR +
@@ -217,7 +213,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffSideBySideBinaryFile() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
@@ -245,7 +241,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffSideBySideIdenticalFiles1() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         return 0;
       }
 
@@ -272,7 +268,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffSideBySideDirectories() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
           try {
@@ -307,7 +303,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffSideBySideIdenticalFiles2() throws Exception {
     final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
-      public long getFile(String path, long revision, Map properties, OutputStream contents) {
+      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
           try {
@@ -548,7 +544,7 @@ public class RepositoryServiceImplTest extends TestCase {
       super(location, options);
     }
 
-    public long getFile(String path, long revision, Map properties, OutputStream contents) {
+    public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
       if (contents != null) {
         try {
           if (first) {

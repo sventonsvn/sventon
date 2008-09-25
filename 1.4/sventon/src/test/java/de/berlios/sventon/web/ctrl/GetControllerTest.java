@@ -11,12 +11,12 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.util.Map;
 
 public class GetControllerTest extends TestCase {
 
@@ -72,7 +72,7 @@ public class GetControllerTest extends TestCase {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }
 
-    public long getFile(String path, long revision, Map properties, OutputStream contents) throws SVNException {
+    public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
       return 0;
     }
 

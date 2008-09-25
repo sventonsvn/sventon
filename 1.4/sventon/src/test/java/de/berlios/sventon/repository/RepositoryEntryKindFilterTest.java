@@ -12,9 +12,9 @@ public class RepositoryEntryKindFilterTest extends TestCase {
   public void testFilter() throws Exception {
 
     final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "/trunk", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "/trunk/test", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "/trunk", SVNNodeKind.DIR, 0, false, 0, null, null), "/"));
 
     List<RepositoryEntry> filteredList;
 

@@ -12,19 +12,20 @@
 package de.berlios.sventon.web.ctrl;
 
 import de.berlios.sventon.colorer.Colorer;
+import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.model.ArchiveFile;
 import de.berlios.sventon.model.TextFile;
+import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.util.WebUtils;
 import de.berlios.sventon.util.ZipUtils;
-import de.berlios.sventon.util.EncodingUtils;
 import de.berlios.sventon.web.command.SVNBaseCommand;
 import de.berlios.sventon.web.model.UserRepositoryContext;
-import de.berlios.sventon.content.KeywordHandler;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -107,7 +108,8 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final Map fileProperties = getRepositoryService().getFileProperties(repository, svnCommand.getPath(), revision.getNumber());
+    final SVNProperties fileProperties = getRepositoryService().getFileProperties(
+        repository, svnCommand.getPath(), revision.getNumber());
 
     logger.debug(fileProperties);
 
@@ -179,8 +181,8 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param properties The svn properties for given file.
    * @return True if text file, false if not.
    */
-  protected boolean isTextMimeType(final Map properties) {
-    return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
+  protected boolean isTextMimeType(final SVNProperties properties) {
+    return SVNProperty.isTextMimeType(properties.getStringValue(SVNProperty.MIME_TYPE));
   }
 
   /**

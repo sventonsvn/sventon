@@ -113,7 +113,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
-          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, true);
+          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, SVNDepth.INFINITY);
     }
     logger.debug("PERF: export(): " + (System.currentTimeMillis() - start));
   }
@@ -143,15 +143,15 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final void getFile(final SVNRepository repository, final String path, final long revision,
                             final OutputStream output, final Map properties) throws SVNException {
     final long start = System.currentTimeMillis();
-    repository.getFile(path, revision, properties, output);
+    repository.getFile(path, revision, SVNProperties.wrap(properties), output);
     logger.debug("PERF: getFile(): " + (System.currentTimeMillis() - start));
   }
 
   /**
    * {@inheritDoc}
    */
-  public final Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    final Map props = new HashMap();
+  public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
+    final SVNProperties props = new SVNProperties();
     final long start = System.currentTimeMillis();
     repository.getFile(path, revision, props, null);
     logger.debug("PERF: getFileProperties(): " + (System.currentTimeMillis() - start));
@@ -162,14 +162,14 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return SVNProperty.isTextMimeType((String) getFileProperties(repository, path, revision).get(SVNProperty.MIME_TYPE));
+    return SVNProperty.isTextMimeType(getFileProperties(repository, path, revision).getStringValue(SVNProperty.MIME_TYPE));
   }
 
   /**
    * {@inheritDoc}
    */
   public final String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return (String) getFileProperties(repository, path, revision).get(SVNProperty.CHECKSUM);
+    return getFileProperties(repository, path, revision).getStringValue(SVNProperty.CHECKSUM);
   }
 
   /**
@@ -221,7 +221,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
-                                          final Map properties) throws SVNException {
+                                          final SVNProperties properties) throws SVNException {
     final long start = System.currentTimeMillis();
     //noinspection unchecked
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
@@ -288,8 +288,8 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      final Map leftFileProperties;
-      final Map rightFileProperties;
+      final SVNProperties leftFileProperties;
+      final SVNProperties rightFileProperties;
 
       if (SVNRevision.UNDEFINED == pegRevision) {
         leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
@@ -457,17 +457,15 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
 
-    final Map properties = getFileProperties(repository, path, revision);
-    final SVNLogClient logClient = SVNClientManager.newInstance(
-        null, repository.getAuthenticationManager()).getLogClient();
+    final SVNProperties properties = getFileProperties(repository, path, revision);
+
     final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
         path, charset, colorer, properties, repository.getLocation().toDecodedString());
-    final ISVNAnnotateHandler handler = new ISVNAnnotateHandler() {
-      public void handleLine(final Date date, final long revision, final String author, final String line) {
-        annotatedTextFile.addRow(date, revision, author, line);
-      }
-    };
 
+    final SVNLogClient logClient = SVNClientManager.newInstance(
+        null, repository.getAuthenticationManager()).getLogClient();
+
+    final AnnotationHandler handler = new AnnotationHandler(annotatedTextFile);
     final SVNRevision startRev = SVNRevision.create(0);
     final SVNRevision endRev = SVNRevision.create(blameRevision);
 
@@ -524,6 +522,44 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
     if (SVNNodeKind.FILE != entry2) {
       throw new DiffException(message + diffCommand.getToPath() + "] is a directory");
+    }
+  }
+
+  private static class AnnotationHandler implements ISVNAnnotateHandler {
+    private final AnnotatedTextFile annotatedTextFile;
+
+    /**
+     * Constructor.
+     *
+     * @param annotatedTextFile File
+     */
+    public AnnotationHandler(final AnnotatedTextFile annotatedTextFile) {
+      this.annotatedTextFile = annotatedTextFile;
+    }
+
+    /**
+     * Deprecated.
+     */
+    @Deprecated
+    public void handleLine(final Date date, final long revision, final String author, final String line)
+        throws SVNException {
+      handleLine(date, revision, author, line, null, -1, null, null, 0);
+    }
+
+    public void handleLine(final Date date, final long revision, final String author, final String line,
+                           final Date mergedDate, final long mergedRevision, final String mergedAuthor,
+                           final String mergedPath, final int lineNumber) throws SVNException {
+      annotatedTextFile.addRow(date, revision, author, line);
+    }
+
+    public boolean handleRevision(Date date, long revision, String author, File contents) throws SVNException {
+      // We do not want our file to be annotated for each revision of the range, but only for the last
+      // revision of it, so we return false
+      return false;
+    }
+
+    public void handleEOF() {
+      // Nothing to do.
     }
   }
 

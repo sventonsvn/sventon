@@ -16,12 +16,12 @@ import de.berlios.sventon.content.KeywordHandler;
 import de.berlios.sventon.util.WebUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Represents a file in plain text format.
@@ -61,7 +61,7 @@ public final class TextFile {
    * @throws IOException if unable to read content.
    */
   public TextFile(final String content, final String path, final String encoding, final Colorer colorer,
-                  final Map properties, final String repositoryURL) throws IOException {
+                  final SVNProperties properties, final String repositoryURL) throws IOException {
 
     String processedContent;
 

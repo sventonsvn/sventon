@@ -4,17 +4,20 @@ import de.berlios.sventon.repository.PeggedRepositoryEntry;
 import de.berlios.sventon.repository.RepositoryEntry;
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.Date;
 
 public class RepositoryEntryTrayTest extends TestCase {
 
-  public void testEntryTray() {
+  public void testEntryTray() throws SVNException {
     final RepositoryEntryTray entryTray = new RepositoryEntryTray();
+    SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
     final PeggedRepositoryEntry entry = new PeggedRepositoryEntry(new RepositoryEntry(
-        new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 123, false, 1, new Date(), "jesper"), "/"), 123);
+        new SVNDirEntry(null, url, "file1.java", SVNNodeKind.FILE, 123, false, 1, new Date(), "jesper"), "/"), 123);
 
     assertEquals(0, entryTray.getSize());
     assertTrue(entryTray.add(entry));
@@ -24,16 +27,17 @@ public class RepositoryEntryTrayTest extends TestCase {
     assertEquals(0, entryTray.getSize());
   }
 
-  public void testDuplicateEntries() {
+  public void testDuplicateEntries() throws SVNException {
     final RepositoryEntryTray entryTray = new RepositoryEntryTray();
+    SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final RepositoryEntry entry1 = new RepositoryEntry(new SVNDirEntry(null, "file1.java",
+    final RepositoryEntry entry1 = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
 
-    final RepositoryEntry entry1Duplicate = new RepositoryEntry(new SVNDirEntry(null, "file1.java",
+    final RepositoryEntry entry1Duplicate = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
 
-    final RepositoryEntry entry2 = new RepositoryEntry(new SVNDirEntry(null, "file1.java",
+    final RepositoryEntry entry2 = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 2, new Date(), "jesper"), "/");
 
     assertEquals(0, entryTray.getSize());

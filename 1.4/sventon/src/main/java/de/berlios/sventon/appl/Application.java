@@ -12,7 +12,6 @@
 package de.berlios.sventon.appl;
 
 import de.berlios.sventon.Version;
-import de.berlios.sventon.logging.SVNLog4JAdapter;
 import de.berlios.sventon.repository.cache.CacheException;
 import de.berlios.sventon.repository.cache.entrycache.EntryCacheManager;
 import de.berlios.sventon.repository.cache.logmessagecache.LogMessageCacheManager;
@@ -25,7 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.util.SVNDebugLog;
 
 import java.io.*;
 import java.util.*;
@@ -235,9 +233,7 @@ public final class Application {
    * Initializes the logger and the SVNKit library.
    */
   private void initSvnSupport() {
-    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter("sventon.svnkit"));
     logger.info("Initializing sventon version " + Version.getVersion());
-
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
     FSRepositoryFactory.setup();

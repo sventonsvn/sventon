@@ -15,14 +15,18 @@ public class FileExtensionListTest extends TestCase {
 
     assertEquals(0, new FileExtensionList(entries).getExtensions().size());
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "test.GIF", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    entries.add(createDirEntry("test.abC"));
+    entries.add(createDirEntry("test.jpg"));
+    entries.add(createDirEntry("test.GIF"));
 
     assertEquals(3, new FileExtensionList(entries).getExtensions().size());
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "anothertest.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    entries.add(createDirEntry("anothertest.jpg"));
 
     assertEquals(3, new FileExtensionList(entries).getExtensions().size());
   }
+
+    private RepositoryEntry createDirEntry(final String name) {
+        return new RepositoryEntry(new SVNDirEntry(null, null, name, SVNNodeKind.FILE, 0, false, 0, null, null), "/");
+    }
 }

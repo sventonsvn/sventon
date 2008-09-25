@@ -1,15 +1,13 @@
 package de.berlios.sventon.content;
 
 import junit.framework.TestCase;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class KeywordHandlerTest extends TestCase {
 
   public void testSubstitute() throws Exception {
-    final Map<String, String> keywordsMap = new HashMap<String, String>();
+    final SVNProperties keywordsMap = new SVNProperties();
     keywordsMap.put(SVNProperty.KEYWORDS, "Id Author Date Revision URL");
     keywordsMap.put(SVNProperty.LAST_AUTHOR, "domain\\user");
     keywordsMap.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");
@@ -35,7 +33,7 @@ public class KeywordHandlerTest extends TestCase {
   }
 
   public void testComputeKeywordsNull() throws Exception {
-    final Map<String, String> keywordsMap = new HashMap<String, String>();
+    final SVNProperties keywordsMap = new SVNProperties();
     assertEquals("No change", new KeywordHandler(keywordsMap, null).substitute("No change", "UTF-8"));
   }
 

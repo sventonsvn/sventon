@@ -12,6 +12,8 @@
   */
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
+<%@ tag import="org.tmatesoft.svn.core.SVNPropertyValue" %>
+<%@ tag import="de.berlios.sventon.util.WebUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -41,13 +43,20 @@
   <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
     <br>
       <table class="sventonPropertiesTable">
-        <% application.setAttribute("br", "\n"); %>
-        <c:forEach items="${properties}" var="property">
+        <c:set var="properties" value="${properties}"/>
+        <jsp:useBean id="properties" type="org.tmatesoft.svn.core.SVNProperties" />
+        <%
+          for (Object o : properties.nameSet()) {
+            final String name = (String) o;
+            final SVNPropertyValue value = properties.getSVNPropertyValue(name);
+        %>
           <tr>
-            <td valign="top"><b>${property.key}:&nbsp;</b></td>
-            <td>${fn:replace(property.value, br, '<br>')}</td>
+            <td valign="top"><b><%=name%>:&nbsp;</b></td>
+            <td><%=WebUtils.nl2br(value.getString())%></td>
           </tr>
-        </c:forEach>
+        <%
+          }
+        %>
       </table>
   </div>
 </c:if>
