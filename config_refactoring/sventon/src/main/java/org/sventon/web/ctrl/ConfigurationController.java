@@ -14,6 +14,7 @@ package org.sventon.web.ctrl;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.web.command.ConfigCommand;
@@ -52,18 +53,20 @@ public final class ConfigurationController extends AbstractFormController {
   protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response,
                                   final BindException errors) throws ServletException {
 
+    final boolean addMore = ServletRequestUtils.getBooleanParameter(request, "addmore", false); 
+
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("addedRepositories", application.getRepositoryNames());
 
-    if (!application.getRepositoryNames().isEmpty() && request.getParameter("addnew") == null) {
-      //Config url is invoked with at least one repository already added
-      return new ModelAndView("config/confirmAddConfig", model);
-    } else {
+    if (application.getRepositoryNames().isEmpty() || addMore) {
       //Config URL invoked for the first time in a non-configured sventon instance
       final ConfigCommand configCommand = new ConfigCommand();
       logger.debug("'command' set to: " + configCommand);
       model.put("command", configCommand);
       return new ModelAndView("config/config", model);
+    } else {
+      //Config url is invoked with at least one repository already added
+      return new ModelAndView("config/confirmAddConfig", model);
     }
   }
 
