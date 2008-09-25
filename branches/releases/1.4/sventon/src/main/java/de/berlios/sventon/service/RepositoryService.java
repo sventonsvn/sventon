@@ -22,17 +22,13 @@ import de.berlios.sventon.model.TextFile;
 import de.berlios.sventon.repository.RepositoryEntry;
 import de.berlios.sventon.repository.export.ExportDirectory;
 import de.berlios.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +144,7 @@ public interface RepositoryService {
    * @return Map populated with the file's properties
    * @throws SVNException if a subversion error occur
    */
-  Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
+  SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
@@ -211,7 +207,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
-                             final Map properties) throws SVNException;
+                             final SVNProperties properties) throws SVNException;
 
   /**
    * Gets entry info from the subversion repository.

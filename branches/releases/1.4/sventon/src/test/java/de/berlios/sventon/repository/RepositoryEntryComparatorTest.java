@@ -16,12 +16,12 @@ public class RepositoryEntryComparatorTest extends TestCase {
 
   public void testCompare() throws Exception {
     List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
-    RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry(null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12)
-        .getTime(), "patrikfr"), "");
-    RepositoryEntry e2 = new RepositoryEntry(new SVNDirEntry(SVNURL.parseURIEncoded("http://test"), "SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13)
-        .getTime(), "jesper"), "");
-    RepositoryEntry e3 = new RepositoryEntry(new SVNDirEntry(null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14)
-        .getTime(), "patrikfr"), "");
+    RepositoryEntry e1 = new RepositoryEntry(new SVNDirEntry(null, null, "FirstClass.java", FILE, 134, false, 2,
+            new GregorianCalendar(2005, 4, 12).getTime(), "patrikfr"), "");
+    RepositoryEntry e2 = new RepositoryEntry(new SVNDirEntry(SVNURL.parseURIEncoded("http://test"), null,
+            "SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(), "jesper"), "");
+    RepositoryEntry e3 = new RepositoryEntry(new SVNDirEntry(null, null, "ThirdClass.java", DIR, 136, false, 4,
+            new GregorianCalendar(2005, 4, 14).getTime(), "patrikfr"), "");
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);
@@ -87,11 +87,11 @@ public class RepositoryEntryComparatorTest extends TestCase {
 
     // Test handling of null properties in SVNDirEntry
     entries = new ArrayList<RepositoryEntry>();
-    e1 = new RepositoryEntry(new SVNDirEntry(null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12).getTime(),
+    e1 = new RepositoryEntry(new SVNDirEntry(null, null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12).getTime(),
         "patrikfr"), "");
-    e2 = new RepositoryEntry(new SVNDirEntry(null, "", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
+    e2 = new RepositoryEntry(new SVNDirEntry(null, null, "", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
         "jesper"), "");
-    e3 = new RepositoryEntry(new SVNDirEntry(null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14).getTime(),
+    e3 = new RepositoryEntry(new SVNDirEntry(null, null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14).getTime(),
         "patrikfr"), "");
     entries.add(e3);
     entries.add(e2);
