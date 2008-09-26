@@ -17,11 +17,12 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="headRevision" required="true" type="java.lang.Long" %>
 <%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-Rev:
+<spring:message code="revision.rev"/>:
 <c:choose>
   <c:when test="${(headRevision == command.revisionNumber)}">
-    HEAD (${command.revisionNumber})
+    <spring:message code="revision.head"/> (${command.revisionNumber})
   </c:when>
   <c:otherwise>
     <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">

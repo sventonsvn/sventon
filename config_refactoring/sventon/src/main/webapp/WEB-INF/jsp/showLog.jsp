@@ -55,11 +55,11 @@
         <c:if test="${isFile}">
           <th style="width: 55px">&nbsp;</th>
         </c:if>
-        <th>Revision</th>
-        <th>Message</th>
+        <th><spring:message code="revision"/></th>
+        <th><spring:message code="message"/></th>
         <th>&nbsp;</th>
-        <th>Author</th>
-        <th>Date</th>
+        <th><spring:message code="author"/></th>
+        <th><spring:message code="date"/></th>
       </tr>
 
       <c:set var="nextPath" value=""/>
@@ -114,7 +114,7 @@
         <c:when test="${morePages}">
           <tr>
             <td colspan="5" align="center">
-              <a href="${showNextLogUrl}">Next ${pageSize}</a>&nbsp;
+              <a href="${showNextLogUrl}"><spring:message code="next"/> ${pageSize}</a>&nbsp;
             </td>
           </tr>
         </c:when>

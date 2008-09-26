@@ -145,8 +145,8 @@
       </c:forEach>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td colspan="2" class="sventonCol1" align="right"><b>Total:</b></td>
-        <td><b>${backLinkVisible ? rowCount - 1 : rowCount} entries</b></td>
+        <td colspan="2" class="sventonCol1" align="right"><b><spring:message code="total"/>:</b></td>
+        <td><b>${backLinkVisible ? rowCount - 1 : rowCount} <spring:message code="entries"/></b></td>
         <td/>
         <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
         <td/>

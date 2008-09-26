@@ -46,11 +46,11 @@
     <c:set var="totalCompSize" value="0"/>
     <tr>
       <th/>
-      <th>Name</th>
-      <th>Original size</th>
-      <th>Compressed size</th>
-      <th>Date</th>
-      <th>CRC</th>
+      <th><spring:message code="name"/></th>
+      <th><spring:message code="size.original"/></th>
+      <th><spring:message code="size.compressed"/></th>
+      <th><spring:message code="date"/></th>
+      <th><spring:message code="crc"/></th>
     </tr>
     <c:forEach items="${entries}" var="zipEntry">
 
@@ -86,8 +86,8 @@
     </c:forEach>
 
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-      <td align="right"><b>Total:</b></td>
-      <td><b>${rowCount} entries</b></td>
+      <td align="right"><b><spring:message code="total"/>:</b></td>
+      <td><b>${rowCount} <spring:message code="entries"/></b></td>
       <td align="right" title="${totalOrigSize} bytes">
         <b><sventon-ui:formatBytes size="${totalOrigSize}" locale="${pageContext.request.locale}"/></b>
       </td>

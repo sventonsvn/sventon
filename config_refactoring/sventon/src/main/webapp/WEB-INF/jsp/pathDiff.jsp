@@ -58,9 +58,9 @@
           <td>
             <table class="sventonPathDiffTable">
               <tr>
-                <th align="left">Action</th>
-                <th align="left">Path</th>
-                <th align="left">Changed Properties</th>
+                <th align="left"><spring:message code="action"/></th>
+                <th align="left"><spring:message code="path"/></th>
+                <th align="left"><spring:message code="properties.changed"/></th>
               </tr>
               <c:set var="diffResult" value="${diffResult}" />
               <jsp:useBean id="diffResult" type="java.util.ArrayList" />
@@ -97,8 +97,8 @@
                 </tr>
               </c:forEach>
               <tr>
-                <td align="right"><b>Total:</b></td>
-                <td colspan="2"><b>${fn:length(diffResult)} entries</b></td>
+                <td align="right"><b><spring:message code="total"/>:</b></td>
+                <td colspan="2"><b>${fn:length(diffResult)} <spring:message code="entries"/></b></td>
               </tr>
             </table>
           </td>

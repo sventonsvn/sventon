@@ -30,7 +30,7 @@
     <tr>
       <td/>
       <td/>
-      <td><b>Name</b></td>
+      <td><b><spring:message code="name"/></b></td>
       <td/>
     </tr>
     <c:set var="rowCount" value="0"/>

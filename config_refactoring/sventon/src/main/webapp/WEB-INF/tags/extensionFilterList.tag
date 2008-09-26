@@ -23,7 +23,7 @@
 </c:url>
 
 <select name="filterExtension" class="sventonSelect" onchange="document.location.href='${showDirLinkUrl}&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;">
-  <option value="all">&lt;show all&gt;</option>
+  <option value="all">&lt;<spring:message code="show.all"/>&gt;</option>
   <c:forEach items="${existingExtensions}" var="extension">
     <option value="${extension}" ${extension eq filterExtension ? "selected" : ""}>${extension}</option>
   </c:forEach>
