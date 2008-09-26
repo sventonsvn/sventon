@@ -22,9 +22,9 @@
 <span style="white-space: nowrap;">
   <spring:message code="search.text"/>
   <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${searchMode eq 'entries' ? 'checked' : ''}>
-  <label for="entrySearch">entries</label>
+  <label for="entrySearch"><spring:message code="entries"/></label>
   <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${searchMode eq 'logMessages' ? 'checked' : ''}>
-  <label for="logSearch">logs</label>
+  <label for="logSearch"><spring:message code="logs"/></label>
 </span>
 <input type="hidden" name="startDir" value="${command.pathPart}">
 

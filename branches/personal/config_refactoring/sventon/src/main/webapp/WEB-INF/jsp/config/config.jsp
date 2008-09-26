@@ -17,7 +17,7 @@
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
-  <title>sventon repository browser</title>
+  <title><spring:message code="window.title.default"/></title>
 
   <script type="text/javascript">
     function toggleAccessControl() {

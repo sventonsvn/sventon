@@ -15,6 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 
 <%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
@@ -27,11 +28,11 @@
   <tr>
     <td>
       <table>
-        <tr><td><b>Revision:</b></td><td>${details.revision}</td></tr>
-        <tr><td><b>Date:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
-        <tr><td><b>User:</b></td><td>${details.author}</td></tr>
-        <tr><td valign="top"><b>Message:</b></td><td>${fn:replace(fn:escapeXml(details.message), br, '<br>')}</td></tr>
-        <tr><td colspan="2" valign="top"><b>Changed paths:</b></td></tr>
+        <tr><td><b><spring:message code="revision"/>:</b></td><td>${details.revision}</td></tr>
+        <tr><td><b><spring:message code="date"/>:</b></td><td><fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/></td></tr>
+        <tr><td><b><spring:message code="author"/>:</b></td><td>${details.author}</td></tr>
+        <tr><td valign="top"><b><spring:message code="message"/>:</b></td><td>${fn:replace(fn:escapeXml(details.message), br, '<br>')}</td></tr>
+        <tr><td colspan="2" valign="top"><b><spring:message code="paths.changed"/>:</b></td></tr>
       </table>
     </td>
   </tr>

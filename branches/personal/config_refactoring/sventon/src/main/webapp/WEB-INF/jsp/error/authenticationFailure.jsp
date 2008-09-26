@@ -16,7 +16,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
-  <title>sventon repository browser</title>
+  <title><spring:message code="window.title.default"/></title>
 </head>
 
 <body>
