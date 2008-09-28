@@ -22,7 +22,7 @@ import java.io.Serializable;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryName implements Serializable {
+public final class RepositoryName implements Serializable, Comparable {
 
   private static final long serialVersionUID = 5044457892450351810L;
 
@@ -77,5 +77,13 @@ public final class RepositoryName implements Serializable {
   @Override
   public String toString() {
     return name;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int compareTo(Object o) {
+    return name.compareTo(o.toString());
   }
 }
