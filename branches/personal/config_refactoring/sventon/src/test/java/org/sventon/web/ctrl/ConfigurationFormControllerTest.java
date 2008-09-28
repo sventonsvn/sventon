@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.validation.BindException;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -16,55 +15,41 @@ import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import java.util.Map;
 import java.util.Set;
 
-public class ConfigurationControllerTest extends TestCase {
+public class ConfigurationFormControllerTest extends TestCase {
 
   public void testShowForm() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
+    final MockHttpServletRequest request = new MockHttpServletRequest("GET", "");
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    ctrl.setCommandClass(ConfigCommand.class);
     ctrl.setApplication(TestUtils.getApplicationStub());
-    final ModelAndView modelAndView = ctrl.showForm(request, response, null);
+    final ModelAndView modelAndView = ctrl.handleRequest(request, response);
     assertNotNull(modelAndView);
-    assertEquals(2, modelAndView.getModel().size());
-    assertEquals("config/config", modelAndView.getViewName());
+    assertEquals(3, modelAndView.getModel().size());
   }
 
-  //Test what happens if an instance is partially configured and the config view is invoked
+  //Test what happens if a repository is partially configured and the config view is invoked
   //this could happen if one started to configure sventon and then called 'browse'.
   public void testShowFormConfiguredII() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
+    final MockHttpServletRequest request = new MockHttpServletRequest("GET", "");
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController();
 
-    final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("firstinstance");
+    final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("repository1");
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     application.addRepository(repositoryConfig);
+    ctrl.setCommandClass(ConfigCommand.class);
     ctrl.setApplication(application);
-    final ModelAndView modelAndView = ctrl.showForm(request, response, null);
+    final ModelAndView modelAndView = ctrl.handleRequest(request, response);
     assertNotNull(modelAndView);
-    assertEquals(1, modelAndView.getModel().size());
-    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
-  }
-
-  public void testProcessFormSubmissionNonConfiguredValidationError() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
-    ctrl.setApplication(TestUtils.getApplicationStub());
-    final ConfigCommand command = new ConfigCommand();
-    final BindException exception = new BindException(command, "test");
-    exception.addError(new ObjectError("test", new String[]{}, new Object[]{}, "test message"));
-    final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
-    assertNotNull(modelAndView);
-    assertEquals(4, modelAndView.getModel().size());
-    assertEquals("config/config", modelAndView.getViewName());
+    assertEquals(3, modelAndView.getModel().size());
   }
 
   public void testProcessFormSubmissionNonConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController();
     final Application application = TestUtils.getApplicationStub();
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
@@ -74,10 +59,9 @@ public class ConfigurationControllerTest extends TestCase {
     command.setName(repositoryName);
     command.setRepositoryUrl("http://localhost");
     final BindException exception = new BindException(command, "test");
-    final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
+    final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals(2, modelAndView.getModel().size());
-    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
+    assertEquals(4, modelAndView.getModel().size());
     assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
@@ -89,7 +73,7 @@ public class ConfigurationControllerTest extends TestCase {
 
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationController ctrl = new ConfigurationController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController();
     final Application application = TestUtils.getApplicationStub();
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
@@ -102,9 +86,9 @@ public class ConfigurationControllerTest extends TestCase {
     command.setConnectionTestUid("test uid");
     command.setConnectionTestPwd("test pwd");
     final BindException exception = new BindException(command, "test");
-    final ModelAndView modelAndView = ctrl.processFormSubmission(request, response, command, exception);
+    final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
-    assertEquals("config/confirmAddConfig", modelAndView.getViewName());
+
     assertEquals(1, application.getRepositoryCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();

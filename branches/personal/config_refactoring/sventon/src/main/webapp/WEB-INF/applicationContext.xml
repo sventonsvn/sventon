@@ -60,7 +60,7 @@
     <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="revisionCacheManager" ref="revisionCacheManager"/>
-    <property name="editableConfig" value="true"/>
+    <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
   </bean>
 

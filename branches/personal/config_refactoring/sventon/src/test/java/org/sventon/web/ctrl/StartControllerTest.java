@@ -25,7 +25,7 @@ public class StartControllerTest extends TestCase {
     ModelAndView modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
     RedirectView view = (RedirectView) modelAndView.getView();
-    assertEquals("/repos/config", view.getUrl());
+    assertEquals("/repos/listconfigs", view.getUrl());
 
     // Configured - but without added instances (should not be possible)
     application.setConfigured(true);
@@ -37,7 +37,7 @@ public class StartControllerTest extends TestCase {
     }
 
     // Configured with one instance
-    application.addRepository(createTestInstance("test1"));
+    application.addRepository(createTestRepository("test1"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
@@ -45,7 +45,7 @@ public class StartControllerTest extends TestCase {
     assertEquals("/repos/test1/browse/", view.getUrl());
 
     // Configured with two instances
-    application.addRepository(createTestInstance("test2"));
+    application.addRepository(createTestRepository("test2"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
@@ -54,7 +54,7 @@ public class StartControllerTest extends TestCase {
 
   }
 
-  private RepositoryConfiguration createTestInstance(final String repositoryName) {
+  private RepositoryConfiguration createTestRepository(final String repositoryName) {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
     configuration.setRepositoryUrl("http://localhost/svn");
     configuration.setCacheUsed(false);

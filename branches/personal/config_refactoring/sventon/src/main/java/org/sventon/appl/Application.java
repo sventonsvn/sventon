@@ -259,12 +259,12 @@ public final class Application {
   }
 
   /**
-   * Gets the repository names.
+   * Gets the repository names, sorted alphabetically.
    *
    * @return Collection of repository names.
    */
   public Set<RepositoryName> getRepositoryNames() {
-    return repositories.keySet();
+    return new TreeSet(repositories.keySet());
   }
 
   /**
