@@ -52,8 +52,8 @@ public abstract class CacheManager<T> {
   }
 
   /**
-   * Registers the instance in the cache manager.
-   * The instance cache will be created if it does not exist.
+   * Registers the repository in the cache manager.
+   * The repository cache will be created if it does not exist.
    *
    * @param repositoryName Repository name.
    * @throws CacheException if unable to create cache instance, or if the

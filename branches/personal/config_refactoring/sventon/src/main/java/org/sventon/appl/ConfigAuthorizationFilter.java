@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Filter that make sure the user trying to modify the instance configuration is loggen in properly.
+ * Filter that make sure the user trying to modify the repository configuration is logged in properly.
  *
  * @author jesper@sventon.org
  */

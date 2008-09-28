@@ -11,7 +11,7 @@ public class CacheBeforeAdviceTest extends TestCase {
     final CacheBeforeAdvice cacheBeforeAdvice = new CacheBeforeAdvice();
     final RevisionObservable observableMock = EasyMock.createMock(RevisionObservable.class);
     cacheBeforeAdvice.setRevisionObservable(observableMock);
-    final RepositoryName repositoryName = new RepositoryName("instance1");
+    final RepositoryName repositoryName = new RepositoryName("repository1");
     observableMock.update(repositoryName, false);
     EasyMock.replay(observableMock);
     cacheBeforeAdvice.before(null, new Object[]{repositoryName}, null);

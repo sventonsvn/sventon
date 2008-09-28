@@ -50,7 +50,7 @@ public final class CacheBeforeAdvice implements MethodBeforeAdvice {
    */
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     final RepositoryName repositoryName = (RepositoryName) args[0];
-    logger.debug("Updating cache for instance [" + repositoryName + "] (if needed)");
+    logger.debug("Updating cache for repository [" + repositoryName + "] (if needed)");
     revisionObservable.update(repositoryName, false);
   }
 }
