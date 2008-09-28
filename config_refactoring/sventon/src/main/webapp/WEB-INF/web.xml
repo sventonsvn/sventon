@@ -62,6 +62,7 @@
   <filter-mapping>
     <filter-name>ConfigAuthorizationFilter</filter-name>
     <url-pattern>/repos/config</url-pattern>
+    <url-pattern>/repos/listconfigs</url-pattern>
     <url-pattern>/repos/submitconfig</url-pattern>
   </filter-mapping>
 

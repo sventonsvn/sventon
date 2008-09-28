@@ -51,7 +51,6 @@
 
     <div id="config_navigation">
       <form action="${pageContext.request.contextPath}/repos/config">
-        <input name="addmore" value="true" type="hidden">
         <input value="Add another repository" class="cfgbtn" type="submit">
       </form>
 

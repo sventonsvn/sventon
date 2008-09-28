@@ -29,7 +29,8 @@
         <prop key="/repos/">listRepositoriesController</prop>
         <prop key="/repos/list">listRepositoriesController</prop>
         <prop key="/repos/start">startController</prop>
-        <prop key="/repos/config">configurationController</prop>
+        <prop key="/repos/config">configurationFormController</prop>
+        <prop key="/repos/listconfigs">listConfigurationsController</prop>
         <prop key="/repos/submitconfig">configurationSubmissionController</prop>
         <prop key="/repos/configlogin">configurationLoginController</prop>
 
@@ -191,7 +192,9 @@
     <property name="application" ref="application"/>
   </bean>
 
-  <bean id="configurationController" class="org.sventon.web.ctrl.ConfigurationController">
+  <bean id="configurationFormController" class="org.sventon.web.ctrl.ConfigurationFormController">
+    <property name="formView" value="config/configForm"/>
+    <property name="successView" value="config/listConfigs"/>
     <property name="commandClass" value="org.sventon.web.command.ConfigCommand"/>
     <property name="sessionForm" value="false"/>
     <property name="bindOnNewForm" value="true"/>
@@ -204,11 +207,15 @@
     <property name="scheduler" ref="scheduler"/>
   </bean>
 
+  <bean id="listConfigurationsController" class="org.sventon.web.ctrl.ListConfigurationsController">
+    <property name="application" ref="application"/>
+  </bean>
+
   <bean id="configurationLoginController" class="org.sventon.web.ctrl.ConfigurationLoginController">
     <property name="application" ref="application"/>
     <property name="commandClass" value="org.sventon.web.command.ConfigLoginCommand"/>
     <property name="formView" value="config/login"/>
-    <property name="successView" value="redirect:config"/>
+    <property name="successView" value="redirect:listconfigs"/>
   </bean>
 
 </beans>
