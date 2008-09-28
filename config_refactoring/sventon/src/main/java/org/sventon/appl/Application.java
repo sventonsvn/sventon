@@ -121,7 +121,7 @@ public final class Application {
   }
 
   /**
-   * Initializes the caches by registering the cache enabled instances in the cache managers.
+   * Initializes the caches by registering the cache enabled repositories in the cache managers.
    *
    * @throws CacheException if unable to register instances in the cache managers.
    */
@@ -135,7 +135,7 @@ public final class Application {
         register(objectCacheManager, repositoryName);
         register(revisionCacheManager, repositoryName);
       } else {
-        logger.debug("Caches have not been enabled for instance: " + repositoryName);
+        logger.debug("Caches have not been enabled for repository: " + repositoryName);
       }
     }
     logger.info("Caches initialized ok");
@@ -152,8 +152,8 @@ public final class Application {
    * Loads the repository configurations from the file at path
    * {@code configurationRootDirectory / [repository name] / configurationFilename}
    * <p/>
-   * If a config file is found an configuration is successful this instance will be marked as configured.
-   * If no file is found initialization will fail silently and the instance will not be marked as configured.
+   * If a config file is found an configuration is successful this repository will be marked as configured.
+   * If no file is found initialization will fail silently and the repository will not be marked as configured.
    * <p/>
    * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
    * {@code configurationRootDirectory} and {@code configurationFilename} must be set before calling this method, or bad
@@ -189,7 +189,7 @@ public final class Application {
     }
 
     if (getRepositoryCount() > 0) {
-      logger.info(getRepositoryCount() + " instance(s) configured");
+      logger.info(getRepositoryCount() + " repositories configured");
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
@@ -229,9 +229,9 @@ public final class Application {
   }
 
   /**
-   * Adds an instance to the application.
+   * Adds a repository to the application.
    *
-   * @param configuration The instance configuration to add.
+   * @param configuration The repository configuration to add.
    */
   public void addRepository(final RepositoryConfiguration configuration) {
     repositories.put(configuration.getName(), configuration);

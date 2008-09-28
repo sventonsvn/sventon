@@ -30,7 +30,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertTrue(conf.isEntryTrayEnabled());
   }
 
-  public void testCreateInstanceConfigurationTest() throws Exception {
+  public void testCreateRepositoryConfigurationTest() throws Exception {
     final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties props = new Properties();
     props.setProperty(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");

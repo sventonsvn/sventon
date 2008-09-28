@@ -132,7 +132,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
       boolean clearCacheBeforeUpdate = false;
 
       if (lastUpdatedRevision == null) {
-        logger.info("No record about previously fetched revisions exists - fetching all revisions for instance: "
+        logger.info("No record about previously fetched revisions exists - fetching all revisions for repository: "
             + name);
         clearCacheBeforeUpdate = true;
         lastUpdatedRevision = 0L;
@@ -161,7 +161,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           logEntries.addAll(repositoryService.getRevisionsFromRepository(
               repository, fromRevision, toRevision));
-          logger.debug("Read [" + logEntries.size() + "] revision(s) from instance: " + name);
+          logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           setChanged();
           final StringBuffer notification = new StringBuffer();
           notification.append("Notifying observers about [");

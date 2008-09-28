@@ -27,7 +27,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
     assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
-  public void testHandleRequestInternalNoAddedInstance() throws Exception {
+  public void testHandleRequestInternalNoAddedRepository() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();

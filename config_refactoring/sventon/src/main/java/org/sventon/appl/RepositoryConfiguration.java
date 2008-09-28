@@ -151,7 +151,7 @@ public final class RepositoryConfiguration {
   }
 
   /**
-   * Creates an instance using given name and properties.
+   * Creates a repository configuration using given name and properties.
    *
    * @param repositoryName Repository name
    * @param properties     Properties
@@ -384,7 +384,7 @@ public final class RepositoryConfiguration {
   /**
    * Gets the RSS feed items count.
    *
-   * @return Number of rss feed items generated for this instance.
+   * @return Number of rss feed items generated for this repository.
    */
   public int getRssItemsCount() {
     return rssItemsCount;

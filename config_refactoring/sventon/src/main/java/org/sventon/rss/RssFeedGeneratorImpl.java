@@ -97,7 +97,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
     SyndEntry entry;
     SyndContent description;
 
-    logger.debug("Generating [" + logEntries.size() + "] RSS feed items for instance [" + repositoryName + "]");
+    logger.debug("Generating [" + logEntries.size() + "] RSS feed items for repository [" + repositoryName + "]");
 
     // One logEntry is one commit (or revision)
     for (final SVNLogEntry logEntry : logEntries) {

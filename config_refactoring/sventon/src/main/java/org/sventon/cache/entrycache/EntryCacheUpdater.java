@@ -86,7 +86,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
 
-    LOGGER.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for instance: "
+    LOGGER.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for repository: "
         + repositoryName);
 
     SVNRepository repository = null;
