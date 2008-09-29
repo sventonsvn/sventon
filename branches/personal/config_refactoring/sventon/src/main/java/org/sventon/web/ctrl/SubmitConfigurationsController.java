@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@sventon.org
  */
-public final class ConfigurationSubmissionController extends AbstractController {
+public final class SubmitConfigurationsController extends AbstractController {
 
   /**
    * The application.
