@@ -207,6 +207,10 @@
     <property name="scheduler" ref="scheduler"/>
   </bean>
 
+  <bean id="deleteConfigurationController" class="org.sventon.web.ctrl.DeleteConfigurationController">
+    <property name="application" ref="application"/>
+  </bean>
+
   <bean id="listConfigurationsController" class="org.sventon.web.ctrl.ListConfigurationsController">
     <property name="application" ref="application"/>
   </bean>

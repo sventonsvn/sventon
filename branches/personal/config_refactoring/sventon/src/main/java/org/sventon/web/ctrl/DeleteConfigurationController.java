@@ -11,33 +11,28 @@
  */
 package org.sventon.web.ctrl;
 
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.appl.Application;
+import org.sventon.model.RepositoryName;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Controller for persisting application configuration.
- * Called after one or more instances have been submitted to {@link ConfigurationFormController}.
+ * Controller for deleting application configurations.
  *
  * @author jesper@sventon.org
  */
-public final class SubmitConfigurationsController extends AbstractController {
+public final class DeleteConfigurationController extends AbstractController {
 
   /**
    * The application.
    */
   private Application application;
-
-  /**
-   * The scheduler instance. Used to fire cache update job.
-   */
-  private Scheduler scheduler;
 
   /**
    * Sets the application.
@@ -49,42 +44,18 @@ public final class SubmitConfigurationsController extends AbstractController {
   }
 
   /**
-   * Sets scheduler instance.
-   * The scheduler is used to fire cache update job after configuration has been done.
-   *
-   * @param scheduler The scheduler
-   */
-  public void setScheduler(final Scheduler scheduler) {
-    this.scheduler = scheduler;
-  }
-
-  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    if (application.getRepositoryCount() == 0) {
-      logger.warn("No repository has been configured and added");
-      return new ModelAndView("error/configurationError");
+    final String repositoryToDelete = ServletRequestUtils.getStringParameter(request, "delete", null);
+
+    if (StringUtils.hasText(repositoryToDelete)) {
+      logger.info("Deleting repository configuration for [" + new RepositoryName(repositoryToDelete).toString() + "]");
+      // TODO: Implement!
     }
-
-    application.persistRepositoryConfigurations();
-    application.initCaches();
-
-    if (!application.isConfigured()) {
-      application.setConfigured(true);
-
-      try {
-        logger.debug("Starting up caches");
-        scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-      } catch (SchedulerException sx) {
-        logger.warn(sx);
-      }
-    }
-
-    logger.info("Configuration done!");
-    return new ModelAndView(new RedirectView("/repos/start", true));
+    return new ModelAndView(new RedirectView("/repos/listconfigs", true));
   }
 
 }
