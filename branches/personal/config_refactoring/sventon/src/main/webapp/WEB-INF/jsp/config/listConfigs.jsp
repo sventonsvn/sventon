@@ -25,13 +25,22 @@
 
 <br>
 
-
 <div id="config_page">
+
+  <c:url value="/repos/deleteconfig" var="deleteConfigUrl">
+    <c:param name="name" value="${repos}" />
+  </c:url>
 
   <div id="configured_repos">
     <ul>
       <c:forEach var="repos" items="${addedRepositories}">
-        <li>${repos}</li>
+        <li>
+          ${repos}
+          <c:url value="/repos/deleteconfig" var="deleteConfigUrl">
+            <c:param name="name" value="${repos}" />
+          </c:url>
+          <a href="${deleteConfigUrl}">[delete]</a>
+        </li>
       </c:forEach>
     </ul>
   </div>
