@@ -31,7 +31,7 @@
         <prop key="/repos/start">startController</prop>
         <prop key="/repos/config">configurationFormController</prop>
         <prop key="/repos/listconfigs">listConfigurationsController</prop>
-        <prop key="/repos/submitconfig">configurationSubmissionController</prop>
+        <prop key="/repos/submitconfig">submitConfigurationsController</prop>
         <prop key="/repos/configlogin">configurationLoginController</prop>
 
         <prop key="/repos/(*:name)/revinfo">revInfoController</prop>
@@ -202,7 +202,7 @@
     <property name="validator" ref="configCommandValidator"/>
   </bean>
 
-  <bean id="configurationSubmissionController" class="org.sventon.web.ctrl.ConfigurationSubmissionController">
+  <bean id="submitConfigurationsController" class="org.sventon.web.ctrl.SubmitConfigurationsController">
     <property name="application" ref="application"/>
     <property name="scheduler" ref="scheduler"/>
   </bean>

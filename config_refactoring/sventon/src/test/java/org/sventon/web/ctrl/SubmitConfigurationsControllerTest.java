@@ -14,12 +14,12 @@ import org.sventon.appl.RepositoryConfiguration;
 
 import java.io.File;
 
-public class ConfigurationSubmissionControllerTest extends TestCase {
+public class SubmitConfigurationsControllerTest extends TestCase {
 
   public void testHandleRequestInternalConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController controller = new SubmitConfigurationsController();
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
@@ -30,7 +30,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
   public void testHandleRequestInternalNoAddedRepository() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController controller = new SubmitConfigurationsController();
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     controller.setApplication(application);
@@ -42,7 +42,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController ctrl = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController ctrl = new SubmitConfigurationsController();
 
     ctrl.setScheduler(new StdScheduler(null, null) {
       public void triggerJob(final String string, final String string1) {

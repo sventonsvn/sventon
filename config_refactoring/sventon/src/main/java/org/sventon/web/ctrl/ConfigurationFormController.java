@@ -63,11 +63,11 @@ public final class ConfigurationFormController extends SimpleFormController {
                                   final Object command, final BindException errors) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("addedRepositories", application.getRepositoryNames());
     final ConfigCommand confCommand = (ConfigCommand) command;
     logger.debug("Adding configuration from command: " + confCommand);
     final RepositoryConfiguration repositoryConfiguration = confCommand.createRepositoryConfiguration();
     application.addRepository(repositoryConfiguration);
+    model.put("addedRepositories", application.getRepositoryNames());
     model.put("latestAddedRepository", confCommand.getName());
     return showForm(request, errors, getSuccessView(), model);
   }
