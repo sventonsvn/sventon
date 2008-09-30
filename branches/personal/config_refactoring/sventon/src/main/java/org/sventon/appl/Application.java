@@ -207,7 +207,7 @@ public final class Application {
   public void persistRepositoryConfigurations() throws IOException {
     for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
       if (!repositoryConfig.isPersisted()) {
-        final File configDir = new File(configurationRootDirectory, repositoryConfig.getName().toString());
+        final File configDir = getConfigurationDirectoryForRepository(repositoryConfig.getName());
         configDir.mkdirs();
 
         final File configFile = new File(configDir, configurationFilename);
@@ -238,12 +238,21 @@ public final class Application {
   }
 
   /**
-   * Removes a repository from the sventon configuration.
+   * Deletes a repository from the sventon configuration.
+   * The config file
    *
-   * @param name Name of repository to remove.
+   * @param name Name of repository to delete from the sventon configuration.
    */
-  public void removeRepository(final RepositoryName name) {
-    repositories.remove(name);
+  public void deleteRepository(final RepositoryName name) {
+    final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
+    final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
+    logger.info("Disabling repository configuration for [" + name.toString() + "]");
+    if (configFile.renameTo(configBackupFile)) {
+      logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
+      repositories.remove(name);
+    } else {
+      logger.error("Unable to rename config file: " + configFile.getAbsolutePath());
+    }
   }
 
   /**
@@ -351,13 +360,13 @@ public final class Application {
   }
 
   /**
-   * Gets the configuration file.
+   * Gets the configuration root directory for given repository name.
    *
-   * @param repositoryName Name of repository to get config file for.
-   * @return The config file.
+   * @param repositoryName Name of repository to get config dir for.
+   * @return The config root dir.
    */
-  public File getConfigurationFileForRepository(final String repositoryName) {
-    return new File(new File(configurationRootDirectory, repositoryName), configurationFilename);
+  public File getConfigurationDirectoryForRepository(final RepositoryName repositoryName) {
+    return new File(configurationRootDirectory, repositoryName.toString());
   }
 
   /**
