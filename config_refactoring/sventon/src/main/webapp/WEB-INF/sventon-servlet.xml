@@ -31,6 +31,7 @@
         <prop key="/repos/start">startController</prop>
         <prop key="/repos/config">configurationFormController</prop>
         <prop key="/repos/listconfigs">listConfigurationsController</prop>
+        <prop key="/repos/deleteconfig">deleteConfigurationController</prop>
         <prop key="/repos/submitconfig">submitConfigurationsController</prop>
         <prop key="/repos/configlogin">configurationLoginController</prop>
 

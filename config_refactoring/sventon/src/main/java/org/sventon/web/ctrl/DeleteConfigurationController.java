@@ -49,11 +49,11 @@ public final class DeleteConfigurationController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    final String repositoryToDelete = ServletRequestUtils.getStringParameter(request, "delete", null);
+    final String repositoryToDelete = ServletRequestUtils.getStringParameter(request, "name", null);
 
     if (StringUtils.hasText(repositoryToDelete)) {
-      logger.info("Deleting repository configuration for [" + new RepositoryName(repositoryToDelete).toString() + "]");
-      // TODO: Implement!
+      final RepositoryName repositoryName = new RepositoryName(repositoryToDelete);
+      application.deleteRepository(repositoryName);
     }
     return new ModelAndView(new RedirectView("/repos/listconfigs", true));
   }
