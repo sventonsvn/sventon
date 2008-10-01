@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1385] Added: Upgraded to SVNKit 1.2.0.
 [1358] Fixed bug #14342 - Version number not displayed properly on Glassfish.
 
 [1339] Release 1.4.0 (2008-07-25)

@@ -161,16 +161,15 @@
 
     <!-- Need to be hosted locally -->
     <dependency>
-      <groupId>com.svnkit</groupId>
+      <groupId>org.tmatesoft.svnkit</groupId>
       <artifactId>svnkit</artifactId>
-      <version>1.2.0-rc4</version>
+      <version>1.2.0.4949</version>
     </dependency>
     <dependency>
-        <groupId>com.trilead</groupId>
-        <artifactId>trilead</artifactId>
-        <version>1.2.0-rc4</version>
+      <groupId>com.trilead</groupId>
+      <artifactId>trilead-ssh2</artifactId>
+      <version>build213-svnkit-1.2-patch</version>
     </dependency>
-
   </dependencies>
 
   <build>
