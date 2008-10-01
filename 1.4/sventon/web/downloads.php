@@ -7,8 +7,8 @@
   <a href="/download/sventon-1.4-rc6-bin.zip" onClick="javascript:urchinTracker ('/downloads/v14rc6');">(mirror)</a>
   <br/>
 -->
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v140'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.4.0 (stable)</a>
-  <a href="/download/sventon-1.4.0-bin.zip" onClick="javascript:urchinTracker ('/downloads/v140');">(mirror)</a>
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v141'); ">
+    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.4.1 (stable)</a>
+  <a href="/download/sventon-1.4.1-bin.zip" onClick="javascript:urchinTracker ('/downloads/v141');">(mirror)</a>
   <br/>
 </div>
