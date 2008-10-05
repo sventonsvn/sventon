@@ -25,6 +25,7 @@ import org.sventon.util.EncodingUtils;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -104,7 +105,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final Map fileProperties = getRepositoryService().getFileProperties(
+    final SVNProperties fileProperties = getRepositoryService().getFileProperties(
         repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
 
     logger.debug(fileProperties);
@@ -177,8 +178,8 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param properties The svn properties for given file.
    * @return True if text file, false if not.
    */
-  boolean isTextMimeType(final Map properties) {
-    return SVNProperty.isTextMimeType((String) properties.get(SVNProperty.MIME_TYPE));
+  protected boolean isTextMimeType(final SVNProperties properties) {
+    return SVNProperty.isTextMimeType(properties.getStringValue(SVNProperty.MIME_TYPE));
   }
 
   /**

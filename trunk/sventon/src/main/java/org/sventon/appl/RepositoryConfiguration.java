@@ -168,7 +168,7 @@ public final class RepositoryConfiguration {
     ic.setRssItemsCount(Integer.parseInt(properties.getProperty(PROPERTY_KEY_RSS_ITEMS_COUNT, String.valueOf(DEFAULT_RSS_ITEMS_COUNT))));
 
     if (properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY) != null) {
-        ic.setEnableEntryTray(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY)));
+      ic.setEnableEntryTray(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ENTRY_TRAY)));
     }
 
     if (properties.get(PROPERTY_KEY_RSS_TEMPLATE_FILE) != null) {

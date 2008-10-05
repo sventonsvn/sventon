@@ -1,11 +1,9 @@
 <div class="header">Screenshots</div>
-<div>
-  <b><i>Updated screenshots from sventon 1.4 comming soon!</i></b>
-</div>
 <div class="body">
 
 <hr>
 
+<!--
 <p>
   <b>Mac OS X screenshots</b>
 </p>
@@ -45,6 +43,7 @@
 </table>
 
 <hr>
+-->
 
 <p>
   <b>Win XP screenshots</b>

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +56,7 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
     final String completePath = svnCommand.getPath();
 
     logger.debug("Getting directory contents for: " + completePath);
-    final HashMap properties = new HashMap();
+    final SVNProperties properties = new SVNProperties();
     final List<RepositoryEntry> entries = getRepositoryService().list(
         repository, completePath, svnCommand.getRevisionNumber(), properties);
 

@@ -15,9 +15,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.sventon.colorer.Colorer;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
+import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Represents an annotated (blamed) file.
@@ -36,7 +40,7 @@ public final class AnnotatedTextFile {
   private final String path;
   private final String encoding;
   private final Colorer colorer;
-  private final Map properties;
+  private final SVNProperties properties;
   private final String repositoryURL;
 
   /**
@@ -59,8 +63,8 @@ public final class AnnotatedTextFile {
    * @param properties    Keywords to be substituted. If <tt>null</tt> no keywords will be processed.
    * @param repositoryURL Respository URL for keyword substitution.
    */
-  public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer, final Map properties,
-                           final String repositoryURL) {
+  public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer,
+                           final SVNProperties properties, final String repositoryURL) {
     this.path = path;
     this.encoding = encoding;
     this.colorer = colorer;

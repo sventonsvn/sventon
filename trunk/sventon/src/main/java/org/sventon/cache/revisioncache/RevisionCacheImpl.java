@@ -12,7 +12,6 @@
 package org.sventon.cache.revisioncache;
 
 import org.apache.commons.lang.Validate;
-import org.sventon.cache.CacheException;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.tmatesoft.svn.core.SVNLogEntry;
 

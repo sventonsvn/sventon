@@ -58,38 +58,38 @@ public final class TestUtils {
 
   public static List<RepositoryEntry> getDirectoryList() {
     final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tags", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tags", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/"));
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/"));
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "code", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "src", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "file1_in_trunk.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"), "/trunk/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "TestDirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "code", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "src", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "file1_in_trunk.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"), "/trunk/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "TestDirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/trunk/"));
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/trunk/code/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/trunk/src/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"), "/trunk/code/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/trunk/src/"));
     return entries;
   }
 
   public static List<RepositoryEntry> getFlattenedDirectoriesList() {
     final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), DEFAULT_AUTHOR), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "dir2", SVNNodeKind.DIR, 0, false, 2, new Date(), DEFAULT_AUTHOR), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "dir3", SVNNodeKind.DIR, 0, false, 3, new Date(), DEFAULT_AUTHOR), "/trunk/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), DEFAULT_AUTHOR), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "dir2", SVNNodeKind.DIR, 0, false, 2, new Date(), DEFAULT_AUTHOR), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "dir3", SVNNodeKind.DIR, 0, false, 3, new Date(), DEFAULT_AUTHOR), "/trunk/"));
     return list;
   }
 
   public static List<RepositoryEntry> getFileEntriesDirectoryList() {
     final List<RepositoryEntry> list = new ArrayList<RepositoryEntry>();
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
-    list.add(new RepositoryEntry(new SVNDirEntry(null, "test.GIF", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "test.abC", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "test.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    list.add(new RepositoryEntry(new SVNDirEntry(null, null, "test.GIF", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
     return list;
   }
 }

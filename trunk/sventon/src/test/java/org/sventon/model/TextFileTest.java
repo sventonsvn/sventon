@@ -3,6 +3,9 @@ package org.sventon.model;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
 import junit.framework.TestCase;
+import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNProperty;
+
 
 import java.util.Properties;
 
@@ -34,7 +37,7 @@ public class TextFileTest extends TestCase {
   }
 
   public void testTextFilePlainWebsafeExpandedKeywords() throws Exception {
-    final Properties props = new Properties();
+    final SVNProperties props = new SVNProperties();
     props.put(SVNProperty.KEYWORDS, "Author Date Revision URL");
     props.put(SVNProperty.LAST_AUTHOR, "domain\\user");
     props.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");

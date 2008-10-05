@@ -443,7 +443,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   final ModelAndView prepareExceptionModelAndView(final BindException exception,
-                                                            final SVNBaseCommand svnCommand) {
+                                                  final SVNBaseCommand svnCommand) {
     final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(svnCommand.getName());
     final Map<String, Object> model = exception.getModel();
     model.put("command", svnCommand);

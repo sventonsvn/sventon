@@ -18,10 +18,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNDiffStatus;
@@ -47,7 +44,7 @@ public interface RepositoryService {
    * @param repository     The repository
    * @param revision       Revision number
    * @return The log entry
-   * @throws SVNException     if subversion error
+   * @throws SVNException                 if subversion error
    * @throws org.sventon.SventonException if a sventon specific error occurs
    */
   SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
@@ -128,10 +125,10 @@ public interface RepositoryService {
    * @param repository The repository
    * @param path       Target of target to get properties for
    * @param revision   The revision
-   * @return Map populated with the file's properties
+   * @return The file's properties
    * @throws SVNException if a subversion error occur
    */
-  Map getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
+  SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
@@ -180,7 +177,7 @@ public interface RepositoryService {
    *
    * @param repository The repository
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
-   * @return Map containing path
+   * @return Map containing path and locks.
    * @throws SVNException if a subversion error occur
    */
   Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException;
@@ -194,7 +191,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
-                             final Map properties) throws SVNException;
+                             final SVNProperties properties) throws SVNException;
 
   /**
    * Gets entry info from the subversion repository.
@@ -274,7 +271,7 @@ public interface RepositoryService {
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param configuration The instance configuration. @return The inline diff.
    * @return List of diff status.
-   * @throws SVNException  if a subversion error occur
+   * @throws SVNException if a subversion error occur
    */
   List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
                                 final RepositoryConfiguration configuration) throws SVNException;
@@ -297,9 +294,9 @@ public interface RepositoryService {
    * @param repository The repository
    * @param path       The entry path
    * @param revision   The entry revision
-   * @return Map of properties
+   * @return Properties
    * @throws SVNException if a subversion error occur
    */
-  Map<String, String> getPathProperties(final SVNRepository repository, final String path, final long revision)
+  SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
       throws SVNException;
 }
