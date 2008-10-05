@@ -9,7 +9,12 @@
   <description>sventon is a web client for browsing Subversion repositories</description>
   <url>http://www.sventon.org/</url>
   <inceptionYear>2005</inceptionYear>
-
+  <distributionManagement>
+    <site>
+      <id>berlios</id>
+      <url>scp://shell.berlios.de:/home/groups/sventon/htdocs/site</url>
+    </site>
+  </distributionManagement>
   <scm>
     <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</connection>
     <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</developerConnection>
@@ -20,10 +25,14 @@
     <developer>
       <id>jesper</id>
       <name>Jesper Hammarback</name>
+      <email>jesper@sventon.org</email> 
+      <timezone>+1</timezone>    
     </developer>
     <developer>
       <id>patrikfr</id>
       <name>Patrik Fredriksson</name>
+      <email>patrik@sventon.org</email>      
+      <timezone>+1</timezone>
     </developer>
   </developers>
 
@@ -153,19 +162,18 @@
       <artifactId>jstl</artifactId>
       <version>1.1.2</version>
     </dependency>
-    <dependency>
-      <groupId>ch.ethz.ganymed</groupId>
-      <artifactId>ganymed-ssh2</artifactId>
-      <version>build210</version>
-    </dependency>
 
-    <!-- Currently deployed to central, they need to be hosted locally -->
+    <!-- Need to be hosted locally -->
     <dependency>
-      <groupId>com.svnkit</groupId>
+      <groupId>org.tmatesoft.svnkit</groupId>
       <artifactId>svnkit</artifactId>
-      <version>1.1.4</version>
+      <version>1.2.0.4949</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.trilead</groupId>
+      <artifactId>trilead-ssh2</artifactId>
+      <version>build213-svnkit-1.2-patch</version>
+    </dependency>
   </dependencies>
 
   <build>

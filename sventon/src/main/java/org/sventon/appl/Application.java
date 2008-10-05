@@ -21,12 +21,10 @@ import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.objectcache.ObjectCacheManager;
 import org.sventon.cache.revisioncache.RevisionCacheManager;
-import org.sventon.logging.SVNLog4JAdapter;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.util.SVNDebugLog;
 
 import java.io.*;
 import java.util.*;
@@ -216,9 +214,7 @@ public final class Application {
    * Initializes the logger and the SVNKit library.
    */
   private void initSvnSupport() {
-    SVNDebugLog.setDefaultLog(new SVNLog4JAdapter());
     logger.info("Initializing sventon version " + Version.getVersion());
-
     SVNRepositoryFactoryImpl.setup();
     DAVRepositoryFactory.setup();
     FSRepositoryFactory.setup();

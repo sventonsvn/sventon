@@ -1,6 +1,12 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1390] Release 1.4.1 (2008-10-01)
+[1385] Added: Upgraded to SVNKit 1.2.0.
+[1358] Fixed bug #14342 - Version number not displayed properly on Glassfish.
+
+[1339] Release 1.4.0 (2008-07-25)
+
 [1333] Fixed: Bug #14244 - Revision zero not considered.
 [1321] Added: Feature #4182 - Friendly URLs.
 [1252] Added: Upgraded to Spring 2.5.2.

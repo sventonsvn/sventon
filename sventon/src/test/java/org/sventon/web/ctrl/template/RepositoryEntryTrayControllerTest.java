@@ -36,7 +36,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
     configuration.setEnableEntryTray(true);
     application.addRepository(configuration);
 
-    entry = new RepositoryEntry(new SVNDirEntry(null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
+    entry = new RepositoryEntry(new SVNDirEntry(null, null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
 
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));

@@ -12,7 +12,6 @@
 package org.sventon.cache.revisioncache;
 
 import org.sventon.cache.Cache;
-import org.sventon.cache.CacheException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 /**

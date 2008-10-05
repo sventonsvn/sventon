@@ -58,15 +58,15 @@ public class CacheGatewayImplTest extends TestCase {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
 
       final List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
-      entries1.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+      entries1.add(new SVNDirEntry(null, null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
       final List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
-      entries2.add(new SVNDirEntry(null, "dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, "file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, null, "dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
+      entries2.add(new SVNDirEntry(null, null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
       repositoryEntries.put("/", entries1);
       repositoryEntries.put("/dir1/", entries2);
       repositoryEntries.put("/dir1/dir2/", new ArrayList());
@@ -82,7 +82,7 @@ public class CacheGatewayImplTest extends TestCase {
       changedPathsUpdate.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
       logEntriesForUpdate.add(new SVNLogEntry(changedPathsUpdate, 124, "jesper", new Date(), "Log message for revision 124."));
 
-      infoEntry = new SVNDirEntry(null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
+      infoEntry = new SVNDirEntry(null, null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
     }
 
     public long getLatestRevision() {

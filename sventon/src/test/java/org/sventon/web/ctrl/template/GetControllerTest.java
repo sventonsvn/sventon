@@ -13,6 +13,7 @@ import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class GetControllerTest extends TestCase {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
     }
 
-    public long getFile(String path, long revision, Map properties, OutputStream contents) throws SVNException {
+    public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
       return 0;
     }
 

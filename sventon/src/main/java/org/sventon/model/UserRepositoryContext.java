@@ -82,7 +82,7 @@ public final class UserRepositoryContext implements Serializable {
    * <code>userContext</code> does not exists, a new instance will be
    * created and added to the session.
    *
-   * @param request      The HTTP request.
+   * @param request        The HTTP request.
    * @param repositoryName Instance name.
    * @return The UserContext instance.
    * @see UserContext

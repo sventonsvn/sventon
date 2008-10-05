@@ -45,11 +45,11 @@ public class EntryCacheUpdaterTest extends TestCase {
 
     public TestRepository() throws SVNException {
       super(SVNURL.parseURIDecoded("http://localhost/"), null);
-      entriesMap.put("/file1.java#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file1.java"), "file1.java", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/file2.abc#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file2.abc"), "file2.abc", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/trunk#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk"), "trunk", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/trunk/file3.def#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk/file3.def"), "file3.def", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/branch#124", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/branch"), "branch", SVNNodeKind.FILE, 12345, false, 124, new Date(), "author"));
+      entriesMap.put("/file1.java#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file1.java"), null, "file1.java", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/file2.abc#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file2.abc"), null, "file2.abc", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/trunk#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk"), null, "trunk", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/trunk/file3.def#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk/file3.def"), null, "file3.def", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
+      entriesMap.put("/branch#124", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/branch"), null, "branch", SVNNodeKind.FILE, 12345, false, 124, new Date(), "author"));
     }
 
     public SVNDirEntry info(final String path, final long revision) throws SVNException {

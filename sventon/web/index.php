@@ -153,6 +153,17 @@
             </td>
           </tr>
         </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
+          <tr>
+            <td align="center">
+              <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_partner_badge"></script>
+              <br>
+              <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_users_logo"></script>
+            </td>
+          </tr>
+        </table>
+
       </td>
     </tr>
   </table>
