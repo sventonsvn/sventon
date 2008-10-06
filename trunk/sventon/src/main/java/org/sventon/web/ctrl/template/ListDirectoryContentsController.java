@@ -54,7 +54,7 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
         repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), properties);
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    logger.debug(properties);
+    logger.debug("Directory entries: " + entries.size());
     model.put("svndir", entries);
     model.put("properties", properties);
     final ModelAndView modelAndView = new ModelAndView();

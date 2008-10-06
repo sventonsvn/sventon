@@ -13,13 +13,13 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNPropertyValue" %>
-<%@ tag import="de.berlios.sventon.util.WebUtils" %>
+<%@ tag import="org.sventon.util.WebUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ attribute name="title" required="true" type="java.lang.String" %>
 <%@ attribute name="target" required="true" type="java.lang.String" %>
-<%@ attribute name="properties" required="true" type="java.util.Map" %>
+<%@ attribute name="properties" required="true" type="org.tmatesoft.svn.core.SVNProperties" %>
 
 <div id="sventonHeaderDiv">
   <table class="sventonHeader">
