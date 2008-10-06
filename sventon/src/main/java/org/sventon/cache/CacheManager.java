@@ -52,8 +52,8 @@ public abstract class CacheManager<T> {
   }
 
   /**
-   * Registers the instance in the cache manager.
-   * The instance cache will be created if it does not exist.
+   * Registers the repository in the cache manager.
+   * The repository cache will be created if it does not exist.
    *
    * @param repositoryName Repository name.
    * @throws CacheException if unable to create cache instance, or if the
@@ -67,6 +67,16 @@ public abstract class CacheManager<T> {
     cache = createCache(repositoryName);
     logger.debug("Adding cache, type [" + cache.getClass().getName() + "] name, [" + repositoryName + "]");
     addCache(repositoryName, cache);
+  }
+
+  /**
+   * Checks if given repository name is registered.
+   *
+   * @param repositoryName Name
+   * @return True if registered, false if not.
+   */
+  public boolean isRegistered(final RepositoryName repositoryName) {
+    return caches.get(repositoryName) != null;
   }
 
   /**

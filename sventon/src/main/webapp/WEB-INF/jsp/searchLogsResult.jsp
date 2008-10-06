@@ -44,8 +44,8 @@
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>
     <tr>
-      <th>Revision</th>
-      <th>Log Message</th>
+      <th><spring:message code="revision"/></th>
+      <th><spring:message code="logmessage"/></th>
     </tr>
     <c:forEach items="${logMessages}" var="logMessage">
       <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
@@ -58,7 +58,7 @@
       <c:set var="rowCount" value="${rowCount + 1}"/>
     </c:forEach>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-      <td><b>Total:&nbsp;${rowCount}&nbsp;hits</b></td>
+      <td><b><spring:message code="total"/>:&nbsp;${rowCount}&nbsp;<spring:message code="hits"/></b></td>
       <td/>
     </tr>
   </table>

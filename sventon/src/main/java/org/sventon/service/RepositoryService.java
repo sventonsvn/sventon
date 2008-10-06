@@ -223,7 +223,7 @@ public interface RepositoryService {
    * @param diffCommand   DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration. @return Ordered list of diffed rows.
+   * @param configuration The repository configuration. @return Ordered list of diffed rows.
    * @return List of diff rows.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
@@ -239,7 +239,7 @@ public interface RepositoryService {
    * @param diffCommand   DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration. @return The unified diff as a string.
+   * @param configuration The repository configuration. @return The unified diff as a string.
    * @return Diff result.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
@@ -255,7 +255,7 @@ public interface RepositoryService {
    * @param diffCommand   DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
-   * @param configuration The instance configuration. @return The inline diff.
+   * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff rows.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
@@ -269,7 +269,7 @@ public interface RepositoryService {
    * @param repository    The repository.
    * @param diffCommand   DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
-   * @param configuration The instance configuration. @return The inline diff.
+   * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff status.
    * @throws SVNException if a subversion error occur
    */

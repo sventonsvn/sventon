@@ -51,17 +51,24 @@ public final class StartController extends AbstractController {
 
     final ModelAndView modelAndView;
     if (!application.isConfigured()) {
-      modelAndView = new ModelAndView(new RedirectView("/repos/config", true));
+      modelAndView = createRedirectModelAndViewFromUrl("/repos/listconfigs");
     } else if (application.getRepositoryCount() > 1) {
-      modelAndView = new ModelAndView(new RedirectView("/repos/list", true));
+      modelAndView = createRedirectModelAndViewFromUrl("/repos/list");
     } else if (application.getRepositoryCount() == 1) {
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
-      final String redirectUrl = EncodingUtils.encodeUrl("/repos/" + repositoryName + "/browse/");
-      modelAndView = new ModelAndView(new RedirectView(redirectUrl, true));
+      modelAndView = createRedirectModelAndViewFromUrl(createBrowseUrl(repositoryName));
     } else {
-      throw new IllegalStateException("No instance has been configured!");
+      throw new IllegalStateException("No repository has been configured!");
     }
     return modelAndView;
+  }
+
+  protected ModelAndView createRedirectModelAndViewFromUrl(final String url) {
+    return new ModelAndView(new RedirectView(url, true));
+  }
+
+  protected String createBrowseUrl(final RepositoryName repositoryName) {
+    return EncodingUtils.encodeUrl("/repos/" + repositoryName + "/browse/");
   }
 
   /**

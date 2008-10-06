@@ -114,6 +114,6 @@ public final class ShowLogController extends AbstractSVNTemplateController {
     model.put("pageSize", pageSize);
     model.put("isFile", getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
-    return new ModelAndView("showLog", model);
+    return new ModelAndView(getViewName(), model);
   }
 }

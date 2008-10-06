@@ -68,7 +68,7 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
     model.put("locks", getRepositoryService().getLocks(repository, svnCommand.getPath()));
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
-    return new ModelAndView("searchEntriesResult", model);
+    return new ModelAndView(getViewName(), model);
   }
 
   /**

@@ -34,12 +34,12 @@
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td align="left">Go to revision</td><td colspan="2" align="left">Go to path</td>
+            <td align="left"><spring:message code="goto.revision"/></td><td colspan="2" align="left"><spring:message code="goto.path"/></td>
           </tr>
           <tr>
             <td>
               <c:if test="${!isHead}">
-                <a href="#" onclick="goToHeadRevision(document.gotoForm); return false;" title="Click to go to 'HEAD' revision">HEAD</a>
+                <a href="#" onclick="goToHeadRevision(document.gotoForm); return false;" title="Click to go to 'HEAD' revision"><spring:message code="revision.head"/></a>
               </c:if>
             </td>
             <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind>

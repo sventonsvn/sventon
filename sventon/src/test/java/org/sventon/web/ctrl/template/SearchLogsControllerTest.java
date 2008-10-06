@@ -50,6 +50,5 @@ public class SearchLogsControllerTest extends TestCase {
     assertEquals("/trunk/", (String) model.get(START_DIR_PARAMETER));
     assertEquals(result, model.get("logMessages"));
     assertTrue((Boolean) model.get("isLogSearch"));
-    assertEquals("searchLogsResult", modelAndView.getViewName());
   }
 }

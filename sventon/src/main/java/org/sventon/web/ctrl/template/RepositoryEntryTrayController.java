@@ -53,7 +53,7 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
     final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", svnCommand.getRevisionNumber());
 
-    final ModelAndView modelAndView = new ModelAndView("ajax/entryTray");
+    final ModelAndView modelAndView = new ModelAndView(getViewName());
     modelAndView.addObject("pegrev", pegRevision);
 
     final RepositoryEntry entry;

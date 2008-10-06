@@ -56,7 +56,7 @@
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/browse${entry.fullEntryName}" var="viewUrl">
+        <c:url value="/repos/${command.name}/browse${entry.fullEntryName}/" var="viewUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
         <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
@@ -116,8 +116,8 @@
       </c:forEach>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td colspan="2" align="right"><b>Total:</b></td>
-        <td><b>${rowCount} entries</b></td>
+        <td colspan="2" align="right"><b><spring:message code="total"/>:</b></td>
+        <td><b>${rowCount} <spring:message code="entries"/></b></td>
         <td/>
         <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
         <td/>

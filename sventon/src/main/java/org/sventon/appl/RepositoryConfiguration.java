@@ -137,6 +137,8 @@ public final class RepositoryConfiguration {
 
   private String mailTemplate;
 
+  private boolean persisted;
+
 
   /**
    * Constructor.
@@ -149,7 +151,7 @@ public final class RepositoryConfiguration {
   }
 
   /**
-   * Creates an instance using given name and properties.
+   * Creates a repository configuration using given name and properties.
    *
    * @param repositoryName Repository name
    * @param properties     Properties
@@ -382,7 +384,7 @@ public final class RepositoryConfiguration {
   /**
    * Gets the RSS feed items count.
    *
-   * @return Number of rss feed items generated for this instance.
+   * @return Number of rss feed items generated for this repository.
    */
   public int getRssItemsCount() {
     return rssItemsCount;
@@ -440,27 +442,34 @@ public final class RepositoryConfiguration {
     return mailTemplateFile;
   }
 
-  private String getTemplate(final String name) throws IOException {
-    final InputStream is = this.getClass().getResourceAsStream(name);
+  private String loadTemplateFile(final String filename) throws IOException {
+    final InputStream is = this.getClass().getResourceAsStream(filename);
     if (is == null) {
-      throw new FileNotFoundException("Unable to find: " + name);
+      throw new FileNotFoundException("Unable to find: " + filename);
     }
     return IOUtils.toString(is);
   }
 
   public String getRssTemplate() throws IOException {
     if (rssTemplate == null) {
-      rssTemplate = getTemplate(rssTemplateFile);
+      rssTemplate = loadTemplateFile(rssTemplateFile);
     }
     return rssTemplate;
   }
 
   public String getMailTemplate() throws IOException {
     if (mailTemplate == null) {
-      mailTemplate = getTemplate(mailTemplateFile);
+      mailTemplate = loadTemplateFile(mailTemplateFile);
     }
     return mailTemplate;
   }
 
+  public void setPersisted() {
+    this.persisted = true;
+  }
+
+  public boolean isPersisted() {
+    return persisted;
+  }
 }
 

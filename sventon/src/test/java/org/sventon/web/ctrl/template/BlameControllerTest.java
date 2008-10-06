@@ -50,6 +50,5 @@ public class BlameControllerTest extends TestCase {
 
     assertEquals(1, model.size());
     assertEquals(annotatedFile, model.get("annotatedFile"));
-    assertEquals("blame", modelAndView.getViewName());
   }
 }

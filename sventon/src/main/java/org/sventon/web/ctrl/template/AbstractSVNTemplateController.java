@@ -43,7 +43,10 @@ import javax.servlet.http.HttpSession;
 import java.beans.PropertyEditor;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract base class for use by controllers whishing to make use of basic
@@ -115,6 +118,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Maximum number of entries per page.
    */
   private int maxEntriesCount;
+
+  /**
+   * Destination view name.
+   */
+  private String viewName;
 
   /**
    * Cached available charsets.
@@ -207,14 +215,13 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
     logger.info("SVNBaseCommand: " + svnCommand);
 
-    // If application config is not ok - redirect to config.jsp
+    // If application config is not ok - redirect to config
     if (!application.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to '/repos/config'");
-      return new ModelAndView(new RedirectView("/repos/config", true));
+      logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
+      return new ModelAndView(new RedirectView("/repos/listconfigs", true));
     }
 
-    final Set<RepositoryName> repositoryNames = application.getRepositoryNames();
-    if (svnCommand.getName() == null || !repositoryNames.contains(svnCommand.getName())) {
+    if (svnCommand.getName() == null || !application.getRepositoryNames().contains(svnCommand.getName())) {
       logger.debug("RepositoryName [" + svnCommand.getName() + "] does not exist, redirecting to '/repos/list'");
       return new ModelAndView(new RedirectView("/repos/list", true));
     }
@@ -586,6 +593,24 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
+  }
+
+  /**
+   * Sets the destination view name.
+   *
+   * @param viewName View name.
+   */
+  public void setViewName(final String viewName) {
+    this.viewName = viewName;
+  }
+
+  /**
+   * Gets the destination view name.
+   *
+   * @return View name.
+   */
+  public String getViewName() {
+    return viewName;
   }
 
 }

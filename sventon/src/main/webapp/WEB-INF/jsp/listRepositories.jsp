@@ -23,7 +23,7 @@
   <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
   <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" hasCredentials="${userRepositoryContext.uid ne null}"/>
 
-  <h1>Repositories</h1>
+  <h1><spring:message code="repositories"/></h1>
 
   <ol>
     <c:forEach items="${repositoryNames}" var="repositoryName">

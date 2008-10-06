@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.CacheManager;
 import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.objectcache.ObjectCacheManager;
@@ -50,7 +51,8 @@ public final class Application {
   /**
    * Set of added subversion repository names.
    */
-  private final Map<RepositoryName, RepositoryConfiguration> repositories = new HashMap<RepositoryName, RepositoryConfiguration>();
+  private final Map<RepositoryName, RepositoryConfiguration> repositories = Collections.synchronizedMap(
+      new HashMap<RepositoryName, RepositoryConfiguration>());
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -66,6 +68,16 @@ public final class Application {
    * Application configuration file name.
    */
   private final String configurationFilename;
+
+  /**
+   * Toggles the possibility to edit the config after initial setup.
+   */
+  private boolean editableConfig;
+
+  /**
+   * Password needed to access the config pages.
+   */
+  private String configPassword;
 
   private EntryCacheManager entryCacheManager;
   private LogMessageCacheManager logMessageCacheManager;
@@ -107,33 +119,39 @@ public final class Application {
   }
 
   /**
-   * Initializes the caches by registering the cache enabled instances in the cache managers.
+   * Initializes the caches by registering the cache enabled repositories in the cache managers.
    *
    * @throws CacheException if unable to register instances in the cache managers.
    */
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
     for (final RepositoryConfiguration repositoryConfiguration : repositories.values()) {
-      final RepositoryName name = repositoryConfiguration.getName();
+      final RepositoryName repositoryName = repositoryConfiguration.getName();
       if (repositoryConfiguration.isCacheUsed()) {
-        logger.debug("Registering caches for instance: " + name);
-        entryCacheManager.register(name);
-        logMessageCacheManager.register(name);
-        objectCacheManager.register(name);
-        revisionCacheManager.register(name);
+        register(entryCacheManager, repositoryName);
+        register(logMessageCacheManager, repositoryName);
+        register(objectCacheManager, repositoryName);
+        register(revisionCacheManager, repositoryName);
       } else {
-        logger.debug("Caches have not been enabled for instance: " + name);
+        logger.debug("Caches have not been enabled for repository: " + repositoryName);
       }
     }
     logger.info("Caches initialized ok");
+  }
+
+  private void register(final CacheManager manager, final RepositoryName repositoryName) throws CacheException {
+    if (!manager.isRegistered(repositoryName)) {
+      logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
+      manager.register(repositoryName);
+    }
   }
 
   /**
    * Loads the repository configurations from the file at path
    * {@code configurationRootDirectory / [repository name] / configurationFilename}
    * <p/>
-   * If a config file is found an configuration is successful this instance will be marked as configured.
-   * If no file is found initialization will fail silently and the instance will not be marked as configured.
+   * If a config file is found an configuration is successful this repository will be marked as configured.
+   * If no file is found initialization will fail silently and the repository will not be marked as configured.
    * <p/>
    * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
    * {@code configurationRootDirectory} and {@code configurationFilename} must be set before calling this method, or bad
@@ -160,14 +178,16 @@ public final class Application {
         properties.load(is);
         final String repositoryName = configDir.getName();
         logger.info("Configuring repository: " + repositoryName);
-        addRepository(RepositoryConfiguration.create(repositoryName, properties));
+        final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
+        configuration.setPersisted();
+        addRepository(configuration);
       } finally {
         IOUtils.closeQuietly(is);
       }
     }
 
     if (getRepositoryCount() > 0) {
-      logger.info(getRepositoryCount() + " instance(s) configured");
+      logger.info(getRepositoryCount() + " repositories configured");
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
@@ -177,37 +197,60 @@ public final class Application {
   /**
    * Store the repository configurations on file at path
    * {@code configurationRootDirectory / [repository name] / configurationFilename}.
+   * <p/>
+   * Note: Already stored configurations will be untouched.
    *
    * @throws IOException if IO error occur during file operations.
    */
-  public void storeRepositoryConfigurations() throws IOException {
-    for (final RepositoryConfiguration configuration : repositories.values()) {
-      final File configDir = new File(configurationRootDirectory, configuration.getName().toString());
-      configDir.mkdirs();
+  public void persistRepositoryConfigurations() throws IOException {
+    for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
+      if (!repositoryConfig.isPersisted()) {
+        final File configDir = getConfigurationDirectoryForRepository(repositoryConfig.getName());
+        configDir.mkdirs();
 
-      final File configFile = new File(configDir, configurationFilename);
-      logger.info("Storing configuration: " + configFile.getAbsolutePath());
+        final File configFile = new File(configDir, configurationFilename);
+        logger.info("Storing configuration: " + configFile.getAbsolutePath());
 
-      FileOutputStream fileOutputStream = null;
-      try {
-        fileOutputStream = new FileOutputStream(configFile);
-        final Properties configProperties = configuration.getAsProperties();
-        logger.debug("Storing properties: " + configProperties);
-        configProperties.store(fileOutputStream, "");
-        fileOutputStream.flush();
-      } finally {
-        IOUtils.closeQuietly(fileOutputStream);
+        FileOutputStream fileOutputStream = null;
+        try {
+          fileOutputStream = new FileOutputStream(configFile);
+          final Properties configProperties = repositoryConfig.getAsProperties();
+          logger.debug("Storing properties: " + configProperties);
+          configProperties.store(fileOutputStream, "");
+          fileOutputStream.flush();
+          repositoryConfig.setPersisted();
+        } finally {
+          IOUtils.closeQuietly(fileOutputStream);
+        }
       }
     }
   }
 
   /**
-   * Adds an instance to the application.
+   * Adds a repository to the application.
    *
-   * @param configuration The instance configuration to add.
+   * @param configuration The repository configuration to add.
    */
   public void addRepository(final RepositoryConfiguration configuration) {
     repositories.put(configuration.getName(), configuration);
+  }
+
+  /**
+   * Deletes a repository from the sventon configuration.
+   * The config file
+   *
+   * @param name Name of repository to delete from the sventon configuration.
+   */
+  public void deleteRepository(final RepositoryName name) {
+    final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
+    final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
+    logger.info("Disabling repository configuration for [" + name.toString() + "]");
+    if (configFile.renameTo(configBackupFile)) {
+      logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
+      repositories.remove(name);
+    } else {
+      logger.error("Unable to rename config file: " + configFile.getAbsolutePath());
+    }
   }
 
   /**
@@ -221,12 +264,12 @@ public final class Application {
   }
 
   /**
-   * Gets the repository names.
+   * Gets the repository names, sorted alphabetically.
    *
    * @return Collection of repository names.
    */
   public Set<RepositoryName> getRepositoryNames() {
-    return repositories.keySet();
+    return new TreeSet(repositories.keySet());
   }
 
   /**
@@ -269,6 +312,25 @@ public final class Application {
   }
 
   /**
+   * Sets the password for the config pages.
+   *
+   * @param configPassword Password.
+   */
+  public void setConfigPassword(final String configPassword) {
+    this.configPassword = configPassword;
+  }
+
+  /**
+   * Checks if given password matches the configuration password.
+   *
+   * @param configPassword Password to match.
+   * @return True if password matches, false if not.
+   */
+  public boolean isValidConfigPassword(final String configPassword) {
+    return this.configPassword != null && this.configPassword.equals(configPassword);
+  }
+
+  /**
    * Sets the cache updating status.
    * <p/>
    * Note: This method is package protected by design.
@@ -294,13 +356,13 @@ public final class Application {
   }
 
   /**
-   * Gets the configuration file.
+   * Gets the configuration root directory for given repository name.
    *
-   * @param repositoryName Name of repository to get config file for.
-   * @return The config file.
+   * @param repositoryName Name of repository to get config dir for.
+   * @return The config root dir.
    */
-  public File getConfigurationFileForRepository(final String repositoryName) {
-    return new File(new File(configurationRootDirectory, repositoryName), configurationFilename);
+  public File getConfigurationDirectoryForRepository(final RepositoryName repositoryName) {
+    return new File(configurationRootDirectory, repositoryName.toString());
   }
 
   /**
@@ -339,4 +401,19 @@ public final class Application {
     this.revisionCacheManager = revisionCacheManager;
   }
 
+  /**
+   * Enables or disables the possibility to edit the instance configuration.
+   *
+   * @param editableConfig True or false
+   */
+  public void setEditableConfig(final boolean editableConfig) {
+    this.editableConfig = editableConfig;
+  }
+
+  /**
+   * @return true if the instance configuration is editable, false if not.
+   */
+  public boolean isEditableConfig() {
+    return editableConfig;
+  }
 }

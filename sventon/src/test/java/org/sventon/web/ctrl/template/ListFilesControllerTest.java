@@ -44,6 +44,5 @@ public class ListFilesControllerTest extends TestCase {
     assertEquals(3, model.size());
     assertEquals(12, model.get("rowNumber"));
     assertEquals(entries.get(0), ((List<RepositoryEntry>) model.get("svndir")).get(0));
-    assertEquals("ajax/listFiles", modelAndView.getViewName());
   }
 }

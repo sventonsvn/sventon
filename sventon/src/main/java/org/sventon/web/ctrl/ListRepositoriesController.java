@@ -46,12 +46,9 @@ public final class ListRepositoriesController extends AbstractController {
 
     // If application config is not ok - redirect to config.jsp
     if (!application.isConfigured()) {
-      logger.debug("sventon not configured, redirecting to '/repos/config'");
-      return new ModelAndView(new RedirectView("/repos/config", true));
+      logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
+      return new ModelAndView(new RedirectView("/repos/listconfigs", true));
     }
-
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("repositoryNames", application.getRepositoryNames());
 
     //Clear uid and pwd if logout param is supplied
     final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
@@ -68,6 +65,8 @@ public final class ListRepositoriesController extends AbstractController {
       }
     }
 
+    final Map<String, Object> model = new HashMap<String, Object>();
+    model.put("repositoryNames", application.getRepositoryNames());
     return new ModelAndView("listRepositories", model);
   }
 

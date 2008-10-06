@@ -38,6 +38,5 @@ public class ShowRevisionInfoControllerTest extends TestCase {
     assertEquals(1, model.size());
     final SVNLogEntry revision = (SVNLogEntry) model.get("revisionInfo");
     assertEquals(123, revision.getRevision());
-    assertEquals("showRevInfo", modelAndView.getViewName());
   }
 }

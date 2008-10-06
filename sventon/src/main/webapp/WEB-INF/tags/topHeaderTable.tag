@@ -14,6 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="repositoryNames" required="true" type="java.util.Set" %>
 <%@ attribute name="hasCredentials" required="true" type="java.lang.Boolean" %>
@@ -21,7 +22,7 @@
 <table class="sventonHeader">
   <tr>
     <td>
-      sventon subversion web client -
+      <spring:message code="sventon.header"/> -
       <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a>
     </td>
     <td align="right">

@@ -1,9 +1,5 @@
 package org.sventon.web.ctrl;
 
-import org.sventon.TestUtils;
-import static org.sventon.TestUtils.TEMPDIR;
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.quartz.impl.StdScheduler;
@@ -11,30 +7,30 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
+import static org.sventon.TestUtils.TEMPDIR;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
 
 import java.io.File;
 
-public class ConfigurationSubmissionControllerTest extends TestCase {
+public class SubmitConfigurationsControllerTest extends TestCase {
 
   public void testHandleRequestInternalConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController controller = new SubmitConfigurationsController();
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
-    try {
-      controller.handleRequestInternal(request, response);
-      fail("Should throw IllegalStateException");
-    } catch (IllegalStateException ise) {
-      // expected
-    }
+    final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
+    assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
-  public void testHandleRequestInternalNoAddedInstance() throws Exception {
+  public void testHandleRequestInternalNoAddedRepository() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController controller = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController controller = new SubmitConfigurationsController();
     final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     controller.setApplication(application);
@@ -46,7 +42,7 @@ public class ConfigurationSubmissionControllerTest extends TestCase {
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationSubmissionController ctrl = new ConfigurationSubmissionController();
+    final SubmitConfigurationsController ctrl = new SubmitConfigurationsController();
 
     ctrl.setScheduler(new StdScheduler(null, null) {
       public void triggerJob(final String string, final String string1) {

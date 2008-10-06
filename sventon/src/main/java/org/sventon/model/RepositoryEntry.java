@@ -30,15 +30,14 @@ public final class RepositoryEntry implements Serializable {
 
   public static final int FULL_ENTRY_NAME_MAX_LENGTH = 70;
   private static final long serialVersionUID = 3617229449081593805L;
-  private String entryPath;
-  private String entryName;
-  private Kind entryKind;
-  private long entrySize;
-  private boolean entryHasProperties;
-  private long entryFirstRevision;
-  private Date entryCreatedDate;
-  private String entryLastAuthor;
-  private String entryLogMessage;
+  private String path;
+  private String name;
+  private Kind kind;
+  private long size;
+  private boolean hasProperties;
+  private long revision;
+  private Date createdDate;
+  private String lastAuthor;
 
   public enum Kind {
     DIR, FILE, NONE, UNKNOWN, ANY
@@ -60,7 +59,7 @@ public final class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
 
-    this.entryPath = entryPath.intern();
+    this.path = entryPath.intern();
     copyEntry(entry);
   }
 
@@ -83,14 +82,13 @@ public final class RepositoryEntry implements Serializable {
   }
 
   private void copyEntry(final SVNDirEntry entry) {
-    this.entryLastAuthor = entry.getAuthor() == null ? null : entry.getAuthor().intern();
-    this.entryLogMessage = entry.getCommitMessage();
-    this.entryCreatedDate = entry.getDate();
-    this.entryKind = Kind.valueOf(entry.getKind().toString().toUpperCase());
-    this.entryName = entry.getName().intern();
-    this.entryFirstRevision = entry.getRevision();
-    this.entrySize = entry.getSize();
-    this.entryHasProperties = entry.hasProperties();
+    this.lastAuthor = entry.getAuthor() == null ? null : entry.getAuthor().intern();
+    this.createdDate = entry.getDate();
+    this.kind = Kind.valueOf(entry.getKind().toString().toUpperCase());
+    this.name = entry.getName().intern();
+    this.revision = entry.getRevision();
+    this.size = entry.getSize();
+    this.hasProperties = entry.hasProperties();
   }
 
   /**
@@ -99,16 +97,7 @@ public final class RepositoryEntry implements Serializable {
    * @return The name.
    */
   public String getName() {
-    return entryName;
-  }
-
-  /**
-   * Gets the entry path.
-   *
-   * @return The full entry path
-   */
-  public String getEntryPath() {
-    return entryPath;
+    return name;
   }
 
   /**
@@ -117,7 +106,7 @@ public final class RepositoryEntry implements Serializable {
    * @return The name and full path.
    */
   public String getFullEntryName() {
-    return entryPath + getName();
+    return path + name;
   }
 
   /**
@@ -137,7 +126,7 @@ public final class RepositoryEntry implements Serializable {
    * @return the path for this entry
    */
   public String getPath() {
-    return entryPath;
+    return path;
   }
 
   /**
@@ -146,7 +135,7 @@ public final class RepositoryEntry implements Serializable {
    * @return the size of this entry in bytes
    */
   public long getSize() {
-    return entrySize;
+    return size;
   }
 
   /**
@@ -155,7 +144,7 @@ public final class RepositoryEntry implements Serializable {
    * @return <code>true</code> if has, <code>false</code> - otherwise
    */
   public boolean hasProperties() {
-    return entryHasProperties;
+    return hasProperties;
   }
 
   /**
@@ -165,7 +154,7 @@ public final class RepositoryEntry implements Serializable {
    *         <code>file</code> or <code>dir</code>.
    */
   public Kind getKind() {
-    return entryKind;
+    return kind;
   }
 
   /**
@@ -174,21 +163,20 @@ public final class RepositoryEntry implements Serializable {
    * @return the creation date, or <tt>null</tt> if no date exists.
    */
   public Date getDate() {
-    if (entryCreatedDate != null) {
-      return (Date) entryCreatedDate.clone();
+    if (createdDate != null) {
+      return (Date) createdDate.clone();
     } else {
       return null;
     }
   }
 
   /**
-   * Gets the revision
-   * at which the entry was last modified in the repository.
+   * Gets the revision at which the entry was last modified in the repository.
    *
    * @return the revision of this entry when it was last changed
    */
   public long getRevision() {
-    return entryFirstRevision;
+    return revision;
   }
 
   /**
@@ -198,16 +186,7 @@ public final class RepositoryEntry implements Serializable {
    * @return the last author's name.
    */
   public String getAuthor() {
-    return entryLastAuthor;
-  }
-
-  /**
-   * Retrieves the log message.
-   *
-   * @return the log message.
-   */
-  public String getCommitMessage() {
-    return entryLogMessage;
+    return lastAuthor;
   }
 
   /**
@@ -219,9 +198,9 @@ public final class RepositoryEntry implements Serializable {
    */
   private void readObject(final ObjectInputStream is) throws IOException, ClassNotFoundException {
     is.defaultReadObject();
-    entryPath = entryPath.intern();
-    entryName = entryName.intern();
-    entryLastAuthor = entryLastAuthor == null ? null : entryLastAuthor.intern();
+    path = path.intern();
+    name = name.intern();
+    lastAuthor = lastAuthor == null ? null : lastAuthor.intern();
   }
 
   /**
