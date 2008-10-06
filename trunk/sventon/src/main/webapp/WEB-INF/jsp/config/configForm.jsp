@@ -17,7 +17,7 @@
 <head>
   <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
-  <title>sventon repository browser</title>
+  <title><spring:message code="window.title.default"/></title>
 
   <script type="text/javascript">
     function toggleAccessControl() {
@@ -189,9 +189,13 @@
     <div class="config_group">
       <div class="config_settings">
         <input value="Continue" class="cfgbtn" type="submit">
+        <c:if test="${not empty addedRepositories}">
+          <input value="Cancel" class="cfgbtn" type="button" onclick="document.location.href='${pageContext.request.contextPath}/repos/listconfigs'">
+        </c:if>
       </div>
     </div>
 </form>
+
 </div>
 
 <script language="JavaScript" type="text/javascript">

@@ -1,15 +1,15 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.TestUtils;
-import org.sventon.model.RepositoryName;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
+import org.sventon.model.RepositoryName;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Collection;
@@ -21,14 +21,14 @@ public class ShowLocksControllerTest extends TestCase {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 
     final SVNBaseCommand command = new SVNBaseCommand();
-    command.setPath("trunk/test");
+    command.setPath("trunk/test/");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 
     final ShowLocksController ctrl = new ShowLocksController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getLocks(null, command.getPath() + "/")).andStubReturn(TestUtils.getLocksStub(command.getPath()));
+    expect(mockService.getLocks(null, command.getPath())).andStubReturn(TestUtils.getLocksStub(command.getPath()));
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
@@ -38,6 +38,5 @@ public class ShowLocksControllerTest extends TestCase {
     assertEquals(1, model.size());
     final Collection locks = (Collection) model.get("currentLocks");
     assertEquals(1, locks.size());
-    assertEquals("showLocks", modelAndView.getViewName());
   }
 }

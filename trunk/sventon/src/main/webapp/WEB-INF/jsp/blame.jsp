@@ -44,9 +44,9 @@
 
   <table id="blameTable" class="codeBlock" cellspacing="0">
     <tr>
-      <th style="width: 50px;">Revision</th>
-      <th width="50px">Author</th>
-      <th width="50px">Line</th>
+      <th style="width: 50px;"><spring:message code="revision"/></th>
+      <th width="50px"><spring:message code="author"/></th>
+      <th width="50px"><spring:message code="line"/></th>
       <th>&nbsp;</th>
     </tr>
 

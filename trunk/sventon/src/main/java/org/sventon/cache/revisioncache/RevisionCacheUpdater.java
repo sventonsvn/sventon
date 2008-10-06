@@ -57,7 +57,7 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for instance: " + repositoryName);
+    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
     try {
       final RevisionCache revisionCache = revisionCacheManager.getCache(repositoryName);

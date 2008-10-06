@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache;
+package org.sventon.advice;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +20,7 @@ import org.sventon.model.RepositoryName;
 import java.lang.reflect.Method;
 
 /**
- * Before advice that checks if the cache needs to be updated before any method
- * of class {@link CacheGatewayImpl} is execuded.
+ * Before advice that checks if the cache needs to be updated before proceeding.
  *
  * @author jesper@sventon.org
  */
@@ -51,7 +50,7 @@ public final class CacheBeforeAdvice implements MethodBeforeAdvice {
    */
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     final RepositoryName repositoryName = (RepositoryName) args[0];
-    logger.debug("Updating cache for instance [" + repositoryName + "] (if needed)");
+    logger.debug("Updating cache for repository [" + repositoryName + "] (if needed)");
     revisionObservable.update(repositoryName, false);
   }
 }

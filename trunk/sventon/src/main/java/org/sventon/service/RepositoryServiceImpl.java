@@ -12,6 +12,7 @@
 package org.sventon.service;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +23,6 @@ import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.util.KeywordHandler;
-import org.sventon.util.PathUtil;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -50,11 +50,8 @@ public class RepositoryServiceImpl implements RepositoryService {
   public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
-    final long start = System.currentTimeMillis();
-    final SVNLogEntry logEntry = (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
+    return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
         true, false).iterator().next();
-    logger.debug("PERF: getRevision(): " + (System.currentTimeMillis() - start));
-    return logEntry;
   }
 
   /**
@@ -63,14 +60,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision,
                                                             final long toRevision) throws SVNException {
 
-    final long start = System.currentTimeMillis();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
         revisions.add(logEntry);
       }
     });
-    logger.debug("PERF: getRevisionsFromRepository(): " + (System.currentTimeMillis() - start));
     return revisions;
   }
 
@@ -82,14 +77,12 @@ public class RepositoryServiceImpl implements RepositoryService {
                                         final long limit) throws SVNException, SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
-    final long start = System.currentTimeMillis();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
         logEntries.add(logEntry);
       }
     });
-    logger.debug("PERF: getRevisions(): " + (System.currentTimeMillis() - start));
     return logEntries;
   }
 
@@ -99,7 +92,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SVNException {
 
-    final long start = System.currentTimeMillis();
     for (final SVNFileRevision fileRevision : targets) {
       logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
       final File revisionRootDir = new File(exportDirectory.getFile(), String.valueOf(fileRevision.getRevision()));
@@ -109,7 +101,6 @@ public class RepositoryServiceImpl implements RepositoryService {
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
           SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, true);
     }
-    logger.debug("PERF: export(): " + (System.currentTimeMillis() - start));
   }
 
   /**
@@ -128,9 +119,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final void getFile(final SVNRepository repository, final String path, final long revision,
                             final OutputStream output) throws SVNException {
-    final long start = System.currentTimeMillis();
     repository.getFile(path, revision, null, output);
-    logger.debug("PERF: getFile(): " + (System.currentTimeMillis() - start));
   }
 
   /**
@@ -138,9 +127,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
     final SVNProperties props = new SVNProperties();
-    final long start = System.currentTimeMillis();
     repository.getFile(path, revision, props, null);
-    logger.debug("PERF: getFileProperties(): " + (System.currentTimeMillis() - start));
     return props;
   }
 
@@ -162,10 +149,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final long getLatestRevision(final SVNRepository repository) throws SVNException {
-    final long start = System.currentTimeMillis();
-    final long revision = repository.getLatestRevision();
-    logger.debug("PERF: getLatestRevision(): " + (System.currentTimeMillis() - start));
-    return revision;
+    return repository.getLatestRevision();
   }
 
   /**
@@ -173,9 +157,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
-    final long start = System.currentTimeMillis();
     final SVNNodeKind svnNodeKind = repository.checkPath(path, revision);
-    logger.debug("PERF: getNodeKind(): " + (System.currentTimeMillis() - start));
     return svnNodeKind;
   }
 
@@ -189,7 +171,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     final Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
     SVNLock[] locksArray;
 
-    final long start = System.currentTimeMillis();
     try {
       locksArray = repository.getLocks(path);
       for (final SVNLock lock : locksArray) {
@@ -199,7 +180,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     } catch (SVNException svne) {
       logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
     }
-    logger.debug("PERF: getLocks(): " + (System.currentTimeMillis() - start));
     return locks;
   }
 
@@ -208,10 +188,8 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
-    final long start = System.currentTimeMillis();
     final SVNProperties properties = new SVNProperties();
     repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
-    logger.debug("PERF: getPathProperties(): " + (System.currentTimeMillis() - start));
     return properties;
   }
 
@@ -220,12 +198,9 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
                                           final SVNProperties properties) throws SVNException {
-    final long start = System.currentTimeMillis();
     //noinspection unchecked
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
-    final List<RepositoryEntry> entryCollection = RepositoryEntry.createEntryCollection(entries, path);
-    logger.debug("PERF: list(): " + (System.currentTimeMillis() - start));
-    return entryCollection;
+    return RepositoryEntry.createEntryCollection(entries, path);
   }
 
   /**
@@ -234,11 +209,9 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
-    final long start = System.currentTimeMillis();
     final SVNDirEntry dirEntry = repository.info(path, revision);
     if (dirEntry != null) {
-      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, PathUtil.getPathPart(path));
-      logger.debug("PERF: getEntryInfo(): " + (System.currentTimeMillis() - start));
+      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, FilenameUtils.getFullPath(path));
       return repositoryEntry;
     } else {
       logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
@@ -252,7 +225,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
-    final long start = System.currentTimeMillis();
     //noinspection unchecked
     final List<SVNFileRevision> svnFileRevisions =
         (List<SVNFileRevision>) repository.getFileRevisions(path, null, 0, revision);
@@ -264,8 +236,6 @@ public class RepositoryServiceImpl implements RepositoryService {
       }
       logger.debug("Found revisions: " + fileRevisionNumbers);
     }
-
-    logger.debug("PERF: getFileRevisions(): " + (System.currentTimeMillis() - start));
     return svnFileRevisions;
   }
 
@@ -443,7 +413,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
                                              final RepositoryConfiguration configuration) throws SVNException {
 
-    final long start = System.currentTimeMillis();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(
         null, repository.getAuthenticationManager()).getDiffClient();
 
@@ -454,13 +423,12 @@ public class RepositoryServiceImpl implements RepositoryService {
         SVNURL.parseURIDecoded(repoRoot + diffCommand.getFromPath()), diffCommand.getFromRevision(),
         SVNURL.parseURIDecoded(repoRoot + diffCommand.getToPath()), diffCommand.getToRevision(),
         true, false, new ISVNDiffStatusHandler() {
-      public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
-        if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-          result.add(diffStatus);
-        }
-      }
-    });
-    logger.debug("PERF: diffPaths(): " + (System.currentTimeMillis() - start));
+          public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
+            if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
+              result.add(diffStatus);
+            }
+          }
+        });
     return result;
   }
 
@@ -476,8 +444,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     } else {
       blameRevision = revision;
     }
-
-    final long start = System.currentTimeMillis();
 
     logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
 
@@ -500,8 +466,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     } catch (IOException ioex) {
       logger.warn("Unable to colorize [" + path + "]", ioex);
     }
-
-    logger.debug("PERF: blame(): " + (System.currentTimeMillis() - start));
     return annotatedTextFile;
   }
 

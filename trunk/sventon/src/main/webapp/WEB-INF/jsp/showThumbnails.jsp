@@ -61,12 +61,12 @@
         </c:url>
 
         <td valign="top" style="border: 1px dashed black;">
-          File:
+          <spring:message code="file"/>:
           <a href="${showFileUrl}">
             <b>${entry.path}</b>
           </a>
           <br>
-          Revision:
+          <spring:message code="revision"/>:
           <a href="${showRevInfoUrl}">
             <b>${entry.revision}</b>
           </a>

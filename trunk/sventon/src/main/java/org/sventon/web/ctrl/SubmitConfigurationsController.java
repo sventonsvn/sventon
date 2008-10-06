@@ -11,8 +11,6 @@
  */
 package org.sventon.web.ctrl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,11 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller for persisting application configuration.
- * Called after one or more instances have been submitted to {@link ConfigurationController}.
+ * Called after one or more instances have been submitted to {@link ConfigurationFormController}.
  *
  * @author jesper@sventon.org
  */
-public final class ConfigurationSubmissionController extends AbstractController {
+public final class SubmitConfigurationsController extends AbstractController {
 
   /**
    * The application.
@@ -40,11 +38,6 @@ public final class ConfigurationSubmissionController extends AbstractController 
    * The scheduler instance. Used to fire cache update job.
    */
   private Scheduler scheduler;
-
-  /**
-   * Logger for this class and subclasses.
-   */
-  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Sets the application.
@@ -71,27 +64,27 @@ public final class ConfigurationSubmissionController extends AbstractController 
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    if (application.isConfigured()) {
-      throw new IllegalStateException("sventon is already configured!");
-    }
-
     if (application.getRepositoryCount() == 0) {
-      logger.warn("No instance has been configured and added");
+      logger.warn("No repository has been configured and added");
       return new ModelAndView("error/configurationError");
     }
 
-    application.storeRepositoryConfigurations();
-    application.setConfigured(true);
+    application.persistRepositoryConfigurations();
     application.initCaches();
 
-    try {
-      logger.debug("Starting up caches");
-      scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-    } catch (SchedulerException sx) {
-      logger.warn(sx);
+    if (!application.isConfigured()) {
+      application.setConfigured(true);
+
+      try {
+        logger.debug("Starting up caches");
+        scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+      } catch (SchedulerException sx) {
+        logger.warn(sx);
+      }
     }
 
     logger.info("Configuration done!");
     return new ModelAndView(new RedirectView("/repos/start", true));
   }
+
 }

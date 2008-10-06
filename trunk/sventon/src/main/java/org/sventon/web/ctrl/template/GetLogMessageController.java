@@ -51,6 +51,6 @@ public final class GetLogMessageController extends AbstractSVNTemplateController
       logger.error(svnex.getMessage());
     }
     model.put("logMessage", logMessage);
-    return new ModelAndView("ajax/logMessage", model);
+    return new ModelAndView(getViewName(), model);
   }
 }

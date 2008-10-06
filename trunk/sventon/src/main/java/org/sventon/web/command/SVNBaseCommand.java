@@ -11,6 +11,7 @@
  */
 package org.sventon.web.command;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -158,10 +159,24 @@ public final class SVNBaseCommand {
    *
    * @return Path excluding taget (end/leaf)
    */
-  public String getPathNoLeaf() {
-    return PathUtil.getPathNoLeaf(getPath());
-  }
+  public String getParentPath() {
+    String work = getPath();
 
+    if (work.equals("/")) {
+      return work;
+    }
+
+    if (work.endsWith("/")) {
+      work = work.substring(0, work.length() - 1);
+    }
+
+    final int lastIndex = work.lastIndexOf('/');
+    if (lastIndex == -1) {
+      return "";
+    } else {
+      return work.substring(0, lastIndex) + "/";
+    }
+  }
 
   /**
    * Get path, excluding the leaf. For complete path including target,see
@@ -173,7 +188,7 @@ public final class SVNBaseCommand {
    * @return Path excluding taget (end/leaf)
    */
   public String getPathPart() {
-    return PathUtil.getPathPart(getPath());
+    return FilenameUtils.getFullPath(getPath());
   }
 
   /**

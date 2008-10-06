@@ -54,7 +54,7 @@ public class ApplicationTest extends TestCase {
 
       assertFalse(new File(repos1, configFilename).exists());
       assertFalse(new File(repos2, configFilename).exists());
-      application.storeRepositoryConfigurations();
+      application.persistRepositoryConfigurations();
       //File should now be written
       assertTrue(new File(repos1, configFilename).exists());
       assertTrue(new File(repos2, configFilename).exists());

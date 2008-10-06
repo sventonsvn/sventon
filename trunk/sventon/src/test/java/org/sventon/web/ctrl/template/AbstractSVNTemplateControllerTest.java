@@ -20,7 +20,7 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
   public void testGetUserContext() throws Exception {
     final AbstractSVNTemplateController ctrl = new TestController();
 
-    final RepositoryName name = new RepositoryName("instance1");
+    final RepositoryName name = new RepositoryName("repository1");
     final HttpServletRequest request = new MockHttpServletRequest();
     assertNull(request.getSession().getAttribute("userContext"));
     final UserRepositoryContext userRepositoryContext = ctrl.getUserContext(request, name);

@@ -53,7 +53,7 @@ public final class ListFilesController extends ListDirectoryContentsController {
     logger.debug("Adding data to model");
     model.put("svndir", entryFilter.filter(entries));
     model.put("rowNumber", rowNumber);
-    modelAndView.setViewName("ajax/listFiles");
+    modelAndView.setViewName(getViewName());
     return modelAndView;
   }
 }

@@ -44,11 +44,11 @@
     <c:set var="rowCount" value="0"/>
     <tr>
       <th/>
-      <th>Name</th>
-      <th>Owner</th>
-      <th>Comment</th>
-      <th>Created</th>
-      <th>Expires</th>
+      <th><spring:message code="name"/></th>
+      <th><spring:message code="owner"/></th>
+      <th><spring:message code="comment"/></th>
+      <th><spring:message code="createDate"/></th>
+      <th><spring:message code="expireDate"/></th>
     </tr>
     <c:forEach items="${currentLocks}" var="lock">
       <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
@@ -70,7 +70,7 @@
 
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td>&nbsp;</td>
-      <td><b>Total: ${rowCount} entries</b></td>
+      <td><b><spring:message code="total"/>: ${rowCount} <spring:message code="entries"/></b></td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>

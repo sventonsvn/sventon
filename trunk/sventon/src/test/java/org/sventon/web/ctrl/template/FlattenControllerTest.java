@@ -47,7 +47,6 @@ public class FlattenControllerTest extends TestCase {
     assertEquals(2, model.size());
     assertEquals(entries.get(2), ((List<RepositoryEntry>) model.get("svndir")).get(0));
     assertEquals(Boolean.TRUE, model.get("isFlatten"));
-    assertEquals("flattenDirResult", modelAndView.getViewName());
   }
 
 }

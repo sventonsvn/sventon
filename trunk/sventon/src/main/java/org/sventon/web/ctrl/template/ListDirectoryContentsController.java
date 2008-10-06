@@ -48,17 +48,10 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    // Update trailing / for path
-    if (!svnCommand.getPath().endsWith("/")) {
-      svnCommand.setPath(svnCommand.getPath() + "/");
-    }
-
-    final String completePath = svnCommand.getPath();
-
-    logger.debug("Getting directory contents for: " + completePath);
+    logger.debug("Getting directory contents for: " + svnCommand.getPath());
     final SVNProperties properties = new SVNProperties();
     final List<RepositoryEntry> entries = getRepositoryService().list(
-        repository, completePath, svnCommand.getRevisionNumber(), properties);
+        repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), properties);
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug(properties);
