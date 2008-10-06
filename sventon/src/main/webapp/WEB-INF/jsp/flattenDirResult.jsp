@@ -61,13 +61,13 @@
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
             <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}"></td>
             <td class="sventonCol2">
-              <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
+              <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
               </a>
             </td>
             <td class="sventonCol3">
-              <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                ${entry.friendlyFullEntryName}
+              <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}/</td></tr></table>')">
+                ${entry.friendlyFullEntryName}/
               </a>
             </td>
             <td class="sventonCol4"/>

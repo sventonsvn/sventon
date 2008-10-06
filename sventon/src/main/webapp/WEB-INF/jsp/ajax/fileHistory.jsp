@@ -38,7 +38,7 @@
             </c:url>
             <jsp:useBean id="fileRevision" type="org.tmatesoft.svn.core.io.SVNFileRevision"/>
             <%
-              final String dateString = (String) fileRevision.getRevisionProperties().get(SVNRevisionProperty.DATE);
+              final String dateString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
               final Date revDate = GetFileHistoryController.ISO8601_FORMAT.parse(dateString);
             %>
             <option value="${showFileAtRevisionUrl}">
