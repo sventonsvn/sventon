@@ -28,7 +28,7 @@
     <td align="right">
       <c:url value="/repos/list" var="changeReposUrl"/>
       <c:if test="${not empty repositoryNames && fn:length(repositoryNames) > 1}">
-        <a class="sventonHeaderLink" href="${changeReposUrl}">[change repository]</a>
+        <a class="sventonHeaderLink" href="${changeReposUrl}">[<spring:message code="repository.change"/>]</a>
       </c:if>
       <c:if test="${hasCredentials}">
         <c:url value="/repos/list" var="logout">

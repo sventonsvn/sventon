@@ -16,6 +16,7 @@
 <%@ tag import="org.sventon.util.WebUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ attribute name="title" required="true" type="java.lang.String" %>
 <%@ attribute name="target" required="true" type="java.lang.String" %>
@@ -27,8 +28,8 @@
       <c:choose>
         <c:when test="${properties ne null}">
           <td>${title} - ${target}&nbsp;
-            <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', 'show', 'hide'); return false;">
-              [<span id="propertiesLink">show</span> properties]
+            <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', '<spring:message code='show'/>', '<spring:message code='hide'/>'); return false;">
+              [<span id="propertiesLink"><spring:message code='show'/></span> properties]
             </a>
           </td>
         </c:when>

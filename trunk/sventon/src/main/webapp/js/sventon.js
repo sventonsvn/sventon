@@ -11,6 +11,7 @@
  */
 
 // function to handle action submissions in repo browser view
+// Note: requires the global variable 'contextPath'
 function doAction(form, name, path) {
   var input = $(form)['actionSelect'];
   var selectedValue = $F(input);
@@ -58,6 +59,7 @@ function goToHeadRevision(form) {
   form.submit();
 }
 
+// Note: requires the global variable 'contextPath'
 function prepareGotoForm(form) {
   var path = form.elements['pathInput'].value;
   var name = form.elements['nameInput'].value;
@@ -65,6 +67,7 @@ function prepareGotoForm(form) {
 }
 
 // function to handle search submission
+// Note: requires the global variable 'contextPath'
 function doSearch(form, name, path) {
   var input = $(form)['searchString'];
   var searchStr = $F(input);
@@ -79,7 +82,7 @@ function doSearch(form, name, path) {
       form.action = contextPath + '/repos/' + name + '/searchlogs' + path;
     }
     if (searchStr.length < 3) {
-      return searchWarning();
+      return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
     } else {
       return true;
     }
@@ -87,10 +90,11 @@ function doSearch(form, name, path) {
 }
 
 // function to handle flatten submissions
+// Note: requires the global variable 'contextPath'
 function doFlatten(path, name) {
   var result = true;
   if (path == '/') {
-    result = flatteningWarning();
+    result = confirm("Flattening on root level is not recommended.\nThe result will potentially be very large.\nDo you want to continue anyway?");
   }
   if (result) {
     location.href = contextPath + '/repos/' + name + '/flatten' + path;
@@ -145,17 +149,6 @@ function verifyCheckBox(checkbox) {
   }
 }
 
-// function to display warning in case user tries to flatten on
-// root directory level.
-function flatteningWarning() {
-  return confirm("Flattening on root level is not recommended.\nThe result will potentially be very large.\nDo you want to continue anyway?");
-}
-
-// function to display warning in case search string is too short.
-function searchWarning() {
-  return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
-}
-
 // Toggles line wrap mode between normal and nowrap
 function toggleWrap() {
   var classNames = new Array(['src'], ['srcChg'], ['srcAdd'], ['srcDel']);
@@ -177,6 +170,7 @@ function toggleWrap() {
 }
 
 // Requests directory contents in given path
+// Note: requires the global variable 'contextPath'
 function listFiles(rowNumber, name, path) {
   var iconElement = $('dirIcon' + rowNumber);
 
@@ -218,6 +212,7 @@ function hideLatestRevisions() {
 }
 
 // Requests the N latest revisions
+// Note: requires the global variable 'contextPath'
 function getLatestRevisions(name, count) {
   // Do the ajax call
   var url = contextPath + '/ajax/' + name + '/latestrevisions';
@@ -239,6 +234,7 @@ function reportAjaxError(request) {
   alert('An error occured during asynchronous request.');
 }
 
+// Note: requires the global variable 'contextPath'
 function getHelpText(id) {
   var url = contextPath + '/ajax/static';
   var urlParams = 'id=' + id;
@@ -255,6 +251,7 @@ function getHelpText(id) {
 }
 
 // Gets the log message for given revision.
+// Note: requires the global variable 'contextPath'
 function getLogMessage(revision, name, date) {
   var url = contextPath + '/ajax/' + name + '/getmessage';
   var urlParams = 'revision=' + revision;
@@ -297,6 +294,7 @@ function showHideEntryTray() {
   }
 }
 
+// Note: requires the global variable 'contextPath'
 function getFileHistory(name, path, revision, archivedEntry) {
   var url = contextPath + '/ajax/' + name + '/filehistory' + path;
   var urlParams = 'revision=' + revision;
