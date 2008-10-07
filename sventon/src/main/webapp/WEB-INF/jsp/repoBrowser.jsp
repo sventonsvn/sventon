@@ -172,7 +172,9 @@
         <tr>
           <td>
             <spring:message code="entrytray.dragdrop.header"/>&nbsp;
-            <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '[hide]', '[show]'); showHideEntryTray(); return false;"><span id="hideShowTrayLink">[show]</span></a>
+            <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '<spring:message code='hide'/>', '<spring:message code='show'/>'); showHideEntryTray(); return false;">
+              [<span id="hideShowTrayLink"><spring:message code='show'/></span>]
+            </a>
           </td>
         </tr>
       </table>

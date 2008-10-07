@@ -12,16 +12,16 @@
  */
 %>
 <td colspan="2" class="sventonCol1">
-  <input type="button" class="btn" name="toggleButton" value="toggle" onClick="toggleEntryFields(this.form)">
+  <input type="button" class="btn" name="toggleButton" value="<spring:message code='toggle'/>" onClick="toggleEntryFields(this.form)">
 </td>
 <td nowrap>
   <select class="sventonSelect" name="actionSelect">
-    <option class="sventonSelectOption">Actions...</option>
-    <option value="diff">&nbsp;&nbsp;Diff entries</option>
+    <option class="sventonSelectOption"><spring:message code="actions"/></option>
+    <option value="diff">&nbsp;&nbsp;<spring:message code="entries.diff"/></option>
     <c:if test="${isZipDownloadsAllowed}">
-      <option value="export">&nbsp;&nbsp;Download as zip</option>
+      <option value="export">&nbsp;&nbsp;<spring:message code="download.zip"/></option>
     </c:if>
-    <option value="thumb">&nbsp;&nbsp;Show as thumbnails</option>
+    <option value="thumb">&nbsp;&nbsp;<spring:message code="thumbnails.show"/></option>
   </select>
-  <input type="submit" class="btn" value="go!">
+  <input type="submit" class="btn" value="<spring:message code='go'/>">
 </td>

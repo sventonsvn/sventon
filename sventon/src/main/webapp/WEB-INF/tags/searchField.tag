@@ -32,16 +32,16 @@
   <c:when test="${isUpdating}">
     <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="search.button.isupdating.tooltip"/>')">
     <input type="text" name="searchString" class="sventonSearchField" value="" disabled="disabled">
-    <input type="submit" value="go!" disabled="disabled" class="btn">
+    <input type="submit" value="<spring:message code='go'/>" disabled="disabled" class="btn">
   </c:when>
   <c:when test="${!isHead}">
     <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="search.button.disabled.tooltip"/>')">
     <input type="text" name="searchString" class="sventonSearchField" value="" disabled="disabled">
-    <input type="submit" value="go!" disabled="disabled" class="btn">
+    <input type="submit" value="<spring:message code='go'/>" disabled="disabled" class="btn">
   </c:when>
   <c:otherwise>
     <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('search_help');">
     <input type="text" name="searchString" class="sventonSearchField" value="">
-    <input type="submit" value="go!" class="btn">
+    <input type="submit" value="<spring:message code='go'/>" class="btn">
   </c:otherwise>
 </c:choose>
