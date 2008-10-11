@@ -8,6 +8,18 @@
   <description>sventon is a web client for browsing Subversion repositories</description>
   <url>http://www.sventon.org/</url>
   <inceptionYear>2005</inceptionYear>
+  <issueManagement>
+    <system>berliOS</system>
+    <url>https://developer.berlios.de/bugs/?group_id=3670</url>
+  </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>sventon support</name>
+      <subscribe>sventon-support+subscribe@googlegroups.com</subscribe>
+      <unsubscribe>sventon-support+unsubscribe@googlegroups.com</unsubscribe>
+      <post>sventon-support@googlegroups.com</post>
+    </mailingList>
+  </mailingLists>
   <distributionManagement>
     <site>
       <id>berlios</id>
@@ -261,6 +273,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.2</version>
       </plugin>
       <!-- CheckStyle report -->
       <plugin>
