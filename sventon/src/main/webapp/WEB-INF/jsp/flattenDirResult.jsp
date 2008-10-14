@@ -59,7 +59,9 @@
           </c:url>
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
-            <td class="sventonCol1"><input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}"></td>
+            <td class="sventonCol1">
+              <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
+            </td>
             <td class="sventonCol2">
               <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
@@ -94,7 +96,6 @@
         <td/>
         <td/>
       </tr>
-
       <tr>
         <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
         <td colspan="5"/>
@@ -102,6 +103,10 @@
     </table>
   </form>
 
+  <c:if test="${isEntryTrayEnabled}">
+    <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>
+  </c:if>
+  
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

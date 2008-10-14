@@ -192,6 +192,11 @@ function listFiles(rowNumber, name, path) {
         function(response) {
           iconElement.src = 'images/icon_folder.png';
           iconElement.className = 'minus';
+          // TODO: Optimize this - now we will re-create Draggables for already visible entries.
+          var entries = document.getElementsByClassName('entry');
+          for (var i = 0; i < entries.length; i++) {
+            new Draggable(entries[i].id, {revert:true})
+          }
           Element.hide('spinner');
         }
     });
