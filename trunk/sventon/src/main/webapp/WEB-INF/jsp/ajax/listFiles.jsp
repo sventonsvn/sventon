@@ -24,13 +24,19 @@
   <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
     <c:param name="revision" value="${entry.revision}" />
   </c:url>
+  <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+    <c:param name="revision" value="${entry.revision}" />
+    <c:param name="action" value="add" />
+  </c:url>
 
   <tr class="sventonFileEntryTableRow expandedDir${rowNumber}">
     <td class="sventonCol1">
       <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
     </td>
     <td class="sventonCol2">
-      <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+      <div id="${entryTrayAddUrl}" class="entry">
+        <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+      </div>
     </td>
     <td class="sventonCol3">
       <a href="${showFileUrl}">${entry.name}</a>
