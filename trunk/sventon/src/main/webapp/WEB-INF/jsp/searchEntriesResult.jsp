@@ -55,6 +55,7 @@
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
+
       <c:forEach items="${svndir}" var="entry">
         <c:url value="/repos/${command.name}/browse${entry.fullEntryName}/" var="viewUrl">
           <c:param name="revision" value="${command.revision}" />
@@ -64,6 +65,10 @@
         </c:url>
         <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
+        </c:url>
+        <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+          <c:param name="revision" value="${entry.revision}" />
+          <c:param name="action" value="add" />
         </c:url>
 
         <c:set var="totalSize" value="${totalSize + entry.size}"/>
@@ -75,7 +80,9 @@
           <c:choose>
             <c:when test="${'DIR' eq entry.kind}">
               <td class="sventonCol2">
-                <img src="images/icon_folder.png" alt="dir">
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <img src="images/icon_folder.png" alt="dir">
+                </div>
               </td>
               <td class="sventonCol3">
                 <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
@@ -85,7 +92,9 @@
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">
-                <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+                </div>
               </td>
               <td class="sventonCol3">
                 <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
@@ -130,6 +139,10 @@
       </tr>
     </table>
   </form>
+
+  <c:if test="${isEntryTrayEnabled}">
+    <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>
+  </c:if>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
