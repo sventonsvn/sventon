@@ -167,40 +167,7 @@
   </c:if>
 
   <c:if test="${isEntryTrayEnabled}">
-    <div align="right" class="entryTrayContainer" id="entryTrayContainerDiv">
-      <table class="entryTrayHeaderTable">
-        <tr>
-          <td>
-            <spring:message code="entrytray.dragdrop.header"/>&nbsp;
-            <a class="sventonHeaderLink" href="#" onclick="toggleInnerHTML('hideShowTrayLink', '<spring:message code='hide'/>', '<spring:message code='show'/>'); showHideEntryTray(); return false;">
-              [<span id="hideShowTrayLink"><spring:message code='show'/></span>]
-            </a>
-          </td>
-        </tr>
-      </table>
-      <div id="entryTrayWrapper" style="display: none">
-        <div id="entryTray">
-          <%@ include file="/WEB-INF/jsp/ajax/entryTray.jsp"%>
-        </div>
-      </div>
-    </div>
-
-    <script type="text/javascript">
-      var entries = document.getElementsByClassName('entry');
-      for (var i = 0; i < entries.length; i++) {
-        new Draggable(entries[i].id, {revert:true})
-      }
-      Droppables.add('entryTrayContainerDiv', {onDrop:
-          function(element, dropon, event) {
-            var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${command.revisionNumber}', {
-              method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
-              Element.hide('spinner');
-            }
-            });
-            Element.show('spinner');
-          }
-      })
-    </script>
+    <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>
   </c:if>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
