@@ -39,6 +39,18 @@ public final class SourceLine {
 
   /**
    * Constructor.
+   * Creates an empty source line with a <tt>null</tt> as line number.
+   *
+   * @param action The <tt>DiffAction</tt> code.
+   */
+  public SourceLine(final DiffAction action) {
+    this.rowNumber = null;
+    this.line = "";
+    this.action = action;
+  }
+
+  /**
+   * Constructor.
    *
    * @param rowNumber The row number, or <tt>null</tt> if unknown.
    * @param action    The <tt>DiffAction</tt> code.
@@ -86,6 +98,26 @@ public final class SourceLine {
    */
   public Integer getRowNumber() {
     return rowNumber;
+  }
+
+  /**
+   * @return Returns true if this line has a row number, false if not.
+   */
+  public boolean hasRowNumber() {
+    return rowNumber != null;
+  }
+
+  /**
+   * Gets the row number as a String.
+   *
+   * @return The row number as a String.
+   */
+  public String getRowNumberAsString() {
+    if (rowNumber == null) {
+      return "";
+    } else {
+      return rowNumber.toString();
+    }
   }
 
   /**

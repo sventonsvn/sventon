@@ -128,63 +128,82 @@ public final class RevisionObservableImpl extends Observable implements Revision
                         final boolean flushAfterUpdate) {
 
     try {
+      final long headRevision = repositoryService.getLatestRevision(repository);
       Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name);
+
       boolean clearCacheBeforeUpdate = false;
 
       if (lastUpdatedRevision == null) {
-        logger.info("No record about previously fetched revisions exists - fetching all revisions for repository: "
-            + name);
+        logger.info("No record about previously fetched revisions exists - fetching all revisions for repository: " + name);
         clearCacheBeforeUpdate = true;
         lastUpdatedRevision = 0L;
       }
 
-      final long headRevision = repositoryService.getLatestRevision(repository);
+      handleSuspectedUrlChange(lastUpdatedRevision, headRevision);
 
-      // Sanity check
-      if (headRevision < lastUpdatedRevision) {
-        final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached"
-            + " revision. The repository URL has probably been changed. Delete all cache files from the temp directory"
-            + " and restart sventon.";
-        logger.error(errorMessage);
-        throw new RuntimeException(errorMessage);
-      }
+      long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
+      logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions");
 
-      if (headRevision > lastUpdatedRevision) {
-        long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
-        logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions");
+      do {
+        final long fromRevision = lastUpdatedRevision + 1;
+        final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
+            ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
-        do {
-          long fromRevision = lastUpdatedRevision + 1;
-          long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
-              ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+        final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+        logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
+        logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
+        setChanged();
+        logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
+        notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
 
-          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisionsFromRepository(
-              repository, fromRevision, toRevision));
-          logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
-          setChanged();
-          final StringBuffer notification = new StringBuffer();
-          notification.append("Notifying observers about [");
-          notification.append(logEntries.size());
-          notification.append("] revisions [");
-          notification.append(fromRevision);
-          notification.append("-");
-          notification.append(toRevision);
-          notification.append("]");
-          logger.info(notification.toString());
-          notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
+        lastUpdatedRevision = toRevision;
+        logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
+        objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
+        clearCacheBeforeUpdate = false;
+        revisionsLeftToFetchCount -= logEntries.size();
+      } while (revisionsLeftToFetchCount > 0);
 
-          lastUpdatedRevision = toRevision;
-          logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
-          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
-          clearCacheBeforeUpdate = false;
-          revisionsLeftToFetchCount -= logEntries.size();
-        } while (revisionsLeftToFetchCount > 0);
-      }
     } catch (SVNException svnex) {
       logger.warn("Exception: " + svnex.getMessage());
       logger.debug("Exception [" + svnex.getErrorMessage().getErrorCode().toString() + "]", svnex);
     }
+  }
+
+  /**
+   * Sanity check of revision numbers.
+   *
+   * @param lastUpdatedRevision Last updated revision number
+   * @param headRevision        Current head revision number.
+   * @throws IllegalStateException if last updated revision is greater than head revision.
+   */
+  private void handleSuspectedUrlChange(final long lastUpdatedRevision, long headRevision) {
+    if (headRevision < lastUpdatedRevision) {
+      final String errorMessage = "Repository HEAD revision (" + headRevision + ") is lower than last cached"
+          + " revision. The repository URL has probably been changed. Delete all cache files from the temp directory"
+          + " and restart sventon.";
+      logger.error(errorMessage);
+      throw new IllegalStateException(errorMessage);
+    }
+  }
+
+  /**
+   * Creates an informative string for logging observer notifications.
+   *
+   * @param fromRevision    From revision
+   * @param toRevision      To revision
+   * @param logEntriesCount Number of log entries.
+   * @return String intended for logging.
+   */
+  private String createNotificationLogMessage(long fromRevision, long toRevision, int logEntriesCount) {
+    final StringBuffer notification = new StringBuffer();
+    notification.append("Notifying observers about [");
+    notification.append(logEntriesCount);
+    notification.append("] revisions [");
+    notification.append(fromRevision);
+    notification.append("-");
+    notification.append(toRevision);
+    notification.append("]");
+    return notification.toString();
   }
 
   /**

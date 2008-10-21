@@ -38,20 +38,19 @@ public final class JHighlightColorer implements Colorer {
   /**
    * File type <-> renderer mappings.
    */
-  private Properties rendererMappings;
+  private Properties rendererMappings = new Properties();
 
   /**
    * {@inheritDoc}
    */
   public String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException {
-
     logger.debug("Colorizing content, file extension: " + fileExtension);
-
-    final Renderer renderer = getRenderer(fileExtension);
 
     if (content == null) {
       return "";
     }
+
+    final Renderer renderer = getRenderer(fileExtension);
 
     if (renderer == null) {
       return StringEscapeUtils.escapeXml(content);
@@ -84,6 +83,7 @@ public final class JHighlightColorer implements Colorer {
    * @param rendererMappings The mappings
    */
   public void setRendererMappings(final Properties rendererMappings) {
+    Validate.notNull(rendererMappings, "Mappings cannot be null");
     this.rendererMappings = rendererMappings;
   }
 
