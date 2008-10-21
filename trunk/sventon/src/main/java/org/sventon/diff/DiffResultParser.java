@@ -12,12 +12,14 @@
 package org.sventon.diff;
 
 import org.sventon.model.DiffAction;
+import static org.sventon.model.DiffAction.parse;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static java.lang.Integer.parseInt;
 
 /**
  * Diff result parser.
@@ -57,23 +59,17 @@ final class DiffResultParser {
    */
   static List<DiffSegment> parseNormalDiffResult(final String normalDiffResult) {
     final List<DiffSegment> diffActions = new ArrayList<DiffSegment>();
-    int leftStart;
-    int leftEnd;
-    int rightStart;
-    int rightEnd;
     final Scanner scanner = new Scanner(normalDiffResult);
+
     try {
       while (scanner.hasNextLine()) {
         final Matcher matcher = DIFF_PATTERN.matcher(scanner.nextLine());
         if (matcher.matches()) {
-          leftStart = Integer.parseInt(matcher.group(1));
-          leftEnd = "".equals(matcher.group(2))
-              ? Integer.parseInt(matcher.group(1)) : Integer.parseInt(matcher.group(2));
-          rightStart = Integer.parseInt(matcher.group(4));
-          rightEnd = "".equals(matcher.group(5))
-              ? Integer.parseInt(matcher.group(4)) : Integer.parseInt(matcher.group(5));
-          diffActions.add(new DiffSegment(DiffAction.parse(matcher.group(3)),
-              leftStart, leftEnd, rightStart, rightEnd));
+          final int leftStart = parseInt(matcher.group(1));
+          final int leftEnd = "".equals(matcher.group(2)) ? parseInt(matcher.group(1)) : parseInt(matcher.group(2));
+          final int rightStart = parseInt(matcher.group(4));
+          final int rightEnd = "".equals(matcher.group(5)) ? parseInt(matcher.group(4)) : parseInt(matcher.group(5));
+          diffActions.add(new DiffSegment(parse(matcher.group(3)), leftStart, leftEnd, rightStart, rightEnd));
         }
       }
     } finally {

@@ -14,6 +14,7 @@ package org.sventon.diff;
 import org.apache.commons.io.IOUtils;
 import static org.sventon.diff.DiffSegment.Side.LEFT;
 import static org.sventon.diff.DiffSegment.Side.RIGHT;
+import org.sventon.model.DiffAction;
 import static org.sventon.model.DiffAction.*;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
@@ -60,7 +61,7 @@ public final class SideBySideDiffCreator {
   public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
                                final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
       throws IOException {
-
+    // TODO: Break this into two classes
     final String leftString = appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset);
     final String rightString = appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset);
     leftSourceLines = IOUtils.readLines(new StringReader(leftString));
@@ -147,12 +148,11 @@ public final class SideBySideDiffCreator {
 
     int offset = 0;
     for (final DiffSegment diffSegment : diffSegments) {
-      if (ADDED == diffSegment.getAction()) {
-        offset = applyAdded(side, diffSegment, resultLines, offset);
-      } else if (DELETED == diffSegment.getAction()) {
-        offset = applyDeleted(side, diffSegment, resultLines, offset);
-      } else if (CHANGED == diffSegment.getAction()) {
+      final DiffAction action = diffSegment.getAction();
+      if (CHANGED == action) {
         offset = applyChanged(side, diffSegment, resultLines, offset);
+      } else if (ADDED == action || DELETED == action) {
+        offset = applyAddedOrDeleted(action, side, diffSegment, resultLines, offset);
       } else {
         throw new IllegalArgumentException("Unknow action: " + diffSegment.getAction());
       }
@@ -188,7 +188,7 @@ public final class SideBySideDiffCreator {
 
     int addedLines = 0;
     for (int i = start + changedLines; i <= end; i++) {
-      resultLines.add(rowIndex + newOffset, new SourceLine(null, CHANGED, ""));
+      resultLines.add(rowIndex + newOffset, new SourceLine(CHANGED));
       addedLines++;
       if (side == DiffSegment.Side.LEFT) {
         changedLines++;
@@ -199,53 +199,26 @@ public final class SideBySideDiffCreator {
   }
 
   /**
-   * Applies the diff action DELETED to given list of sourcelines.
-   *
-   * @param side        Left or right
-   * @param diffSegment DiffSegment
-   * @param resultLines The sourcelines to update
-   * @param offset      Row offset
-   * @return Updated row offset
-   */
-  private int applyDeleted(final DiffSegment.Side side, final DiffSegment diffSegment, final List<SourceLine> resultLines, final int offset) {
-    int newOffset = offset;
-    switch (side) {
-      case RIGHT:
-        int deletedLines = 0;
-        int startLine = diffSegment.getLineIntervalStart(side) + newOffset;
-        for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++) {
-          resultLines.add(startLine++ - 1, new SourceLine(null, DELETED, ""));
-          deletedLines++;
-        }
-        newOffset += deletedLines;
-        break;
-      case LEFT:
-        for (int i = diffSegment.getLineIntervalStart(side); i <= diffSegment.getLineIntervalEnd(side); i++) {
-          final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
-          resultLines.set(i - 1 + newOffset, sourceLine.changeAction(DELETED));
-        }
-        break;
-    }
-    return newOffset;
-  }
-
-  /**
    * Applies the diff action ADDED to given list of sourcelines.
    *
+   * @param action      Diff action.
    * @param side        Left or right
    * @param diffSegment DiffSegment
    * @param resultLines The sourcelines to update
    * @param offset      Row offset
    * @return Updated row offset
    */
-  private int applyAdded(final DiffSegment.Side side, final DiffSegment diffSegment, final List<SourceLine> resultLines, final int offset) {
+  private int applyAddedOrDeleted(final DiffAction action, final DiffSegment.Side side, final DiffSegment diffSegment,
+                                  final List<SourceLine> resultLines, final int offset) {
     int newOffset = offset;
-    switch (side) {
+    final DiffSegment.Side startSide = action == ADDED ? side : side.opposite();
+
+    switch (startSide) {
       case LEFT:
         int addedLines = 0;
         int startLine = diffSegment.getLineIntervalStart(side) + newOffset;
         for (int i = diffSegment.getLineIntervalStart(side.opposite()); i <= diffSegment.getLineIntervalEnd(side.opposite()); i++) {
-          resultLines.add(startLine++ - 1, new SourceLine(null, ADDED, ""));
+          resultLines.add(startLine++ - 1, new SourceLine(action));
           addedLines++;
         }
         newOffset += addedLines;
@@ -253,7 +226,7 @@ public final class SideBySideDiffCreator {
       case RIGHT:
         for (int i = diffSegment.getLineIntervalStart(side); i <= diffSegment.getLineIntervalEnd(side); i++) {
           final SourceLine sourceLine = resultLines.get(i - 1 + newOffset);
-          resultLines.set(i - 1 + newOffset, sourceLine.changeAction(ADDED));
+          resultLines.set(i - 1 + newOffset, sourceLine.changeAction(action));
         }
         break;
     }

@@ -66,7 +66,7 @@
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">
               <jsp:useBean id="row" type="org.sventon.model.SideBySideDiffRow"/>
-              <tr <%= row.getRight().getRowNumber() != null ? "id=\"l" + row.getRight().getRowNumber().toString() + "\"" : "" %>>
+              <tr <%= row.getRight().hasRowNumber() ? "id=\"l" + row.getRight().getRowNumberAsString() + "\"" : "" %>>
                 <td style="background-color: white;">
                   <c:if test="${!row.isUnchanged}">
                     <a name="diff${diffCount}"></a>
@@ -78,7 +78,7 @@
                 </td>
 
                 <td class="lineNo">
-                  <%= row.getLeft().getRowNumber() != null ? row.getLeft().getRowNumber().toString() : "" %>
+                  <%= row.getLeft().getRowNumberAsString() %>
                 </td>
                 <td style="text-align: center; background-color: white;">
                   <b><%= row.getLeft().getAction().getSymbol() %></b>
@@ -92,7 +92,7 @@
                   </span>
                 </td>
                 <td class="lineNo">
-                  <%= row.getRight().getRowNumber() != null ? row.getRight().getRowNumber().toString() : "" %>
+                  <%= row.getRight().getRowNumberAsString() %>
                 </td>
                 <td style="text-align: center; background-color: white;">
                   <b><%= row.getRight().getAction().getSymbol() %></b>
