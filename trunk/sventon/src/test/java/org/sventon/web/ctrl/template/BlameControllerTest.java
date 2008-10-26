@@ -1,17 +1,17 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.colorer.Colorer;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
-import org.sventon.model.UserRepositoryContext;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.colorer.Colorer;
 import org.sventon.model.AnnotatedTextFile;
+import org.sventon.model.RepositoryName;
+import org.sventon.model.UserRepositoryContext;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;

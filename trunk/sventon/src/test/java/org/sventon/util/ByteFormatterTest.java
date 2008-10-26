@@ -1,8 +1,8 @@
 package org.sventon.util;
 
-import java.util.Locale;
-
 import junit.framework.TestCase;
+
+import java.util.Locale;
 
 public class ByteFormatterTest extends TestCase {
 

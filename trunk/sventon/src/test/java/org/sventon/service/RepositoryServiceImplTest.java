@@ -1,17 +1,17 @@
 package org.sventon.service;
 
+import junit.framework.TestCase;
+import org.sventon.SVNRepositoryStub;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.model.SourceLine;
 import org.sventon.model.InlineDiffRow;
 import org.sventon.model.SideBySideDiffRow;
-import org.sventon.SVNRepositoryStub;
+import org.sventon.model.SourceLine;
+import org.sventon.util.RequestParameterParser;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.DiffCommand;
-import org.sventon.util.RequestParameterParser;
-import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.ISVNSession;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -19,7 +19,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 public class RepositoryServiceImplTest extends TestCase {
 

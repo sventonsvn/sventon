@@ -1,8 +1,8 @@
 package org.sventon.util;
 
-import org.sventon.model.RepositoryName;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 

@@ -1,8 +1,8 @@
 package org.sventon.web.command;
 
+import junit.framework.TestCase;
 import org.sventon.diff.DiffException;
 import org.sventon.util.RequestParameterParser;
-import junit.framework.TestCase;
 
 public class DiffCommandTest extends TestCase {
 

@@ -16,7 +16,9 @@ import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.*;
 
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
 
 public class SVNRepositoryStub extends SVNRepository {
 

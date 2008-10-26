@@ -1,11 +1,11 @@
 package org.sventon.diff;
 
+import junit.framework.TestCase;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.TextFile;
-import junit.framework.TestCase;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 public class SideBySideDiffCreatorTest extends TestCase {
 

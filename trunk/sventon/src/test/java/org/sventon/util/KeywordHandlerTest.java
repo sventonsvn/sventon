@@ -4,9 +4,6 @@ import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class KeywordHandlerTest extends TestCase {
 
   public void testSubstitute() throws Exception {

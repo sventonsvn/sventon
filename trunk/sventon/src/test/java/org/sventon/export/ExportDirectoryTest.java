@@ -1,7 +1,7 @@
 package org.sventon.export;
 
-import org.sventon.model.RepositoryName;
 import junit.framework.TestCase;
+import org.sventon.model.RepositoryName;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

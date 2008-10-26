@@ -1,8 +1,8 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
+import org.sventon.web.command.SVNBaseCommand;
 
 public class ShowFileControllerTest extends TestCase {
 

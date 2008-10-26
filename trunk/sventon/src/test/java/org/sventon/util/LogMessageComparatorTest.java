@@ -1,12 +1,11 @@
 package org.sventon.util;
 
 import junit.framework.TestCase;
+import org.sventon.model.LogMessage;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import org.sventon.model.LogMessage;
+import java.util.List;
 
 public class LogMessageComparatorTest extends TestCase {
 

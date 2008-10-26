@@ -1,9 +1,9 @@
 package org.sventon.web.command;
 
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import org.sventon.util.RepositoryEntryComparator;
+import org.sventon.util.RepositoryEntrySorter;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 public class SVNBaseCommandValidatorTest extends TestCase {

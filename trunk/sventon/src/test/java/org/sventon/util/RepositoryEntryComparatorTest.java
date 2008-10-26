@@ -1,12 +1,12 @@
 package org.sventon.util;
 
-import static org.sventon.util.RepositoryEntryComparator.SortType.*;
 import junit.framework.TestCase;
+import org.sventon.model.RepositoryEntry;
+import static org.sventon.util.RepositoryEntryComparator.SortType.*;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
 import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 import org.tmatesoft.svn.core.SVNURL;
-import org.sventon.model.RepositoryEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;

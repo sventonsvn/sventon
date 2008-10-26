@@ -1,9 +1,9 @@
 package org.sventon.web.command;
 
-import org.sventon.TestUtils;
-import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import org.sventon.TestUtils;
+import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
 public class ConfigCommandValidatorTest extends TestCase {
 

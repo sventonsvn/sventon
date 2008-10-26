@@ -1,6 +1,5 @@
 package org.sventon.model;
 
-import org.sventon.model.RepositoryName;
 import junit.framework.TestCase;
 
 public class UserContextTest extends TestCase {

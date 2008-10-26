@@ -12,11 +12,10 @@ import org.sventon.service.RepositoryServiceImpl;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNURL;
 
 import java.io.OutputStream;
-import java.util.Map;
 
 public class GetControllerTest extends TestCase {
 

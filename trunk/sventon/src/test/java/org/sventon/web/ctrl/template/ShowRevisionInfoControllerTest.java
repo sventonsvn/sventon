@@ -1,15 +1,15 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.TestUtils;
-import org.sventon.model.RepositoryName;
-import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
+import org.sventon.model.RepositoryName;
+import org.sventon.service.RepositoryService;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 

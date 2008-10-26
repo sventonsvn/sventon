@@ -1,9 +1,9 @@
 package org.sventon.rss;
 
-import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.appl.RepositoryConfiguration;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
