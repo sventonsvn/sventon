@@ -1,7 +1,7 @@
 package org.sventon.web.command;
 
-import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
+import org.sventon.appl.RepositoryConfiguration;
 
 public class ConfigCommandTest extends TestCase {
 

@@ -1,11 +1,10 @@
 package org.sventon.util;
 
-import org.sventon.TestUtils;
 import junit.framework.TestCase;
+import org.sventon.TestUtils;
+import org.sventon.model.RepositoryEntry;
 
 import java.util.List;
-
-import org.sventon.model.RepositoryEntry;
 
 public class RepositoryEntryKindFilterTest extends TestCase {
 

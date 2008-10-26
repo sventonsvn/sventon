@@ -1,8 +1,8 @@
 package org.sventon.util;
 
-import org.sventon.model.RepositoryEntry;
-import org.sventon.TestUtils;
 import junit.framework.TestCase;
+import org.sventon.TestUtils;
+import org.sventon.model.RepositoryEntry;
 
 import java.util.List;
 

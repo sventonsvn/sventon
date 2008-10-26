@@ -1,15 +1,12 @@
 package org.sventon.model;
 
+import junit.framework.TestCase;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
-import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 
-
 import java.util.Properties;
-
-import org.tmatesoft.svn.core.SVNProperty;
 
 public class TextFileTest extends TestCase {
 

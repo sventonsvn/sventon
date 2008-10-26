@@ -1,11 +1,11 @@
 package org.sventon.appl;
 
-import org.sventon.TestUtils;
+import junit.framework.TestCase;
 import org.sventon.SVNRepositoryStub;
+import org.sventon.TestUtils;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.service.RepositoryServiceImpl;
-import junit.framework.TestCase;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;

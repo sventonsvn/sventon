@@ -1,15 +1,15 @@
 package org.sventon.web.ctrl.template;
 
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
-import org.sventon.model.UserRepositoryContext;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.model.RepositoryName;
+import org.sventon.model.UserContext;
+import org.sventon.model.UserRepositoryContext;
+import org.sventon.util.RepositoryEntryComparator;
+import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;

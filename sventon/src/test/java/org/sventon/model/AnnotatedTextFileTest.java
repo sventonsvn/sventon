@@ -1,8 +1,8 @@
 package org.sventon.model;
 
+import junit.framework.TestCase;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
-import junit.framework.TestCase;
 
 import java.util.Date;
 import java.util.Properties;

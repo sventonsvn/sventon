@@ -1,10 +1,5 @@
 package org.sventon.web.ctrl;
 
-import org.sventon.TestUtils;
-import org.sventon.appl.Application;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
-import org.sventon.model.UserRepositoryContext;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -12,6 +7,11 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.model.RepositoryName;
+import org.sventon.model.UserContext;
+import org.sventon.model.UserRepositoryContext;
 
 public class ListRepositoriesControllerTest extends TestCase {
 

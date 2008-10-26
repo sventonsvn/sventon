@@ -1,14 +1,14 @@
 package org.sventon.web.ctrl;
 
-import org.sventon.TestUtils;
-import org.sventon.model.RepositoryName;
-import org.sventon.appl.Application;
-import org.sventon.appl.RepositoryConfiguration;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.RepositoryName;
 
 public class StartControllerTest extends TestCase {
 

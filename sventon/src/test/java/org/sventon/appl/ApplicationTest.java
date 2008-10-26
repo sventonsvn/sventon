@@ -1,10 +1,10 @@
 package org.sventon.appl;
 
-import org.sventon.TestUtils;
-import static org.sventon.TestUtils.TEMPDIR;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.sventon.TestUtils;
+import static org.sventon.TestUtils.TEMPDIR;
 
 import java.io.File;
 import java.io.FileOutputStream;
