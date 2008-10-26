@@ -56,6 +56,9 @@ public final class ExportDirectory {
    */
   private final RepositoryName repositoryName;
 
+  /**
+   * The charset to use for filenames and comments in compressed archive file.
+   */
   private final Charset charset;
 
   /**
@@ -116,7 +119,6 @@ public final class ExportDirectory {
   public void delete() throws IOException {
     FileUtils.forceDelete(exportDirectory);
   }
-
 
   /**
    * {@inheritDoc}

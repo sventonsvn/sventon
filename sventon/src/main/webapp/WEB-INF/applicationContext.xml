@@ -226,9 +226,16 @@
     <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
   </bean>
 
+  <bean id="exportFileFilter" class="org.sventon.export.ExportFileFilter"/>
+
+  <bean id="exportFileExpirationRule" class="org.sventon.export.ExportFileExpirationRule">
+    <constructor-arg value="600000"/> 
+  </bean>
+
   <bean id="tempFileCleaner" class="org.sventon.export.TemporaryFileCleaner">
-    <property name="exportRootDir" ref="sventonTempExportDir"/>
-    <property name="timeThreshold" value="600000"/>
+    <constructor-arg ref="sventonTempExportDir"/>
+    <constructor-arg ref="exportFileFilter"/>
+    <constructor-arg ref="exportFileExpirationRule"/>
   </bean>
 
   <bean id="colorer" class="org.sventon.colorer.JHighlightColorer">

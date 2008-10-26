@@ -16,10 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.FilenameFilter;
 
 /**
  * Temporary export file cleaner.
@@ -33,62 +30,50 @@ public final class TemporaryFileCleaner {
    */
   private final Log logger = LogFactory.getLog(getClass());
 
-  private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
-
-  private File exportRootDir;
-  private long timeThreshold;
+  /**
+   * Temp file root directory.
+   */
+  private File directory;
 
   /**
-   * Sets the export root directory.
-   *
-   * @param exportRootDir Directory
+   * File name filter to use.
    */
-  public void setExportRootDir(final File exportRootDir) {
-    Validate.isTrue(exportRootDir.exists(), "Directory does not exist: " + exportRootDir);
-    Validate.isTrue(exportRootDir.isDirectory(), "Not a directory: " + exportRootDir);
-    this.exportRootDir = exportRootDir;
+  private FilenameFilter filenameFilter;
+
+  /**
+   * Expiration rule.
+   */
+  private ExpirationRule expirationRule;
+
+  /**
+   * Constructor.
+   *
+   * @param directory      The directory.
+   * @param filenameFilter Filter to use.
+   * @param expirationRule Expiration rule.
+   */
+  public TemporaryFileCleaner(final File directory, final FilenameFilter filenameFilter, final ExpirationRule expirationRule) {
+    Validate.isTrue(directory.exists(), "Directory does not exist: " + directory);
+    Validate.isTrue(directory.isDirectory(), "Not a directory: " + directory);
+    Validate.notNull(filenameFilter);
+    Validate.notNull(expirationRule);
+    this.directory = directory;
+    this.filenameFilter = filenameFilter;
+    this.expirationRule = expirationRule;
   }
 
   /**
-   * Sets the time threshold (in milliseconds).
-   * Files older than given threshold will be deleted next time
-   * {@link #clean()} is invoked.
-   *
-   * @param timeThreshold Time in milliseconds.
-   */
-  public void setTimeThreshold(final long timeThreshold) {
-    this.timeThreshold = timeThreshold;
-  }
-
-  /**
-   * Cleans the export directory.
+   * Cleans the given directory.
+   * <p/>
    * All filenames matching <code>sventon-[millis].zip</code>
    * older than given threshold value will be deleted.
    */
   public void clean() {
-    for (final File file : exportRootDir.listFiles(new ExportFileFilter())) {
-      if (isOld(file)) {
+    for (final File file : directory.listFiles(filenameFilter)) {
+      if (expirationRule.hasExpired(file)) {
         logger.debug("Deleting tempfile [" + file.getAbsolutePath() + "]");
         file.delete();
       }
-    }
-  }
-
-  /**
-   * Returns true if this file is old enough to be deleted.
-   *
-   * @param tempFile Temporary file
-   * @return True if file is old enough, according to the threshold value.
-   */
-  protected boolean isOld(final File tempFile) {
-    final Matcher matcher = DIGIT_PATTERN.matcher(tempFile.getName());
-    matcher.find();
-    try {
-      final Date fileDate = ExportDirectory.DATE_FORMAT.parse(matcher.group());
-      return System.currentTimeMillis() - fileDate.getTime() > timeThreshold;
-    } catch (final ParseException pe) {
-      logger.warn("Unable to parse date part of filename: " + tempFile.getName(), pe);
-      return false;
     }
   }
 
