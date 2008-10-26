@@ -141,28 +141,27 @@ public final class RevisionObservableImpl extends Observable implements Revision
 
       handleSuspectedUrlChange(lastUpdatedRevision, headRevision);
 
-      long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
-      logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions");
+      if (headRevision > lastUpdatedRevision) {
+        long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
+        logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions from repository: " + name);
 
-      do {
         final long fromRevision = lastUpdatedRevision + 1;
         final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
             ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
-
-        final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-        logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
-        logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
-        setChanged();
-        logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
-        notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
-
-        lastUpdatedRevision = toRevision;
-        logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
-        objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
-        clearCacheBeforeUpdate = false;
-        revisionsLeftToFetchCount -= logEntries.size();
-      } while (revisionsLeftToFetchCount > 0);
-
+        do {
+          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
+          logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
+          setChanged();
+          logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
+          notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
+          lastUpdatedRevision = toRevision;
+          logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
+          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
+          clearCacheBeforeUpdate = false;
+          revisionsLeftToFetchCount -= logEntries.size();
+        } while (revisionsLeftToFetchCount > 0);
+      }
     } catch (SVNException svnex) {
       logger.warn("Exception: " + svnex.getMessage());
       logger.debug("Exception [" + svnex.getErrorMessage().getErrorCode().toString() + "]", svnex);
