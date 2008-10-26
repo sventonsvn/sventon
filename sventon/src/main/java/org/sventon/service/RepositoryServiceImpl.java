@@ -99,7 +99,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
-          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, true);
+          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, SVNDepth.INFINITY);
     }
   }
 
@@ -157,8 +157,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
-    final SVNNodeKind svnNodeKind = repository.checkPath(path, revision);
-    return svnNodeKind;
+    return repository.checkPath(path, revision);
   }
 
   /**
@@ -211,8 +210,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     final SVNDirEntry dirEntry = repository.info(path, revision);
     if (dirEntry != null) {
-      final RepositoryEntry repositoryEntry = new RepositoryEntry(dirEntry, FilenameUtils.getFullPath(path));
-      return repositoryEntry;
+      return new RepositoryEntry(dirEntry, FilenameUtils.getFullPath(path));
     } else {
       logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
       throw new SVNException(SVNErrorMessage.create(SVNErrorCode.ENTRY_NOT_FOUND));
@@ -423,12 +421,12 @@ public class RepositoryServiceImpl implements RepositoryService {
         SVNURL.parseURIDecoded(repoRoot + diffCommand.getFromPath()), diffCommand.getFromRevision(),
         SVNURL.parseURIDecoded(repoRoot + diffCommand.getToPath()), diffCommand.getToRevision(),
         true, false, new ISVNDiffStatusHandler() {
-          public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
-            if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-              result.add(diffStatus);
-            }
-          }
-        });
+      public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
+        if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
+          result.add(diffStatus);
+        }
+      }
+    });
     return result;
   }
 
