@@ -154,6 +154,7 @@
   <bean id="getThumbnailController" class="de.berlios.sventon.web.ctrl.GetThumbnailController"
         parent="abstractController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+    <property name="imageScaler" ref="imageScaler"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>
     <property name="maxThumbnailSize" value="200"/>
@@ -363,6 +364,8 @@
     <property name="exportRootDir" ref="sventonExportDir"/>
     <property name="timeThreshold" value="600000"/>
   </bean>
+
+  <bean id="imageScaler" class="de.berlios.sventon.util.ImageScaler"/>
 
   <bean id="colorer" class="de.berlios.sventon.colorer.JHighlightColorer">
     <property name="rendererMappings">

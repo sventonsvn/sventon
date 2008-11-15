@@ -3,12 +3,11 @@ package de.berlios.sventon.util;
 import junit.framework.TestCase;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class ImageScalerTest extends TestCase {
 
   public void testGetThumbnail() throws Exception {
-    final ImageScaler imageScaler = new ImageScaler(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+    final ImageScaler imageScaler = new ImageScaler();
 
     int maxSize = 200;
     assertEquals(new Dimension(100, 100), imageScaler.getThumbnailSize(100, 100, maxSize));
