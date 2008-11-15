@@ -11,15 +11,15 @@ public class ObjectCacheImplTest extends TestCase {
   public void testPut() throws Exception {
     ObjectCache cache = createMemoryCache();
 
-    cache.put("test1", 10);
-    cache.put("test2", 20);
+    cache.put("test1", "10");
+    cache.put("test2", "20");
 
     assertEquals(0, cache.getHitCount());
     assertEquals(0, cache.getMissCount());
-    assertEquals(10, cache.get("test1"));
+    assertEquals("10", cache.get("test1"));
     assertEquals(1, cache.getHitCount());
     assertEquals(0, cache.getMissCount());
-    assertEquals(20, cache.get("test2"));
+    assertEquals("20", cache.get("test2"));
     assertEquals(2, cache.getHitCount());
     assertEquals(0, cache.getMissCount());
     try {

@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1407] Fixed: Bug #14799 - Unnecessary recreation of thumbnails.
+
 [1390] Release 1.4.1 (2008-10-01)
 [1385] Added: Upgraded to SVNKit 1.2.0.
 [1358] Fixed bug #14342 - Version number not displayed properly on Glassfish.
