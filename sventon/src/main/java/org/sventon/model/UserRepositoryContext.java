@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.util.WebUtils;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 
@@ -92,11 +93,8 @@ public final class UserRepositoryContext implements Serializable {
     final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
     final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
 
-    UserContext userContext = (UserContext) session.getAttribute("userContext");
-    if (userContext == null) {
-      userContext = new UserContext();
-      session.setAttribute("userContext", userContext);
-    }
+    final UserContext userContext = (UserContext) WebUtils.getOrCreateSessionAttribute(
+        session, "userContext", UserContext.class);
 
     UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(repositoryName);
     if (userRepositoryContext == null) {

@@ -2,6 +2,10 @@ package org.sventon.model;
 
 import junit.framework.TestCase;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+
 public class UserRepositoryContextTest extends TestCase {
 
   public void testDefaults() throws Exception {
@@ -88,4 +92,16 @@ public class UserRepositoryContextTest extends TestCase {
     assertEquals(testString, context.toString());
   }
 
+  public void testGetUserContext() throws Exception {
+    final RepositoryName name = new RepositoryName("repository1");
+    final HttpServletRequest request = new MockHttpServletRequest();
+    assertNull(request.getSession().getAttribute("userContext"));
+    final UserRepositoryContext userRepositoryContext = UserRepositoryContext.getContext(request, name);
+    assertNotNull(request.getSession());
+    final Object o = request.getSession().getAttribute("userContext");
+    assertNotNull(o);
+    assertTrue(o instanceof UserContext);
+    final UserRepositoryContext contextFromSession = ((UserContext) o).getUserRepositoryContext(name);
+    assertSame(contextFromSession, userRepositoryContext);
+  }  
 }

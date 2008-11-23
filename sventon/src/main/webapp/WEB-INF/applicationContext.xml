@@ -48,6 +48,7 @@
 
   <bean id="nameEditor" class="org.sventon.util.RepositoryNameEditor"/>
   <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
+  <bean id="svnFileRevisionEditor" class="org.sventon.util.SVNFileRevisionEditor"/>
 
   <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactory" scope="prototype">
     <constructor-arg ref="repositoriesDir"/>

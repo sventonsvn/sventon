@@ -49,7 +49,7 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -59,15 +59,15 @@ public final class GetFileHistoryController extends AbstractSVNTemplateControlle
 
     final List<SVNFileRevision> fileRevisions = new ArrayList<SVNFileRevision>();
     try {
-      logger.debug("Finding revisions for [" + svnCommand.getPath() + "]");
-      fileRevisions.addAll(getRepositoryService().getFileRevisions(repository, svnCommand.getPath(),
-          svnCommand.getRevisionNumber()));
+      logger.debug("Finding revisions for [" + command.getPath() + "]");
+      fileRevisions.addAll(getRepositoryService().getFileRevisions(repository, command.getPath(),
+          command.getRevisionNumber()));
       Collections.reverse(fileRevisions);
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());
     }
 
-    model.put("currentRevision", svnCommand.getRevisionNumber());
+    model.put("currentRevision", command.getRevisionNumber());
     model.put("fileRevisions", fileRevisions);
     if (archivedEntry != null) {
       model.put(ARCHIVED_ENTRY, archivedEntry);

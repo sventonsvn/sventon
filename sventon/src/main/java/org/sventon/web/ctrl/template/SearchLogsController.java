@@ -41,7 +41,7 @@ public final class SearchLogsController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -51,7 +51,7 @@ public final class SearchLogsController extends AbstractSVNTemplateController {
 
     logger.debug("Searching logMessages for: " + searchString);
 
-    final List<LogMessage> logMessages = getCache().find(svnCommand.getName(), searchString);
+    final List<LogMessage> logMessages = getCache().find(command.getName(), searchString);
     //TODO: Parse to apply Bugtraq links
     Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 

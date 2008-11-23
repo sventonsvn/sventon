@@ -33,13 +33,13 @@ public final class ShowLocksController extends AbstractSVNTemplateController imp
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("currentLocks", getRepositoryService().getLocks(repository, svnCommand.getPath()).values());
+    model.put("currentLocks", getRepositoryService().getLocks(repository, command.getPath()).values());
     return new ModelAndView(getViewName(), model);
   }
 

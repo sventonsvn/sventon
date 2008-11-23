@@ -35,7 +35,7 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -50,9 +50,9 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
 
     if (isAllUpperCase(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");
-      entries.addAll(getCache().findEntryByCamelCase(svnCommand.getName(), new CamelCasePattern(searchString), startDir));
+      entries.addAll(getCache().findEntryByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
     } else {
-      entries.addAll(getCache().findEntry(svnCommand.getName(), searchString, startDir));
+      entries.addAll(getCache().findEntry(command.getName(), searchString, startDir));
     }
 
     if (logger.isDebugEnabled()) {
@@ -65,7 +65,7 @@ public final class SearchEntriesController extends AbstractSVNTemplateController
     logger.debug("Adding data to model");
     model.put("svndir", entries);
     model.put("searchString", searchString);
-    model.put("locks", getRepositoryService().getLocks(repository, svnCommand.getPath()));
+    model.put("locks", getRepositoryService().getLocks(repository, command.getPath()));
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);

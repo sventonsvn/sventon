@@ -11,7 +11,6 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -24,7 +23,6 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.AvailableCharsets;
 import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.RepositoryEntryComparator;
@@ -34,12 +32,12 @@ import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.beans.PropertyEditor;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
@@ -175,6 +173,11 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private PropertyEditor revisionEditor;
 
   /**
+   * Revision editor instance.
+   */
+  private PropertyEditor svnFileRevisionEditor;
+
+  /**
    * The first possible repository revision.
    */
   public static final long FIRST_REVISION = 1;
@@ -198,22 +201,32 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
+   * Sets the editor.
+   *
+   * @param svnFileRevisionEditor Editor.
+   */
+  public void setSvnFileRevisionEditor(final PropertyEditor svnFileRevisionEditor) {
+    this.svnFileRevisionEditor = svnFileRevisionEditor;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);
     binder.registerCustomEditor(SVNRevision.class, revisionEditor);
+    binder.registerCustomEditor(SVNFileRevision.class, svnFileRevisionEditor);
   }
 
   /**
    * {@inheritDoc}
    */
   public final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                   final Object command, final BindException errors) {
+                                   final Object cmd, final BindException errors) {
 
-    final SVNBaseCommand svnCommand = (SVNBaseCommand) command;
-    logger.info("SVNBaseCommand: " + svnCommand);
+    final SVNBaseCommand command = (SVNBaseCommand) cmd;
+    logger.info(command);
 
     // If application config is not ok - redirect to config
     if (!application.isConfigured()) {
@@ -221,19 +234,19 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return new ModelAndView(new RedirectView("/repos/listconfigs", true));
     }
 
-    if (svnCommand.getName() == null || !application.getRepositoryNames().contains(svnCommand.getName())) {
-      logger.debug("RepositoryName [" + svnCommand.getName() + "] does not exist, redirecting to '/repos/list'");
+    if (command.getName() == null || !application.getRepositoryNames().contains(command.getName())) {
+      logger.debug("RepositoryName [" + command.getName() + "] does not exist, redirecting to '/repos/list'");
       return new ModelAndView(new RedirectView("/repos/list", true));
     }
 
     if (errors.hasErrors()) {
-      return prepareExceptionModelAndView(errors, svnCommand);
+      return prepareExceptionModelAndView(errors, command);
     }
 
     SVNRepository repository = null;
     try {
-      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(svnCommand.getName());
-      final UserRepositoryContext repositoryContext = getUserContext(request, svnCommand.getName());
+      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
+      final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
 
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryConnectionFactory.createConnection(configuration.getName(), configuration.getSVNURL(),
@@ -246,25 +259,25 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
 
-      svnCommand.translateRevision(headRevision, repository);
+      command.translateRevision(headRevision, repository);
 
-      parseAndUpdateSortParameters(svnCommand, repositoryContext);
+      parseAndUpdateSortParameters(command, repositoryContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, repositoryContext);
       parseAndUpdateCharsetParameter(request, repositoryContext);
       parseAndUpdateSearchModeParameter(request, repositoryContext);
 
-      final ModelAndView modelAndView = svnHandle(repository, svnCommand, headRevision, repositoryContext, request, response, errors);
+      final ModelAndView modelAndView = svnHandle(repository, command, headRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetController.
       // If the view is a RedirectView it's model has already been populated
       if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
         final Map<String, Object> model = new HashMap<String, Object>();
-        logger.debug("'command' set to: " + svnCommand);
-        model.put("command", svnCommand); // This is for the form to work
+        logger.debug("'command' set to: " + command);
+        model.put("command", command); // This is for the form to work
         model.put("repositoryURL", configuration.getRepositoryDisplayUrl());
-        model.put("isHead", svnCommand.getRevisionNumber() == headRevision);
+        model.put("isHead", command.getRevisionNumber() == headRevision);
         model.put("headRevision", headRevision);
-        model.put("isUpdating", application.isUpdating(svnCommand.getName()));
+        model.put("isUpdating", application.isUpdating(command.getName()));
         model.put("useCache", configuration.isCacheUsed());
         model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
         model.put("isEntryTrayEnabled", configuration.isEntryTrayEnabled());
@@ -277,7 +290,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
           logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           try {
-            logEntries.addAll(getRepositoryService().getRevisions(svnCommand.getName(), repository, headRevision,
+            logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
                 FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount()));
           } catch (SVNException svnex) {
             if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
@@ -303,7 +316,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       } else {
         errors.reject(null, ex.getMessage());
       }
-      return prepareExceptionModelAndView(errors, svnCommand);
+      return prepareExceptionModelAndView(errors, command);
     } finally {
       if (repository != null) {
         repository.closeSession();
@@ -368,59 +381,23 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Parses sort mode and type parameters from the request instance and
    * updates the <code>UserContext</code> instance.
    *
-   * @param svnCommand  The Command.
+   * @param command  The Command.
    * @param userContext The UserContext instance to update.
    */
-  protected final void parseAndUpdateSortParameters(final SVNBaseCommand svnCommand,
+  protected final void parseAndUpdateSortParameters(final SVNBaseCommand command,
                                                     final UserRepositoryContext userContext) {
 
-    if (svnCommand.getSortType() != null) {
-      userContext.setSortType(svnCommand.getSortType());
+    if (command.getSortType() != null) {
+      userContext.setSortType(command.getSortType());
     } else if (userContext.getSortType() == null) {
       userContext.setSortType(RepositoryEntryComparator.SortType.FULL_NAME);
     }
 
-    if (svnCommand.getSortMode() != null) {
-      userContext.setSortMode(svnCommand.getSortMode());
+    if (command.getSortMode() != null) {
+      userContext.setSortMode(command.getSortMode());
     } else if (userContext.getSortMode() == null) {
       userContext.setSortMode(RepositoryEntrySorter.SortMode.ASC);
     }
-  }
-
-  /**
-   * Gets the UserContext instance from the user's HTTPSession.
-   * If session does not exist, it will be created. If the attribute
-   * <code>userContext</code> does not exists, a new instance will be
-   * created and added to the session.
-   *
-   * @param request        The HTTP request.
-   * @param repositoryName Repository name.
-   * @return The UserContext instance.
-   * @see org.sventon.model.UserContext
-   */
-  protected final UserRepositoryContext getUserContext(final HttpServletRequest request, final RepositoryName repositoryName) {
-    final HttpSession session = request.getSession(true);
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
-
-    UserContext userContext = (UserContext) session.getAttribute("userContext");
-    if (userContext == null) {
-      userContext = new UserContext();
-      session.setAttribute("userContext", userContext);
-    }
-
-    UserRepositoryContext repositoryContext = userContext.getUserRepositoryContext(repositoryName);
-    if (repositoryContext == null) {
-      repositoryContext = new UserRepositoryContext();
-      userContext.add(repositoryName, repositoryContext);
-    }
-
-    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      repositoryContext.setUid(uid);
-      repositoryContext.setPwd(pwd);
-    }
-
-    return repositoryContext;
   }
 
   /**
@@ -445,15 +422,15 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * needed to for displaying a useful error message.
    *
    * @param exception  Bind exception from Spring MVC validation.
-   * @param svnCommand Command object.
+   * @param command Command object.
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
   final ModelAndView prepareExceptionModelAndView(final BindException exception,
-                                                  final SVNBaseCommand svnCommand) {
-    final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(svnCommand.getName());
+                                                  final SVNBaseCommand command) {
+    final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(command.getName());
     final Map<String, Object> model = exception.getModel();
-    model.put("command", svnCommand);
+    model.put("command", command);
     model.put("repositoryURL", repositoryConfiguration != null ? repositoryConfiguration.getRepositoryDisplayUrl() : "");
     return new ModelAndView("goto", model);
   }
@@ -465,7 +442,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param repository            Reference to the repository, prepared with authentication
    *                              if applicable.
-   * @param svnCommand            Command (basically request parameters submitted in user
+   * @param command            Command (basically request parameters submitted in user
    *                              request)
    * @param headRevision          The head revision.
    * @param userRepositoryContext The user's context instance for this repository.
@@ -477,7 +454,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @throws Exception Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
-                                            final SVNBaseCommand svnCommand,
+                                            final SVNBaseCommand command,
                                             final long headRevision,
                                             final UserRepositoryContext userRepositoryContext,
                                             final HttpServletRequest request,

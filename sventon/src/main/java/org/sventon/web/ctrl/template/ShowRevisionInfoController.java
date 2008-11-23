@@ -32,15 +32,15 @@ public final class ShowRevisionInfoController extends AbstractSVNTemplateControl
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    logger.debug("Getting revision info details for revision: " + svnCommand.getRevision());
+    logger.debug("Getting revision info details for revision: " + command.getRevision());
     model.put("revisionInfo", getRepositoryService().getRevision(
-        svnCommand.getName(), repository, svnCommand.getRevisionNumber()));
+        command.getName(), repository, command.getRevisionNumber()));
     return new ModelAndView(getViewName(), model);
   }
 

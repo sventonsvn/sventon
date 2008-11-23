@@ -240,11 +240,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
+  public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand command,
                                                       final SVNRevision pegRevision, final String charset,
                                                       final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, command, pegRevision);
 
     String diffResultString;
     SideBySideDiffCreator sideBySideDiffCreator;
@@ -257,15 +257,15 @@ public class RepositoryServiceImpl implements RepositoryService {
       final SVNProperties rightFileProperties;
 
       if (SVNRevision.UNDEFINED == pegRevision) {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
-        leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-        rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
+        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFileProperties = getFileProperties(repository, command.getFromPath(), command.getFromRevision().getNumber());
+        rightFileProperties = getFileProperties(repository, command.getToPath(), command.getToRevision().getNumber());
       } else {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), pegRevision.getNumber(), charset);
-        leftFileProperties = getFileProperties(repository, diffCommand.getFromPath(), pegRevision.getNumber());
-        rightFileProperties = getFileProperties(repository, diffCommand.getToPath(), pegRevision.getNumber());
+        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFileProperties = getFileProperties(repository, command.getFromPath(), pegRevision.getNumber());
+        rightFileProperties = getFileProperties(repository, command.getToPath(), pegRevision.getNumber());
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -277,13 +277,13 @@ public class RepositoryServiceImpl implements RepositoryService {
       diffResultString = diffResult.toString(charset);
 
       if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
       }
 
       final KeywordHandler fromFileKeywordHandler =
-          new KeywordHandler(leftFileProperties, configuration.getRepositoryUrl() + diffCommand.getFromPath());
+          new KeywordHandler(leftFileProperties, configuration.getRepositoryUrl() + command.getFromPath());
       final KeywordHandler toFileKeywordHandler =
-          new KeywordHandler(rightFileProperties, configuration.getRepositoryUrl() + diffCommand.getToPath());
+          new KeywordHandler(rightFileProperties, configuration.getRepositoryUrl() + command.getToPath());
 
       sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, charset, rightFile,
           toFileKeywordHandler, charset);
@@ -298,10 +298,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+  public final String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                   final String charset, final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, command, pegRevision);
 
     String diffResultString;
 
@@ -310,11 +310,11 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile rightFile;
 
       if (SVNRevision.UNDEFINED == pegRevision) {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -325,7 +325,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
       diffResultString = diffResult.toString(charset);
       if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
       }
 
     } catch (final IOException ioex) {
@@ -338,11 +338,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                               final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException {
 
-    assertNotBinary(repository, diffCommand, pegRevision);
+    assertNotBinary(repository, command, pegRevision);
 
     String diffResultString;
     final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
@@ -352,11 +352,11 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile rightFile;
 
       if (SVNRevision.UNDEFINED == pegRevision) {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(repository, diffCommand.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, diffCommand.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -371,7 +371,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
       diffResultString = diffResult.toString(charset);
       if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
       }
 
       int rowNumberLeft = 1;
@@ -408,7 +408,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                              final RepositoryConfiguration configuration) throws SVNException {
 
     final SVNDiffClient diffClient = SVNClientManager.newInstance(
@@ -418,8 +418,8 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     final String repoRoot = repository.getLocation().toDecodedString();
     diffClient.doDiffStatus(
-        SVNURL.parseURIDecoded(repoRoot + diffCommand.getFromPath()), diffCommand.getFromRevision(),
-        SVNURL.parseURIDecoded(repoRoot + diffCommand.getToPath()), diffCommand.getToRevision(),
+        SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), command.getFromRevision(),
+        SVNURL.parseURIDecoded(repoRoot + command.getToPath()), command.getToRevision(),
         true, false, new ISVNDiffStatusHandler() {
       public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
         if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
@@ -467,29 +467,68 @@ public class RepositoryServiceImpl implements RepositoryService {
     return annotatedTextFile;
   }
 
-  private void assertNotBinary(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision)
+  /**
+   * {@inheritDoc}
+   */
+  public SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command,
+                                        final SVNRevision pegRevision) throws SVNException, DiffException {
+
+    final long fromRevision;
+    final long toRevision;
+
+    if (SVNRevision.UNDEFINED.equals(pegRevision)) {
+      fromRevision = command.getFromRevision().getNumber();
+      toRevision = command.getToRevision().getNumber();
+    } else {
+      fromRevision = pegRevision.getNumber();
+      toRevision = pegRevision.getNumber();
+    }
+
+    final SVNNodeKind nodeKind1 = getNodeKind(repository, command.getFromPath(), fromRevision);
+    final SVNNodeKind nodeKind2 = getNodeKind(repository, command.getToPath(), toRevision);
+
+    assertFileOrDir(nodeKind1, command.getFromPath(), fromRevision);
+    assertFileOrDir(nodeKind2, command.getToPath(), toRevision);
+    assertSameKind(nodeKind1, nodeKind2);
+    return nodeKind1;
+  }
+
+  private void assertSameKind(final SVNNodeKind nodeKind1, final SVNNodeKind nodeKind2) throws DiffException {
+    if (nodeKind1 != nodeKind2) {
+      throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
+    }
+  }
+
+  private void assertFileOrDir(final SVNNodeKind nodeKind, final String path, final long revision) throws DiffException {
+    if (SVNNodeKind.DIR != nodeKind && SVNNodeKind.FILE != nodeKind) {
+      throw new DiffException("Path [" + path + "] does not exist as revision [" + revision + "]");
+    }
+  }
+
+  private void assertNotBinary(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision)
       throws SVNException, IllegalFileFormatException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
     if (SVNRevision.UNDEFINED.equals(pegRevision)) {
-      isLeftFileTextType = isTextFile(repository, diffCommand.getFromPath(), diffCommand.getFromRevision().getNumber());
-      isRightFileTextType = isTextFile(repository, diffCommand.getToPath(), diffCommand.getToRevision().getNumber());
+      isLeftFileTextType = isTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber());
+      isRightFileTextType = isTextFile(repository, command.getToPath(), command.getToRevision().getNumber());
     } else {
-      isLeftFileTextType = isTextFile(repository, diffCommand.getFromPath(), pegRevision.getNumber());
-      isRightFileTextType = isTextFile(repository, diffCommand.getToPath(), pegRevision.getNumber());
+      isLeftFileTextType = isTextFile(repository, command.getFromPath(), pegRevision.getNumber());
+      isRightFileTextType = isTextFile(repository, command.getToPath(), pegRevision.getNumber());
     }
 
     if (!isLeftFileTextType && !isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary files: " + diffCommand.getFromPath() + ", " + diffCommand.getToPath());
+      throw new IllegalFileFormatException("Cannot diff binary files: " + command.getFromPath() + ", " + command.getToPath());
     } else if (!isLeftFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getFromPath());
+      throw new IllegalFileFormatException("Cannot diff binary file: " + command.getFromPath());
     } else if (!isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + diffCommand.getToPath());
+      throw new IllegalFileFormatException("Cannot diff binary file: " + command.getToPath());
     }
   }
 
   private static class AnnotationHandler implements ISVNAnnotateHandler {
+
     private final AnnotatedTextFile annotatedTextFile;
 
     /**
@@ -501,10 +540,6 @@ public class RepositoryServiceImpl implements RepositoryService {
       this.annotatedTextFile = annotatedTextFile;
     }
 
-    /**
-     * Deprecated.
-     */
-    @Deprecated
     public void handleLine(final Date date, final long revision, final String author, final String line)
         throws SVNException {
       handleLine(date, revision, author, line, null, -1, null, null, 0);
@@ -525,6 +560,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     public void handleEOF() {
       // Nothing to do.
     }
-  }
 
+  }
 }

@@ -43,15 +43,15 @@ public class ListDirectoryContentsController extends AbstractSVNTemplateControll
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    logger.debug("Getting directory contents for: " + svnCommand.getPath());
+    logger.debug("Getting directory contents for: " + command.getPath());
     final SVNProperties properties = new SVNProperties();
     final List<RepositoryEntry> entries = getRepositoryService().list(
-        repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), properties);
+        repository, command.getPath(), command.getRevisionNumber(), properties);
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Directory entries: " + entries.size());

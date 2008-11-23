@@ -47,7 +47,7 @@ public final class GoToController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -56,8 +56,8 @@ public final class GoToController extends AbstractSVNTemplateController {
     SVNNodeKind kind = null;
 
     try {
-      kind = getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
-      logger.debug("Node kind of [" + svnCommand.getPath() + "]: " + kind);
+      kind = getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber());
+      logger.debug("Node kind of [" + command.getPath() + "]: " + kind);
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
         logger.info(svnex.getMessage());
@@ -67,20 +67,20 @@ public final class GoToController extends AbstractSVNTemplateController {
     }
 
     if (SVNNodeKind.DIR == kind) {
-      redirectUrl = createBrowseUrl(svnCommand);
+      redirectUrl = createBrowseUrl(command);
     } else if (SVNNodeKind.FILE == kind) {
-      redirectUrl = createViewUrl(svnCommand);
+      redirectUrl = createViewUrl(command);
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");
-      return prepareExceptionModelAndView(exception, svnCommand);
+      return prepareExceptionModelAndView(exception, command);
     } else {
       exception.rejectValue("path", "goto.command.invalidpath");
-      return prepareExceptionModelAndView(exception, svnCommand);
+      return prepareExceptionModelAndView(exception, command);
     }
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", SVNRevision.HEAD.equals(svnCommand.getRevision()) ? "HEAD" : String.valueOf(svnCommand.getRevisionNumber()));
+    model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(command.getRevisionNumber()));
 
     redirectUrl = EncodingUtils.encodeUrl(redirectUrl);
     logger.debug("Redirecting to: " + redirectUrl);
@@ -92,15 +92,15 @@ public final class GoToController extends AbstractSVNTemplateController {
    * <p/>
    * Note: A trailing slash ("/") will be appended if missing on path.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return Url
    */
-  protected String createBrowseUrl(final SVNBaseCommand svnCommand) {
-    String path = svnCommand.getPath();
+  protected String createBrowseUrl(final SVNBaseCommand command) {
+    String path = command.getPath();
     if (!path.endsWith("/")) {
       path += "/";
     }
-    return "/repos/" + svnCommand.getName().toString() + "/browse" + path;
+    return "/repos/" + command.getName().toString() + "/browse" + path;
   }
 
   /**
@@ -108,14 +108,14 @@ public final class GoToController extends AbstractSVNTemplateController {
    * <p/>
    * Note: A trailing slash ("/") will be removed if found on path.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return Url
    */
-  protected String createViewUrl(final SVNBaseCommand svnCommand) {
-    String path = svnCommand.getPath();
+  protected String createViewUrl(final SVNBaseCommand command) {
+    String path = command.getPath();
     if (path.endsWith("/")) {
       path = path.substring(0, path.length() - 1);
     }
-    return "/repos/" + svnCommand.getName().toString() + "/view" + path;
+    return "/repos/" + command.getName().toString() + "/view" + path;
   }
 }

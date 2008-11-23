@@ -28,7 +28,7 @@
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
-          <sventon:diffFunctionButtons command="${command}" diffCommand="${diffCommand}" diffStyle="${style}" pegrev="${pegrev}"/>
+          <sventon:diffFunctionButtons command="${command}" pegrev="${pegrev}"/>
           <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
         </td>
         <td style="text-align: right;">
@@ -44,7 +44,7 @@
 
   <c:choose>
     <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical.files" arguments="${diffCommand.fromTarget},${diffCommand.fromRevision},${diffCommand.toTarget},${diffCommand.toRevision}"/></b></p>
+      <p><b><spring:message code="diff.error.identical.files" arguments="${command.fromTarget},${command.fromRevision},${command.toTarget},${command.toRevision}"/></b></p>
     </c:when>
     <c:otherwise>
       <c:choose>
@@ -58,10 +58,10 @@
               </th>
               <th class="lineNo">&nbsp;</th>
               <th style="background-color: white;">&nbsp;</th>
-              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.fromTarget} @ revision ${diffCommand.fromRevision}</th>
+              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${command.fromTarget} @ revision ${command.fromRevision}</th>
               <th class="lineNo">&nbsp;</th>
               <th style="background-color: white;">&nbsp;</th>
-              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.toTarget} @ revision ${diffCommand.toRevision}</th>
+              <th width="50%" style="background-color: white; border-bottom: 1px solid black">${command.toTarget} @ revision ${command.toRevision}</th>
             </tr>
             <c:set var="diffCount" value="0"/>
             <c:forEach items="${diffResult}" var="row">

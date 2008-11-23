@@ -27,7 +27,7 @@
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
-        <sventon:diffFunctionButtons command="${command}" diffCommand="${diffCommand}" diffStyle="${style}" pegrev="${pegrev}"/>
+        <sventon:diffFunctionButtons command="${command}" pegrev="${pegrev}"/>
         <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
       </td>
       <td style="text-align: right;">
@@ -43,17 +43,17 @@
 
   <c:choose>
     <c:when test="${isIdentical}">
-      <p><b><spring:message code="diff.error.identical.files" arguments="${diffCommand.fromTarget},${diffCommand.fromRevision},${diffCommand.toTarget},${diffCommand.toRevision}"/></b></p>
+      <p><b><spring:message code="diff.error.identical.files" arguments="${command.fromTarget},${command.fromRevision},${command.toTarget},${command.toRevision}"/></b></p>
     </c:when>
     <c:otherwise>
       <c:choose>
         <c:when test="${!isBinary}">
           <table id="diffTable" class="sventonUnifiedDiffTable" cellspacing="0">
             <tr>
-              <th width="100%" style="background-color: white;">${diffCommand.fromPath} @ revision ${diffCommand.fromRevision}</th>
+              <th width="100%" style="background-color: white;">${command.fromPath} @ revision ${command.fromRevision}</th>
             </tr>
             <tr>
-              <th width="100%" style="background-color: white; border-bottom: 1px solid black">${diffCommand.toPath} @ revision ${diffCommand.toRevision}</th>
+              <th width="100%" style="background-color: white; border-bottom: 1px solid black">${command.toPath} @ revision ${command.toRevision}</th>
             </tr>
             <tr>
               <td><c:out value="${diffResult}" escapeXml="false"/></td>

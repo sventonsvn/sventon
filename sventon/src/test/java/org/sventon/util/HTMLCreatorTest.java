@@ -20,7 +20,7 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Modified</i></td>\n" +
-        "    <td><a href=\"repos/sandbox/diff/file1.java?revision=1&entry=/file1.java;;1&entry=/file1.java;;0\" title=\"Diff with previous version\"><i>/file1.java</i></a></td>\n" +
+        "    <td><a href=\"repos/sandbox/diff/file1.java?revision=1&entries=/file1.java;;1&entries=/file1.java;;0\" title=\"Diff with previous version\"><i>/file1.java</i></a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Deleted</i></td>\n" +
@@ -61,7 +61,7 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testCreateDiffUrl() throws Exception {
-    assertEquals("http://localhost/repos/sandbox/diff/a.txt?revision=2&entry=/a.txt;;2&entry=/a.txt;;1",
+    assertEquals("http://localhost/repos/sandbox/diff/a.txt?revision=2&entries=/a.txt;;2&entries=/a.txt;;1",
         HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, new RepositoryName("sandbox"), false));
   }
 }

@@ -61,7 +61,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -70,22 +70,22 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
 
     final OutputStream output = response.getOutputStream();
 
-    if (!mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
-      logger.error("File '" + svnCommand.getTarget() + "' is not a image file");
+    if (!mimeFileTypeMap.getContentType(command.getPath()).startsWith("image")) {
+      logger.error("File '" + command.getTarget() + "' is not a image file");
       return null;
     }
 
-    prepareResponse(request, response, svnCommand);
+    prepareResponse(request, response, command);
 
-    final boolean cacheUsed = getRepositoryConfiguration(svnCommand.getName()).isCacheUsed();
+    final boolean cacheUsed = getRepositoryConfiguration(command.getName()).isCacheUsed();
 
     ObjectCache objectCache = null;
     ObjectCacheKey cacheKey = null;
 
     if (cacheUsed) {
-      final String checksum = getRepositoryService().getFileChecksum(repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
-      objectCache = objectCacheManager.getCache(svnCommand.getName());
-      cacheKey = new ObjectCacheKey(svnCommand.getPath(), checksum);
+      final String checksum = getRepositoryService().getFileChecksum(repository, command.getPath(), command.getRevisionNumber());
+      objectCache = objectCacheManager.getCache(command.getName());
+      cacheKey = new ObjectCacheKey(command.getPath(), checksum);
       logger.debug("Using cachekey: " + cacheKey);
       final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
       // Check if the thumbnail exists on the cache
@@ -95,7 +95,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
       }
     }
 
-    final byte[] thumbnailData = createThumbnail(repository, svnCommand);
+    final byte[] thumbnailData = createThumbnail(repository, command);
 
     if (cacheUsed) {
       // Putting created thumbnail image into the cache.
@@ -113,15 +113,15 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * Creates a thumbnail version of a full size image.
    *
    * @param repository Repository
-   * @param svnCommand Command
+   * @param command Command
    * @return array of image bytes
    */
-  private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand svnCommand) {
-    logger.debug("Getting image file: " + svnCommand.getPath());
+  private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand command) {
+    logger.debug("Getting image file: " + command.getPath());
     final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
     final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
     try {
-      getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), fullSizeImageData);
+      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
       final ImageScaler imageScaler = new ImageScaler(ImageIO.read(new ByteArrayInputStream(
           fullSizeImageData.toByteArray())));
       ImageIO.write(imageScaler.createThumbnail(maxThumbnailSize), imageFormatName, thumbnailImageData);
@@ -136,12 +136,12 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    *
    * @param request    Request.
    * @param response   Response.
-   * @param svnCommand Command.
+   * @param command Command.
    */
   protected void prepareResponse(final HttpServletRequest request, final HttpServletResponse response,
-                                 final SVNBaseCommand svnCommand) {
-    response.setHeader(CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
-    response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
+                                 final SVNBaseCommand command) {
+    response.setHeader(CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
+    response.setContentType(mimeFileTypeMap.getContentType(command.getPath()));
   }
 
   /**

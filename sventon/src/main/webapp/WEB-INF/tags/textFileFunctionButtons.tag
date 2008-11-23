@@ -40,9 +40,10 @@
     <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="document.location.href='${blameLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="document.location.href='${showFileUrl}&format=raw';">
 
-      <c:url value="/repos/${command.name}/diffprev${command.path}" var="diffPreviousUrl">
-        <c:param name="revision" value="${command.revision}" />
-      </c:url>
+    <c:url value="/repos/${command.name}/diff${command.path}" var="diffPreviousUrl">
+      <c:param name="revision" value="${command.revision}"/>
+    </c:url>
+
     <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.path},${command.revision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
   </c:otherwise>
 </c:choose>

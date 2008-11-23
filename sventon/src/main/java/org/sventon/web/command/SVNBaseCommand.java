@@ -39,7 +39,10 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class SVNBaseCommand {
+public class SVNBaseCommand {
+
+  public SVNBaseCommand() {
+  }
 
   /**
    * The full path.
@@ -72,9 +75,9 @@ public final class SVNBaseCommand {
   private RepositoryEntrySorter.SortMode sortMode;
 
   /**
-   * Logger for this class.
+   * Logger for this class and sub classes.
    */
-  private static final Log LOGGER = LogFactory.getLog(SVNBaseCommand.class);
+  protected final Log logger = LogFactory.getLog(getClass().getName());
 
   /**
    * Gets the path.
@@ -283,7 +286,7 @@ public final class SVNBaseCommand {
       } else if (revision.getNumber() == -1 && revision.getDate() != null) {
         revisionNumber = repository.getDatedRevision(revision.getDate());
       } else {
-        LOGGER.warn("Unexpected revision: " + revision);
+        logger.warn("Unexpected revision: " + revision);
         revisionNumber = headRevision;
       }
     }

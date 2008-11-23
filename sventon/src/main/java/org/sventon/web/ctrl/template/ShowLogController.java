@@ -54,12 +54,12 @@ public final class ShowLogController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", svnCommand.getPath());
+    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
     final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "head"));
 
     final long revNumber;
@@ -75,7 +75,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
 
     try {
-      logEntries.addAll(getRepositoryService().getRevisions(svnCommand.getName(), repository, revNumber, FIRST_REVISION,
+      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, revNumber, FIRST_REVISION,
           nextPathParam, pageSize));
 
       String pathAtRevision = nextPathParam;
@@ -112,7 +112,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
-    model.put("isFile", getRepositoryService().getNodeKind(repository, svnCommand.getPath(), svnCommand.getRevisionNumber()) == SVNNodeKind.FILE);
+    model.put("isFile", getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
     return new ModelAndView(getViewName(), model);
   }

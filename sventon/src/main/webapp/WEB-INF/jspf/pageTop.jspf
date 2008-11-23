@@ -25,16 +25,7 @@
   <tr>
     <td valign="bottom" colspan="1">
       <a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount); return false;">
-        [<span id="latestCommitLink">
-        <c:choose>
-          <c:when test="${param.showlatestrevinfo eq 'true'}">
-            <spring:message code='hide'/>
-          </c:when>
-          <c:otherwise>
-            <spring:message code='show'/>
-          </c:otherwise>
-        </c:choose>
-      </span>&nbsp;<spring:message code='latest.commit.info'/>]</a></td>
+        [<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}"><spring:message code='hide'/></c:when><c:otherwise><spring:message code='show'/></c:otherwise></c:choose></span>&nbsp;<spring:message code='latest.commit.info'/>]</a></td>
     <td align="right">
     <form name="gotoForm" method="post" action="#" onsubmit="return goto(this);">
         <table class="sventonRepositoryFunctionsTable">

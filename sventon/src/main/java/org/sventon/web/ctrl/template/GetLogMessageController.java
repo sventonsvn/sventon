@@ -36,7 +36,7 @@ public final class GetLogMessageController extends AbstractSVNTemplateController
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -44,9 +44,9 @@ public final class GetLogMessageController extends AbstractSVNTemplateController
     final Map<String, Object> model = new HashMap<String, Object>();
     LogMessage logMessage = null;
     try {
-      logger.debug("Getting log message from revision [" + svnCommand.getRevisionNumber() + "]");
-      final SVNLogEntry logEntry = getRepositoryService().getRevision(svnCommand.getName(), repository, svnCommand.getRevisionNumber());
-      logMessage = new LogMessage(svnCommand.getRevisionNumber(), logEntry.getMessage()); //TODO: Parse to apply Bugtraq link
+      logger.debug("Getting log message from revision [" + command.getRevisionNumber() + "]");
+      final SVNLogEntry logEntry = getRepositoryService().getRevision(command.getName(), repository, command.getRevisionNumber());
+      logMessage = new LogMessage(command.getRevisionNumber(), logEntry.getMessage()); //TODO: Parse to apply Bugtraq link
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());
     }

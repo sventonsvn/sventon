@@ -52,18 +52,18 @@ public final class BlameController extends AbstractSVNTemplateController {
    * {@inheritDoc}
    */
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    logger.debug("Blaming: " + svnCommand.getPath() + ", revision: " + svnCommand.getRevisionNumber());
+    logger.debug("Blaming: " + command.getPath() + ", revision: " + command.getRevisionNumber());
 
     final String charset = userRepositoryContext.getCharset();
     logger.debug("Using charset encoding: " + charset);
 
-    final AnnotatedTextFile annotatedFile = getRepositoryService().blame(
-        repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), charset, colorer);
+    final AnnotatedTextFile annotatedFile = getRepositoryService().blame(repository, command.getPath(),
+        command.getRevisionNumber(), charset, colorer);
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("annotatedFile", annotatedFile);

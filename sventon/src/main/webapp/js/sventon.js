@@ -120,8 +120,8 @@ function validateUrl(form) {
 function doDiff(form) {
   // Check if any entry is checked
   var checkedEntry = 0;
-  for (var i = 0; i < form.entry.length; i++) {
-    if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
+  for (var i = 0; i < form.entries.length; i++) {
+    if (form.entries[i].type == 'checkbox' && form.entries[i].checked) {
       checkedEntry++;
     }
   }
@@ -134,10 +134,10 @@ function verifyCheckBox(checkbox) {
   var count = 0;
   var first = null;
   var form = checkbox.form;
-  for (var i = 0; i < form.entry.length; i++) {
-    if (form.entry[i].type == 'checkbox' && form.entry[i].checked) {
-      if (first == null && form.entry[i] != checkbox) {
-        first = form.entry[i];
+  for (var i = 0; i < form.entries.length; i++) {
+    if (form.entries[i].type == 'checkbox' && form.entries[i].checked) {
+      if (first == null && form.entries[i] != checkbox) {
+        first = form.entries[i];
       }
       count += 1;
     }
@@ -193,7 +193,7 @@ function listFiles(rowNumber, name, path) {
           iconElement.src = 'images/icon_folder.png';
           iconElement.className = 'minus';
           // TODO: Optimize this - now we will re-create Draggables for already visible entries.
-          var entries = document.getElementsByClassName('entry');
+          var entries = document.getElementsByClassName('entries');
           for (var i = 0; i < entries.length; i++) {
             new Draggable(entries[i].id, {revert:true})
           }
@@ -379,12 +379,12 @@ function getCheckedCount(form) {
   var checkedEntriesCount = 0;
 
   // Check if only one entry exists - and whether it's checked
-  if (form.entry.length == undefined) {
-    checkedEntriesCount = form.entry.checked ? 1 : 0;
+  if (form.entries.length == undefined) {
+    checkedEntriesCount = form.entries.checked ? 1 : 0;
   } else {
     // More than one entry exists - Check how many are checked
-    for (var i = 0; i < form.entry.length; i++) {
-      if (form.entry[i].checked) {
+    for (var i = 0; i < form.entries.length; i++) {
+      if (form.entries[i].checked) {
         checkedEntriesCount++;
       }
     }
