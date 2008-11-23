@@ -220,7 +220,7 @@ public interface RepositoryService {
    * Creates a side-by-side diff.
    *
    * @param repository    The repository.
-   * @param diffCommand   DiffCommand.
+   * @param command       DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return Ordered list of diffed rows.
@@ -228,7 +228,7 @@ public interface RepositoryService {
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand diffCommand,
+  List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand command,
                                          final SVNRevision pegRevision, final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException;
 
@@ -236,7 +236,7 @@ public interface RepositoryService {
    * Creates a unified diff.
    *
    * @param repository    The repository.
-   * @param diffCommand   DiffCommand.
+   * @param command       DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return The unified diff as a string.
@@ -244,7 +244,7 @@ public interface RepositoryService {
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  String diffUnified(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
+  String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision, final String charset,
                      final RepositoryConfiguration configuration)
       throws SVNException, DiffException;
 
@@ -252,7 +252,7 @@ public interface RepositoryService {
    * Creates an inline diff.
    *
    * @param repository    The repository.
-   * @param diffCommand   DiffCommand.
+   * @param command       DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return The inline diff.
@@ -260,20 +260,20 @@ public interface RepositoryService {
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision, final String charset,
+  List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision, final String charset,
                                  final RepositoryConfiguration configuration) throws SVNException, DiffException;
 
   /**
    * Creates a path diff.
    *
    * @param repository    The repository.
-   * @param diffCommand   DiffCommand.
+   * @param command       DiffCommand.
    * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff status.
    * @throws SVNException if a subversion error occur
    */
-  List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand diffCommand, final SVNRevision pegRevision,
+  List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                 final RepositoryConfiguration configuration) throws SVNException;
 
   /**
@@ -291,6 +291,8 @@ public interface RepositoryService {
                           final Colorer colorer) throws SVNException;
 
   /**
+   * Gets the path properties.
+   *
    * @param repository The repository
    * @param path       The entry path
    * @param revision   The entry revision
@@ -299,4 +301,18 @@ public interface RepositoryService {
    */
   SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
       throws SVNException;
+
+  /**
+   * Gets the node kind for given to/from entries.
+   *
+   * @param repository  The repository
+   * @param command     DiffCommand.
+   * @param pegRevision Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
+   * @return Node kind
+   * @throws SVNException  if a subversion error occur
+   * @throws DiffException Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
+   *                       of if one of the given entries does not exist in given revision.
+   */
+  SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision)
+      throws SVNException, DiffException;
 }

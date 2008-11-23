@@ -86,9 +86,9 @@ public final class KeywordHandler {
    * @throws UnsupportedEncodingException if given encoding is unsupported.
    */
   public String substitute(final String content, final String encoding) throws UnsupportedEncodingException {
-    logger.debug("Substituting keywords");
     String substitutedContent = content;
     for (String keyword : keywordsMap.keySet()) {
+      logger.debug("Substituting keywords");
       final String value = new String(keywordsMap.get(keyword), encoding);
       logger.debug(keyword + "=" + value);
       final Pattern keywordPattern = Pattern.compile("\\$" + keyword + "\\$");

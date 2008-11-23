@@ -55,7 +55,7 @@ public class GetController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -64,15 +64,15 @@ public class GetController extends AbstractSVNTemplateController {
 
     if (displayType == null) {
       logger.debug("Getting file as 'attachment'");
-      getAsAttachment(repository, svnCommand, request, response);
+      getAsAttachment(repository, command, request, response);
     } else if (DISPLAY_TYPE_INLINE.equals(displayType)) {
       logger.debug("Getting file as 'inline'");
 
-      if (mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image")) {
-        getAsInlineImage(repository, svnCommand, request, response);
+      if (mimeFileTypeMap.getContentType(command.getPath()).startsWith("image")) {
+        getAsInlineImage(repository, command, request, response);
       } else {
-        logger.warn("File [" + svnCommand.getTarget() + "] is not an image file - unable to display it 'inline'");
-        getAsAttachment(repository, svnCommand, request, response);
+        logger.warn("File [" + command.getTarget() + "] is not an image file - unable to display it 'inline'");
+        getAsAttachment(repository, command, request, response);
       }
     } else {
       throw new IllegalArgumentException("Illegal parameter '" + DISPLAY_REQUEST_PARAMETER + "':" + displayType);
@@ -80,22 +80,22 @@ public class GetController extends AbstractSVNTemplateController {
     return null;
   }
 
-  private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand svnCommand, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+  private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand command, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final OutputStream output = response.getOutputStream();
-    response.setContentType(mimeFileTypeMap.getContentType(svnCommand.getPath()));
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
+    response.setContentType(mimeFileTypeMap.getContentType(command.getPath()));
+    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), output);
+    getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
     output.flush();
     output.close();
   }
 
-  private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand svnCommand, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+  private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand command, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final OutputStream output = response.getOutputStream();
     String mimeType = null;
 
     try {
-      mimeType = getServletContext().getMimeType(svnCommand.getTarget().toLowerCase());
+      mimeType = getServletContext().getMimeType(command.getTarget().toLowerCase());
     } catch (IllegalStateException ise) {
       logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
     }
@@ -105,9 +105,9 @@ public class GetController extends AbstractSVNTemplateController {
     } else {
       response.setContentType(mimeType);
     }
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
+    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
     // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), output);
+    getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
     output.flush();
     output.close();
   }

@@ -38,7 +38,7 @@ public final class GetLatestRevisionsController extends AbstractSVNTemplateContr
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -50,7 +50,7 @@ public final class GetLatestRevisionsController extends AbstractSVNTemplateContr
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
       revisions.addAll(getRepositoryService().getRevisions(
-          svnCommand.getName(), repository, -1, FIRST_REVISION, "/", revisionCount));
+          command.getName(), repository, -1, FIRST_REVISION, "/", revisionCount));
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {

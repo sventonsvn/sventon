@@ -78,7 +78,7 @@
               <c:url value="/repos/${command.name}/view${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
-              <td><input type="checkbox" name="entry" value="${entry.pathAtRevision};;${entry.revision}" onClick="verifyCheckBox(this)"></td>
+              <td><input type="checkbox" name="entries" value="${entry.pathAtRevision};;${entry.revision}" onClick="verifyCheckBox(this)"></td>
               <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>

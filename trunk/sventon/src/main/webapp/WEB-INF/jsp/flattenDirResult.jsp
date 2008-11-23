@@ -39,7 +39,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
+  <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegrev" value="${command.revisionNumber}">
 
@@ -60,7 +60,7 @@
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
             <td class="sventonCol1">
-              <input type="checkbox" name="entry" value="${entry.fullEntryName};;${entry.revision}">
+              <form:checkbox path="entries" value="${entry.fullEntryName};;${entry.revision}"/>
             </td>
             <td class="sventonCol2">
               <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
@@ -101,7 +101,7 @@
         <td colspan="5"/>
       </tr>
     </table>
-  </form>
+  </form:form>
 
   <c:if test="${isEntryTrayEnabled}">
     <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>

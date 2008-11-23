@@ -259,8 +259,8 @@ public final class HTMLCreator {
     sb.append("/diff");
     sb.append(path);
     sb.append("?revision=").append(linkToHead ? "HEAD" : revision);
-    sb.append("&entry=").append(entry1);
-    sb.append("&entry=").append(entry2);
+    sb.append("&entries=").append(entry1);
+    sb.append("&entries=").append(entry2);
     return sb.toString();
   }
 

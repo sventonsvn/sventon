@@ -37,12 +37,12 @@ public final class ListFilesController extends ListDirectoryContentsController {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final ModelAndView modelAndView = super.svnHandle(repository, svnCommand, headRevision, userRepositoryContext, request,
+    final ModelAndView modelAndView = super.svnHandle(repository, command, headRevision, userRepositoryContext, request,
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();

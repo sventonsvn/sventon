@@ -58,8 +58,6 @@
         <prop key="/repos/(*:name)/searchlogs/(**/*:path)*">searchLogsController</prop>
         <prop key="/repos/(*:name)/flatten/(**/*:path)*">flattenController</prop>
 
-        <prop key="/repos/(*:name)/diffprev/(**/*:path)*">diffPreviousController</prop>
-
         <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
 
         <!-- url mappings for xml producers -->
@@ -88,6 +86,7 @@
     <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
     <property name="nameEditor" ref="nameEditor"/>
     <property name="revisionEditor" ref="revisionEditor"/>
+    <property name="svnFileRevisionEditor" ref="svnFileRevisionEditor"/>
   </bean>
 
   <bean id="rssController" class="org.sventon.web.ctrl.RSSController">
@@ -111,6 +110,7 @@
   </bean>
 
   <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="ajax/entryTray"/>
   </bean>
 
@@ -123,6 +123,7 @@
   </bean>
 
   <bean id="repoBrowserController" class="org.sventon.web.ctrl.template.RepoBrowserController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="repoBrowser"/>
   </bean>
 
@@ -139,10 +140,12 @@
   </bean>
 
   <bean id="flattenController" class="org.sventon.web.ctrl.template.FlattenController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="flattenDirResult"/>
   </bean>
 
   <bean id="searchEntriesController" class="org.sventon.web.ctrl.template.SearchEntriesController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="searchEntriesResult"/>
   </bean>
 
@@ -152,8 +155,11 @@
   </bean>
 
   <bean id="goToController" class="org.sventon.web.ctrl.template.GoToController" parent="abstractController"/>
-  <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractController"/>
-  <bean id="diffPreviousController" class="org.sventon.web.ctrl.template.DiffPreviousController" parent="abstractController"/>
+
+  <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.DiffCommand"/>
+    <property name="preferredDiffStyle" value="inline" />
+  </bean>
 
   <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractController">
     <property name="textFileExtensionPattern" value=""/>
@@ -168,7 +174,9 @@
   </bean>
 
   <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+    <property name="viewName" value="showThumbnails"/>
   </bean>
 
   <bean id="getThumbnailController" class="org.sventon.web.ctrl.template.GetThumbnailController" parent="abstractController">
@@ -176,10 +184,10 @@
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>
     <property name="maxThumbnailSize" value="200"/>
-    <property name="viewName" value="showThumbnails"/>
   </bean>
 
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="exportDir" ref="sventonTempExportDir"/>
     <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
   </bean>

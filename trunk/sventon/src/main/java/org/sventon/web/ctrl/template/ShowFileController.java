@@ -93,12 +93,12 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    logger.debug("Assembling file contents for: " + svnCommand);
+    logger.debug("Assembling file contents for: " + command);
 
     final String formatParameter = ServletRequestUtils.getStringParameter(request, FORMAT_REQUEST_PARAMETER, null);
     final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
@@ -106,7 +106,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final SVNProperties fileProperties = getRepositoryService().getFileProperties(
-        repository, svnCommand.getPath(), svnCommand.getRevisionNumber());
+        repository, command.getPath(), command.getRevisionNumber());
 
     logger.debug(fileProperties);
 
@@ -116,13 +116,13 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
     model.put("properties", fileProperties);
     final ModelAndView modelAndView;
 
-    if (isImageFileExtension(svnCommand)) {
+    if (isImageFileExtension(command)) {
       logger.debug("File identified as an image file");
       modelAndView = new ModelAndView("showImageFile", model);
-    } else if (isArchiveFileExtension(svnCommand)) {
+    } else if (isArchiveFileExtension(command)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
-        getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
+        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
         model.put("entries", archiveFile.getEntries());
         modelAndView = new ModelAndView("showArchiveFile", model);
@@ -133,8 +133,8 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
         logger.debug("Detected content-type: " + contentType);
 
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
-          getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
-          logger.debug("Extracting [" + archivedEntry + "] from archive [" + svnCommand.getPath() + "]");
+          getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
+          logger.debug("Extracting [" + archivedEntry + "] from archive [" + command.getPath() + "]");
           final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
           final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
               archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
@@ -144,23 +144,23 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
           modelAndView = new ModelAndView("showBinaryFile", model);
         }
       }
-    } else if (isBinaryFileExtension(svnCommand)) {
+    } else if (isBinaryFileExtension(command)) {
       logger.debug("File identified as a binary file");
       modelAndView = new ModelAndView("showBinaryFile", model);
-    } else if (isTextFileExtension(svnCommand) || isTextMimeType(fileProperties)) {
-      getRepositoryService().getFile(repository, svnCommand.getPath(), svnCommand.getRevisionNumber(), outStream);
+    } else if (isTextFileExtension(command) || isTextMimeType(fileProperties)) {
+      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
-            repository.getLocation().toDecodedString() + svnCommand.getPath());
+            repository.getLocation().toDecodedString() + command.getPath());
         final String content = keywordHandler.substitute(outStream.toString(charset), charset);
         response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
-            "inline; filename=\"" + EncodingUtils.encodeFilename(svnCommand.getTarget(), request) + "\"");
+            "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
         response.getOutputStream().write(content.getBytes(charset));
         return null;
       } else {
-        final TextFile textFile = new TextFile(outStream.toString(charset), svnCommand.getPath(), charset,
+        final TextFile textFile = new TextFile(outStream.toString(charset), command.getPath(), charset,
             colorer, fileProperties, repository.getLocation().toDecodedString());
         model.put("file", textFile);
       }
@@ -185,41 +185,41 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   /**
    * Checks if given file name indicates a text file.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return True if text file, false if not.
    */
-  boolean isTextFileExtension(final SVNBaseCommand svnCommand) {
-    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(textFileExtensionPattern);
+  boolean isTextFileExtension(final SVNBaseCommand command) {
+    return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(textFileExtensionPattern);
   }
 
   /**
    * Checks if given file name indicates a binary file.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return True if binary file, false if not.
    */
-  boolean isBinaryFileExtension(final SVNBaseCommand svnCommand) {
-    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(binaryFileExtensionPattern);
+  boolean isBinaryFileExtension(final SVNBaseCommand command) {
+    return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(binaryFileExtensionPattern);
   }
 
   /**
    * Checks if given file name indicates an archive file.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return True if archive file, false if not.
    */
-  protected boolean isArchiveFileExtension(final SVNBaseCommand svnCommand) {
-    return FilenameUtils.getExtension(svnCommand.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
+  protected boolean isArchiveFileExtension(final SVNBaseCommand command) {
+    return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
   }
 
   /**
    * Checks if given file name indicates an image file.
    *
-   * @param svnCommand Command
+   * @param command Command
    * @return True if image file, false if not.
    */
-  protected boolean isImageFileExtension(final SVNBaseCommand svnCommand) {
-    return mimeFileTypeMap.getContentType(svnCommand.getPath()).startsWith("image");
+  protected boolean isImageFileExtension(final SVNBaseCommand command) {
+    return mimeFileTypeMap.getContentType(command.getPath()).startsWith("image");
   }
 
   /**

@@ -18,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
-import org.sventon.util.RequestParameterParser;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  * Controller for exporting and downloading files or directories as a zip file.
@@ -55,18 +56,19 @@ public final class ExportController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", svnCommand.getRevisionNumber());
+    final MultipleEntriesCommand command = (MultipleEntriesCommand) cmd;
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", command.getRevisionNumber());
 
     OutputStream output = null;
     InputStream fileInputStream = null;
 
-    final List<SVNFileRevision> targets = new RequestParameterParser().parseEntries(request);
-    final ExportDirectory exportDirectory = new ExportDirectory(svnCommand.getName(), exportDir, archiveFileCharset);
+    final List<SVNFileRevision> targets = Arrays.asList(command.getEntries());
+    final ExportDirectory exportDirectory = new ExportDirectory(command.getName(), exportDir, archiveFileCharset);
 
     try {
       logger.debug(exportDirectory);

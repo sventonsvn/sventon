@@ -5,31 +5,35 @@ import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNRepositoryStub;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.util.SVNFileRevisionEditor;
+import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 public class ShowThumbnailsControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final MultipleEntriesCommand command = new MultipleEntriesCommand();
     final ShowThumbnailsController ctrl = new ShowThumbnailsController();
 
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
     mftm.afterPropertiesSet();
     ctrl.setMimeFileTypeMap(mftm);
 
-    final MockHttpServletRequest req = new MockHttpServletRequest();
     final String[] pathEntries = new String[]{
         "file1.gif;;123",
         "file2.jpg;;123",
         "file.abc;;123"};
-    req.addParameter("entry", pathEntries);
 
+    final SVNFileRevisionEditor svnFileRevisionEditor = new SVNFileRevisionEditor();
+    command.setEntries(svnFileRevisionEditor.convert(pathEntries));
+
+    final MockHttpServletRequest req = new MockHttpServletRequest();
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_INLINE);
 
     final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(),

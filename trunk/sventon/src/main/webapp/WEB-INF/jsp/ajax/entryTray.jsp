@@ -16,8 +16,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');">
+<form:form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
   <!-- The last dragged entry's peg revision will rule -->
   <input type="hidden" name="revision" value="${pegrev}">
 
@@ -52,7 +53,9 @@
         <c:param name="action" value="remove" />
       </c:url>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-      <td><input type="checkbox" name="entry" value="${trayEntry.fullEntryName};;${peggedEntry.pegRevision}"></td>
+      <td>
+        <form:checkbox path="entries" value="${trayEntry.fullEntryName};;${peggedEntry.pegRevision}"/>
+      </td>
       <c:choose>
         <c:when test="${'DIR' eq trayEntry.kind}">
           <td>
@@ -84,4 +87,4 @@
       <td/>
     </tr>
   </table>
-</form>
+</form:form>

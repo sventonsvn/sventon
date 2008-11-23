@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1408] Feature #4221 - Possibility to decide default diff view.
 [1393] Feature #3022 - Add admin control.
 
 [1390] Release 1.4.1 (2008-10-01)

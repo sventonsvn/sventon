@@ -44,21 +44,21 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand svnCommand,
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    assertEntryTrayEnabled(svnCommand.getName());
+    assertEntryTrayEnabled(command.getName());
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", svnCommand.getRevisionNumber());
+    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", command.getRevisionNumber());
 
     final ModelAndView modelAndView = new ModelAndView(getViewName());
     modelAndView.addObject("pegrev", pegRevision);
 
     final RepositoryEntry entry;
     try {
-      entry = getRepositoryService().getEntryInfo(repository, svnCommand.getPath(), pegRevision);
+      entry = getRepositoryService().getEntryInfo(repository, command.getPath(), pegRevision);
     } catch (SVNException e) {
       return modelAndView;
     }

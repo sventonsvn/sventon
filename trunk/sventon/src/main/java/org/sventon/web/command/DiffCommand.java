@@ -11,77 +11,90 @@
  */
 package org.sventon.web.command;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.sventon.diff.DiffException;
+import org.apache.commons.lang.Validate;
+import org.sventon.model.DiffStyle;
 import org.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * DiffCommand.
  * <p/>
  * Command class used to parse and bundle diffing from/to details.
+ * <p/>
+ * A diff can be made between two arbitrary entries or by a single entry and
+ * it's previous revision. In the first case, the method
+ * {@link #setEntries(org.tmatesoft.svn.core.io.SVNFileRevision[])} setEntries} will be used.
+ * A diff with previous revision will use the main path set by calling {@link #setPath(String)} }
  *
  * @author jesper@sventon.org
  */
-public final class DiffCommand {
+public final class DiffCommand extends SVNBaseCommand {
 
   /**
    * From revision.
    */
-  private final SVNRevision fromRevision;
+  private SVNFileRevision fromFileRevision;
 
   /**
    * To revision.
    */
-  private final SVNRevision toRevision;
+  private SVNFileRevision toFileRevision;
 
   /**
-   * From path.
+   * The requested diff style.
    */
-  private final String fromPath;
+  private DiffStyle style = DiffStyle.unspecified;
 
   /**
-   * To path.
-   */
-  private final String toPath;
-
-  /**
-   * Constructor.
-   * Used when diffing an entry to its previous entry in history.
+   * Sets the requested diff style.
    *
-   * @param revisions The list containing at least two <code>SVNFileRevision</code> objects.
-   *                  The first is assumed to be the <i>to (i.e. latest)</i> revision,
-   *                  the second to be the <i>from (i.e. oldest)</i> revision.
-   * @throws DiffException if given list does not contain at least two entries.
+   * @param style Style
    */
-  public DiffCommand(final List<SVNFileRevision> revisions) throws DiffException {
+  public void setStyle(final DiffStyle style) {
+    Validate.notNull(style);
+    this.style = style;
+  }
 
-    if (revisions == null || revisions.size() < 2) {
-      throw new DiffException("The entry does not have a history.");
+  /**
+   * Used when diffing two arbitrary entries.
+   *
+   * @param entries Array containing two <code>SVNFileRevision</code> objects.
+   * @throws IllegalArgumentException if given list does not contain two entries.
+   */
+  public void setEntries(final SVNFileRevision[] entries) {
+    Validate.notNull(entries);
+
+    if (entries.length < 2) {
+      throw new IllegalArgumentException("The entry does not have a history.");
     }
 
-    // Reverse to get latest first
-    Collections.sort(revisions, new Comparator<SVNFileRevision>() {
-      public int compare(final SVNFileRevision o1, final SVNFileRevision o2) {
+    Arrays.sort(entries, new Comparator<SVNFileRevision>() {
+      public int compare(SVNFileRevision o1, SVNFileRevision o2) {
         return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
       }
     });
-    final Iterator revisionIterator = revisions.iterator();
-    // Grab the latest..
-    final SVNFileRevision toRevision = (SVNFileRevision) revisionIterator.next();
-    this.toPath = toRevision.getPath();
-    this.toRevision = SVNRevision.create(toRevision.getRevision());
-    // ..and the previous one...
-    final SVNFileRevision fromRevision = (SVNFileRevision) revisionIterator.next();
-    this.fromPath = fromRevision.getPath();
-    this.fromRevision = SVNRevision.create(fromRevision.getRevision());
+    toFileRevision = entries[0];
+    fromFileRevision = entries[1];
+  }
+
+  /**
+   * @return True if entries has been set (using {@link #setEntries(org.tmatesoft.svn.core.io.SVNFileRevision[])}).
+   */
+  public boolean hasEntries() {
+    return toFileRevision != null && fromFileRevision != null;
+  }
+
+  /**
+   * Gets the requested diff style.
+   *
+   * @return Style
+   */
+  public DiffStyle getStyle() {
+    return style;
   }
 
   /**
@@ -90,7 +103,7 @@ public final class DiffCommand {
    * @return The path.
    */
   public String getFromPath() {
-    return fromPath;
+    return fromFileRevision != null ? fromFileRevision.getPath() : "";
   }
 
   /**
@@ -99,7 +112,7 @@ public final class DiffCommand {
    * @return From target, i.e. file name without path.
    */
   public String getFromTarget() {
-    return PathUtil.getTarget(fromPath);
+    return PathUtil.getTarget(getFromPath());
   }
 
   /**
@@ -108,7 +121,7 @@ public final class DiffCommand {
    * @return The revision.
    */
   public SVNRevision getFromRevision() {
-    return fromRevision;
+    return fromFileRevision != null ? SVNRevision.create(fromFileRevision.getRevision()) : SVNRevision.UNDEFINED;
   }
 
   /**
@@ -117,7 +130,7 @@ public final class DiffCommand {
    * @return The path.
    */
   public String getToPath() {
-    return toPath;
+    return toFileRevision != null ? toFileRevision.getPath() : "";
   }
 
   /**
@@ -126,7 +139,7 @@ public final class DiffCommand {
    * @return To target, i.e. file name without path.
    */
   public String getToTarget() {
-    return PathUtil.getTarget(toPath);
+    return PathUtil.getTarget(getToPath());
   }
 
   /**
@@ -135,7 +148,7 @@ public final class DiffCommand {
    * @return The revision.
    */
   public SVNRevision getToRevision() {
-    return toRevision;
+    return toFileRevision != null ? SVNRevision.create(toFileRevision.getRevision()) : SVNRevision.UNDEFINED;
   }
 
   /**
@@ -143,6 +156,31 @@ public final class DiffCommand {
    */
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    final StringBuilder sb = new StringBuilder();
+    sb.append("DiffCommand {");
+    if (hasEntries()) {
+      sb.append("from: ");
+      sb.append(getFromPath());
+      sb.append("@");
+      sb.append(getFromRevision());
+      sb.append(", to: ");
+      sb.append(getToPath());
+      sb.append("@");
+      sb.append(getToRevision());
+    } else {
+      sb.append("from: ");
+      sb.append(getPath());
+      sb.append("@");
+      sb.append(getRevision());
+      sb.append(", to: ");
+      sb.append(getPath());
+      sb.append("@");
+      sb.append(getRevision());
+      sb.append("-1");
+    }
+    sb.append(", style: ");
+    sb.append(getStyle());
+    sb.append("}");
+    return sb.toString();
   }
 }
