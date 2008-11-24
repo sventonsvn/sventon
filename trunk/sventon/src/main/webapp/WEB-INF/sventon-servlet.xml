@@ -188,7 +188,7 @@
 
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
-    <property name="exportDir" ref="sventonTempExportDir"/>
+    <property name="configDirectory" ref="configDirectory"/>
     <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
   </bean>
 

@@ -1,16 +1,16 @@
 package org.sventon;
 
-import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryEntry;
 import org.tmatesoft.svn.core.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public final class TestUtils {
 
   public static final String TEMPDIR = System.getProperty("java.io.tmpdir");
+  public static final String CONFIG_FILE_NAME = "sventon_config.properties";
 
   private static final Map<String, SVNLogEntryPath> ONE_CHANED_PATH = new HashMap<String, SVNLogEntryPath>();
   private static final long DEFAULT_REVISION = 123;
@@ -21,8 +21,8 @@ public final class TestUtils {
     ONE_CHANED_PATH.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
   }
 
-  public static Application getApplicationStub() throws IOException {
-    return new Application(new File(TEMPDIR), "filename");
+  public static ConfigDirectory getTestConfigDirectory() {
+    return new ConfigDirectory(new File(TEMPDIR), "export_temp", "repositories");
   }
 
   public static SVNLogEntry getLogEntryStub() {

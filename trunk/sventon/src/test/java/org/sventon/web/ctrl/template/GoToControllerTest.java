@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.SVNBaseCommand;
@@ -31,7 +32,14 @@ public class GoToControllerTest extends TestCase {
     command.setRevision(SVNRevision.create(12));
 
     final GoToController ctrl = new GoToController();
-    final Application application = TestUtils.getApplicationStub();
+
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
     application.setConfigured(true);
     ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);

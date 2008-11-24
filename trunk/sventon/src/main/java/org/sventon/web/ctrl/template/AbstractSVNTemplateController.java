@@ -381,7 +381,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Parses sort mode and type parameters from the request instance and
    * updates the <code>UserContext</code> instance.
    *
-   * @param command  The Command.
+   * @param command     The Command.
    * @param userContext The UserContext instance to update.
    */
   protected final void parseAndUpdateSortParameters(final SVNBaseCommand command,
@@ -421,8 +421,8 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * Prepares the exception model and view with basic data
    * needed to for displaying a useful error message.
    *
-   * @param exception  Bind exception from Spring MVC validation.
-   * @param command Command object.
+   * @param exception Bind exception from Spring MVC validation.
+   * @param command   Command object.
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
@@ -442,7 +442,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *
    * @param repository            Reference to the repository, prepared with authentication
    *                              if applicable.
-   * @param command            Command (basically request parameters submitted in user
+   * @param command               Command (basically request parameters submitted in user
    *                              request)
    * @param headRevision          The head revision.
    * @param userRepositoryContext The user's context instance for this repository.

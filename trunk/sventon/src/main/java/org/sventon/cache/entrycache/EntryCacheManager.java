@@ -11,6 +11,7 @@
  */
 package org.sventon.cache.entrycache;
 
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
 import org.sventon.model.RepositoryName;
@@ -27,16 +28,16 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
   /**
    * Root directory for cache files.
    */
-  private final File rootDirectory;
+  private final File repositoriesDirectory;
 
   /**
    * Constructor.
    *
-   * @param rootDirectory Directory where to store cache files.
+   * @param configDirectory Directory where to store cache files.
    */
-  public EntryCacheManager(final File rootDirectory) {
-    logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
-    this.rootDirectory = rootDirectory;
+  public EntryCacheManager(final ConfigDirectory configDirectory) {
+    logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
+    this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
   }
 
   /**
@@ -48,7 +49,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
    */
   protected EntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
-    final File cacheDirectory = new File(new File(rootDirectory, repositoryName.toString()), "cache");
+    final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
     final DiskCache cache = new DiskCache(cacheDirectory);
     cache.init();

@@ -3,13 +3,14 @@ package org.sventon.cache;
 import junit.framework.TestCase;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.entrycache.MemoryCache;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.*;
+import org.springframework.mock.web.MockServletContext;
 
-import java.io.File;
 import java.util.*;
 
 public class CacheGatewayImplTest extends TestCase {
@@ -17,7 +18,13 @@ public class CacheGatewayImplTest extends TestCase {
   private final RepositoryName repositoryName = new RepositoryName("testRepos");
 
   private CacheGateway createCache() throws CacheException {
-    final EntryCacheManager cacheManager = new EntryCacheManager(new File("/"));
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    final EntryCacheManager cacheManager = new EntryCacheManager(configDirectory);
     final EntryCache entryCache = new MemoryCache();
     entryCache.init();
     cacheManager.addCache(repositoryName, entryCache);
