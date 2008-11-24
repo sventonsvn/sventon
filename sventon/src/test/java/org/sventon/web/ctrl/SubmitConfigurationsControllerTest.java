@@ -8,19 +8,30 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
-import static org.sventon.TestUtils.TEMPDIR;
 import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 
 import java.io.File;
 
 public class SubmitConfigurationsControllerTest extends TestCase {
 
+  private ConfigDirectory configDirectory;
+  private Application application;
+
+  protected void setUp() throws Exception {
+    configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+  }
+
   public void testHandleRequestInternalConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final SubmitConfigurationsController controller = new SubmitConfigurationsController();
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
     final ModelAndView modelAndView = controller.handleRequestInternal(request, response);
@@ -31,7 +42,6 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final SubmitConfigurationsController controller = new SubmitConfigurationsController();
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     controller.setApplication(application);
 
@@ -43,13 +53,14 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final SubmitConfigurationsController ctrl = new SubmitConfigurationsController();
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
 
     ctrl.setScheduler(new StdScheduler(null, null) {
       public void triggerJob(final String string, final String string1) {
       }
     });
-
-    final Application application = new Application(new File(TEMPDIR), "tmpconfigfilename");
 
     final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
     repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
@@ -71,8 +82,8 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     ctrl.setApplication(application);
     ctrl.setServletContext(new MockServletContext());
 
-    final File configFile1 = new File(TEMPDIR, "testrepos1");
-    final File configFile2 = new File(TEMPDIR, "testrepos2");
+    final File configFile1 = new File(configDirectory.getRepositoriesDirectory(), "testrepos1");
+    final File configFile2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
 
     assertFalse(configFile1.exists());
     assertFalse(configFile2.exists());
@@ -84,8 +95,7 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     //File should now be written
     assertTrue(configFile1.exists());
     assertTrue(configFile2.exists());
-    FileUtils.deleteDirectory(configFile1);
-    FileUtils.deleteDirectory(configFile2);
+    FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
     assertFalse(configFile1.exists());
     assertFalse(configFile2.exists());
     assertTrue(application.isConfigured());

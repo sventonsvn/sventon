@@ -7,6 +7,7 @@ import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
+import org.springframework.mock.web.MockServletContext;
 
 import java.util.*;
 
@@ -17,9 +18,15 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   }
 
   public void testUpdate() throws Exception {
-    final Application application = TestUtils.getApplicationStub();
-    final String name = "defaultsvn";
-    final RepositoryConfiguration configuration = new RepositoryConfiguration(name);
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("name");
     configuration.setCacheUsed(true);
     application.addRepository(configuration);
     application.setConfigured(true);

@@ -15,12 +15,13 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.WebUtils;
-import org.sventon.web.command.SVNBaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
+import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -28,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Controller for exporting and downloading files or directories as a zip file.
@@ -95,12 +96,13 @@ public final class ExportController extends AbstractSVNTemplateController {
   }
 
   /**
-   * Sets the export dir to use when exporting files to be zipped from the repository.
+   * Sets the export dir (extracted from given configDirectory) to use when exporting
+   * files to be zipped from the repository.
    *
-   * @param exportDir The directory
+   * @param configDirectory The configuration directory.
    */
-  public void setExportDir(final File exportDir) {
-    this.exportDir = exportDir;
+  public void setConfigDirectory(final ConfigDirectory configDirectory) {
+    this.exportDir = configDirectory.getExportDirectory();
   }
 
   /**

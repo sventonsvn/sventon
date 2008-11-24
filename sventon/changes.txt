@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1409] Fixed: Bug #12687 - Cannot have more than one sventon instance per container.
 [1408] Feature #4221 - Possibility to decide default diff view.
 [1393] Feature #3022 - Add admin control.
 

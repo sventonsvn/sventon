@@ -12,6 +12,7 @@
 package org.sventon.cache.logmessagecache;
 
 import org.apache.lucene.store.FSDirectory;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
 import org.sventon.model.RepositoryName;
@@ -29,7 +30,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
   /**
    * Directory where to store cache files.
    */
-  private final File rootDirectory;
+  private final File repositoriesDirectory;
 
   /**
    * Lucene Analyzer to use.
@@ -41,14 +42,14 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
   /**
    * Constructor.
    *
-   * @param rootDirectory     Root directory to use.
+   * @param configDirectory   Root directory to use.
    * @param analyzerClassName Analyzer to use.
    */
-  public LogMessageCacheManager(final File rootDirectory, final String analyzerClassName) {
-    logger.debug("Starting cache manager. Using [" + rootDirectory + "] as root directory");
-    this.rootDirectory = rootDirectory;
+  public LogMessageCacheManager(final ConfigDirectory configDirectory, final String analyzerClassName) {
+    logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
+    this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
     this.analyzerClassName = analyzerClassName;
-    System.setProperty("org.apache.lucene.lockDir", rootDirectory.getAbsolutePath());
+    System.setProperty("org.apache.lucene.lockDir", configDirectory.getRepositoriesDirectory().getAbsolutePath());
   }
 
   /**
@@ -62,7 +63,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
     logger.debug("Creating cache: " + repositoryName);
     final FSDirectory fsDirectory;
     try {
-      final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
+      final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
       cachePath.mkdirs();
       fsDirectory = FSDirectory.getDirectory(cachePath);
       logger.debug("Log cache dir: " + fsDirectory.getFile().getAbsolutePath());

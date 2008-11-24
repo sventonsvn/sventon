@@ -12,6 +12,7 @@
 package org.sventon;
 
 import org.apache.commons.lang.Validate;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -31,18 +32,17 @@ public final class RepositoryConnectionFactory {
   /**
    * Root directory where to place the svn config files.
    */
-  private final File configurationRootDirectory;
+  private final ConfigDirectory configurationDirectory;
 
   /**
    * Constructor.
    *
-   * @param configurationRootDirectory Root directory where to place the svn config files.
-   *                                   If the directory does not exist, it will be created.
+   * @param configDirectory Root directory where to place the svn config files.
+   *                        If the directory does not exist, it will be created.
    */
-  public RepositoryConnectionFactory(final File configurationRootDirectory) {
-    Validate.notNull(configurationRootDirectory, "Configuration root dir cannot be null!");
-    configurationRootDirectory.mkdirs();
-    this.configurationRootDirectory = configurationRootDirectory;
+  public RepositoryConnectionFactory(final ConfigDirectory configDirectory) {
+    Validate.notNull(configDirectory, "Configuration directory cannot be null!");
+    this.configurationDirectory = configDirectory;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class RepositoryConnectionFactory {
     }
 
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
-    final File configDirectory = new File(configurationRootDirectory, repositoryName.toString());
+    final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd, false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;

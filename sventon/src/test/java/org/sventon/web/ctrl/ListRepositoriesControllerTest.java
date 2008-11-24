@@ -9,18 +9,30 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
 
 public class ListRepositoriesControllerTest extends TestCase {
 
+  private ConfigDirectory configDirectory;
+  private Application application;
+
+  protected void setUp() throws Exception {
+    configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+  }
+
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
 
     final ListRepositoriesController ctrl = new ListRepositoriesController();
-    final Application application = TestUtils.getApplicationStub();
     ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);
 
@@ -59,7 +71,6 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setSession(session);
 
     final ListRepositoriesController controller = new ListRepositoriesController();
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     controller.setApplication(application);
 

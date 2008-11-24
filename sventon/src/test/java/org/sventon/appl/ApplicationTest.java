@@ -3,8 +3,8 @@ package org.sventon.appl;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
-import static org.sventon.TestUtils.TEMPDIR;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +14,12 @@ import java.util.Properties;
 
 public class ApplicationTest extends TestCase {
 
+  private ConfigDirectory configDirectory;
+
+  protected void setUp() throws Exception {
+    configDirectory = TestUtils.getTestConfigDirectory();
+  }
+
   public void testApplication() throws Exception {
     try {
       new Application(null, null);
@@ -22,18 +28,25 @@ public class ApplicationTest extends TestCase {
       // exptected
     }
 
-    final Application application = TestUtils.getApplicationStub();
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setCreateDirectories(false);
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
     assertFalse(application.isConfigured());
     assertEquals(0, application.getRepositoryCount());
   }
 
   public void testStoreRepositoryConfigurations() throws Exception {
-    final File repos1 = new File(TEMPDIR, "testrepos1");
-    final File repos2 = new File(TEMPDIR, "testrepos2");
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    final File repos1 = new File(configDirectory.getRepositoriesDirectory(), "testrepos1");
+    final File repos2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
 
     try {
-      final String configFilename = "tmpconfigfilename";
-      final Application application = new Application(new File(TEMPDIR), configFilename);
+      final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
 
       final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
       repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
@@ -52,20 +65,24 @@ public class ApplicationTest extends TestCase {
       application.addRepository(repositoryConfiguration1);
       application.addRepository(repositoryConfiguration2);
 
-      assertFalse(new File(repos1, configFilename).exists());
-      assertFalse(new File(repos2, configFilename).exists());
+      assertFalse(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
+      assertFalse(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
       application.persistRepositoryConfigurations();
       //File should now be written
-      assertTrue(new File(repos1, configFilename).exists());
-      assertTrue(new File(repos2, configFilename).exists());
+      assertTrue(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
+      assertTrue(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
     } finally {
-      FileUtils.deleteDirectory(repos1);
-      FileUtils.deleteDirectory(repos2);
+      FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
     }
   }
 
   public void testGetConfigurationAsProperties() throws Exception {
-    final Application application = TestUtils.getApplicationStub();
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setCreateDirectories(false);
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
     final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
     config1.setUid("");
@@ -84,6 +101,10 @@ public class ApplicationTest extends TestCase {
   }
 
   public void testLoadRepositoryConfigurations() throws Exception {
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
     final Properties testConfig = new Properties();
     testConfig.put("root", "http://localhost");
     testConfig.put("uid", "username");
@@ -91,9 +112,8 @@ public class ApplicationTest extends TestCase {
     testConfig.put("useCache", "false");
     testConfig.put("allowZipDownloads", "false");
 
-    final File configRootDirectory = new File(TEMPDIR);
     final String configFilename = "sventon-config-test.tmp";
-    final Application application = new Application(configRootDirectory, configFilename);
+    final Application application = new Application(configDirectory, configFilename);
 
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
@@ -101,7 +121,7 @@ public class ApplicationTest extends TestCase {
     OutputStream os = null;
     InputStream is = null;
 
-    final File configDir = new File(configRootDirectory, "defaultsvn");
+    final File configDir = new File(configDirectory.getRepositoriesDirectory(), "defaultsvn");
     configDir.mkdirs();
 
     try {
@@ -115,7 +135,7 @@ public class ApplicationTest extends TestCase {
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
-      FileUtils.deleteDirectory(configDir);
+      FileUtils.deleteDirectory(configDirectory.getRepositoriesDirectory());
     }
   }
 

@@ -14,6 +14,7 @@ package org.sventon.export;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.appl.ConfigDirectory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -48,16 +49,17 @@ public final class TemporaryFileCleaner {
   /**
    * Constructor.
    *
-   * @param directory      The directory.
-   * @param filenameFilter Filter to use.
-   * @param expirationRule Expiration rule.
+   * @param configDirectory The configuration directory.
+   * @param filenameFilter  Filter to use.
+   * @param expirationRule  Expiration rule.
    */
-  public TemporaryFileCleaner(final File directory, final FilenameFilter filenameFilter, final ExpirationRule expirationRule) {
-    Validate.isTrue(directory.exists(), "Directory does not exist: " + directory);
-    Validate.isTrue(directory.isDirectory(), "Not a directory: " + directory);
+  public TemporaryFileCleaner(final ConfigDirectory configDirectory, final FilenameFilter filenameFilter, final ExpirationRule expirationRule) {
+    final File exportDirectory = configDirectory.getExportDirectory();
+    Validate.isTrue(exportDirectory.exists(), "Directory does not exist: " + exportDirectory.getAbsolutePath());
+    Validate.isTrue(exportDirectory.isDirectory(), "Not a directory: " + exportDirectory.getAbsolutePath());
     Validate.notNull(filenameFilter);
     Validate.notNull(expirationRule);
-    this.directory = directory;
+    this.directory = exportDirectory;
     this.filenameFilter = filenameFilter;
     this.expirationRule = expirationRule;
   }

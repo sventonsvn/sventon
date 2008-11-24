@@ -62,7 +62,7 @@ public final class Application {
   /**
    * Application configuration directory.
    */
-  private final File configurationRootDirectory;
+  private final File repositoriesDirectory;
 
   /**
    * Application configuration file name.
@@ -89,16 +89,16 @@ public final class Application {
   /**
    * Constructor.
    *
-   * @param configurationRootDirectory Configuration root directory. Directory will be created if it does not already exist,
-   *                                   not {@code null} Configuration settings will be stored in this directory.
-   * @param configurationFilename      Path and file name of sventon configuration file, not {@code null}
+   * @param configDirectory       Configuration root directory. Directory will be created if it does not already exist,
+   *                              not {@code null} Configuration settings will be stored in this directory.
+   * @param configurationFilename Path and file name of sventon configuration file, not {@code null}
    * @throws IOException if IO error occur
    */
-  public Application(final File configurationRootDirectory, final String configurationFilename) throws IOException {
-    Validate.notNull(configurationRootDirectory, "Config directory cannot be null");
+  public Application(final ConfigDirectory configDirectory, final String configurationFilename) throws IOException {
+    Validate.notNull(configDirectory, "Config directory cannot be null");
     Validate.notNull(configurationFilename, "Config filename cannot be null");
 
-    this.configurationRootDirectory = configurationRootDirectory;
+    this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
     this.configurationFilename = configurationFilename;
   }
 
@@ -109,10 +109,6 @@ public final class Application {
    * @throws CacheException if unable to initalize caches.
    */
   public void init() throws IOException, CacheException {
-    if (!this.configurationRootDirectory.exists() && !this.configurationRootDirectory.mkdirs()) {
-      throw new RuntimeException("Unable to create temporary directory: " + this.configurationRootDirectory.getAbsolutePath());
-    }
-
     initSvnSupport();
     loadRepositoryConfigurations();
     initCaches();
@@ -161,11 +157,11 @@ public final class Application {
    * @see #isConfigured()
    */
   protected void loadRepositoryConfigurations() throws IOException {
-    final File[] configDirs = configurationRootDirectory.listFiles(
+    final File[] configDirs = repositoriesDirectory.listFiles(
         new SventonConfigDirectoryFileFilter(configurationFilename));
 
     if (configDirs.length == 0) {
-      logger.debug("No configuration files were found below: " + configurationRootDirectory.getAbsolutePath());
+      logger.debug("No configuration files were found below: " + repositoriesDirectory.getAbsolutePath());
       logger.info("No repository has been configured yet. Access sventon web application to start the setup");
       return;
     }
@@ -362,7 +358,7 @@ public final class Application {
    * @return The config root dir.
    */
   public File getConfigurationDirectoryForRepository(final RepositoryName repositoryName) {
-    return new File(configurationRootDirectory, repositoryName.toString());
+    return new File(repositoriesDirectory, repositoryName.toString());
   }
 
   /**

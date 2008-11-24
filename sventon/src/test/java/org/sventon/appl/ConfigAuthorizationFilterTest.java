@@ -2,16 +2,24 @@ package org.sventon.appl;
 
 import junit.framework.TestCase;
 import org.easymock.EasyMock;
-import org.springframework.mock.web.MockFilterChain;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.*;
 import org.sventon.TestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ConfigAuthorizationFilterTest extends TestCase {
+
+  private Application application;
+
+  protected void setUp() throws Exception {
+    ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+  }
 
   public void testDoFilterInternalApplicationNotConfigured() throws Exception {
     final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter();
@@ -20,7 +28,6 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     final HttpServletResponse response = EasyMock.createMock(HttpServletResponse.class);
     final MockFilterChain filterChain = new MockFilterChain();
 
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(false);
     filter.setApplication(application);
 
@@ -39,7 +46,6 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     final HttpServletResponse response = EasyMock.createMock(HttpServletResponse.class);
     final MockFilterChain filterChain = new MockFilterChain();
 
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     application.setEditableConfig(false);
     filter.setApplication(application);
@@ -66,7 +72,6 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     final HttpServletResponse response = new MockHttpServletResponse();
     final MockFilterChain filterChain = new MockFilterChain();
 
-    final Application application = TestUtils.getApplicationStub();
     application.setConfigured(true);
     application.setEditableConfig(true);
     filter.setApplication(application);

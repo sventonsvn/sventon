@@ -113,7 +113,7 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * Creates a thumbnail version of a full size image.
    *
    * @param repository Repository
-   * @param command Command
+   * @param command    Command
    * @return array of image bytes
    */
   private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand command) {
@@ -134,9 +134,9 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
   /**
    * Prepares the response by setting headers and content type.
    *
-   * @param request    Request.
-   * @param response   Response.
-   * @param command Command.
+   * @param request  Request.
+   * @param response Response.
+   * @param command  Command.
    */
   protected void prepareResponse(final HttpServletRequest request, final HttpServletResponse response,
                                  final SVNBaseCommand command) {

@@ -11,6 +11,7 @@
  */
 package org.sventon.cache.objectcache;
 
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
 import org.sventon.model.RepositoryName;
@@ -27,7 +28,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
   /**
    * Root directory for cache files.
    */
-  private final File rootDirectory;
+  private final File repositoriesDirectory;
   private final int maxElementsInMemory;
   private final boolean overflowToDisk;
   private final boolean eternal;
@@ -39,7 +40,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
   /**
    * Constructor.
    *
-   * @param rootDirectory       Root repository temp directory.
+   * @param configDirectory     Configuration directory.
    *                            Cache files will be stored in a sub dir called <tt>cache</tt>.
    * @param maxElementsInMemory Max elements in memory
    * @param overflowToDisk      Overflow to disk
@@ -50,7 +51,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @param diskExpiryThreadIntervalSeconds
    *                            Expiry thread interval
    */
-  public ObjectCacheManager(final File rootDirectory,
+  public ObjectCacheManager(final ConfigDirectory configDirectory,
                             final int maxElementsInMemory,
                             final boolean overflowToDisk,
                             final boolean eternal,
@@ -58,7 +59,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
                             final int timeToIdleSeconds,
                             final boolean diskPersistent,
                             final int diskExpiryThreadIntervalSeconds) {
-    this.rootDirectory = rootDirectory;
+    this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
     this.maxElementsInMemory = maxElementsInMemory;
     this.overflowToDisk = overflowToDisk;
     this.eternal = eternal;
@@ -77,7 +78,7 @@ public final class ObjectCacheManager extends CacheManager<ObjectCache> {
    *          if unable to create cache.
    */
   protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
-    final File cachePath = new File(new File(rootDirectory, repositoryName.toString()), "cache");
+    final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     cachePath.mkdirs();
     logger.debug("Creating cache: " + cachePath.getAbsolutePath());
     return new ObjectCacheImpl(

@@ -5,9 +5,11 @@ import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.RevisionUpdate;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
+import org.springframework.mock.web.MockServletContext;
 
 import java.util.*;
 
@@ -30,7 +32,13 @@ public class EntryCacheUpdaterTest extends TestCase {
     changedPaths2.put("/branch/file3.def", new SVNLogEntryPath("/branch/file3.def", 'D', null, -1));
     logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
 
-    final Application application = TestUtils.getApplicationStub();
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
     cacheUpdater.updateInternal(entryCache, new TestRepository(),

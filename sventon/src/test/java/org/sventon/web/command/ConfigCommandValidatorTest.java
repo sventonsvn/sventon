@@ -2,7 +2,10 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
+import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
 public class ConfigCommandValidatorTest extends TestCase {
@@ -13,8 +16,15 @@ public class ConfigCommandValidatorTest extends TestCase {
   }
 
   public void testValidate() throws Exception {
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
     final ConfigCommandValidator validator = new ConfigCommandValidator(false);
-    validator.setApplication(TestUtils.getApplicationStub());
+    validator.setApplication(application);
 
     final ConfigCommand command = new ConfigCommand();
 

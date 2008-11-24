@@ -4,10 +4,12 @@ import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryServiceImpl;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
@@ -19,8 +21,19 @@ import java.io.OutputStream;
 
 public class GetControllerTest extends TestCase {
 
+  private Application application;
+
+  protected void setUp() throws Exception {
+    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
+    configDirectory.setCreateDirectories(false);
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+  }
+
   public void testSvnHandleGetImageAsInline() throws Exception {
-    final Application application = TestUtils.getApplicationStub();
+
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     final GetController ctrl = new GetController();
@@ -44,7 +57,6 @@ public class GetControllerTest extends TestCase {
   }
 
   public void testSvnHandleGetFileAsAttachment() throws Exception {
-    final Application application = TestUtils.getApplicationStub();
     final SVNBaseCommand command = new SVNBaseCommand();
     command.setPath("/testimage.gif");
     final GetController ctrl = new GetController();
