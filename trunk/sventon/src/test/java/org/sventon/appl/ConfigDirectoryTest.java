@@ -50,4 +50,21 @@ public class ConfigDirectoryTest extends TestCase {
     assertTrue(configDir.getRepositoriesDirectory().getAbsolutePath().endsWith(
         SERVLET_CONTEXT_PATH + SEPARATOR + REPOSITORIES_DIR));
   }
+
+  public void testDirectoryOverrideBySettingSystemProperty() throws Exception {
+    System.setProperty(ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY, SEPARATOR + "override");
+
+    final ConfigDirectory configDir = new ConfigDirectory(TEMP_DIR, EXPORT_DIR, REPOSITORIES_DIR);
+    configDir.setCreateDirectories(false);
+
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath(SERVLET_CONTEXT_PATH);
+    configDir.setServletContext(servletContext);
+
+    final String path = configDir.getConfigRootDirectory().getAbsolutePath();
+    assertTrue(path.contains(SEPARATOR + "override" + SEPARATOR));
+    assertTrue(path.endsWith(SERVLET_CONTEXT_PATH));
+
+    System.clearProperty(ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY);
+  }
 }

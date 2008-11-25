@@ -11,6 +11,7 @@
  */
 package org.sventon.appl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.ServletContextAware;
@@ -25,6 +26,8 @@ import java.io.File;
  */
 public class ConfigDirectory implements ServletContextAware {
 
+  public static final String SVENTON_DIR_SYSTEM_PROPERTY_KEY = "sventon.dir";
+
   /**
    * The logging instance.
    */
@@ -35,13 +38,13 @@ public class ConfigDirectory implements ServletContextAware {
    */
   private ServletContext servletContext;
 
-  private File configRootDirectory = null;
-  private final File configDirectoryLocation;
-
+  private final String sventonDirProperty = System.getProperty(SVENTON_DIR_SYSTEM_PROPERTY_KEY);
   private final String exportDirectoryName;
-  private File exportDirectory;
-
   private final String repositoriesDirectoryName;
+
+  private File sventonConfigDirectory;
+  private File configRootDirectory = null;
+  private File exportDirectory;
   private File repositoriesDirectory;
 
   /**
@@ -52,14 +55,17 @@ public class ConfigDirectory implements ServletContextAware {
   /**
    * Constructor.
    *
-   * @param configDirectoryLocation   Location where to store the sventon config root directory,
+   * @param sventonConfigDirectory    Location where to store the sventon config root directory,
    *                                  usually <tt>java.io.tmpdir/sventon_temp/</tt>.
+   *                                  This parameter can be overriden by setting the system property
+   *                                  <tt>sventon.dir</tt> to a user preferred directory.
    * @param exportDirectoryName       Directory name for the export.
    * @param repositoriesDirectoryName Directory name for the configured repositories.
    */
-  public ConfigDirectory(final File configDirectoryLocation, final String exportDirectoryName,
+  public ConfigDirectory(final File sventonConfigDirectory, final String exportDirectoryName,
                          final String repositoriesDirectoryName) {
-    this.configDirectoryLocation = configDirectoryLocation;
+
+    this.sventonConfigDirectory = sventonConfigDirectory;
     this.exportDirectoryName = exportDirectoryName;
     this.repositoriesDirectoryName = repositoriesDirectoryName;
   }
@@ -79,8 +85,8 @@ public class ConfigDirectory implements ServletContextAware {
    */
   public void setServletContext(final ServletContext servletContext) {
     this.servletContext = servletContext;
-
-    configRootDirectory = new File(configDirectoryLocation, servletContext.getContextPath());
+    handleConfigDirectoryOverride();
+    configRootDirectory = new File(sventonConfigDirectory, servletContext.getContextPath());
     exportDirectory = new File(getConfigRootDirectory(), exportDirectoryName);
     repositoriesDirectory = new File(getConfigRootDirectory(), repositoriesDirectoryName);
 
@@ -89,13 +95,19 @@ public class ConfigDirectory implements ServletContextAware {
       exportDirectory.mkdirs();
       repositoriesDirectory.mkdirs();
     }
+    logger.info("Config root directory for current servlet context set to: " + configRootDirectory.getAbsolutePath());
+  }
 
-    logger.info("Config root directory set to: " + configRootDirectory.getAbsolutePath());
+  private void handleConfigDirectoryOverride() {
+    if (StringUtils.isNotBlank(sventonDirProperty)) {
+      sventonConfigDirectory = new File(sventonDirProperty);
+      logger.info("sventon config root directory (overridden by system property) set to: " + sventonConfigDirectory);
+    }
   }
 
   /**
    * Gets the sventon config root directory,
-   * i.e. {@link #configDirectoryLocation} + {@link javax.servlet.ServletContext#getContextPath()}.
+   * i.e. {@link #sventonConfigDirectory} + {@link javax.servlet.ServletContext#getContextPath()}.
    *
    * @return sventon config root directory.
    * @throws IllegalStateException if ServletContext has not been set.
