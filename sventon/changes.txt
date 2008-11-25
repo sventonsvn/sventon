@@ -1,13 +1,14 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1410] Added: Feature #4354 - Point out sventon dir using a property (sventon.dir).
 [1409] Fixed: Bug #12687 - Cannot have more than one sventon instance per container.
-[1408] Feature #4221 - Possibility to decide default diff view.
-[1393] Feature #3022 - Add admin control.
+[1408] Added: Feature #4221 - Possibility to decide default diff view.
+[1393] Added: Feature #3022 - Add admin control.
 
 [1390] Release 1.4.1 (2008-10-01)
 [1385] Added: Upgraded to SVNKit 1.2.0.
-[1358] Fixed bug #14342 - Version number not displayed properly on Glassfish.
+[1358] Fixed: Bug #14342 - Version number not displayed properly on Glassfish.
 
 [1339] Release 1.4.0 (2008-07-25)
 
