@@ -91,7 +91,11 @@
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${fn:replace(fn:escapeXml(entry.message), br, '<br>')}</a></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
           <td>${entry.author}</td>
-          <td nowrap><fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/></td>
+          <td nowrap>
+            <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+              <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
+            </span>
+          </td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
           <c:if test="${isFile}">

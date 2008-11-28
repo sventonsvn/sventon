@@ -53,4 +53,16 @@
     </attribute>
   </tag>
 
+  <tag>
+    <name>age</name>
+    <tag-class>org.sventon.web.tags.AgeTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>Tag for formatting a date into an age string.</description>
+    <attribute>
+      <name>date</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
 </taglib>

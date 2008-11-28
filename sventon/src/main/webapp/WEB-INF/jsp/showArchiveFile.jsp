@@ -75,7 +75,10 @@
         </c:choose>
         <td class="sventonColRightAlign">${zipEntry.size}</td>
         <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
-        <td class="sventonColNoWrap"><fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/>
+        <td class="sventonColNoWrap">
+          <span onmouseover="Tip('<sventon-ui:age date="${entryDate}"/>');">
+            <fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/>
+          </span>
         </td>
         <td>${zipEntry.crc}</td>
       </tr>
