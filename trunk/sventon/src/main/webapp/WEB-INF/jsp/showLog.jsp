@@ -41,7 +41,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
+  <form:form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
 
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="revision" value="${command.revision}">
@@ -53,7 +53,8 @@
       <c:set var="rowCount" value="0"/>
       <tr>
         <c:if test="${isFile}">
-          <th style="width: 55px">&nbsp;</th>
+          <th style="width: 10px">&nbsp;</th>
+          <th style="width: 10px">&nbsp;</th>
         </c:if>
         <th><spring:message code="revision"/></th>
         <th><spring:message code="message"/></th>
@@ -72,13 +73,25 @@
 
         <jsp:useBean id="entry" type="org.sventon.model.LogEntryWrapper" />
 
+        <c:url value="/ajax/${command.name}/entrytray${entry.pathAtRevision}" var="entryTrayAddUrl">
+          <c:param name="pegrev" value="${entry.revision}" />
+          <c:param name="action" value="add" />
+        </c:url>
+
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
             <c:when test="${isFile}">
               <c:url value="/repos/${command.name}/view${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
-              <td><input type="checkbox" name="entries" value="${entry.pathAtRevision};;${entry.revision}" onClick="verifyCheckBox(this)"></td>
+              <td>
+                <form:checkbox path="entries" value="${entry.pathAtRevision};;${entry.revision}" onclick="verifyCheckBox(this)"/>
+              </td>
+              <td class="sventonCol2">
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <img src="images/icon_file.png" alt="file">
+                </div>
+              </td>
               <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
@@ -99,7 +112,7 @@
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
           <c:if test="${isFile}">
-            <td>&nbsp;</td>
+            <td colspan="2">&nbsp;</td>
           </c:if>
           <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
             <%=HTMLCreator.createChangedPathsTable(entry.getChangedPaths(), entry.getRevision(),
@@ -130,8 +143,12 @@
         <td colspan="3">&nbsp;</td>
       </tr>
     </table>
-  </form>
+  </form:form>
 
+  <c:if test="${isEntryTrayEnabled}">
+    <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>
+  </c:if>
+  
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>
