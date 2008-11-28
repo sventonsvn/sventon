@@ -150,6 +150,7 @@
   </bean>
 
   <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractController">
+    <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="pageSize" value="20"/>
     <property name="viewName" value="showLog"/>
   </bean>
