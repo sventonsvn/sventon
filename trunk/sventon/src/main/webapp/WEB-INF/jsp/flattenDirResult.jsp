@@ -81,7 +81,9 @@
             </td>
             <td class="sventonCol7">${entry.author}</td>
             <td class="sventonCol8">
-              <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
+              <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+                <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
+              </span>
             </td>
           </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>

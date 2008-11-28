@@ -62,8 +62,16 @@
         <td><a href="${showUrl}">${lock.path}</a></td>
         <td>${lock.owner}</td>
         <td>${lock.comment}</td>
-        <td><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td>
-        <td><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td>
+        <td>
+          <span onmouseover="Tip('<sventon-ui:age date="${lock.creationDate}"/>');">
+            <fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/>
+          </span>
+        </td>
+        <td>
+          <span onmouseover="Tip('<sventon-ui:age date="${lock.creationDate}"/>');">
+            <fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/>
+          </span>
+        </td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>
     </c:forEach>
