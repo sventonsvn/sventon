@@ -260,4 +260,6 @@
   <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
   <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
+  <bean id="imageScaler" class="org.sventon.util.ImageScaler"/>
+  
 </beans>

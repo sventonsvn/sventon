@@ -17,44 +17,19 @@ import java.awt.image.BufferedImage;
 /**
  * Class for scaling images.
  *
- * @author jesper@sventon.org
+ * @author jesper@users.berlios.de
  */
-public final class ImageScaler {
-
-  /**
-   * The image.
-   */
-  private final BufferedImage image;
-
-  /**
-   * Image width.
-   */
-  private final int width;
-
-  /**
-   * Image height.
-   */
-  private final int height;
-
-  /**
-   * Constructor.
-   *
-   * @param image The image to scale.
-   */
-  public ImageScaler(final BufferedImage image) {
-    this.image = image;
-    this.width = image.getWidth();
-    this.height = image.getHeight();
-  }
+public class ImageScaler {
 
   /**
    * Gets a thumbnail version of the buffered image.
    *
+   * @param image The image to scale.
    * @param maxSize Maximum size (height and width)
    * @return The thumbnail.
    */
-  public BufferedImage createThumbnail(final int maxSize) {
-    final Dimension thumbnailSize = getThumbnailSize(width, height, maxSize);
+  public BufferedImage getThumbnail(final BufferedImage image, final int maxSize) {
+    final Dimension thumbnailSize = getThumbnailSize(image.getWidth(), image.getHeight(), maxSize);
 
     // Resize image.
     final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(),
