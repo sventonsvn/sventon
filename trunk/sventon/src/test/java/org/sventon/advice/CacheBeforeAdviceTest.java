@@ -8,13 +8,13 @@ import org.sventon.model.RepositoryName;
 public class CacheBeforeAdviceTest extends TestCase {
 
   public void testBefore() throws Throwable {
-    final CacheBeforeAdvice cacheBeforeAdvice = new CacheBeforeAdvice();
+    final CacheUpdateBeforeAdvice cacheUpdateBeforeAdvice = new CacheUpdateBeforeAdvice();
     final RevisionObservable observableMock = EasyMock.createMock(RevisionObservable.class);
-    cacheBeforeAdvice.setRevisionObservable(observableMock);
+    cacheUpdateBeforeAdvice.setRevisionObservable(observableMock);
     final RepositoryName repositoryName = new RepositoryName("repository1");
     observableMock.update(repositoryName, false);
     EasyMock.replay(observableMock);
-    cacheBeforeAdvice.before(null, new Object[]{repositoryName}, null);
+    cacheUpdateBeforeAdvice.before(null, new Object[]{repositoryName}, null);
     EasyMock.verify(observableMock);
   }
 }

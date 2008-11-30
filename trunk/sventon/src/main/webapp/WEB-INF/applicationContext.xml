@@ -120,7 +120,7 @@
     <property name="interceptorNames">
       <list>
         <value>stopWatchAroundAdvisor</value>
-        <value>cacheBeforeAdvisor</value>
+        <value>cacheUpdateBeforeAdvisor</value>
       </list>
     </property>
   </bean>
@@ -132,13 +132,13 @@
   </bean>
 
   <!-- Advisor pointcut definition for before advice -->
-  <bean id="cacheBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
-    <property name="advice" ref="cacheBeforeAdvice"/>
+  <bean id="cacheUpdateBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="cacheUpdateBeforeAdvice"/>
     <property name="pattern" value=".*"/>
   </bean>
 
   <!-- Advice class -->
-  <bean id="cacheBeforeAdvice" class="org.sventon.advice.CacheBeforeAdvice">
+  <bean id="cacheUpdateBeforeAdvice" class="org.sventon.advice.CacheUpdateBeforeAdvice">
     <property name="revisionObservable" ref="revisionObservable"/>
   </bean>
 
