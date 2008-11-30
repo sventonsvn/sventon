@@ -417,10 +417,11 @@ public class RepositoryServiceImpl implements RepositoryService {
     final List<SVNDiffStatus> result = new ArrayList<SVNDiffStatus>();
 
     final String repoRoot = repository.getLocation().toDecodedString();
+
     diffClient.doDiffStatus(
         SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), command.getFromRevision(),
         SVNURL.parseURIDecoded(repoRoot + command.getToPath()), command.getToRevision(),
-        true, false, new ISVNDiffStatusHandler() {
+        SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
       public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
         if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
           result.add(diffStatus);
@@ -540,6 +541,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       this.annotatedTextFile = annotatedTextFile;
     }
 
+    @Deprecated
     public void handleLine(final Date date, final long revision, final String author, final String line)
         throws SVNException {
       handleLine(date, revision, author, line, null, -1, null, null, 0);
