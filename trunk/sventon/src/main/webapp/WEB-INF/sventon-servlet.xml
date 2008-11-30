@@ -181,6 +181,7 @@
   </bean>
 
   <bean id="getThumbnailController" class="org.sventon.web.ctrl.template.GetThumbnailController" parent="abstractController">
+    <property name="imageScaler" ref="imageScaler"/>
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>

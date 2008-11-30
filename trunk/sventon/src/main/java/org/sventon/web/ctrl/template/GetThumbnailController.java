@@ -27,6 +27,7 @@ import javax.activation.FileTypeMap;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -59,6 +60,11 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
   private int maxThumbnailSize;
 
   /**
+   * Image scaler.
+   */
+  private ImageScaler imageScaler;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
@@ -79,28 +85,26 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
 
     final boolean cacheUsed = getRepositoryConfiguration(command.getName()).isCacheUsed();
 
-    ObjectCache objectCache = null;
-    ObjectCacheKey cacheKey = null;
+    ObjectCache objectCache;
+    ObjectCacheKey cacheKey;
+    byte[] thumbnailData;
 
     if (cacheUsed) {
       final String checksum = getRepositoryService().getFileChecksum(repository, command.getPath(), command.getRevisionNumber());
       objectCache = objectCacheManager.getCache(command.getName());
       cacheKey = new ObjectCacheKey(command.getPath(), checksum);
       logger.debug("Using cachekey: " + cacheKey);
-      final byte[] thumbnailData = (byte[]) objectCache.get(cacheKey);
-      // Check if the thumbnail exists on the cache
-      if (thumbnailData != null) {
-        // Writing cached thumbnail image to output stream
-        output.write(thumbnailData);
+      thumbnailData = (byte[]) objectCache.get(cacheKey);
+
+      if (thumbnailData == null) {
+        // Thumbnail did not exist - create it and cache it
+        thumbnailData = createThumbnail(repository, command);
+        logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+        objectCache.put(cacheKey, thumbnailData);
       }
-    }
-
-    final byte[] thumbnailData = createThumbnail(repository, command);
-
-    if (cacheUsed) {
-      // Putting created thumbnail image into the cache.
-      logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
-      objectCache.put(cacheKey, thumbnailData);
+    } else {
+      // Cache is not used - always recreate the thumbnail
+      thumbnailData = createThumbnail(repository, command);
     }
 
     output.write(thumbnailData);
@@ -117,14 +121,13 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
    * @return array of image bytes
    */
   private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand command) {
-    logger.debug("Getting image file: " + command.getPath());
+    logger.debug("Creating thumbnail for: " + command.getPath());
     final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
     final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
     try {
       getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
-      final ImageScaler imageScaler = new ImageScaler(ImageIO.read(new ByteArrayInputStream(
-          fullSizeImageData.toByteArray())));
-      ImageIO.write(imageScaler.createThumbnail(maxThumbnailSize), imageFormatName, thumbnailImageData);
+      final BufferedImage image = ImageIO.read(new ByteArrayInputStream(fullSizeImageData.toByteArray()));
+      ImageIO.write(imageScaler.getThumbnail(image, maxThumbnailSize), imageFormatName, thumbnailImageData);
     } catch (final Exception ex) {
       logger.warn("Unable to create thumbnail", ex);
     }
@@ -142,6 +145,15 @@ public final class GetThumbnailController extends AbstractSVNTemplateController 
                                  final SVNBaseCommand command) {
     response.setHeader(CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
     response.setContentType(mimeFileTypeMap.getContentType(command.getPath()));
+  }
+
+  /**
+   * Sets the image scaler.
+   *
+   * @param imageScaler Image scaler
+   */
+  public void setImageScaler(final ImageScaler imageScaler) {
+    this.imageScaler = imageScaler;
   }
 
   /**
