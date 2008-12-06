@@ -46,6 +46,20 @@
   <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
   <bean id="svnFileRevisionEditor" class="org.sventon.util.SVNFileRevisionEditor"/>
 
+  <bean id="maxRevisionsCount" class="java.lang.Integer">
+    <constructor-arg value="10"/>
+  </bean>
+
+  <bean id="logsPerPageCount" class="java.lang.Integer">
+    <constructor-arg value="20"/>
+  </bean>
+
+  <bean id="maxThumbnailSize" class="java.lang.Integer">
+    <constructor-arg value="200"/>
+  </bean>
+
+  <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
+
   <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactory" scope="prototype">
     <constructor-arg ref="configDirectory"/>
   </bean>
@@ -188,6 +202,7 @@
 
   <!-- List of notification mail receivers -->
   <util:list id="mailNotificationReceivers">
+    <value>me@myserver.org</value>
     <value>you@yourserver.org</value>
   </util:list>
 
