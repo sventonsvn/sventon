@@ -81,7 +81,7 @@
     <property name="repositoryService" ref="repositoryService"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
     <property name="validator" ref="svnBaseCommandValidator"/>
-    <property name="maxRevisionsCount" value="10"/>
+    <property name="maxRevisionsCount" ref="maxRevisionsCount"/>
     <property name="availableCharsets" ref="availableCharsets"/>
     <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
     <property name="nameEditor" ref="nameEditor"/>
@@ -151,7 +151,7 @@
 
   <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
-    <property name="pageSize" value="20"/>
+    <property name="pageSize" ref="logsPerPageCount"/>
     <property name="viewName" value="showLog"/>
   </bean>
 
@@ -159,7 +159,7 @@
 
   <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.DiffCommand"/>
-    <property name="preferredDiffStyle" value="inline" />
+    <property name="preferredDiffStyle" ref="defaultDiffView" />
   </bean>
 
   <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractController">
@@ -185,7 +185,7 @@
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="imageFormatName" value="png"/>
-    <property name="maxThumbnailSize" value="200"/>
+    <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
