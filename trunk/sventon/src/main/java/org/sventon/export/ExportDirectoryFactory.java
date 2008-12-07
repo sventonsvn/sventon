@@ -11,36 +11,21 @@
  */
 package org.sventon.export;
 
-import java.io.File;
-import java.io.IOException;
+import org.sventon.model.RepositoryName;
 
 /**
- * Represents a temporary export directory.
+ * ExportDirectoryFactory.
  *
  * @author jesper@sventon.org
  */
-public interface ExportDirectory {
+public interface ExportDirectoryFactory {
 
   /**
-   * Compresses the temporary export directory.
+   * Creates an export directory.
    *
-   * @return The <code>File</code> instance of the compressed file.
-   * @throws IOException if IO error occurs.
+   * @param repositoryName Repository name.
+   * @return Directory instance.
    */
-  File compress() throws IOException;
-
-  /**
-   * Gets the export directory.
-   *
-   * @return The directory.
-   */
-  File getDirectory();
-
-  /**
-   * Deletes the temporary export directory.
-   *
-   * @throws IOException if deletion was unsuccessful.
-   */
-  void delete() throws IOException;
+  ExportDirectory create(final RepositoryName repositoryName);
 
 }
