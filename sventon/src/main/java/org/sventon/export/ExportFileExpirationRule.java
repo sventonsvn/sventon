@@ -13,7 +13,7 @@ package org.sventon.export;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static org.sventon.export.ExportDirectory.DATE_FORMAT;
+import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT;
 
 import java.io.File;
 import java.text.ParseException;

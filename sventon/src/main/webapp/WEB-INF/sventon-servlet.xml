@@ -188,10 +188,14 @@
     <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
+  <bean id="exportDirectoryFactory" class="org.sventon.export.ExportDirectoryFactoryImpl">
+    <constructor-arg ref="configDirectory"/>
+    <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
+  </bean>
+
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
-    <property name="configDirectory" ref="configDirectory"/>
-    <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
+    <property name="exportDirectoryFactory" ref="exportDirectoryFactory"/>
   </bean>
 
   <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractController">

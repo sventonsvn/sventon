@@ -15,8 +15,8 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.export.ExportDirectory;
+import org.sventon.export.ExportDirectoryFactory;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.WebUtils;
@@ -28,7 +28,6 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,19 +39,9 @@ import java.util.List;
 public final class ExportController extends AbstractSVNTemplateController {
 
   /**
-   * Root of temporary directory where export will be made.
+   * The export directory factory instance.
    */
-  private File exportDir;
-
-  /**
-   * The charset to use for filenames and comments in the archive file.
-   */
-  private Charset archiveFileCharset;
-
-  /**
-   * Fallback character set, default set to ISO-8859-1.
-   */
-  public static final String FALLBACK_CHARSET = "ISO-8859-1";
+  private ExportDirectoryFactory exportDirectoryFactory;
 
   /**
    * {@inheritDoc}
@@ -69,8 +58,7 @@ public final class ExportController extends AbstractSVNTemplateController {
     InputStream fileInputStream = null;
 
     final List<SVNFileRevision> targets = Arrays.asList(command.getEntries());
-    final ExportDirectory exportDirectory = new ExportDirectory(command.getName(), exportDir, archiveFileCharset);
-
+    final ExportDirectory exportDirectory = exportDirectoryFactory.create(command.getName());
     try {
       logger.debug(exportDirectory);
       getRepositoryService().export(repository, targets, pegRevision, exportDirectory);
@@ -96,38 +84,12 @@ public final class ExportController extends AbstractSVNTemplateController {
   }
 
   /**
-   * Sets the export dir (extracted from given configDirectory) to use when exporting
-   * files to be zipped from the repository.
+   * Sets the export directory factory.
    *
-   * @param configDirectory The configuration directory.
+   * @param exportDirectoryFactory Export directory factory.
    */
-  public void setConfigDirectory(final ConfigDirectory configDirectory) {
-    this.exportDir = configDirectory.getExportDirectory();
-  }
-
-  /**
-   * Sets the archive file charset to use for filenames and comments.
-   * <p/>
-   * If given charset does not exist, <code>iso-8859-1</code> will be used as a fallback.
-   *
-   * @param archiveFileCharset Charset.
-   * @see #FALLBACK_CHARSET
-   */
-  public void setArchiveFileCharset(final String archiveFileCharset) {
-    try {
-      this.archiveFileCharset = Charset.forName(archiveFileCharset);
-    } catch (IllegalArgumentException iae) {
-      this.archiveFileCharset = Charset.forName(FALLBACK_CHARSET);
-    }
-  }
-
-  /**
-   * Gets the archive file charset.
-   *
-   * @return Charset.
-   */
-  protected Charset getArchiveFileCharset() {
-    return archiveFileCharset;
+  public void setExportDirectoryFactory(final ExportDirectoryFactory exportDirectoryFactory) {
+    this.exportDirectoryFactory = exportDirectoryFactory;
   }
 
 }
