@@ -23,6 +23,7 @@ import org.sventon.util.RepositoryEntrySorter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Class containing user specific data, the data is stored per configured repository if more than
@@ -77,6 +78,10 @@ public final class UserRepositoryContext implements Serializable {
    */
   private String pwd;
 
+  private boolean isWaitingForExport = false;
+
+  private UUID uuid;
+
   /**
    * Gets the UserContext instance from the user's HTTPSession.
    * If session does not exist, it will be created. If the attribute
@@ -107,6 +112,14 @@ public final class UserRepositoryContext implements Serializable {
       userRepositoryContext.setPwd(pwd);
     }
     return userRepositoryContext;
+  }
+
+  public boolean getIsWaitingForExport() {
+    return isWaitingForExport;
+  }
+
+  public void setIsWaitingForExport(final boolean isWaitingForExport) {
+    this.isWaitingForExport = isWaitingForExport;
   }
 
   /**
@@ -283,6 +296,24 @@ public final class UserRepositoryContext implements Serializable {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Gets the export UUID.
+   *
+   * @return Export UUID
+   */
+  public UUID getExportUuid() {
+    return uuid;
+  }
+
+  /**
+   * Sets the export UUID.
+   *
+   * @param uuid UUID
+   */
+  public void setExportUuid(UUID uuid) {
+    this.uuid = uuid;
   }
 
   @Override

@@ -14,27 +14,23 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.command.MultipleEntriesCommand;
 import org.sventon.web.command.SVNBaseCommand;
-import org.sventon.util.EncodingUtils;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * Controller for exporting and downloading files or directories as a zip file.
+ * The export progress controller.
  *
  * @author jesper@sventon.org
  */
-public final class ExportController extends AbstractSVNTemplateController {
+public final class ExportProgressController extends AbstractSVNTemplateController {
 
   /**
    * The export executor instance.
@@ -44,28 +40,30 @@ public final class ExportController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand cmd,
+  @SuppressWarnings("unchecked")
+  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final MultipleEntriesCommand command = (MultipleEntriesCommand) cmd;
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", command.getRevisionNumber());
+    final Map<String, Object> model = new HashMap<String, Object>();
+    final UUID exportUuid = UUID.fromString(ServletRequestUtils.getRequiredStringParameter(request, "uuid"));
+    final boolean download = ServletRequestUtils.getBooleanParameter(request, "download", false);
+    final boolean delete = ServletRequestUtils.getBooleanParameter(request, "delete", false);
 
-    if (userRepositoryContext.getIsWaitingForExport()) {
-      throw new IllegalStateException("Export already in progress");
+    if (delete) {
+      exportExecutor.delete(exportUuid);
+      userRepositoryContext.setIsWaitingForExport(false);
+    } else if (download) {
+      logger.info("Downloading export file, uuid: " + exportUuid);
+      exportExecutor.downloadByUUID(exportUuid, request, response);
+      return null;
+    } else {
+      final boolean finished = exportExecutor.isExported(exportUuid);
+      logger.debug("Export finished: " + finished);
+      model.put("exportFinished", finished);
     }
-
-    final UUID uuid = exportExecutor.submit(command, repository, pegRevision);
-    userRepositoryContext.setExportUuid(uuid);
-    userRepositoryContext.setIsWaitingForExport(true);
-
-    // Add the redirect URL parameters
-    final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
-        command.getRevisionNumber()));
-
-    return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createBrowseUrl()), true), model);
+    return new ModelAndView(getViewName(), model);
   }
 
   /**

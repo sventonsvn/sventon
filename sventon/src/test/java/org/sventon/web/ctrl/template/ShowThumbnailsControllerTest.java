@@ -13,7 +13,6 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 
 public class ShowThumbnailsControllerTest extends TestCase {
 
