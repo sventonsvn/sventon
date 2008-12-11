@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1418] Added: Feature #2747 - Asynchronous exports.
 [1412] Fixed: Bug #5604 - Not possible to diff over paged logs.
 [1411] Added: Feature #4400 - Age popup on all printed dates.
 [1410] Added: Feature #4354 - Point out sventon dir using a property (sventon.dir).

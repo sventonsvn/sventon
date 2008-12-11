@@ -2,6 +2,7 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.sventon.SVNRepositoryStub;
+import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -132,4 +133,27 @@ public class SVNBaseCommandTest extends TestCase {
     cmd.setPath(null);
     assertEquals("/", cmd.getPathPart());
   }
+
+  public void testCreateBrowseUrl() {
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+    cmd.setName(new RepositoryName("test"));
+
+    cmd.setPath("/test/dir");
+    assertEquals("/repos/test/browse/test/dir/", cmd.createBrowseUrl());
+
+    cmd.setPath("/test/dir/");
+    assertEquals("/repos/test/browse/test/dir/", cmd.createBrowseUrl());
+  }
+
+  public void testCreateViewUrl() {
+    final SVNBaseCommand cmd = new SVNBaseCommand();
+    cmd.setName(new RepositoryName("test"));
+
+    cmd.setPath("/test/file");
+    assertEquals("/repos/test/view/test/file", cmd.createViewUrl());
+
+    cmd.setPath("/test/file/");
+    assertEquals("/repos/test/view/test/file", cmd.createViewUrl());
+  }
+
 }

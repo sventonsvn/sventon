@@ -25,11 +25,13 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.activation.DataHandler;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -95,6 +97,9 @@ public final class MailNotifier extends AbstractRevisionObserver {
    */
   private String baseUrl;
 
+  /**
+   * Executor service.
+   */
   private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
   /**
@@ -117,6 +122,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
 
     executorService.execute(new Runnable() {
 
+      @Override
       public void run() {
         final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
@@ -134,17 +140,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
             LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
 
             try {
-              final Message msg = new MimeMessage(session);
-              msg.setFrom(new InternetAddress(from));
-              msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
-              msg.setSubject(formatSubject(subject, logEntry.getRevision(), repositoryName));
-
-              msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-                  configuration.getMailTemplate(), logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
-
-              msg.setHeader("X-Mailer", "sventon");
-              msg.setSentDate(new Date());
-
+              final Message msg = createMessage(logEntry, repositoryName, configuration.getMailTemplate());
               final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
 
               try {
@@ -154,10 +150,10 @@ public final class MailNotifier extends AbstractRevisionObserver {
                   transport.connect();
                 }
                 transport.sendMessage(msg, msg.getAllRecipients());
+                LOGGER.debug("Notification mail was sent successfully");
               } finally {
                 transport.close();
               }
-              LOGGER.debug("Notification mail was sent successfully");
             } catch (Exception e) {
               LOGGER.error("Unable to send notification mail", e);
             }
@@ -165,8 +161,29 @@ public final class MailNotifier extends AbstractRevisionObserver {
         }
       }
     });
+  }
 
+  /**
+   * @param logEntry       Log entry
+   * @param repositoryName Name
+   * @param mailTemplate   Template
+   * @return Message
+   * @throws MessagingException If a message exception occurs.
+   * @throws IOException        if a IO exception occurs while creating the datasource.
+   */
+  private Message createMessage(final SVNLogEntry logEntry, RepositoryName repositoryName, String mailTemplate)
+      throws MessagingException, IOException {
+    final Message msg = new MimeMessage(session);
+    msg.setFrom(new InternetAddress(from));
+    msg.setRecipients(Message.RecipientType.BCC, receivers.toArray(new InternetAddress[receivers.size()]));
+    msg.setSubject(formatSubject(subject, logEntry.getRevision(), repositoryName));
 
+    msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
+        mailTemplate, logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
+
+    msg.setHeader("X-Mailer", "sventon");
+    msg.setSentDate(new Date());
+    return msg;
   }
 
   /**

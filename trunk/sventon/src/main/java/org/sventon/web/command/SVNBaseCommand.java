@@ -41,6 +41,9 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  */
 public class SVNBaseCommand {
 
+  /**
+   * Constructor.
+   */
   public SVNBaseCommand() {
   }
 
@@ -291,6 +294,52 @@ public class SVNBaseCommand {
       }
     }
     return revisionNumber;
+  }
+
+  /**
+   * Creates a redirect url for browsing a directory.
+   * <p/>
+   * Note: A trailing slash ("/") will be appended if missing on path.
+   *
+   * @return Url
+   */
+  public String createBrowseUrl() {
+    assertNameSet();
+    return "/repos/" + name.toString() + "/browse" + getPathWithTrailingSlash();
+  }
+
+  /**
+   * Creates a redirect url for viewing a file.
+   * <p/>
+   * Note: A trailing slash ("/") will be removed if found on path.
+   *
+   * @return Url
+   */
+  public String createViewUrl() {
+    assertNameSet();
+    return "/repos/" + name.toString() + "/view" + getPathStripTrailingSlash();
+  }
+
+  private void assertNameSet() {
+    if (name == null) {
+      throw new IllegalStateException("Name has not been set");
+    }
+  }
+
+  private String getPathWithTrailingSlash() {
+    String path = this.path;
+    if (!path.endsWith("/")) {
+      path += "/";
+    }
+    return path;
+  }
+
+  private String getPathStripTrailingSlash() {
+    String path = this.path;
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length() - 1);
+    }
+    return path;
   }
 
   /**

@@ -70,6 +70,7 @@
         <prop key="/ajax/(*:name)/listfiles/(**/*:path)*">listFilesController</prop>
         <prop key="/ajax/(*:name)/entrytray/(**/*:path)*">entryTrayController</prop>
         <prop key="/ajax/(*:name)/filehistory/(**/*:path)*">fileHistoryController</prop>
+        <prop key="/ajax/(*:name)/exportprogress">exportProgressController</prop>
       </props>
     </property>
   </bean>
@@ -116,6 +117,11 @@
 
   <bean id="fileHistoryController" class="org.sventon.web.ctrl.template.GetFileHistoryController" parent="abstractController">
     <property name="viewName" value="ajax/fileHistory"/>
+  </bean>
+
+  <bean id="exportProgressController" class="org.sventon.web.ctrl.template.ExportProgressController" parent="abstractController">
+    <property name="viewName" value="ajax/exportProgress"/>
+    <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
 
   <bean id="getStaticContentController" class="org.sventon.web.ctrl.GetStaticContentController">
@@ -188,14 +194,10 @@
     <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
-  <bean id="exportDirectoryFactory" class="org.sventon.export.ExportDirectoryFactoryImpl">
-    <constructor-arg ref="configDirectory"/>
-    <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
-  </bean>
-
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
-    <property name="exportDirectoryFactory" ref="exportDirectoryFactory"/>
+    <property name="viewName" value="repoBrowser"/>
+    <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
 
   <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractController">

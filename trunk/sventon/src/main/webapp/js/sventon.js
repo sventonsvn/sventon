@@ -291,6 +291,12 @@ function removeEntryFromTray(removeEntryUrl) {
   Element.show('spinner');
 }
 
+function deleteExportFile(exportDeleteUrl) {
+  new Ajax.Updater({success: $('downloadLinkDiv')}, exportDeleteUrl, {
+    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+  }});
+}
+
 function showHideEntryTray() {
   if ($('entryTrayWrapper').visible()) {
     Effect.SlideUp('entryTrayWrapper', {duration:0.3});

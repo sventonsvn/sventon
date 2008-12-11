@@ -15,10 +15,10 @@ public class ExportDirectoryFactoryImplTest extends TestCase {
     final ConfigDirectory configDirectoryMock = EasyMock.createMock(ConfigDirectory.class);
     expect(configDirectoryMock.getExportDirectory()).andStubReturn(new File("."));
     replay(configDirectoryMock);
-    final ExportDirectoryFactoryImpl ctrl = new ExportDirectoryFactoryImpl(configDirectoryMock);
-    assertEquals(ExportDirectoryFactoryImpl.FALLBACK_CHARSET, ctrl.getArchiveFileCharset().toString());
+    final ExportExecutorImpl ctrl = new ExportExecutorImpl(configDirectoryMock);
+    assertEquals(ExportExecutorImpl.FALLBACK_CHARSET, ctrl.getArchiveFileCharset().toString());
     ctrl.setArchiveFileCharset(null);
-    assertEquals(ExportDirectoryFactoryImpl.FALLBACK_CHARSET, ctrl.getArchiveFileCharset().toString());
+    assertEquals(ExportExecutorImpl.FALLBACK_CHARSET, ctrl.getArchiveFileCharset().toString());
     ctrl.setArchiveFileCharset("UTF-8");
     assertEquals("UTF-8", ctrl.getArchiveFileCharset().toString());
     verify(configDirectoryMock);

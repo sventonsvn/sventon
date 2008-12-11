@@ -67,9 +67,9 @@ public final class GoToController extends AbstractSVNTemplateController {
     }
 
     if (SVNNodeKind.DIR == kind) {
-      redirectUrl = createBrowseUrl(command);
+      redirectUrl = command.createBrowseUrl();
     } else if (SVNNodeKind.FILE == kind) {
-      redirectUrl = createViewUrl(command);
+      redirectUrl = command.createViewUrl();
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");
       return prepareExceptionModelAndView(exception, command);
@@ -80,42 +80,12 @@ public final class GoToController extends AbstractSVNTemplateController {
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(command.getRevisionNumber()));
+    model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
+        command.getRevisionNumber()));
 
     redirectUrl = EncodingUtils.encodeUrl(redirectUrl);
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl, true), model);
   }
 
-  /**
-   * Creates a redirect url for browsing a directory.
-   * <p/>
-   * Note: A trailing slash ("/") will be appended if missing on path.
-   *
-   * @param command Command
-   * @return Url
-   */
-  protected String createBrowseUrl(final SVNBaseCommand command) {
-    String path = command.getPath();
-    if (!path.endsWith("/")) {
-      path += "/";
-    }
-    return "/repos/" + command.getName().toString() + "/browse" + path;
-  }
-
-  /**
-   * Creates a redirect url for viewing a file.
-   * <p/>
-   * Note: A trailing slash ("/") will be removed if found on path.
-   *
-   * @param command Command
-   * @return Url
-   */
-  protected String createViewUrl(final SVNBaseCommand command) {
-    String path = command.getPath();
-    if (path.endsWith("/")) {
-      path = path.substring(0, path.length() - 1);
-    }
-    return "/repos/" + command.getName().toString() + "/view" + path;
-  }
 }

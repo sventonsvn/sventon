@@ -13,6 +13,7 @@ package org.sventon.export;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Represents a temporary export directory.
@@ -43,4 +44,17 @@ public interface ExportDirectory {
    */
   void delete() throws IOException;
 
+  /**
+   * Gets the UUID for this export directory.
+   *
+   * @return UUID
+   */
+  UUID getUUID();
+
+  /**
+   * Creates the export directory.
+   *
+   * @return True if successfully created, false if not.
+   */
+  boolean mkdirs();
 }

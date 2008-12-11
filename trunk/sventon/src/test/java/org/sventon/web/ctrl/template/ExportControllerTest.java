@@ -1,31 +1,29 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import org.easymock.EasyMock;
-import static org.easymock.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.sventon.export.ExportDirectory;
-import org.sventon.export.ExportDirectoryFactory;
+import org.springframework.web.servlet.ModelAndView;
+import org.sventon.export.ExportExecutor;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.service.RepositoryService;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.sventon.util.WebUtils;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.Arrays;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.util.UUID;
 
 public class ExportControllerTest extends TestCase {
+  private static final String UUID_STRING = "c5eaa2ba-2655-444b-aa64-c15ecff3e6da";
 
   public void testExport() throws Exception {
     final File tempFile = File.createTempFile("sventon-", "-test");
     tempFile.deleteOnExit();
-    final ExportDirectory exportDirectoryMock = EasyMock.createMock(ExportDirectory.class);
-    final RepositoryService repositoryServiceMock = EasyMock.createMock(RepositoryService.class);
 
     final ExportController ctrl = new ExportController();
     final MockHttpServletRequest request = new MockHttpServletRequest();
@@ -36,29 +34,32 @@ public class ExportControllerTest extends TestCase {
         new SVNFileRevision("/trunk/file1", 100, new SVNProperties(), new SVNProperties()),
         new SVNFileRevision("/tags/test/file2", 101, new SVNProperties(), new SVNProperties())
     };
+    command.setName(new RepositoryName("test"));
     command.setEntries(entriesToExport);
 
-    ctrl.setRepositoryService(repositoryServiceMock);
-    ctrl.setExportDirectoryFactory(new ExportDirectoryFactory() {
-      public ExportDirectory create(RepositoryName repositoryName) {
-        return exportDirectoryMock;
+    assertFalse(context.getIsWaitingForExport());
+    assertNull(context.getExportUuid());
+
+    ctrl.setExportExecutor(new ExportExecutor() {
+      public UUID submit(MultipleEntriesCommand command, SVNRepository repository, long pegRevision) {
+        return UUID.fromString(UUID_STRING);
+      }
+
+      public void downloadByUUID(UUID uuid, HttpServletRequest request, HttpServletResponse response) throws IOException {
+      }
+
+      public void delete(UUID uuid) {
+      }
+
+      public boolean isExported(UUID uuid) {
+        return false;
       }
     });
 
-    repositoryServiceMock.export(null, Arrays.asList(entriesToExport), -1, exportDirectoryMock);
-    expect(exportDirectoryMock.compress()).andStubReturn(tempFile);
-    exportDirectoryMock.delete();
+    final ModelAndView modelAndView = ctrl.svnHandle(null, command, 123, context, request, response, null);
+    assertNotNull(modelAndView);
 
-    replay(exportDirectoryMock);
-    replay(repositoryServiceMock);
-    ctrl.svnHandle(null, command, 123, context, request, response, null);
-    verify(exportDirectoryMock);
-    verify(repositoryServiceMock);
-
-    assertEquals("application/octet-stream", response.getContentType());
-    assertEquals("", response.getContentAsString());
-    assertTrue(((String)response.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).matches(
-        "attachment; filename=\"sventon-\\d++-test\""
-    ));
+    assertTrue(context.getIsWaitingForExport());
+    assertEquals(UUID_STRING, context.getExportUuid().toString());
   }
 }

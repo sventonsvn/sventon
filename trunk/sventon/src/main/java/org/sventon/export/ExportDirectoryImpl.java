@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Represents a temporary export directory.
@@ -62,6 +63,11 @@ public final class ExportDirectoryImpl implements ExportDirectory {
   private final Charset charset;
 
   /**
+   * UUID identifier for this export directory.
+   */
+  private UUID uuid;
+
+  /**
    * Creates an export directory in given parent directory using the name format
    * <code>sventon-[currentTimeMillis] </code>.
    *
@@ -74,6 +80,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
     this.charset = charset;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());
     exportDirectory.deleteOnExit();
+    uuid = UUID.randomUUID();
   }
 
   /**
@@ -110,6 +117,20 @@ public final class ExportDirectoryImpl implements ExportDirectory {
    */
   public void delete() throws IOException {
     FileUtils.forceDelete(exportDirectory);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public UUID getUUID() {
+    return uuid;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean mkdirs() {
+    return exportDirectory.mkdirs();
   }
 
   /**

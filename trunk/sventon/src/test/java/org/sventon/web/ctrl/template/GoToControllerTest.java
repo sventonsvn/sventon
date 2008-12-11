@@ -89,28 +89,4 @@ public class GoToControllerTest extends TestCase {
     assertEquals("goto", modelAndView.getViewName());
   }
 
-  public void testCreateBrowseUrl() {
-    final GoToController ctrl = new GoToController();
-    final SVNBaseCommand cmd = new SVNBaseCommand();
-    cmd.setName(new RepositoryName("test"));
-
-    cmd.setPath("/test/dir");
-    assertEquals("/repos/test/browse/test/dir/", ctrl.createBrowseUrl(cmd));
-
-    cmd.setPath("/test/dir/");
-    assertEquals("/repos/test/browse/test/dir/", ctrl.createBrowseUrl(cmd));
-  }
-
-  public void testCreateViewUrl() {
-    final GoToController ctrl = new GoToController();
-    final SVNBaseCommand cmd = new SVNBaseCommand();
-    cmd.setName(new RepositoryName("test"));
-
-    cmd.setPath("/test/file");
-    assertEquals("/repos/test/view/test/file", ctrl.createViewUrl(cmd));
-
-    cmd.setPath("/test/file/");
-    assertEquals("/repos/test/view/test/file", ctrl.createViewUrl(cmd));
-  }
-
 }

@@ -135,7 +135,7 @@ public class ApplicationTest extends TestCase {
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
-      FileUtils.deleteDirectory(configDirectory.getRepositoriesDirectory());
+      FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
     }
   }
 

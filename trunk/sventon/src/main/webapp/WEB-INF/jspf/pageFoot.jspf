@@ -12,10 +12,27 @@
  */
 %>
 <br>
+<table width="100%">
+  <tr>
+    <td colspan="2"><div id="downloadLinkDiv"/></td>
+  </tr>
+</table>
+
 <p>
   <c:url value="/xml/${command.name}/rss${command.path}" var="rssUrl">
     <c:param name="revision" value="${command.revision}" />
   </c:url>
   <a href="${rssUrl}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
 </p>
+
+<c:if test="${userRepositoryContext.isWaitingForExport eq true}">
+  <script type="text/javascript">
+    var url = contextPath + '/ajax/${command.name}/exportprogress';
+    var urlParams = 'uuid=${userRepositoryContext.exportUuid}';
+    new Ajax.PeriodicalUpdater('downloadLinkDiv', url, {
+      asynchronous: true, frequency: 3, decay: 2, parameters: urlParams
+    });
+  </script>
+</c:if>
+
 <%@ include file="/WEB-INF/jspf/version.jspf"%>

@@ -28,10 +28,7 @@ import org.sventon.service.RepositoryService;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.SVNBaseCommand;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -247,18 +244,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     try {
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
       final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
-
-      if (configuration.isAccessControlEnabled()) {
-        repository = repositoryConnectionFactory.createConnection(configuration.getName(), configuration.getSVNURL(),
-            repositoryContext.getUid(), repositoryContext.getPwd());
-      } else {
-        repository = repositoryConnectionFactory.createConnection(configuration.getName(), configuration.getSVNURL(),
-            configuration.getUid(), configuration.getPwd());
-      }
-
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
+      
+      repository = createConnection(configuration, repositoryContext);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
-
       command.translateRevision(headRevision, repository);
 
       parseAndUpdateSortParameters(command, repositoryContext);
@@ -323,6 +312,29 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       }
     }
 
+  }
+
+  /**
+   * Creates a repository connection.
+   *
+   * @param configuration     Configuration
+   * @param repositoryContext Context
+   * @return Connection
+   * @throws SVNException if a subversion error occur.
+   */
+  private SVNRepository createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
+    final SVNRepository repository;
+    final RepositoryName repositoryName = configuration.getName();
+    final SVNURL svnurl = configuration.getSVNURL();
+
+    if (configuration.isAccessControlEnabled()) {
+      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl,
+          repositoryContext.getUid(), repositoryContext.getPwd());
+    } else {
+      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl,
+          configuration.getUid(), configuration.getPwd());
+    }
+    return repository;
   }
 
   /**
