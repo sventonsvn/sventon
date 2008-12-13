@@ -8,6 +8,10 @@ sventon change history
 [1409] Fixed: Bug #12687 - Cannot have more than one sventon instance per container.
 [1408] Added: Feature #4221 - Possibility to decide default diff view.
 [1393] Added: Feature #3022 - Add admin control.
+[1333] Fixed: Bug #14244 - Revision zero not considered.
+[1321] Added: Feature #4182 - Friendly URLs.
+[1252] Added: Upgraded to Spring 2.5.2.
+[1246] Added: Feature #3499 - Diff tags.
 
 [1407] Fixed: Bug #14799 - Unnecessary recreation of thumbnails.
 
@@ -16,11 +20,6 @@ sventon change history
 [1358] Fixed: Bug #14342 - Version number not displayed properly on Glassfish.
 
 [1339] Release 1.4.0 (2008-07-25)
-
-[1333] Fixed: Bug #14244 - Revision zero not considered.
-[1321] Added: Feature #4182 - Friendly URLs.
-[1252] Added: Upgraded to Spring 2.5.2.
-[1246] Added: Feature #3499 - Diff tags.
 
 [1319] Release 1.4 RC6 (2008-07-09)
 [1315] Fixed: Bug #14171 - Thumbnails are not shown when using user based auth.
