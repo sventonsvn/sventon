@@ -47,7 +47,7 @@
       <p><b><spring:message code="diff.error.identical.dirs"/></b></p>
     </c:when>
     <c:otherwise>
-      <table id="diffTable" cellspacing="0">
+      <table id="diffTable" cellspacing="0" style="width:100%">
         <tr>
           <th width="100%" style="background-color: white;">${command.fromPath} @ revision ${command.fromRevision}</th>
         </tr>
