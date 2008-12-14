@@ -53,7 +53,7 @@
     <url>http://svn.sventon.org/</url>
   </scm>
   <properties>
-    <spring.version>2.5.2</spring.version>
+    <spring.version>2.5.6</spring.version>
   </properties>
   <build>
     <finalName>svn</finalName>

@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1421] Added: Upgraded to Spring 2.5.6.
 [1418] Added: Feature #2747 - Asynchronous exports.
 [1412] Fixed: Bug #5604 - Not possible to diff over paged logs.
 [1411] Added: Feature #4400 - Age popup on all printed dates.
@@ -10,7 +11,6 @@ sventon change history
 [1393] Added: Feature #3022 - Add admin control.
 [1333] Fixed: Bug #14244 - Revision zero not considered.
 [1321] Added: Feature #4182 - Friendly URLs.
-[1252] Added: Upgraded to Spring 2.5.2.
 [1246] Added: Feature #3499 - Diff tags.
 
 [1407] Fixed: Bug #14799 - Unnecessary recreation of thumbnails.
