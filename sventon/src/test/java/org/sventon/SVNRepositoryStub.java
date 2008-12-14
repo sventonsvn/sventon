@@ -128,6 +128,7 @@ public class SVNRepositoryStub extends SVNRepository {
   }
 
   @Override
+  @Deprecated
   public void update(SVNURL url, long revision, String target, boolean recursive, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }
@@ -249,6 +250,7 @@ public class SVNRepositoryStub extends SVNRepository {
   }
 
   @Override
+  @Deprecated
   public void diff(SVNURL url, long targetRevision, long revision, String target, boolean ignoreAncestry, boolean recursive, boolean getContents, ISVNReporterBaton reporter, ISVNEditor editor) throws SVNException {
     throw new UnsupportedOperationException("Not implemented!");
   }
