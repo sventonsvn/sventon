@@ -42,8 +42,8 @@ var config = new Object();
 
 
 //===================  GLOBAL TOOPTIP CONFIGURATION  =========================//
-var  Debug			 = true			// false or true - recommended: false once you release your page to the public
-var  TagsToTip		 = true			// false or true - if true, the script is capable of converting HTML elements to tooltips
+var  Debug			 = false			// false or true - recommended: false once you release your page to the public
+var  TagsToTip	 = false			// false or true - if true, the script is capable of converting HTML elements to tooltips
 
 // For each of the following config variables there exists a command, which is
 // just the variablename in uppercase, to be passed to Tip() or TagToTip() to
