@@ -290,6 +290,7 @@ input.btn {
 }
 
 .sventonPathDiffTable {
+  width: 100%;
   color: #14233D;
   background-color: #E2E4E6;
   border: 1px solid black;
