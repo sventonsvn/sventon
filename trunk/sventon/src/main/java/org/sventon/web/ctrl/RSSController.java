@@ -110,7 +110,7 @@ public final class RSSController extends AbstractController {
       logger.debug("Outputting feed for [" + path + "]");
       final long revisionNumber = SVNRevision.parse(revision).getNumber();
       logEntries.addAll(repositoryService.getRevisions(repositoryName, repository, revisionNumber, FIRST_REVISION, path,
-          configuration.getRssItemsCount()));
+          configuration.getRssItemsCount(), false));
     } catch (SVNAuthenticationException aex) {
       logger.info(aex.getMessage());
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, aex.getMessage());
