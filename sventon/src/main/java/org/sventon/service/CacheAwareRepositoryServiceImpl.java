@@ -87,14 +87,14 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
   @Override
   public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
-                                        final long limit) throws SVNException, SventonException {
+                                        final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
       // To be able to return cached revisions, we first have to get the revision numbers
       // Doing a logs-call, skipping the details, to get them.
       final List<Long> revisions = new ArrayList<Long>();
-      repository.log(new String[]{path}, fromRevision, toRevision, false, false, limit, new ISVNLogEntryHandler() {
+      repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
           revisions.add(logEntry.getRevision());
         }
@@ -102,7 +102,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       logger.debug("Fetching [" + limit + "] cached revisions in the interval [" + toRevision + "-" + fromRevision + "]");
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit));
+      logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
   }

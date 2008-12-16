@@ -76,7 +76,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     try {
       logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, revNumber, FIRST_REVISION,
-          nextPathParam, pageSize));
+          nextPathParam, pageSize, false));
 
       String pathAtRevision = nextPathParam;
 

@@ -38,7 +38,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     revisions.add(TestUtils.getLogEntryStub(2));
 
     expect(mockService.getRevisions(command.getName(), null, SVNRevision.HEAD.getNumber(), FIRST_REVISION, "/",
-        userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);
+        userRepositoryContext.getLatestRevisionsDisplayCount(), false)).andStubReturn(revisions);
 
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, userRepositoryContext, null, null, null);

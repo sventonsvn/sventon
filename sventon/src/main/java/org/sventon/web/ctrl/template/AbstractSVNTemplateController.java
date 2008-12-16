@@ -280,7 +280,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           try {
             logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
-                FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount()));
+                FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
           } catch (SVNException svnex) {
             if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
               logger.info(svnex.getMessage());

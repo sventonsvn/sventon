@@ -73,13 +73,14 @@ public interface RepositoryService {
    * @param toRevision     To revision
    * @param path           The repository path
    * @param limit          Revision limit
+   * @param stopOnCopy     Stop on copy
    * @return The log entries
    * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                  final long fromRevision, final long toRevision, final String path,
-                                 final long limit) throws SVNException, SventonException;
+                                 final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
 
   /**
    * Exports given list of target entries to the given destination export directory.

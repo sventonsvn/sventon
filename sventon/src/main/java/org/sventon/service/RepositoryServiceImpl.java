@@ -74,11 +74,11 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
-                                        final long limit) throws SVNException, SventonException {
+                                        final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{path}, fromRevision, toRevision, true, false, limit, new ISVNLogEntryHandler() {
+    repository.log(new String[]{path}, fromRevision, toRevision, true, stopOnCopy, limit, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
         logEntries.add(logEntry);
       }
