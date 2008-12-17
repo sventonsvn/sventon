@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1425] Added: Feature #4407 - Add options to Log View.
 [1421] Added: Upgraded to Spring 2.5.6.
 [1418] Added: Feature #2747 - Asynchronous exports.
 [1412] Fixed: Bug #5604 - Not possible to diff over paged logs.

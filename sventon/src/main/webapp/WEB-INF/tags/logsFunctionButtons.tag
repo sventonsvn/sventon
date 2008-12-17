@@ -26,6 +26,16 @@
 <c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
+<c:url var="showLogUrl" value="/repos/${command.name}/showlog${command.path}">
+  <c:param name="revision" value="${command.revision}"/>
+  <c:param name="stopOnCopy" value="${!stopOnCopy}"/>
+  <c:if test="${nextPath ne null}">
+    <c:param name="nextPath" value="${nextPath}" />
+  </c:if>
+  <c:if test="${nextRevision ne null}">
+    <c:param name="nextRevision" value="${nextRevision}" />
+  </c:if>
+</c:url>
 
 <c:choose>
   <c:when test="${isFile}">
@@ -36,3 +46,5 @@
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="document.location.href='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
   </c:otherwise>
 </c:choose>
+<input type="checkbox" ${stopOnCopy ? 'checked="checked"' : ''} onclick="document.location.href='${showLogUrl}';"/>
+<spring:message code="stop-on-copy.button.text"/>

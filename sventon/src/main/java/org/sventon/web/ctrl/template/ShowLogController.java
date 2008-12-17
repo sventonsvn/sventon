@@ -61,6 +61,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
     final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "head"));
+    final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
 
     final long revNumber;
     if (SVNRevision.HEAD.equals(nextRevParam)) {
@@ -76,7 +77,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     try {
       logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, revNumber, FIRST_REVISION,
-          nextPathParam, pageSize, false));
+          nextPathParam, pageSize, stopOnCopy));
 
       String pathAtRevision = nextPathParam;
 
@@ -110,10 +111,13 @@ public final class ShowLogController extends AbstractSVNTemplateController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
 
+    model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
     model.put("isFile", getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
+    model.put("nextPath", nextPathParam);
+    model.put("nextRevision", revNumber);
     return new ModelAndView(getViewName(), model);
   }
 }

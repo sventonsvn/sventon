@@ -125,6 +125,7 @@
         <c:param name="nextPath" value="${nextPath}" />
         <c:param name="nextRevision" value="${nextRev}" />
         <c:param name="revision" value="${command.revision}"/>
+        <c:param name="stopOnCopy" value="${stopOnCopy}"/>
       </c:url>
 
       <c:choose>
