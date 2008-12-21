@@ -82,7 +82,6 @@ public final class RepositoryName implements Serializable, Comparable {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int compareTo(Object o) {
     return name.compareTo(o.toString());
   }
