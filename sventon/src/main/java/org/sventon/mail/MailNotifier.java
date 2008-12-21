@@ -122,7 +122,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
 
     executorService.execute(new Runnable() {
 
-      @Override
       public void run() {
         final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
