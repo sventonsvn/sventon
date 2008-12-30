@@ -217,7 +217,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
         SVNRepository repository = null;
         try {
           repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-              configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+              configuration.getSVNURL(), configuration.getCredentials());
           final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
           update(repositoryName, repository, objectCache, flushAfterUpdate);
         } catch (final Exception ex) {

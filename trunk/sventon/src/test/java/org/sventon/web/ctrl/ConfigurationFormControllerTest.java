@@ -19,11 +19,10 @@ import java.util.Set;
 
 public class ConfigurationFormControllerTest extends TestCase {
 
-  private ConfigDirectory configDirectory;
   private Application application;
 
   protected void setUp() throws Exception {
-    configDirectory = TestUtils.getTestConfigDirectory();
+    ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -110,8 +109,8 @@ public class ConfigurationFormControllerTest extends TestCase {
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());
-    assertNull(configuration.getUid()); //UID only for connection testing, not stored
-    assertNull(configuration.getPwd()); //PWD only for connection testing, not stored
+    assertNull(configuration.getCredentials().getUsername()); //UID only for connection testing, not stored
+    assertNull(configuration.getCredentials().getPassword()); //PWD only for connection testing, not stored
   }
 
 }

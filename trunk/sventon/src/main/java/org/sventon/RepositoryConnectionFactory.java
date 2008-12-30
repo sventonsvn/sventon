@@ -13,6 +13,7 @@ package org.sventon;
 
 import org.apache.commons.lang.Validate;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -52,13 +53,12 @@ public final class RepositoryConnectionFactory {
    *
    * @param repositoryName Repository name.
    * @param svnUrl         Subversion repository URL
-   * @param uid            User id
-   * @param pwd            Password
+   * @param credentials    User credentials
    * @return The repository connection.
    * @throws SVNException if unable to create repository connection.
    */
-  public SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl, final String uid, final String pwd)
-      throws SVNException {
+  public SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
+                                        final Credentials credentials) throws SVNException {
 
     if (svnUrl == null) {
       return null;
@@ -66,7 +66,8 @@ public final class RepositoryConnectionFactory {
 
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
     final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
-    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(configDirectory, uid, pwd, false));
+    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
+        configDirectory, credentials.getUsername(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;
   }

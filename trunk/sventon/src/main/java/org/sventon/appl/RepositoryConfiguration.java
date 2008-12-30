@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -34,7 +35,7 @@ import java.util.Properties;
 public final class RepositoryConfiguration {
 
   /**
-   * Default number of RSS feed items (20).
+   * Default number of RSS feed items, default set to 20.
    */
   public static final int DEFAULT_RSS_ITEMS_COUNT = 20;
 
@@ -87,16 +88,9 @@ public final class RepositoryConfiguration {
   private SVNURL svnUrl;
 
   /**
-   * If a global user is configured for repository browsing, this property
-   * should be set.
+   * If a global user is configured for repository browsing, the credentials property should be set.
    */
-  private String uid;
-
-  /**
-   * If a global user is configured for repository browsing, this property
-   * should be set.
-   */
-  private String pwd;
+  private Credentials credentials;
 
   /**
    * Decides whether the caching feature will be used.
@@ -125,18 +119,33 @@ public final class RepositoryConfiguration {
   private boolean enableIssueTrackerIntegration;
 
   /**
-   * Number of items in the generated RSS feed.
+   * Number of items in the generated RSS feed, default set to {@link #DEFAULT_RSS_ITEMS_COUNT}.
    */
   private int rssItemsCount = DEFAULT_RSS_ITEMS_COUNT;
 
+  /**
+   * RSS template file, default set to {@link #DEFAULT_RSS_TEMPLATE_FILE}.
+   */
   private String rssTemplateFile = DEFAULT_RSS_TEMPLATE_FILE;
 
+  /**
+   * RSS template string.
+   */
   private String rssTemplate;
 
+  /**
+   * Mail template file, default set to {@link #DEFAULT_MAIL_TEMPLATE_FILE}.
+   */
   private String mailTemplateFile = DEFAULT_MAIL_TEMPLATE_FILE;
 
+  /**
+   * Mail template string.
+   */
   private String mailTemplate;
 
+  /**
+   * Flag indicating if configuration is persisted or not.
+   */
   private boolean persisted;
 
 
@@ -161,8 +170,7 @@ public final class RepositoryConfiguration {
     final RepositoryConfiguration ic = new RepositoryConfiguration(repositoryName);
     ic.setRepositoryUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_URL));
     ic.setRepositoryDisplayUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
-    ic.setUid((String) properties.get(PROPERTY_KEY_USERNAME));
-    ic.setPwd((String) properties.get(PROPERTY_KEY_PASSWORD));
+    ic.setCredentials(new Credentials((String) properties.get(PROPERTY_KEY_USERNAME), (String) properties.get(PROPERTY_KEY_PASSWORD)));
     ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
@@ -192,11 +200,9 @@ public final class RepositoryConfiguration {
     final Properties properties = new Properties();
     properties.put(PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
     properties.put(PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
-    if (getUid() != null) {
-      properties.put(PROPERTY_KEY_USERNAME, getUid());
-    }
-    if (getPwd() != null) {
-      properties.put(PROPERTY_KEY_PASSWORD, getPwd());
+    if (credentials != null) {
+      properties.put(PROPERTY_KEY_USERNAME, credentials.getUsername());
+      properties.put(PROPERTY_KEY_PASSWORD, credentials.getPassword());
     }
     properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
@@ -210,41 +216,23 @@ public final class RepositoryConfiguration {
   }
 
   /**
-   * Get configured Password, if any.
+   * Get the configured credentials, if any.
+   * The credentials will will be used for repository access.
    *
-   * @return Returns the pwd.
+   * @return Returns the credentials, or null.
    */
-  public String getPwd() {
-    return pwd;
+  public Credentials getCredentials() {
+    return credentials;
   }
 
   /**
-   * Set a configured pwd. This pwd will be used for repository
-   * access, together with configured user ID, {@link #setUid(String)}
+   * Get the configured credentials, if any.
+   * The credentials will will be used for repository access.
    *
-   * @param pwd The pwd to set, may be <code>null</code>.
+   * @param credentials Credentials if any
    */
-  public void setPwd(final String pwd) {
-    this.pwd = pwd;
-  }
-
-  /**
-   * Get configured user ID, if any.
-   *
-   * @return Returns the uid.
-   */
-  public String getUid() {
-    return uid;
-  }
-
-  /**
-   * Set a configured user ID. This user ID will be used for repository access,
-   * together with configured pwd, {@link #setPwd(String)}
-   *
-   * @param uid The uid to set, may be <code>null</code>
-   */
-  public void setUid(final String uid) {
-    this.uid = uid;
+  public void setCredentials(final Credentials credentials) {
+    this.credentials = credentials;
   }
 
   /**

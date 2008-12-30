@@ -18,6 +18,7 @@ import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Credentials;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.service.RepositoryService;
 import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
@@ -78,8 +79,9 @@ public final class RSSController extends AbstractController {
     final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
     final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
     final String revision = ServletRequestUtils.getStringParameter(request, "revision", "HEAD");
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", null);
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", null);
+    final Credentials credentialsFromUrlParameters = new Credentials(
+        ServletRequestUtils.getStringParameter(request, "uid", null),
+        ServletRequestUtils.getStringParameter(request, "pwd", null));
 
     if (!application.isConfigured()) {
       String errorMessage = "sventon has not been configured yet!";
@@ -101,10 +103,10 @@ public final class RSSController extends AbstractController {
     try {
       if (configuration.isAccessControlEnabled()) {
         repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-            configuration.getSVNURL(), uid, pwd);
+            configuration.getSVNURL(), credentialsFromUrlParameters);
       } else {
         repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-            configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+            configuration.getSVNURL(), configuration.getCredentials());
       }
 
       logger.debug("Outputting feed for [" + path + "]");
