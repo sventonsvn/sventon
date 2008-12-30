@@ -11,8 +11,8 @@
  */
 package org.sventon.model;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -69,14 +69,9 @@ public final class UserRepositoryContext implements Serializable {
   private String searchMode;
 
   /**
-   * User id.
+   * User credentials.
    */
-  private String uid;
-
-  /**
-   * Password.
-   */
-  private String pwd;
+  private Credentials credentials;
 
   private boolean isWaitingForExport = false;
 
@@ -108,8 +103,7 @@ public final class UserRepositoryContext implements Serializable {
     }
 
     if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      userRepositoryContext.setUid(uid);
-      userRepositoryContext.setPwd(pwd);
+      userRepositoryContext.setCredentials(new Credentials(uid, pwd));
     }
     return userRepositoryContext;
   }
@@ -230,42 +224,22 @@ public final class UserRepositoryContext implements Serializable {
   }
 
   /**
-   * Gets the user id.
+   * Sets the user's credentials.
    *
-   * @return User id, or null.
+   * @param credentials Credentials.
    */
-  public String getUid() {
-    return decodeBase64(uid);
+  public void setCredentials(final Credentials credentials) {
+    Validate.notNull(credentials);
+    this.credentials = credentials;
   }
 
   /**
-   * Sets the user id.
-   * <p/>
-   * The uid is stored obfuscated as Base64.
+   * Gets the user's credentials.
    *
-   * @param uid User id.
+   * @return User's credentials, or null.
    */
-  public void setUid(final String uid) {
-    this.uid = encodeBase64(uid);
-  }
-
-  /**
-   * Gets the password.
-   *
-   * @return Password, or null.
-   */
-  public String getPwd() {
-    return decodeBase64(pwd);
-  }
-
-  /**
-   * Sets the password.
-   * The pwd is stored obfuscated as Base64.
-   *
-   * @param pwd Password.
-   */
-  public void setPwd(final String pwd) {
-    this.pwd = encodeBase64(pwd);
+  public Credentials getCredentials() {
+    return credentials;
   }
 
   /**
@@ -274,28 +248,11 @@ public final class UserRepositoryContext implements Serializable {
    * @return True if user id and password has been set, false if not.
    */
   public boolean hasCredentials() {
-    return uid != null && pwd != null;
+    return credentials != null;
   }
 
   public void clearCredentials() {
-    uid = null;
-    pwd = null;
-  }
-
-  private String encodeBase64(final String s) {
-    if (s != null) {
-      return new String(Base64.encodeBase64(s.getBytes()));
-    } else {
-      return null;
-    }
-  }
-
-  private String decodeBase64(final String s) {
-    if (s != null) {
-      return new String(Base64.decodeBase64(s.getBytes()));
-    } else {
-      return null;
-    }
+    credentials = null;
   }
 
   /**
@@ -323,8 +280,6 @@ public final class UserRepositoryContext implements Serializable {
         append("sortMode", sortMode).
         append("latestRevisionsDisplayCount", latestRevisionsDisplayCount).
         append("charset", charset).
-        append("uid", uid != null ? "*****" : "<null>").
-        append("pwd", pwd != null ? "*****" : "<null>").
         toString();
   }
 }

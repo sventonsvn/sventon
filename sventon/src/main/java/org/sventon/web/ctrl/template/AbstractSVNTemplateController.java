@@ -245,7 +245,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
       final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
-      
+
       repository = createConnection(configuration, repositoryContext);
       final long headRevision = getRepositoryService().getLatestRevision(repository);
       command.translateRevision(headRevision, repository);
@@ -328,11 +328,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     final SVNURL svnurl = configuration.getSVNURL();
 
     if (configuration.isAccessControlEnabled()) {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl,
-          repositoryContext.getUid(), repositoryContext.getPwd());
+      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
     } else {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl,
-          configuration.getUid(), configuration.getPwd());
+      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getCredentials());
     }
     return repository;
   }

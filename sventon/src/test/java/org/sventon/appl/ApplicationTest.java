@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
+import org.sventon.model.Credentials;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,15 +51,13 @@ public class ApplicationTest extends TestCase {
 
       final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
       repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
-      repositoryConfiguration1.setUid("user1");
-      repositoryConfiguration1.setPwd("abc123");
+      repositoryConfiguration1.setCredentials(new Credentials("user1", "abc123"));
       repositoryConfiguration1.setCacheUsed(false);
       repositoryConfiguration1.setZippedDownloadsAllowed(false);
 
       final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
       repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
-      repositoryConfiguration2.setUid("user2");
-      repositoryConfiguration2.setPwd("123abc");
+      repositoryConfiguration2.setCredentials(new Credentials("user2", "123abc"));
       repositoryConfiguration2.setCacheUsed(false);
       repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
@@ -85,13 +84,11 @@ public class ApplicationTest extends TestCase {
 
     final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
-    config1.setUid("");
-    config1.setPwd("");
+    config1.setCredentials(new Credentials("", ""));
 
     final RepositoryConfiguration config2 = new RepositoryConfiguration("test2");
     config2.setRepositoryUrl("http://repo2");
-    config2.setUid("");
-    config2.setPwd("");
+    config2.setCredentials(new Credentials("", ""));
 
     assertEquals(0, application.getRepositoryCount());
     application.addRepository(config1);

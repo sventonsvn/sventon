@@ -15,6 +15,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.BeanUtils;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.Credentials;
 
 /**
  * ConfigCommand.
@@ -220,7 +221,7 @@ public final class ConfigCommand {
   }
 
   /**
-   * Create an populate a RepositoryConfiguration based on the contens of this config command instance.
+   * Create and populate a RepositoryConfiguration based on the contens of this config command instance.
    *
    * @return New, populated RepositoryConfiguration
    */
@@ -228,6 +229,7 @@ public final class ConfigCommand {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
     configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
+    configuration.setCredentials(new Credentials(uid, pwd));
     return configuration;
   }
 

@@ -18,6 +18,7 @@ import org.springframework.validation.Validator;
 import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
@@ -119,13 +120,14 @@ public final class ConfigCommandValidator implements Validator {
         if (url != null && testConnection) {
           final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
           configuration.setRepositoryUrl(trimmedURL);
-          configuration.setUid(command.getAccessMethod() == USER ? command.getConnectionTestUid() : command.getUid());
-          configuration.setPwd(command.getAccessMethod() == USER ? command.getConnectionTestPwd() : command.getPwd());
+          configuration.setCredentials(new Credentials(
+              command.getAccessMethod() == USER ? command.getConnectionTestUid() : command.getUid(),
+              command.getAccessMethod() == USER ? command.getConnectionTestPwd() : command.getPwd()));
 
           SVNRepository repository = null;
           try {
             repository = repositoryConnectionFactory.createConnection(new RepositoryName(repositoryName),
-                configuration.getSVNURL(), configuration.getUid(), configuration.getPwd());
+                configuration.getSVNURL(), configuration.getCredentials());
             repository.testConnection();
           } catch (SVNAuthenticationException e) {
             logger.warn("Repository authentication failed");

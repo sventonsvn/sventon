@@ -94,7 +94,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       final EntryCache entryCache = entryCacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
       repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
-          configuration.getUid(), configuration.getPwd());
+          configuration.getCredentials());
       updateInternal(entryCache, repository, revisionUpdate);
     } catch (final Exception ex) {
       LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
