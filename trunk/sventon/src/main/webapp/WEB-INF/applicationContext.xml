@@ -282,5 +282,9 @@
   <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
   <bean id="imageScaler" class="org.sventon.util.ImageScaler"/>
-  
+
+  <bean id="httpAuthenticationHandler" class="org.sventon.web.HttpBasicAuthenticationHandler">
+    <constructor-arg value="sventon rss feed"/>  
+  </bean>
+
 </beans>

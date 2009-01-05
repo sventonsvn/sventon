@@ -96,6 +96,7 @@
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="rssFeedGenerator" ref="rssFeedGenerator"/>
     <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+    <property name="httpAuthenticationHandler" ref="httpAuthenticationHandler"/>
   </bean>
 
   <bean id="listFilesController" class="org.sventon.web.ctrl.template.ListFilesController" parent="abstractController">

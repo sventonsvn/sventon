@@ -17,10 +17,11 @@ import org.springframework.web.servlet.mvc.AbstractController;
 import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
 import org.sventon.model.Credentials;
+import org.sventon.model.RepositoryName;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.service.RepositoryService;
+import org.sventon.web.HttpAuthenticationHandler;
 import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNErrorCode;
@@ -67,6 +68,11 @@ public final class RSSController extends AbstractController {
   private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
+   * HTTP Authentication Handler.
+   */
+  private HttpAuthenticationHandler httpAuthenticationHandler;
+
+  /**
    * {@inheritDoc}
    */
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
@@ -100,22 +106,32 @@ public final class RSSController extends AbstractController {
 
     SVNRepository repository = null;
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    final Credentials credentials;
+
     try {
       if (configuration.isAccessControlEnabled()) {
-        repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-            configuration.getSVNURL(), credentialsFromUrlParameters);
+        if (httpAuthenticationHandler.isLoginAttempt(request)) {
+          logger.debug("Basic HTTP authentication detected. Parsing credentials from request.");
+          credentials = httpAuthenticationHandler.parseCredentials(request);
+        } else {
+          logger.debug("Parsing credentials from url");
+          credentials = credentialsFromUrlParameters;
+        }
       } else {
-        repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-            configuration.getSVNURL(), configuration.getCredentials());
+        credentials = configuration.getCredentials();
       }
+
+      repository = repositoryConnectionFactory.createConnection(configuration.getName(),
+          configuration.getSVNURL(), credentials);
 
       logger.debug("Outputting feed for [" + path + "]");
       final long revisionNumber = SVNRevision.parse(revision).getNumber();
       logEntries.addAll(repositoryService.getRevisions(repositoryName, repository, revisionNumber, FIRST_REVISION, path,
           configuration.getRssItemsCount(), false));
+      rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (SVNAuthenticationException aex) {
       logger.info(aex.getMessage());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, aex.getMessage());
+      httpAuthenticationHandler.sendChallenge(response);
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
         logger.info(svnex.getMessage());
@@ -128,8 +144,6 @@ public final class RSSController extends AbstractController {
         repository.closeSession();
       }
     }
-
-    rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     return null;
   }
 
@@ -178,4 +192,12 @@ public final class RSSController extends AbstractController {
     this.repositoryService = repositoryService;
   }
 
+  /**
+   * Sets the authentication handler to use.
+   *
+   * @param httpAuthenticationHandler Handler
+   */
+  public void setHttpAuthenticationHandler(final HttpAuthenticationHandler httpAuthenticationHandler) {
+    this.httpAuthenticationHandler = httpAuthenticationHandler;
+  }
 }
