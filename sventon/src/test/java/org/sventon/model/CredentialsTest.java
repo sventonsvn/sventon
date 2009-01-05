@@ -40,4 +40,12 @@ public class CredentialsTest extends TestCase {
     credentials = new Credentials(null, null);
     assertEquals(testString, credentials.toString());
   }
+
+  public void testIsEmpty() throws Exception {
+    Credentials credentials = new Credentials(null, null);
+    assertTrue(credentials.isEmpty());
+
+    credentials = new Credentials("", "");
+    assertTrue(credentials.isEmpty());
+  }
 }

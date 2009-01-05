@@ -12,6 +12,7 @@
 package org.sventon.model;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -60,6 +61,13 @@ public class Credentials {
    */
   public String getPassword() {
     return decodeBase64(password);
+  }
+
+  /**
+   * @return True if credentials are empty/blank/null.
+   */
+  public boolean isEmpty() {
+    return StringUtils.isEmpty(username) && StringUtils.isEmpty(password);
   }
 
   private String encodeBase64(final String string) {
