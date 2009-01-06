@@ -13,7 +13,7 @@
 %>
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
 <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
-<sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" hasCredentials="${userRepositoryContext.uid ne null}"/>
+<sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
 
 <spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
 

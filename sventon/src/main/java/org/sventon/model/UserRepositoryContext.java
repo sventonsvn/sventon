@@ -112,6 +112,10 @@ public final class UserRepositoryContext implements Serializable {
     return isWaitingForExport;
   }
 
+  public boolean getIsLoggedIn() {
+    return hasCredentials();
+  }
+
   public void setIsWaitingForExport(final boolean isWaitingForExport) {
     this.isWaitingForExport = isWaitingForExport;
   }
