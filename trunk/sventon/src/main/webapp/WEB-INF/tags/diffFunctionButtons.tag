@@ -29,8 +29,8 @@
 
 <c:url value="/repos/${command.name}/diff${command.path}" var="diffUrl">
   <c:param name="revision" value="${command.revision}" />
-  <c:param name="entries" value="${command.toPath};;${command.toRevision}" />
-  <c:param name="entries" value="${command.fromPath};;${command.fromRevision}" />
+  <c:param name="entries" value="${command.toPath}@${command.toRevision}" />
+  <c:param name="entries" value="${command.fromPath}@${command.fromRevision}" />
   <c:if test="${pegrev > 0}">
     <c:param name="pegrev" value="${pegrev}" />
   </c:if>

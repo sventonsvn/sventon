@@ -31,7 +31,7 @@
 
   <tr class="sventonFileEntryTableRow expandedDir${rowNumber}">
     <td class="sventonCol1">
-      <input type="checkbox" name="entries" value="${entry.fullEntryName};;${entry.revision}">
+      <input type="checkbox" name="entries" value="${entry.fullEntryName}@${entry.revision}">
     </td>
     <td class="sventonCol2">
       <div id="${entryTrayAddUrl}" class="entry">

@@ -89,7 +89,7 @@
                   <% } else if (LogEntryActionType.DELETED == actionType) { %>
                   <td><a href="${goToUrl}?revision=${command.fromRevision}" title="Show file">${row.path}</a></td>
                   <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
-                  <td><a href="${diffUrl}&entries=${command.fromPath}/${row.path};;${command.fromRevision}&entries=${command.toPath}/${row.path};;${command.toRevision}" title="Show Diff">${row.path}</a></td>
+                  <td><a href="${diffUrl}&entries=${command.fromPath}/${row.path}@${command.fromRevision}&entries=${command.toPath}/${row.path}@${command.toRevision}" title="Show Diff">${row.path}</a></td>
                   <% } else { %>
                   <td>${row.path}</td>
                   <% } %>

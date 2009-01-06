@@ -27,7 +27,7 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
   /**
    * The delimiter between the path and the revision values.
    */
-  private static final String DELIMITER = ";;";
+  private static final String DELIMITER = "@";
 
   /**
    * {@inheritDoc}
@@ -42,7 +42,7 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
       throw new IllegalArgumentException("Illegal parameter. No delimiter in entry: " + entry);
     }
     final String path = entry.substring(0, entry.lastIndexOf(DELIMITER));
-    final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 2);
+    final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 1);
     return new SVNFileRevision(path, Long.parseLong(revision), null, null);
   }
 
@@ -55,7 +55,7 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
     if (fileRevision == null) {
       return "";
     } else {
-      return fileRevision.getPath() + ";;" + fileRevision.getRevision();
+      return fileRevision.getPath() + DELIMITER + fileRevision.getRevision();
     }
   }
 
