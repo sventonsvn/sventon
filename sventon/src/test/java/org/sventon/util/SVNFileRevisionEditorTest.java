@@ -9,7 +9,7 @@ public class SVNFileRevisionEditorTest extends TestCase {
     final SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
     assertEquals("", editor.getAsText());
 
-    editor.setAsText("/trunk/test.java;;3");
+    editor.setAsText("/trunk/test.java@3");
     SVNFileRevision fileRevision = new SVNFileRevision("/trunk/test.java", 3, null, null);
     assertEquals(fileRevision.getPath(), ((SVNFileRevision) editor.getValue()).getPath());
     assertEquals(fileRevision.getRevision(), ((SVNFileRevision) editor.getValue()).getRevision());
@@ -19,22 +19,22 @@ public class SVNFileRevisionEditorTest extends TestCase {
   public void testParseEntriesWithDelimitersInPath() throws Exception {
     final SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
     final String[] parameters = new String[]{
-        "/trunk/test;;file.java;;123",
+        "/trunk/test@file.java@123",
     };
     final SVNFileRevision[] entries = editor.convert(parameters);
     assertEquals(1, entries.length);
 
     final SVNFileRevision entry0 = entries[0];
-    assertEquals("/trunk/test;;file.java", entry0.getPath());
+    assertEquals("/trunk/test@file.java", entry0.getPath());
     assertEquals(123, entry0.getRevision());
   }
 
   public void testParseEntries() throws Exception {
     final SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
     final String[] parameters = new String[]{
-        "/trunk/test.java;;3",
-        "/trunk/test.java;;2",
-        "/trunk/test.java;;1"
+        "/trunk/test.java@3",
+        "/trunk/test.java@2",
+        "/trunk/test.java@1"
     };
     final SVNFileRevision[] entries = editor.convert(parameters);
     assertEquals(3, entries.length);

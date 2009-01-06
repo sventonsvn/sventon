@@ -250,8 +250,8 @@ public final class HTMLCreator {
   protected static String createDiffUrl(final String baseURL, final String path, final long revision,
                                         final RepositoryName repositoryName, final boolean linkToHead) {
 
-    final String entry1 = path + ";;" + revision;
-    final String entry2 = path + ";;" + (revision - 1);
+    final String entry1 = path + "@" + revision;
+    final String entry2 = path + "@" + (revision - 1);
 
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append("repos/");

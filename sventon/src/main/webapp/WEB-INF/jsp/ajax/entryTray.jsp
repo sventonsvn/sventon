@@ -54,7 +54,7 @@
       </c:url>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td>
-        <form:checkbox path="entries" value="${trayEntry.fullEntryName};;${peggedEntry.pegRevision}"/>
+        <form:checkbox path="entries" value="${trayEntry.fullEntryName}@${peggedEntry.pegRevision}"/>
       </td>
       <c:choose>
         <c:when test="${'DIR' eq trayEntry.kind}">

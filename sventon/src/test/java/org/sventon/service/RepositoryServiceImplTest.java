@@ -44,8 +44,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -72,8 +72,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -108,8 +108,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -152,8 +152,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -201,8 +201,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -232,8 +232,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -260,8 +260,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -296,8 +296,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try1;;91",
-        "/bug/code/try2;;90"};
+        "/bug/code/try1@91",
+        "/bug/code/try2@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -332,8 +332,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
@@ -352,8 +352,8 @@ public class RepositoryServiceImplTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 

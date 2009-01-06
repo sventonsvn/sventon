@@ -60,7 +60,7 @@
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
             <td class="sventonCol1">
-              <form:checkbox path="entries" value="${entry.fullEntryName};;${entry.revision}"/>
+              <form:checkbox path="entries" value="${entry.fullEntryName}@${entry.revision}"/>
             </td>
             <td class="sventonCol2">
               <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">

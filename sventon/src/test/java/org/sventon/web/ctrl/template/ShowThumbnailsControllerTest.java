@@ -25,9 +25,9 @@ public class ShowThumbnailsControllerTest extends TestCase {
     ctrl.setMimeFileTypeMap(mftm);
 
     final String[] pathEntries = new String[]{
-        "file1.gif;;123",
-        "file2.jpg;;123",
-        "file.abc;;123"};
+        "file1.gif@123",
+        "file2.jpg@123",
+        "file.abc@123"};
 
     final SVNFileRevisionEditor svnFileRevisionEditor = new SVNFileRevisionEditor();
     command.setEntries(svnFileRevisionEditor.convert(pathEntries));

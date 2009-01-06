@@ -20,8 +20,8 @@ public class DiffCommandTest extends TestCase {
 
   public void testDiffCommand() throws Exception {
     final String[] params = new String[]{
-        "/bug/code/try2/OrderDetailModel.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetailModel.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
 
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(params));
@@ -35,8 +35,8 @@ public class DiffCommandTest extends TestCase {
 
   public void testDiffCommandDifferentPaths() throws Exception {
     final String[] params = new String[]{
-        "/bug/code/try2/OrderDetail.java;;91",
-        "/bug/code/try2/OrderDetailModel.java;;90"};
+        "/bug/code/try2/OrderDetail.java@91",
+        "/bug/code/try2/OrderDetailModel.java@90"};
 
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(params));
@@ -50,8 +50,8 @@ public class DiffCommandTest extends TestCase {
 
   public void testDiffCommandDirs() throws Exception {
     final String[] params = new String[]{
-        "/bug/code/try1/;;90",
-        "/bug/code/try2/;;91"};
+        "/bug/code/try1/@90",
+        "/bug/code/try2/@91"};
 
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(params));
@@ -65,7 +65,7 @@ public class DiffCommandTest extends TestCase {
 
   public void testDiffCommandNoHistory() throws Exception {
     final String[] params = new String[]{
-        "/bug/code/try2/Order.java;;92"
+        "/bug/code/try2/Order.java@92"
     };
 
     final DiffCommand command = new DiffCommand();

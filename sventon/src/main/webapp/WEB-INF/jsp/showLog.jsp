@@ -85,7 +85,7 @@
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
               <td>
-                <form:checkbox path="entries" value="${entry.pathAtRevision};;${entry.revision}" onclick="verifyCheckBox(this)"/>
+                <form:checkbox path="entries" value="${entry.pathAtRevision}@${entry.revision}" onclick="verifyCheckBox(this)"/>
               </td>
               <td class="sventonCol2">
                 <div id="${entryTrayAddUrl}" class="entry">
