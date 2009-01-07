@@ -16,9 +16,11 @@
     
 <beans>
 
+<!-- Uncomment to set a fixed locale regardless of browser accept headers.
   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
     <property name="defaultLocale" value="en"/>
   </bean>
+-->
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
