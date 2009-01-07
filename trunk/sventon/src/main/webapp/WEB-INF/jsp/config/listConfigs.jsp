@@ -79,7 +79,7 @@
         </div>
         <div class="config_faq_answer" id="faqa1" style="display: none;">
           By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
-          repository configurations will be stored in a directory called <code>sventon_temp</code> below the servlet
+          repository configurations will be stored in a directory called <b>sventon_temp</b> below the servlet
           container's temporary directory, <b><%=System.getProperty("java.io.tmpdir")%>
           </b>.
         </div>
@@ -101,7 +101,7 @@
         <div class="config_faq_answer" id="faqa3" style="display:none;">
           If this sventon instance will be used with <a href="http://tomcat.apache.org/">Tomcat</a> in a
           non-US-ASCII environment, making fully use of Subversion's UTF-8 support, modifications must be made to the
-          Coyote HTTP/1.1 connector: In <code>server.xml</code>, either set attribute <code>URIEncoding="UTF-8"</code>
+          Coyote HTTP/1.1 connector: In <b>server.xml</b>, either set attribute <code>URIEncoding="UTF-8"</code>
           and/or set <code>useBodyEncodingForURI="true"</code>.
         </div>
       </div>
