@@ -238,14 +238,23 @@ public final class Application {
    * @param name Name of repository to delete from the sventon configuration.
    */
   public void deleteRepository(final RepositoryName name) {
-    final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
-    final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
-    logger.info("Disabling repository configuration for [" + name.toString() + "]");
-    if (configFile.renameTo(configBackupFile)) {
-      logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
-      repositories.remove(name);
+    if (!repositories.containsKey(name)) {
+      throw new IllegalArgumentException("Unknown repository name: " + name);
+    }
+    final RepositoryConfiguration configuration = repositories.get(name);
+    if (configuration.isPersisted()) {
+      final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
+      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
+      logger.info("Disabling repository configuration for [" + name.toString() + "]");
+      if (configFile.renameTo(configBackupFile)) {
+        logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
+        repositories.remove(name);
+      } else {
+        logger.error("Unable to rename config file: " + configFile.getAbsolutePath());
+      }
     } else {
-      logger.error("Unable to rename config file: " + configFile.getAbsolutePath());
+      // Repository has not yet been stored and the user wants to delete it. Simply remove reference.
+      repositories.remove(name);
     }
   }
 
