@@ -14,6 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ tag import="org.tmatesoft.svn.core.SVNPropertyValue" %>
 <%@ tag import="org.sventon.util.WebUtils" %>
+<%@ tag import="java.util.Iterator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -47,8 +48,8 @@
         <c:set var="properties" value="${properties}"/>
         <jsp:useBean id="properties" type="org.tmatesoft.svn.core.SVNProperties" />
         <%
-          for (Object o : properties.nameSet()) {
-            final String name = (String) o;
+          for (Iterator it = properties.nameSet().iterator(); it.hasNext();) {
+            final String name = (String) it.next();
             final SVNPropertyValue value = properties.getSVNPropertyValue(name);
         %>
           <tr>
