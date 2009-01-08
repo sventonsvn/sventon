@@ -3,7 +3,7 @@
   <groupId>org.tmatesoft.svnkit</groupId>
   <artifactId>svnkit</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.0.4949</version>
+  <version>1.2.1.5297</version>
   <name>SVNKit</name>
   <description>A pure Java Subversion library, formerly known as JavaSVN</description>
   <url>http://svnkit.com/</url>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.sun.jna</groupId>
       <artifactId>jna</artifactId>
-      <version>3.0.5</version>
+      <version>3.0.9</version>
       <optional>true</optional>
     </dependency>
     <dependency>
