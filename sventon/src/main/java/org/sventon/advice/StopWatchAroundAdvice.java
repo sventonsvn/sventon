@@ -42,6 +42,6 @@ public class StopWatchAroundAdvice implements MethodInterceptor {
   }
 
   protected String createMessage(final String methodName, long milliseconds) {
-    return "Method [" + methodName + "] took " + milliseconds + " ms";
+    return "Method [" + methodName + "] took [" + milliseconds + "] ms";
   }
 }
