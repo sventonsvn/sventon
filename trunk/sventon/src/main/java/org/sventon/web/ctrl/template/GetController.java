@@ -14,15 +14,24 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.cache.objectcache.ObjectCacheKey;
+import org.sventon.cache.objectcache.ObjectCacheManager;
+import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
+import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
+import static org.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 /**
@@ -48,9 +57,45 @@ public class GetController extends AbstractSVNTemplateController {
    */
   private FileTypeMap mimeFileTypeMap;
 
+  /**
+   * Object cache manager instance.
+   */
+  private ObjectCacheManager objectCacheManager;
+
+  /**
+   * Image format name to use when generating thumbnails.
+   */
+  private String imageFormatName;
+
+  /**
+   * Specifies the maximum horizontal/vertical size (in pixels) for a generated thumbnail image.
+   */
+  private int maxThumbnailSize;
+
+  /**
+   * Image scaler.
+   */
+  private ImageScaler imageScaler;
+
+  /**
+   * Display parameter.
+   */
   public static final String DISPLAY_REQUEST_PARAMETER = "disp";
 
-  public static final String DISPLAY_TYPE_INLINE = "inline";
+  /**
+   * Inline mode.
+   */
+  public static final String CONTENT_DISPOSITION_INLINE = "inline";
+
+  /**
+   * Attachment mode.
+   */
+  public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment";
+
+  /**
+   * Thumbnail mode.
+   */
+  public static final String DISPLAY_TYPE_THUMBNAIL = "thumbnail";
 
   /**
    * {@inheritDoc}
@@ -60,56 +105,150 @@ public class GetController extends AbstractSVNTemplateController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String displayType = ServletRequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, null);
+    final String displayType = ServletRequestUtils.getStringParameter(request, DISPLAY_REQUEST_PARAMETER, CONTENT_DISPOSITION_ATTACHMENT);
+    final OutputStream output = response.getOutputStream();
+    final boolean cacheUsed = getRepositoryConfiguration(command.getName()).isCacheUsed();
+    ObjectCache objectCache;
+    ObjectCacheKey cacheKey;
+    byte[] thumbnailData;
 
-    if (displayType == null) {
+    if (CONTENT_DISPOSITION_ATTACHMENT.equals(displayType)) {
       logger.debug("Getting file as 'attachment'");
-      getAsAttachment(repository, command, request, response);
-    } else if (DISPLAY_TYPE_INLINE.equals(displayType)) {
-      logger.debug("Getting file as 'inline'");
-
-      if (mimeFileTypeMap.getContentType(command.getPath()).startsWith("image")) {
-        getAsInlineImage(repository, command, request, response);
+      prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
+      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
+    } else if (CONTENT_DISPOSITION_INLINE.equals(displayType)) {
+      if (isImageFile(command.getPath())) {
+        logger.debug("Getting file as 'inline'");
+        prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
+        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
       } else {
         logger.warn("File [" + command.getTarget() + "] is not an image file - unable to display it 'inline'");
-        getAsAttachment(repository, command, request, response);
+        prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
+        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
+      }
+    } else if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
+      if (isImageFile(command.getPath())) {
+        logger.debug("Getting file as 'thumbnail'");
+        prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
+        if (cacheUsed) {
+          final String checksum = getRepositoryService().getFileChecksum(repository, command.getPath(), command.getRevisionNumber());
+          objectCache = objectCacheManager.getCache(command.getName());
+          cacheKey = new ObjectCacheKey(command.getPath(), checksum);
+          logger.debug("Using cachekey: " + cacheKey);
+          thumbnailData = (byte[]) objectCache.get(cacheKey);
+
+          if (thumbnailData == null) {
+            // Thumbnail did not exist - create it and cache it
+            thumbnailData = createThumbnail(repository, command);
+            logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
+            objectCache.put(cacheKey, thumbnailData);
+          }
+        } else {
+          // Cache is not used - always recreate the thumbnail
+          thumbnailData = createThumbnail(repository, command);
+        }
+        output.write(thumbnailData);
+      } else {
+        logger.error("File '" + command.getTarget() + "' is not a image file");
       }
     } else {
       throw new IllegalArgumentException("Illegal parameter '" + DISPLAY_REQUEST_PARAMETER + "':" + displayType);
     }
+    output.flush();
+    output.close();
     return null;
   }
 
-  private void getAsInlineImage(final SVNRepository repository, final SVNBaseCommand command, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-    final OutputStream output = response.getOutputStream();
-    response.setContentType(mimeFileTypeMap.getContentType(command.getPath()));
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
-    // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
-    output.flush();
-    output.close();
+  protected String getContentType(final String path) {
+    return mimeFileTypeMap.getContentType(path);
   }
 
-  private void getAsAttachment(final SVNRepository repository, final SVNBaseCommand command, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-    final OutputStream output = response.getOutputStream();
-    String mimeType = null;
-
+  protected String getMimeType(final String path) {
+    String mimeType = WebUtils.APPLICATION_OCTET_STREAM;
     try {
-      mimeType = getServletContext().getMimeType(command.getTarget().toLowerCase());
+      mimeType = getServletContext().getMimeType(path);
     } catch (IllegalStateException ise) {
       logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
     }
+    return mimeType;
+  }
 
-    if (mimeType == null) {
-      response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);
-    } else {
-      response.setContentType(mimeType);
+  protected boolean isImageFile(final String path) {
+    return mimeFileTypeMap.getContentType(path).startsWith("image");
+  }
+
+  /**
+   * Prepares the response by setting headers and content type.
+   *
+   * @param disposition Content disposition.
+   * @param request     Request.
+   * @param response    Response.
+   * @param contentType Content type.
+   * @param command     Command.
+   */
+  protected void prepareResponse(final String disposition, final HttpServletRequest request,
+                                 final HttpServletResponse response, final String contentType,
+                                 final SVNBaseCommand command) {
+    response.setContentType(contentType);
+    response.setHeader(CONTENT_DISPOSITION_HEADER, disposition + "; filename=\"" +
+        EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
+  }
+
+  /**
+   * Creates a thumbnail version of a full size image.
+   *
+   * @param repository Repository
+   * @param command    Command
+   * @return array of image bytes
+   */
+  private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand command) {
+    logger.debug("Creating thumbnail for: " + command.getPath());
+    final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
+    final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
+    try {
+      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
+      final BufferedImage image = ImageIO.read(new ByteArrayInputStream(fullSizeImageData.toByteArray()));
+      ImageIO.write(imageScaler.getThumbnail(image, maxThumbnailSize), imageFormatName, thumbnailImageData);
+    } catch (final Exception ex) {
+      logger.warn("Unable to create thumbnail", ex);
     }
-    response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
-    // Get the image data and write it to the outputStream.
-    getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
-    output.flush();
-    output.close();
+    return thumbnailImageData.toByteArray();
+  }
+
+  /**
+   * Sets the image scaler.
+   *
+   * @param imageScaler Image scaler
+   */
+  public void setImageScaler(final ImageScaler imageScaler) {
+    this.imageScaler = imageScaler;
+  }
+
+  /**
+   * Sets the object cache manager instance.
+   *
+   * @param objectCacheManager The cache manager instance.
+   */
+  public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
+    this.objectCacheManager = objectCacheManager;
+  }
+
+  /**
+   * Sets the image format name.
+   *
+   * @param imageFormatName The format name, e.g. <tt>png</tt>.
+   */
+  public void setImageFormatName(final String imageFormatName) {
+    this.imageFormatName = imageFormatName;
+  }
+
+  /**
+   * Sets the maximum vertical/horizontal size in pixels for the generated thumbnail images.
+   *
+   * @param maxSize Size in pixels.
+   */
+  public void setMaxThumbnailSize(final int maxSize) {
+    this.maxThumbnailSize = maxSize;
   }
 
   /**
@@ -117,7 +256,7 @@ public class GetController extends AbstractSVNTemplateController {
    *
    * @param mimeFileTypeMap Map.
    */
-  public final void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
+  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
     this.mimeFileTypeMap = mimeFileTypeMap;
   }
 

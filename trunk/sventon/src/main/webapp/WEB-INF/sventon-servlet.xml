@@ -50,7 +50,6 @@
 
         <prop key="/repos/(*:name)/get/(**/*:path)*">getController</prop>
         <prop key="/repos/(*:name)/showlocks/(**/*:path)*">showLocksController</prop>
-        <prop key="/repos/(*:name)/getthumbnail/(**/*:path)*">getThumbnailController</prop>
 
         <prop key="/repos/(*:name)/showthumbnails/(**/*:path)*">showThumbnailsController</prop>
         <prop key="/repos/(*:name)/export/(**/*:path)*">exportController</prop>
@@ -181,20 +180,16 @@
 
   <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
+    <property name="imageScaler" ref="imageScaler"/>
+    <property name="objectCacheManager" ref="objectCacheManager"/>
+    <property name="imageFormatName" value="png"/>
+    <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
   <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="viewName" value="showThumbnails"/>
-  </bean>
-
-  <bean id="getThumbnailController" class="org.sventon.web.ctrl.template.GetThumbnailController" parent="abstractController">
-    <property name="imageScaler" ref="imageScaler"/>
-    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
-    <property name="objectCacheManager" ref="objectCacheManager"/>
-    <property name="imageFormatName" value="png"/>
-    <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
