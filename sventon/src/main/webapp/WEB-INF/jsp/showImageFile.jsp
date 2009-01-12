@@ -45,8 +45,9 @@
     <c:param name="disp" value="inline" />
   </c:url>
 
-  <c:url value="/repos/${command.name}/getthumbnail${command.path}${entry.name}" var="getThumbUrl">
+  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="getThumbUrl">
     <c:param name="revision" value="${command.revision}" />
+    <c:param name="disp" value="thumbnail" />
   </c:url>
 
   <p>
