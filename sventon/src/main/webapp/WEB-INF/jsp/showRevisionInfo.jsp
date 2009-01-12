@@ -27,7 +27,7 @@
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
-        <sventon:revInfoFunctionButtons command="${command}"/>
+        <sventon:revisionInfoFunctionButtons command="${command}"/>
       </td>
       <td style="text-align: right;">
         <c:if test="${useCache}">
@@ -40,19 +40,19 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <c:url value="/repos/${command.name}/revinfo" var="showPrevRevInfoUrl">
+  <c:url value="/repos/${command.name}/info" var="showPrevRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber - 1}" />
   </c:url>
 
-  <c:url value="/repos/${command.name}/revinfo" var="showNextRevInfoUrl">
+  <c:url value="/repos/${command.name}/info" var="showNextRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber + 1}" />
   </c:url>
 
   <c:if test="${command.revisionNumber - 1 gt 0}">
-    <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revinfo.previousrev"/>"></a>
+    <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revision.info.previous"/>"></a>
   </c:if>
   <c:if test="${!(command.revisionNumber + 1 gt headRevision)}">
-    <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Next revision" title="<spring:message code="revinfo.nextrev"/>"></a>
+    <a href="${showNextRevInfoUrl}"><img src="images/arrow_right.png" alt="Next revision" title="<spring:message code="revision.info.next"/>"></a>
   </c:if>
 
   <br>

@@ -38,7 +38,7 @@ showrawfile.button.text=Visa oformaterad
 showrawfile.button.tooltip=Visa filen oformaterad
 showdir.button.text=Visa katalog
 showdir.button.tooltip=Visa innehållet i katalogen {0}
-showrevinfo.link.tooltip=Visa\\u00a0revisionsdetaljer
+showrevision.info.link.tooltip=Visa\\u00a0revisionsdetaljer
 logmessage.empty=Inget loggmeddelande angett
 filter.text=Filtrera ändelser
 listfiles.link.tooltip=Visa\\u00a0/\\u00a0dölj\\u00a0kataloginnehåll
@@ -49,8 +49,8 @@ diff.error.identical.files=Filerna är identiska, {0}@{1} och {2}@{3}.
 diff.error.identical.dirs=Sökvägarnas innehåll är identiska.
 diff.error.binary=En eller båda valda filerna är i binärt format.
 
-revinfo.previousrev=Tidigare revision
-revinfo.nextrev=Nästa revision
+revision.info.previous=Tidigare revision
+revision.info.next=Nästa revision
 
 previous-revisions=Tidigare versioner
 
@@ -119,4 +119,4 @@ actions=Åtgärder...
 diff.show=Visa skillnader
 show=visa
 hide=dölj
-latest.commit.info=senaste arkiveringsinfon
+latest.revision.info=senaste arkiveringsinfon

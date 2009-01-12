@@ -48,11 +48,11 @@
       <th><spring:message code="logmessage"/></th>
     </tr>
     <c:forEach items="${logMessages}" var="logMessage">
-      <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
+      <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
         <c:param name="revision" value="${logMessage.revision}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevinfo.link.tooltip"/>')">${logMessage.revision}</a></td>
+        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logMessage.revision}</a></td>
         <td>${fn:replace(logMessage.message, br, '<br>')}</td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>
