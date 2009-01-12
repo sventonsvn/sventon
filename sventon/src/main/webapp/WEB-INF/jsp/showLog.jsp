@@ -121,7 +121,7 @@
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
-      <c:url value="/repos/${command.name}/showlog${command.path}" var="showNextLogUrl">
+      <c:url value="/repos/${command.name}/log${command.path}" var="showNextLogUrl">
         <c:param name="nextPath" value="${nextPath}" />
         <c:param name="nextRevision" value="${nextRev}" />
         <c:param name="revision" value="${command.revision}"/>

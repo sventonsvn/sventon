@@ -19,7 +19,7 @@
 <c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="showFileUrl" value="/repos/${command.name}/view${command.path}">

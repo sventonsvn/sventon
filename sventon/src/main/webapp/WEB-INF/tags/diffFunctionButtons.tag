@@ -17,7 +17,7 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.DiffCommand" %>
 <%@ attribute name="pegrev" required="true" type="java.lang.Long" %>
 
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="showFileUrl" value="/repos/${command.name}/view${command.path}">
