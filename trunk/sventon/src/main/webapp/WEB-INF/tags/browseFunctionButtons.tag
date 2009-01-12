@@ -16,7 +16,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="showLockLinkUrl" value="/repos/${command.name}/showlocks${command.path}">

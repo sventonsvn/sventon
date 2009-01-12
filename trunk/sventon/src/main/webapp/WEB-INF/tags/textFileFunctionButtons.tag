@@ -26,7 +26,7 @@
 <c:url var="blameLinkUrl" value="/repos/${command.name}/blame${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/showlog${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
