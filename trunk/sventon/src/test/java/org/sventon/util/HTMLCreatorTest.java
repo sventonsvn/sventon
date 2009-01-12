@@ -28,7 +28,7 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Added</i></td>\n" +
-        "    <td><a href=\"repos/sandbox/goto/file3.abc?revision=1\" title=\"Show\">/file3.abc</a><br><b>Copy from</b> <a href=\"repos/sandbox/goto/branch/file3.abc?revision=1\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"repos/sandbox/revinfo?revision=1\">1</a></td>\n" +
+        "    <td><a href=\"repos/sandbox/goto/file3.abc?revision=1\" title=\"Show\">/file3.abc</a><br><b>Copy from</b> <a href=\"repos/sandbox/goto/branch/file3.abc?revision=1\" title=\"Show\">/branch/file3.abc</a> @ <a href=\"repos/sandbox/info?revision=1\">1</a></td>\n" +
         "  </tr>\n" +
         "  <tr>\n" +
         "    <td valign=\"top\"><i>Replaced</i></td>\n" +
@@ -56,8 +56,8 @@ public class HTMLCreatorTest extends TestCase {
   }
 
   public void testCreateRevInfoUrl() throws Exception {
-    assertEquals("http://localhost/repos/sandbox/revinfo?revision=1",
-        HTMLCreator.createRevInfoUrl("http://localhost/", 1, new RepositoryName("sandbox")));
+    assertEquals("http://localhost/repos/sandbox/info?revision=1",
+        HTMLCreator.createRevisionInfoUrl("http://localhost/", 1, new RepositoryName("sandbox")));
   }
 
   public void testCreateDiffUrl() throws Exception {

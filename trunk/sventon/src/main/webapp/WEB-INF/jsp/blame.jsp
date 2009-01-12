@@ -51,7 +51,7 @@
     </tr>
 
     <c:forEach items="${annotatedFile.unmodifiableRows}" var="row">
-      <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
+      <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
         <c:param name="revision" value="${row.revision}" />
       </c:url>
 

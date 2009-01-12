@@ -25,7 +25,7 @@
     <spring:message code="revision.head"/> (${command.revisionNumber})
   </c:when>
   <c:otherwise>
-    <c:url value="/repos/${command.name}/revinfo" var="showRevInfoUrl">
+    <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
       <c:param name="revision" value="${command.revision}"/>
     </c:url>
     <c:choose>

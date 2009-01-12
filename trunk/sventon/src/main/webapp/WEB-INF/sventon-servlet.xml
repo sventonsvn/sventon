@@ -41,7 +41,7 @@
         <prop key="/repos/submitconfig">submitConfigurationsController</prop>
         <prop key="/repos/configlogin">configurationLoginController</prop>
 
-        <prop key="/repos/(*:name)/revinfo">revInfoController</prop>
+        <prop key="/repos/(*:name)/info">revisionInfoController</prop>
         <prop key="/repos/(*:name)/browse/(**/*:path)*">repoBrowserController</prop>
 
         <prop key="/repos/(*:name)/view/(**/*:path)*">showFileController</prop>
@@ -136,8 +136,8 @@
     <property name="viewName" value="repoBrowser"/>
   </bean>
 
-  <bean id="revInfoController" class="org.sventon.web.ctrl.template.ShowRevisionInfoController" parent="abstractController">
-    <property name="viewName" value="showRevInfo"/>
+  <bean id="revisionInfoController" class="org.sventon.web.ctrl.template.ShowRevisionInfoController" parent="abstractController">
+    <property name="viewName" value="showRevisionInfo"/>
   </bean>
 
   <bean id="showLocksController" class="org.sventon.web.ctrl.template.ShowLocksController" parent="abstractController">

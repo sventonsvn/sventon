@@ -200,11 +200,11 @@ public final class HTMLCreator {
           sb.append("&showlatestrevinfo=true");
         }
         sb.append("\" title=\"Show\">").append(logEntryPath.getCopyPath()).append("</a>").append(" @ ");
-        String revInfoUrl = createRevInfoUrl(baseURL, logEntryPath.getCopyRevision(), repositoryName);
+        String revisionInfoUrl = createRevisionInfoUrl(baseURL, logEntryPath.getCopyRevision(), repositoryName);
         if (response != null) {
-          revInfoUrl = response.encodeURL(revInfoUrl);
+          revisionInfoUrl = response.encodeURL(revisionInfoUrl);
         }
-        sb.append("<a href=\"").append(revInfoUrl);
+        sb.append("<a href=\"").append(revisionInfoUrl);
         sb.append("\">");
         sb.append(logEntryPath.getCopyRevision()).append("</a>");
       }
@@ -272,11 +272,11 @@ public final class HTMLCreator {
    * @param repositoryName Repository name.
    * @return The URL
    */
-  protected static String createRevInfoUrl(final String baseURL, final long revision, final RepositoryName repositoryName) {
+  protected static String createRevisionInfoUrl(final String baseURL, final long revision, final RepositoryName repositoryName) {
     final StringBuilder sb = new StringBuilder(baseURL);
     sb.append("repos/");
     sb.append(encode(repositoryName.toString()));
-    sb.append("/revinfo");
+    sb.append("/info");
     sb.append("?revision=").append(encode(String.valueOf(revision)));
     return sb.toString();
   }

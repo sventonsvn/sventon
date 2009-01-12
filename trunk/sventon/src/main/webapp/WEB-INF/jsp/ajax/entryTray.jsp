@@ -45,7 +45,7 @@
       <c:url value="/repos/${command.name}/view${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
-      <c:url value="/repos/${command.name}/revinfo" var="entryTrayShowRevInfoUrl">
+      <c:url value="/repos/${command.name}/info" var="entryTrayShowRevInfoUrl">
         <c:param name="revision" value="${trayEntry.revision}" />
       </c:url>
       <c:url value="/ajax/${command.name}/entrytray${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
