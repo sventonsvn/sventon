@@ -117,32 +117,32 @@ public class DiffProducerTest extends TestCase {
             "}" + LINE_BREAK;
 
     final String result =
-        "2a2,8" + LINE_BREAK +
-            "> * $Id$" + LINE_BREAK +
-            "> * $LastChangedDate$" + LINE_BREAK +
-            "> * $Date$" + LINE_BREAK +
-            "> * $LastChangedRevision$" + LINE_BREAK +
-            "> * $Revision$" + LINE_BREAK +
-            "> * $Rev$" + LINE_BREAK +
-            "> * $LastChangedBy$" + LINE_BREAK +
-            "10,12c3,4" + LINE_BREAK +
-            "< * $HeadURL$" + LINE_BREAK +
-            "< * $URL$" + LINE_BREAK +
+        "2,8d2" + LINE_BREAK +
             "< * $Id$" + LINE_BREAK +
+            "< * $LastChangedDate$" + LINE_BREAK +
+            "< * $Date$" + LINE_BREAK +
+            "< * $LastChangedRevision$" + LINE_BREAK +
+            "< * $Revision$" + LINE_BREAK +
+            "< * $Rev$" + LINE_BREAK +
+            "< * $LastChangedBy$" + LINE_BREAK +
+            "3,4c10,12" + LINE_BREAK +
+            "< * $Revision$" + LINE_BREAK +
+            "< * $Date:$" + LINE_BREAK +
             "---" + LINE_BREAK +
-            "> * $Revision$" + LINE_BREAK +
-            "> * $Date:$" + LINE_BREAK +
-            "10a18,22" + LINE_BREAK +
-            ">" + LINE_BREAK +
-            ">public String getRev {" + LINE_BREAK +
-            "> return \"$Rev$\";" + LINE_BREAK +
-            ">" + LINE_BREAK +
-            ">}" + LINE_BREAK;
+            "> * $HeadURL$" + LINE_BREAK +
+            "> * $URL$" + LINE_BREAK +
+            "> * $Id$" + LINE_BREAK +
+            "18,22d10" + LINE_BREAK +
+            "<" + LINE_BREAK +
+            "<public String getRev {" + LINE_BREAK +
+            "< return \"$Rev$\";" + LINE_BREAK +
+            "<" + LINE_BREAK +
+            "<}" + LINE_BREAK;
 
     final InputStream left = IOUtils.toInputStream(leftString);
     final InputStream right = IOUtils.toInputStream(rightString);
 
-    final DiffProducer diffProducer = new DiffProducer(left, right, null);
+    final DiffProducer diffProducer = new DiffProducer(right, left, null);
     final OutputStream output = new ByteArrayOutputStream();
     diffProducer.doNormalDiff(output);
     assertEquals(result, output.toString());
@@ -150,26 +150,26 @@ public class DiffProducerTest extends TestCase {
     final Iterator<DiffSegment> actions = DiffResultParser.parseNormalDiffResult(result).iterator();
 
     DiffSegment action = actions.next();
-    assertSame(DiffAction.ADDED, action.getAction());
+    assertSame(DiffAction.DELETED, action.getAction());
     assertEquals(2, action.getLineIntervalStart(LEFT));
-    assertEquals(2, action.getLineIntervalEnd(LEFT));
+    assertEquals(8, action.getLineIntervalEnd(LEFT));
     assertEquals(2, action.getLineIntervalStart(RIGHT));
-    assertEquals(8, action.getLineIntervalEnd(RIGHT));
-    assertEquals("DiffSegment: ADDED, left: 2-2, right: 2-8", action.toString());
+    assertEquals(2, action.getLineIntervalEnd(RIGHT));
+    assertEquals("DiffSegment: DELETED, left: 2-8, right: 2-2", action.toString());
     action = actions.next();
     assertSame(DiffAction.CHANGED, action.getAction());
-    assertEquals(10, action.getLineIntervalStart(LEFT));
-    assertEquals(12, action.getLineIntervalEnd(LEFT));
-    assertEquals(3, action.getLineIntervalStart(RIGHT));
-    assertEquals(4, action.getLineIntervalEnd(RIGHT));
-    assertEquals("DiffSegment: CHANGED, left: 10-12, right: 3-4", action.toString());
+    assertEquals(3, action.getLineIntervalStart(LEFT));
+    assertEquals(4, action.getLineIntervalEnd(LEFT));
+    assertEquals(10, action.getLineIntervalStart(RIGHT));
+    assertEquals(12, action.getLineIntervalEnd(RIGHT));
+    assertEquals("DiffSegment: CHANGED, left: 3-4, right: 10-12", action.toString());
     action = actions.next();
-    assertSame(DiffAction.ADDED, action.getAction());
-    assertEquals(10, action.getLineIntervalStart(LEFT));
-    assertEquals(10, action.getLineIntervalEnd(LEFT));
-    assertEquals(18, action.getLineIntervalStart(RIGHT));
-    assertEquals(22, action.getLineIntervalEnd(RIGHT));
-    assertEquals("DiffSegment: ADDED, left: 10-10, right: 18-22", action.toString());
+    assertSame(DiffAction.DELETED, action.getAction());
+    assertEquals(18, action.getLineIntervalStart(LEFT));
+    assertEquals(22, action.getLineIntervalEnd(LEFT));
+    assertEquals(10, action.getLineIntervalStart(RIGHT));
+    assertEquals(10, action.getLineIntervalEnd(RIGHT));
+    assertEquals("DiffSegment: DELETED, left: 18-22, right: 10-10", action.toString());
   }
 
   public void testDoNormalDiffIII() throws Exception {

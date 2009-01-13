@@ -396,16 +396,16 @@ public class RepositoryServiceImplTest extends TestCase {
 
     String leftResult =
         "1u/**\n" +
-            "a\n" +
-            "a\n" +
-            "a\n" +
-            "a\n" +
-            "a\n" +
-            "a\n" +
-            "a\n" +
-            "2u&nbsp;* $Author$\n" +
-            "3c&nbsp;* $Revision$\n" +
+            "2c&nbsp;* $Author$\n" +
+            "c\n" +
+            "c\n" +
+            "c\n" +
+            "3u&nbsp;* $Revision$\n" +
             "4c&nbsp;* $Date:$\n" +
+            "c\n" +
+            "c\n" +
+            "c\n" +
+            "c\n" +
             "c\n" +
             "5u&nbsp;*/\n" +
             "6uTest1\n" +
@@ -420,14 +420,14 @@ public class RepositoryServiceImplTest extends TestCase {
 
     String rightResult =
         "1u/**\n" +
-            "2a&nbsp;* $Id$\n" +
-            "3a&nbsp;* $LastChangedDate$\n" +
-            "4a&nbsp;* $Date$\n" +
-            "5a&nbsp;* $LastChangedRevision$\n" +
-            "6a&nbsp;* $Revision$\n" +
-            "7a&nbsp;* $Rev$\n" +
-            "8a&nbsp;* $LastChangedBy$\n" +
-            "9u&nbsp;* $Author$\n" +
+            "2c&nbsp;* $Id$\n" +
+            "3c&nbsp;* $LastChangedDate$\n" +
+            "4c&nbsp;* $Date$\n" +
+            "5c&nbsp;* $LastChangedRevision$\n" +
+            "6u&nbsp;* $Revision$\n" +
+            "7c&nbsp;* $Rev$\n" +
+            "8c&nbsp;* $LastChangedBy$\n" +
+            "9c&nbsp;* $Author$\n" +
             "10c&nbsp;* $HeadURL$\n" +
             "11c&nbsp;* $URL$\n" +
             "12c&nbsp;* $Id$\n" +
