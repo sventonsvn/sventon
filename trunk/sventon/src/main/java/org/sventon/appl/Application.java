@@ -274,7 +274,7 @@ public final class Application {
    * @return Collection of repository names.
    */
   public Set<RepositoryName> getRepositoryNames() {
-    return new TreeSet(repositories.keySet());
+    return new TreeSet<RepositoryName>(repositories.keySet());
   }
 
   /**
