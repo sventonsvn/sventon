@@ -3,7 +3,7 @@
   <groupId>org.tmatesoft.svnkit</groupId>
   <artifactId>svnkit</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.1.5297</version>
+  <version>1.2.2.5405</version>
   <name>SVNKit</name>
   <description>A pure Java Subversion library, formerly known as JavaSVN</description>
   <url>http://svnkit.com/</url>
