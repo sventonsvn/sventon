@@ -303,9 +303,9 @@ public class SVNBaseCommand {
    *
    * @return Url
    */
-  public String createBrowseUrl() {
+  public String createListUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/browse" + getPathWithTrailingSlash();
+    return "/repos/" + name.toString() + "/list" + getPathWithTrailingSlash();
   }
 
   /**

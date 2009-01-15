@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
@@ -18,8 +19,12 @@ import org.sventon.model.UserRepositoryContext;
 public class ListRepositoriesControllerTest extends TestCase {
 
   private Application application;
+  private MockHttpServletRequest request;
+  private MockHttpServletResponse response;
 
   protected void setUp() throws Exception {
+    request = new MockHttpServletRequest();
+    response = new MockHttpServletResponse();
     ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
     final MockServletContext servletContext = new MockServletContext();
@@ -29,9 +34,6 @@ public class ListRepositoriesControllerTest extends TestCase {
   }
 
   public void testHandleRequestInternal() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-
     final ListRepositoriesController ctrl = new ListRepositoriesController();
     ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);
@@ -41,6 +43,8 @@ public class ListRepositoriesControllerTest extends TestCase {
     // Not configured
     assertTrue(modelAndView.getView() instanceof RedirectView);
 
+    application.addRepository(createTestRepository("test1"));
+    application.addRepository(createTestRepository("test2"));
     application.setConfigured(true);
 
     modelAndView = ctrl.handleRequestInternal(request, response);
@@ -48,9 +52,6 @@ public class ListRepositoriesControllerTest extends TestCase {
   }
 
   public void testHandleRequestInternalLogout() throws Exception {
-    final MockHttpServletRequest request = new MockHttpServletRequest();
-    final MockHttpServletResponse response = new MockHttpServletResponse();
-
     //Create a mock session and prepare it. After the contrller call completes, the session should be empty.
     final MockHttpSession session = new MockHttpSession();
     final UserRepositoryContext context1 = new UserRepositoryContext();
@@ -69,6 +70,8 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setSession(session);
 
     final ListRepositoriesController controller = new ListRepositoriesController();
+    application.addRepository(createTestRepository("test1"));
+    application.addRepository(createTestRepository("test2"));
     application.setConfigured(true);
     controller.setApplication(application);
 
@@ -142,5 +145,58 @@ public class ListRepositoriesControllerTest extends TestCase {
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
     assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
+  }
+
+  public void testHandleRequestInternal2() throws Exception {
+    final ListRepositoriesController ctrl = new ListRepositoriesController();
+    ctrl.setServletContext(new MockServletContext());
+    ctrl.setApplication(application);
+
+    final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+    // Not configured
+    application.setConfigured(false);
+    ModelAndView modelAndView = ctrl.handleRequestInternal(mockRequest, null);
+
+    RedirectView view = (RedirectView) modelAndView.getView();
+    assertEquals("/repos/listconfigs", view.getUrl());
+
+    // Configured - but without added instances (should not be possible)
+    application.setConfigured(true);
+    try {
+      ctrl.handleRequestInternal(mockRequest, null);
+      fail("Should throw IllegalStateException ");
+    } catch (IllegalStateException e) {
+      // expected
+    }
+
+    // Configured with one instance
+    application.addRepository(createTestRepository("test1"));
+
+    modelAndView = ctrl.handleRequestInternal(mockRequest, null);
+
+    view = (RedirectView) modelAndView.getView();
+    assertEquals("/repos/test1/list/", view.getUrl());
+
+    // Configured with two instances
+    application.addRepository(createTestRepository("test2"));
+
+    modelAndView = ctrl.handleRequestInternal(mockRequest, null);
+    assertEquals("listRepositories", modelAndView.getViewName());
+  }
+
+  private RepositoryConfiguration createTestRepository(final String repositoryName) {
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
+    configuration.setRepositoryUrl("http://localhost/svn");
+    configuration.setCacheUsed(false);
+    configuration.setZippedDownloadsAllowed(false);
+    configuration.setEnableAccessControl(false);
+    return configuration;
+  }
+
+  public void testCreateListUrl() {
+    final ListRepositoriesController ctrl = new ListRepositoriesController();
+    assertEquals("/repos/test/list/", ctrl.createListUrl(new RepositoryName("test")));
+    assertEquals("/repos/%C3%BC/list/", ctrl.createListUrl(new RepositoryName("\u00fc")));
   }
 }

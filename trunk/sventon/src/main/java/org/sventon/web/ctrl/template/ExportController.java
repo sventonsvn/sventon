@@ -65,7 +65,7 @@ public final class ExportController extends AbstractSVNTemplateController {
     model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
         command.getRevisionNumber()));
 
-    return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createBrowseUrl()), true), model);
+    return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createListUrl()), true), model);
   }
 
   /**

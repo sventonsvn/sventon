@@ -53,7 +53,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegrev" value="${command.revisionNumber}">
 
-    <c:url value="/repos/${command.name}/browse${command.path}" var="sortUrl">
+    <c:url value="/repos/${command.name}/list${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
     </c:url>
 
@@ -64,7 +64,7 @@
       <c:set var="backLinkVisible" value="false"/>
       <c:if test="${command.path ne '/'}">
         <c:set var="backLinkVisible" value="true"/>
-        <c:url value="/repos/${command.name}/browse${command.parentPath}" var="backUrl">
+        <c:url value="/repos/${command.name}/list${command.parentPath}" var="backUrl">
           <c:param name="revision" value="${command.revision}"/>
         </c:url>
 
@@ -84,7 +84,7 @@
       </c:if>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/browse${entry.fullEntryName}/" var="viewUrl">
+        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="viewUrl">
           <c:param name="revision" value="${command.revision}" />
           <c:param name="bypassEmpty" value="true" />
         </c:url>

@@ -34,7 +34,6 @@
       <props>
         <prop key="/repos/">listRepositoriesController</prop>
         <prop key="/repos/list">listRepositoriesController</prop>
-        <prop key="/repos/start">startController</prop>
         <prop key="/repos/config">configurationFormController</prop>
         <prop key="/repos/listconfigs">listConfigurationsController</prop>
         <prop key="/repos/deleteconfig">deleteConfigurationController</prop>
@@ -42,7 +41,7 @@
         <prop key="/repos/configlogin">configurationLoginController</prop>
 
         <prop key="/repos/(*:name)/info">revisionInfoController</prop>
-        <prop key="/repos/(*:name)/browse/(**/*:path)*">repoBrowserController</prop>
+        <prop key="/repos/(*:name)/list/(**/*:path)*">repoBrowserController</prop>
         <prop key="/repos/(*:name)/view/(**/*:path)*">showFileController</prop>
         <prop key="/repos/(*:name)/blame/(**/*:path)*">blameController</prop>
         <prop key="/repos/(*:name)/log/(**/*:path)*">showLogsController</prop>
@@ -203,10 +202,6 @@
   </bean>
 
   <bean id="listRepositoriesController" class="org.sventon.web.ctrl.ListRepositoriesController">
-    <property name="application" ref="application"/>
-  </bean>
-
-  <bean id="startController" class="org.sventon.web.ctrl.StartController">
     <property name="application" ref="application"/>
   </bean>
 

@@ -27,7 +27,7 @@
 
   <ol>
     <c:forEach items="${repositoryNames}" var="repositoryName">
-      <c:url value="/repos/${repositoryName}/browse/" var="repositoryUrl" />
+      <c:url value="/repos/${repositoryName}/list/" var="repositoryUrl" />
       <li>
         <a href="${repositoryUrl}">${repositoryName}</a>
       </li>
