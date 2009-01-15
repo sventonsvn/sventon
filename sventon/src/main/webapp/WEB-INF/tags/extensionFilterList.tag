@@ -18,7 +18,7 @@
 <%@ attribute name="existingExtensions" required="true" type="java.util.Set" %>
 <%@ attribute name="filterExtension" required="true" type="java.lang.String" %>
 
-<c:url var="showDirLinkUrl" value="/repos/${command.name}/browse${command.path}">
+<c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 

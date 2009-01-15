@@ -70,7 +70,7 @@ public class GoToControllerTest extends TestCase {
 
     assertEquals(1, model.size());
     view = (RedirectView) modelAndView.getView();
-    assertEquals("/repos/test/browse/dir/", view.getUrl());
+    assertEquals("/repos/test/list/dir/", view.getUrl());
 
     reset(mockService);
 

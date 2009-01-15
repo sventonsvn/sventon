@@ -134,15 +134,15 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals("/", cmd.getPathPart());
   }
 
-  public void testCreateBrowseUrl() {
+  public void testCreateListUrl() {
     final SVNBaseCommand cmd = new SVNBaseCommand();
     cmd.setName(new RepositoryName("test"));
 
     cmd.setPath("/test/dir");
-    assertEquals("/repos/test/browse/test/dir/", cmd.createBrowseUrl());
+    assertEquals("/repos/test/list/test/dir/", cmd.createListUrl());
 
     cmd.setPath("/test/dir/");
-    assertEquals("/repos/test/browse/test/dir/", cmd.createBrowseUrl());
+    assertEquals("/repos/test/list/test/dir/", cmd.createListUrl());
   }
 
   public void testCreateViewUrl() {

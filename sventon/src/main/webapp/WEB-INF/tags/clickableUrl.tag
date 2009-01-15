@@ -20,7 +20,7 @@
 <%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
 
 <span id="clickableUrl">
-  <c:url value="/repos/${command.name}/browse/" var="basePathUrl">
+  <c:url value="/repos/${command.name}/list/" var="basePathUrl">
     <c:param name="revision" value="${command.revision}" />
   </c:url>
   <a href="${basePathUrl}">${url}</a> /
@@ -28,7 +28,7 @@
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
         <c:when test="${clickable}">
-          <c:url value="/repos/${command.name}/browse/${accuPath}" var="pathUrl">
+          <c:url value="/repos/${command.name}/list/${accuPath}" var="pathUrl">
             <c:param name="revision" value="${command.revision}" />
           </c:url>
           <a href="${pathUrl}">${pathSegment}</a>

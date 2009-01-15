@@ -19,6 +19,7 @@ import org.sventon.appl.Application;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
+import org.sventon.util.EncodingUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,9 +66,23 @@ public final class ListRepositoriesController extends AbstractController {
       }
     }
 
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("repositoryNames", application.getRepositoryNames());
-    return new ModelAndView("listRepositories", model);
+    final ModelAndView modelAndView;
+
+    if (application.getRepositoryCount() > 1) {
+      final Map<String, Object> model = new HashMap<String, Object>();
+      model.put("repositoryNames", application.getRepositoryNames());
+      modelAndView = new ModelAndView("listRepositories", model);
+    } else if (application.getRepositoryCount() == 1) {
+      final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
+      modelAndView = new ModelAndView(new RedirectView(createListUrl(repositoryName), true));
+    } else {
+      throw new IllegalStateException("No repository has been configured!");
+    }
+    return modelAndView;
+  }
+
+  protected String createListUrl(final RepositoryName repositoryName) {
+    return EncodingUtils.encodeUrl("/repos/" + repositoryName + "/list/");
   }
 
   /**

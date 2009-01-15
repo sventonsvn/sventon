@@ -84,7 +84,7 @@ public final class SubmitConfigurationsController extends AbstractController {
     }
 
     logger.info("Configuration done!");
-    return new ModelAndView(new RedirectView("/repos/start", true));
+    return new ModelAndView(new RedirectView("/repos/list", true));
   }
 
 }

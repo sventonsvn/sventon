@@ -22,7 +22,7 @@
 <c:url var="showLockLinkUrl" value="/repos/${command.name}/showlocks${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showDirLinkUrl" value="/repos/${command.name}/browse${command.path}">
+<c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 

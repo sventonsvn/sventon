@@ -67,7 +67,7 @@ public final class GoToController extends AbstractSVNTemplateController {
     }
 
     if (SVNNodeKind.DIR == kind) {
-      redirectUrl = command.createBrowseUrl();
+      redirectUrl = command.createListUrl();
     } else if (SVNNodeKind.FILE == kind) {
       redirectUrl = command.createViewUrl();
     } else if (kind == null) {

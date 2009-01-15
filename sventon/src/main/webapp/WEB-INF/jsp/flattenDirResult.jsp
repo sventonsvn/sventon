@@ -51,7 +51,7 @@
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
         <c:set var="rowCount" value="0"/>
         <c:forEach items="${svndir}" var="entry">
-          <c:url value="/repos/${command.name}/browse${entry.fullEntryName}/" var="viewUrl">
+          <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="viewUrl">
             <c:param name="revision" value="${command.revision}" />
           </c:url>
           <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">

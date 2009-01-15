@@ -65,8 +65,8 @@ public class TestParameterizedPathMatcher extends TestCase {
     assertTrue(pathMatcher.match("org/(**:path)/servlet/bla.jsp", "org/springframework/testing/servlet/bla.jsp"));
     assertTrue(pathMatcher.match("org/(**:path)/servlet/bla.jsp", "org/servlet/bla.jsp"));
 
-    assertTrue(pathMatcher.match("/browse/(*:name)/(**/*:path)*", "/browse/sandbox/trunk/dev?revision=123"));
-    assertTrue(pathMatcher.match("/browse/(*:name)/(**/*:path)*", "/browse/sandbox/trunk/dev/?revision=123"));
+    assertTrue(pathMatcher.match("/list/(*:name)/(**/*:path)*", "/list/sandbox/trunk/dev?revision=123"));
+    assertTrue(pathMatcher.match("/list/(*:name)/(**/*:path)*", "/list/sandbox/trunk/dev/?revision=123"));
   }
 
   public void testNamedGroups() {
