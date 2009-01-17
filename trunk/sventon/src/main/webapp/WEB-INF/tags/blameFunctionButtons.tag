@@ -22,7 +22,7 @@
 <c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showFileUrl" value="/repos/${command.name}/view${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 

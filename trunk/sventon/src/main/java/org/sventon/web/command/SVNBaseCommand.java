@@ -315,9 +315,9 @@ public class SVNBaseCommand {
    *
    * @return Url
    */
-  public String createViewUrl() {
+  public String createShowFileUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/view" + getPathStripTrailingSlash();
+    return "/repos/" + name.toString() + "/show" + getPathStripTrailingSlash();
   }
 
   private void assertNameSet() {

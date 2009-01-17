@@ -84,11 +84,11 @@
       </c:if>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="viewUrl">
+        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
           <c:param name="revision" value="${command.revision}" />
           <c:param name="bypassEmpty" value="true" />
         </c:url>
-        <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
@@ -112,7 +112,7 @@
                   <img src="images/icon_folder.png" alt="dir">
                 </div>
               </td>
-              <td class="sventonCol3"><a href="${viewUrl}">${entry.name}</a></td>
+              <td class="sventonCol3"><a href="${listUrl}">${entry.name}</a></td>
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">

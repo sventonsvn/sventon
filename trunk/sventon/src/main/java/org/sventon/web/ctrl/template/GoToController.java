@@ -69,7 +69,7 @@ public final class GoToController extends AbstractSVNTemplateController {
     if (SVNNodeKind.DIR == kind) {
       redirectUrl = command.createListUrl();
     } else if (SVNNodeKind.FILE == kind) {
-      redirectUrl = command.createViewUrl();
+      redirectUrl = command.createShowFileUrl();
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");
       return prepareExceptionModelAndView(exception, command);

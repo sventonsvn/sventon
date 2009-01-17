@@ -23,10 +23,10 @@
 <c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showFileUrl" value="/repos/${command.name}/view${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showArchivedFileLinkUrl" value="/repos/${command.name}/view${command.path}">
+<c:url var="showArchivedFileLinkUrl" value="/repos/${command.name}/show${command.path}">
   <c:param name="revision" value="${command.revision}"/>
   <c:param name="archivedEntry" value="${archivedEntry}"/>
   <c:param name="forceDisplay" value="true"/>

@@ -57,7 +57,7 @@
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
         </c:url>
-        <c:url value="/repos/${command.name}/view${entry.path}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show${entry.path}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
 

@@ -42,22 +42,19 @@
 
         <prop key="/repos/(*:name)/info">revisionInfoController</prop>
         <prop key="/repos/(*:name)/list/(**/*:path)*">repoBrowserController</prop>
-        <prop key="/repos/(*:name)/view/(**/*:path)*">showFileController</prop>
+        <prop key="/repos/(*:name)/show/(**/*:path)*">showFileController</prop>
         <prop key="/repos/(*:name)/blame/(**/*:path)*">blameController</prop>
         <prop key="/repos/(*:name)/log/(**/*:path)*">showLogsController</prop>
-
         <prop key="/repos/(*:name)/get/(**/*:path)*">getController</prop>
-        <prop key="/repos/(*:name)/showlocks/(**/*:path)*">showLocksController</prop>
-
-        <prop key="/repos/(*:name)/showthumbnails/(**/*:path)*">showThumbnailsController</prop>
         <prop key="/repos/(*:name)/export/(**/*:path)*">exportController</prop>
         <prop key="/repos/(*:name)/diff/(**/*:path)*">diffController</prop>
+        <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
 
+        <prop key="/repos/(*:name)/showlocks/(**/*:path)*">showLocksController</prop>
+        <prop key="/repos/(*:name)/showthumbnails/(**/*:path)*">showThumbnailsController</prop>
         <prop key="/repos/(*:name)/searchentries/(**/*:path)*">searchEntriesController</prop>
         <prop key="/repos/(*:name)/searchlogs/(**/*:path)*">searchLogsController</prop>
         <prop key="/repos/(*:name)/flatten/(**/*:path)*">flattenController</prop>
-
-        <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
 
         <!-- url mappings for xml producers -->
         <prop key="/xml/(*:name)/rss/(**/*:path)*">rssController</prop>

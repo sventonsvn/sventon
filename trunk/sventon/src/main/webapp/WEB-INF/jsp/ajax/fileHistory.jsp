@@ -29,7 +29,7 @@
         <spring:message code="previous-revisions"/>
         <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
           <c:forEach var="fileRevision" items="${fileRevisions}">
-            <c:url value="/repos/${command.name}/view${fileRevision.path}" var="showFileAtRevisionUrl">
+            <c:url value="/repos/${command.name}/show${fileRevision.path}" var="showFileAtRevisionUrl">
               <c:param name="revision" value="${fileRevision.revision}" />
               <c:if test="${archivedEntry ne null}">
                 <c:param name="archivedEntry" value="${archivedEntry}" />
