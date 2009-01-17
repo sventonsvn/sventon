@@ -39,10 +39,10 @@
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="org.sventon.model.RepositoryEntry"/>
       
-      <c:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayViewUrl">
+      <c:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayListUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
-      <c:url value="/repos/${command.name}/view${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
+      <c:url value="/repos/${command.name}/show${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
       <c:url value="/repos/${command.name}/info" var="entryTrayShowRevInfoUrl">
@@ -62,7 +62,7 @@
             <img src="images/icon_folder.png" alt="dir">
           </td>
           <td>
-            <a href="${entryTrayViewUrl}">${trayEntry.name}</a>&nbsp;
+            <a href="${entryTrayListUrl}">${trayEntry.name}</a>&nbsp;
         </c:when>
         <c:otherwise>
           <td>

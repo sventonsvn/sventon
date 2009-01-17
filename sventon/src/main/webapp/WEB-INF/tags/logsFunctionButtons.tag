@@ -17,7 +17,7 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="isFile" required="true" type="java.lang.Boolean" %>
 
-<c:url var="showFileUrl" value="/repos/${command.name}/view${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">

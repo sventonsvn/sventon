@@ -57,10 +57,10 @@
       <c:set var="totalSize" value="0"/>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="viewUrl">
+        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
-        <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
@@ -85,7 +85,7 @@
                 </div>
               </td>
               <td class="sventonCol3">
-                <a href="${viewUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
+                <a href="${listUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
                 ${entry.friendlyFullEntryName}
                 </a>
               </td>

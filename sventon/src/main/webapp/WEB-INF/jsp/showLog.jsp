@@ -81,7 +81,7 @@
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
             <c:when test="${isFile}">
-              <c:url value="/repos/${command.name}/view${entry.pathAtRevision}" var="showUrl">
+              <c:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
               <td>

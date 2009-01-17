@@ -55,7 +55,7 @@ public class GoToControllerTest extends TestCase {
 
     assertEquals(1, model.size());
     RedirectView view = (RedirectView) modelAndView.getView();
-    assertEquals("/repos/test/view/file.txt", view.getUrl());
+    assertEquals("/repos/test/show/file.txt", view.getUrl());
 
     reset(mockService);
     command.setPath("/dir");

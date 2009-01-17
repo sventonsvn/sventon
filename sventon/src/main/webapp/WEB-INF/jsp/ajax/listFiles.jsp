@@ -18,7 +18,7 @@
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
 <c:forEach items="${svndir}" var="entry">
-  <c:url value="/repos/${command.name}/view${entry.fullEntryName}" var="showFileUrl">
+  <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
     <c:param name="revision" value="${command.revision}" />
   </c:url>
   <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
