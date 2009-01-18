@@ -144,9 +144,10 @@
           <tr>
             <td class="boxBody">
               <p>
-              See the <a href="http://wiki.sventon.org/">sventon Wiki</a> for user and developer documentation.
+              See the <a href="http://wiki.sventon.org/">sventon wiki</a> for user and developer documentation.
               </p>
-              <p>If you have any questions regarding sventon usage or development, please visit the
+              <p>If you have any questions regarding sventon usage or development, please check the 
+                <a href="http://wiki.sventon.org/index.php?n=Main.FAQ">FAQ</a> or visit the
                 <a href="http://groups.google.com/group/sventon-support/">sventon Google group</a> to
                 discuss different topics with sventon committers and users.
                 </p>
