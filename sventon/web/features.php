@@ -24,8 +24,8 @@
   <li>Download files and directories as ZIP files.</li>
   <li>Bypass of empty middle directories for faster navigation.</li>
   <li>Support for multiple encodings.</li>
-  <li>Several authentication methods supported, including user based</li>
-  <li>Commit notifications via e-mail</li>
-  <li>Convenient tray for handling entries</li>
+  <li>Several authentication methods supported, including user based.</li>
+  <li>Commit notifications via e-mail.</li>
+  <li>Convenient tray for handling entries.</li>
 </ul>
 </div>

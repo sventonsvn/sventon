@@ -12,7 +12,7 @@
   </p>
   <p>
   <b><a href="http://svn.sventon.org/repobrowser.svn?name=berlios">The sventon sventon instance</a></b><br/>
-  Browse the source code and keep track of changes using the RSS feeds
+  Browse the source code and keep track of changes using the <a href="http://svn.sventon.org/rss.xml?name=berlios&path=/&revision=HEAD">RSS feeds</a>.
   </p>
   <p>
   <b><a href="http://groups.google.com/group/sventon-support/">The sventon support Google group</a></b><br/>
@@ -40,7 +40,7 @@
   The best way of communicating is to use our
   <a href="http://groups.google.com/group/sventon-support/">Google group</a>. Patches can be
   <a href="http://groups.google.com/group/sventon-support/files?upload=1">uploaded to the group</a> or e-mailed directly
-  to <a href="mailto:sventonproject@gmail.com">sventonproject@gmail.com</a>
+  to <a href="mailto:sventonproject@gmail.com">sventonproject@gmail.com</a>.
   </p>
   <p>
   When creating patches, use <code>svn diff</code> from the top of a sventon Subversion trunk working copy.
@@ -52,7 +52,9 @@
   <br/>
   <b>Documentation</b>
   <p>
-  End-user and developer documentation can be found on the <a href="http://wiki.sventon.org/">sventon Wiki</a>.
+  End-user and developer documentation can be found on the <a href="http://wiki.sventon.org/">sventon wiki</a>.<br/>
+  <a href="http://maven.apache.org/">Maven</a> generated project pages can be found 
+  <a href="http://sventon.berlios.de/site/">here</a>. 
   </p>
   
   <br/>
