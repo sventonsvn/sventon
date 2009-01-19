@@ -39,7 +39,7 @@
           <c:url value="/repos/deleteconfig" var="deleteConfigUrl">
             <c:param name="name" value="${repos}" />
           </c:url>
-          <a href="${deleteConfigUrl}">[delete]</a>
+          <a style="color: #FEAE02;" href="${deleteConfigUrl}">[delete]</a>
         </li>
       </c:forEach>
     </ul>
