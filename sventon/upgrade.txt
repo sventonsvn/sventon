@@ -26,5 +26,5 @@ this can take quite some time. You will be able to use sventon during the
 indexing process, but the search and flatten buttons will be disabled until
 indexing is completed.
 
-Support
+Documentation and FAQ
 See http://wiki.sventon.org
