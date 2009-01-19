@@ -11,8 +11,9 @@
   Here you will find source code repository, bug and feature request databases as well as binary and source releases.
   </p>
   <p>
-  <b><a href="http://svn.sventon.org/repobrowser.svn?name=berlios">The sventon sventon instance</a></b><br/>
-  Browse the source code and keep track of changes using the <a href="http://svn.sventon.org/rss.xml?name=berlios&path=/&revision=HEAD">RSS feeds</a>.
+  <b><a href="http://svn.sventon.org/">The sventon sventon instance</a></b><br/>
+  Browse the source code and keep track of changes using the
+  <a href="http://svn.sventon.org/xml/berlios/rss/?revision=HEAD">RSS feeds</a>.
   </p>
   <p>
   <b><a href="http://groups.google.com/group/sventon-support/">The sventon support Google group</a></b><br/>
