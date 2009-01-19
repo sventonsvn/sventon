@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1456] Release 2.0.0 (2009-01-19)
 [1443] Added: Upgraded to SVNKit 1.2.2.
 [1425] Added: Feature #4407 - Add options to Log View.
 [1421] Added: Upgraded to Spring 2.5.6.
@@ -14,7 +15,6 @@ sventon change history
 [1333] Fixed: Bug #14244 - Revision zero not considered.
 [1321] Added: Feature #4182 - Friendly URLs.
 [1246] Added: Feature #3499 - Diff tags.
-
 [1407] Fixed: Bug #14799 - Unnecessary recreation of thumbnails.
 
 [1390] Release 1.4.1 (2008-10-01)
