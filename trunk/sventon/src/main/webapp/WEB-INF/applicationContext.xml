@@ -23,7 +23,7 @@
 
   <bean id="sventonTempRootDir" class="java.io.File">
     <constructor-arg value="${java.io.tmpdir}"/>
-    <constructor-arg value="sventon_temp"/>
+    <constructor-arg value="sventon_config"/>
   </bean>
 
   <bean id="configDirectory" class="org.sventon.appl.ConfigDirectory">
