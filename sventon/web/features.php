@@ -5,6 +5,7 @@
   <li>WebDAV (http/https), svnserve (svn/svn+ssh) and file repository browsning.</li>
   <li>Support for multiple repositories.</li>
   <li>View and download files for any given revision or date in time.</li>
+  <li>Friendly URL:s.</li>
   <li>Sort or filter directory listings.</li>
   <li>View contents of archives and files inside archives.</li>
   <li>View logs history and metadata for files and directories.</li>
@@ -17,6 +18,7 @@
   <li>Directory flattening for fast navigation.</li>
   <li>Image thumbnail preview.</li>
   <li>Diff files between revisions or directories, side-by-side, inline or as unified diff.</li>
+  <li>Show differences between paths.</li>
   <li>Keyword expansion when viewing or diffing files.</li>
   <li>Revision details as context sensitive RSS feeds.</li>
   <li>Customizable RSS layout.</li>
@@ -27,5 +29,6 @@
   <li>Several authentication methods supported, including user based.</li>
   <li>Commit notifications via e-mail.</li>
   <li>Convenient tray for handling entries.</li>
+  <li>Admin function that simplifies adding/removing repositories.</li>
 </ul>
 </div>
