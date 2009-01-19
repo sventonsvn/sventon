@@ -79,7 +79,7 @@
         </div>
         <div class="config_faq_answer" id="faqa1" style="display: none;">
           By default, the temporary files created by sventon, including the <b>sventon.log</b> file and
-          repository configurations will be stored in a directory called <b>sventon_temp</b> below the servlet
+          repository configurations will be stored in a directory called <b>sventon_config</b> below the servlet
           container's temporary directory, <b><%=System.getProperty("java.io.tmpdir")%>
           </b>.
         </div>
