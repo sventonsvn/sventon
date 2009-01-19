@@ -19,7 +19,7 @@ Currently the library supports colorization of the following file formats:
 Installation:
 1. Download and unzip the file. 
 2. Put the war-file in the appropriate application server directory,
-   on a standard Tomcat 5.5 installation this is in 'webapps'.
+   on a standard Tomcat installation this is in 'webapps'.
 3. Point your browser to http://<host:port>/svn
 4. Enter and submit basic configuration data.
 
@@ -34,8 +34,8 @@ For non-US-ASCII charsets to work correctly with Tomcat, the Tomcat connector
 attribute "URIEncoding" should be set to "UTF-8", or alternatively the attribute 
 "useBodyEncodingForURI" should be set to "true"
 
-Support
-See http://www.sventon.org
+Documentation and FAQ
+See http://wiki.sventon.org
 
 Source
 If the sventon source was not included in the download, you can fetch it
