@@ -16,6 +16,7 @@ Some of the features making sventon a great Subversion companion:
   <li>Browse and download directories and files</li>
   <li>View logs and blame individual files</li>
   <li>Diff your repository files, or view their properties</li>
+  <li>Show differences between paths.</li>
   <li>Support for multiple repositories</li>
   <li>Several authentication methods supported, including user based</li>
   <li>Easily keep track of changes using the 'latest commit' feature</li>
