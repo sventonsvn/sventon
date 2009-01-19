@@ -1,0 +1,122 @@
+browse.error.illegal-sortType=Ogiltig sorteringstyp
+browse.error.illegal-sortMode=Ogiltigt sorteringssätt
+browse.error.illegal-revision=Ogiltig revision
+
+authenticate.title=Vänligen logga in
+authenticate.heading=Den begärda handlingen kräver autentisering, vänligen logga in.
+#authenticate.error.uid-empty
+
+goto.command.invalidpath=Ogiltig kombination av revision/sökväg
+goto.command.invalidrevision=Revisionen finns inte
+
+error.heading.no-route-to-host=Subversion-servern kunde inte kontaktas.
+error.message.no-route-to-host=Subversion-servern kunde inte kontaktas. Om du med säkerhet vet att servern körs kan detta fel indikera nätverksproblem.
+
+# Function links
+search.text=Sök efter
+search.button.isupdating.tooltip=Cacharna uppdateras!
+search.button.disabled.tooltip=Det går endast att söka i HEAD
+showlog.button.text=Visa loggmeddelanden
+showlog.button.tooltip=Visa loggmeddelanden för {0}
+download.button.text=Ladda ner
+stop-on-copy.button.text=Följ inte kopieringshistorik
+blame.button.text=Visa ändringar per rad
+diffprev.button.text=Jämför med tidigare
+diffprev.button.tooltip=Jämför {0} revision {1} med dess tidigare revision
+diff.button.text=Visa jämförelse
+diff.button.tooltip=Visa jämförelse sida vid sida
+unifieddiff.button.text=Visa som 'unified diff'
+unifieddiff.button.tooltip=Visa jämförelse som 'unified diff'
+wrap-nowrap.button.text=Växla radbrytsläge
+showlocks.button.text=Visa lås
+flatten.button.text=Platta ut katalog
+flatten.button.tooltip=Platta ut katalogstrukturen från befintlig nivå
+flatten.button.isupdating.tooltip=Cacharna uppdateras!
+flatten.button.disabled.tooltip=Det går endast att platta ut i HEAD
+showfile.button.text=Visa fil
+showrawfile.button.text=Visa oformaterad
+showrawfile.button.tooltip=Visa filen oformaterad
+showdir.button.text=Visa katalog
+showdir.button.tooltip=Visa innehållet i katalogen {0}
+showrevision.info.link.tooltip=Visa\\u00a0revisionsdetaljer
+logmessage.empty=Inget loggmeddelande angett
+filter.text=Filtrera ändelser
+listfiles.link.tooltip=Visa\\u00a0/\\u00a0dölj\\u00a0kataloginnehåll
+force-display.button.text=Tvinga visning
+showarchivefile.button.text=Visa arkivinnehåll
+
+diff.error.identical.files=Filerna är identiska, {0}@{1} och {2}@{3}.
+diff.error.identical.dirs=Sökvägarnas innehåll är identiska.
+diff.error.binary=En eller båda valda filerna är i binärt format.
+
+revision.info.previous=Tidigare revision
+revision.info.next=Nästa revision
+
+previous-revisions=Tidigare versioner
+
+entrytray.dragdrop.header=drag&amp;släpp-yta -
+entrytray.dragdrop.text=Drag &amp; släpp filer-/katalog-ikoner hit!
+
+more.link=[mer]
+less.link=[mindre]
+delete.tooltip=Ta bort
+latest-revisions.text=Antal loggmeddelanden att visa
+
+#Configuration screen
+config.error.illegal-name=Namnet får inte innehålla tomrum.
+config.error.duplicate-name=Namnet används redan
+config.error.illegal-url=Ogiltig arkiv-URL.
+config.error.authentication-error=Autentiseringen misslyckades, kontrollera användarnamn och lösenord.
+config.error.connection-error=Kan inte ansluta till arkivet [{0}]. Kontrollera URL.
+
+size=Storlek (bytes)
+file=Fil
+total=Total
+entry=Post
+entries=poster
+name=Namn
+revision=Revision
+logmessage=Loggmeddelande
+hits=träffar
+date=Datum
+owner=Ägare
+next=Nästa
+author=Författare
+line=Rad
+action=Åtgärd
+path=Sökväg
+paths=Sökvägare
+paths.changed=Ändrade sökvägar
+properties=Egenskaper
+properties.changed=Ändrade egenskaper
+
+repositories=Arkiv
+
+window.title.default=sventon repository browser
+window.title.configerror=Konfigurationsfel
+
+size.original=Originalstorlek
+size.compressed=Komprimerad storlek
+crc=CRC
+comment=Kommentar
+createDate=Skapad
+expireDate=Utgår
+message=Meddelande
+goto.revision=Gå till revision
+goto.path=Gå till sökväg
+revision.head=HEAD
+revision.rev=Rev
+show.all=visa alla
+logs=loggar
+sventon.header=sventon subversion web client
+repository.change=byt arkiv
+go=gå!
+toggle=växla
+thumbnails.show=Visa som tumnaglar
+download.zip=Ladda ner som zip
+entries.diff=Visa skillnader
+actions=Åtgärder...
+diff.show=Visa skillnader
+show=visa
+hide=dölj
+latest.revision.info=senaste arkiveringsinfon
