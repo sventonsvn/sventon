@@ -26,7 +26,9 @@
   </head>
   <body>
   <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
-  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
+
+  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" isEditableConfig="${isEditableConfig}"
+                          isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
 
   <h1>An unhandled internal application error has occured</h1>
   <p/>
