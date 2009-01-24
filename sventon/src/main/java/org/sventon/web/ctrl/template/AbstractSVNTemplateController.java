@@ -264,16 +264,18 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         logger.debug("'command' set to: " + command);
         model.put("command", command); // This is for the form to work
         model.put("repositoryURL", configuration.getRepositoryDisplayUrl());
-        model.put("isHead", command.getRevisionNumber() == headRevision);
         model.put("headRevision", headRevision);
+        model.put("isHead", command.getRevisionNumber() == headRevision);
         model.put("isUpdating", application.isUpdating(command.getName()));
-        model.put("useCache", configuration.isCacheUsed());
+        model.put("isEditableConfig", application.isEditableConfig());
         model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
         model.put("isEntryTrayEnabled", configuration.isEntryTrayEnabled());
+        model.put("useCache", configuration.isCacheUsed());
         model.put("repositoryNames", application.getRepositoryNames());
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("charsets", availableCharsets.getCharsets());
         model.put("userRepositoryContext", repositoryContext);
+
 
         if (showLatestRevInfo) {
           logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");

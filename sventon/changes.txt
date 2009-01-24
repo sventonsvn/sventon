@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1462] Added: Feature: #4453 - Add link to admin page if enabled.
 [1460] Fixed: Bug #15086 - User based auth broken.
 
 [1456] Release 2.0.0 (2009-01-19)

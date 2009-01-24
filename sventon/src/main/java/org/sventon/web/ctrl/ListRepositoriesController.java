@@ -71,6 +71,7 @@ public final class ListRepositoriesController extends AbstractController {
     if (application.getRepositoryCount() > 1) {
       final Map<String, Object> model = new HashMap<String, Object>();
       model.put("repositoryNames", application.getRepositoryNames());
+      model.put("isEditableConfig", application.isEditableConfig());
       modelAndView = new ModelAndView("listRepositories", model);
     } else if (application.getRepositoryCount() == 1) {
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();

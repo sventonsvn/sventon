@@ -18,6 +18,7 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
 <%@ attribute name="repositoryNames" required="true" type="java.util.Set" %>
 <%@ attribute name="isLoggedIn" required="true" type="java.lang.Boolean" %>
+<%@ attribute name="isEditableConfig" required="true" type="java.lang.Boolean" %>
 
 <table class="sventonHeader">
   <tr>
@@ -26,16 +27,25 @@
       <a class="sventonHeaderLink" href="http://www.sventon.org" target="page">http://www.sventon.org</a>
     </td>
     <td align="right">
-      <c:url value="/repos/list" var="changeReposUrl"/>
-      <c:if test="${not empty repositoryNames && fn:length(repositoryNames) > 1}">
-        <a class="sventonHeaderLink" href="${changeReposUrl}">[<spring:message code="repository.change"/>]</a>
-      </c:if>
-      <c:if test="${isLoggedIn}">
-        <c:url value="/repos/list" var="logout">
+      <c:if test="${(not empty repositoryNames && fn:length(repositoryNames) > 1) or isLoggedIn or isEditableConfig}">
+        <c:url value="/repos/list" var="changeReposUrl"/>
+        <c:url value="/repos/list" var="logoutUrl">
           <c:param name="logout" value="true"/>
           <c:param name="repositoryName" value="${command.name}"/>
         </c:url>
-        <a class="sventonHeaderLink" href="${logout}">[logout]</a>
+        <c:url value="/repos/listconfigs" var="adminUrl"/>
+        <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">        
+          <option class="sventonSelectOption"><spring:message code="actions"/></option>
+          <c:if test="${isLoggedIn}">
+            <option value="${logoutUrl}"><spring:message code="logout"/></option>
+          </c:if>
+          <c:if test="${not empty repositoryNames && fn:length(repositoryNames) > 1}">
+            <option value="${changeReposUrl}"><spring:message code="repository.change"/></option>
+          </c:if>
+          <c:if test="${isEditableConfig}">
+            <option value="${adminUrl}"><spring:message code="admin"/></option>
+          </c:if>
+        </select>
       </c:if>
     </td>
   </tr>
