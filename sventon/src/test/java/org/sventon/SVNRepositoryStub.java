@@ -11,6 +11,20 @@ import java.util.Map;
 
 public class SVNRepositoryStub extends SVNRepository {
 
+  private static SVNURL LOCALHOST;
+
+  static {
+    try {
+      LOCALHOST = SVNURL.parseURIDecoded("http://localhost/");
+    } catch (SVNException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public SVNRepositoryStub() {
+    super(LOCALHOST, null);
+  }
+
   public SVNRepositoryStub(SVNURL location, ISVNSession options) {
     super(location, options);
   }

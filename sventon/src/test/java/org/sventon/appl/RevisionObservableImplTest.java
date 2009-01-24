@@ -60,10 +60,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
   static class TestRepository extends SVNRepositoryStub {
     private boolean firstTime = true;
 
-    public TestRepository() throws SVNException {
-      super(SVNURL.parseURIDecoded("http://localhost/"), null);
-    }
-
+    @Override
     public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, ISVNLogEntryHandler handler) throws SVNException {
       if (firstTime) {
         handler.handleLogEntry(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 1, "jesper1", new Date(), "Log message for revision 1."));
@@ -78,6 +75,7 @@ public class RevisionObservableImplTest extends TestCase implements RevisionObse
       return 1;
     }
 
+    @Override
     public long getLatestRevision() throws SVNException {
       return 6;
     }

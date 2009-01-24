@@ -1,6 +1,7 @@
 package org.sventon.cache;
 
 import junit.framework.TestCase;
+import org.springframework.mock.web.MockServletContext;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
@@ -9,7 +10,6 @@ import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.entrycache.MemoryCache;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.*;
-import org.springframework.mock.web.MockServletContext;
 
 import java.util.*;
 
@@ -55,29 +55,12 @@ public class CacheGatewayImplTest extends TestCase {
   }
 
   static class TestRepository extends SVNRepositoryStub {
-    private HashMap<String, Collection> repositoryEntries = new HashMap<String, Collection>();
     private List<SVNLogEntry> logEntriesForPopulation = new ArrayList<SVNLogEntry>();
     private List<SVNLogEntry> logEntriesForUpdate = new ArrayList<SVNLogEntry>();
     private SVNDirEntry infoEntry;
     private long headRevision = 123;
 
-    public TestRepository() throws SVNException {
-      super(SVNURL.parseURIDecoded("http://localhost/"), null);
-
-      final List<SVNDirEntry> entries1 = new ArrayList<SVNDirEntry>();
-      entries1.add(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, null, "dir1", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-      entries1.add(new SVNDirEntry(null, null, "File3.java", SVNNodeKind.FILE, 16000, false, 3, new Date(), "jesper"));
-      final List<SVNDirEntry> entries2 = new ArrayList<SVNDirEntry>();
-      entries2.add(new SVNDirEntry(null, null, "dir2", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 6400, false, 1, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, null, "DirFile2.html", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"));
-      entries2.add(new SVNDirEntry(null, null, "DirFile3.java", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"));
-      repositoryEntries.put("/", entries1);
-      repositoryEntries.put("/dir1/", entries2);
-      repositoryEntries.put("/dir1/dir2/", new ArrayList());
-
+    public TestRepository() {
       final Map<String, SVNLogEntryPath> changedPathsPopulation = new HashMap<String, SVNLogEntryPath>();
       changedPathsPopulation.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
       changedPathsPopulation.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
@@ -92,22 +75,17 @@ public class CacheGatewayImplTest extends TestCase {
       infoEntry = new SVNDirEntry(null, null, "file999.java", SVNNodeKind.FILE, 12345, false, 1, new Date(), "jesper");
     }
 
+    @Override
     public long getLatestRevision() {
       return headRevision;
     }
 
-    public void setLatestRevision(final long headRevision) {
-      this.headRevision = headRevision;
-    }
-
-    public Collection getDir(String path, long revision, Map properties, Collection dirEntries) throws SVNException {
-      return repositoryEntries.get(path);
-    }
-
+    @Override
     public Collection log(String[] targetPaths, Collection entries, long startRevision, long endRevision, boolean changedPath, boolean strictNode) throws SVNException {
       return logEntriesForUpdate;
     }
 
+    @Override
     public long log(String[] targetPaths, long startRevision, long endRevision, boolean changedPath, boolean strictNode, ISVNLogEntryHandler handler) throws SVNException {
       for (final SVNLogEntry svnLogEntry : logEntriesForPopulation) {
         handler.handleLogEntry(svnLogEntry);
@@ -115,6 +93,7 @@ public class CacheGatewayImplTest extends TestCase {
       return logEntriesForPopulation.size();
     }
 
+    @Override
     public SVNDirEntry info(String path, long revision) throws SVNException {
       return infoEntry;
     }

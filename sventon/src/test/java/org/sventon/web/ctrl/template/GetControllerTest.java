@@ -1,6 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+import org.easymock.EasyMock;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -8,28 +9,26 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
-import org.sventon.cache.objectcache.ObjectCacheManager;
-import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheImpl;
-import org.sventon.cache.CacheException;
-import org.sventon.model.RepositoryName;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.service.RepositoryServiceImpl;
+import org.sventon.cache.CacheException;
+import org.sventon.cache.objectcache.ObjectCache;
+import org.sventon.cache.objectcache.ObjectCacheImpl;
+import org.sventon.cache.objectcache.ObjectCacheManager;
+import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.util.WebUtils;
+import org.sventon.service.RepositoryServiceImpl;
 import org.sventon.util.ImageScaler;
+import org.sventon.util.WebUtils;
 import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.easymock.EasyMock;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.OutputStream;
 import java.awt.image.BufferedImage;
+import java.io.OutputStream;
 
 public class GetControllerTest extends TestCase {
 
@@ -211,10 +210,6 @@ public class GetControllerTest extends TestCase {
   }
 
   static class TestRepository extends SVNRepositoryStub {
-
-    public TestRepository() throws SVNException {
-      super(SVNURL.parseURIDecoded("http://localhost/"), null);
-    }
 
     public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
       return 0;

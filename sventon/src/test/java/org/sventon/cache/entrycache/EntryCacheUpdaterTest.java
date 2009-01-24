@@ -52,7 +52,6 @@ public class EntryCacheUpdaterTest extends TestCase {
     private final Map<String, SVNDirEntry> entriesMap = new HashMap<String, SVNDirEntry>();
 
     public TestRepository() throws SVNException {
-      super(SVNURL.parseURIDecoded("http://localhost/"), null);
       entriesMap.put("/file1.java#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file1.java"), null, "file1.java", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
       entriesMap.put("/file2.abc#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file2.abc"), null, "file2.abc", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
       entriesMap.put("/trunk#123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk"), null, "trunk", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
@@ -60,6 +59,7 @@ public class EntryCacheUpdaterTest extends TestCase {
       entriesMap.put("/branch#124", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/branch"), null, "branch", SVNNodeKind.FILE, 12345, false, 124, new Date(), "author"));
     }
 
+    @Override
     public SVNDirEntry info(final String path, final long revision) throws SVNException {
       return entriesMap.get(path + "#" + revision);
     }

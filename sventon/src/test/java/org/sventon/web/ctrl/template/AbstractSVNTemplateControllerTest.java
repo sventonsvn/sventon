@@ -1,15 +1,19 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.apache.commons.lang.mutable.MutableBoolean;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.RepositoryConnectionFactory;
+import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.SVNBaseCommand;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +38,40 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
     ctrl.parseAndUpdateSortParameters(command, userRepositoryContext);
     assertEquals("DESC", userRepositoryContext.getSortMode().toString());
     assertEquals("SIZE", userRepositoryContext.getSortType().toString());
+  }
+
+  public void testCreateConnection() throws Exception {
+    final AbstractSVNTemplateController ctrl = new TestController();
+    final MutableBoolean usingGlobalAuthSettings = new MutableBoolean(false);
+
+    ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
+      public SVNRepository createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
+        if ("global".equals(credentials.getUsername())) {
+          usingGlobalAuthSettings.setValue(true);
+        } else if ("user".equals(credentials.getUsername())) {
+          usingGlobalAuthSettings.setValue(false);
+        }
+        return null;
+      }
+    });
+
+    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+    final UserRepositoryContext context = new UserRepositoryContext();
+
+    assertFalse(usingGlobalAuthSettings.booleanValue());
+
+    configuration.setCredentials(new Credentials("global", "pass"));
+    configuration.setEnableAccessControl(false);
+    ctrl.createConnection(configuration, context);
+    assertTrue(usingGlobalAuthSettings.booleanValue());
+
+    configuration.setEnableAccessControl(true);
+    ctrl.createConnection(configuration, context);
+    assertTrue(usingGlobalAuthSettings.booleanValue());
+
+    context.setCredentials(new Credentials("user", "pass"));
+    ctrl.createConnection(configuration, context);
+    assertFalse(usingGlobalAuthSettings.booleanValue());
   }
 
   private static class TestController extends AbstractSVNTemplateController {

@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1460] Fixed: Bug #15086 - User based auth broken.
+
 [1456] Release 2.0.0 (2009-01-19)
 [1443] Added: Upgraded to SVNKit 1.2.2.
 [1425] Added: Feature #4407 - Add options to Log View.

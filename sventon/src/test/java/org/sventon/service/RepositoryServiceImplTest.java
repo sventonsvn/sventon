@@ -9,11 +9,13 @@ import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.InlineDiffRow;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
-import org.sventon.util.WebUtils;
 import org.sventon.util.SVNFileRevisionEditor;
+import org.sventon.util.WebUtils;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.ISVNSession;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
@@ -29,12 +31,15 @@ public class RepositoryServiceImplTest extends TestCase {
   private SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
 
   public void testDiffUnifiedBinaryFile() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -58,11 +63,14 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnifiedIdenticalFiles1() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -86,7 +94,9 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnifiedIdenticalFiles2() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
@@ -99,6 +109,7 @@ public class RepositoryServiceImplTest extends TestCase {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -122,9 +133,10 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnified() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
       private boolean firstTime = true;
 
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String leftFileContents = "test left file contents" + BR;
         final String rightFileContents = "test right file contents" + BR;
@@ -143,6 +155,7 @@ public class RepositoryServiceImplTest extends TestCase {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -162,9 +175,10 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffInline() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
       private boolean firstTime = true;
 
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String leftFileContents =
             "row one" + BR +
@@ -192,6 +206,7 @@ public class RepositoryServiceImplTest extends TestCase {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -217,12 +232,15 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideBinaryFile() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -246,11 +264,15 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideIdenticalFiles1() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -274,7 +296,9 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideDirectories() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
@@ -287,6 +311,7 @@ public class RepositoryServiceImplTest extends TestCase {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.DIR;
       }
@@ -310,7 +335,9 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideIdenticalFiles2() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub(null, null) {
+    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+
+      @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String fileContents = "test file contents";
         if (contents != null) {
@@ -323,6 +350,7 @@ public class RepositoryServiceImplTest extends TestCase {
         return 0;
       }
 
+      @Override
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
@@ -346,7 +374,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySide() throws Exception {
-    final TestSVNRepositoryStub repository = new TestSVNRepositoryStub(null, null);
+    final TestSVNRepositoryStub repository = new TestSVNRepositoryStub();
 
     final RepositoryService service = new RepositoryServiceImpl();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
@@ -550,10 +578,7 @@ public class RepositoryServiceImplTest extends TestCase {
     public String leftFileContents = "test left file contents" + BR;
     public String rightFileContents = "test right file contents" + BR;
 
-    public TestSVNRepositoryStub(SVNURL location, ISVNSession options) {
-      super(location, options);
-    }
-
+    @Override
     public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
       if (contents != null) {
         try {
@@ -571,6 +596,7 @@ public class RepositoryServiceImplTest extends TestCase {
       return 0;
     }
 
+    @Override
     public SVNNodeKind checkPath(String path, long revision) throws SVNException {
       return SVNNodeKind.FILE;
     }

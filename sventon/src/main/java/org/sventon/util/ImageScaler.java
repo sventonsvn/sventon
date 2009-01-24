@@ -24,7 +24,7 @@ public class ImageScaler {
   /**
    * Gets a thumbnail version of the buffered image.
    *
-   * @param image The image to scale.
+   * @param image   The image to scale.
    * @param maxSize Maximum size (height and width)
    * @return The thumbnail.
    */

@@ -60,7 +60,7 @@
 
   <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
 
-  <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactory" scope="prototype">
+  <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactoryImpl">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
