@@ -16,12 +16,16 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
  * Credentials.
  *
  * @author jesper@sventon.org
  */
-public class Credentials {
+public class Credentials implements Serializable {
+
+  private static final long serialVersionUID = -30885545779723155L;
 
   /**
    * Username.
@@ -32,7 +36,6 @@ public class Credentials {
    * Password.
    */
   private final String password;
-
 
   /**
    * Constructor.
