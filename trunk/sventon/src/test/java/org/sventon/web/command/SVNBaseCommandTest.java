@@ -82,7 +82,7 @@ public class SVNBaseCommandTest extends TestCase {
     assertEquals(SVNRevision.create(123), command.getRevision());
 
     command.setRevision(SVNRevision.parse("{2007-01-01}"));
-    command.translateRevision(200, new SVNRepositoryStub(null, null) {
+    command.translateRevision(200, new SVNRepositoryStub() {
       public long getDatedRevision(final Date date) throws SVNException {
         return 123;
       }

@@ -322,12 +322,12 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @return Connection
    * @throws SVNException if a subversion error occur.
    */
-  private SVNRepository createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
+  protected SVNRepository createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
     final SVNRepository repository;
     final RepositoryName repositoryName = configuration.getName();
     final SVNURL svnurl = configuration.getSVNURL();
 
-    if (configuration.isAccessControlEnabled()) {
+    if (configuration.isAccessControlEnabled() && repositoryContext.hasCredentials()) {
       repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
     } else {
       repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getCredentials());

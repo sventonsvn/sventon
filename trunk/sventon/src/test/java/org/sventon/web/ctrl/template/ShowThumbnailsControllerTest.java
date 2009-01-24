@@ -7,8 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.util.SVNFileRevisionEditor;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     final MockHttpServletRequest req = new MockHttpServletRequest();
     req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.CONTENT_DISPOSITION_INLINE);
 
-    final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(),
+    final ModelAndView modelAndView = ctrl.svnHandle(new SVNRepositoryStub(),
         command, 100, null, req, null, null);
 
     final Map model = modelAndView.getModel();
@@ -46,12 +44,6 @@ public class ShowThumbnailsControllerTest extends TestCase {
     final SVNFileRevision entry0 = (SVNFileRevision) entries.get(0);
     assertEquals("file1.gif", entry0.getPath());
     assertEquals(123, entry0.getRevision());
-  }
-
-  static class TestRepository extends SVNRepositoryStub {
-    public TestRepository() throws SVNException {
-      super(SVNURL.parseURIDecoded("http://localhost/"), null);
-    }
   }
 
 }

@@ -14,6 +14,7 @@ package org.sventon.export;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StopWatch;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.EncodingUtils;
@@ -22,7 +23,6 @@ import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.springframework.util.StopWatch;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
