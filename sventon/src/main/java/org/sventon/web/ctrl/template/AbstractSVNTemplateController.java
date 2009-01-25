@@ -298,7 +298,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       return modelAndView;
     } catch (SVNAuthenticationException svnae) {
       logger.debug(svnae.getMessage());
-      return forwardToAuthenticationFailureView(request);
+      return prepareAuthenticationRequiredView(request);
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();
@@ -413,7 +413,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   }
 
   /**
-   * Prepare authentication model. This setus up a model and redirect view with
+   * Prepares the authentication model. This setus up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
    * @param request Request.
@@ -421,12 +421,14 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView forwardToAuthenticationFailureView(final HttpServletRequest request) {
+  private ModelAndView prepareAuthenticationRequiredView(final HttpServletRequest request) {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("parameters", request.getParameterMap());
     model.put("action", request.getRequestURL());
-    logger.debug("Forwarding to 'authenticationfailure' view");
-    return new ModelAndView("error/authenticationFailure", model);
+    model.put("repositoryNames", application.getRepositoryNames());
+    model.put("isEditableConfig", application.isEditableConfig());
+    logger.debug("Forwarding to 'authenticationRequired' view");
+    return new ModelAndView("error/authenticationRequired", model);
   }
 
   /**
