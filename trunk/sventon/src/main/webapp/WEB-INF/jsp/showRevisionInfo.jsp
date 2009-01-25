@@ -21,7 +21,7 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-  <sventon:currentTargetHeader title="Revision Information" target="${command.revision}" properties="${properties}"/>
+  <sventon:currentTargetHeader title="revision.info" target="${command.revision}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
   <table class="sventonFunctionLinksTable">

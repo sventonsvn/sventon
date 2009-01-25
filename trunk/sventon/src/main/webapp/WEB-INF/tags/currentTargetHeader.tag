@@ -28,14 +28,14 @@
     <tr>
       <c:choose>
         <c:when test="${properties ne null}">
-          <td>${title} - ${target}&nbsp;
+          <td><spring:message code='${title}'/> - ${target}&nbsp;
             <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', '<spring:message code='show'/>', '<spring:message code='hide'/>'); return false;">
               [<span id="propertiesLink"><spring:message code='show'/></span> properties]
             </a>
           </td>
         </c:when>
         <c:otherwise>
-          <td>${title} - ${target}</td>
+          <td><spring:message code='${title}'/> - ${target}</td>
         </c:otherwise>
       </c:choose>
     </tr>

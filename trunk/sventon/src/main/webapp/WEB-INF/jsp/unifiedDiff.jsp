@@ -21,7 +21,7 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-  <sventon:currentTargetHeader title="Unified Diff View" target="${command.target}" properties="${properties}"/>
+  <sventon:currentTargetHeader title="unified.diff.view" target="${command.target}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
   <table class="sventonFunctionLinksTable">

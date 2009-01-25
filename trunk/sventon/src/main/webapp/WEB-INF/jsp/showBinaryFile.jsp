@@ -23,10 +23,10 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <c:choose>
     <c:when test="${archivedEntry ne null}">
-      <sventon:currentTargetHeader title="Show Binary File" target="${command.target} (${archivedEntry})" properties="${properties}"/>
+      <sventon:currentTargetHeader title="show.binary.file" target="${command.target} (${archivedEntry})" properties="${properties}"/>
     </c:when>
     <c:otherwise>
-      <sventon:currentTargetHeader title="Show Binary File" target="${command.target}" properties="${properties}"/>
+      <sventon:currentTargetHeader title="show.binary.file" target="${command.target}" properties="${properties}"/>
     </c:otherwise>
   </c:choose>
 
