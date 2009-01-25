@@ -33,7 +33,7 @@
     <spring:bind path="command.pwd">
       <c:if test="${status.error}">
         <tr>
-          <td></td>
+          <td>&nbsp;</td>
           <td>
             <span class="exclamationText">${status.errorMessage}</span>
           </td>

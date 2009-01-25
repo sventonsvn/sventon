@@ -15,7 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="repositoryName" required="true" type="org.sventon.model.RepositoryName" %>
 <%@ attribute name="repositoryNames" required="true" type="java.util.Set" %>
 <%@ attribute name="isLoggedIn" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="isEditableConfig" required="true" type="java.lang.Boolean" %>
@@ -31,7 +31,7 @@
         <c:url value="/repos/list" var="changeReposUrl"/>
         <c:url value="/repos/list" var="logoutUrl">
           <c:param name="logout" value="true"/>
-          <c:param name="repositoryName" value="${command.name}"/>
+          <c:param name="repositoryName" value="${repositoryName}"/>
         </c:url>
         <c:url value="/repos/listconfigs" var="adminUrl"/>
         <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">        

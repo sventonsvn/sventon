@@ -26,8 +26,8 @@
   <body>
   <%@ include file="/WEB-INF/jspf/spinner.jspf"%>
 
-  <sventon:topHeaderTable command="${command}" repositoryNames="${repositoryNames}" isEditableConfig="${isEditableConfig}"
-                          isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
+  <sventon:topHeaderTable repositoryName="${command}" repositoryNames="${repositoryNames}" 
+                          isEditableConfig="${isEditableConfig}" isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
 
   <h1>The requested view does not exist</h1>
   <p/>
