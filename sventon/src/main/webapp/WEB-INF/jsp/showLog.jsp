@@ -22,7 +22,7 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-  <sventon:currentTargetHeader title="Log Messages" target="${command.target}" properties="${properties}"/>
+  <sventon:currentTargetHeader title="log.messages" target="${command.target}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
   <table class="sventonFunctionLinksTable">

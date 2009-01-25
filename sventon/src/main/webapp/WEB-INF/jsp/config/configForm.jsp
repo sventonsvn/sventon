@@ -42,7 +42,7 @@
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
 
-<sventon:currentTargetHeader title="sventon repository browser" target="configuration" properties="${properties}"/>
+<sventon:currentTargetHeader title="sventon.header" target="configuration" properties="${properties}"/>
 
 <br>
 

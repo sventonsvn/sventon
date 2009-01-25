@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<sventon:currentTargetHeader title="sventon repository browser" target="configuration" properties="${properties}"/>
+<sventon:currentTargetHeader title="sventon.header" target="configuration" properties="${properties}"/>
 
 <br>
 

@@ -21,7 +21,7 @@
 
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-  <sventon:currentTargetHeader title="Show Archive File" target="${command.target}" properties="${properties}"/>
+  <sventon:currentTargetHeader title="show.archive.file" target="${command.target}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
   <table class="sventonFunctionLinksTable">

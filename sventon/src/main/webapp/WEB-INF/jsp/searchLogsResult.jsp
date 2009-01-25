@@ -16,11 +16,11 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
-  <title>sventon repository browser - ${repositoryURL}</title>
+  <title><spring:message code="window.title.default"/> - ${repositoryURL}</title>
 </head>
 <body>
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-  <sventon:currentTargetHeader title="Search result for" target="${searchString}" properties="${properties}"/>
+  <sventon:currentTargetHeader title="search.result" target="${searchString}" properties="${properties}"/>
 
   <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
     <table class="sventonFunctionLinksTable">
