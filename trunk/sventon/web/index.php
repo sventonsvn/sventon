@@ -11,6 +11,12 @@
   <meta name="copyright" content="Copyright (c) 2005-2009 sventon project.">
   <meta name="distribution" content="Global">
   <meta name="rating" content="General">
+
+  <script type="text/javascript" src="js/prototype.js"></script>
+  <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
+  <script type="text/javascript" src="js/lightbox.js"></script>
+  <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
+
   <link rel="stylesheet" type="text/css" href="css/sventon.css">
   <link rel="alternate" type="application/atom+xml" title="sventon" href="http://sventonblog.blogspot.com/atom.xml"/>
   <link rel="shortcut icon" href="/images/favicon.ico" />

@@ -10,7 +10,7 @@ img {
 }
 
 body {
-  background-image: url( images/background.gif );
+  background-image: url( ../images/background.gif );
   background-repeat: repeat-x;
   background-color: #fefef7;
 }
