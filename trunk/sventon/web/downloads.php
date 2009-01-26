@@ -8,7 +8,7 @@
   <br/>
 
   <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v141'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.4.1 (stable)</a>
+    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>1.4.1</a>
   <a href="/download/sventon-1.4.1-bin.zip" onClick="javascript:urchinTracker ('/downloads/v141');">(mirror)</a>
   <br/>
 </div>
