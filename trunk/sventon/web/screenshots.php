@@ -84,7 +84,7 @@
   </tr>
   <tr>
     <th>File diff</th>
-    <th>Search logs</th>
+    <th>Blame</th>
   </tr>
   <tr>
     <td>
@@ -93,22 +93,24 @@
       </a>
     </td>
     <td>
-      <a href="images/screenshots/win_logsearch.png" rel="lightbox[sventon]" title="Search logs">
-        <img width="150" height="100" alt="Search logs" src="images/screenshots/win_logsearch.png"/>
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <th>Blame</th>
-    <th></th>
-  </tr>
-  <tr>
-    <td>
       <a href="images/screenshots/win_blame.png" rel="lightbox[sventon]" title="Blame">
         <img width="150" height="100" alt="Blame" src="images/screenshots/win_blame.png"/>
       </a>
     </td>
+  </tr>
+<!--
+  <tr>
+    <th>Search logs</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>
+      <a href="images/screenshots/win_logsearch.png" rel="lightbox[sventon]" title="Search logs">
+        <img width="150" height="100" alt="Search logs" src="images/screenshots/win_logsearch.png"/>
+      </a>
+    </td>
     <td>&nbsp;</td>
   </tr>
+-->
 </table>
 </div>
