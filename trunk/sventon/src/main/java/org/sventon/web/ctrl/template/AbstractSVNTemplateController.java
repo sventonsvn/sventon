@@ -223,7 +223,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
                                    final Object cmd, final BindException errors) {
 
     final SVNBaseCommand command = (SVNBaseCommand) cmd;
-    logger.info(command);
+    logger.debug(command);
 
     // If application config is not ok - redirect to config
     if (!application.isConfigured()) {
