@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1476] Fixed: Bug #15182 - Append trailing slash to URL.
 [1475] Fixed: Bug #15155 - Cache not flushed after updating 'lastUpdatedRevision'.
 
 [1467] Release 2.0.1 (2009-01-25)
