@@ -49,6 +49,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(10));
+    command.setPegRevision(5);
 
     mockService = EasyMock.createMock(RepositoryService.class);
     request = new MockHttpServletRequest();
@@ -63,7 +64,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
   }
 
   private Map executeTest() throws Exception {
-    expect(mockService.getEntryInfo(null, command.getPath(), command.getRevisionNumber())).andStubReturn(entry);
+    expect(mockService.getEntryInfo(null, command.getPath(), command.getPegRevision())).andStubReturn(entry);
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, context, request, null, null);
     verify(mockService);
@@ -72,24 +73,20 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
 
   public void testAddAndRemove() throws Exception {
     request.setParameter("action", RepositoryEntryTrayController.PARAMETER_ADD);
-    request.setParameter("pegrev", "10");
     assertEquals(0, context.getRepositoryEntryTray().getSize());
 
     Map model = executeTest();
 
-    assertEquals(1, model.size());
-    assertTrue(10 == (Long) model.get("pegrev"));
+    assertEquals(0, model.size());
     assertEquals(1, context.getRepositoryEntryTray().getSize());
 
     EasyMock.reset(mockService);
 
     request.setParameter("action", RepositoryEntryTrayController.PARAMETER_REMOVE);
-    request.setParameter("pegrev", "10");
 
     model = executeTest();
 
-    assertEquals(1, model.size());
-    assertTrue(10 == (Long) model.get("pegrev"));
+    assertEquals(0, model.size());
     assertEquals(0, context.getRepositoryEntryTray().getSize());
   }
 

@@ -53,6 +53,11 @@ public class SVNBaseCommand {
   private String path = "/";
 
   /**
+   * The peg revision.
+   */
+  private long pegRevision = -1;
+
+  /**
    * The revision.
    */
   private SVNRevision revision = SVNRevision.HEAD;
@@ -138,11 +143,26 @@ public class SVNBaseCommand {
   public void setRevision(final SVNRevision revision) {
     Validate.notNull(revision);
     this.revision = revision;
-    if (this.revision.getNumber() > -1) {
-      revisionNumber = revision.getNumber();
-    } else {
-      revisionNumber = -1;
-    }
+    this.revisionNumber = revision.getNumber();
+  }
+
+  /**
+   * Sets the peg revision.
+   *
+   * @param pegRevision Peg revision.
+   */
+  public void setPegRevision(final long pegRevision) {
+    Validate.isTrue(pegRevision > 0);
+    this.pegRevision = pegRevision;
+  }
+
+  /**
+   * Gets the peg revision.
+   *
+   * @return Peg revision.
+   */
+  public long getPegRevision() {
+    return this.pegRevision;
   }
 
   /**
@@ -282,7 +302,7 @@ public class SVNBaseCommand {
   }
 
   /**
-   * Translates the revision into a number, if needed.
+   * Translates the revision and the peg revision into a number, if needed.
    * <p/>
    * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
    * by getting the closest revision number before or at the specified datestamp.
@@ -304,6 +324,13 @@ public class SVNBaseCommand {
       }
     }
     return revisionNumber;
+  }
+
+  /**
+   * @return True if peg revision is set.
+   */
+  public boolean hasPegRevision() {
+    return pegRevision > -1;
   }
 
   /**

@@ -36,8 +36,8 @@
   }
   Droppables.add('entryTrayContainerDiv', {onDrop:
       function(element, dropon, event) {
-        var ajax = new Ajax.Updater({success: $('entryTray')}, element.id + '&pegrev=${command.revisionNumber}', {
-          method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+        new Ajax.Updater({success: $('entryTray')}, element.id, {
+          method: 'post', onFailure: reportAjaxError, onComplete: function() {
           Element.hide('spinner');
         }
         });

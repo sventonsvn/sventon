@@ -12,7 +12,6 @@
 package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.export.ExportExecutor;
@@ -50,7 +49,7 @@ public final class ExportController extends AbstractSVNTemplateController {
                                    final BindException exception) throws Exception {
 
     final MultipleEntriesCommand command = (MultipleEntriesCommand) cmd;
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", command.getRevisionNumber());
+    final long pegRevision = command.hasPegRevision() ? command.getPegRevision() : command.getRevisionNumber();
 
     if (userRepositoryContext.getIsWaitingForExport()) {
       throw new IllegalStateException("Export already in progress");

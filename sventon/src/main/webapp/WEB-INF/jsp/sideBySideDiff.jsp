@@ -28,7 +28,7 @@
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
-          <sventon:diffFunctionButtons command="${command}" pegrev="${pegrev}"/>
+          <sventon:diffFunctionButtons command="${command}"/>
           <sventon:charsetSelectList charsets="${charsets}" currentCharset="${userRepositoryContext.charset}"/>
         </td>
         <td style="text-align: right;">
