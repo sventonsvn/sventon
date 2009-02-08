@@ -26,6 +26,7 @@
   </c:url>
   <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
     <c:param name="revision" value="${entry.revision}" />
+    <c:param name="pegRevision" value="${command.revisionNumber}"/>
     <c:param name="action" value="add" />
   </c:url>
 

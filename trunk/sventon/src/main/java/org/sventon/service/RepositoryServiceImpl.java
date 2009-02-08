@@ -408,11 +408,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
+  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command,
                                              final RepositoryConfiguration configuration) throws SVNException {
 
-    final SVNDiffClient diffClient = SVNClientManager.newInstance(
-        null, repository.getAuthenticationManager()).getDiffClient();
+    final SVNDiffClient diffClient = SVNClientManager.newInstance(null,
+        repository.getAuthenticationManager()).getDiffClient();
 
     final List<SVNDiffStatus> result = new ArrayList<SVNDiffStatus>();
 
@@ -471,18 +471,18 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command,
-                                        final SVNRevision pegRevision) throws SVNException, DiffException {
+  public SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command)
+      throws SVNException, DiffException {
 
     final long fromRevision;
     final long toRevision;
 
-    if (SVNRevision.UNDEFINED.equals(pegRevision)) {
+    if (command.hasPegRevision()) {
+      fromRevision = command.getPegRevision();
+      toRevision = command.getPegRevision();
+    } else {
       fromRevision = command.getFromRevision().getNumber();
       toRevision = command.getToRevision().getNumber();
-    } else {
-      fromRevision = pegRevision.getNumber();
-      toRevision = pegRevision.getNumber();
     }
 
     final SVNNodeKind nodeKind1 = getNodeKind(repository, command.getFromPath(), fromRevision);

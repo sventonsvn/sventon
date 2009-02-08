@@ -269,12 +269,11 @@ public interface RepositoryService {
    *
    * @param repository    The repository.
    * @param command       DiffCommand.
-   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
    * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff status.
    * @throws SVNException if a subversion error occur
    */
-  List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
+  List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command,
                                 final RepositoryConfiguration configuration) throws SVNException;
 
   /**
@@ -306,14 +305,13 @@ public interface RepositoryService {
   /**
    * Gets the node kind for given to/from entries.
    *
-   * @param repository  The repository
-   * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
+   * @param repository The repository
+   * @param command    DiffCommand.
    * @return Node kind
    * @throws SVNException  if a subversion error occur
    * @throws DiffException Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
    *                       of if one of the given entries does not exist in given revision.
    */
-  SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision)
+  SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command)
       throws SVNException, DiffException;
 }

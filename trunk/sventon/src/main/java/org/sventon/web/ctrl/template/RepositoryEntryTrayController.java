@@ -51,10 +51,9 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
 
     assertEntryTrayEnabled(command.getName());
     final String actionParameter = ServletRequestUtils.getRequiredStringParameter(request, "action");
-    final long pegRevision = ServletRequestUtils.getLongParameter(request, "pegrev", command.getRevisionNumber());
+    final long pegRevision = command.hasPegRevision() ? command.getPegRevision() : command.getRevisionNumber();
 
     final ModelAndView modelAndView = new ModelAndView(getViewName());
-    modelAndView.addObject("pegrev", pegRevision);
 
     final RepositoryEntry entry;
     try {

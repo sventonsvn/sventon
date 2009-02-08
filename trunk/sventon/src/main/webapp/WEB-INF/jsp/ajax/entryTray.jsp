@@ -20,7 +20,7 @@
 
 <form:form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
   <!-- The last dragged entry's peg revision will rule -->
-  <input type="hidden" name="revision" value="${pegrev}">
+  <input type="hidden" name="revision" value="${command.pegRevision}">
 
   <table class="entryTrayTable">
     <tr>
@@ -54,7 +54,7 @@
       </c:url>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td>
-        <form:checkbox path="entries" value="${trayEntry.fullEntryName}@${peggedEntry.pegRevision}"/>
+        <input type="checkbox" name="entries" value="${trayEntry.fullEntryName}@${peggedEntry.pegRevision}"/>
       </td>
       <c:choose>
         <c:when test="${'DIR' eq trayEntry.kind}">

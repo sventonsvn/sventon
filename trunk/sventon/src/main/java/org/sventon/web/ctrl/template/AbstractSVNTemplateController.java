@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
@@ -258,11 +259,10 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
       final ModelAndView modelAndView = svnHandle(repository, command, headRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetController.
-      // If the view is a RedirectView it's model has already been populated
-      if (modelAndView != null && !(modelAndView.getView() instanceof RedirectView)) {
+      if (needModelPopulation(modelAndView)) {
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + command);
-        model.put("command", command); // This is for the form to work
+        model.put("command", command);
         model.put("repositoryURL", configuration.getRepositoryDisplayUrl());
         model.put("headRevision", headRevision);
         model.put("isHead", command.getRevisionNumber() == headRevision);
@@ -276,23 +276,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         model.put("charsets", availableCharsets.getCharsets());
         model.put("userRepositoryContext", repositoryContext);
 
-
         if (showLatestRevInfo) {
-          logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          try {
-            logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
-                FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
-          } catch (SVNException svnex) {
-            if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-              logger.info(svnex.getMessage());
-            } else {
-              logger.error(svnex.getMessage());
-            }
-          }
-          model.put("revisions", logEntries);
+          model.put("revisions", getLatestRevisions(command, repository, repositoryContext, headRevision));
         }
-
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
@@ -313,7 +299,27 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
         repository.closeSession();
       }
     }
+  }
 
+  // If the view is a RedirectView it's model has already been populated
+  private boolean needModelPopulation(ModelAndView modelAndView) {
+    return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
+  }
+
+  private List<SVNLogEntry> getLatestRevisions(SVNBaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+    logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
+    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    try {
+      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
+          FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        logger.info(svnex.getMessage());
+      } else {
+        logger.error(svnex.getMessage());
+      }
+    }
+    return logEntries;
   }
 
   /**

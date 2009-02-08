@@ -13,7 +13,6 @@ package org.sventon.web.ctrl.template;
 
 import org.apache.commons.lang.Validate;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
@@ -58,7 +57,6 @@ public final class DiffController extends AbstractSVNTemplateController {
 
     final DiffCommand command = (DiffCommand) cmd;
 
-    final SVNRevision pegRevision = SVNRevision.create(ServletRequestUtils.getLongParameter(request, "pegrev", -1));
     final Map<String, Object> model = new HashMap<String, Object>();
     final ModelAndView modelAndView = new ModelAndView();
     final RepositoryConfiguration config = getRepositoryConfiguration(command.getName());
@@ -68,11 +66,11 @@ public final class DiffController extends AbstractSVNTemplateController {
     handleDiffStyle(command);
 
     try {
-      final SVNNodeKind nodeKind = getRepositoryService().getNodeKindForDiff(repository, command, pegRevision);
+      final SVNNodeKind nodeKind = getRepositoryService().getNodeKindForDiff(repository, command);
       if (SVNNodeKind.DIR == nodeKind) {
-        model.putAll(handlePathDiff(repository, modelAndView, pegRevision, command, config));
+        model.putAll(handlePathDiff(repository, modelAndView, command, config));
       } else if (SVNNodeKind.FILE == nodeKind) {
-        model.putAll(handleFileDiff(repository, modelAndView, pegRevision, command, config, charset));
+        model.putAll(handleFileDiff(repository, modelAndView, command, config, charset));
       }
     } catch (final IdenticalFilesException ife) {
       logger.debug("Files are identical");
@@ -80,9 +78,6 @@ public final class DiffController extends AbstractSVNTemplateController {
     } catch (final IllegalFileFormatException iffe) {
       logger.info(iffe.getMessage());
       model.put("isBinary", true);  // Indicates that one or both files are in binary format.
-    }
-    if (SVNRevision.UNDEFINED != pegRevision) {
-      model.put("pegrev", pegRevision.getNumber());
     }
     modelAndView.addAllObjects(model);
     return modelAndView;
@@ -105,11 +100,12 @@ public final class DiffController extends AbstractSVNTemplateController {
   }
 
   private Map<String, Object> handleFileDiff(final SVNRepository repository, final ModelAndView modelAndView,
-                                             final SVNRevision pegRevision, final DiffCommand command,
-                                             final RepositoryConfiguration config, final String charset)
+                                             final DiffCommand command, final RepositoryConfiguration config,
+                                             final String charset)
       throws SVNException, DiffException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
+    final SVNRevision pegRevision = SVNRevision.create(command.getPegRevision());
 
     switch (command.getStyle()) {
       case inline:
@@ -133,14 +129,13 @@ public final class DiffController extends AbstractSVNTemplateController {
   }
 
   private Map<String, Object> handlePathDiff(final SVNRepository repository, final ModelAndView modelAndView,
-                                             final SVNRevision pegRevision, final DiffCommand command,
-                                             final RepositoryConfiguration config) throws SVNException {
+                                             final DiffCommand command, final RepositoryConfiguration config)
+      throws SVNException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Diffing dirs");
     modelAndView.setViewName("pathDiff");
-    final List<SVNDiffStatus> diffResult = getRepositoryService().diffPaths(
-        repository, command, pegRevision, config);
+    final List<SVNDiffStatus> diffResult = getRepositoryService().diffPaths(repository, command, config);
     logger.debug("Number of path diffs: " + diffResult.size());
     model.put("isIdentical", diffResult.isEmpty());
     model.put("diffResult", diffResult);

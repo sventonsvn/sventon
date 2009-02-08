@@ -43,7 +43,7 @@
 
   <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
     <input type="hidden" name="revision" value="${command.revision}">
-    <input type="hidden" name="pegrev" value="${command.revisionNumber}">
+    <input type="hidden" name="pegRevision" value="${command.revisionNumber}">
     
     <c:url value="/repos/${command.name}/searchentries${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
@@ -68,6 +68,7 @@
         </c:url>
         <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
           <c:param name="revision" value="${entry.revision}" />
+          <c:param name="pegRevision" value="${command.revisionNumber}"/>
           <c:param name="action" value="add" />
         </c:url>
 
@@ -75,7 +76,7 @@
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <td class="sventonCol1">
-            <form:checkbox path="entries" value="${entry.fullEntryName}@${entry.revision}"/>
+            <input type="checkbox" name="entries" value="${entry.fullEntryName}@${entry.revision}"/>
           </td>
           <c:choose>
             <c:when test="${'DIR' eq entry.kind}">

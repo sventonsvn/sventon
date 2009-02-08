@@ -15,7 +15,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.DiffCommand" %>
-<%@ attribute name="pegrev" required="true" type="java.lang.Long" %>
 
 <c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
   <c:param name="revision" value="${command.revision}" />
@@ -31,8 +30,8 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="entries" value="${command.toPath}@${command.toRevision}" />
   <c:param name="entries" value="${command.fromPath}@${command.fromRevision}" />
-  <c:if test="${pegrev > 0}">
-    <c:param name="pegrev" value="${pegrev}" />
+  <c:if test="${command.pegRevision > 0}">
+    <c:param name="pegRevision" value="${command.pegRevision}" />
   </c:if>
   <c:if test="${param.showlatestrevinfo}">
     <c:param name="showlatestrevinfo" value="true" />
