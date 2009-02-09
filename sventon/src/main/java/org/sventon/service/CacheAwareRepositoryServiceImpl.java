@@ -90,21 +90,32 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
-      // To be able to return cached revisions, we first have to get the revision numbers
-      // Doing a logs-call, skipping the details, to get them.
+    if (canReturnCachedRevisionsFor(repositoryName)) {
       final List<Long> revisions = new ArrayList<Long>();
-      repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
-        public void handleLogEntry(final SVNLogEntry logEntry) {
-          revisions.add(logEntry.getRevision());
+      if ("/".equals(path)) {
+        // Requested path is root - simply return the revisions without checking with the repository
+        for (long i = fromRevision; i > fromRevision - limit; i--) {
+          revisions.add(i);
         }
-      });
-      logger.debug("Fetching [" + limit + "] cached revisions in the interval [" + toRevision + "-" + fromRevision + "]");
+      } else {
+        // To be able to return cached revisions, we first have to get the revision numbers for given path
+        // Doing a logs-call, skipping the details, to get them.
+        repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
+          public void handleLogEntry(final SVNLogEntry logEntry) {
+            revisions.add(logEntry.getRevision());
+          }
+        });
+      }
+      logger.debug("Fetching [" + limit + "] cached revisions: " + revisions);
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
       logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
+  }
+
+  private boolean canReturnCachedRevisionsFor(RepositoryName repositoryName) {
+    return application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName);
   }
 
 }
