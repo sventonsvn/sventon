@@ -11,7 +11,7 @@ import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -19,12 +19,12 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AbstractSVNTemplateControllerTest extends TestCase {
+public class AbstractTemplateControllerTest extends TestCase {
 
   public void testParseAndUpdateSortParameters() throws Exception {
     final UserRepositoryContext userRepositoryContext = new UserRepositoryContext();
-    final AbstractSVNTemplateController ctrl = new TestController();
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final AbstractTemplateController ctrl = new TestController();
+    final BaseCommand command = new BaseCommand();
 
     assertNull(userRepositoryContext.getSortMode());
     assertNull(userRepositoryContext.getSortType());
@@ -41,7 +41,7 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
   }
 
   public void testCreateConnection() throws Exception {
-    final AbstractSVNTemplateController ctrl = new TestController();
+    final AbstractTemplateController ctrl = new TestController();
     final MutableBoolean usingGlobalAuthSettings = new MutableBoolean(false);
 
     ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
@@ -74,8 +74,8 @@ public class AbstractSVNTemplateControllerTest extends TestCase {
     assertFalse(usingGlobalAuthSettings.booleanValue());
   }
 
-  private static class TestController extends AbstractSVNTemplateController {
-    protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  private static class TestController extends AbstractTemplateController {
+    protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                      final long headRevision, final UserRepositoryContext userRepositoryContext,
                                      final HttpServletRequest request, final HttpServletResponse response,
                                      final BindException exception) throws Exception {

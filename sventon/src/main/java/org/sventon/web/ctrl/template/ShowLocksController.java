@@ -15,7 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +28,12 @@ import java.util.Map;
  *
  * @author jesper@sventon.org
  */
-public final class ShowLocksController extends AbstractSVNTemplateController implements Controller {
+public final class ShowLocksController extends AbstractTemplateController implements Controller {
 
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

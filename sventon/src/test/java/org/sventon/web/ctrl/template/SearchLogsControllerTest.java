@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryName;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import static org.sventon.web.ctrl.template.SearchLogsController.SEARCH_STRING_PARAMETER;
 import static org.sventon.web.ctrl.template.SearchLogsController.START_DIR_PARAMETER;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -27,7 +27,7 @@ public class SearchLogsControllerTest extends TestCase {
     request.addParameter(SEARCH_STRING_PARAMETER, "abc");
     request.addParameter(START_DIR_PARAMETER, "/trunk/");
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("trunk/test");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));

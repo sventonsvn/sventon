@@ -11,7 +11,7 @@ import org.sventon.model.AnnotatedTextFile;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class BlameControllerTest extends TestCase {
     final UserRepositoryContext context = new UserRepositoryContext();
     context.setCharset("UTF-8");
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("trunk/test");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));

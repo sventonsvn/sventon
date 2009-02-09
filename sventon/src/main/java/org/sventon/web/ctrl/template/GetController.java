@@ -22,7 +22,7 @@ import org.sventon.util.EncodingUtils;
 import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
 import static org.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
@@ -50,7 +50,7 @@ import java.io.OutputStream;
  *
  * @author jesper@sventon.org
  */
-public class GetController extends AbstractSVNTemplateController {
+public class GetController extends AbstractTemplateController {
 
   /**
    * The mime/file type map.
@@ -100,7 +100,7 @@ public class GetController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -188,7 +188,7 @@ public class GetController extends AbstractSVNTemplateController {
    */
   protected void prepareResponse(final String disposition, final HttpServletRequest request,
                                  final HttpServletResponse response, final String contentType,
-                                 final SVNBaseCommand command) {
+                                 final BaseCommand command) {
     response.setContentType(contentType);
     response.setHeader(CONTENT_DISPOSITION_HEADER, disposition + "; filename=\"" +
         EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
@@ -201,7 +201,7 @@ public class GetController extends AbstractSVNTemplateController {
    * @param command    Command
    * @return array of image bytes
    */
-  private byte[] createThumbnail(final SVNRepository repository, final SVNBaseCommand command) {
+  private byte[] createThumbnail(final SVNRepository repository, final BaseCommand command) {
     logger.debug("Creating thumbnail for: " + command.getPath());
     final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
     final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();

@@ -16,7 +16,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.*;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryEntryTrayController extends AbstractSVNTemplateController {
+public final class RepositoryEntryTrayController extends AbstractTemplateController {
 
   /**
    * Request parameter indicating entry should be added to tray.
@@ -44,7 +44,7 @@ public final class RepositoryEntryTrayController extends AbstractSVNTemplateCont
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

@@ -29,7 +29,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
- * SVNBaseCommand.
+ * BaseCommand.
  * <p/>
  * Command class used to bind and pass servlet parameter arguments in sventon.
  * <p/>
@@ -39,12 +39,12 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public class SVNBaseCommand {
+public class BaseCommand {
 
   /**
    * Constructor.
    */
-  public SVNBaseCommand() {
+  public BaseCommand() {
   }
 
   /**
@@ -133,7 +133,7 @@ public class SVNBaseCommand {
 
   /**
    * Set revision. Any revision is legal here (but may be rejected by the
-   * validator, {@link SVNBaseCommandValidator}).
+   * validator, {@link BaseCommandValidator}).
    * <p/>
    * All case variations of the logical name "HEAD" will be converted to HEAD,
    * all other revision arguments will be set as is.
@@ -188,7 +188,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the end/leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getPath()}.
+   * {@link BaseCommand#getPath()}.
    * <p/>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
@@ -216,7 +216,7 @@ public class SVNBaseCommand {
 
   /**
    * Get path, excluding the leaf. For complete path including target,see
-   * {@link SVNBaseCommand#getPath()}.
+   * {@link BaseCommand#getPath()}.
    * <p/>
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.

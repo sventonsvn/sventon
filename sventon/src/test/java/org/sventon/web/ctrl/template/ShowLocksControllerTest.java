@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ public class ShowLocksControllerTest extends TestCase {
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("trunk/test/");
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));

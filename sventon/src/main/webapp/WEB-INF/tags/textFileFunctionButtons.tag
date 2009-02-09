@@ -14,7 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="isArchivedEntry" required="true" type="java.lang.Boolean" %>
 
 <c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">

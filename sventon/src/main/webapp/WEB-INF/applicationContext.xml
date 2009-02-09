@@ -75,7 +75,7 @@
     <property name="configPassword" value="password"/>
   </bean>
 
-  <bean id="svnBaseCommandValidator" class="org.sventon.web.command.SVNBaseCommandValidator"/>
+  <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
 
   <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
     <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>

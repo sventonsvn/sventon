@@ -8,16 +8,16 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Date;
 
-public class SVNBaseCommandTest extends TestCase {
+public class BaseCommandTest extends TestCase {
 
   public void testDefaultValues() {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     assertEquals("/", command.getPath());
     assertEquals(SVNRevision.HEAD, command.getRevision());
   }
 
   public void testSetPath() {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
 
     //null is OK, will be converted to "/"
     command.setPath(null);
@@ -32,7 +32,7 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testSetRevision() {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     try {
       command.setRevision(null);
       fail("Should throw IllegalArgumentException");
@@ -44,7 +44,7 @@ public class SVNBaseCommandTest extends TestCase {
     command.setRevision(SVNRevision.parse("2"));
     assertEquals(SVNRevision.create(2), command.getRevision());
 
-    //Drutten is accepted as a revision here, but not by the SVNBaseCommandValidator
+    //Drutten is accepted as a revision here, but not by the BaseCommandValidator
     command.setRevision(SVNRevision.parse("Drutten"));
     assertEquals(SVNRevision.UNDEFINED, command.getRevision());
 
@@ -60,13 +60,13 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testGetCompletePath() {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("trunk/src/File.java");
     assertEquals("/trunk/src/File.java", command.getPath());
   }
 
   public void testTranslateRevision() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setRevision(SVNRevision.parse("head"));
     command.translateRevision(100, null);
     assertEquals(SVNRevision.HEAD, command.getRevision());
@@ -91,7 +91,7 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testGetParentPath() {
-    final SVNBaseCommand cmd = new SVNBaseCommand();
+    final BaseCommand cmd = new BaseCommand();
 
     cmd.setPath("/trunk/src/File.java");
     assertEquals("/trunk/src/", cmd.getParentPath());
@@ -113,7 +113,7 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testGetPathPart() {
-    final SVNBaseCommand cmd = new SVNBaseCommand();
+    final BaseCommand cmd = new BaseCommand();
 
     cmd.setPath("/trunk/src/File.java");
     assertEquals("/trunk/src/", cmd.getPathPart());
@@ -135,7 +135,7 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testCreateListUrl() {
-    final SVNBaseCommand cmd = new SVNBaseCommand();
+    final BaseCommand cmd = new BaseCommand();
     cmd.setName(new RepositoryName("test"));
 
     cmd.setPath("/test/dir");
@@ -146,7 +146,7 @@ public class SVNBaseCommandTest extends TestCase {
   }
 
   public void testCreateShowFileUrl() {
-    final SVNBaseCommand cmd = new SVNBaseCommand();
+    final BaseCommand cmd = new BaseCommand();
     cmd.setName(new RepositoryName("test"));
 
     cmd.setPath("/test/file");

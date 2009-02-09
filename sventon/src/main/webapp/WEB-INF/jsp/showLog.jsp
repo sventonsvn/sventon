@@ -47,7 +47,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
 
     <c:set var="command" value="${command}"/>
-    <jsp:useBean id="command" type="org.sventon.web.command.SVNBaseCommand" />
+    <jsp:useBean id="command" type="org.sventon.web.command.BaseCommand" />
 
     <table class="sventonLogEntriesTable">
       <c:set var="rowCount" value="0"/>

@@ -19,7 +19,7 @@ import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.FileExtensionFilter;
 import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

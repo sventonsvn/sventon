@@ -11,7 +11,7 @@ import org.sventon.TestUtils;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -27,7 +27,7 @@ public class ListFilesControllerTest extends TestCase {
 
     final List<RepositoryEntry> entries = TestUtils.getFileEntriesDirectoryList();
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 

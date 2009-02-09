@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -20,7 +20,7 @@ import java.util.Map;
 public class GetFileHistoryControllerTest extends TestCase {
 
   private final List<SVNFileRevision> fileRevisions = new ArrayList<SVNFileRevision>();
-  private final SVNBaseCommand command = new SVNBaseCommand();
+  private final BaseCommand command = new BaseCommand();
   private RepositoryService mockService;
   private MockHttpServletRequest request;
   private GetFileHistoryController ctrl;

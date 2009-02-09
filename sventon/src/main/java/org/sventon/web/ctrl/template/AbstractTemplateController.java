@@ -12,31 +12,24 @@
 package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.sventon.RepositoryConnectionFactory;
 import org.sventon.SventonException;
-import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.AvailableCharsets;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.service.RepositoryService;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
+import org.sventon.web.ctrl.AbstractBaseController;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.beans.PropertyEditor;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.util.ArrayList;
@@ -50,7 +43,7 @@ import java.util.Map;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository,SVNBaseCommand,long,UserRepositoryContext,
+ * <code>{@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
  * HttpServletRequest,HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
@@ -62,22 +55,22 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository,SVNBaseCommand,long,UserRepositoryContext,
+ * {@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
  * HttpServletRequest,HttpServletResponse,BindException)}
- * method with the given {@link org.sventon.web.command.SVNBaseCommand}
+ * method with the given {@link org.sventon.web.command.BaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository,SVNBaseCommand,long, org.sventon.model.UserRepositoryContext ,
+ * {@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long, org.sventon.model.UserRepositoryContext ,
  * HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
  * <b>Input arguments</b><br>
  * Input to this argument is wrapped in a
- * <code>{@link SVNBaseCommand}</code> object by the
+ * <code>{@link org.sventon.web.command.BaseCommand}</code> object by the
  * Spring framework. If the extending controller is configured in the Spring
- * config file with a validator for the <code>SVNBaseCommand</code> it will be
+ * config file with a validator for the <code>BaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception
  * model will be created an control forwarded to an error view. respectively.
  * <b>Exception handling</b>
@@ -93,12 +86,7 @@ import java.util.Map;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public abstract class AbstractSVNTemplateController extends AbstractCommandController {
-
-  /**
-   * The application.
-   */
-  private Application application;
+public abstract class AbstractTemplateController extends AbstractBaseController {
 
   /**
    * Gateway class for accessing the caches.
@@ -151,71 +139,9 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   private static final String REVISION_COUNT_REQUEST_PARAMETER = "revcount";
 
   /**
-   * Service.
-   */
-  private RepositoryService repositoryService;
-
-  /**
-   * The repository factory.
-   */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
-
-  /**
-   * Name property editor instance.
-   */
-  private PropertyEditor nameEditor;
-
-  /**
-   * Revision editor instance.
-   */
-  private PropertyEditor revisionEditor;
-
-  /**
-   * Revision editor instance.
-   */
-  private PropertyEditor svnFileRevisionEditor;
-
-  /**
    * The first possible repository revision.
    */
   public static final long FIRST_REVISION = 1;
-
-  /**
-   * Sets the editor.
-   *
-   * @param nameEditor Editor.
-   */
-  public void setNameEditor(final PropertyEditor nameEditor) {
-    this.nameEditor = nameEditor;
-  }
-
-  /**
-   * Sets the editor.
-   *
-   * @param revisionEditor Editor.
-   */
-  public void setRevisionEditor(final PropertyEditor revisionEditor) {
-    this.revisionEditor = revisionEditor;
-  }
-
-  /**
-   * Sets the editor.
-   *
-   * @param svnFileRevisionEditor Editor.
-   */
-  public void setSvnFileRevisionEditor(final PropertyEditor svnFileRevisionEditor) {
-    this.svnFileRevisionEditor = svnFileRevisionEditor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
-    binder.registerCustomEditor(RepositoryName.class, nameEditor);
-    binder.registerCustomEditor(SVNRevision.class, revisionEditor);
-    binder.registerCustomEditor(SVNFileRevision.class, svnFileRevisionEditor);
-  }
 
   /**
    * {@inheritDoc}
@@ -223,7 +149,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
   public final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                    final Object cmd, final BindException errors) {
 
-    final SVNBaseCommand command = (SVNBaseCommand) cmd;
+    final BaseCommand command = (BaseCommand) cmd;
     logger.debug(command);
 
     // If application config is not ok - redirect to config
@@ -306,7 +232,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<SVNLogEntry> getLatestRevisions(SVNBaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<SVNLogEntry> getLatestRevisions(BaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
@@ -402,7 +328,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @param command     The Command.
    * @param userContext The UserContext instance to update.
    */
-  protected final void parseAndUpdateSortParameters(final SVNBaseCommand command,
+  protected final void parseAndUpdateSortParameters(final BaseCommand command,
                                                     final UserRepositoryContext userContext) {
 
     if (command.getSortType() != null) {
@@ -447,7 +373,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   @SuppressWarnings("unchecked")
   final ModelAndView prepareExceptionModelAndView(final BindException exception,
-                                                  final SVNBaseCommand command) {
+                                                  final BaseCommand command) {
     final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(command.getName());
     final Map<String, Object> model = exception.getModel();
     model.put("command", command);
@@ -474,7 +400,7 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    * @throws Exception Thrown if exception occurs during SVN operations.
    */
   protected abstract ModelAndView svnHandle(final SVNRepository repository,
-                                            final SVNBaseCommand command,
+                                            final BaseCommand command,
                                             final long headRevision,
                                             final UserRepositoryContext userRepositoryContext,
                                             final HttpServletRequest request,
@@ -498,43 +424,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   final CacheGateway getCache() {
     return cacheGateway;
-  }
-
-  /**
-   * Sets the application.
-   *
-   * @param application Application
-   */
-  public final void setApplication(final Application application) {
-    this.application = application;
-  }
-
-  /**
-   * Get current application configuration.
-   *
-   * @param name Repository name
-   * @return ApplicationConfiguration
-   */
-  final RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
-    return application.getRepositoryConfiguration(name);
-  }
-
-  /**
-   * Gets the repository service instance.
-   *
-   * @return Repository service
-   */
-  final RepositoryService getRepositoryService() {
-    return repositoryService;
-  }
-
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public final void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
   }
 
   /**
@@ -581,15 +470,6 @@ public abstract class AbstractSVNTemplateController extends AbstractCommandContr
    */
   public final void setAvailableCharsets(final AvailableCharsets availableCharsets) {
     this.availableCharsets = availableCharsets;
-  }
-
-  /**
-   * Sets the repository connection factory instance.
-   *
-   * @param repositoryConnectionFactory Factory instance.
-   */
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
 
   /**

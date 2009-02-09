@@ -13,7 +13,7 @@ import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class FlattenControllerTest extends TestCase {
 
     final List<RepositoryEntry> entries = TestUtils.getFlattenedDirectoriesList();
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 

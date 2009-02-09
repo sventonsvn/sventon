@@ -21,10 +21,9 @@ import org.sventon.service.RepositoryService;
 import org.sventon.service.RepositoryServiceImpl;
 import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.awt.image.BufferedImage;
@@ -60,7 +59,7 @@ public class GetControllerTest extends TestCase {
   }
 
   public void testSvnHandleGetImageAsInline() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
     command.setPath("/testimage.gif");
 
@@ -84,7 +83,7 @@ public class GetControllerTest extends TestCase {
   }
 
   public void testSvnHandleGetFileAsAttachment() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
     command.setPath("/testimage.gif");
 
@@ -126,7 +125,7 @@ public class GetControllerTest extends TestCase {
     ctrl.setImageScaler(imageScaler);
     ctrl.setImageFormatName("jpg");
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
     command.setPath("/test/target.jpg");
 
@@ -178,7 +177,7 @@ public class GetControllerTest extends TestCase {
     ctrl.setImageFormatName("png");
     ctrl.setObjectCacheManager(objectCacheManager);
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
     command.setPath("/test/target.png");
 

@@ -6,17 +6,17 @@ import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
-public class SVNBaseCommandValidatorTest extends TestCase {
+public class BaseCommandValidatorTest extends TestCase {
 
   public void testSupports() {
-    SVNBaseCommandValidator validator = new SVNBaseCommandValidator();
-    assertTrue(validator.supports(SVNBaseCommand.class));
+    BaseCommandValidator validator = new BaseCommandValidator();
+    assertTrue(validator.supports(BaseCommand.class));
   }
 
   public void testValidate() {
-    SVNBaseCommandValidator validator = new SVNBaseCommandValidator();
+    BaseCommandValidator validator = new BaseCommandValidator();
 
-    SVNBaseCommand command = new SVNBaseCommand();
+    BaseCommand command = new BaseCommand();
 
     BindException exception = new BindException(command, "test");
 
@@ -41,7 +41,7 @@ public class SVNBaseCommandValidatorTest extends TestCase {
 
     //Both HEAD and head (and HeAd) are valid revisions. These are not really
     //accepted by the validator in any other form than HEAD, but other case variations
-    //are automatically converted when set using the setRevision method on SVNBaseCommand
+    //are automatically converted when set using the setRevision method on BaseCommand
     command.setRevision(SVNRevision.parse("HEAD"));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());

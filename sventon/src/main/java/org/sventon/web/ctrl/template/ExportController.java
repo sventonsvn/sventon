@@ -17,8 +17,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
+import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.sventon.web.command.SVNBaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -33,7 +33,7 @@ import java.util.UUID;
  *
  * @author jesper@sventon.org
  */
-public final class ExportController extends AbstractSVNTemplateController {
+public final class ExportController extends AbstractTemplateController {
 
   /**
    * The export executor instance.
@@ -43,7 +43,7 @@ public final class ExportController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand cmd,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
