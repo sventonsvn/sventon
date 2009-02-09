@@ -105,6 +105,8 @@ public final class RSSController extends AbstractBaseController {
       repository = repositoryConnectionFactory.createConnection(configuration.getName(),
           configuration.getSVNURL(), credentials);
 
+      command.translateRevision(getRepositoryService().getLatestRevision(repository), repository);
+
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, command.getRevisionNumber(),
           FIRST_REVISION, command.getPath(), configuration.getRssItemsCount(), false));
