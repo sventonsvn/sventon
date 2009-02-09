@@ -16,7 +16,7 @@ import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class RepositoryEntryTrayControllerTest extends TestCase {
 
-  private final SVNBaseCommand command = new SVNBaseCommand();
+  private final BaseCommand command = new BaseCommand();
   private RepositoryService mockService;
   private MockHttpServletRequest request;
   private RepositoryEntryTrayController ctrl;

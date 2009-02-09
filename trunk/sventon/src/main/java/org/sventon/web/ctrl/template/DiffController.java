@@ -21,7 +21,7 @@ import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.DiffStyle;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.DiffCommand;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -40,7 +40,7 @@ import java.util.Map;
  *
  * @author jesper@sventon.org
  */
-public final class DiffController extends AbstractSVNTemplateController {
+public final class DiffController extends AbstractTemplateController {
 
   /**
    * User preferred diff style.
@@ -50,7 +50,7 @@ public final class DiffController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand cmd,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

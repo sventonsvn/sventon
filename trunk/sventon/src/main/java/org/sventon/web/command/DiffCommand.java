@@ -32,7 +32,7 @@ import java.util.Comparator;
  *
  * @author jesper@sventon.org
  */
-public final class DiffCommand extends SVNBaseCommand {
+public final class DiffCommand extends BaseCommand {
 
   /**
    * From revision.

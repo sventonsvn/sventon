@@ -14,7 +14,7 @@ import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -26,7 +26,7 @@ public class GoToControllerTest extends TestCase {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
     final MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
     command.setPath("/file.txt");
     command.setRevision(SVNRevision.create(12));

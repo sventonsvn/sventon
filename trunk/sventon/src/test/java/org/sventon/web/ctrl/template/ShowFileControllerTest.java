@@ -2,7 +2,7 @@ package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 
 public class ShowFileControllerTest extends TestCase {
 
@@ -17,7 +17,7 @@ public class ShowFileControllerTest extends TestCase {
   }
 
   public void testIsArchiveFileExtension() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("/file.zip");
     assertTrue(ctrl.isArchiveFileExtension(command));
     command.setPath("/file.jar");
@@ -52,7 +52,7 @@ public class ShowFileControllerTest extends TestCase {
   }
 
   public void testIsImageFileExtension() throws Exception {
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setPath("file.gif");
     assertTrue(ctrl.isImageFileExtension(command));
   }

@@ -28,7 +28,7 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
  *
  * @author jesper@sventon.org
  */
-public class MultipleEntriesCommand extends SVNBaseCommand {
+public class MultipleEntriesCommand extends BaseCommand {
 
   /**
    * Entries.

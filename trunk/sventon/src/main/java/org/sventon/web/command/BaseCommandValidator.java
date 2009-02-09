@@ -16,24 +16,24 @@ import org.springframework.validation.Validator;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
- * SVNBaseCommandValidator.
+ * BaseCommandValidator.
  *
  * @author patrik@sventon.org
  */
-public final class SVNBaseCommandValidator implements Validator {
+public final class BaseCommandValidator implements Validator {
 
   /**
    * {@inheritDoc}
    */
   public boolean supports(final Class clazz) {
-    return SVNBaseCommand.class.isAssignableFrom(clazz);
+    return BaseCommand.class.isAssignableFrom(clazz);
   }
 
   /**
    * {@inheritDoc}
    */
   public void validate(final Object target, final Errors errors) {
-    final SVNBaseCommand command = (SVNBaseCommand) target;
+    final BaseCommand command = (BaseCommand) target;
 
     if (SVNRevision.UNDEFINED.equals(command.getRevision())) {
       command.setRevision(SVNRevision.HEAD);

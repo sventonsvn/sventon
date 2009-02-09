@@ -16,7 +16,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import java.util.UUID;
  *
  * @author jesper@sventon.org
  */
-public final class ExportProgressController extends AbstractSVNTemplateController {
+public final class ExportProgressController extends AbstractTemplateController {
 
   /**
    * The export executor instance.
@@ -41,7 +41,7 @@ public final class ExportProgressController extends AbstractSVNTemplateControlle
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

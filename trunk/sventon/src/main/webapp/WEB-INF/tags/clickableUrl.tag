@@ -15,7 +15,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 
-<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
 <%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
 

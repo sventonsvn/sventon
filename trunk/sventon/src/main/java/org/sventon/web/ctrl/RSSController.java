@@ -11,24 +11,20 @@
  */
 package org.sventon.web.ctrl;
 
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
-import org.sventon.RepositoryConnectionFactory;
-import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
-import org.sventon.model.RepositoryName;
 import org.sventon.rss.RssFeedGenerator;
-import org.sventon.service.RepositoryService;
 import org.sventon.web.HttpAuthenticationHandler;
-import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
+import org.sventon.web.command.BaseCommand;
+import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +36,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class RSSController extends AbstractController {
+public final class RSSController extends AbstractBaseController {
 
   /**
    * RSS mime type, default set to <tt>application/xml; charset=UTF-8</tt>.
@@ -48,24 +44,9 @@ public final class RSSController extends AbstractController {
   private String mimeType = "application/xml; charset=UTF-8";
 
   /**
-   * The application.
-   */
-  private Application application;
-
-  /**
    * The feed generator.
    */
   private RssFeedGenerator rssFeedGenerator;
-
-  /**
-   * Service.
-   */
-  private RepositoryService repositoryService;
-
-  /**
-   * The repository factory.
-   */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
    * HTTP Authentication Handler.
@@ -75,16 +56,14 @@ public final class RSSController extends AbstractController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
-      throws Exception {
+  protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+                                final Object cmd, final BindException errors) throws Exception {
 
     logger.debug("Getting RSS feed");
-    response.setContentType(mimeType);
-    response.setHeader("Cache-Control", "no-cache");
 
-    final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "name"));
-    final String path = ServletRequestUtils.getStringParameter(request, "path", "/");
-    final String revision = ServletRequestUtils.getStringParameter(request, "revision", "HEAD");
+    final BaseCommand command = (BaseCommand) cmd;
+    logger.debug(command);
+
     final Credentials credentialsFromUrlParameters = new Credentials(
         ServletRequestUtils.getStringParameter(request, "uid", null),
         ServletRequestUtils.getStringParameter(request, "pwd", null));
@@ -96,13 +75,16 @@ public final class RSSController extends AbstractController {
       return null;
     }
 
-    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
     if (configuration == null) {
-      String errorMessage = "Repository [" + repositoryName + "] does not exist!";
+      String errorMessage = "Repository [" + command.getName() + "] does not exist!";
       logger.error(errorMessage);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
       return null;
     }
+
+    response.setContentType(mimeType);
+    response.setHeader("Cache-Control", "no-cache");
 
     SVNRepository repository = null;
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -120,14 +102,12 @@ public final class RSSController extends AbstractController {
       } else {
         credentials = configuration.getCredentials();
       }
-
       repository = repositoryConnectionFactory.createConnection(configuration.getName(),
           configuration.getSVNURL(), credentials);
 
-      logger.debug("Outputting feed for [" + path + "]");
-      final long revisionNumber = SVNRevision.parse(revision).getNumber();
-      logEntries.addAll(repositoryService.getRevisions(repositoryName, repository, revisionNumber, FIRST_REVISION, path,
-          configuration.getRssItemsCount(), false));
+      logger.debug("Outputting feed for [" + command.getPath() + "]");
+      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, command.getRevisionNumber(),
+          FIRST_REVISION, command.getPath(), configuration.getRssItemsCount(), false));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (SVNAuthenticationException aex) {
       logger.info(aex.getMessage());
@@ -148,24 +128,6 @@ public final class RSSController extends AbstractController {
   }
 
   /**
-   * Sets the repository connection factory instance.
-   *
-   * @param repositoryConnectionFactory Factory instance.
-   */
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
-  }
-
-  /**
-   * Sets the application.
-   *
-   * @param application Application
-   */
-  public void setApplication(final Application application) {
-    this.application = application;
-  }
-
-  /**
    * Sets the mime-type for the feed.
    *
    * @param mimeType The mime-type
@@ -181,15 +143,6 @@ public final class RSSController extends AbstractController {
    */
   public void setRssFeedGenerator(final RssFeedGenerator rssFeedGenerator) {
     this.rssFeedGenerator = rssFeedGenerator;
-  }
-
-  /**
-   * Sets the repository service instance.
-   *
-   * @param repositoryService The service instance.
-   */
-  public void setRepositoryService(final RepositoryService repositoryService) {
-    this.repositoryService = repositoryService;
   }
 
   /**

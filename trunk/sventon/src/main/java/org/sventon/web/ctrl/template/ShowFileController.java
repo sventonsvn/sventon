@@ -24,7 +24,7 @@ import org.sventon.model.ZipFileWrapper;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -42,7 +42,7 @@ import java.util.Map;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class ShowFileController extends AbstractSVNTemplateController implements Controller {
+public final class ShowFileController extends AbstractTemplateController implements Controller {
 
   /**
    * The colorer instance.
@@ -93,7 +93,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -188,7 +188,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param command Command
    * @return True if text file, false if not.
    */
-  boolean isTextFileExtension(final SVNBaseCommand command) {
+  boolean isTextFileExtension(final BaseCommand command) {
     return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(textFileExtensionPattern);
   }
 
@@ -198,7 +198,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param command Command
    * @return True if binary file, false if not.
    */
-  boolean isBinaryFileExtension(final SVNBaseCommand command) {
+  boolean isBinaryFileExtension(final BaseCommand command) {
     return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(binaryFileExtensionPattern);
   }
 
@@ -208,7 +208,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param command Command
    * @return True if archive file, false if not.
    */
-  protected boolean isArchiveFileExtension(final SVNBaseCommand command) {
+  protected boolean isArchiveFileExtension(final BaseCommand command) {
     return FilenameUtils.getExtension(command.getPath()).toLowerCase().matches(archiveFileExtensionPattern);
   }
 
@@ -218,7 +218,7 @@ public final class ShowFileController extends AbstractSVNTemplateController impl
    * @param command Command
    * @return True if image file, false if not.
    */
-  protected boolean isImageFileExtension(final SVNBaseCommand command) {
+  protected boolean isImageFileExtension(final BaseCommand command) {
     return mimeFileTypeMap.getContentType(command.getPath()).startsWith("image");
   }
 

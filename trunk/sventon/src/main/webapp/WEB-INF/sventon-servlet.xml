@@ -71,52 +71,52 @@
     </property>
   </bean>
 
-  <bean id="abstractController" class="org.sventon.web.ctrl.template.AbstractSVNTemplateController" abstract="true">
-    <property name="commandClass" value="org.sventon.web.command.SVNBaseCommand"/>
+  <bean id="abstractBaseController" class="org.sventon.web.ctrl.AbstractBaseController" abstract="true">
+    <property name="commandClass" value="org.sventon.web.command.BaseCommand"/>
     <property name="cacheSeconds" value="0"/>
-    <property name="application" ref="application"/>
-    <property name="repositoryService" ref="repositoryService"/>
-    <property name="cacheGateway" ref="cacheGatewayBean"/>
-    <property name="validator" ref="svnBaseCommandValidator"/>
-    <property name="maxRevisionsCount" ref="maxRevisionsCount"/>
-    <property name="availableCharsets" ref="availableCharsets"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+    <property name="validator" ref="baseCommandValidator"/>
     <property name="nameEditor" ref="nameEditor"/>
     <property name="revisionEditor" ref="revisionEditor"/>
     <property name="svnFileRevisionEditor" ref="svnFileRevisionEditor"/>
-  </bean>
-
-  <bean id="rssController" class="org.sventon.web.ctrl.RSSController">
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
+    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+  </bean>
+
+  <bean id="abstractTemplateController" class="org.sventon.web.ctrl.template.AbstractTemplateController" parent="abstractBaseController" abstract="true">
+    <property name="cacheGateway" ref="cacheGatewayBean"/>
+    <property name="maxRevisionsCount" ref="maxRevisionsCount"/>
+    <property name="availableCharsets" ref="availableCharsets"/>
+  </bean>
+
+  <bean id="rssController" class="org.sventon.web.ctrl.RSSController" parent="abstractBaseController">
     <property name="mimeType" value="application/xml; charset=UTF-8"/>
     <property name="rssFeedGenerator" ref="rssFeedGenerator"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
     <property name="httpAuthenticationHandler" ref="httpAuthenticationHandler"/>
   </bean>
 
-  <bean id="listFilesController" class="org.sventon.web.ctrl.template.ListFilesController" parent="abstractController">
+  <bean id="listFilesController" class="org.sventon.web.ctrl.template.ListFilesController" parent="abstractTemplateController">
     <property name="viewName" value="ajax/listFiles"/>
   </bean>
 
-  <bean id="latestRevisionsController" class="org.sventon.web.ctrl.template.GetLatestRevisionsController" parent="abstractController">
+  <bean id="latestRevisionsController" class="org.sventon.web.ctrl.template.GetLatestRevisionsController" parent="abstractTemplateController">
     <property name="viewName" value="ajax/latestRevisions"/>
   </bean>
 
-  <bean id="logMessageController" class="org.sventon.web.ctrl.template.GetLogMessageController" parent="abstractController">
+  <bean id="logMessageController" class="org.sventon.web.ctrl.template.GetLogMessageController" parent="abstractTemplateController">
     <property name="viewName" value="ajax/logMessage"/>
   </bean>
 
-  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractController">
+  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="ajax/entryTray"/>
   </bean>
 
-  <bean id="fileHistoryController" class="org.sventon.web.ctrl.template.GetFileHistoryController" parent="abstractController">
+  <bean id="fileHistoryController" class="org.sventon.web.ctrl.template.GetFileHistoryController" parent="abstractTemplateController">
     <property name="viewName" value="ajax/fileHistory"/>
   </bean>
 
-  <bean id="exportProgressController" class="org.sventon.web.ctrl.template.ExportProgressController" parent="abstractController">
+  <bean id="exportProgressController" class="org.sventon.web.ctrl.template.ExportProgressController" parent="abstractTemplateController">
     <property name="viewName" value="ajax/exportProgress"/>
     <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
@@ -125,47 +125,47 @@
     <property name="path" value="/WEB-INF/static"/>
   </bean>
 
-  <bean id="repoBrowserController" class="org.sventon.web.ctrl.template.RepoBrowserController" parent="abstractController">
+  <bean id="repoBrowserController" class="org.sventon.web.ctrl.template.RepoBrowserController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="repoBrowser"/>
   </bean>
 
-  <bean id="revisionInfoController" class="org.sventon.web.ctrl.template.ShowRevisionInfoController" parent="abstractController">
+  <bean id="revisionInfoController" class="org.sventon.web.ctrl.template.ShowRevisionInfoController" parent="abstractTemplateController">
     <property name="viewName" value="showRevisionInfo"/>
   </bean>
 
-  <bean id="showLocksController" class="org.sventon.web.ctrl.template.ShowLocksController" parent="abstractController">
+  <bean id="showLocksController" class="org.sventon.web.ctrl.template.ShowLocksController" parent="abstractTemplateController">
     <property name="viewName" value="showLocks"/>
   </bean>
 
-  <bean id="searchLogsController" class="org.sventon.web.ctrl.template.SearchLogsController" parent="abstractController">
+  <bean id="searchLogsController" class="org.sventon.web.ctrl.template.SearchLogsController" parent="abstractTemplateController">
     <property name="viewName" value="searchLogsResult"/>
   </bean>
 
-  <bean id="flattenController" class="org.sventon.web.ctrl.template.FlattenController" parent="abstractController">
+  <bean id="flattenController" class="org.sventon.web.ctrl.template.FlattenController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="flattenDirResult"/>
   </bean>
 
-  <bean id="searchEntriesController" class="org.sventon.web.ctrl.template.SearchEntriesController" parent="abstractController">
+  <bean id="searchEntriesController" class="org.sventon.web.ctrl.template.SearchEntriesController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="searchEntriesResult"/>
   </bean>
 
-  <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractController">
+  <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="pageSize" ref="logsPerPageCount"/>
     <property name="viewName" value="showLog"/>
   </bean>
 
-  <bean id="goToController" class="org.sventon.web.ctrl.template.GoToController" parent="abstractController"/>
+  <bean id="goToController" class="org.sventon.web.ctrl.template.GoToController" parent="abstractTemplateController"/>
 
-  <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractController">
+  <bean id="diffController" class="org.sventon.web.ctrl.template.DiffController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.DiffCommand"/>
     <property name="preferredDiffStyle" ref="defaultDiffView" />
   </bean>
 
-  <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractController">
+  <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractTemplateController">
     <property name="textFileExtensionPattern" value=""/>
     <property name="binaryFileExtensionPattern" value="(bin|exe|pdf)"/>
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
@@ -173,7 +173,7 @@
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
-  <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractController">
+  <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractTemplateController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="imageScaler" ref="imageScaler"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>
@@ -181,19 +181,19 @@
     <property name="maxThumbnailSize" ref="maxThumbnailSize"/>
   </bean>
 
-  <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractController">
+  <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="viewName" value="showThumbnails"/>
   </bean>
 
-  <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractController">
+  <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="repoBrowser"/>
     <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
 
-  <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractController">
+  <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractTemplateController">
     <property name="colorer" ref="colorer"/>
     <property name="viewName" value="blame"/>
   </bean>

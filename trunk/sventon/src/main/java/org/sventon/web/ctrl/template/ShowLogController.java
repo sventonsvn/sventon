@@ -17,7 +17,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.web.command.SVNBaseCommand;
+import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNRevision;
@@ -34,7 +34,7 @@ import java.util.*;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class ShowLogController extends AbstractSVNTemplateController {
+public final class ShowLogController extends AbstractTemplateController {
 
   /**
    * Max entries per page, default set to 20.
@@ -54,7 +54,7 @@ public final class ShowLogController extends AbstractSVNTemplateController {
   /**
    * {@inheritDoc}
    */
-  protected ModelAndView svnHandle(final SVNRepository repository, final SVNBaseCommand command,
+  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

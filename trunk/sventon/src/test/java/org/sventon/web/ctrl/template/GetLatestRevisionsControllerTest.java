@@ -10,8 +10,8 @@ import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
-import org.sventon.web.command.SVNBaseCommand;
-import static org.sventon.web.ctrl.template.AbstractSVNTemplateController.FIRST_REVISION;
+import org.sventon.web.command.BaseCommand;
+import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
@@ -30,7 +30,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     final GetLatestRevisionsController ctrl = new GetLatestRevisionsController();
     ctrl.setRepositoryService(mockService);
 
-    final SVNBaseCommand command = new SVNBaseCommand();
+    final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
 
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();

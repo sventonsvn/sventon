@@ -14,7 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ attribute name="command" required="true" type="org.sventon.web.command.SVNBaseCommand" %>
+<%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 
 <c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
   <c:param name="name" value="${command.name}" />

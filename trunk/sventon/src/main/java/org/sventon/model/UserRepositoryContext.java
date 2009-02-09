@@ -63,8 +63,8 @@ public final class UserRepositoryContext implements Serializable {
   /**
    * Search mode.
    *
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#ENTRIES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#LOGMESSAGES_SEARCH_MODE
    */
   private String searchMode;
 
@@ -200,8 +200,8 @@ public final class UserRepositoryContext implements Serializable {
    * Gets the user's search mode.
    *
    * @return Search mode
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#ENTRIES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#LOGMESSAGES_SEARCH_MODE
    */
   public String getSearchMode() {
     return searchMode;
@@ -211,8 +211,8 @@ public final class UserRepositoryContext implements Serializable {
    * Sets the user's search mode.
    *
    * @param searchMode Search mode
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#ENTRIES_SEARCH_MODE
-   * @see org.sventon.web.ctrl.template.AbstractSVNTemplateController#LOGMESSAGES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#ENTRIES_SEARCH_MODE
+   * @see org.sventon.web.ctrl.template.AbstractTemplateController#LOGMESSAGES_SEARCH_MODE
    */
   public void setSearchMode(final String searchMode) {
     this.searchMode = searchMode;
