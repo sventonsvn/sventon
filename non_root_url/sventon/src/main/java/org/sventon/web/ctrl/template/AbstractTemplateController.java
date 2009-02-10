@@ -232,12 +232,14 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<SVNLogEntry> getLatestRevisions(BaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<SVNLogEntry> getLatestRevisions(final BaseCommand command, final SVNRepository repository,
+                                               final UserRepositoryContext repositoryContext, final long headRevision)
+      throws SventonException {
+
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
-      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
-          FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
+      logEntries.addAll(getRepositoryService().getRevisionsFromRoot(command.getName(), repository, headRevision, repositoryContext.getLatestRevisionsDisplayCount()));
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
         logger.info(svnex.getMessage());

@@ -11,9 +11,7 @@ import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +35,8 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 
-    expect(mockService.getRevisions(command.getName(), null, SVNRevision.HEAD.getNumber(), FIRST_REVISION, "/",
-        userRepositoryContext.getLatestRevisionsDisplayCount(), false)).andStubReturn(revisions);
+    expect(mockService.getRevisionsFromRoot(command.getName(), null, 100,
+        userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);
 
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, userRepositoryContext, null, null, null);

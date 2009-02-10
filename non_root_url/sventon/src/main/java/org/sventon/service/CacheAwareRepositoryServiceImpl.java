@@ -15,6 +15,7 @@ import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.RepositoryName;
+import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -65,15 +66,15 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevisionFromRoot(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
-    if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
+    if (canReturnCachedRevisionsFor(repositoryName)) {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {
-      logEntry = super.getRevision(repositoryName, repository, revision);
+      logEntry = super.getRevisionFromRoot(repositoryName, repository, revision);
     }
     return logEntry;
   }
@@ -92,14 +93,14 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (canReturnCachedRevisionsFor(repositoryName)) {
       final List<Long> revisions = new ArrayList<Long>();
-      if ("/".equals(path)) {
-        // Requested path is root - simply return the revisions without checking with the repository
+      if (isRoot(repository, path)) {
         for (long i = fromRevision; i > fromRevision - limit; i--) {
           revisions.add(i);
         }
       } else {
         // To be able to return cached revisions, we first have to get the revision numbers for given path
         // Doing a logs-call, skipping the details, to get them.
+        logger.debug("Fetching revision number for path [" + path + "] from server");
         repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
           public void handleLogEntry(final SVNLogEntry logEntry) {
             revisions.add(logEntry.getRevision());
@@ -112,6 +113,20 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
+  }
+
+  /**
+   * {@inheritDoc}
+   * <p/>
+   * If the instance is configured to use the cache, and the cache is not
+   * currently busy updating, a cached log entry instance will be returned.
+   */
+  @Override
+  public List<SVNLogEntry> getRevisionsFromRoot(final RepositoryName repositoryName, final SVNRepository repository,
+                                                final long fromRevision, final long limit) throws SVNException, SventonException {
+
+    final String root = resolveRoot(repository);
+    return getRevisions(repositoryName, repository, fromRevision, FIRST_REVISION, root, limit, false);
   }
 
   private boolean canReturnCachedRevisionsFor(RepositoryName repositoryName) {

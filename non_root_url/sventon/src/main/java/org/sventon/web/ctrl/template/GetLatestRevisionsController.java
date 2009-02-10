@@ -19,6 +19,7 @@ import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,8 +50,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
 
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
-      revisions.addAll(getRepositoryService().getRevisions(command.getName(), repository, -1, FIRST_REVISION, "/",
-          revisionCount, false));
+      revisions.addAll(getRepositoryService().getRevisionsFromRoot(command.getName(), repository, headRevision, revisionCount));
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
