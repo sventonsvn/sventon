@@ -28,7 +28,8 @@ public class ShowRevisionInfoControllerTest extends TestCase {
     final ShowRevisionInfoController ctrl = new ShowRevisionInfoController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getRevision(command.getName(), null, command.getRevisionNumber())).andStubReturn(TestUtils.getLogEntryStub());
+    expect(mockService.getRevisionFromRoot(command.getName(), null,
+        command.getRevisionNumber())).andStubReturn(TestUtils.getLogEntryStub());
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);

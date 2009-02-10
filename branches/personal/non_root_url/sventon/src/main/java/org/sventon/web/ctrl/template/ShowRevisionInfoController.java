@@ -39,8 +39,8 @@ public final class ShowRevisionInfoController extends AbstractTemplateController
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Getting revision info details for revision: " + command.getRevision());
-    model.put("revisionInfo", getRepositoryService().getRevision(
-        command.getName(), repository, command.getRevisionNumber()));
+    model.put("revisionInfo", getRepositoryService().getRevisionFromRoot(command.getName(), repository,
+        command.getRevisionNumber()));
     return new ModelAndView(getViewName(), model);
   }
 

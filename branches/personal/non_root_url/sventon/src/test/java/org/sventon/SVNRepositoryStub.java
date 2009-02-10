@@ -173,7 +173,7 @@ public class SVNRepositoryStub extends SVNRepository {
 
   @Override
   public SVNURL getLocation() {
-    throw new UnsupportedOperationException("Not implemented!");
+    return LOCALHOST;
   }
 
   @Override
@@ -204,7 +204,7 @@ public class SVNRepositoryStub extends SVNRepository {
 
   @Override
   public SVNURL getRepositoryRoot(boolean forceConnection) throws SVNException {
-    throw new UnsupportedOperationException("Not implemented!");
+    return LOCALHOST;
   }
 
   @Override

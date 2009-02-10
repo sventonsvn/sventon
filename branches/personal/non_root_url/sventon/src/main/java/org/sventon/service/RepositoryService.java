@@ -37,6 +37,25 @@ import java.util.Map;
 public interface RepositoryService {
 
   /**
+   * Checks if given path is the root of the repository.
+   *
+   * @param repository The repository
+   * @param path       Path
+   * @return True if root, false if not.
+   * @throws SVNException if subversion error
+   */
+  public boolean isRoot(final SVNRepository repository, final String path) throws SVNException;
+
+  /**
+   * Resolves the repository root path.
+   *
+   * @param repository The repository
+   * @return Repository root path.
+   * @throws SVNException if subversion error
+   */
+  public String resolveRoot(final SVNRepository repository) throws SVNException;
+
+  /**
    * Gets revision details for a specific revision number.
    * If caching is enabled in the {@link org.sventon.appl.RepositoryConfiguration}, a cached revision will be returned.
    *
@@ -47,7 +66,7 @@ public interface RepositoryService {
    * @throws SVNException                 if subversion error
    * @throws org.sventon.SventonException if a sventon specific error occurs
    */
-  SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
+  SVNLogEntry getRevisionFromRoot(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException;
 
   /**
@@ -314,4 +333,19 @@ public interface RepositoryService {
    */
   SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command)
       throws SVNException, DiffException;
+
+  /**
+   * Gets revision details for given revision interval and a specific path with limit.
+   * If caching is enabled in the {@link org.sventon.appl.RepositoryConfiguration}, cached revisions will be returned.
+   *
+   * @param repositoryName Repository repositoryName.
+   * @param repository     The repository
+   * @param fromRevision   From revision
+   * @param limit          Revision limit
+   * @return The log entries
+   * @throws SVNException                 if subversion error
+   * @throws org.sventon.SventonException if a sventon specific error occurs
+   */
+  List<SVNLogEntry> getRevisionsFromRoot(final RepositoryName repositoryName, final SVNRepository repository,
+                                         final long fromRevision, final long limit) throws SVNException, SventonException;
 }

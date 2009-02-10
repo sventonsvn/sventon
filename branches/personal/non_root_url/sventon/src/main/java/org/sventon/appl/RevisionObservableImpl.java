@@ -142,6 +142,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
       handleSuspectedUrlChange(lastUpdatedRevision, headRevision);
 
       if (headRevision > lastUpdatedRevision) {
+        //TODO: Decide which revisions to fetch by asking the server for logs without details...
         long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
         logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions from repository: " + name);
 

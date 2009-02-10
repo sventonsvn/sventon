@@ -12,10 +12,7 @@ import org.sventon.model.SourceLine;
 import org.sventon.util.SVNFileRevisionEditor;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
@@ -569,11 +566,43 @@ public class RepositoryServiceImplTest extends TestCase {
       sb.append("\n");
     }
     assertEquals(rightResult, sb.toString());
+  }
 
+  public void testResolveRoot() throws Exception {
+    final RepositoryService service = new RepositoryServiceImpl();
+    assertEquals("/", service.resolveRoot(new TestSVNRepositoryStub()));
+    assertEquals("/trunk/", service.resolveRoot(new TestSVNRepositoryStub() {
+      @Override
+      public SVNURL getLocation() {
+        try {
+          return SVNURL.parseURIDecoded("http://localhost/trunk");
+        } catch (SVNException e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+    }));
+  }
+
+  public void testIsRoot() throws Exception {
+    final RepositoryService service = new RepositoryServiceImpl();
+    assertTrue(service.isRoot(new TestSVNRepositoryStub(), "/"));
+    assertFalse(service.isRoot(new TestSVNRepositoryStub(), "/trunk"));
+    assertFalse(service.isRoot(new TestSVNRepositoryStub(), "/trunk/"));
+    assertFalse(service.isRoot(new TestSVNRepositoryStub() {
+      @Override
+      public SVNURL getLocation() {
+        try {
+          return SVNURL.parseURIDecoded("http://localhost/trunk");
+        } catch (SVNException e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+    }, "/"));
   }
 
   public static class TestSVNRepositoryStub extends SVNRepositoryStub {
-
     private boolean first = true;
     public String leftFileContents = "test left file contents" + BR;
     public String rightFileContents = "test right file contents" + BR;

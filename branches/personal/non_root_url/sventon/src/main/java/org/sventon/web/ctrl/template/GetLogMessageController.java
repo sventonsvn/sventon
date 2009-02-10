@@ -45,7 +45,8 @@ public final class GetLogMessageController extends AbstractTemplateController {
     LogMessage logMessage = null;
     try {
       logger.debug("Getting log message from revision [" + command.getRevisionNumber() + "]");
-      final SVNLogEntry logEntry = getRepositoryService().getRevision(command.getName(), repository, command.getRevisionNumber());
+      final SVNLogEntry logEntry = getRepositoryService().getRevisionFromRoot(
+          command.getName(), repository, command.getRevisionNumber());
       logMessage = new LogMessage(command.getRevisionNumber(), logEntry.getMessage()); //TODO: Parse to apply Bugtraq link
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());
