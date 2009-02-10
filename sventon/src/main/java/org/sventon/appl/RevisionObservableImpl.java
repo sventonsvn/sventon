@@ -145,10 +145,11 @@ public final class RevisionObservableImpl extends Observable implements Revision
         long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
         logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions from repository: " + name);
 
-        final long fromRevision = lastUpdatedRevision + 1;
-        final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
-            ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
         do {
+          final long fromRevision = lastUpdatedRevision + 1;
+          final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
+              ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
           logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
