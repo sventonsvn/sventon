@@ -54,6 +54,9 @@ public final class AgeTag extends TagSupport {
    * @return Age string.
    */
   protected static String getAsAgeString(final Date start, final Date stop) {
+    if (start == null || stop == null) {
+      return "";
+    }
     final String s = DurationFormatUtils.formatDurationWords(stop.getTime() - start.getTime(), true, true);
     Pattern p = Pattern.compile("(\\S+\\s{1}\\S+).*");
     Matcher m = p.matcher(s);

@@ -25,5 +25,7 @@ public class AgeTagTest extends TestCase {
     assertEquals("652 days", AgeTag.getAsAgeString(start.getTime(), stop.getTime()));
     stop.add(Calendar.SECOND, 10);
     assertEquals("652 days", AgeTag.getAsAgeString(start.getTime(), stop.getTime()));
+
+    assertEquals("", AgeTag.getAsAgeString(null, null));
   }
 }
