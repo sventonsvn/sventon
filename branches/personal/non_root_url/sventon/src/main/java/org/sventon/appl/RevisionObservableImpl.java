@@ -17,7 +17,9 @@ import org.sventon.RepositoryConnectionFactory;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheManager;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.RevisionRange;
 import org.sventon.service.RepositoryService;
+import org.sventon.util.RevisionRangeSplitter;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -142,28 +144,29 @@ public final class RevisionObservableImpl extends Observable implements Revision
       handleSuspectedUrlChange(lastUpdatedRevision, headRevision);
 
       if (headRevision > lastUpdatedRevision) {
-        //TODO: Decide which revisions to fetch by asking the server for logs without details...
-        long revisionsLeftToFetchCount = headRevision - lastUpdatedRevision;
-        logger.debug("About to fetch [" + revisionsLeftToFetchCount + "] revisions from repository: " + name);
 
-        do {
-          final long fromRevision = lastUpdatedRevision + 1;
-          final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
-              ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
+        final String path = repository.getRepositoryPath("");
+        logger.debug("Fetching revision number for path [" + path + "] from server");
+        final List<Long> revisions = repositoryService.getRevisionNumbers(repository, lastUpdatedRevision + 1,
+            headRevision, path);
 
+        for (RevisionRange revisionRange : new RevisionRangeSplitter(revisions, maxRevisionCountPerUpdate)) {
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
+          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository,
+              revisionRange.getFromRevision(), revisionRange.getToRevision()));
+
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           setChanged();
-          logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
+          logger.info(createNotificationLogMessage(revisionRange.getFromRevision(),
+              revisionRange.getToRevision(), logEntries.size()));
+
           notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
-          lastUpdatedRevision = toRevision;
+          lastUpdatedRevision = revisionRange.getToRevision();
           logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
           objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
           objectCache.flush();
           clearCacheBeforeUpdate = false;
-          revisionsLeftToFetchCount -= logEntries.size();
-        } while (revisionsLeftToFetchCount > 0);
+        }
       }
     } catch (SVNException svnex) {
       logger.warn("Exception: " + svnex.getMessage());

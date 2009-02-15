@@ -77,9 +77,9 @@
                   }
                 %>
                 <tr>
-                  <c:url value="/repos/${command.name}/goto${command.toPath}/${row.path}" var="goToUrl"/>
+                  <c:url value="/repos/${command.name}/goto/${command.toPath}/${row.path}" var="goToUrl"/>
 
-                  <c:url value="/repos/${command.name}/diff${command.toPath}/${row.path}" var="diffUrl">
+                  <c:url value="/repos/${command.name}/diff/${command.toPath}/${row.path}" var="diffUrl">
                     <c:param name="revision" value="${command.toRevision}"/>
                   </c:url>
 

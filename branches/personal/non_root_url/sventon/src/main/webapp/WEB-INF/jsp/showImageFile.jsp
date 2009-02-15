@@ -40,12 +40,12 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="showUrl">
+  <c:url value="/repos/${command.name}/get/${command.path}${entry.name}" var="showUrl">
     <c:param name="revision" value="${command.revision}" />
     <c:param name="disp" value="inline" />
   </c:url>
 
-  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="getThumbUrl">
+  <c:url value="/repos/${command.name}/get/${command.path}${entry.name}" var="getThumbUrl">
     <c:param name="revision" value="${command.revision}" />
     <c:param name="disp" value="thumbnail" />
   </c:url>

@@ -50,7 +50,7 @@ public class BaseCommand {
   /**
    * The full path.
    */
-  private String path = "/";
+  private String path = "";
 
   /**
    * The peg revision.
@@ -114,12 +114,12 @@ public class BaseCommand {
    */
   public void setPath(final String path) {
     if (StringUtils.isEmpty(path)) {
-      this.path = "/";
+      this.path = "";
     } else {
       if (path.startsWith("/")) {
-        this.path = path;
+        this.path = path.substring(1);
       } else {
-        this.path = "/" + path;
+        this.path = path;
       }
     }
   }
@@ -198,7 +198,7 @@ public class BaseCommand {
   public String getParentPath() {
     String work = getPath();
 
-    if (work.equals("/")) {
+    if (work.isEmpty()) {
       return work;
     }
 
@@ -312,7 +312,7 @@ public class BaseCommand {
    * @return The revision number.
    * @throws SVNException if unable to communicate with repository.
    */
-  public long translateRevision(long headRevision, final SVNRepository repository) throws SVNException {
+  public long translateRevision(final long headRevision, final SVNRepository repository) throws SVNException {
     if (revision.getNumber() < 0 && revisionNumber < 0) {
       if (SVNRevision.HEAD.equals(revision)) {
         revisionNumber = headRevision;
@@ -342,7 +342,7 @@ public class BaseCommand {
    */
   public String createListUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/list" + getPathWithTrailingSlash();
+    return "/repos/" + name.toString() + "/list/" + getPathWithTrailingSlash();
   }
 
   /**
@@ -354,7 +354,7 @@ public class BaseCommand {
    */
   public String createShowFileUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/show" + getPathStripTrailingSlash();
+    return "/repos/" + name.toString() + "/show/" + getPathStripTrailingSlash();
   }
 
   private void assertNameSet() {
@@ -365,7 +365,7 @@ public class BaseCommand {
 
   private String getPathWithTrailingSlash() {
     String path = this.path;
-    if (!path.endsWith("/")) {
+    if (!path.isEmpty() && !path.endsWith("/")) {
       path += "/";
     }
     return path;

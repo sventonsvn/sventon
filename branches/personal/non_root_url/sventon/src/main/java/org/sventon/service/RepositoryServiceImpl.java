@@ -26,7 +26,6 @@ import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
 import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.internal.util.SVNPathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.*;
@@ -49,26 +48,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public boolean isRoot(final SVNRepository repository, final String path) throws SVNException {
-    return "/".equals(resolveRoot(repository)) && "/".equals(path);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String resolveRoot(final SVNRepository repository) throws SVNException {
-    final String root = "/" + SVNPathUtil.getRelativePath(repository.getRepositoryRoot(false).toDecodedString(),
-        repository.getLocation().toDecodedString());
-    return root.endsWith("/") ? root : root + "/";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public SVNLogEntry getRevisionFromRoot(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
-    return (SVNLogEntry) repository.log(new String[]{resolveRoot(repository)}, null, revision, revision,
+    return (SVNLogEntry) repository.log(new String[]{repository.getRepositoryPath("")}, null, revision, revision,
         true, false).iterator().next();
   }
 
@@ -79,7 +62,7 @@ public class RepositoryServiceImpl implements RepositoryService {
                                                             final long toRevision) throws SVNException {
 
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
-    repository.log(new String[]{resolveRoot(repository)}, fromRevision, toRevision, true, false,
+    repository.log(new String[]{repository.getRepositoryPath("")}, fromRevision, toRevision, true, false,
         new ISVNLogEntryHandler() {
           public void handleLogEntry(final SVNLogEntry logEntry) {
             revisions.add(logEntry);
@@ -111,7 +94,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   public List<SVNLogEntry> getRevisionsFromRoot(final RepositoryName repositoryName, final SVNRepository repository,
                                                 final long fromRevision, final long limit) throws SVNException, SventonException {
 
-    final String root = resolveRoot(repository);
+    final String root = repository.getRepositoryPath("");
     return getRevisions(repositoryName, repository, fromRevision, FIRST_REVISION, root, limit, false);
   }
 
@@ -521,6 +504,21 @@ public class RepositoryServiceImpl implements RepositoryService {
     assertFileOrDir(nodeKind2, command.getToPath(), toRevision);
     assertSameKind(nodeKind1, nodeKind2);
     return nodeKind1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<Long> getRevisionNumbers(final SVNRepository repository, final long fromRevision, final long toRevision,
+                                       final String path) throws SVNException {
+
+    final List<Long> revisions = new ArrayList<Long>();
+    repository.log(new String[]{path}, fromRevision, toRevision, false, false, new ISVNLogEntryHandler() {
+      public void handleLogEntry(final SVNLogEntry logEntry) {
+        revisions.add(logEntry.getRevision());
+      }
+    });
+    return revisions;
   }
 
   private void assertSameKind(final SVNNodeKind nodeKind1, final SVNNodeKind nodeKind2) throws DiffException {

@@ -16,13 +16,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 
-<c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
+<c:url var="downloadLinkUrl" value="/repos/${command.name}/get/${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 

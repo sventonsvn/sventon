@@ -46,18 +46,18 @@
   <table style="border-collapse: collapse;">
     <c:forEach items="${thumbnailentries}" var="entry">
       <tr height="160px">
-        <c:url value="/repos/${command.name}/get${entry.path}" var="downloadUrl" >
+        <c:url value="/repos/${command.name}/get/${entry.path}" var="downloadUrl" >
           <c:param name="revision" value="${command.revision}" />
           <c:param name="disp" value="inline" />
         </c:url>
-        <c:url value="/repos/${command.name}/get${entry.path}" var="getThumbUrl" >
+        <c:url value="/repos/${command.name}/get/${entry.path}" var="getThumbUrl" >
           <c:param name="revision" value="${command.revision}" />
           <c:param name="disp" value="thumbnail" />
         </c:url>
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
         </c:url>
-        <c:url value="/repos/${command.name}/show${entry.path}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show/${entry.path}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
 

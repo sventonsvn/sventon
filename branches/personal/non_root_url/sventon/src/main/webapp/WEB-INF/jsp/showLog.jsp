@@ -41,7 +41,8 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form:form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
+  <form:form action="${pageContext.request.contextPath}/repos/${command.name}/diff/${command.path}${entry.name}"
+             method="get" name="logForm" onsubmit="return doDiff(this);">
 
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="revision" value="${command.revision}">
@@ -73,7 +74,7 @@
 
         <jsp:useBean id="entry" type="org.sventon.model.LogEntryWrapper" />
 
-        <c:url value="/ajax/${command.name}/entrytray${entry.pathAtRevision}" var="entryTrayAddUrl">
+        <c:url value="/ajax/${command.name}/entrytray/${entry.pathAtRevision}" var="entryTrayAddUrl">
           <c:param name="pegRevision" value="${entry.revision}" />
           <c:param name="action" value="add" />
         </c:url>
@@ -81,7 +82,7 @@
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
             <c:when test="${isFile}">
-              <c:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
+              <c:url value="/repos/${command.name}/show/${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
               <td>
@@ -121,7 +122,7 @@
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
-      <c:url value="/repos/${command.name}/log${command.path}" var="showNextLogUrl">
+      <c:url value="/repos/${command.name}/log/${command.path}" var="showNextLogUrl">
         <c:param name="nextPath" value="${nextPath}" />
         <c:param name="nextRevision" value="${nextRev}" />
         <c:param name="revision" value="${command.revision}"/>
