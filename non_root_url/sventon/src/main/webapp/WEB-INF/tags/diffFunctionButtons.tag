@@ -16,17 +16,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.DiffCommand" %>
 
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
 <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
 <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="document.location.href='${showFileUrl}';">
 
-<c:url value="/repos/${command.name}/diff${command.path}" var="diffUrl">
+<c:url value="/repos/${command.name}/diff/${command.path}" var="diffUrl">
   <c:param name="revision" value="${command.revision}" />
   <c:param name="entries" value="${command.toPath}@${command.toRevision}" />
   <c:param name="entries" value="${command.fromPath}@${command.fromRevision}" />
@@ -39,7 +39,7 @@
 </c:url>
 <input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
 
-<c:url value="/repos/${command.name}/diff${command.fromPath}" var="diffPreviousUrl">
+<c:url value="/repos/${command.name}/diff/${command.fromPath}" var="diffPreviousUrl">
   <c:param name="revision" value="${command.fromRevision}" />
   <c:param name="style" value="${command.style}" />
 </c:url>

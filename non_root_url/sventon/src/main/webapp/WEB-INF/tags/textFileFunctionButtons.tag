@@ -17,16 +17,16 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="isArchivedEntry" required="true" type="java.lang.Boolean" %>
 
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
+<c:url var="downloadLinkUrl" value="/repos/${command.name}/get/${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="blameLinkUrl" value="/repos/${command.name}/blame${command.path}">
+<c:url var="blameLinkUrl" value="/repos/${command.name}/blame/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+<c:url var="showLogLinkUrl" value="/repos/${command.name}/log/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 
@@ -40,7 +40,7 @@
     <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="document.location.href='${blameLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="document.location.href='${showFileUrl}&format=raw';">
 
-    <c:url value="/repos/${command.name}/diff${command.path}" var="diffPreviousUrl">
+    <c:url value="/repos/${command.name}/diff/${command.path}" var="diffPreviousUrl">
       <c:param name="revision" value="${command.revision}"/>
     </c:url>
 

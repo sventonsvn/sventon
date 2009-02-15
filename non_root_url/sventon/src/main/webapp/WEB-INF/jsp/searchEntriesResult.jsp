@@ -45,7 +45,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegRevision" value="${command.revisionNumber}">
     
-    <c:url value="/repos/${command.name}/searchentries${command.path}" var="sortUrl">
+    <c:url value="/repos/${command.name}/searchentries/${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
       <c:param name="searchString" value="${searchString}" />
       <c:param name="startDir" value="${startDir}" />
@@ -57,16 +57,16 @@
       <c:set var="totalSize" value="0"/>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
+        <c:url value="/repos/${command.name}/list/${entry.fullEntryName}/" var="listUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
-        <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show/${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
         </c:url>
-        <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+        <c:url value="/ajax/${command.name}/entrytray/${entry.fullEntryName}" var="entryTrayAddUrl">
           <c:param name="revision" value="${entry.revision}" />
           <c:param name="pegRevision" value="${command.revisionNumber}"/>
           <c:param name="action" value="add" />

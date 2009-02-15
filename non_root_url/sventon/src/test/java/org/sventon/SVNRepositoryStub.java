@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class SVNRepositoryStub extends SVNRepository {
 
-  private static SVNURL LOCALHOST;
+  public static SVNURL LOCALHOST;
 
   static {
     try {
@@ -290,12 +290,12 @@ public class SVNRepositoryStub extends SVNRepository {
 
   @Override
   public String getRepositoryPath(String relativePath) throws SVNException {
-    throw new UnsupportedOperationException("Not implemented!");
+    return super.getRepositoryPath(relativePath);
   }
 
   @Override
   public String getFullPath(String relativeOrRepositoryPath) throws SVNException {
-    throw new UnsupportedOperationException("Not implemented!");
+    return super.getFullPath(relativeOrRepositoryPath);
   }
 
   @Override

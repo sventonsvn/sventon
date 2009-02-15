@@ -29,7 +29,7 @@ public class GetLogMessageControllerTest extends TestCase {
     final GetLogMessageController ctrl = new GetLogMessageController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getRevisionFromRoot(command.getName(), null,
+    expect(mockService.getRevision(command.getName(), null,
         command.getRevisionNumber())).andStubReturn(logEntry);
     replay(mockService);
 

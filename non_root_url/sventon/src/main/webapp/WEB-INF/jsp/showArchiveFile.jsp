@@ -54,7 +54,7 @@
     </tr>
     <c:forEach items="${entries}" var="zipEntry">
 
-      <c:url value="/repos/${command.name}/show${command.path}" var="showFileUrl">
+      <c:url value="/repos/${command.name}/show/${command.path}" var="showFileUrl">
         <c:param name="revision" value="${command.revision}" />
         <c:param name="archivedEntry" value="${zipEntry.name}" />
       </c:url>

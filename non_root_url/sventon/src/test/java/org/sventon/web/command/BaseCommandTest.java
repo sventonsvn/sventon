@@ -12,23 +12,23 @@ public class BaseCommandTest extends TestCase {
 
   public void testDefaultValues() {
     final BaseCommand command = new BaseCommand();
-    assertEquals("/", command.getPath());
+    assertEquals("", command.getPath());
     assertEquals(SVNRevision.HEAD, command.getRevision());
   }
 
   public void testSetPath() {
     final BaseCommand command = new BaseCommand();
 
-    //null is OK, will be converted to "/"
+    //null is OK, will be converted to ""
     command.setPath(null);
-    assertEquals("/", command.getPath());
+    assertEquals("", command.getPath());
 
-    //"" (empty string) will also be converted to "/"
+    //"" (empty string) will also be converted to ""
     command.setPath("");
-    assertEquals("/", command.getPath());
+    assertEquals("", command.getPath());
 
     command.setPath("Asdf.java");
-    assertEquals("/Asdf.java", command.getPath());
+    assertEquals("Asdf.java", command.getPath());
   }
 
   public void testSetRevision() {
@@ -62,7 +62,7 @@ public class BaseCommandTest extends TestCase {
   public void testGetCompletePath() {
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/src/File.java");
-    assertEquals("/trunk/src/File.java", command.getPath());
+    assertEquals("trunk/src/File.java", command.getPath());
   }
 
   public void testTranslateRevision() throws Exception {
@@ -94,44 +94,44 @@ public class BaseCommandTest extends TestCase {
     final BaseCommand cmd = new BaseCommand();
 
     cmd.setPath("/trunk/src/File.java");
-    assertEquals("/trunk/src/", cmd.getParentPath());
+    assertEquals("trunk/src/", cmd.getParentPath());
 
     cmd.setPath("/trunk/src/File.java");
-    assertEquals("/trunk/src/", cmd.getParentPath());
+    assertEquals("trunk/src/", cmd.getParentPath());
 
     cmd.setPath("/trunk/src/");
-    assertEquals("/trunk/", cmd.getParentPath());
+    assertEquals("trunk/", cmd.getParentPath());
 
     cmd.setPath("");
-    assertEquals("/", cmd.getParentPath());
+    assertEquals("", cmd.getParentPath());
 
     cmd.setPath("/");
-    assertEquals("/", cmd.getParentPath());
+    assertEquals("", cmd.getParentPath());
 
     cmd.setPath(null);
-    assertEquals("/", cmd.getParentPath());
+    assertEquals("", cmd.getParentPath());
   }
 
   public void testGetPathPart() {
     final BaseCommand cmd = new BaseCommand();
 
     cmd.setPath("/trunk/src/File.java");
-    assertEquals("/trunk/src/", cmd.getPathPart());
+    assertEquals("trunk/src/", cmd.getPathPart());
 
     cmd.setPath("/trunk/src/");
-    assertEquals("/trunk/src/", cmd.getPathPart());
+    assertEquals("trunk/src/", cmd.getPathPart());
 
     cmd.setPath("/trunk/src");
-    assertEquals("/trunk/", cmd.getPathPart());  // 'src' will be treated as a target leaf
+    assertEquals("trunk/", cmd.getPathPart());  // 'src' will be treated as a target leaf
 
     cmd.setPath("");
-    assertEquals("/", cmd.getPathPart());
+    assertEquals("", cmd.getPathPart());
 
     cmd.setPath("/");
-    assertEquals("/", cmd.getPathPart());
+    assertEquals("", cmd.getPathPart());
 
     cmd.setPath(null);
-    assertEquals("/", cmd.getPathPart());
+    assertEquals("", cmd.getPathPart());
   }
 
   public void testCreateListUrl() {

@@ -568,40 +568,6 @@ public class RepositoryServiceImplTest extends TestCase {
     assertEquals(rightResult, sb.toString());
   }
 
-  public void testResolveRoot() throws Exception {
-    final RepositoryService service = new RepositoryServiceImpl();
-    assertEquals("/", service.resolveRoot(new TestSVNRepositoryStub()));
-    assertEquals("/trunk/", service.resolveRoot(new TestSVNRepositoryStub() {
-      @Override
-      public SVNURL getLocation() {
-        try {
-          return SVNURL.parseURIDecoded("http://localhost/trunk");
-        } catch (SVNException e) {
-          e.printStackTrace();
-        }
-        return null;
-      }
-    }));
-  }
-
-  public void testIsRoot() throws Exception {
-    final RepositoryService service = new RepositoryServiceImpl();
-    assertTrue(service.isRoot(new TestSVNRepositoryStub(), "/"));
-    assertFalse(service.isRoot(new TestSVNRepositoryStub(), "/trunk"));
-    assertFalse(service.isRoot(new TestSVNRepositoryStub(), "/trunk/"));
-    assertFalse(service.isRoot(new TestSVNRepositoryStub() {
-      @Override
-      public SVNURL getLocation() {
-        try {
-          return SVNURL.parseURIDecoded("http://localhost/trunk");
-        } catch (SVNException e) {
-          e.printStackTrace();
-        }
-        return null;
-      }
-    }, "/"));
-  }
-
   public static class TestSVNRepositoryStub extends SVNRepositoryStub {
     private boolean first = true;
     public String leftFileContents = "test left file contents" + BR;

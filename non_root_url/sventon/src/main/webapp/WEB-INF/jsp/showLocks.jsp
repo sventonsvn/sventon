@@ -53,7 +53,7 @@
     <c:forEach items="${currentLocks}" var="lock">
       <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
 
-      <c:url value="/repos/${command.name}/show${lock.path}" var="showUrl">
+      <c:url value="/repos/${command.name}/show/${lock.path}" var="showUrl">
         <c:param name="revision" value="${command.revision}" />
       </c:url>
 

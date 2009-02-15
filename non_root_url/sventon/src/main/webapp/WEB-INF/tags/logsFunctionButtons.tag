@@ -17,16 +17,16 @@
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="isFile" required="true" type="java.lang.Boolean" %>
 
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+<c:url var="showFileUrl" value="/repos/${command.name}/show/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
+<c:url var="showDirLinkUrl" value="/repos/${command.name}/list/${command.path}">
   <c:param name="revision" value="${command.revision}" />
 </c:url>
-<c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
+<c:url var="downloadLinkUrl" value="/repos/${command.name}/get/${command.path}">
   <c:param name="name" value="${command.name}" />
 </c:url>
-<c:url var="showLogUrl" value="/repos/${command.name}/log${command.path}">
+<c:url var="showLogUrl" value="/repos/${command.name}/log/${command.path}">
   <c:param name="revision" value="${command.revision}"/>
   <c:param name="stopOnCopy" value="${!stopOnCopy}"/>
   <c:if test="${nextPath ne null}">

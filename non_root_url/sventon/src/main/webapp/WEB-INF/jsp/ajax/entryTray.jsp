@@ -39,16 +39,16 @@
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="org.sventon.model.RepositoryEntry"/>
       
-      <c:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayListUrl">
+      <c:url value="/repos/${command.name}/list/${trayEntry.fullEntryName}/" var="entryTrayListUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
-      <c:url value="/repos/${command.name}/show${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
+      <c:url value="/repos/${command.name}/show/${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
       </c:url>
       <c:url value="/repos/${command.name}/info" var="entryTrayShowRevInfoUrl">
         <c:param name="revision" value="${trayEntry.revision}" />
       </c:url>
-      <c:url value="/ajax/${command.name}/entrytray${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
+      <c:url value="/ajax/${command.name}/entrytray/${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />
         <c:param name="action" value="remove" />
       </c:url>

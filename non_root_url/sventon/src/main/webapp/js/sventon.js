@@ -25,14 +25,14 @@ function doAction(form, name, path) {
   if (selectedValue == 'thumb') {
     // One or more entries must be checked
     if (getCheckedCount(form) > 0) {
-      form.action = contextPath + '/repos/' + name + '/showthumbnails' + path;
+      form.action = contextPath + '/repos/' + name + '/showthumbnails/' + path;
       return true;
     }
   } else if (selectedValue == 'diff') {
     // Exactly two entries must be checked
     if (getCheckedCount(form) == 2) {
       form.method = 'get';
-      form.action = contextPath + '/repos/' + name + '/diff' + path;
+      form.action = contextPath + '/repos/' + name + '/diff/' + path;
       return true;
     } else {
       alert('Two entries must be selected');
@@ -40,7 +40,7 @@ function doAction(form, name, path) {
   } else if (selectedValue == 'export') {
     // One or more entries must be checked
     if (getCheckedCount(form) > 0) {
-      form.action = contextPath + '/repos/' + name + '/export' + path;
+      form.action = contextPath + '/repos/' + name + '/export/' + path;
       return true;
     }
   }
@@ -63,7 +63,7 @@ function goToHeadRevision(form) {
 function prepareGotoForm(form) {
   var path = form.elements['pathInput'].value;
   var name = form.elements['nameInput'].value;
-  form.action = contextPath + '/repos/' + name + '/goto' + path;
+  form.action = contextPath + '/repos/' + name + '/goto/' + path;
 }
 
 // function to handle search submission
@@ -77,9 +77,9 @@ function doSearch(form, name, path) {
     return false;
   } else {
     if (getCheckedValue(form.elements['searchMode']) == 'entries') {
-      form.action = contextPath + '/repos/' + name + '/searchentries' + path;
+      form.action = contextPath + '/repos/' + name + '/searchentries/' + path;
     } else {
-      form.action = contextPath + '/repos/' + name + '/searchlogs' + path;
+      form.action = contextPath + '/repos/' + name + '/searchlogs/' + path;
     }
     if (searchStr.length < 3) {
       return confirm("Given search string is short. The result will potentially be very large.\nDo you want to continue anyway?");
@@ -97,7 +97,7 @@ function doFlatten(path, name) {
     result = confirm("Flattening on root level is not recommended.\nThe result will potentially be very large.\nDo you want to continue anyway?");
   }
   if (result) {
-    location.href = contextPath + '/repos/' + name + '/flatten' + path;
+    location.href = contextPath + '/repos/' + name + '/flatten/' + path;
     return true;
   }
   return false;
@@ -184,7 +184,7 @@ function listFiles(rowNumber, name, path) {
     iconElement.className = 'plus';
   } else {
     // Do the ajax call
-    var url = contextPath + '/ajax/' + name + '/listfiles' + path;
+    var url = contextPath + '/ajax/' + name + '/listfiles/' + path;
     var urlParams = 'revision=head&rowNumber=' + rowNumber;
     var elementId = 'dir' + rowNumber;
     new Ajax.Updater({success: elementId}, url, {
@@ -307,7 +307,7 @@ function showHideEntryTray() {
 
 // Note: requires the global variable 'contextPath'
 function getFileHistory(name, path, revision, archivedEntry) {
-  var url = contextPath + '/ajax/' + name + '/filehistory' + path;
+  var url = contextPath + '/ajax/' + name + '/filehistory/' + path;
   var urlParams = 'revision=' + revision;
   if (archivedEntry != '') {
     urlParams = urlParams + '&archivedEntry=' + archivedEntry;

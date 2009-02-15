@@ -53,7 +53,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegRevision" value="${command.revisionNumber}">
 
-    <c:url value="/repos/${command.name}/list${command.path}" var="sortUrl">
+    <c:url value="/repos/${command.name}/list/${command.path}" var="sortUrl">
       <c:param name="revision" value="${command.revision}" />
     </c:url>
 
@@ -62,9 +62,9 @@
       <c:set var="rowCount" value="0"/>
       <c:set var="totalSize" value="0"/>
       <c:set var="backLinkVisible" value="false"/>
-      <c:if test="${command.path ne '/'}">
+      <c:if test="${command.path ne ''}">
         <c:set var="backLinkVisible" value="true"/>
-        <c:url value="/repos/${command.name}/list${command.parentPath}" var="backUrl">
+        <c:url value="/repos/${command.name}/list/${command.parentPath}" var="backUrl">
           <c:param name="revision" value="${command.revision}"/>
         </c:url>
 
@@ -84,17 +84,17 @@
       </c:if>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
+        <c:url value="/repos/${command.name}/list/${entry.fullEntryName}/" var="listUrl">
           <c:param name="revision" value="${command.revision}" />
           <c:param name="bypassEmpty" value="true" />
         </c:url>
-        <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
+        <c:url value="/repos/${command.name}/show/${entry.fullEntryName}" var="showFileUrl">
           <c:param name="revision" value="${command.revision}" />
         </c:url>
         <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
           <c:param name="revision" value="${entry.revision}" />
         </c:url>
-        <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+        <c:url value="/ajax/${command.name}/entrytray/${entry.fullEntryName}" var="entryTrayAddUrl">
           <c:param name="revision" value="${entry.revision}" />
           <c:param name="pegRevision" value="${command.revisionNumber}"/>
           <c:param name="action" value="add" />
