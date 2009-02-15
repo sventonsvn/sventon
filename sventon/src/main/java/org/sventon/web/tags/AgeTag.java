@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
  */
 public final class AgeTag extends TagSupport {
 
+  private static final long serialVersionUID = 5299403672028193493L;
+
   /**
    * Locale.
    */
