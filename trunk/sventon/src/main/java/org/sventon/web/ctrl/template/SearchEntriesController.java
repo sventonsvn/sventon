@@ -32,6 +32,15 @@ import java.util.*;
  */
 public final class SearchEntriesController extends AbstractTemplateController {
 
+  public static final String SEARCH_STRING_PARAMETER = "searchString";
+
+  public static final String START_DIR_PARAMETER = "startDir";
+
+  public enum SearchType {
+    TEXT,
+    CAMELCASE
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -40,8 +49,8 @@ public final class SearchEntriesController extends AbstractTemplateController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String searchString = ServletRequestUtils.getRequiredStringParameter(request, "searchString");
-    final String startDir = ServletRequestUtils.getRequiredStringParameter(request, "startDir");
+    final String searchString = ServletRequestUtils.getRequiredStringParameter(request, SEARCH_STRING_PARAMETER);
+    final String startDir = ServletRequestUtils.getRequiredStringParameter(request, START_DIR_PARAMETER);
 
     final Map<String, Object> model = new HashMap<String, Object>();
 
@@ -51,8 +60,10 @@ public final class SearchEntriesController extends AbstractTemplateController {
     if (isAllUpperCase(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");
       entries.addAll(getCache().findEntryByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
+      model.put("searchType", SearchType.CAMELCASE);
     } else {
       entries.addAll(getCache().findEntry(command.getName(), searchString, startDir));
+      model.put("searchType", SearchType.TEXT);
     }
 
     if (logger.isDebugEnabled()) {
@@ -62,7 +73,6 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
     new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
-    logger.debug("Adding data to model");
     model.put("svndir", entries);
     model.put("searchString", searchString);
     model.put("locks", getRepositoryService().getLocks(repository, command.getPath()));

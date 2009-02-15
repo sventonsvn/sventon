@@ -87,7 +87,7 @@
               </td>
               <td class="sventonCol3">
                 <a href="${listUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                ${entry.friendlyFullEntryName}
+                  <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
                 </a>
               </td>
             </c:when>
@@ -99,7 +99,7 @@
               </td>
               <td class="sventonCol3">
                 <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                ${entry.friendlyFullEntryName}
+                  <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
                 </a>
               </td>
             </c:otherwise>
