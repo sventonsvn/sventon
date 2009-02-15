@@ -347,6 +347,15 @@ function toggleInnerHTML(id, text1, text2) {
   }
 }
 
+function toggleButtonText(id, text1, text2) {
+  var object = $(id);
+  if (object.value == text1) {
+    object.value= text2;
+  } else {
+    object.value = text1;
+  }
+}
+
 // function to toggle the entry checkboxes
 function toggleEntryFields(form) {
   for (var i = 0; i < form.length; i++) {
@@ -354,6 +363,12 @@ function toggleEntryFields(form) {
     if (fieldObj.type == 'checkbox') {
       fieldObj.checked = !fieldObj.checked;
     }
+  }
+}
+
+function toggleLogDetails(rowCount) {
+  for (var i = 0; i < rowCount; i++) {
+    Element.toggle('logInfoEntry' + i);    
   }
 }
 
