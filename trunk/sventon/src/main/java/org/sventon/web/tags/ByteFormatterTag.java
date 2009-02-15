@@ -26,11 +26,12 @@ import java.util.Locale;
  */
 public final class ByteFormatterTag extends TagSupport {
 
+  private static final long serialVersionUID = -7625429549478354923L;
+
   /**
    * The size.
    */
   private long size;
-
   /**
    * Locale.
    */

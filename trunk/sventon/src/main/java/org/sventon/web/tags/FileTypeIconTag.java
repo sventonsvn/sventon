@@ -30,6 +30,8 @@ import java.util.Properties;
  */
 public final class FileTypeIconTag extends TagSupport {
 
+  private static final long serialVersionUID = -1953829689152447996L;
+
   /**
    * Mappings.
    */
@@ -49,7 +51,6 @@ public final class FileTypeIconTag extends TagSupport {
    * Default file icon.
    */
   private static final String DEFAULT_FILE_ICON = "images/icon_file.png";
-
   private String fallbackIcon = DEFAULT_FILE_ICON;
 
   /**
