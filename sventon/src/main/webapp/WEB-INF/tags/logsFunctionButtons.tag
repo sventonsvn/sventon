@@ -14,6 +14,7 @@
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="isFile" required="true" type="java.lang.Boolean" %>
 
@@ -46,5 +47,6 @@
     <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="document.location.href='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
   </c:otherwise>
 </c:choose>
+<input type="button" class="btn" value="<spring:message code="show-all-details.button.text"/>" onclick="toggleLogDetails(${fn:length(logEntriesPage)}); toggleButtonText(this, '<spring:message code="show-all-details.button.text"/>', '<spring:message code="hide-all-details.button.text"/>');"/>
 <input type="checkbox" ${stopOnCopy ? 'checked="checked"' : ''} onclick="document.location.href='${showLogUrl}';"/>
 <spring:message code="stop-on-copy.button.text"/>
