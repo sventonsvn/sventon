@@ -218,7 +218,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
                                   final SVNLogEntryPath logEntryPath, final long revision,
                                   final RepositoryService repositoryService) throws SVNException {
 
-    entryCache.removeByName(logEntryPath.getPath(), false);
+    entryCache.removeEntry(logEntryPath.getPath(), false);
     entryCache.add(repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision));
   }
 
@@ -271,10 +271,10 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     if (deletedEntry.getKind() == RepositoryEntry.Kind.DIR) {
       // Directory node deleted
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
-      entryCache.removeByName(logEntryPath.getPath(), true);
+      entryCache.removeEntry(logEntryPath.getPath(), true);
     } else {
       // Single entry delete
-      entryCache.removeByName(logEntryPath.getPath(), false);
+      entryCache.removeEntry(logEntryPath.getPath(), false);
     }
   }
 

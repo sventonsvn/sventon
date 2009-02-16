@@ -34,7 +34,8 @@ public interface CacheGateway {
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntryByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir) throws CacheException;
+  List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
+                                               final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for given string (name fragment) starting from given directory.
@@ -42,10 +43,12 @@ public interface CacheGateway {
    * @param repositoryName Cache repository name
    * @param searchString   String to search for
    * @param startDir       Start path
-   * @return List of entries
+   * @param includeAuthors If true, also the entry's author string will be included in the search.
+   * @return List of entries with names (and/or author) matching given search string.
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntry(final RepositoryName repositoryName, final String searchString, final String startDir) throws CacheException;
+  List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString, final String startDir,
+                                    final boolean includeAuthors) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.

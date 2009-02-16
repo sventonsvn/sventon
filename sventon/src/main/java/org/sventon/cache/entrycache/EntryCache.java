@@ -141,7 +141,7 @@ public abstract class EntryCache implements Cache {
    * @param pathAndName Entry to remove from cache.
    * @param recursive   True if remove should be performed recursively
    */
-  public final synchronized void removeByName(final String pathAndName, final boolean recursive) {
+  public final synchronized void removeEntry(final String pathAndName, final boolean recursive) {
     final List<RepositoryEntry> toBeRemoved = new ArrayList<RepositoryEntry>();
 
     for (RepositoryEntry entry : cachedEntries) {
@@ -173,7 +173,7 @@ public abstract class EntryCache implements Cache {
    * @param kind    Entry kind
    * @return List of entries matching given pattern.
    */
-  public final synchronized List<RepositoryEntry> findByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
+  public final synchronized List<RepositoryEntry> findEntriesByPattern(final Pattern pattern, final RepositoryEntry.Kind kind) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + pattern + "] of kind [" + kind + "]");
     }
@@ -195,11 +195,13 @@ public abstract class EntryCache implements Cache {
   /**
    * Finds entry names containing given search string.
    *
-   * @param searchString Entry name search string.
-   * @param startDir     Directory/path to start in.
-   * @return List of entries with names matching given search string.
+   * @param searchString   Entry name search string.
+   * @param startDir       Directory/path to start in.
+   * @param includeAuthors If true, also the entry's author string will be included in the search.
+   * @return List of entries with names (and/or author) matching given search string.
    */
-  public final synchronized List<RepositoryEntry> findEntry(final String searchString, final String startDir) {
+  public final synchronized List<RepositoryEntry> findEntries(final String searchString, final String startDir,
+                                                              final boolean includeAuthors) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
     }
@@ -211,6 +213,12 @@ public abstract class EntryCache implements Cache {
         hit = true;
         if (entry.getName().contains(searchString)) {
           result.add(entry);
+        } else {
+          if (includeAuthors) {
+            if (entry.getAuthor().contains(searchString)) {
+              result.add(entry);
+            }
+          }
         }
       } else {
         if (hit) {

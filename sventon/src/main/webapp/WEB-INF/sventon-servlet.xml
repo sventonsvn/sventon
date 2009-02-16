@@ -150,6 +150,7 @@
   <bean id="searchEntriesController" class="org.sventon.web.ctrl.template.SearchEntriesController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="searchEntriesResult"/>
+    <property name="includeAuthorInSearch" value="true"/>
   </bean>
 
   <bean id="showLogsController" class="org.sventon.web.ctrl.template.ShowLogController" parent="abstractTemplateController">

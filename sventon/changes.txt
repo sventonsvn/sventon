@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1496] Added: Feature #4116 - Possibility to search entries by author.
+
 [1488] Release 2.0.2 (2009-02-10)
 [1482] Fixed: Bug #15238 - EntryCache population bug.
 [1476] Fixed: Bug #15182 - Append trailing slash to URL.

@@ -228,8 +228,7 @@
     <constructor-arg index="0" ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.cache.entrycache.EntryCacheManager"
-        destroy-method="shutdown">
+  <bean id="entryCacheManager" class="org.sventon.cache.entrycache.EntryCacheManager" destroy-method="shutdown">
     <constructor-arg ref="configDirectory"/>
   </bean>
 

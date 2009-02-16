@@ -36,6 +36,11 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
   public static final String START_DIR_PARAMETER = "startDir";
 
+  private boolean includeAuthorInSearch;
+
+  /**
+   * Available search types.
+   */
   public enum SearchType {
     TEXT,
     CAMELCASE
@@ -59,10 +64,10 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
     if (isAllUpperCase(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");
-      entries.addAll(getCache().findEntryByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
+      entries.addAll(getCache().findEntriesByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
       model.put("searchType", SearchType.CAMELCASE);
     } else {
-      entries.addAll(getCache().findEntry(command.getName(), searchString, startDir));
+      entries.addAll(getCache().findEntries(command.getName(), searchString, startDir, includeAuthorInSearch));
       model.put("searchType", SearchType.TEXT);
     }
 
@@ -90,4 +95,12 @@ public final class SearchEntriesController extends AbstractTemplateController {
   private boolean isAllUpperCase(final String str) {
     return str.toUpperCase().equals(str);
   }
+
+  /**
+   * @param includeAuthorInSearch True if the entry's author string should be included in the search.
+   */
+  public void setIncludeAuthorInSearch(final boolean includeAuthorInSearch) {
+    this.includeAuthorInSearch = includeAuthorInSearch;
+  }
+
 }
