@@ -117,7 +117,9 @@
               ${entry.revision}
             </a>
           </td>
-          <td class="sventonCol7">${entry.author}</td>
+          <td class="sventonCol7">
+            <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.author}"/>
+          </td>
           <td class="sventonCol8">
             <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
               <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>

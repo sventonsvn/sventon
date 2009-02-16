@@ -27,9 +27,24 @@ public final class SearchHitDecoratorTag extends TagSupport {
 
   private static final long serialVersionUID = 1174478203198572953L;
 
+  /**
+   * CSS class to use.
+   */
   private String cssName;
+
+  /**
+   * Search type, 'TEXT' or 'CAMELCASE'.
+   */
   private String searchType;
+
+  /**
+   * The string to search for.
+   */
   private String searchString;
+
+  /**
+   * The string to search in.
+   */
   private String text;
 
   /**
@@ -61,10 +76,13 @@ public final class SearchHitDecoratorTag extends TagSupport {
       throw new IllegalArgumentException("No CSS name specified!");
     }
 
-    final StringBuilder work = new StringBuilder(text);
+    final StringBuilder work = new StringBuilder(StringUtils.trimToEmpty(text));
     if (StringUtils.trimToEmpty(searchType).equals(SearchEntriesController.SearchType.TEXT.name())) {
-      work.insert(work.indexOf(searchString), "<span class=\"" + cssName + "\">");
-      work.insert(work.indexOf(searchString) + searchString.length(), "</span>");
+      final int offset = work.indexOf(searchString);
+      if (offset >= 0) {
+        work.insert(offset + searchString.length(), "</span>");
+        work.insert(offset, "<span class=\"" + cssName + "\">");
+      }
     }
     return work.toString();
   }

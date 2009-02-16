@@ -82,7 +82,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntryByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
+  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
@@ -90,17 +90,18 @@ public final class CacheGatewayImpl implements CacheGateway {
     if (rootDir.endsWith("/")) {
       rootDir = rootDir.substring(0, rootDir.length() - 1);
     }
-    return cache.findByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
+    return cache.findEntriesByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntry(final RepositoryName repositoryName, final String searchString, final String startDir)
+  public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
+                                         final String startDir, final boolean includeAuthors)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findEntry(searchString, startDir);
+    return cache.findEntries(searchString, startDir, includeAuthors);
   }
 
   /**
@@ -109,7 +110,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), DIR);
+    return cache.findEntriesByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), DIR);
   }
 
   /**

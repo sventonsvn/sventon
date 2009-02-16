@@ -36,16 +36,15 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryInPath() throws Exception {
     final CacheGateway cache = createCache();
-    assertEquals(1, cache.findEntry(repositoryName, "html", "/trunk/src/").size());
-
-    assertEquals(5, cache.findEntry(repositoryName, "java", "/").size());
-    assertEquals(1, cache.findEntry(repositoryName, "code", "/").size());
+    assertEquals(1, cache.findEntries(repositoryName, "html", "/trunk/src/", false).size());
+    assertEquals(5, cache.findEntries(repositoryName, "java", "/", false).size());
+    assertEquals(1, cache.findEntries(repositoryName, "code", "/", false).size());
   }
 
   public void testFindEntryByCamelCase() throws Exception {
     final CacheGateway cache = createCache();
     final CamelCasePattern ccPattern = new CamelCasePattern("DF");
-    assertEquals(2, cache.findEntryByCamelCase(repositoryName, ccPattern, "/trunk/").size());
+    assertEquals(2, cache.findEntriesByCamelCase(repositoryName, ccPattern, "/trunk/").size());
   }
 
   public void testFindDirectories() throws Exception {
