@@ -44,9 +44,6 @@
     </td>
   </tr>
 
-  <c:set var="latestChangedPaths" value="${details.changedPaths}"/>
-  <jsp:useBean id="latestChangedPaths" type="java.util.Map"/>
-
   <tr>
     <td colspan="2">
       <%=HTMLCreator.createChangedPathsTable(details.getChangedPaths(), details.getRevision(), null, "", name,
