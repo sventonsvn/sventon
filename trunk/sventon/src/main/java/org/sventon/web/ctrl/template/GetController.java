@@ -142,6 +142,7 @@ public class GetController extends AbstractTemplateController {
             thumbnailData = createThumbnail(repository, command);
             logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
             objectCache.put(cacheKey, thumbnailData);
+            objectCache.flush();
           }
         } else {
           // Cache is not used - always recreate the thumbnail
