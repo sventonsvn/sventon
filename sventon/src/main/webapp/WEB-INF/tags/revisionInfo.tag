@@ -20,7 +20,7 @@
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 
 <%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
-<%@ attribute name="details" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
+<%@ attribute name="logEntry" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
@@ -29,16 +29,16 @@
   <tr>
     <td>
       <table>
-        <tr><td><b><spring:message code="revision"/>:</b></td><td>${details.revision}</td></tr>
+        <tr><td><b><spring:message code="revision"/>:</b></td><td>${logEntry.revision}</td></tr>
         <tr><td><b><spring:message code="date"/>:</b></td>
           <td>
-            <span onmouseover="Tip('<sventon-ui:age date="${details.date}"/>');">
-              <fmt:formatDate type="both" value="${details.date}" dateStyle="short" timeStyle="short"/>
+            <span onmouseover="Tip('<sventon-ui:age date="${logEntry.date}"/>');">
+              <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
             </span>
           </td>
         </tr>
-        <tr><td><b><spring:message code="author"/>:</b></td><td>${details.author}</td></tr>
-        <tr><td valign="top"><b><spring:message code="message"/>:</b></td><td>${fn:replace(fn:escapeXml(details.message), br, '<br>')}</td></tr>
+        <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
+        <tr><td valign="top"><b><spring:message code="message"/>:</b></td><td>${fn:replace(fn:escapeXml(logEntry.message), br, '<br>')}</td></tr>
         <tr><td colspan="2" valign="top"><b><spring:message code="paths.changed"/>:</b></td></tr>
       </table>
     </td>
@@ -46,7 +46,7 @@
 
   <tr>
     <td colspan="2">
-      <%=HTMLCreator.createChangedPathsTable(details.getChangedPaths(), details.getRevision(), null, "", name,
+      <%=HTMLCreator.createChangedPathsTable(logEntry.getChangedPaths(), logEntry.getRevision(), null, "", name,
           keepVisible.booleanValue(), linkToHead.booleanValue(), response)%>
     </td>
   </tr>

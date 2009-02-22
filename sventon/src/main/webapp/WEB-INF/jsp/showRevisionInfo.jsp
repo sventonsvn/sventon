@@ -60,7 +60,7 @@
   <table class="sventonLatestCommitInfoTableWide">
     <tr>
       <td>
-        <sventon:revisionInfo name="${command.name}" details="${revisionInfo}" keepVisible="false" linkToHead="false" />
+        <sventon:revisionInfo name="${command.name}" logEntry="${revisionInfo}" keepVisible="false" linkToHead="false" />
       </td>
     </tr>
   </table>
