@@ -1,8 +1,8 @@
 package org.sventon.web.command;
 
 import junit.framework.TestCase;
-import org.springframework.validation.BindException;
 import org.springframework.mock.web.MockServletContext;
+import org.springframework.validation.BindException;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;

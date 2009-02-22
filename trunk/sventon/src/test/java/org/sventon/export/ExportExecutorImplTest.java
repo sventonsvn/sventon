@@ -4,10 +4,10 @@ import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.sventon.appl.ConfigDirectory;
-import org.sventon.util.WebUtils;
 import org.sventon.TestUtils;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
+import org.sventon.util.WebUtils;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 

@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class ListConfigurationsControllerTest extends TestCase {
 
   public void testHandleRequestInternal() {
-    
+
   }
-  
+
 }

@@ -13,7 +13,6 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.ArrayList;
 import java.util.List;
