@@ -1,9 +1,9 @@
 package org.sventon.web;
 
 import junit.framework.TestCase;
-import org.sventon.model.Credentials;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.model.Credentials;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +24,7 @@ public class AbstractHttpAuthenticationHandlerTest extends TestCase {
     }
   };
 
-  public void testIsLoginAttempt() throws Exception{
+  public void testIsLoginAttempt() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     assertFalse(handler.isLoginAttempt(request));
 

@@ -1,15 +1,15 @@
 package org.sventon.cache.entrycache;
 
 import junit.framework.TestCase;
+import org.springframework.mock.web.MockServletContext;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
-import org.sventon.appl.RevisionUpdate;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.appl.RevisionUpdate;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
-import org.springframework.mock.web.MockServletContext;
 
 import java.util.*;
 
