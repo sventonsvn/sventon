@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1505] Fixed: Bug #15304 - Show latest revision info broken.
+
 [1500] Release 2.0.3 (2009-02-18)
 [1497] Fixed: Bug #15086 - User based auth broken (since 2.0.0).
 [1496] Added: Feature #4116 - Possibility to search entries by author.

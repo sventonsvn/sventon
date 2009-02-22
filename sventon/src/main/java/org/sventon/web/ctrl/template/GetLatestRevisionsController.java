@@ -49,8 +49,8 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
 
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
-      revisions.addAll(getRepositoryService().getRevisions(command.getName(), repository, -1, FIRST_REVISION, "/",
-          revisionCount, false));
+      revisions.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision, FIRST_REVISION,
+          "/", revisionCount, false));
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
