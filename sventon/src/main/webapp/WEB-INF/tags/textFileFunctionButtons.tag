@@ -21,7 +21,7 @@
   <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
-  <c:param name="name" value="${command.name}" />
+  <c:param name="revision" value="${command.revision}" />
 </c:url>
 <c:url var="blameLinkUrl" value="/repos/${command.name}/blame${command.path}">
   <c:param name="revision" value="${command.revision}" />
