@@ -372,8 +372,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  final ModelAndView prepareExceptionModelAndView(final BindException exception,
-                                                  final BaseCommand command) {
+  final ModelAndView prepareExceptionModelAndView(final BindException exception, final BaseCommand command) {
     final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(command.getName());
     final Map<String, Object> model = exception.getModel();
     model.put("command", command);

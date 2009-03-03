@@ -108,8 +108,6 @@ public final class ShowFileController extends AbstractTemplateController impleme
     final SVNProperties fileProperties = getRepositoryService().getFileProperties(
         repository, command.getPath(), command.getRevisionNumber());
 
-    logger.debug(fileProperties);
-
     final String charset = userRepositoryContext.getCharset();
     logger.debug("Using charset encoding: " + charset);
 
