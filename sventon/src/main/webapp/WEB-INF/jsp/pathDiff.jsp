@@ -83,7 +83,7 @@
                     <c:param name="revision" value="${command.toRevision}"/>
                   </c:url>
 
-                  <td valign="top"><i><%= actionType == null ? "" : actionType %></i></td>
+                  <td valign="top"><i><%= actionType == null ? "" : actionType.name() %></i></td>
                   <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
                   <td><a href="${goToUrl}?revision=${command.toRevision}" title="Show file">${row.path}</a></td>
                   <% } else if (LogEntryActionType.DELETED == actionType) { %>

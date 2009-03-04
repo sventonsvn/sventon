@@ -48,5 +48,5 @@
   </c:otherwise>
 </c:choose>
 <input type="button" class="btn" value="<spring:message code="show-all-details.button.text"/>" onclick="toggleLogDetails(${fn:length(logEntriesPage)}); toggleButtonText(this, '<spring:message code="show-all-details.button.text"/>', '<spring:message code="hide-all-details.button.text"/>');"/>
-<input type="checkbox" ${stopOnCopy ? 'checked="checked"' : ''} onclick="document.location.href='${showLogUrl}';"/>
+<input type="checkbox" <c:if test="${stopOnCopy}">checked="checked"</c:if> onclick="document.location.href='${showLogUrl}';"/>
 <spring:message code="stop-on-copy.button.text"/>
