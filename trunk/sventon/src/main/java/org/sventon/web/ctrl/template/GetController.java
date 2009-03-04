@@ -171,7 +171,7 @@ public class GetController extends AbstractTemplateController {
     } catch (IllegalStateException ise) {
       logger.debug("Could not get mimeType for file as an ApplicationContext does not exist. Using default");
     }
-    return mimeType;
+    return mimeType != null ? mimeType : WebUtils.APPLICATION_OCTET_STREAM;
   }
 
   protected boolean isImageFile(final String path) {

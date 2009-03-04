@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1514] Fixed: Bug #15311 - Does not work on WebSphere 6.1.
+
 [1510] Release 2.0.4 (2009-02-22)
 [1505] Fixed: Bug #15304 - Show latest revision info broken.
 

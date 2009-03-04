@@ -58,7 +58,7 @@
   </tr>
   <tr>
     <td colspan="2">
-      <div id="latestCommitInfoDiv" ${param.showlatestrevinfo eq null or param.showlatestrevinfo eq 'false' ? 'style="display:none"' : ''} >
+      <div id="latestCommitInfoDiv" style="display: ${param.showlatestrevinfo eq null or param.showlatestrevinfo eq 'false' ? 'none' : ''};" >
         <%@ include file="/WEB-INF/jsp/ajax/latestRevisions.jsp"%>
       </div>
     </td>
