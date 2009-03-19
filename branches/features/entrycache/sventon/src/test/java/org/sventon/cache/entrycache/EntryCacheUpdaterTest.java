@@ -12,11 +12,12 @@ import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
+import java.io.File;
 
 public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final EntryCache entryCache = new MemoryCache();
+    final EntryCache entryCache = new EntryCacheImpl(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 

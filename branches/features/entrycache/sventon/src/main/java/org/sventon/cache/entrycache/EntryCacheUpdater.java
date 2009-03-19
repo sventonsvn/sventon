@@ -136,7 +136,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
         entryCache.clear();
         lastRevision = repositoryService.getLatestRevision(repository);
         addDirectories(entryCache, repository, "/", lastRevision, repositoryService);
-        entryCache.setCachedRevision(lastRevision);
+        entryCache.setLatestCachedRevisionNumber(lastRevision);
         if (revisionUpdate.isFlushAfterUpdate()) {
           try {
             entryCache.flush();
@@ -150,7 +150,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     } else {
       // Initial population has already been performed - only apply changes for now.
 
-      if (lastRevision > entryCache.getCachedRevision()) {
+      if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
 
         // One logEntry is one commit (or revision)
         for (final SVNLogEntry logEntry : revisions) {
@@ -191,7 +191,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
             LOGGER.error("Unable to update entryCache", svnex);
           }
         }
-        entryCache.setCachedRevision(lastRevision);
+        entryCache.setLatestCachedRevisionNumber(lastRevision);
         if (revisionUpdate.isFlushAfterUpdate()) {
           try {
             entryCache.flush();
@@ -326,12 +326,13 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   private void addDirectories(final EntryCache entryCache, final SVNRepository repository, final String path,
                               final long revision, final RepositoryService repositoryService) throws SVNException {
 
-    LOGGER.debug("Cached entries: " + entryCache.getSize());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Cached entries: " + entryCache.getSize());
+    }
+
     final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
     for (final RepositoryEntry entry : entriesList) {
-      if (!entryCache.add(entry)) {
-        LOGGER.warn("Unable to add already existing entry to cache: " + entry.toString());
-      }
+      entryCache.add(entry);
       if (entry.getKind() == RepositoryEntry.Kind.DIR) {
         final String pathToAdd = path + entry.getName() + "/";
         LOGGER.debug("Adding: " + pathToAdd);

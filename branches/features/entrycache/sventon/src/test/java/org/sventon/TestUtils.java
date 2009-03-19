@@ -50,7 +50,7 @@ public final class TestUtils {
     return new SVNLogEntry(changedPaths, revision, author, date, message);
   }
 
-  public static final Map<String, SVNLock> getLocksStub(final String path) {
+  public static Map<String, SVNLock> getLocksStub(final String path) {
     final Map<String, SVNLock> lockMap = new HashMap<String, SVNLock>();
     lockMap.put(path, new SVNLock(path, "id", "TestOwner", "Comment", new Date(), null));
     return lockMap;

@@ -51,7 +51,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final DiskCache cache = new DiskCache(cacheDirectory);
+    final EntryCache cache = new EntryCacheImpl(cacheDirectory, true);
     cache.init();
     return cache;
   }
