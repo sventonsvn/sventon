@@ -21,13 +21,11 @@ import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.cache.revisioncache.RevisionCacheManager;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.DIR;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Gateway class used to access the caches.
@@ -82,22 +80,8 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
-      throws CacheException {
-    final EntryCache cache = entryCacheManager.getCache(repositoryName);
-    assertCacheExists(cache, repositoryName);
-    String rootDir = startDir;
-    if (rootDir.endsWith("/")) {
-      rootDir = rootDir.substring(0, rootDir.length() - 1);
-    }
-    return cache.findEntriesByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                         final String startDir, final boolean includeAuthors)
+                                           final String startDir, final boolean includeAuthors)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
@@ -107,10 +91,25 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
+  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
+      throws CacheException {
+//    final EntryCache cache = entryCacheManager.getCache(repositoryName);
+//    assertCacheExists(cache, repositoryName);
+//    String rootDir = startDir;
+//    if (rootDir.endsWith("/")) {
+//      rootDir = rootDir.substring(0, rootDir.length() - 1);
+//    }
+//    return cache.findEntriesByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findEntriesByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), DIR);
+    return cache.findDirectories(fromPath);
   }
 
   /**

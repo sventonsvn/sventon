@@ -11,16 +11,6 @@
  */
 package org.sventon.cache.entrycache;
 
-import org.sventon.model.RepositoryEntry;
-import org.sventon.util.RepositoryEntryComparator;
-
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
-import java.util.zip.GZIPInputStream;
-
 /**
  * Simple viewer utility for the sventon entry cache file.
  *
@@ -43,7 +33,7 @@ public final class EntryCacheViewer {
     }
 
     System.out.println("Viewing cache file: " + args[0]);
-
+/*
     final ObjectInputStream inputStream = new ObjectInputStream(new GZIPInputStream(new FileInputStream(args[0])));
     final long cachedRevision = inputStream.readLong();
 
@@ -59,6 +49,7 @@ public final class EntryCacheViewer {
     for (RepositoryEntry entry : entries) {
       System.out.println(entry);
     }
+*/
     System.out.println("--------------------------------------------------------");
     System.out.println("Done.");
 
