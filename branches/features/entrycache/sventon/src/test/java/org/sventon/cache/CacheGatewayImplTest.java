@@ -9,6 +9,7 @@ import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.RepositoryEntry;
 import org.tmatesoft.svn.core.*;
 
 import java.util.*;
@@ -29,7 +30,10 @@ public class CacheGatewayImplTest extends TestCase {
     final EntryCache entryCache = new EntryCacheImpl(new File("test"));
     entryCache.init();
     cacheManager.addCache(repositoryName, entryCache);
-    entryCache.add(TestUtils.getDirectoryList());
+
+    for (RepositoryEntry repositoryEntry : TestUtils.getDirectoryList()) {
+      entryCache.add(repositoryEntry);
+    }
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);
     return cache;
