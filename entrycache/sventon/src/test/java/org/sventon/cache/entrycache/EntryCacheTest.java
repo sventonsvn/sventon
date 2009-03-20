@@ -10,6 +10,12 @@ import java.util.List;
 
 public class EntryCacheTest extends TestCase {
 
+  private void addAll(EntryCache entryCache, List<RepositoryEntry> entries) {
+    for (RepositoryEntry repositoryEntry : entries) {
+      entryCache.add(repositoryEntry);
+    }
+  }
+
   public void testEntryCache() throws Exception {
     final EntryCache cache = createCache();
     assertEquals(0, cache.getLatestCachedRevisionNumber());
@@ -23,54 +29,54 @@ public class EntryCacheTest extends TestCase {
   }
 
   public void testEntryCacheClear() throws Exception {
-    final EntryCache cache = createCache();
-    assertEquals(0, cache.getSize());
-    cache.add(TestUtils.getDirectoryList());
-    assertEquals(13, cache.getSize());
-    cache.clear();
-    assertEquals(0, cache.getSize());
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
+    entryCache.clear();
+    assertEquals(0, entryCache.getSize());
   }
 
   public void testEntryCacheAdd() throws Exception {
-    final EntryCache cache = createCache();
-    assertEquals(0, cache.getSize());
-    cache.add(TestUtils.getDirectoryList());
-    assertEquals(13, cache.getSize());
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
   }
 
   public void testFindEntry() throws Exception {
-    final EntryCache cache = createCache();
-    assertEquals(0, cache.getSize());
-    cache.add(TestUtils.getDirectoryList());
-    assertEquals(13, cache.getSize());
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
 
-    assertEquals(2, cache.findEntries("tag", "/tags/", false).size());
+    assertEquals(2, entryCache.findEntries("tag", "/tags/", false).size());
   }
 
   public void testEntryCacheRemove() throws Exception {
-    final EntryCache cache = createCache();
-    assertEquals(0, cache.getSize());
-    cache.add(TestUtils.getDirectoryList());
-    assertEquals(13, cache.getSize());
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
 
-    cache.removeEntry("/file1.java", false);
-    assertEquals(12, cache.getSize());
+    entryCache.removeEntry("/file1.java", false);
+    assertEquals(12, entryCache.getSize());
 
     // Try to remove again
-    cache.removeEntry("/file1.java", false);
-    assertEquals(12, cache.getSize());
+    entryCache.removeEntry("/file1.java", false);
+    assertEquals(12, entryCache.getSize());
 
     // Recursive must not matter in this case (entry is a file)
-    cache.removeEntry("/file2.html", true);
-    assertEquals(11, cache.getSize());
+    entryCache.removeEntry("/file2.html", true);
+    assertEquals(11, entryCache.getSize());
 
     // Remove the 'trunk' recursively (trailing slash keeps the dir itself)
-    cache.removeEntry("/trunk/", true);
-    assertEquals(4, cache.getSize());
+    entryCache.removeEntry("/trunk/", true);
+    assertEquals(4, entryCache.getSize());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
-    cache.removeEntry("/tags", true);
-    assertEquals(1, cache.getSize());
+    entryCache.removeEntry("/tags", true);
+    assertEquals(1, entryCache.getSize());
 
   }
 

@@ -53,13 +53,6 @@ public interface EntryCache extends Cache {
   void add(RepositoryEntry entry);
 
   /**
-   * Adds one or more entries to the cache.
-   *
-   * @param entries The entries to parse and add
-   */
-  void add(List<RepositoryEntry> entries);
-
-  /**
    * Clears the entire cache.
    */
   void clear();

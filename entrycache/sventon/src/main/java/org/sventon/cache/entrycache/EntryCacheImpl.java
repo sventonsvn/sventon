@@ -137,20 +137,6 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void add(final List<RepositoryEntry> entries) {
-    final CompassTemplate template = new CompassTemplate(compass);
-    template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
-        for (RepositoryEntry entry : entries) {
-          session.save(entry);
-        }
-      }
-    });
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public final void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
