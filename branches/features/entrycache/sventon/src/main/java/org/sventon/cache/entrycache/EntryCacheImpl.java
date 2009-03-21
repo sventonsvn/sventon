@@ -60,7 +60,7 @@ public class EntryCacheImpl implements EntryCache {
    * @param cacheRootDirectory Cache root directory
    * @param useDiskStore       If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public EntryCacheImpl(File cacheRootDirectory, final boolean useDiskStore) {
+  public EntryCacheImpl(final File cacheRootDirectory, final boolean useDiskStore) {
     this.cacheDirectory = new File(cacheRootDirectory, "entrycache");
     this.useDiskStore = useDiskStore;
   }
@@ -125,11 +125,13 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void add(final RepositoryEntry entry) {
+  public final void add(final RepositoryEntry... entries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
-        session.save(entry);
+        for (RepositoryEntry entry : entries) {
+          session.save(entry);
+        }
       }
     });
   }

@@ -46,11 +46,11 @@ public interface EntryCache extends Cache {
   public abstract void flush() throws CacheException;
 
   /**
-   * Adds one entry to the cache.
+   * Adds entries to the cache.
    *
-   * @param entry The entry to parse and add
+   * @param entries   The entries to parse and add
    */
-  void add(RepositoryEntry entry);
+  void add(final RepositoryEntry... entries);
 
   /**
    * Clears the entire cache.
