@@ -79,6 +79,7 @@ public class EntryCacheImpl implements EntryCache {
 
     compassConfiguration.setSetting(CompassEnvironment.CONNECTION, connectionString)
         .setSetting(CompassEnvironment.DEBUG, String.valueOf(true))
+        .setSetting(CompassEnvironment.NAME, cacheDirectory.getParent())
         .addClass(RepositoryEntry.class);
     compass = compassConfiguration.buildCompass();
     cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
@@ -177,7 +178,8 @@ public class EntryCacheImpl implements EntryCache {
     final CompassTemplate template = new CompassTemplate(compass);
     final List<RepositoryEntry> result = template.execute(new CompassCallback<List<RepositoryEntry>>() {
       public List<RepositoryEntry> doInCompass(CompassSession session) throws CompassException {
-        return toEntriesList(session.find("path:" + startDir + "* name:*" + searchString + "*"));
+        return toEntriesList(session.find("path:" + startDir + "* (name:*" + searchString + "*" +
+            " OR lastAuthor:*" + searchString + "*)"));
       }
     });
 
