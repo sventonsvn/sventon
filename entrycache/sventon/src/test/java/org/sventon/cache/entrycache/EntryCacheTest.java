@@ -53,6 +53,16 @@ public class EntryCacheTest extends TestCase {
     assertEquals(2, entryCache.findEntries("tag", "/tags/", false).size());
   }
 
+  public void testFindEntryByAuthor() throws Exception {
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
+
+    assertEquals(11, entryCache.findEntries("jesper", "/", false).size());
+    assertEquals(2, entryCache.findEntries("jesper", "/tags/", false).size());
+  }
+
   public void testEntryCacheRemove() throws Exception {
     final EntryCache entryCache = createCache();
     assertEquals(0, entryCache.getSize());
