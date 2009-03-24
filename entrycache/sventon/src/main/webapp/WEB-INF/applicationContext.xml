@@ -67,10 +67,7 @@
   <bean id="application" class="org.sventon.appl.Application" init-method="init">
     <constructor-arg ref="configDirectory"/>
     <constructor-arg value="sventon_config.properties"/>
-    <property name="entryCacheManager" ref="entryCacheManager"/>
-    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
-    <property name="objectCacheManager" ref="objectCacheManager"/>
-    <property name="revisionCacheManager" ref="revisionCacheManager"/>
+    <property name="cacheManagers" ref="cacheManagers"/>
     <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
   </bean>
@@ -108,7 +105,7 @@
 
   <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
-  <bean id="objectCacheManager" class="org.sventon.cache.objectcache.ObjectCacheManager"
+  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager"
         destroy-method="shutdown">
     <constructor-arg index="0" ref="configDirectory"/>
     <constructor-arg index="1" value="1000"/>
@@ -166,7 +163,7 @@
   </bean>
 
   <!-- Monitors the repository and polls for changes -->
-  <bean id="revisionObservable" class="org.sventon.appl.RevisionObservableImpl">
+  <bean id="revisionObservable" class="org.sventon.repository.RevisionObservableImpl">
     <constructor-arg ref="observerList"/>
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
@@ -175,6 +172,13 @@
     <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
   </bean>
 
+  <util:list id="cacheManagers">
+    <ref local="entryCacheManager"/>
+    <ref local="logMessageCacheManager"/>
+    <ref local="objectCacheManager"/>
+    <ref local="revisionCacheManager"/>
+  </util:list>
+  
   <!-- List of RevisionObservers registered to observe repository changes -->
   <util:list id="observerList">
     <ref local="entryCacheUpdater"/>
@@ -184,7 +188,7 @@
   </util:list>
 
   <!-- NOTE: Make sure to change the parameters below! -->
-  <bean id="mailNotifier" class="org.sventon.mail.MailNotifier" init-method="init">
+  <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier" init-method="init">
     <property name="application" ref="application"/>
     <property name="baseUrl" value="http://yourserver.com/svn/"/>
     <property name="host" value="smtp.yourserver.com"/>
@@ -207,12 +211,12 @@
   </util:list>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="revisionCacheUpdater" class="org.sventon.cache.revisioncache.RevisionCacheUpdater">
+  <bean id="revisionCacheUpdater" class="org.sventon.repository.observer.RevisionCacheUpdater">
     <constructor-arg index="0" ref="revisionCacheManager"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="entryCacheUpdater" class="org.sventon.cache.entrycache.EntryCacheUpdater">
+  <bean id="entryCacheUpdater" class="org.sventon.repository.observer.EntryCacheUpdater">
     <constructor-arg index="0" ref="entryCacheManager"/>
     <constructor-arg index="1" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
@@ -220,19 +224,19 @@
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="logMessageCacheUpdater" class="org.sventon.cache.logmessagecache.LogMessageCacheUpdater">
+  <bean id="logMessageCacheUpdater" class="org.sventon.repository.observer.LogMessageCacheUpdater">
     <constructor-arg index="0" ref="logMessageCacheManager"/>
   </bean>
 
-  <bean id="revisionCacheManager" class="org.sventon.cache.revisioncache.RevisionCacheManager">
+  <bean id="revisionCacheManager" class="org.sventon.appl.RevisionCacheManager">
     <constructor-arg index="0" ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.cache.entrycache.EntryCacheManager" destroy-method="shutdown">
+  <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager" destroy-method="shutdown">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logMessageCacheManager" class="org.sventon.cache.logmessagecache.LogMessageCacheManager">
+  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager">
     <constructor-arg index="0" ref="configDirectory"/>
     <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
   </bean>

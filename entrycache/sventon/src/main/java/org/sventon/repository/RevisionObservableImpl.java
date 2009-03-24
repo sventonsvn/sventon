@@ -9,14 +9,17 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.RepositoryConnectionFactory;
+import org.sventon.appl.Application;
+import org.sventon.appl.ObjectCacheManager;
+import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheManager;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.observer.RevisionObserver;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;

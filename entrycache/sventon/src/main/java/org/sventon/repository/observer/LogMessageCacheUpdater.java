@@ -9,15 +9,16 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logmessagecache;
+package org.sventon.repository.observer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.appl.AbstractRevisionObserver;
-import org.sventon.appl.RevisionUpdate;
+import org.sventon.appl.LogMessageCacheManager;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;

@@ -1,9 +1,14 @@
-package org.sventon.appl;
+package org.sventon.repository;
 
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
+import org.sventon.repository.observer.RevisionObserver;
+import org.sventon.repository.RevisionUpdate;
+import org.sventon.appl.ConfigDirectory;
+import org.sventon.appl.Application;
+import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.service.RepositoryService;
