@@ -13,12 +13,12 @@ package org.sventon.cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.appl.EntryCacheManager;
+import org.sventon.appl.LogMessageCacheManager;
+import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.revisioncache.RevisionCache;
-import org.sventon.cache.revisioncache.RevisionCacheManager;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;

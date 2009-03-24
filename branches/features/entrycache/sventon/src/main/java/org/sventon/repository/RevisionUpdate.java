@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.repository;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * A RevisionUpdate object will be created when a repository change has been detected.
- * The object will be communicated to all {@link RevisionObserver}s and contains the
+ * The object will be communicated to all {@link org.sventon.repository.observer.RevisionObserver}s and contains the
  * new revisions including repository information.
  *
  * @author jesper@sventon.org

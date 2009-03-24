@@ -15,7 +15,7 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
-import org.sventon.cache.objectcache.ObjectCacheManager;
+import org.sventon.appl.ObjectCacheManager;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
 import org.sventon.service.RepositoryServiceImpl;

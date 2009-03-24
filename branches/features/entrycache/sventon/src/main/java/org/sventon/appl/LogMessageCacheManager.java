@@ -9,12 +9,12 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logmessagecache;
+package org.sventon.appl;
 
 import org.apache.lucene.store.FSDirectory;
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.CacheManager;
+import org.sventon.cache.logmessagecache.LogMessageCache;
+import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import java.io.File;

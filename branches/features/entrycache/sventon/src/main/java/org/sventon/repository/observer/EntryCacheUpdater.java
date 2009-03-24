@@ -9,19 +9,20 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.repository.observer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.RepositoryConnectionFactory;
-import org.sventon.appl.AbstractRevisionObserver;
 import org.sventon.appl.Application;
+import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.appl.RevisionUpdate;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.model.LogEntryActionType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
@@ -219,7 +220,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * Modifies an entry (file or directory) in the cache.
    *
    * @param entryCache   The cache instance.
-   * @param entriesToAdd      List of entries to add.
+   * @param entriesToAdd List of entries to add.
    * @param repository   Repository
    * @param logEntryPath The log entry path
    * @param revision     The log revision
@@ -238,7 +239,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * Replaces an entry (file or directory) in the cache.
    *
    * @param entryCache   The cache instance.
-   * @param entriesToAdd      Entries
+   * @param entriesToAdd Entries
    * @param repository   Repository
    * @param logEntryPath The log entry path
    * @param revision     The log revision
@@ -291,7 +292,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Adds an entry (file or directory) to the cache.
    *
-   * @param entriesToAdd      Entries
+   * @param entriesToAdd Entries
    * @param repository   Repository
    * @param logEntryPath The log entry path
    * @param revision     The log revision
@@ -321,7 +322,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * Adds all entries in given path.
    * This method will be recursively called by itself.
    *
-   * @param entriesToAdd           List containing entries to add.
+   * @param entriesToAdd      List containing entries to add.
    * @param repository        Repository
    * @param path              The path to add.
    * @param revision          Revision

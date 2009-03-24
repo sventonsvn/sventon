@@ -9,7 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.repository.observer;
+
+import org.sventon.repository.RevisionUpdate;
 
 import java.util.Observer;
 

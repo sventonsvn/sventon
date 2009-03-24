@@ -1,10 +1,12 @@
-package org.sventon.cache.logmessagecache;
+package org.sventon.repository.observer;
 
 import junit.framework.TestCase;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.sventon.TestUtils;
+import org.sventon.cache.logmessagecache.LogMessageCache;
+import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;

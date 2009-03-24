@@ -9,14 +9,15 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache;
+package org.sventon.appl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryName;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Abstract CacheManager class. To be subclasses by the cache specific managers.
@@ -33,7 +34,7 @@ public abstract class CacheManager<T> {
   /**
    * The cache instances.
    */
-  protected final Map<RepositoryName, T> caches = new HashMap<RepositoryName, T>();
+  protected final Map<RepositoryName, T> caches = new ConcurrentHashMap<RepositoryName, T>();
 
   /**
    * Gets a cache by name. If cache does not exist yet, it will be created
@@ -41,7 +42,8 @@ public abstract class CacheManager<T> {
    *
    * @param repositoryName Name of cache to get
    * @return The cache instance.
-   * @throws CacheException if cache does not exist.
+   * @throws org.sventon.cache.CacheException
+   *          if cache does not exist.
    */
   public final T getCache(final RepositoryName repositoryName) throws CacheException {
     T cache = caches.get(repositoryName);
