@@ -11,14 +11,12 @@
  */
 package org.sventon.appl;
 
-import org.apache.lucene.store.FSDirectory;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Handles LogMessageCache instances.
@@ -32,24 +30,15 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    */
   private final File repositoriesDirectory;
 
-  /**
-   * Lucene Analyzer to use.
-   *
-   * @see org.apache.lucene.analysis.Analyzer
-   */
-  private final String analyzerClassName;
 
   /**
    * Constructor.
    *
-   * @param configDirectory   Root directory to use.
-   * @param analyzerClassName Analyzer to use.
+   * @param configDirectory Root directory to use.
    */
-  public LogMessageCacheManager(final ConfigDirectory configDirectory, final String analyzerClassName) {
+  public LogMessageCacheManager(final ConfigDirectory configDirectory) {
     logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
-    this.analyzerClassName = analyzerClassName;
-    System.setProperty("org.apache.lucene.lockDir", configDirectory.getRepositoriesDirectory().getAbsolutePath());
   }
 
   /**
@@ -57,31 +46,26 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    *
    * @param repositoryName Name of cache instance.
    * @return The created cache instance.
-   * @throws CacheException if unable to create cache or unable to load analyzer.
+   * @throws CacheException if unable to create cache.
    */
   protected LogMessageCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
-    final FSDirectory fsDirectory;
-    try {
-      final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
-      cachePath.mkdirs();
-      fsDirectory = FSDirectory.getDirectory(cachePath);
-      logger.debug("Log cache dir: " + fsDirectory.getFile().getAbsolutePath());
-    } catch (IOException ioex) {
-      throw new CacheException("Unable to create LogMessageCache instance", ioex);
-    }
-
-    final Class<?> analyzer;
-    try {
-      logger.debug("Loading analyzer [" + analyzerClassName + "]");
-      analyzer = Class.forName(analyzerClassName);
-    } catch (final ClassNotFoundException cnfe) {
-      throw new CacheException("Unable to load analyzer [" + analyzerClassName + "]", cnfe);
-    }
-    //noinspection unchecked
-    final LogMessageCacheImpl cache = new LogMessageCacheImpl(fsDirectory, (Class) analyzer);
+    final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
+    logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
+    final LogMessageCache cache = new LogMessageCacheImpl(cacheDirectory, true);
     cache.init();
     return cache;
+  }
+
+  /**
+   * Shuts all the caches down.
+   *
+   * @throws CacheException if unable to shutdown caches.
+   */
+  public void shutdown() throws CacheException {
+    for (final LogMessageCache cache : caches.values()) {
+      cache.shutdown();
+    }
   }
 
 }

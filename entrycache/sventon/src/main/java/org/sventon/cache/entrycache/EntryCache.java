@@ -13,6 +13,7 @@ package org.sventon.cache.entrycache;
 
 import org.sventon.cache.Cache;
 import org.sventon.cache.CacheException;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public interface EntryCache extends Cache {
   /**
    * Adds entries to the cache.
    *
-   * @param entries   The entries to parse and add
+   * @param entries The entries to parse and add
    */
   void add(final RepositoryEntry... entries);
 
@@ -69,12 +70,11 @@ public interface EntryCache extends Cache {
   /**
    * Finds entry names containing given search string.
    *
-   * @param searchString   Entry name search string.
-   * @param startDir       Directory/path to start in.
-   * @param includeAuthors If true, also the entry's author string will be included in the search.
+   * @param searchString Entry name search string.
+   * @param startDir     Directory/path to start in.
    * @return List of entries with names (and/or author) matching given search string.
    */
-  List<RepositoryEntry> findEntries(String searchString, String startDir, boolean includeAuthors);
+  List<RepositoryEntry> findEntries(String searchString, String startDir);
 
   /**
    * Finds directories recursively.
@@ -106,4 +106,11 @@ public interface EntryCache extends Cache {
    * @return Latest successfully cached revision number.
    */
   long getLatestCachedRevisionNumber();
+
+  /**
+   * @param camelCasePattern
+   * @param startDir
+   * @return
+   */
+  List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, final String startDir);
 }

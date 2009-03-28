@@ -82,7 +82,7 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
   protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
       for (final SVNLogEntry svnLogEntry : revisions) {
-        logMessageCache.add(new LogMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));
+        logMessageCache.add(new LogMessage(svnLogEntry));
       }
     } catch (CacheException ce) {
       LOGGER.error("Unable to update logMessageCache", ce);

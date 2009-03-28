@@ -13,9 +13,11 @@ import org.sventon.model.RepositoryName;
 import org.sventon.web.command.BaseCommand;
 import static org.sventon.web.ctrl.template.SearchLogsController.SEARCH_STRING_PARAMETER;
 import static org.sventon.web.ctrl.template.SearchLogsController.START_DIR_PARAMETER;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class SearchLogsControllerTest extends TestCase {
     ctrl.setCacheGateway(mockCache);
 
     final List<LogMessage> result = new ArrayList<LogMessage>();
-    result.add(new LogMessage(123, "Revision 123."));
+    result.add(new LogMessage(new SVNLogEntry(null, 123, "jesper", new Date(), "Revision 123.")));
 
     expect(mockCache.find(command.getName(), "abc")).andStubReturn(result);
     replay(mockCache);
