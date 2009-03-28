@@ -63,4 +63,12 @@ public interface LogMessageCache extends Cache {
    * @throws CacheException if unable to clear cache.
    */
   void clear() throws CacheException;
+
+  /**
+   * Shuts down the cache.
+   *
+   * @throws CacheException if unable to shut down cache instance.
+   */
+  public abstract void shutdown() throws CacheException;
+
 }

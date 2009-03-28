@@ -236,9 +236,8 @@
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager">
-    <constructor-arg index="0" ref="configDirectory"/>
-    <constructor-arg index="1" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager" destroy-method="shutdown">
+    <constructor-arg ref="configDirectory"/>
   </bean>
 
   <bean id="exportFileFilter" class="org.sventon.export.ExportFileFilter"/>

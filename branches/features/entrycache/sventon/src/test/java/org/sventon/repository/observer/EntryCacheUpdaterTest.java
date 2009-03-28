@@ -4,17 +4,17 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
-import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.repository.RevisionUpdate;
+import org.sventon.cache.entrycache.EntryCache;
+import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
 
-import java.util.*;
 import java.io.File;
+import java.util.*;
 
 public class EntryCacheUpdaterTest extends TestCase {
 

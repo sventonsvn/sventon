@@ -45,6 +45,9 @@ public final class RepositoryEntry implements Serializable {
   private String name;
 
   @SearchableProperty
+  private String camelCasePattern;
+
+  @SearchableProperty
   private Kind kind;
 
   @SearchableProperty(format = "#000000000000")
@@ -85,10 +88,23 @@ public final class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
 
+    final String entryName = entry.getName();
     id = createId(entryPath, entry);
+    try {
+      camelCasePattern = CamelCasePattern.parse(entryName).getPattern();
+    } catch (IllegalArgumentException e) {
+      // ignore
+    }
     copyEntry(entryPath, entry);
   }
 
+  /**
+   * Creates an Id.
+   *
+   * @param path  Path
+   * @param entry SVN entry
+   * @return Id
+   */
   protected String createId(final String path, final SVNDirEntry entry) {
     return path + entry.getName();
   }
@@ -128,6 +144,15 @@ public final class RepositoryEntry implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets the camel case pattern for this entry's name.
+   *
+   * @return Pattern
+   */
+  public CamelCasePattern getCamelCasePattern() {
+    return new CamelCasePattern(camelCasePattern);
   }
 
   /**

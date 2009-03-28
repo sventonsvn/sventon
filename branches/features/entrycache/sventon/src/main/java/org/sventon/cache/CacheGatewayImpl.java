@@ -19,6 +19,7 @@ import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.revisioncache.RevisionCache;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
@@ -85,22 +86,17 @@ public final class CacheGatewayImpl implements CacheGateway {
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findEntries(searchString, startDir, includeAuthors);
+    return cache.findEntries(searchString, startDir);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
-      throws CacheException {
-//    final EntryCache cache = entryCacheManager.getCache(repositoryName);
-//    assertCacheExists(cache, repositoryName);
-//    String rootDir = startDir;
-//    if (rootDir.endsWith("/")) {
-//      rootDir = rootDir.substring(0, rootDir.length() - 1);
-//    }
-//    return cache.findEntriesByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
-    throw new UnsupportedOperationException();
+  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
+                                                      final String startDir) throws CacheException {
+    final EntryCache cache = entryCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
+    return cache.findEntriesByCamelCasePattern(pattern, startDir);
   }
 
   /**

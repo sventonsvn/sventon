@@ -14,7 +14,7 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.cache.CamelCasePattern;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntrySorter;
@@ -62,7 +62,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
     logger.debug("Searching cache for [" + searchString + "] in directory [" + startDir + "]");
     final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
 
-    if (isAllUpperCase(searchString)) {
+    if (CamelCasePattern.isValid(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");
       entries.addAll(getCache().findEntriesByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
       model.put("searchType", SearchType.CAMELCASE);
@@ -84,16 +84,6 @@ public final class SearchEntriesController extends AbstractTemplateController {
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
-  }
-
-  /**
-   * Checks if all characters in given string is in upper case.
-   *
-   * @param str String.
-   * @return True if all is uppercase.
-   */
-  private boolean isAllUpperCase(final String str) {
-    return str.toUpperCase().equals(str);
   }
 
   /**

@@ -7,6 +7,7 @@ import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
 import org.sventon.cache.CacheException;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * The logging instance.
    */
-  final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Default filename for storing the latest cached revision number.
@@ -32,7 +33,7 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * The cache file.
    */
-  private File cacheFile;
+  private File latestCachedRevisionFile;
 
   /**
    * Cached revision.
@@ -40,18 +41,20 @@ public class EntryCacheImpl implements EntryCache {
   private final AtomicLong cachedRevision = new AtomicLong(0);
 
   private final CompassConfiguration compassConfiguration = new CompassConfiguration();
+
   private final File cacheDirectory;
+
   private Compass compass;
 
   private boolean useDiskStore;
 
   /**
-   * Constructor.
+   * Constructs an in-memory cache instance.
    *
    * @param cacheRootDirectory Cache root directory
    */
   public EntryCacheImpl(final File cacheRootDirectory) {
-    this.cacheDirectory = new File(cacheRootDirectory, "entrycache");
+    this(cacheRootDirectory, false);
   }
 
   /**
@@ -61,7 +64,7 @@ public class EntryCacheImpl implements EntryCache {
    * @param useDiskStore       If true index will be stored to disk. Otherwise it will be kept in memory.
    */
   public EntryCacheImpl(final File cacheRootDirectory, final boolean useDiskStore) {
-    this.cacheDirectory = new File(cacheRootDirectory, "entrycache");
+    this.cacheDirectory = new File(cacheRootDirectory, "cache");
     this.useDiskStore = useDiskStore;
   }
 
@@ -82,7 +85,7 @@ public class EntryCacheImpl implements EntryCache {
         .setSetting(CompassEnvironment.NAME, cacheDirectory.getParent())
         .addClass(RepositoryEntry.class);
     compass = compassConfiguration.buildCompass();
-    cacheFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
+    latestCachedRevisionFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
 
     if (useDiskStore) {
       loadLatestCachedRevisionNumber();
@@ -169,22 +172,29 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final List<RepositoryEntry> findEntries(final String searchString, final String startDir,
-                                                 final boolean includeAuthors) {
+  public final List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = template.execute(new CompassCallback<List<RepositoryEntry>>() {
-      public List<RepositoryEntry> doInCompass(CompassSession session) throws CompassException {
-        return toEntriesList(session.find("path:" + startDir + "* (name:*" + searchString + "*" +
-            " OR lastAuthor:*" + searchString + "*)"));
-      }
-    });
-
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startDir + "* (name:*" +
+        searchString + "*" + " OR lastAuthor:*" + searchString + "*)"));
     logResult(result);
     return result;
+  }
+
+  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, String startDir) {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Finding [" + camelCasePattern + "] starting in [" + startDir + "]");
+    }
+
+    final CompassTemplate template = new CompassTemplate(compass);
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startDir +
+        "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*"));
+    logResult(result);
+    return result;
+
   }
 
   /**
@@ -196,17 +206,12 @@ public class EntryCacheImpl implements EntryCache {
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = template.execute(new CompassCallback<List<RepositoryEntry>>() {
-      public List<RepositoryEntry> doInCompass(CompassSession session) throws CompassException {
-        return toEntriesList(session.find("path:" + startPath + "* kind:DIR"));
-      }
-    });
-
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startPath + "* kind:DIR"));
     logResult(result);
     return result;
   }
 
-  protected List<RepositoryEntry> toEntriesList(final CompassHits compassHits) {
+  protected List<RepositoryEntry> toEntriesList(final CompassDetachedHits compassHits) {
     final List<RepositoryEntry> hits = new ArrayList<RepositoryEntry>(compassHits.length());
     for (CompassHit compassHit : compassHits) {
       hits.add((RepositoryEntry) compassHit.getData());
@@ -234,11 +239,11 @@ public class EntryCacheImpl implements EntryCache {
    * @throws CacheException if unable to save revision number.
    */
   private void saveLatestRevisionNumber() throws CacheException {
-    logger.info("Saving file to disk, " + cacheFile);
+    logger.info("Saving file to disk, " + latestCachedRevisionFile);
     ObjectOutputStream out = null;
     try {
       // Write to a temp file first, to keep the old file just in case.
-      out = new ObjectOutputStream(new FileOutputStream(cacheFile));
+      out = new ObjectOutputStream(new FileOutputStream(latestCachedRevisionFile));
       out.writeLong(getLatestCachedRevisionNumber());
       out.flush();
       out.close();
@@ -256,11 +261,11 @@ public class EntryCacheImpl implements EntryCache {
    * @throws CacheException if unable to read file.
    */
   private void loadLatestCachedRevisionNumber() throws CacheException {
-    logger.info("Loading file from disk, " + cacheFile);
+    logger.info("Loading file from disk, " + latestCachedRevisionFile);
     ObjectInputStream inputStream = null;
-    if (cacheFile.exists()) {
+    if (latestCachedRevisionFile.exists()) {
       try {
-        inputStream = new ObjectInputStream(new FileInputStream(cacheFile));
+        inputStream = new ObjectInputStream(new FileInputStream(latestCachedRevisionFile));
         setLatestCachedRevisionNumber(inputStream.readLong());
         logger.debug("Revision: " + getLatestCachedRevisionNumber());
       } catch (Exception ex) {

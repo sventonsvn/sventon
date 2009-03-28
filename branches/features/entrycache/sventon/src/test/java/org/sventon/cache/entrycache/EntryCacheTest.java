@@ -3,6 +3,7 @@ package org.sventon.cache.entrycache;
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
 import org.sventon.cache.CacheException;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
 
 import java.io.File;
@@ -11,9 +12,7 @@ import java.util.List;
 public class EntryCacheTest extends TestCase {
 
   private void addAll(EntryCache entryCache, List<RepositoryEntry> entries) {
-    for (RepositoryEntry repositoryEntry : entries) {
-      entryCache.add(repositoryEntry);
-    }
+    entryCache.add(entries.toArray(new RepositoryEntry[0]));
   }
 
   public void testEntryCache() throws Exception {
@@ -50,7 +49,8 @@ public class EntryCacheTest extends TestCase {
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
 
-    assertEquals(2, entryCache.findEntries("tag", "/tags/", false).size());
+    assertEquals(2, entryCache.findEntries("tag", "/tags/").size());
+    assertEquals(2, entryCache.findEntries("tag", "/TAGS/").size());
   }
 
   public void testFindEntryByAuthor() throws Exception {
@@ -59,8 +59,8 @@ public class EntryCacheTest extends TestCase {
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
 
-    assertEquals(11, entryCache.findEntries("jesper", "/", false).size());
-    assertEquals(2, entryCache.findEntries("jesper", "/tags/", false).size());
+    assertEquals(11, entryCache.findEntries("jesper", "/").size());
+    assertEquals(2, entryCache.findEntries("jesper", "/tags/").size());
   }
 
   public void testEntryCacheRemove() throws Exception {
@@ -87,28 +87,16 @@ public class EntryCacheTest extends TestCase {
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
     entryCache.removeEntry("/tags", true);
     assertEquals(1, entryCache.getSize());
-
   }
 
-//  public void testEntryCacheFindPattern() throws Exception {
-//    final EntryCache cache = createCache();
-//    assertEquals(0, cache.getSize());
-//    cache.add(TestUtils.getDirectoryList());
-//    assertEquals(13, cache.getSize());
-//
-//    assertEquals(5, cache.findEntriesByPattern(Pattern.compile(".*[12].*"), ANY).size());
-//    assertEquals(5, cache.findEntriesByPattern(Pattern.compile(".*[12].*"), FILE).size());
-//    assertEquals(0, cache.findEntriesByPattern(Pattern.compile(".*[12].*"), DIR).size());
-//
-//    assertEquals(8, cache.findEntriesByPattern(Pattern.compile(".*trunk.*"), ANY).size());
-//    assertEquals(3, cache.findEntriesByPattern(Pattern.compile(".*trunk.*"), DIR).size());
-//
-//    assertEquals(4, cache.findEntriesByPattern(Pattern.compile(".*"), DIR).size());
-//
-//    assertEquals(1, cache.findEntriesByPattern(Pattern.compile(".*/trunk/src/.*"), FILE).size());
-//
-//    assertEquals(1, cache.findEntriesByPattern(Pattern.compile(".*/TrUnK/sRc/.*", Pattern.CASE_INSENSITIVE), FILE).size());
-//  }
+  public void testEntryCacheFindPattern() throws Exception {
+    final EntryCache entryCache = createCache();
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
+    assertEquals(1, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("TDF"), "/").size());
+    assertEquals(2, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("DF"), "/").size());
+  }
 
   private void print(List<RepositoryEntry> entries) {
     for (RepositoryEntry entry : entries) {

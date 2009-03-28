@@ -87,7 +87,7 @@
               </td>
               <td class="sventonCol3">
                 <a href="${listUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                  <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
+                  <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
                 </a>
               </td>
             </c:when>
@@ -99,7 +99,7 @@
               </td>
               <td class="sventonCol3">
                 <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                  <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
+                  <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.friendlyFullEntryName}"/>
                 </a>
               </td>
             </c:otherwise>
@@ -118,7 +118,7 @@
             </a>
           </td>
           <td class="sventonCol7">
-            <sventon-ui:searchHitDecorator cssName="searchHit" searchType="${searchType}" searchString="${searchString}" text="${entry.author}"/>
+            <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.author}"/>
           </td>
           <td class="sventonCol8">
             <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
