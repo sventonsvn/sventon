@@ -155,16 +155,24 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void removeEntry(final String pathAndName, final boolean recursive) {
+  public final void remove(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
-        if (recursive) {
-          session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
-          session.delete(RepositoryEntry.class, pathAndName);
-        } else {
-          session.delete(RepositoryEntry.class, pathAndName);
-        }
+        session.delete(RepositoryEntry.class, pathAndName);
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public final void removeDirectory(final String pathAndName) {
+    final CompassTemplate template = new CompassTemplate(compass);
+    template.execute(new CompassCallbackWithoutResult() {
+      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+        session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
+        session.delete(RepositoryEntry.class, pathAndName);
       }
     });
   }

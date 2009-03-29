@@ -69,23 +69,23 @@ public class EntryCacheTest extends TestCase {
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
 
-    entryCache.removeEntry("/file1.java", false);
+    entryCache.remove("/file1.java");
     assertEquals(12, entryCache.getSize());
 
     // Try to remove again
-    entryCache.removeEntry("/file1.java", false);
+    entryCache.remove("/file1.java");
     assertEquals(12, entryCache.getSize());
 
-    // Recursive must not matter in this case (entry is a file)
-    entryCache.removeEntry("/file2.html", true);
+    // Must not matter in this case (entry is a file)
+    entryCache.removeDirectory("/file2.html");
     assertEquals(11, entryCache.getSize());
 
     // Remove the 'trunk' recursively (trailing slash keeps the dir itself)
-    entryCache.removeEntry("/trunk/", true);
+    entryCache.removeDirectory("/trunk/");
     assertEquals(4, entryCache.getSize());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
-    entryCache.removeEntry("/tags", true);
+    entryCache.removeDirectory("/tags");
     assertEquals(1, entryCache.getSize());
   }
 
