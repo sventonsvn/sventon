@@ -44,6 +44,8 @@
   <table class="sventonEntriesTable">
     <c:set var="rowCount" value="0"/>
     <tr>
+      <th><spring:message code="date"/></th>
+      <th><spring:message code="author"/></th>
       <th><spring:message code="revision"/></th>
       <th><spring:message code="logmessage"/></th>
     </tr>
@@ -52,6 +54,12 @@
         <c:param name="revision" value="${logMessage.revision}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+        <td>
+          <span onmouseover="Tip('<sventon-ui:age date="${logMessage.date}"/>');">
+            <fmt:formatDate type="both" value="${logMessage.date}" dateStyle="short" timeStyle="short"/>
+          </span>
+        </td>
+        <td>${logMessage.author}</td>
         <td valign="top"><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logMessage.revision}</a></td>
         <td>${fn:replace(logMessage.message, br, '<br>')}</td>
       </tr>
@@ -59,6 +67,8 @@
     </c:forEach>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td><b><spring:message code="total"/>:&nbsp;${rowCount}&nbsp;<spring:message code="hits"/></b></td>
+      <td/>
+      <td/>
       <td/>
     </tr>
   </table>
