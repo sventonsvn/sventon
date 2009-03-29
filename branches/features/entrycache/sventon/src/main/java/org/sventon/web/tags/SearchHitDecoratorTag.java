@@ -78,13 +78,17 @@ public final class SearchHitDecoratorTag extends TagSupport {
 
     final StringBuilder work = new StringBuilder(StringUtils.trimToEmpty(text));
     if (StringUtils.trimToEmpty(searchType).equals(SearchEntriesController.SearchType.TEXT.name())) {
-      final int offset = work.indexOf(searchString);
+      final int offset = indexOfIgnoreCase(work.toString(), searchString);
       if (offset >= 0) {
         work.insert(offset + searchString.length(), "</span>");
         work.insert(offset, "<span class=\"" + cssName + "\">");
       }
     }
     return work.toString();
+  }
+
+  protected static int indexOfIgnoreCase(final String work, final String searchString) {
+    return work.toLowerCase().indexOf(searchString.toLowerCase());
   }
 
   /**
