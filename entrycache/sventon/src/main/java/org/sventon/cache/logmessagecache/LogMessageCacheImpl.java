@@ -56,11 +56,11 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * Constructor.
    *
-   * @param cacheRootDirectory Cache root directory
-   * @param useDiskStore       If true index will be stored to disk. Otherwise it will be kept in memory.
+   * @param cacheDirectory Cache directory
+   * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public LogMessageCacheImpl(final File cacheRootDirectory, final boolean useDiskStore) {
-    this.cacheDirectory = new File(cacheRootDirectory, "cache");
+  public LogMessageCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+    this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }
 
