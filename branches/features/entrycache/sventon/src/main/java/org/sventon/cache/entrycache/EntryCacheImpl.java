@@ -60,11 +60,11 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * Constructor.
    *
-   * @param cacheRootDirectory Cache root directory
-   * @param useDiskStore       If true index will be stored to disk. Otherwise it will be kept in memory.
+   * @param cacheDirectory Cache directory
+   * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public EntryCacheImpl(final File cacheRootDirectory, final boolean useDiskStore) {
-    this.cacheDirectory = new File(cacheRootDirectory, "cache");
+  public EntryCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+    this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }
 
