@@ -62,10 +62,15 @@ public interface EntryCache extends Cache {
    * Removes entries from the cache, based by path and file name.
    *
    * @param pathAndName Entry to remove from cache.
-   * @param recursive   True if remove should be performed recursively,
-   *                    requires that {@code pathAndName} is a directory.
    */
-  void removeEntry(String pathAndName, boolean recursive);
+  void remove(String pathAndName);
+
+  /**
+   * Removes a directory entry including all children.
+   *
+   * @param pathAndName Directory entry to remove from cache.
+   */
+  void removeDirectory(final String pathAndName);
 
   /**
    * Finds entry names containing given search string.
