@@ -12,7 +12,7 @@ import java.util.List;
 public class EntryCacheTest extends TestCase {
 
   private void addAll(EntryCache entryCache, List<RepositoryEntry> entries) {
-    entryCache.add(entries.toArray(new RepositoryEntry[0]));
+    entryCache.add(entries.toArray(new RepositoryEntry[entries.size()]));
   }
 
   public void testEntryCache() throws Exception {

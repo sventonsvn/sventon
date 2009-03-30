@@ -84,17 +84,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         .setSetting("compass.engine.highlighter.default.formatter.type", "simple")
         .setSetting("compass.engine.highlighter.default.formatter.simple.pre", "<span class=\"searchhit\">")
         .setSetting("compass.engine.highlighter.default.formatter.simple.post", "</span>")
-
         .setSetting("compass.engine.queryParser.default.allowConstantScorePrefixQuery", "false")
-
-//        .setSetting("compass.engine.highlighter.default.formatter.type", "htmlSpanGradient")
-//        .setSetting("compass.engine.highlighter.default.formatter.htmlSpanGradient.maxScore", "50")
-//        .setSetting("compass.engine.highlighter.default.formatter.htmlSpanGradient.minForegroundColor", "#FFFFFF")
-//        .setSetting("compass.engine.highlighter.default.formatter.htmlSpanGradient.maxForegroundColor", "#000000")
-//        .setSetting("compass.engine.highlighter.default.formatter.htmlSpanGradient.minBackgroundColor", "#FFFFFF")
-//        .setSetting("compass.engine.highlighter.default.formatter.htmlSpanGradient.maxBackgroundColor", "#000000")
-//        .setSetting("compass.engine.highlighter.default.formatter.simple.pre", Matcher.quoteReplacement("<span>"))
-
         .addClass(LogMessage.class);
     compass = compassConfiguration.buildCompass();
   }

@@ -13,6 +13,7 @@ import org.sventon.model.RepositoryEntry;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -167,6 +168,40 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
+  public final void removeAndAdd(final List<RepositoryEntry> entriesToAdd,
+                                 final Map<String, RepositoryEntry.Kind> entriesToDelete) {
+
+    final CompassTemplate template = new CompassTemplate(compass);
+    template.execute(new CompassCallbackWithoutResult() {
+      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+        logger.debug("Applying changes inside transaction...");
+
+        // Apply deletion...
+        for (String id : entriesToDelete.keySet()) {
+          final RepositoryEntry.Kind kind = entriesToDelete.get(id);
+          if (kind == RepositoryEntry.Kind.DIR) {
+            // Directory node deleted
+            logger.debug(id + " is a directory. Doing a recursive delete");
+            session.delete(session.queryBuilder().queryString("path:" + id + "*").toQuery());
+            session.delete(RepositoryEntry.class, id);
+          } else {
+            // Single entry delete
+            session.delete(RepositoryEntry.class, id);
+          }
+        }
+
+        // Apply adds...
+        for (RepositoryEntry entry : entriesToAdd) {
+          session.save(entry);
+        }
+
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public final void removeDirectory(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -192,13 +227,13 @@ public class EntryCacheImpl implements EntryCache {
     return result;
   }
 
-  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, String startDir) {
+  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, String startPath) {
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding [" + camelCasePattern + "] starting in [" + startDir + "]");
+      logger.debug("Finding [" + camelCasePattern + "] starting in [" + startPath + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startDir +
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startPath +
         "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*"));
     logResult(result);
     return result;
