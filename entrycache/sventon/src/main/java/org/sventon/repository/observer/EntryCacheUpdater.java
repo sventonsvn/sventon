@@ -30,10 +30,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class responsible for updating one or more entry cache instances.
@@ -160,6 +157,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       Collections.sort(latestPathsList);
 
       final List<RepositoryEntry> entriesToAdd = new ArrayList<RepositoryEntry>();
+      final Map<String, RepositoryEntry.Kind> entriesToDelete = new HashMap<String, RepositoryEntry.Kind>();
 
       for (final String entryPath : latestPathsList) {
         final SVNLogEntryPath logEntryPath = map.get(entryPath);
@@ -170,21 +168,21 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
             break;
           case DELETED:
             LOGGER.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
-            doEntryCacheDelete(entryCache, repository, logEntryPath, revision);
+            doEntryCacheDelete(entriesToDelete, repository, logEntryPath, revision);
             break;
           case REPLACED:
             LOGGER.debug("Replacing entry in cache: " + logEntryPath.getPath());
-            doEntryCacheReplace(entryCache, entriesToAdd, repository, logEntryPath, revision);
+            doEntryCacheReplace(entriesToAdd, entriesToDelete, repository, logEntryPath, revision);
             break;
           case MODIFIED:
             LOGGER.debug("Updating modified entry in cache: " + logEntryPath.getPath());
-            doEntryCacheModify(entryCache, entriesToAdd, repository, logEntryPath, revision);
+            doEntryCacheModify(entriesToAdd, entriesToDelete, repository, logEntryPath, revision);
             break;
           default:
             throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
-      updateAndFlushCache(entriesToAdd, revision, entryCache, flushAfterUpdate);
+      updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache, flushAfterUpdate);
     } catch (SVNException svnex) {
       LOGGER.error("Unable to update entryCache", svnex);
     }
@@ -197,14 +195,16 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       long revision = repositoryService.getLatestRevision(repository);
       final List<RepositoryEntry> entriesToAdd = new ArrayList<RepositoryEntry>();
       addDirectories(entriesToAdd, repository, "/", revision, repositoryService);
-      updateAndFlushCache(entriesToAdd, revision, entryCache, revisionUpdate.isFlushAfterUpdate());
+      updateAndFlushCache(entriesToAdd, Collections.EMPTY_MAP, revision, entryCache, revisionUpdate.isFlushAfterUpdate());
     } catch (SVNException svnex) {
       LOGGER.error("Unable to populate cache", svnex);
     }
   }
 
-  private void updateAndFlushCache(List<RepositoryEntry> entriesToAdd, long revision, EntryCache entryCache, boolean flushAfterUpdate) {
-    entryCache.add(entriesToAdd.toArray(new RepositoryEntry[entriesToAdd.size()]));
+  private void updateAndFlushCache(final List<RepositoryEntry> entriesToAdd,
+                                   final Map<String, RepositoryEntry.Kind> entriesToDelete,
+                                   final long revision, EntryCache entryCache, boolean flushAfterUpdate) {
+    entryCache.removeAndAdd(entriesToAdd,entriesToDelete);
     entryCache.setLatestCachedRevisionNumber(revision);
 
     if (flushAfterUpdate) {
@@ -219,18 +219,19 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Modifies an entry (file or directory) in the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param entriesToAdd List of entries to add.
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entriesToAdd    List of entries to add.
+   * @param entriesToDelete List of entries to delete.
+   * @param repository      Repository
+   * @param logEntryPath    The log entry path
+   * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheModify(final EntryCache entryCache, final List<RepositoryEntry> entriesToAdd,
+  private void doEntryCacheModify(final List<RepositoryEntry> entriesToAdd,
+                                  final Map<String, RepositoryEntry.Kind> entriesToDelete,
                                   final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                   final long revision) throws SVNException {
 
-    entryCache.remove(logEntryPath.getPath());
+    entriesToDelete.put(logEntryPath.getPath(), RepositoryEntry.Kind.ANY);
     final RepositoryEntry entry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision);
     entriesToAdd.add(entry);
   }
@@ -238,31 +239,33 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * Replaces an entry (file or directory) in the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param entriesToAdd Entries
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entriesToAdd    Entries
+   * @param entriesToDelete List of entries to delete.
+   * @param repository      Repository
+   * @param logEntryPath    The log entry path
+   * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheReplace(final EntryCache entryCache, final List<RepositoryEntry> entriesToAdd,
+  private void doEntryCacheReplace(final List<RepositoryEntry> entriesToAdd,
+                                   final Map<String, RepositoryEntry.Kind> entriesToDelete,
                                    final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                    final long revision) throws SVNException {
 
-    doEntryCacheModify(entryCache, entriesToAdd, repository, logEntryPath, revision);
+    doEntryCacheModify(entriesToAdd, entriesToDelete, repository, logEntryPath, revision);
   }
 
   /**
    * Deletes an entry (file or directory) from the cache.
    *
-   * @param entryCache   The cache instance.
-   * @param repository   Repository
-   * @param logEntryPath The log entry path
-   * @param revision     The log revision
+   * @param entriesToDelete List of entries to delete.
+   * @param repository      Repository
+   * @param logEntryPath    The log entry path
+   * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheDelete(final EntryCache entryCache, final SVNRepository repository,
-                                  final SVNLogEntryPath logEntryPath, final long revision) throws SVNException {
+  private void doEntryCacheDelete(final Map<String, RepositoryEntry.Kind> entriesToDelete,
+                                  final SVNRepository repository, final SVNLogEntryPath logEntryPath,
+                                  final long revision) throws SVNException {
 
     // Have to find out if deleted entry was a file or directory
     final long previousRevision = revision - 1;
@@ -270,22 +273,13 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     try {
       deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), previousRevision);
+      entriesToDelete.put(logEntryPath.getPath(), deletedEntry.getKind());
     } catch (SVNException e) {
       if (SVNErrorCode.ENTRY_NOT_FOUND.equals(e.getErrorMessage().getErrorCode())) {
         LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
-        return;
       } else {
         throw e;
       }
-    }
-
-    if (deletedEntry.getKind() == RepositoryEntry.Kind.DIR) {
-      // Directory node deleted
-      LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive delete");
-      entryCache.removeDirectory(logEntryPath.getPath());
-    } else {
-      // Single entry delete
-      entryCache.remove(logEntryPath.getPath());
     }
   }
 

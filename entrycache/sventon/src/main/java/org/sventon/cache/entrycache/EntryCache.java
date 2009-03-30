@@ -17,6 +17,7 @@ import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Contains the cached entries in the repository HEAD.
@@ -66,6 +67,14 @@ public interface EntryCache extends Cache {
   void remove(String pathAndName);
 
   /**
+   * Removes and adds entries in the same transaction.
+   *
+   * @param entriesToAdd    Entries to add.
+   * @param entriesToDelete Entries to delete.
+   */
+  void removeAndAdd(final List<RepositoryEntry> entriesToAdd, final Map<String, RepositoryEntry.Kind> entriesToDelete);
+
+  /**
    * Removes a directory entry including all children.
    *
    * @param pathAndName Directory entry to remove from cache.
@@ -113,9 +122,11 @@ public interface EntryCache extends Cache {
   long getLatestCachedRevisionNumber();
 
   /**
-   * @param camelCasePattern
-   * @param startDir
-   * @return
+   * Finds entries using camel case pattern
+   *
+   * @param camelCasePattern Camel case pattern
+   * @param startPath        Start path
+   * @return List of entries.
    */
-  List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, final String startDir);
+  List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, final String startPath);
 }
