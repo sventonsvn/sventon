@@ -46,7 +46,7 @@ public interface LogMessageCache extends Cache {
    * @param logMessage The log message to cache.
    * @throws CacheException if error.
    */
-  void add(final LogMessage logMessage) throws CacheException;
+  void add(final LogMessage... logMessage) throws CacheException;
 
   /**
    * Gets the size of the log message cache, i.e. the number

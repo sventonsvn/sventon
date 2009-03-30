@@ -21,6 +21,7 @@ import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,9 +82,11 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
    */
   protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
+      final List<LogMessage> logMessages = new ArrayList<LogMessage>();
       for (final SVNLogEntry svnLogEntry : revisions) {
-        logMessageCache.add(new LogMessage(svnLogEntry));
+        logMessages.add(new LogMessage(svnLogEntry));
       }
+      logMessageCache.add(logMessages.toArray(new LogMessage[logMessages.size()]));
     } catch (CacheException ce) {
       LOGGER.error("Unable to update logMessageCache", ce);
     }
