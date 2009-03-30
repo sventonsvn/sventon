@@ -116,9 +116,15 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void add(final LogMessage logMessage) throws CacheException {
+  public void add(final LogMessage... logMessages) throws CacheException {
     final CompassTemplate template = new CompassTemplate(compass);
-    template.save(logMessage);
+    template.execute(new CompassCallbackWithoutResult() {
+      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+        for (LogMessage logMessage : logMessages) {
+          session.save(logMessage);
+        }
+      }
+    });
   }
 
   /**
