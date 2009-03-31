@@ -69,7 +69,7 @@
             </td>
             <td class="sventonCol3">
               <a href="${listUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}/</td></tr></table>')">
-                ${entry.friendlyFullEntryName}/
+                ${entry.shortenedFullEntryName}/
               </a>
             </td>
             <td class="sventonCol4"/>

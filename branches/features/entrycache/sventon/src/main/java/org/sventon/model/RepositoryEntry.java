@@ -171,8 +171,24 @@ public final class RepositoryEntry implements Serializable {
    * @return The abbreviated display friendly entry name
    * @see #FULL_ENTRY_NAME_MAX_LENGTH
    */
-  public String getFriendlyFullEntryName() {
-    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), FULL_ENTRY_NAME_MAX_LENGTH));
+  public String getShortenedFullEntryName() {
+    return getShortenedFullEntryName(FULL_ENTRY_NAME_MAX_LENGTH);
+  }
+
+  /**
+   * Gets the full entry name in a display friendly format.
+   *
+   * @param maxLength Max path string length.
+   * @return Path string, shortened if necessary.
+   */
+  protected String getShortenedFullEntryName(final int maxLength) {
+    final String strippedPath = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
+    final int maxWidth = maxLength - name.length() - 1;
+    if (maxWidth > 3) {
+      return StringUtils.abbreviate(strippedPath, maxWidth) + "/" + name;
+    } else {
+      return ".../" + name;
+    }
   }
 
   /**
