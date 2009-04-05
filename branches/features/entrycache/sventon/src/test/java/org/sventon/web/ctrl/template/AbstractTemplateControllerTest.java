@@ -42,14 +42,14 @@ public class AbstractTemplateControllerTest extends TestCase {
 
   public void testCreateConnection() throws Exception {
     final AbstractTemplateController ctrl = new TestController();
-    final MutableBoolean usingGlobalAuthSettings = new MutableBoolean(false);
+    final MutableBoolean usingSharedAuthSettings = new MutableBoolean(false);
 
     ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
       public SVNRepository createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
-        if ("global".equals(credentials.getUsername())) {
-          usingGlobalAuthSettings.setValue(true);
+        if ("shared".equals(credentials.getUsername())) {
+          usingSharedAuthSettings.setValue(true);
         } else if ("user".equals(credentials.getUsername())) {
-          usingGlobalAuthSettings.setValue(false);
+          usingSharedAuthSettings.setValue(false);
         }
         return null;
       }
@@ -58,20 +58,20 @@ public class AbstractTemplateControllerTest extends TestCase {
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
     final UserRepositoryContext context = new UserRepositoryContext();
 
-    assertFalse(usingGlobalAuthSettings.booleanValue());
+    assertFalse(usingSharedAuthSettings.booleanValue());
 
-    configuration.setCredentials(new Credentials("global", "pass"));
+    configuration.setCredentials(new Credentials("shared", "pass"));
     configuration.setEnableAccessControl(false);
     ctrl.createConnection(configuration, context);
-    assertTrue(usingGlobalAuthSettings.booleanValue());
-
-    configuration.setEnableAccessControl(true);
-    ctrl.createConnection(configuration, context);
-    assertTrue(usingGlobalAuthSettings.booleanValue());
+    assertTrue(usingSharedAuthSettings.booleanValue());
 
     context.setCredentials(new Credentials("user", "pass"));
+    configuration.setEnableAccessControl(true);
     ctrl.createConnection(configuration, context);
-    assertFalse(usingGlobalAuthSettings.booleanValue());
+    assertFalse(usingSharedAuthSettings.booleanValue());
+
+    ctrl.createConnection(configuration, context);
+    assertFalse(usingSharedAuthSettings.booleanValue());
   }
 
   private static class TestController extends AbstractTemplateController {

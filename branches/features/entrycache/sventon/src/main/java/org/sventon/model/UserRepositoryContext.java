@@ -71,7 +71,7 @@ public final class UserRepositoryContext implements Serializable {
   /**
    * User credentials.
    */
-  private Credentials credentials;
+  private Credentials credentials = Credentials.EMPTY;
 
   private boolean isWaitingForExport = false;
 
@@ -252,11 +252,14 @@ public final class UserRepositoryContext implements Serializable {
    * @return True if user id and password has been set, false if not.
    */
   public boolean hasCredentials() {
-    return credentials != null;
+    return !credentials.isEmpty();
   }
 
+  /**
+   * Clears the credentials from memory.
+   */
   public void clearCredentials() {
-    credentials = null;
+    credentials = Credentials.EMPTY;
   }
 
   /**

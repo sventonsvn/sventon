@@ -29,13 +29,13 @@
     Authentication required for
     <c:choose>
       <c:when test="${paramValues['path'] eq null or empty paramValues['path'][0]}">
-        repository
+        repository access.
       </c:when>
       <c:otherwise>
         directory: <i>${paramValues['path'][0]}</i>
       </c:otherwise>
     </c:choose>
-    access.
+
   </h2>
 
   <form name="loginForm" action="${action}" method="post">
