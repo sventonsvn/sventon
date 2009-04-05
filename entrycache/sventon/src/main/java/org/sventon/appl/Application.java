@@ -128,8 +128,10 @@ public final class Application {
 
   private void registerCacheManagers(final List<CacheManager> cacheManagers, final RepositoryName repositoryName) throws CacheException {
     for (CacheManager manager : cacheManagers) {
-      logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
-      manager.register(repositoryName);
+      if (!manager.isRegistered(repositoryName)) {
+        logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
+        manager.register(repositoryName);
+      }
     }
   }
 
