@@ -2,6 +2,8 @@ sventon change history
 -----------------------------------------------------------------------------------------
 
 [1533] Added: Feature #4522 - Case-insensitive entry search.
+[1531] Added: Feature #4564 - New entry cache implementation.
+[1525] Added: Feature #4565 - New log cache implementation.
 
 [1517] Release 2.0.5 (2009-03-04)
 [1514] Fixed: Bug #15311 - Does not work on WebSphere 6.1.
