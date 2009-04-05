@@ -21,17 +21,17 @@
 
   <script type="text/javascript">
     function toggleAccessControl() {
-      var global = $('global_btn');
+      var shared = $('shared_btn');
       var user = $('user_btn');
 
-      ['access_method_user', 'access_method_global', 'access_method_anon', 'cache'].each(Element.show);
+      ['access_method_user', 'access_method_shared', 'access_method_anon', 'cache'].each(Element.show);
 
       if (user.checked) {
-        ['access_method_anon', 'access_method_global', 'cache'].each(Element.hide);
-      } else if (global.checked) {
+        ['access_method_anon', 'access_method_shared', 'cache'].each(Element.hide);
+      } else if (shared.checked) {
         ['access_method_anon', 'access_method_user'].each(Element.hide);
       } else {
-        ['access_method_user', 'access_method_global'].each(Element.hide);
+        ['access_method_user', 'access_method_shared'].each(Element.hide);
       }
     }
     window.onload = toggleAccessControl;
@@ -102,9 +102,9 @@
             <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
                                                          onclick="toggleAccessControl();"><label
                for="anon_btn">anonymous</label>
-              <input id="global_btn" type=radio name="accessMethod" value="GLOBAL"
-              <c:if test="${status.value eq 'GLOBAL'}"> checked</c:if> onclick="toggleAccessControl();"><label
-               for="global_btn">sventon</label>
+              <input id="shared_btn" type=radio name="accessMethod" value="SHARED"
+              <c:if test="${status.value eq 'SHARED'}"> checked</c:if> onclick="toggleAccessControl();"><label
+               for="shared_btn">shared</label>
               <input id="user_btn" type=radio name="accessMethod" value="USER"
               <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
                for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
@@ -114,20 +114,20 @@
         </div>
       </div>
 
-      <div id="access_method_global">
+      <div id="access_method_shared">
         <div class="config_settings">
           <p class="config_key">Username:</p>
 
           <spring:bind path="command.uid">
-          <p><input id="global-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
+          <p><input id="shared-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
                     class="configHeaderSmall">
             </spring:bind>
             <img class="helpIcon" src="images/icon_help.png" alt="Help"
-                 onmouseover="return getHelpText('conf_global_uid_help');"></p>
+                 onmouseover="return getHelpText('conf_shared_uid_help');"></p>
 
           <p class="config_key">Password:</p>
           <spring:bind path="command.pwd">
-            <p><input id="global-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
+            <p><input id="shared-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
                       class="configHeaderSmall"></p>
           </spring:bind>
         </div>

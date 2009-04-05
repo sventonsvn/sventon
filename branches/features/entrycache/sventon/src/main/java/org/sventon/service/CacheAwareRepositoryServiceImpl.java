@@ -69,7 +69,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
-    if (application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName)) {
+    if (canReturnCachedRevisionsFor(repositoryName)) {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {

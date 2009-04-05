@@ -38,9 +38,9 @@ public final class ConfigCommand {
     ANONYMOUS(),
 
     /**
-     * Global access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user.
+     * Shared access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user.
      */
-    GLOBAL(),
+    SHARED(),
 
     /**
      * User access, each sventon user needs supply it's own uid/pwd for accessing restricted parts of the repository.
