@@ -40,7 +40,7 @@
 
   <form name="loginForm" action="${action}" method="post">
     <table>
-      <c:if test="${paramValues['uid'] ne null}" >
+      <c:if test="${paramValues['userName'] ne null}" >
       <tr>
         <td colspan="2" align="center" bgcolor="#E2E4E6">
           <span class="exclamationText">Authentication failed!</span>
@@ -49,11 +49,11 @@
       </c:if>
       <tr>
         <td>Username</td>
-        <td><input name="uid" type="text" nocache value="${paramValues['uid'][0]}"/></td>
+        <td><input name="userName" type="text" nocache value="${paramValues['userName'][0]}"/></td>
       </tr>
       <tr>
         <td>Password</td>
-        <td><input name="pwd" type="password" nocache/></td>
+        <td><input name="userPassword" type="password" nocache/></td>
       </tr>
       <tr>
         <td colspan="2" align="right">
@@ -64,7 +64,7 @@
 
     <c:forEach items="${parameters}" var="paramEntry">
       <c:forEach items="${paramEntry.value}" var="parameter">
-        <c:if test="${paramEntry.key ne 'pwd' && paramEntry.key ne 'uid'}">
+        <c:if test="${paramEntry.key ne 'userPassword' && paramEntry.key ne 'userName'}">
           <input type="hidden" name="${paramEntry.key}" value="${parameter}">
         </c:if>
       </c:forEach>
@@ -72,7 +72,7 @@
 
   </form>
 
-  <script language="JavaScript" type="text/javascript">document.loginForm.uid.focus();</script>
+  <script language="JavaScript" type="text/javascript">document.loginForm.userName.focus();</script>
 
 <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf"%>
 </body>

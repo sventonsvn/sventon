@@ -65,8 +65,8 @@ public final class RSSController extends AbstractBaseController {
     logger.debug(command);
 
     final Credentials credentialsFromUrlParameters = new Credentials(
-        ServletRequestUtils.getStringParameter(request, "uid", null),
-        ServletRequestUtils.getStringParameter(request, "pwd", null));
+        ServletRequestUtils.getStringParameter(request, "userName", null),
+        ServletRequestUtils.getStringParameter(request, "userPassword", null));
 
     if (!application.isConfigured()) {
       String errorMessage = "sventon has not been configured yet!";

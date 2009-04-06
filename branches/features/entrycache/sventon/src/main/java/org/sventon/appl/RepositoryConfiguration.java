@@ -49,10 +49,10 @@ public final class RepositoryConfiguration {
    */
   public static final String DEFAULT_MAIL_TEMPLATE_FILE = "/mailtemplate.html";
 
-  public static final String PROPERTY_KEY_REPOSITORY_URL = "root";
-  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "displayRoot";
-  public static final String PROPERTY_KEY_USERNAME = "uid";
-  public static final String PROPERTY_KEY_PASSWORD = "pwd";
+  public static final String PROPERTY_KEY_REPOSITORY_URL = "repositoryRootUrl";
+  public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "repositoryDisplayRootUrl";
+  public static final String PROPERTY_KEY_USER_NAME = "userName";
+  public static final String PROPERTY_KEY_USER_PASSWORD = "userPassword";
   public static final String PROPERTY_KEY_USE_CACHE = "useCache";
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
   public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
@@ -170,7 +170,7 @@ public final class RepositoryConfiguration {
     final RepositoryConfiguration ic = new RepositoryConfiguration(repositoryName);
     ic.setRepositoryUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_URL));
     ic.setRepositoryDisplayUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
-    ic.setCredentials(new Credentials((String) properties.get(PROPERTY_KEY_USERNAME), (String) properties.get(PROPERTY_KEY_PASSWORD)));
+    ic.setCredentials(new Credentials((String) properties.get(PROPERTY_KEY_USER_NAME), (String) properties.get(PROPERTY_KEY_USER_PASSWORD)));
     ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
@@ -201,8 +201,8 @@ public final class RepositoryConfiguration {
     properties.put(PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
     properties.put(PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
     if (credentials != null) {
-      properties.put(PROPERTY_KEY_USERNAME, credentials.getUsername());
-      properties.put(PROPERTY_KEY_PASSWORD, credentials.getPassword());
+      properties.put(PROPERTY_KEY_USER_NAME, credentials.getUsername());
+      properties.put(PROPERTY_KEY_USER_PASSWORD, credentials.getPassword());
     }
     properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");

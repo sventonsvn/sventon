@@ -118,7 +118,7 @@
         <div class="config_settings">
           <p class="config_key">Username:</p>
 
-          <spring:bind path="command.uid">
+          <spring:bind path="command.userName">
           <p><input id="shared-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
                     class="configHeaderSmall">
             </spring:bind>
@@ -126,7 +126,7 @@
                  onmouseover="return getHelpText('conf_shared_uid_help');"></p>
 
           <p class="config_key">Password:</p>
-          <spring:bind path="command.pwd">
+          <spring:bind path="command.userPassword">
             <p><input id="shared-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
                       class="configHeaderSmall"></p>
           </spring:bind>
