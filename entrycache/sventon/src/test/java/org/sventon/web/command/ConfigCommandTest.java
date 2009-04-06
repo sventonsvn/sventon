@@ -15,8 +15,8 @@ public class ConfigCommandTest extends TestCase {
     command.setZippedDownloadsAllowed(true);
     command.setConnectionTestUid("test uid");
     command.setConnectionTestPwd("test pwd");
-    command.setUid("uid");
-    command.setPwd("pwd");
+    command.setUserName("uid");
+    command.setUserPassword("pwd");
 
     final RepositoryConfiguration configuration = command.createRepositoryConfiguration();
     assertEquals("http://localhost", configuration.getRepositoryUrl());
@@ -26,6 +26,5 @@ public class ConfigCommandTest extends TestCase {
     assertEquals("uid", configuration.getCredentials().getUsername());
     assertEquals("pwd", configuration.getCredentials().getPassword());
   }
-
 
 }

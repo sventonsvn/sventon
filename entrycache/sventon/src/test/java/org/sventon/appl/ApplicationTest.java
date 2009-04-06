@@ -103,9 +103,9 @@ public class ApplicationTest extends TestCase {
     configDirectory.setServletContext(servletContext);
 
     final Properties testConfig = new Properties();
-    testConfig.put("root", "http://localhost");
-    testConfig.put("uid", "username");
-    testConfig.put("pwd", "abc123");
+    testConfig.put("repositoryRootUrl", "http://localhost");
+    testConfig.put("userName", "username");
+    testConfig.put("userPassword", "abc123");
     testConfig.put("useCache", "false");
     testConfig.put("allowZipDownloads", "false");
 

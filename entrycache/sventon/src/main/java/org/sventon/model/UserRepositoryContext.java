@@ -90,8 +90,8 @@ public final class UserRepositoryContext implements Serializable {
    */
   public static UserRepositoryContext getContext(final HttpServletRequest request, final RepositoryName repositoryName) {
     final HttpSession session = request.getSession(true);
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
+    final String userName = ServletRequestUtils.getStringParameter(request, "userName", "");
+    final String userPassword = ServletRequestUtils.getStringParameter(request, "userPassword", "");
 
     final UserContext userContext = (UserContext) WebUtils.getOrCreateSessionAttribute(
         session, "userContext", UserContext.class);
@@ -102,8 +102,8 @@ public final class UserRepositoryContext implements Serializable {
       userContext.add(repositoryName, userRepositoryContext);
     }
 
-    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      userRepositoryContext.setCredentials(new Credentials(uid, pwd));
+    if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(userPassword)) {
+      userRepositoryContext.setCredentials(new Credentials(userName, userPassword));
     }
     return userRepositoryContext;
   }

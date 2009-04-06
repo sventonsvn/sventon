@@ -38,24 +38,30 @@ public final class ConfigCommand {
     ANONYMOUS(),
 
     /**
-     * Shared access, one uid/pwd for the entire repos, set globally in sventon, transparent for sventon user.
+     * Shared access, one uid/pwd for the entire repos, set globally in sventon, transparent
+     * for sventon user.
      */
     SHARED(),
 
     /**
-     * User access, each sventon user needs supply it's own uid/pwd for accessing restricted parts of the repository.
+     * User access, each sventon user needs supply it's own uid/pwd for accessing restricted
+     * parts of the repository.
      */
     USER()
   }
 
   private String name;
   private String repositoryUrl;
-  private String uid;
-  private String pwd;
+
+  private String userName;
+  private String userPassword;
+
   private String connectionTestUid;
   private String connectionTestPwd;
+
   private boolean useCache;
   private boolean zipDownloadsAllowed;
+
   private ConfigCommand.AccessMethod accessMethod = AccessMethod.ANONYMOUS;
 
   /**
@@ -77,39 +83,39 @@ public final class ConfigCommand {
   }
 
   /**
-   * Gets the UID.
+   * Gets the user ID.
    *
-   * @return UID.
+   * @return User ID.
    */
-  public String getUid() {
-    return uid;
+  public String getUserName() {
+    return userName;
   }
 
   /**
-   * Sets the UID.
+   * Sets the user ID.
    *
-   * @param uid UID.
+   * @param userName User ID.
    */
-  public void setUid(final String uid) {
-    this.uid = uid;
+  public void setUserName(final String userName) {
+    this.userName = userName;
   }
 
   /**
-   * Gets the password.
+   * Gets the user password.
    *
-   * @return Password.
+   * @return User password.
    */
-  public String getPwd() {
-    return pwd;
+  public String getUserPassword() {
+    return userPassword;
   }
 
   /**
-   * Sets the password.
+   * Sets the user password.
    *
-   * @param pwd Password.
+   * @param userPassword User password.
    */
-  public void setPwd(final String pwd) {
-    this.pwd = pwd;
+  public void setUserPassword(final String userPassword) {
+    this.userPassword = userPassword;
   }
 
   /**
@@ -229,7 +235,7 @@ public final class ConfigCommand {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
     configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
-    configuration.setCredentials(new Credentials(uid, pwd));
+    configuration.setCredentials(new Credentials(userName, userPassword));
     return configuration;
   }
 

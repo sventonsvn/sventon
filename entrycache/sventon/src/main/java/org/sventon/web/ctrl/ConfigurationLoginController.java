@@ -63,7 +63,7 @@ public class ConfigurationLoginController extends SimpleFormController {
                                   final Object command, final BindException errors) throws Exception {
 
     final ConfigLoginCommand configLoginCommand = (ConfigLoginCommand) command;
-    final String passwordString = configLoginCommand.getPwd();
+    final String passwordString = configLoginCommand.getUserPassword();
 
     if (application.isValidConfigPassword(passwordString)) {
       logger.debug("Correct config password entered");
@@ -72,7 +72,7 @@ public class ConfigurationLoginController extends SimpleFormController {
       return super.onSubmit(configLoginCommand, errors);
     } else {
       logger.debug("Incorrect config password entered");
-      errors.rejectValue("pwd", "illegal.config.password", "Illegal config password");
+      errors.rejectValue("userPassword", "illegal.config.password", "Illegal config password");
       return super.showForm(request, response, errors);
     }
   }
