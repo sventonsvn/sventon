@@ -51,13 +51,13 @@ public class ApplicationTest extends TestCase {
 
       final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
       repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
-      repositoryConfiguration1.setCredentials(new Credentials("user1", "abc123"));
+      repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
       repositoryConfiguration1.setCacheUsed(false);
       repositoryConfiguration1.setZippedDownloadsAllowed(false);
 
       final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
       repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
-      repositoryConfiguration2.setCredentials(new Credentials("user2", "123abc"));
+      repositoryConfiguration2.setUserCredentials(new Credentials("user2", "123abc"));
       repositoryConfiguration2.setCacheUsed(false);
       repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
@@ -84,11 +84,11 @@ public class ApplicationTest extends TestCase {
 
     final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
-    config1.setCredentials(new Credentials("", ""));
+    config1.setUserCredentials(new Credentials("", ""));
 
     final RepositoryConfiguration config2 = new RepositoryConfiguration("test2");
     config2.setRepositoryUrl("http://repo2");
-    config2.setCredentials(new Credentials("", ""));
+    config2.setUserCredentials(new Credentials("", ""));
 
     assertEquals(0, application.getRepositoryCount());
     application.addRepository(config1);

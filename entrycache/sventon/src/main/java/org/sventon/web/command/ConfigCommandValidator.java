@@ -11,8 +11,6 @@
  */
 package org.sventon.web.command;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.sventon.RepositoryConnectionFactory;
@@ -20,7 +18,6 @@ import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -35,14 +32,9 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 public final class ConfigCommandValidator implements Validator {
 
   /**
-   * Logger for this class.
-   */
-  private final Log logger = LogFactory.getLog(getClass());
-
-  /**
    * Controls whether repository connection should be tested or not.
    */
-  private boolean testConnection = true;
+  private boolean testConnections = true;
 
   /**
    * The repository factory.
@@ -63,11 +55,11 @@ public final class ConfigCommandValidator implements Validator {
   /**
    * Constructor for testing purposes.
    *
-   * @param testConnection If <tt>false</tt> repository
-   *                       connection will not be tested.
+   * @param testConnections If <tt>false</tt> repository
+   *                        connection will not be tested.
    */
-  protected ConfigCommandValidator(final boolean testConnection) {
-    this.testConnection = testConnection;
+  protected ConfigCommandValidator(final boolean testConnections) {
+    this.testConnections = testConnections;
   }
 
   /**
@@ -102,51 +94,62 @@ public final class ConfigCommandValidator implements Validator {
     final ConfigCommand command = (ConfigCommand) obj;
 
     final String repositoryUrl = command.getRepositoryUrl();
-    final String repositoryName = command.getName();
 
-    if (repositoryName != null && repositoryUrl != null) {
-      if (!RepositoryName.isValid(repositoryName)) {
+    if (command.getName() != null && repositoryUrl != null) {
+      if (!RepositoryName.isValid(command.getName())) {
         errors.rejectValue("name", "config.error.illegal-name");
-      } else if (application.getRepositoryNames().contains(new RepositoryName(repositoryName))) {
+      } else if (application.getRepositoryNames().contains(new RepositoryName(command.getName()))) {
         errors.rejectValue("name", "config.error.duplicate-name");
       } else {
-        final String trimmedURL = repositoryUrl.trim();
         SVNURL url = null;
         try {
-          url = SVNURL.parseURIDecoded(trimmedURL);
+          url = SVNURL.parseURIDecoded(repositoryUrl);
         } catch (SVNException ex) {
           errors.rejectValue("repositoryUrl", "config.error.illegal-url");
         }
-        if (url != null && testConnection) {
-          final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
-          configuration.setRepositoryUrl(trimmedURL);
+        if (url != null && testConnections) {
+          Credentials credentials;
+          final RepositoryName repositoryName = new RepositoryName(command.getName());
 
-          final Credentials credentials;
-          if (command.getAccessMethod() == USER) {
-            credentials = new Credentials(command.getConnectionTestUid(), command.getConnectionTestPwd());
-          } else {
-            credentials = new Credentials(command.getUserName(), command.getUserPassword());
-          }
-          configuration.setCredentials(credentials);
-
-          SVNRepository repository = null;
+          // Check if it's possible to connect to the repos given the user credentials.
           try {
-            repository = repositoryConnectionFactory.createConnection(new RepositoryName(repositoryName),
-                configuration.getSVNURL(), configuration.getCredentials());
-            repository.testConnection();
+            credentials = new Credentials(command.getUserName(), command.getUserPassword());
+            testConnection(repositoryName, repositoryUrl, credentials);
           } catch (SVNAuthenticationException e) {
-            logger.warn("Repository authentication failed");
             errors.rejectValue("accessMethod", "config.error.authentication-error");
           } catch (SVNException e) {
-            logger.warn("Unable to connect to repository", e);
-            errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{trimmedURL},
-                "Unable to connect to repository [" + trimmedURL + "]. Check URL.");
-          } finally {
-            if (repository != null) {
-              repository.closeSession();
+            errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{repositoryUrl},
+                "Unable to connect to repository [" + repositoryUrl + "]. Check URL.");
+          }
+
+          // If cache is used - check cache account access.
+          if (command.isCacheUsed()) {
+            try {
+              credentials = new Credentials(command.getCacheUserName(), command.getCacheUserPassword());
+              testConnection(repositoryName, repositoryUrl, credentials);
+            } catch (SVNException e) {
+              errors.rejectValue("cacheUsed", "config.error.authentication-error");
             }
           }
         }
+      }
+    }
+  }
+
+  private void testConnection(final RepositoryName repositoryName, final String repositoryUrl,
+                              final Credentials credentials) throws SVNException {
+
+    final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName.toString());
+    configuration.setRepositoryUrl(repositoryUrl);
+
+    SVNRepository repository = null;
+    try {
+      repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
+          credentials);
+      repository.testConnection();
+    } finally {
+      if (repository != null) {
+        repository.closeSession();
       }
     }
   }

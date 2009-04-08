@@ -14,8 +14,10 @@ public class RepositoryConfigurationTest extends TestCase {
     props.setProperty(PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
     final RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
 
-    assertNull(conf.getCredentials().getUsername());
-    assertNull(conf.getCredentials().getPassword());
+    assertNull(conf.getUserCredentials().getUsername());
+    assertNull(conf.getUserCredentials().getPassword());
+    assertNull(conf.getCacheCredentials().getUsername());
+    assertNull(conf.getCacheCredentials().getPassword());
     assertEquals("test", conf.getName().toString());
     assertEquals("svn://repositoryserver/repository", conf.getRepositoryDisplayUrl());
     assertEquals("svn://repositoryserver/repository", conf.getRepositoryUrl());
@@ -46,8 +48,8 @@ public class RepositoryConfigurationTest extends TestCase {
 
     assertTrue(conf.isZippedDownloadsAllowed());
     assertTrue(conf.isAccessControlEnabled());
-    assertEquals("userName", conf.getCredentials().getUsername());
-    assertEquals("userPassword", conf.getCredentials().getPassword());
+    assertEquals("userName", conf.getUserCredentials().getUsername());
+    assertEquals("userPassword", conf.getUserCredentials().getPassword());
     assertEquals(repositoryUrl, conf.getRepositoryUrl());
     assertEquals(repositoryUrl, conf.getRepositoryDisplayUrl());
     assertEquals(SVNURL.parseURIDecoded(conf.getRepositoryUrl()), conf.getSVNURL());
