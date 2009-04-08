@@ -60,7 +60,7 @@ public class AbstractTemplateControllerTest extends TestCase {
 
     assertFalse(usingSharedAuthSettings.booleanValue());
 
-    configuration.setCredentials(new Credentials("shared", "pass"));
+    configuration.setUserCredentials(new Credentials("shared", "pass"));
     configuration.setEnableAccessControl(false);
     ctrl.createConnection(configuration, context);
     assertTrue(usingSharedAuthSettings.booleanValue());

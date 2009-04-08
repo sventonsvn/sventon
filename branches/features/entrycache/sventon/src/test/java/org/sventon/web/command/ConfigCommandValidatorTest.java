@@ -59,8 +59,8 @@ public class ConfigCommandValidatorTest extends TestCase {
     command.setName("default");
     command.setUserPassword("");
     command.setUserName("");
-    command.setConnectionTestUid("");
-    command.setConnectionTestPwd("");
+    command.setCacheUserName("");
+    command.setCacheUserPassword("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
@@ -95,14 +95,13 @@ public class ConfigCommandValidatorTest extends TestCase {
     assertEquals(0, exception.getAllErrors().size());
 
     //if user based access is used, test connection uid and pwd can be supplied
-    //(this is the tyical case)
     command.setRepositoryUrl("svn://domain.com/svn/");
     command.setName("default");
-    command.setUserPassword("");
-    command.setUserName("");
+    command.setUserPassword("admin");
+    command.setUserName("super-secret-pwd123");
     command.setAccessMethod(USER);
-    command.setConnectionTestUid("admin");
-    command.setConnectionTestPwd("super-secret-pwd123");
+    command.setCacheUserName("");
+    command.setCacheUserPassword("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
   }

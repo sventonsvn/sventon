@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1540] Added: Feature #4551 - User based access control with caching.
 [1533] Added: Feature #4522 - Case-insensitive entry search.
 [1531] Added: Feature #4564 - New entry cache implementation.
 [1525] Added: Feature #4565 - New log cache implementation.

@@ -56,8 +56,8 @@ public final class ConfigCommand {
   private String userName;
   private String userPassword;
 
-  private String connectionTestUid;
-  private String connectionTestPwd;
+  private String cacheUserName;
+  private String cacheUserPassword;
 
   private boolean useCache;
   private boolean zipDownloadsAllowed;
@@ -67,10 +67,10 @@ public final class ConfigCommand {
   /**
    * Gets the repository URL.
    *
-   * @return URL.
+   * @return The repository URL, (trimmed if necessary)
    */
   public String getRepositoryUrl() {
-    return repositoryUrl;
+    return repositoryUrl == null ? null : repositoryUrl.trim();
   }
 
   /**
@@ -191,40 +191,41 @@ public final class ConfigCommand {
   }
 
   /**
-   * Gets the connection test UID.
+   * Gets the user name used by the cache.
    *
-   * @return Test UID.
+   * @return User name
    */
-  public String getConnectionTestUid() {
-    return connectionTestUid;
+  public String getCacheUserName() {
+    return cacheUserName;
   }
 
   /**
-   * Sets the connection test UID.
+   * Sets the user name used by the cache.
    *
-   * @param connectionTestUid Test UID.
+   * @param cacheUserName User name
    */
-  public void setConnectionTestUid(final String connectionTestUid) {
-    this.connectionTestUid = connectionTestUid;
+  public void setCacheUserName(String cacheUserName) {
+    this.cacheUserName = cacheUserName;
   }
 
   /**
-   * Gets the connection test password.
+   * Gets the password used by the cache.
    *
-   * @return Test password.
+   * @return Password
    */
-  public String getConnectionTestPwd() {
-    return connectionTestPwd;
+  public String getCacheUserPassword() {
+    return cacheUserPassword;
   }
 
   /**
-   * Sets the connection test password.
+   * Sets the password used by the cache.
    *
-   * @param connectionTestPwd Test password.
+   * @param cacheUserPassword Password
    */
-  public void setConnectionTestPwd(final String connectionTestPwd) {
-    this.connectionTestPwd = connectionTestPwd;
+  public void setCacheUserPassword(String cacheUserPassword) {
+    this.cacheUserPassword = cacheUserPassword;
   }
+
 
   /**
    * Create and populate a RepositoryConfiguration based on the contens of this config command instance.
@@ -234,8 +235,19 @@ public final class ConfigCommand {
   public RepositoryConfiguration createRepositoryConfiguration() {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(getName());
     BeanUtils.copyProperties(this, configuration);
-    configuration.setEnableAccessControl(accessMethod == AccessMethod.USER);
-    configuration.setCredentials(new Credentials(userName, userPassword));
+
+    if (AccessMethod.USER == accessMethod) {
+      configuration.setEnableAccessControl(true);
+      configuration.setUserCredentials(Credentials.EMPTY);
+    } else {
+      configuration.setUserCredentials(new Credentials(userName, userPassword));
+    }
+
+    if (isCacheUsed()) {
+      configuration.setCacheCredentials(new Credentials(cacheUserName, cacheUserPassword));
+    } else {
+      configuration.setCacheCredentials(Credentials.EMPTY);
+    }
     return configuration;
   }
 

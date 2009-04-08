@@ -23,15 +23,20 @@
     function toggleAccessControl() {
       var shared = $('shared_btn');
       var user = $('user_btn');
+      var useCache = $('caching');
 
-      ['access_method_user', 'access_method_shared', 'access_method_anon', 'cache'].each(Element.show);
+      ['access_method_user', 'access_method_shared', 'cache_settings', 'access_credentials'].each(Element.show);
 
       if (user.checked) {
-        ['access_method_anon', 'access_method_shared', 'cache'].each(Element.hide);
+        ['access_method_shared'].each(Element.hide);
       } else if (shared.checked) {
-        ['access_method_anon', 'access_method_user'].each(Element.hide);
+        ['access_method_user'].each(Element.hide);
       } else {
-        ['access_method_user', 'access_method_shared'].each(Element.hide);
+        ['access_method_user', 'access_method_shared', 'access_credentials'].each(Element.hide);
+      }
+
+      if (!useCache.checked) {
+        ['cache_settings'].each(Element.hide);
       }
     }
     window.onload = toggleAccessControl;
@@ -116,43 +121,32 @@
 
       <div id="access_method_shared">
         <div class="config_settings">
-          <p class="config_key">Username:</p>
-
-          <spring:bind path="command.userName">
-          <p><input id="shared-uid" type="text" name="${status.expression}" size="30" value="${status.value}"
-                    class="configHeaderSmall">
-            </spring:bind>
-            <img class="helpIcon" src="images/icon_help.png" alt="Help"
-                 onmouseover="return getHelpText('conf_shared_uid_help');"></p>
-
-          <p class="config_key">Password:</p>
-          <spring:bind path="command.userPassword">
-            <p><input id="shared-pwd" type="password" name="${status.expression}" size="30" value="${status.value}"
-                      class="configHeaderSmall"></p>
-          </spring:bind>
+          <p class="config_key">Username and password:</p>
         </div>
       </div>
 
       <div id="access_method_user">
         <div class="config_settings">
           <p class="config_key">Username for connection test:</p>
-          <spring:bind path="command.connectionTestUid">
-          <p><input type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
-            </spring:bind> <img
-             class="helpIcon" src="images/icon_help.png" alt="Help"
-             onmouseover="return getHelpText('conf_connection_test_uid_help');"></p>
+        </div>
+      </div>
 
-          <p class="config_key">Password for connection test:</p>
-          <spring:bind path="command.connectionTestPwd">
-            <p><input type="password" name="${status.expression}" size="30" value="${status.value}"
-                      class="configHeaderSmall"></p>
+      <div id="access_credentials">
+        <div class="config_settings">
+          <spring:bind path="command.userName">
+            <p>
+              <input id="shared-uid" type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+              <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_shared_uid_help');">
+            </p>
+          </spring:bind>
+          <spring:bind path="command.userPassword">
+            <p>
+              <input id="shared-pwd" type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+            </p>
           </spring:bind>
         </div>
       </div>
 
-      <div id="access_method_anon">
-
-      </div>
     </div>
 
     <div class="config_group">
@@ -161,29 +155,51 @@
 
         <div id="downloads">
           <div class="config_settings">
-            <p class="config_key"><label for="zip_cbx">Allow download as compressed ZIP: </label>
+            <p class="config_key">
+              <label for="zip_cbx">Allow download as compressed ZIP: </label>
               <spring:bind path="command.zippedDownloadsAllowed">
                 <input id="zip_cbx" type="checkbox" name="${status.expression}"
                 <c:if test="${status.value}"> checked</c:if>>
               </spring:bind>
-              <img class="helpIcon" src="images/icon_help.png" alt="Help"
-                   onmouseover="return getHelpText('conf_zipped_downloads_help');"></p>
+              <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_zipped_downloads_help');">
+            </p>
           </div>
         </div>
 
         <div id="cache">
           <div class="config_settings">
-            <p class="config_key"><label for="caching">Use repository caching: </label>
-              <spring:bind path="command.cacheUsed">
+            <spring:bind path="command.cacheUsed">
+              <p class="config_key">
+                <label for="caching">Use repository caching: </label>
                 <input id="caching" type="checkbox" name="${status.expression}"
-                <c:if test="${status.value}"> checked</c:if>>
-              </spring:bind> <img
-               class="helpIcon" src="images/icon_help.png" alt="Help"
-               onmouseover="return getHelpText('conf_repository_caching_help');"></p>
+                <c:if test="${status.value}"> checked</c:if> onclick="toggleAccessControl();">
+                <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_repository_caching_help');">
+              </p>
+              <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
+            </spring:bind>
           </div>
         </div>
-      </div>
 
+        <div id="cache_settings">
+          <div class="config_settings">
+            <p class="config_key">Username for cache: </p>
+            <p>
+              <spring:bind path="command.cacheUserName">
+              <input id="cache-uid" type="text" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+              </spring:bind>
+              <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_repository_cache_config_help');">
+            </p>
+
+            <p class="config_key">Password for cache: </p>
+            <spring:bind path="command.cacheUserPassword">
+              <p>
+                <input id="cache-pwd" type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
+              </p>
+            </spring:bind>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <div class="config_group">

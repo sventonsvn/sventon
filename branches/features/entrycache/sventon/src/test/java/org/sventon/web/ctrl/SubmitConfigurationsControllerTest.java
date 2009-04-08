@@ -65,13 +65,13 @@ public class SubmitConfigurationsControllerTest extends TestCase {
 
     final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
     repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
-    repositoryConfiguration1.setCredentials(new Credentials("user1", "abc123"));
+    repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
     repositoryConfiguration1.setCacheUsed(false);
     repositoryConfiguration1.setZippedDownloadsAllowed(false);
 
     final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
     repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
-    repositoryConfiguration2.setCredentials(new Credentials("user2", "abc123"));
+    repositoryConfiguration2.setUserCredentials(new Credentials("user2", "abc123"));
     repositoryConfiguration2.setCacheUsed(false);
     repositoryConfiguration2.setZippedDownloadsAllowed(false);
 

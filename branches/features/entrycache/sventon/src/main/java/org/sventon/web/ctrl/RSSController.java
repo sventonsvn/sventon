@@ -100,7 +100,7 @@ public final class RSSController extends AbstractBaseController {
           credentials = credentialsFromUrlParameters;
         }
       } else {
-        credentials = configuration.getCredentials();
+        credentials = configuration.getUserCredentials();
       }
       repository = repositoryConnectionFactory.createConnection(configuration.getName(),
           configuration.getSVNURL(), credentials);

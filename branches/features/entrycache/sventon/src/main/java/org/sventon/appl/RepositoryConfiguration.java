@@ -53,7 +53,11 @@ public final class RepositoryConfiguration {
   public static final String PROPERTY_KEY_REPOSITORY_DISPLAY_URL = "repositoryDisplayRootUrl";
   public static final String PROPERTY_KEY_USER_NAME = "userName";
   public static final String PROPERTY_KEY_USER_PASSWORD = "userPassword";
+
   public static final String PROPERTY_KEY_USE_CACHE = "useCache";
+  public static final String PROPERTY_KEY_CACHE_USER_NAME = "cacheUserName";
+  public static final String PROPERTY_KEY_CACHE_USER_PASSWORD = "cacheUserPassword";
+
   public static final String PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS = "allowZipDownloads";
   public static final String PROPERTY_KEY_ENABLE_ACCESS_CONTROL = "enableAccessControl";
   public static final String PROPERTY_KEY_ENABLE_ISSUE_TRACKER_INTEGRATION = "enableIssueTrackerIntegration";
@@ -90,7 +94,12 @@ public final class RepositoryConfiguration {
   /**
    * If a global user is configured for repository browsing, the credentials property should be set.
    */
-  private Credentials credentials;
+  private Credentials userCredentials;
+
+  /**
+   * Credentials used by the cache to access the repository.
+   */
+  private Credentials cacheCredentials;
 
   /**
    * Decides whether the caching feature will be used.
@@ -104,7 +113,7 @@ public final class RepositoryConfiguration {
 
   /**
    * Decides wheter repository access control is enforced (this is configured on the
-   * SVN server). Note that enabling access control _disables_ caching.
+   * SVN server).
    */
   private boolean enableAccessControl;
 
@@ -148,7 +157,6 @@ public final class RepositoryConfiguration {
    */
   private boolean persisted;
 
-
   /**
    * Constructor.
    *
@@ -170,7 +178,8 @@ public final class RepositoryConfiguration {
     final RepositoryConfiguration ic = new RepositoryConfiguration(repositoryName);
     ic.setRepositoryUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_URL));
     ic.setRepositoryDisplayUrl((String) properties.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
-    ic.setCredentials(new Credentials((String) properties.get(PROPERTY_KEY_USER_NAME), (String) properties.get(PROPERTY_KEY_USER_PASSWORD)));
+    ic.setUserCredentials(new Credentials((String) properties.get(PROPERTY_KEY_USER_NAME), (String) properties.get(PROPERTY_KEY_USER_PASSWORD)));
+    ic.setCacheCredentials(new Credentials((String) properties.get(PROPERTY_KEY_CACHE_USER_NAME), (String) properties.get(PROPERTY_KEY_CACHE_USER_PASSWORD)));
     ic.setCacheUsed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_USE_CACHE)));
     ic.setZippedDownloadsAllowed(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS)));
     ic.setEnableAccessControl(Boolean.parseBoolean((String) properties.get(PROPERTY_KEY_ENABLE_ACCESS_CONTROL)));
@@ -200,9 +209,13 @@ public final class RepositoryConfiguration {
     final Properties properties = new Properties();
     properties.put(PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
     properties.put(PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
-    if (credentials != null) {
-      properties.put(PROPERTY_KEY_USER_NAME, credentials.getUsername());
-      properties.put(PROPERTY_KEY_USER_PASSWORD, credentials.getPassword());
+    if (userCredentials != null) {
+      properties.put(PROPERTY_KEY_USER_NAME, userCredentials.getUsername());
+      properties.put(PROPERTY_KEY_USER_PASSWORD, userCredentials.getPassword());
+    }
+    if (cacheCredentials != null) {
+      properties.put(PROPERTY_KEY_CACHE_USER_NAME, cacheCredentials.getUsername());
+      properties.put(PROPERTY_KEY_CACHE_USER_PASSWORD, cacheCredentials.getPassword());
     }
     properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");
     properties.put(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, isZippedDownloadsAllowed() ? "true" : "false");
@@ -216,23 +229,43 @@ public final class RepositoryConfiguration {
   }
 
   /**
-   * Get the configured credentials, if any.
-   * The credentials will will be used for repository access.
+   * Gets the configured user credentials, if any.
+   * The credentials will be used for repository access.
    *
    * @return Returns the credentials, or null.
    */
-  public Credentials getCredentials() {
-    return credentials;
+  public Credentials getUserCredentials() {
+    return userCredentials;
   }
 
   /**
-   * Get the configured credentials, if any.
-   * The credentials will will be used for repository access.
+   * Sets the configured user credentials.
+   * The credentials will be used for repository access.
    *
-   * @param credentials Credentials if any
+   * @param userCredentials Credentials if any
    */
-  public void setCredentials(final Credentials credentials) {
-    this.credentials = credentials;
+  public void setUserCredentials(final Credentials userCredentials) {
+    this.userCredentials = userCredentials;
+  }
+
+
+  /**
+   * Gets the configured cache credentials, if any.
+   * The credentials will be used by the cache for repository access.
+   *
+   * @return Returns the credentials, or null.
+   */
+  public Credentials getCacheCredentials() {
+    return cacheCredentials;
+  }
+
+  /**
+   * Sets the credentials used by the cache to connect to the repository.
+   *
+   * @param cacheCredentials Credentials used by the cache.
+   */
+  public void setCacheCredentials(final Credentials cacheCredentials) {
+    this.cacheCredentials = cacheCredentials;
   }
 
   /**
@@ -311,7 +344,7 @@ public final class RepositoryConfiguration {
    * @return <code>true</code> if cache is enabled, <code>false</code> if not.
    */
   public boolean isCacheUsed() {
-    return this.useCache && !this.enableAccessControl;
+    return this.useCache;
   }
 
   /**
@@ -459,5 +492,6 @@ public final class RepositoryConfiguration {
   public boolean isPersisted() {
     return persisted;
   }
+
 }
 
