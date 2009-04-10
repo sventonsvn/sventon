@@ -11,6 +11,7 @@
  */
 package org.sventon.cache;
 
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
@@ -47,8 +48,8 @@ public interface CacheGateway {
    * @return List of entries with names (and/or author) matching given search string.
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString, final String startDir,
-                                    final boolean includeAuthors) throws CacheException;
+  List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
+                                    final String startDir, final boolean includeAuthors) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.

@@ -14,10 +14,12 @@ package org.sventon.model;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.compass.annotations.Index;
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
 import org.tmatesoft.svn.core.SVNDirEntry;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -26,21 +28,48 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
+@Searchable(root = true)
 public final class RepositoryEntry implements Serializable {
 
   public static final int FULL_ENTRY_NAME_MAX_LENGTH = 70;
+
   private static final long serialVersionUID = 3617229449081593805L;
+
+  @SearchableId
+  private String id;
+
+  @SearchableProperty(index = Index.UN_TOKENIZED)
   private String path;
+
+  @SearchableProperty
   private String name;
+
+  @SearchableProperty
+  private String camelCasePattern;
+
+  @SearchableProperty
   private Kind kind;
+
+  @SearchableProperty(format = "#000000000000")
   private long size;
-  private boolean hasProperties;
+
+  @SearchableProperty(format = "#000000000000")
   private long revision;
+
+  @SearchableProperty
   private Date createdDate;
+
+  @SearchableProperty
   private String lastAuthor;
 
   public enum Kind {
     DIR, FILE, NONE, UNKNOWN, ANY
+  }
+
+  /**
+   * Default constructor.
+   */
+  private RepositoryEntry() {
   }
 
   /**
@@ -59,8 +88,25 @@ public final class RepositoryEntry implements Serializable {
       throw new IllegalArgumentException("entry cannot be null.");
     }
 
-    this.path = entryPath.intern();
-    copyEntry(entry);
+    final String entryName = entry.getName();
+    id = createId(entryPath, entry);
+    try {
+      camelCasePattern = CamelCasePattern.parse(entryName).getPattern();
+    } catch (IllegalArgumentException e) {
+      // ignore
+    }
+    copyEntry(entryPath, entry);
+  }
+
+  /**
+   * Creates an Id.
+   *
+   * @param path  Path
+   * @param entry SVN entry
+   * @return Id
+   */
+  protected String createId(final String path, final SVNDirEntry entry) {
+    return path + entry.getName();
   }
 
   /**
@@ -81,14 +127,14 @@ public final class RepositoryEntry implements Serializable {
     return dir;
   }
 
-  private void copyEntry(final SVNDirEntry entry) {
-    this.lastAuthor = entry.getAuthor() == null ? null : entry.getAuthor().intern();
+  private void copyEntry(final String path, final SVNDirEntry entry) {
+    this.path = path;
+    this.lastAuthor = entry.getAuthor() == null ? null : entry.getAuthor();
     this.createdDate = entry.getDate();
     this.kind = Kind.valueOf(entry.getKind().toString().toUpperCase());
-    this.name = entry.getName().intern();
+    this.name = entry.getName();
     this.revision = entry.getRevision();
     this.size = entry.getSize();
-    this.hasProperties = entry.hasProperties();
   }
 
   /**
@@ -98,6 +144,15 @@ public final class RepositoryEntry implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets the camel case pattern for this entry's name.
+   *
+   * @return Pattern
+   */
+  public CamelCasePattern getCamelCasePattern() {
+    return new CamelCasePattern(camelCasePattern);
   }
 
   /**
@@ -116,8 +171,24 @@ public final class RepositoryEntry implements Serializable {
    * @return The abbreviated display friendly entry name
    * @see #FULL_ENTRY_NAME_MAX_LENGTH
    */
-  public String getFriendlyFullEntryName() {
-    return StringUtils.reverse(StringUtils.abbreviate(new StringBuilder(getFullEntryName()).reverse().toString(), FULL_ENTRY_NAME_MAX_LENGTH));
+  public String getShortenedFullEntryName() {
+    return getShortenedFullEntryName(FULL_ENTRY_NAME_MAX_LENGTH);
+  }
+
+  /**
+   * Gets the full entry name in a display friendly format.
+   *
+   * @param maxLength Max path string length.
+   * @return Path string, shortened if necessary.
+   */
+  protected String getShortenedFullEntryName(final int maxLength) {
+    final String strippedPath = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
+    final int maxWidth = maxLength - name.length() - 1;
+    if (maxWidth > 3) {
+      return StringUtils.abbreviate(strippedPath, maxWidth) + "/" + name;
+    } else {
+      return ".../" + name;
+    }
   }
 
   /**
@@ -136,15 +207,6 @@ public final class RepositoryEntry implements Serializable {
    */
   public long getSize() {
     return size;
-  }
-
-  /**
-   * Tells if the entry has any properties.
-   *
-   * @return <code>true</code> if has, <code>false</code> - otherwise
-   */
-  public boolean hasProperties() {
-    return hasProperties;
   }
 
   /**
@@ -187,20 +249,6 @@ public final class RepositoryEntry implements Serializable {
    */
   public String getAuthor() {
     return lastAuthor;
-  }
-
-  /**
-   * Needed to make sure the fields are interned correctly.
-   *
-   * @param is Input stream.
-   * @throws IOException            if io error
-   * @throws ClassNotFoundException if class not found
-   */
-  private void readObject(final ObjectInputStream is) throws IOException, ClassNotFoundException {
-    is.defaultReadObject();
-    path = path.intern();
-    name = name.intern();
-    lastAuthor = lastAuthor == null ? null : lastAuthor.intern();
   }
 
   /**

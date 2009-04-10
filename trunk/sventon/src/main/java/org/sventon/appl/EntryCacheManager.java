@@ -9,11 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.appl;
 
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.CacheManager;
+import org.sventon.cache.entrycache.EntryCache;
+import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final DiskCache cache = new DiskCache(cacheDirectory);
+    final EntryCache cache = new EntryCacheImpl(cacheDirectory, true);
     cache.init();
     return cache;
   }

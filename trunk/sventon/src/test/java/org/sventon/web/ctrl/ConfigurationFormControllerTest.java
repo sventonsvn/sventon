@@ -11,6 +11,7 @@ import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Credentials;
 import org.sventon.web.command.ConfigCommand;
 import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
@@ -93,8 +94,9 @@ public class ConfigurationFormControllerTest extends TestCase {
     command.setRepositoryUrl("http://localhost");
     command.setAccessMethod(USER);
     command.setZippedDownloadsAllowed(true);
-    command.setConnectionTestUid("test uid");
-    command.setConnectionTestPwd("test pwd");
+    command.setUserName("test uid");
+    command.setUserPassword("test pwd");
+
     final BindException exception = new BindException(command, "test");
     final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
@@ -109,8 +111,49 @@ public class ConfigurationFormControllerTest extends TestCase {
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());
-    assertNull(configuration.getCredentials().getUsername()); //UID only for connection testing, not stored
-    assertNull(configuration.getCredentials().getPassword()); //PWD only for connection testing, not stored
+    assertEquals(Credentials.EMPTY, configuration.getUserCredentials()); //UID/PWD only for connection testing, not stored
+    assertEquals(Credentials.EMPTY, configuration.getCacheCredentials()); //UID/PWD for cache, not configured.
+  }
+
+  public void testProcessFormSubmissionNonConfiguredUserBasedAccessControlWithCache() throws Exception {
+    final String repositoryName = "testrepos";
+
+    final MockHttpServletRequest request = new MockHttpServletRequest();
+    final MockHttpServletResponse response = new MockHttpServletResponse();
+    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    assertEquals(0, application.getRepositoryCount());
+    assertFalse(application.isConfigured());
+    ctrl.setApplication(application);
+    final ConfigCommand command = new ConfigCommand();
+    command.setName(repositoryName);
+    command.setRepositoryUrl("http://localhost");
+    command.setAccessMethod(USER);
+    command.setZippedDownloadsAllowed(true);
+    command.setUserName("test uid");
+    command.setUserPassword("test pwd");
+
+    command.setCacheUsed(true);
+    command.setCacheUserName("cache uid");
+    command.setCacheUserPassword("cache pwd");
+
+    final BindException exception = new BindException(command, "test");
+    final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
+    assertNotNull(modelAndView);
+
+    assertEquals(1, application.getRepositoryCount());
+    assertFalse(application.isConfigured());
+    final Map model = modelAndView.getModel();
+    assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
+
+    //assert that the config was created correctly:
+    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(new RepositoryName(repositoryName));
+    assertEquals("http://localhost", configuration.getRepositoryUrl());
+    assertTrue(configuration.isAccessControlEnabled());
+    assertTrue(configuration.isZippedDownloadsAllowed());
+    assertEquals(Credentials.EMPTY, configuration.getUserCredentials()); //UID/PWD only for connection testing, not stored
+
+    assertEquals("cache uid", configuration.getCacheCredentials().getUsername()); //UID for cache
+    assertEquals("cache pwd", configuration.getCacheCredentials().getPassword()); //PWD for cache
   }
 
 }

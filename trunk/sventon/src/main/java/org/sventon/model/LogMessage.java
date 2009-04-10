@@ -11,25 +11,52 @@
  */
 package org.sventon.model;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
+import org.tmatesoft.svn.core.SVNLogEntry;
+
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * LogMessage.
  *
  * @author jesper@sventon.org
  */
-public final class LogMessage {
+@Searchable(root = true)
+public final class LogMessage implements Serializable {
 
-  private final long revision;
-  private final String message;
+  private static final long serialVersionUID = 1484899822981422330L;
+
+  @SearchableId
+  private long revision;
+
+  @SearchableProperty
+  private String author;
+
+  @SearchableProperty
+  private Date date;
+
+  @SearchableProperty
+  private String message;
+
+  /**
+   * Default constructor.
+   */
+  private LogMessage() {
+  }
 
   /**
    * Constructor.
    *
-   * @param revision The revision
-   * @param message  The log message
+   * @param svnLogEntry SVN log entry
    */
-  public LogMessage(final long revision, final String message) {
-    this.revision = revision;
-    this.message = message;
+  public LogMessage(final SVNLogEntry svnLogEntry) {
+    this.revision = svnLogEntry.getRevision();
+    this.author = svnLogEntry.getAuthor();
+    this.date = svnLogEntry.getDate();
+    this.message = svnLogEntry.getMessage();
   }
 
   /**
@@ -50,4 +77,30 @@ public final class LogMessage {
     return message;
   }
 
+  /**
+   * Sets the message.
+   *
+   * @param message Message.
+   */
+  public void setMessage(final String message) {
+    this.message = message;
+  }
+
+  /**
+   * Gets the author.
+   *
+   * @return Author
+   */
+  public String getAuthor() {
+    return author;
+  }
+
+  /**
+   * Gets the date.
+   *
+   * @return The date
+   */
+  public Date getDate() {
+    return date;
+  }
 }

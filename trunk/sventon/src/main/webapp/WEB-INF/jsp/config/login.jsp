@@ -30,7 +30,7 @@
 
 <form name="loginForm" action="${pageContext.request.contextPath}/repos/configlogin" method="post">
   <table>
-    <spring:bind path="command.pwd">
+    <spring:bind path="command.userPassword">
       <c:if test="${status.error}">
         <tr>
           <td>&nbsp;</td>
@@ -42,7 +42,7 @@
       <tr>
         <td>Password</td>
         <td>
-          <input name="pwd" type="password" nocache/>
+          <input name="userPassword" type="password" nocache/>
         </td>
       </tr>
     </spring:bind>
@@ -53,7 +53,7 @@
     </tr>
   </table>
 
-  <script language="JavaScript" type="text/javascript">document.loginForm.pwd.focus();</script>
+  <script language="JavaScript" type="text/javascript">document.loginForm.userPassword.focus();</script>
 
   <%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
 </body>

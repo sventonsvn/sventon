@@ -37,8 +37,8 @@ public class ConfigCommandValidatorTest extends TestCase {
     // Invalid repository name
     command.setName("Illegal whitespace in name");
     command.setRepositoryUrl("svn://domain.com/svn/");
-    command.setPwd("");
-    command.setUid("");
+    command.setUserPassword("");
+    command.setUserName("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
@@ -47,8 +47,8 @@ public class ConfigCommandValidatorTest extends TestCase {
     // Empty name is not ok
     command.setName("");
     command.setRepositoryUrl("svn://domain.com/svn/");
-    command.setPwd("");
-    command.setUid("");
+    command.setUserPassword("");
+    command.setUserName("");
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("config.error.illegal-name", exception.getFieldError("name").getCode());
@@ -57,22 +57,22 @@ public class ConfigCommandValidatorTest extends TestCase {
     // Valid (typical) input
     command.setRepositoryUrl("svn://domain.com/svn/");
     command.setName("default");
-    command.setPwd("");
-    command.setUid("");
-    command.setConnectionTestUid("");
-    command.setConnectionTestPwd("");
+    command.setUserPassword("");
+    command.setUserName("");
+    command.setCacheUserName("");
+    command.setCacheUserPassword("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     // Valid input, spaces will be trimmed
     command.setRepositoryUrl(" svn://domain.com/svn/ ");
-    command.setPwd("");
-    command.setUid("");
+    command.setUserPassword("");
+    command.setUserName("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setPwd(null);
-    command.setUid(null);
+    command.setUserPassword(null);
+    command.setUserName(null);
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
@@ -89,20 +89,19 @@ public class ConfigCommandValidatorTest extends TestCase {
 
     exception = new BindException(command, "test");
     command.setRepositoryUrl("svn://domain.com/svn/");
-    command.setPwd("");
-    command.setUid("");
+    command.setUserPassword("");
+    command.setUserName("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     //if user based access is used, test connection uid and pwd can be supplied
-    //(this is the tyical case)
     command.setRepositoryUrl("svn://domain.com/svn/");
     command.setName("default");
-    command.setPwd("");
-    command.setUid("");
+    command.setUserPassword("admin");
+    command.setUserName("super-secret-pwd123");
     command.setAccessMethod(USER);
-    command.setConnectionTestUid("admin");
-    command.setConnectionTestPwd("super-secret-pwd123");
+    command.setCacheUserName("");
+    command.setCacheUserPassword("");
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
   }
