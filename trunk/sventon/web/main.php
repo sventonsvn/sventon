@@ -7,7 +7,7 @@
 <p>
 sventon is a pure Java application, all you need to run it is a
 <a href="http://java.sun.com/j2se/1.5.0/">J2SE 5.0 runtime</a> and a Servlet 2.4/JSP 2.0 compliant webserver,
-such as  <a href="http://tomcat.apache.org/">Tomcat 5.5</a>. Installation is truly simple, we will have you up and
+such as  <a href="http://tomcat.apache.org/">Tomcat 6.0</a>. Installation is truly simple, we will have you up and
 running in no-time!
 </p>
 <p>

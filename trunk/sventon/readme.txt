@@ -1,7 +1,7 @@
 sventon is a Subversion web client for Java Servlet containers.
 
 A J2SE 5.0 runtime and a servlet 2.4/JSP 2.0 compliant container is
-required for deployment, thus Tomcat 5.5 is a good container companion.
+required for deployment, thus Tomcat 6.0 is a good container companion.
 You'll also need a Subversion server set up and configured with a
 repository. For info on Subversion, see http://subversion.tigris.org
 

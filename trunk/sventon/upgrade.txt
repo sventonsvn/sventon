@@ -1,17 +1,17 @@
 UPGRADING FROM A PREVIOUS SVENTON VERSION
 
-The configuration directory structure and the property file format
-has changed between sventon version 1.4.1 and 2.0.0. This means you will
+The cache implementation and the configuration property file format
+has changed between sventon version 2.0.5 and 2.1.0. This means you will
 have to reconfigure sventon and let it re-cache your repository.
 
 Follow these steps for a smooth upgrade.
 
 1. Stop the servlet container.
-2. Locate the container's temp directory and the sub directory 'sventon'.
+2. Locate the container's temp directory and the sub directory 'sventon_config'.
 3. View the contents of the configuration file 'sventon.properties' located
-   in the 'sventon' directory and write down the info somewhere, as
+   in the 'repositories' sub directory and write down the info somewhere, as
    you will need it during setup of your new sventon instance.
-4. Delete the entire directory 'sventon' including it's sub directories.
+4. Delete the entire directory 'sventon_config' including it's sub directories.
 5. Delete the old compiled and cached JSP pages from your container's
    work directory (usually work/Catalina/localhost/svn on Tomcat).
 6. Replace the old svn.war file in the container's webapps install folder
