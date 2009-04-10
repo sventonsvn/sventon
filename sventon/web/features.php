@@ -9,11 +9,11 @@
   <li>Sort or filter directory listings.</li>
   <li>View contents of archives and files inside archives.</li>
   <li>View logs history and metadata for files and directories.</li>
-  <li>Log cache powered by <a href="http://lucene.apache.org/">Lucene</a>.</li>
+  <li><a href="http://www.compass-project.org/">Compass</a> powered cache for entries and logs.</li>
   <li>Source code syntax highlighting using <a href="https://jhighlight.dev.java.net">JHighlight</a>.</li>
   <li>Style sheet marked up for easy graphical customization.</li>
   <li>Single account authentication support for non public repositories.</li>
-  <li>Caching for fast access.</li>
+  <li>Internal caching for fast access.</li>
   <li>File and directory name search (<a href="http://en.wikipedia.org/wiki/Camel_case">CamelCase</a> enabled).</li>
   <li>Directory flattening for fast navigation.</li>
   <li>Image thumbnail preview.</li>
