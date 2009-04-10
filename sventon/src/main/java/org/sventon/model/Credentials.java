@@ -28,6 +28,11 @@ public class Credentials implements Serializable {
   private static final long serialVersionUID = -30885545779723155L;
 
   /**
+   * Represents empty/blank credentials.
+   */
+  public static final Credentials EMPTY = new Credentials("", "");
+
+  /**
    * Username.
    */
   private final String username;

@@ -28,7 +28,7 @@ public class UserRepositoryContextTest extends TestCase {
     context.setCredentials(new Credentials("uid", "pwd"));
     assertTrue(context.hasCredentials());
     context.clearCredentials();
-    assertNull(context.getCredentials());
+    assertSame(Credentials.EMPTY, context.getCredentials());
   }
 
   public void testGetUserContext() throws Exception {

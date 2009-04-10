@@ -49,7 +49,7 @@ import java.util.Map;
  * Workflow for this controller:
  * <ol>
  * <li>The controller inspects the application configuration object to see if it's
- * user id and pwd have been provided during setup. If credentials are
+ * user id and password have been provided during setup. If credentials are
  * configured they will be used for authorized repository access, if they do not
  * exist the controller will try to set up the repository with anonymous access.
  * If this fails the user will be forwarded to an error page.
@@ -261,10 +261,10 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     final RepositoryName repositoryName = configuration.getName();
     final SVNURL svnurl = configuration.getSVNURL();
 
-    if (configuration.isAccessControlEnabled() && repositoryContext.hasCredentials()) {
+    if (configuration.isAccessControlEnabled()) {
       repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
     } else {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getCredentials());
+      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
     }
     return repository;
   }

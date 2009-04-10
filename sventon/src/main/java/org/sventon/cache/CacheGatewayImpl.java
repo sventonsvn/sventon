@@ -13,21 +13,20 @@ package org.sventon.cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.appl.EntryCacheManager;
+import org.sventon.appl.LogMessageCacheManager;
+import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.cache.entrycache.EntryCacheManager;
 import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.logmessagecache.LogMessageCacheManager;
 import org.sventon.cache.revisioncache.RevisionCache;
-import org.sventon.cache.revisioncache.RevisionCacheManager;
+import org.sventon.model.CamelCasePattern;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
-import static org.sventon.model.RepositoryEntry.Kind.DIR;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Gateway class used to access the caches.
@@ -82,26 +81,22 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern, final String startDir)
+  public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
+                                           final String startDir, final boolean includeAuthors)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    String rootDir = startDir;
-    if (rootDir.endsWith("/")) {
-      rootDir = rootDir.substring(0, rootDir.length() - 1);
-    }
-    return cache.findEntriesByPattern(Pattern.compile(".*" + rootDir + ".*?[/]" + pattern.getPattern()), RepositoryEntry.Kind.ANY);
+    return cache.findEntries(searchString, startDir);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                         final String startDir, final boolean includeAuthors)
-      throws CacheException {
+  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
+                                                      final String startDir) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findEntries(searchString, startDir, includeAuthors);
+    return cache.findEntriesByCamelCasePattern(pattern, startDir);
   }
 
   /**
@@ -110,7 +105,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    return cache.findEntriesByPattern(Pattern.compile(fromPath + ".*?", Pattern.CASE_INSENSITIVE), DIR);
+    return cache.findDirectories(fromPath);
   }
 
   /**

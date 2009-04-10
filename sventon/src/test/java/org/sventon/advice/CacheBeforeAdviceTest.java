@@ -2,8 +2,8 @@ package org.sventon.advice;
 
 import junit.framework.TestCase;
 import org.easymock.EasyMock;
-import org.sventon.appl.RevisionObservable;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionObservable;
 
 public class CacheBeforeAdviceTest extends TestCase {
 

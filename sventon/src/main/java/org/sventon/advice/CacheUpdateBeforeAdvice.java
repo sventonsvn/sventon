@@ -14,8 +14,8 @@ package org.sventon.advice;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.MethodBeforeAdvice;
-import org.sventon.appl.RevisionObservable;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionObservable;
 
 import java.lang.reflect.Method;
 

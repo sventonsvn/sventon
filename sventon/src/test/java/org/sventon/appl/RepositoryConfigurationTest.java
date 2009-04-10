@@ -14,8 +14,10 @@ public class RepositoryConfigurationTest extends TestCase {
     props.setProperty(PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
     final RepositoryConfiguration conf = RepositoryConfiguration.create("test", props);
 
-    assertNull(conf.getCredentials().getUsername());
-    assertNull(conf.getCredentials().getPassword());
+    assertNull(conf.getUserCredentials().getUsername());
+    assertNull(conf.getUserCredentials().getPassword());
+    assertNull(conf.getCacheCredentials().getUsername());
+    assertNull(conf.getCacheCredentials().getPassword());
     assertEquals("test", conf.getName().toString());
     assertEquals("svn://repositoryserver/repository", conf.getRepositoryDisplayUrl());
     assertEquals("svn://repositoryserver/repository", conf.getRepositoryUrl());
@@ -35,8 +37,8 @@ public class RepositoryConfigurationTest extends TestCase {
     final Properties props = new Properties();
     props.setProperty(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS, "true");
     props.setProperty(PROPERTY_KEY_ENABLE_ACCESS_CONTROL, "true");
-    props.setProperty(PROPERTY_KEY_PASSWORD, "pwd");
-    props.setProperty(PROPERTY_KEY_USERNAME, "uid");
+    props.setProperty(PROPERTY_KEY_USER_NAME, "userName");
+    props.setProperty(PROPERTY_KEY_USER_PASSWORD, "userPassword");
 
     props.setProperty(PROPERTY_KEY_REPOSITORY_URL, repositoryUrl);
     props.setProperty(PROPERTY_KEY_USE_CACHE, "false");
@@ -46,8 +48,8 @@ public class RepositoryConfigurationTest extends TestCase {
 
     assertTrue(conf.isZippedDownloadsAllowed());
     assertTrue(conf.isAccessControlEnabled());
-    assertEquals("uid", conf.getCredentials().getUsername());
-    assertEquals("pwd", conf.getCredentials().getPassword());
+    assertEquals("userName", conf.getUserCredentials().getUsername());
+    assertEquals("userPassword", conf.getUserCredentials().getPassword());
     assertEquals(repositoryUrl, conf.getRepositoryUrl());
     assertEquals(repositoryUrl, conf.getRepositoryDisplayUrl());
     assertEquals(SVNURL.parseURIDecoded(conf.getRepositoryUrl()), conf.getSVNURL());
@@ -79,33 +81,6 @@ public class RepositoryConfigurationTest extends TestCase {
 
   }
 
-  public void testCacheUsedAndAccessControlEnabledCombinations() {
-    final RepositoryConfiguration conf = new RepositoryConfiguration("test");
-    conf.setCacheUsed(true);
-    conf.setEnableAccessControl(false);
-
-    assertTrue(conf.isCacheUsed());
-    assertFalse(conf.isAccessControlEnabled());
-
-    //Can't have both caching and access control
-    conf.setEnableAccessControl(true);
-    assertFalse(conf.isCacheUsed());
-    assertTrue(conf.isAccessControlEnabled());
-
-    conf.setCacheUsed(false);
-    assertFalse(conf.isCacheUsed());
-    assertTrue(conf.isAccessControlEnabled());
-
-    conf.setEnableAccessControl(false);
-    assertFalse(conf.isCacheUsed());
-    assertFalse(conf.isAccessControlEnabled());
-
-    conf.setCacheUsed(true);
-    assertTrue(conf.isCacheUsed());
-    assertFalse(conf.isAccessControlEnabled());
-  }
-
-
   public void testGetAsProperties() throws Exception {
     final RepositoryConfiguration conf = new RepositoryConfiguration("test");
 
@@ -124,8 +99,8 @@ public class RepositoryConfigurationTest extends TestCase {
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_URL));
     assertEquals("http://localhost", props.get(PROPERTY_KEY_REPOSITORY_DISPLAY_URL));
 
-    assertNull(props.get(PROPERTY_KEY_USERNAME));
-    assertNull(props.get(PROPERTY_KEY_PASSWORD));
+    assertNull(props.get(PROPERTY_KEY_USER_NAME));
+    assertNull(props.get(PROPERTY_KEY_USER_PASSWORD));
 
     assertEquals("false", props.get(PROPERTY_KEY_USE_CACHE));
     assertEquals("false", props.get(PROPERTY_KEY_ALLOW_ZIP_DOWNLOADS));

@@ -1,9 +1,10 @@
-package org.sventon.cache.revisioncache;
+package org.sventon.repository.observer;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
+import org.sventon.cache.revisioncache.RevisionCacheImpl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;

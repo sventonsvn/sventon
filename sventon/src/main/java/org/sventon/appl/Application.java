@@ -17,11 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.CacheManager;
-import org.sventon.cache.entrycache.EntryCacheManager;
-import org.sventon.cache.logmessagecache.LogMessageCacheManager;
-import org.sventon.cache.objectcache.ObjectCacheManager;
-import org.sventon.cache.revisioncache.RevisionCacheManager;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
@@ -29,6 +24,8 @@ import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Represents the sventon application.
@@ -49,10 +46,10 @@ public final class Application {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Set of added subversion repository names.
+   * Map of added subversion repository names and their configurations.
    */
-  private final Map<RepositoryName, RepositoryConfiguration> repositories = Collections.synchronizedMap(
-      new HashMap<RepositoryName, RepositoryConfiguration>());
+  private final Map<RepositoryName, RepositoryConfiguration> repositories =
+      new ConcurrentHashMap<RepositoryName, RepositoryConfiguration>();
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -79,12 +76,9 @@ public final class Application {
    */
   private String configPassword;
 
-  private EntryCacheManager entryCacheManager;
-  private LogMessageCacheManager logMessageCacheManager;
-  private ObjectCacheManager objectCacheManager;
-  private RevisionCacheManager revisionCacheManager;
+  private final List<CacheManager> cacheManagers = new ArrayList<CacheManager>();
 
-  private final List<RepositoryName> updating = Collections.synchronizedList(new ArrayList<RepositoryName>());
+  private final ConcurrentLinkedQueue<RepositoryName> updating = new ConcurrentLinkedQueue<RepositoryName>();
 
   /**
    * Constructor.
@@ -124,10 +118,7 @@ public final class Application {
     for (final RepositoryConfiguration repositoryConfiguration : repositories.values()) {
       final RepositoryName repositoryName = repositoryConfiguration.getName();
       if (repositoryConfiguration.isCacheUsed()) {
-        register(entryCacheManager, repositoryName);
-        register(logMessageCacheManager, repositoryName);
-        register(objectCacheManager, repositoryName);
-        register(revisionCacheManager, repositoryName);
+        registerCacheManagers(cacheManagers, repositoryName);
       } else {
         logger.debug("Caches have not been enabled for repository: " + repositoryName);
       }
@@ -135,10 +126,12 @@ public final class Application {
     logger.info("Caches initialized ok");
   }
 
-  private void register(final CacheManager manager, final RepositoryName repositoryName) throws CacheException {
-    if (!manager.isRegistered(repositoryName)) {
-      logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
-      manager.register(repositoryName);
+  private void registerCacheManagers(final List<CacheManager> cacheManagers, final RepositoryName repositoryName) throws CacheException {
+    for (CacheManager manager : cacheManagers) {
+      if (!manager.isRegistered(repositoryName)) {
+        logger.debug("Registering [" + repositoryName.toString() + "] in [" + manager.getClass().getName() + "]");
+        manager.register(repositoryName);
+      }
     }
   }
 
@@ -343,7 +336,7 @@ public final class Application {
    * @param name     Repository name.
    * @param updating True or false.
    */
-  synchronized void setUpdatingCache(final RepositoryName name, final boolean updating) {
+  public synchronized void setUpdatingCache(final RepositoryName name, final boolean updating) {
     if (updating) {
       this.updating.add(name);
     } else {
@@ -371,39 +364,12 @@ public final class Application {
   }
 
   /**
-   * Sets the cache manager.
+   * Sets the cache managers.
    *
-   * @param entryCacheManager Cache manager.
+   * @param cacheManagers List of cache managers.
    */
-  public void setEntryCacheManager(final EntryCacheManager entryCacheManager) {
-    this.entryCacheManager = entryCacheManager;
-  }
-
-  /**
-   * Sets the cache manager.
-   *
-   * @param logMessageCacheManager Cache manager.
-   */
-  public void setLogMessageCacheManager(final LogMessageCacheManager logMessageCacheManager) {
-    this.logMessageCacheManager = logMessageCacheManager;
-  }
-
-  /**
-   * Sets the cache manager.
-   *
-   * @param objectCacheManager Cache manager.
-   */
-  public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
-    this.objectCacheManager = objectCacheManager;
-  }
-
-  /**
-   * Sets the cache manager.
-   *
-   * @param revisionCacheManager Cache manager.
-   */
-  public void setRevisionCacheManager(final RevisionCacheManager revisionCacheManager) {
-    this.revisionCacheManager = revisionCacheManager;
+  public void setCacheManagers(final List<CacheManager> cacheManagers) {
+    this.cacheManagers.addAll(cacheManagers);
   }
 
   /**

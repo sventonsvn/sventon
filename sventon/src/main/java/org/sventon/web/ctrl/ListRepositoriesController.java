@@ -51,7 +51,7 @@ public final class ListRepositoriesController extends AbstractController {
       return new ModelAndView(new RedirectView("/repos/listconfigs", true));
     }
 
-    //Clear uid and pwd if logout param is supplied
+    // Clear credentials if logout param is supplied
     final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
 
     if (logout) {

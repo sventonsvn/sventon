@@ -46,7 +46,7 @@ public interface LogMessageCache extends Cache {
    * @param logMessage The log message to cache.
    * @throws CacheException if error.
    */
-  void add(final LogMessage logMessage) throws CacheException;
+  void add(final LogMessage... logMessage) throws CacheException;
 
   /**
    * Gets the size of the log message cache, i.e. the number
@@ -63,4 +63,12 @@ public interface LogMessageCache extends Cache {
    * @throws CacheException if unable to clear cache.
    */
   void clear() throws CacheException;
+
+  /**
+   * Shuts down the cache.
+   *
+   * @throws CacheException if unable to shut down cache instance.
+   */
+  public abstract void shutdown() throws CacheException;
+
 }

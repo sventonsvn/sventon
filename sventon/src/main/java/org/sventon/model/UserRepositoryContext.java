@@ -71,7 +71,7 @@ public final class UserRepositoryContext implements Serializable {
   /**
    * User credentials.
    */
-  private Credentials credentials;
+  private Credentials credentials = Credentials.EMPTY;
 
   private boolean isWaitingForExport = false;
 
@@ -90,8 +90,8 @@ public final class UserRepositoryContext implements Serializable {
    */
   public static UserRepositoryContext getContext(final HttpServletRequest request, final RepositoryName repositoryName) {
     final HttpSession session = request.getSession(true);
-    final String uid = ServletRequestUtils.getStringParameter(request, "uid", "");
-    final String pwd = ServletRequestUtils.getStringParameter(request, "pwd", "");
+    final String userName = ServletRequestUtils.getStringParameter(request, "userName", "");
+    final String userPassword = ServletRequestUtils.getStringParameter(request, "userPassword", "");
 
     final UserContext userContext = (UserContext) WebUtils.getOrCreateSessionAttribute(
         session, "userContext", UserContext.class);
@@ -102,8 +102,8 @@ public final class UserRepositoryContext implements Serializable {
       userContext.add(repositoryName, userRepositoryContext);
     }
 
-    if (!StringUtils.isEmpty(uid) && !StringUtils.isEmpty(pwd)) {
-      userRepositoryContext.setCredentials(new Credentials(uid, pwd));
+    if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(userPassword)) {
+      userRepositoryContext.setCredentials(new Credentials(userName, userPassword));
     }
     return userRepositoryContext;
   }
@@ -252,11 +252,14 @@ public final class UserRepositoryContext implements Serializable {
    * @return True if user id and password has been set, false if not.
    */
   public boolean hasCredentials() {
-    return credentials != null;
+    return !credentials.isEmpty();
   }
 
+  /**
+   * Clears the credentials from memory.
+   */
   public void clearCredentials() {
-    credentials = null;
+    credentials = Credentials.EMPTY;
   }
 
   /**

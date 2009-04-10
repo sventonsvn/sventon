@@ -56,11 +56,11 @@
           <th style="width: 10px">&nbsp;</th>
           <th style="width: 10px">&nbsp;</th>
         </c:if>
+        <th><spring:message code="date"/></th>
+        <th><spring:message code="author"/></th>
         <th><spring:message code="revision"/></th>
         <th><spring:message code="message"/></th>
         <th>&nbsp;</th>
-        <th><spring:message code="author"/></th>
-        <th><spring:message code="date"/></th>
       </tr>
 
       <c:set var="nextPath" value=""/>
@@ -79,19 +79,27 @@
         </c:url>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
+          <c:if test="${isFile}">
+            <td>
+              <input type="checkbox" name="entries" value="${entry.pathAtRevision}@${entry.revision}" onclick="verifyCheckBox(this)"/>
+            </td>
+            <td class="sventonCol2">
+              <div id="${entryTrayAddUrl}" class="entry">
+                <img src="images/icon_file.png" alt="file">
+              </div>
+            </td>
+          </c:if>
+          <td nowrap>
+            <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+              <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
+            </span>
+          </td>
+          <td>${entry.author}</td>
           <c:choose>
             <c:when test="${isFile}">
               <c:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
-              <td>
-                <input type="checkbox" name="entries" value="${entry.pathAtRevision}@${entry.revision}" onclick="verifyCheckBox(this)"/>
-              </td>
-              <td class="sventonCol2">
-                <div id="${entryTrayAddUrl}" class="entry">
-                  <img src="images/icon_file.png" alt="file">
-                </div>
-              </td>
               <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
@@ -103,18 +111,12 @@
           </c:choose>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${fn:replace(fn:escapeXml(entry.message), br, '<br>')}</a></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
-          <td>${entry.author}</td>
-          <td nowrap>
-            <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
-              <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
-            </span>
-          </td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
           <c:if test="${isFile}">
             <td colspan="2">&nbsp;</td>
           </c:if>
-          <td valign="top"><b>Changed<br>paths</b></td><td colspan="4">
+          <td valign="top"><b>Changed paths</b></td><td colspan="4">
             <%=HTMLCreator.createChangedPathsTable(entry.getChangedPaths(), entry.getRevision(),
                 entry.getPathAtRevision(), "", command.getName(), false, false, response)%>
           </td>
@@ -132,7 +134,7 @@
         <c:when test="${morePages}">
           <tr>
             <td colspan="5" align="center">
-              <a href="${showNextLogUrl}"><spring:message code="next"/> ${pageSize}</a>&nbsp;
+              <b><a href="${showNextLogUrl}"><spring:message code="next"/> ${pageSize}</a></b>
             </td>
           </tr>
         </c:when>

@@ -9,17 +9,19 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logmessagecache;
+package org.sventon.repository.observer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.appl.AbstractRevisionObserver;
-import org.sventon.appl.RevisionUpdate;
+import org.sventon.appl.LogMessageCacheManager;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,9 +82,11 @@ public final class LogMessageCacheUpdater extends AbstractRevisionObserver {
    */
   protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
+      final List<LogMessage> logMessages = new ArrayList<LogMessage>();
       for (final SVNLogEntry svnLogEntry : revisions) {
-        logMessageCache.add(new LogMessage(svnLogEntry.getRevision(), svnLogEntry.getMessage()));
+        logMessages.add(new LogMessage(svnLogEntry));
       }
+      logMessageCache.add(logMessages.toArray(new LogMessage[logMessages.size()]));
     } catch (CacheException ce) {
       LOGGER.error("Unable to update logMessageCache", ce);
     }

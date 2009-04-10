@@ -1,4 +1,4 @@
-package org.sventon.cache.entrycache;
+package org.sventon.repository.observer;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
@@ -6,17 +6,20 @@ import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.appl.RevisionUpdate;
+import org.sventon.cache.entrycache.EntryCache;
+import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryServiceImpl;
 import org.tmatesoft.svn.core.*;
 
+import java.io.File;
 import java.util.*;
 
 public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final EntryCache entryCache = new MemoryCache();
+    final EntryCache entryCache = new EntryCacheImpl(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 

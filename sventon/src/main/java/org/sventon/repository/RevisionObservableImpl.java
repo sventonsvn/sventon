@@ -9,14 +9,17 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.RepositoryConnectionFactory;
+import org.sventon.appl.Application;
+import org.sventon.appl.ObjectCacheManager;
+import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheManager;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.observer.RevisionObserver;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -219,7 +222,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
         SVNRepository repository = null;
         try {
           repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-              configuration.getSVNURL(), configuration.getCredentials());
+              configuration.getSVNURL(), configuration.getCacheCredentials());
           final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
           update(repositoryName, repository, objectCache, flushAfterUpdate);
         } catch (final Exception ex) {

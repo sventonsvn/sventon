@@ -9,16 +9,15 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.mail;
+package org.sventon.repository.observer;
 
 import com.sun.mail.smtp.SMTPTransport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.appl.AbstractRevisionObserver;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.appl.RevisionUpdate;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RevisionUpdate;
 import org.sventon.util.HTMLCreator;
 import org.sventon.util.SVNUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;

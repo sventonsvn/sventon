@@ -140,7 +140,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
-    assertNull(uRC1FromSession.getCredentials());
+    assertSame(Credentials.EMPTY, uRC1FromSession.getCredentials());
 
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
     assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());

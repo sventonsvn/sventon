@@ -12,11 +12,13 @@ public class SearchHitDecoratorTagTest extends TestCase {
     assertEquals("<span class=\"hit\">jesper</span>", SearchHitDecoratorTag.decorate("hit",
         SearchEntriesController.SearchType.TEXT.name(), "jesper", "jesper"));
 
+    assertEquals("<span class=\"hit\">Jesper</span>", SearchHitDecoratorTag.decorate("hit",
+        SearchEntriesController.SearchType.TEXT.name(), "jesper", "Jesper"));
+
     assertEquals("this is a test!", SearchHitDecoratorTag.decorate("hit",
         SearchEntriesController.SearchType.TEXT.name(), "not-found", "this is a test!"));
 
     assertEquals("this is a test!", SearchHitDecoratorTag.decorate("hit",
         SearchEntriesController.SearchType.CAMELCASE.name(), "test", "this is a test!"));
-
   }
 }

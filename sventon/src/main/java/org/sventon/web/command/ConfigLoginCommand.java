@@ -26,24 +26,24 @@ public final class ConfigLoginCommand {
   /**
    * Password needed to access the configuration pages.
    */
-  private String pwd;
+  private String userPassword;
 
   /**
    * Gets the password.
    *
    * @return Password.
    */
-  public String getPwd() {
-    return pwd;
+  public String getUserPassword() {
+    return userPassword;
   }
 
   /**
    * Sets the password.
    *
-   * @param pwd Password.
+   * @param userPassword Password.
    */
-  public void setPwd(final String pwd) {
-    this.pwd = pwd;
+  public void setUserPassword(final String userPassword) {
+    this.userPassword = userPassword;
   }
 
   /**
