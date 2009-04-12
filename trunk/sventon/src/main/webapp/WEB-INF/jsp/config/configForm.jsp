@@ -25,18 +25,19 @@
       var user = $('user_btn');
       var useCache = $('caching');
 
-      ['access_method_user', 'access_method_shared', 'cache_settings', 'access_credentials'].each(Element.show);
+      ['access_method_user', 'access_method_shared', 'cache_settings', 'access_credentials', 'access_method_user_and_cache_enabled'].each(Element.hide);
 
       if (user.checked) {
-        ['access_method_shared'].each(Element.hide);
+        ['access_method_user', 'access_credentials'].each(Element.show);
       } else if (shared.checked) {
-        ['access_method_user'].each(Element.hide);
-      } else {
-        ['access_method_user', 'access_method_shared', 'access_credentials'].each(Element.hide);
+        ['access_method_shared', 'access_credentials'].each(Element.show);      
       }
 
-      if (!useCache.checked) {
-        ['cache_settings'].each(Element.hide);
+      if (useCache.checked) {
+        ['cache_settings'].each(Element.show);
+        if (user.checked) {
+          ['access_method_user_and_cache_enabled'].each(Element.show);
+        }
       }
     }
     window.onload = toggleAccessControl;
@@ -68,30 +69,43 @@
         <img alt="Step 1" src="images/config_step1.png"/>
 
         <div class="config_settings">
-          <p class="config_key">Repository name: <img class="helpIcon" src="images/icon_help.png"
-                                                      alt="Help"
-                                                      onmouseover="return getHelpText('conf_repository_name_help');">
+          <p class="config_key">Repository name:
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_repository_name_help');">
           </p>
 
           <spring:bind path="command.name">
-            <p><input type="text" name="name" size="50" value="${status.value}" class="configHeaderSmall"></p>
-            <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
+            <p>
+              <input type="text" name="name" size="50" value="${status.value}" class="configHeaderSmall">
+            </p>
+            <c:if test="${status.error}">
+              <p>
+                <span class="exclamationText">${status.errorMessage}</span>
+              </p>
+            </c:if>
           </spring:bind>
-          <p><b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i></p>
 
-          <p class="config_key">Subversion repository root URL: <img class="helpIcon"
-                                                                     src="images/icon_help.png"
-                                                                     alt="Help"
-                                                                     onmouseover="return getHelpText('conf_repository_url_help');">
+          <p>
+            <b>Example:</b> <i>local</i>, <i>myrepos</i>, or <i>project1</i>
+          </p>
+
+          <p class="config_key"> Subversion repository root URL:
+            <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_repository_url_help');">
           </p>
 
           <spring:bind path="command.repositoryUrl">
-            <p><input type="text" name="repositoryUrl" size="50" value="${status.value}" class="configHeaderSmall"></p>
-            <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
+            <p>
+              <input type="text" name="repositoryUrl" size="50" value="${status.value}" class="configHeaderSmall">
+            </p>
+            <c:if test="${status.error}">
+              <p>
+                <span class="exclamationText">${status.errorMessage}</span>
+              </p>
+            </c:if>
           </spring:bind>
 
-          <p><b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or
-            <i>svn+ssh://domain/project/</i></p>
+          <p>
+            <b>Example:</b> <i>http://domain/project/</i>, <i>svn://domain/project/</i> or <i>svn+ssh://domain/project/</i>
+          </p>
         </div>
 
       </div>
@@ -103,35 +117,40 @@
 
         <div class="config_settings">
           <spring:bind path="command.accessMethod">
-            <p class="config_key"><input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS"
-            <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if>
-                                                         onclick="toggleAccessControl();"><label
-               for="anon_btn">anonymous</label>
+            <p class="config_key">
+              <input id="anon_btn" type=radio name="accessMethod" value="ANONYMOUS"
+              <c:if test="${status.value eq 'ANONYMOUS'}"> checked</c:if> onclick="toggleAccessControl();">
+              <label for="anon_btn">anonymous</label>
               <input id="shared_btn" type=radio name="accessMethod" value="SHARED"
-              <c:if test="${status.value eq 'SHARED'}"> checked</c:if> onclick="toggleAccessControl();"><label
-               for="shared_btn">shared</label>
+              <c:if test="${status.value eq 'SHARED'}"> checked</c:if> onclick="toggleAccessControl();">
+              <label for="shared_btn">shared</label>
               <input id="user_btn" type=radio name="accessMethod" value="USER"
-              <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();"><label
-               for="user_btn">user</label> <img class="helpIcon" src="images/icon_help.png" alt="Help"
-                                                onmouseover="return getHelpText('conf_access_method_help');"></p>
-            <c:if test="${status.error}"><p><span class="exclamationText">${status.errorMessage}</span></p></c:if>
+              <c:if test="${status.value eq 'USER'}"> checked</c:if> onclick="toggleAccessControl();">
+              <label for="user_btn">user</label>
+              <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('conf_access_method_help');">
+            </p>
+            <c:if test="${status.error}">
+              <p>
+                <span class="exclamationText">${status.errorMessage}</span>
+              </p>
+            </c:if>
           </spring:bind>
         </div>
       </div>
 
-      <div id="access_method_shared">
+      <div id="access_method_shared" style="display: none;">
         <div class="config_settings">
           <p class="config_key">Username and password:</p>
         </div>
       </div>
 
-      <div id="access_method_user">
+      <div id="access_method_user" style="display: none;">
         <div class="config_settings">
           <p class="config_key">Username for connection test:</p>
         </div>
       </div>
 
-      <div id="access_credentials">
+      <div id="access_credentials" style="display: none;">
         <div class="config_settings">
           <spring:bind path="command.userName">
             <p>
@@ -180,7 +199,7 @@
           </div>
         </div>
 
-        <div id="cache_settings">
+        <div id="cache_settings" style="display: none;">
           <div class="config_settings">
             <p class="config_key">Username for cache: </p>
             <p>
@@ -196,6 +215,14 @@
                 <input id="cache-pwd" type="password" name="${status.expression}" size="30" value="${status.value}" class="configHeaderSmall">
               </p>
             </spring:bind>
+          </div>
+        </div>
+
+        <div id="access_method_user_and_cache_enabled" style="display: none; width: 50%;">
+          <div class="config_settings">
+            <p class="config_key">
+              <span class="exclamationText"><spring:message code="config.warning.cached-files-visibility"/></span>
+            </p>
           </div>
         </div>
 
