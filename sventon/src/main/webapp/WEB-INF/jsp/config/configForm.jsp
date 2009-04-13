@@ -222,6 +222,9 @@
           <div class="config_settings">
             <p class="config_key">
               <img src="images/icon_exclamation.png" alt="Warning"/>
+              <span class="exclamationText">
+                <b><spring:message code="config.warning.header"/></b>
+              </span>
             </p>
             <p class="config_key">
               <span class="exclamationText"><spring:message code="config.warning.cached-files-visibility"/></span>
