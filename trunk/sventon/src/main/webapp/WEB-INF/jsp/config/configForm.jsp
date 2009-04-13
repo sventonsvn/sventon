@@ -221,11 +221,13 @@
         <div id="access_method_user_and_cache_enabled" style="display: none; width: 50%;">
           <div class="config_settings">
             <p class="config_key">
+              <img src="images/icon_exclamation.png" alt="Warning"/>
+            </p>
+            <p class="config_key">
               <span class="exclamationText"><spring:message code="config.warning.cached-files-visibility"/></span>
             </p>
           </div>
         </div>
-
       </div>
     </div>
 
