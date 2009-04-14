@@ -96,6 +96,15 @@ public final class LogMessage implements Serializable {
   }
 
   /**
+   * Sets the author.
+   *
+   * @param author Author.
+   */
+  public void setAuthor(final String author) {
+    this.author = author;
+  }
+
+  /**
    * Gets the date.
    *
    * @return The date

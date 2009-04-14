@@ -3,6 +3,7 @@ package org.sventon.cache.logmessagecache;
 import junit.framework.TestCase;
 import org.sventon.model.LogMessage;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -77,6 +78,13 @@ public class LogMessageCacheImplTest extends TestCase {
 
     cache.add(new LogMessage(create(130, "<This is a <code>log</code> message for &amp; revision 130.......")));
     assertEquals(8, cache.getSize());
+
+    logMessages = cache.find("autho");
+    assertEquals(8, logMessages.size());
+    assertTrue(StringUtils.isNotBlank(logMessages.get(0).getMessage()));
+
+    logMessages = cache.find("theauthor");
+    assertEquals(8, logMessages.size());
 
     logMessages = cache.find("log");
     assertEquals(4, logMessages.size());

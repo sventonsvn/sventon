@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1549] Added: Feature #4572 - Allow searching for author in log search.
 [1540] Added: Feature #4551 - User based access control with caching.
 [1533] Added: Feature #4522 - Case-insensitive entry search.
 [1531] Added: Feature #4564 - New entry cache implementation.
