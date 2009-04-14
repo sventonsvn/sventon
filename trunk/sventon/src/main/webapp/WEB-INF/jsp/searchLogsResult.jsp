@@ -54,7 +54,7 @@
         <c:param name="revision" value="${logMessage.revision}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td>
+        <td class="sventonColNoWrap">
           <span onmouseover="Tip('<sventon-ui:age date="${logMessage.date}"/>');">
             <fmt:formatDate type="both" value="${logMessage.date}" dateStyle="short" timeStyle="short"/>
           </span>
