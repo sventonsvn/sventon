@@ -11,6 +11,7 @@
  */
 package org.sventon.cache.logmessagecache;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.compass.core.*;
@@ -100,12 +101,20 @@ public final class LogMessageCacheImpl implements LogMessageCache {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<List<LogMessage>>() {
       public List<LogMessage> doInCompass(CompassSession session) throws CompassException {
-        final CompassHits compassHits = session.find("message:" + queryString);
+        final CompassHits compassHits = session.find("message:" + queryString + " OR author:*" + queryString + "*");
         final List<LogMessage> hits = new ArrayList<LogMessage>(compassHits.length());
         for (int i = 0; i < compassHits.length(); i++) {
-          compassHits.highlighter(i).fragment("message");
           final LogMessage logMessage = (LogMessage) compassHits.hit(i).getData();
-          logMessage.setMessage(compassHits.hit(i).getHighlightedText().getHighlightedText());
+          compassHits.highlighter(i).fragment("message");
+          compassHits.highlighter(i).fragment("author");
+          final String highLightedMessage = compassHits.hit(i).getHighlightedText().getHighlightedText("message");
+          final String highLightedAuthor = compassHits.hit(i).getHighlightedText().getHighlightedText("author");
+          if (StringUtils.isNotBlank(highLightedAuthor)) {
+            logMessage.setAuthor(highLightedAuthor);
+          }
+          if (StringUtils.isNotBlank(highLightedMessage)) {
+            logMessage.setMessage(highLightedMessage);
+          }
           hits.add(logMessage);
         }
         return hits;
