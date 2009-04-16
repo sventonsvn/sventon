@@ -464,11 +464,16 @@ public final class RepositoryConfiguration {
   }
 
   private String loadTemplateFile(final String filename) throws IOException {
-    final InputStream is = this.getClass().getResourceAsStream(filename);
-    if (is == null) {
-      throw new FileNotFoundException("Unable to find: " + filename);
+    InputStream is = null;
+    try {
+      is = this.getClass().getResourceAsStream(filename);
+      if (is == null) {
+        throw new FileNotFoundException("Unable to find: " + filename);
+      }
+      return IOUtils.toString(is);
+    } finally {
+      IOUtils.closeQuietly(is);
     }
-    return IOUtils.toString(is);
   }
 
   public String getRssTemplate() throws IOException {

@@ -21,6 +21,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="org.tmatesoft.svn.core.SVNRevisionProperty" %>
 <%@ page import="org.sventon.web.ctrl.template.GetFileHistoryController" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <c:if test="${fn:length(fileRevisions) > 1}">
 <table class="fileHistoryTable">
@@ -39,7 +40,7 @@
             <jsp:useBean id="fileRevision" type="org.tmatesoft.svn.core.io.SVNFileRevision"/>
             <%
               final String dateString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
-              final Date revDate = GetFileHistoryController.ISO8601_FORMAT.parse(dateString);
+              final Date revDate = new SimpleDateFormat(GetFileHistoryController.ISO8601_FORMAT_PATTERN).parse(dateString);
             %>
             <option value="${showFileAtRevisionUrl}">
               <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>

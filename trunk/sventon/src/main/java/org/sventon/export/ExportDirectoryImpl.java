@@ -20,7 +20,6 @@ import org.sventon.model.ZipFileWrapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -40,7 +39,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
   /**
    * Date format used for file name assembling.
    */
-  public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+  public static final String DATE_FORMAT_PATTERN = "yyyyMMddHHmmssSSS";
 
   /**
    * The directory name prefix.
@@ -102,7 +101,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
    * @return Generated file name.
    */
   protected String createTempFilename(final Date date) {
-    return repositoryName + "-" + DATE_FORMAT.format(date) + ".zip";
+    return repositoryName + "-" + new SimpleDateFormat(DATE_FORMAT_PATTERN).format(date) + ".zip";
   }
 
   /**

@@ -12,6 +12,8 @@
 package org.sventon.web.command;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sventon.model.DiffStyle;
 import org.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -151,6 +153,22 @@ public final class DiffCommand extends BaseCommand {
     return toFileRevision != null ? SVNRevision.create(toFileRevision.getRevision()) : SVNRevision.UNDEFINED;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(final Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
+  }
+  
   /**
    * {@inheritDoc}
    */

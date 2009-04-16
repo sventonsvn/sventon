@@ -44,7 +44,7 @@ public final class LogMessage implements Serializable {
   /**
    * Default constructor.
    */
-  private LogMessage() {
+  LogMessage() {
   }
 
   /**
@@ -55,7 +55,7 @@ public final class LogMessage implements Serializable {
   public LogMessage(final SVNLogEntry svnLogEntry) {
     this.revision = svnLogEntry.getRevision();
     this.author = svnLogEntry.getAuthor();
-    this.date = svnLogEntry.getDate();
+    this.date = svnLogEntry.getDate() != null ? (Date) svnLogEntry.getDate().clone() : null;
     this.message = svnLogEntry.getMessage();
   }
 
@@ -110,6 +110,6 @@ public final class LogMessage implements Serializable {
    * @return The date
    */
   public Date getDate() {
-    return date;
+    return date != null ? (Date) date.clone() : null;
   }
 }
