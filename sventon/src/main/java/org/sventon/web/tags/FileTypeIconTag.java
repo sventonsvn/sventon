@@ -12,6 +12,7 @@
 package org.sventon.web.tags;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
@@ -74,11 +75,16 @@ public final class FileTypeIconTag extends TagSupport {
    */
   private synchronized void assertMappingsLoaded() throws IOException {
     if (MAPPINGS.isEmpty()) {
-      final InputStream is = this.getClass().getResourceAsStream(FILE_TYPE_ICON_MAPPINGS_FILENAME);
-      if (is == null) {
-        throw new FileNotFoundException("Unable to find '" + FILE_TYPE_ICON_MAPPINGS_FILENAME + "' in the CLASSPATH root");
+      InputStream is = null;
+      try {
+        is = this.getClass().getResourceAsStream(FILE_TYPE_ICON_MAPPINGS_FILENAME);
+        if (is == null) {
+          throw new FileNotFoundException("Unable to find '" + FILE_TYPE_ICON_MAPPINGS_FILENAME + "' in the CLASSPATH root");
+        }
+        MAPPINGS.load(is);
+      } finally {
+        IOUtils.closeQuietly(is);
       }
-      MAPPINGS.load(is);
     }
   }
 

@@ -56,7 +56,7 @@ public final class AnnotatedTextFileRow {
    */
   public AnnotatedTextFileRow(final Date date, final long revision, final String author,
                               final int rowNumber, final String content) {
-    this.date = date;
+    this.date = date != null ? (Date) date.clone() : null;
     this.revision = revision;
     this.author = author;
     this.rowNumber = rowNumber;
@@ -78,7 +78,7 @@ public final class AnnotatedTextFileRow {
    * @return The date.
    */
   public Date getDate() {
-    return date;
+    return date != null ? (Date) date.clone() : null;
   }
 
   /**

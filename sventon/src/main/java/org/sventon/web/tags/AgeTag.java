@@ -72,7 +72,7 @@ public final class AgeTag extends TagSupport {
    * @param date Date.
    */
   public void setDate(final Date date) {
-    this.date = date;
+    this.date = date != null ? (Date) date.clone() : null;
   }
 
 }

@@ -13,10 +13,11 @@ package org.sventon.export;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT;
+import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT_PATTERN;
 
 import java.io.File;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,7 +60,7 @@ public final class ExportFileExpirationRule implements ExpirationRule {
     final Matcher matcher = DIGIT_PATTERN.matcher(tempFile.getName());
     matcher.find();
     try {
-      final Date fileDate = DATE_FORMAT.parse(matcher.group());
+      final Date fileDate = new SimpleDateFormat(DATE_FORMAT_PATTERN).parse(matcher.group());
       return System.currentTimeMillis() - fileDate.getTime() > temporaryFileExpireTimeMs;
     } catch (final ParseException pe) {
       logger.warn("Unable to parse date part of filename: " + tempFile.getName(), pe);

@@ -22,8 +22,6 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -39,11 +37,9 @@ public final class GetFileHistoryController extends AbstractTemplateController {
   protected static final String ARCHIVED_ENTRY = "archivedEntry";
 
   /**
-   * Formatter for time in a quasi ISO 8601 format where the ':' are replaced by periods to save to disk.
-   * <p/>
-   * <code>yyyy-MM-ddTHH.mm.ss.SSSSSSZ</code>.
+   * Formatter for ISO 8601 format.
    */
-  public static final DateFormat ISO8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+  public static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
   /**
    * {@inheritDoc}

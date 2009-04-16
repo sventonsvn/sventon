@@ -13,6 +13,7 @@ import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,6 @@ public class GetFileHistoryControllerTest extends TestCase {
 
   public void testDateFormat() throws Exception {
     final String source = "2008-08-19T11:12:38.765624Z";
-    GetFileHistoryController.ISO8601_FORMAT.parse(source);
+    new SimpleDateFormat(GetFileHistoryController.ISO8601_FORMAT_PATTERN).parse(source);
   }
 }
