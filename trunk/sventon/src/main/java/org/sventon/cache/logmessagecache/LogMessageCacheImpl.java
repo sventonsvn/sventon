@@ -109,10 +109,10 @@ public final class LogMessageCacheImpl implements LogMessageCache {
           compassHits.highlighter(i).fragment("author");
           final String highLightedMessage = compassHits.hit(i).getHighlightedText().getHighlightedText("message");
           final String highLightedAuthor = compassHits.hit(i).getHighlightedText().getHighlightedText("author");
-          if (StringUtils.isNotBlank(highLightedAuthor)) {
+          if (isAvailable(highLightedAuthor)) {
             logMessage.setAuthor(highLightedAuthor);
           }
-          if (StringUtils.isNotBlank(highLightedMessage)) {
+          if (isAvailable(highLightedMessage)) {
             logMessage.setMessage(highLightedMessage);
           }
           hits.add(logMessage);
@@ -120,6 +120,10 @@ public final class LogMessageCacheImpl implements LogMessageCache {
         return hits;
       }
     });
+  }
+
+  private boolean isAvailable(String text) {
+    return StringUtils.isNotBlank(text) && !text.equals(LogMessage.NOT_AVAILABLE_TAG);
   }
 
   /**

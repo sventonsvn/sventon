@@ -115,6 +115,12 @@ public class LogMessageCacheImplTest extends TestCase {
 
     cache.add(new LogMessage(create(124, null)));
     assertEquals(2, cache.getSize());
+
+    cache.add(new LogMessage(new SVNLogEntry(null, 125, null, new Date(), "abc")));
+    assertEquals(3, cache.getSize());
+    final LogMessage message = cache.find("abc").get(0);
+    assertEquals("<span class=\"searchhit\">abc</span>", message.getMessage());
+    assertEquals(null, message.getAuthor());
   }
 
 }
