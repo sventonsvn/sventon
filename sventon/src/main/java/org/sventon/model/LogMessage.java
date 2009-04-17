@@ -27,12 +27,14 @@ import java.util.Date;
 @Searchable(root = true)
 public final class LogMessage implements Serializable {
 
+  public static final String NOT_AVAILABLE_TAG = "_NA_";
+
   private static final long serialVersionUID = 1484899822981422330L;
 
   @SearchableId
   private long revision;
 
-  @SearchableProperty
+  @SearchableProperty(nullValue = NOT_AVAILABLE_TAG)
   private String author;
 
   @SearchableProperty
