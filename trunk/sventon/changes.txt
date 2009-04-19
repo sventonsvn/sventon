@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1556] Release 2.1.0 (2009-04-19)
+
 [1549] Added: Feature #4572 - Allow searching for author in log search.
 [1540] Added: Feature #4551 - User based access control with caching.
 [1533] Added: Feature #4522 - Case-insensitive entry search.
