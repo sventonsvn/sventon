@@ -1,6 +1,8 @@
 <div class="header">Screenshots</div>
 <div class="body">
 
+(2.1.0 updates comming soon!)
+
 <hr>
 
 <!--
