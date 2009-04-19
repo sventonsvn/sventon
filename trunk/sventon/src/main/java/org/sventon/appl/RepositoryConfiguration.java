@@ -447,20 +447,68 @@ public final class RepositoryConfiguration {
     this.enableIssueTrackerIntegration = enableIssueTrackerIntegration;
   }
 
+  /**
+   * @param rssTemplateFile RSS template file.
+   */
   public void setRssTemplateFile(final String rssTemplateFile) {
     this.rssTemplateFile = rssTemplateFile;
   }
 
+  /**
+   * @param mailTemplateFile Mail template file.
+   */
   public void setMailTemplateFile(final String mailTemplateFile) {
     this.mailTemplateFile = mailTemplateFile;
   }
 
+  /**
+   * @return RSS template file.
+   */
   public String getRssTemplateFile() {
     return rssTemplateFile;
   }
 
+  /**
+   * @return mail template file.
+   */
   public String getMailTemplateFile() {
     return mailTemplateFile;
+  }
+
+  /**
+   * @return RSS template
+   * @throws IOException if unable to load template.
+   */
+  public String getRssTemplate() throws IOException {
+    if (rssTemplate == null) {
+      rssTemplate = loadTemplateFile(rssTemplateFile);
+    }
+    return rssTemplate;
+  }
+
+  /**
+   * @return Mail template
+   * @throws IOException if unable to load template.
+   */
+  public String getMailTemplate() throws IOException {
+    if (mailTemplate == null) {
+      mailTemplate = loadTemplateFile(mailTemplateFile);
+    }
+    return mailTemplate;
+  }
+
+  /**
+   * Marks the configuration as persisted.
+   */
+  public void setPersisted() {
+    this.persisted = true;
+  }
+
+  /**
+   * @return True if the configuration is persisted, false if not.
+   */
+  public boolean isPersisted() {
+    return persisted;
   }
 
   private String loadTemplateFile(final String filename) throws IOException {
@@ -474,28 +522,6 @@ public final class RepositoryConfiguration {
     } finally {
       IOUtils.closeQuietly(is);
     }
-  }
-
-  public String getRssTemplate() throws IOException {
-    if (rssTemplate == null) {
-      rssTemplate = loadTemplateFile(rssTemplateFile);
-    }
-    return rssTemplate;
-  }
-
-  public String getMailTemplate() throws IOException {
-    if (mailTemplate == null) {
-      mailTemplate = loadTemplateFile(mailTemplateFile);
-    }
-    return mailTemplate;
-  }
-
-  public void setPersisted() {
-    this.persisted = true;
-  }
-
-  public boolean isPersisted() {
-    return persisted;
   }
 
 }
