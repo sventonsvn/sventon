@@ -1,0 +1,254 @@
+sventon change history
+-----------------------------------------------------------------------------------------
+
+[1556] Release 2.1.0 (2009-04-19)
+
+[1549] Added: Feature #4572 - Allow searching for author in log search.
+[1540] Added: Feature #4551 - User based access control with caching.
+[1533] Added: Feature #4522 - Case-insensitive entry search.
+[1531] Added: Feature #4564 - New entry cache implementation.
+[1525] Added: Feature #4565 - New log cache implementation.
+
+[1517] Release 2.0.5 (2009-03-04)
+[1514] Fixed: Bug #15311 - Does not work on WebSphere 6.1.
+
+[1510] Release 2.0.4 (2009-02-22)
+[1505] Fixed: Bug #15304 - Show latest revision info broken.
+
+[1500] Release 2.0.3 (2009-02-18)
+[1497] Fixed: Bug #15086 - User based auth broken (since 2.0.0).
+[1496] Added: Feature #4116 - Possibility to search entries by author.
+
+[1488] Release 2.0.2 (2009-02-10)
+[1482] Fixed: Bug #15238 - EntryCache population bug.
+[1476] Fixed: Bug #15182 - Append trailing slash to URL.
+[1475] Fixed: Bug #15155 - Cache not flushed after updating 'lastUpdatedRevision'.
+
+[1467] Release 2.0.1 (2009-01-25)
+[1462] Added: Feature #4453 - Add link to admin page if enabled.
+[1460] Fixed: Bug #15086 - User based auth broken.
+
+[1456] Release 2.0.0 (2009-01-19)
+[1443] Added: Upgraded to SVNKit 1.2.2.
+[1425] Added: Feature #4407 - Add options to Log View.
+[1421] Added: Upgraded to Spring 2.5.6.
+[1418] Added: Feature #2747 - Asynchronous exports.
+[1412] Fixed: Bug #5604 - Not possible to diff over paged logs.
+[1411] Added: Feature #4400 - Age popup on all printed dates.
+[1410] Added: Feature #4354 - Point out sventon dir using a property (sventon.dir).
+[1409] Fixed: Bug #12687 - Cannot have more than one sventon instance per container.
+[1408] Added: Feature #4221 - Possibility to decide default diff view.
+[1393] Added: Feature #3022 - Add admin control.
+[1333] Fixed: Bug #14244 - Revision zero not considered.
+[1321] Added: Feature #4182 - Friendly URLs.
+[1246] Added: Feature #3499 - Diff tags.
+[1407] Fixed: Bug #14799 - Unnecessary recreation of thumbnails.
+
+[1390] Release 1.4.1 (2008-10-01)
+[1385] Added: Upgraded to SVNKit 1.2.0.
+[1358] Fixed: Bug #14342 - Version number not displayed properly on Glassfish.
+
+[1339] Release 1.4.0 (2008-07-25)
+
+[1319] Release 1.4 RC6 (2008-07-09)
+[1315] Fixed: Bug #14171 - Thumbnails are not shown when using user based auth.
+[1314] Fixed: Bug #14151 - Thumbnails are not shown when cache is disabled.
+[1308] Fixed: Bug #14129 - Multi-byte characters not correctly rendered in source files.
+
+[1291] Release 1.4 RC5 (2008-05-25)
+[1288] Fixed: Bug #13881 - RSS component not working when using user based auth.
+[1286] Fixed: Bug #13870 - Not possible to link to a specific row.
+[1276] Fixed: Bug #13707 - Entry tray remove link broken for non-head entries.
+
+[1270] Release 1.4 RC4 (2008-04-20)
+[1265] Fixed: Bug #13640 - Diff crashes if the file starts with a new line character.
+[1263] Fixed: Bug #13622 - Diff with previous revision not working for moved files.
+[1249] Fixed: Bug #13388 - Keywords are not expanded in raw file view.
+[1248] Fixed: Bug #13389 - Keyword expansion values not properly escaped.
+
+[1242] Release 1.4 RC3 (2008-03-10)
+[1236] Fixed: Bug #13325 - Search box too far on the right.
+[1230] Added: Feature #4035 - Loosen restrictions on instance name.
+[1228] Fixed: Bug #13308 - Validation error of instance name not handled properly.
+
+[1223] Release 1.4 RC2 (2008-03-06)
+[1219] Fixed: Bug #13268 - Peg revision not honored by RSS creator.
+[1218] Fixed: Bug #13244 - Error during population of log message cache.
+
+[1212] Release 1.4 RC1 (2008-02-19)
+[1152] Added: Upgraded to Spring 2.5.1
+[1145] Added: Feature #3999 - Inline diff view.
+[1144] Fixed: Bug #9716 - Incorrect diff.
+[1135] Fixed: Bug #6387 - Markup of changed file in logs view fails if it's renamed.
+[1133] Added: Feature #2750 - Add help text divs.
+[1131] Added: Upgraded to Lucene 2.2.0.
+[1104] Added: Feature #3943 - Send notification mail for new revisions.
+[1092] Added: Feature #3931 - Easy navigation between file revisions.
+[1077] Added: Feature #3928 - Possibility to set an URL for display.
+[1047] Added: Feature #3900 - Change behaviour when searching entries.
+[1044] Fixed: Bug #12698 - Highlighting problem when searching using wildcards.
+ [982] Added: Feature #2164 - Repository browsing with user credential.
+ [978] Added: Feature #3809 - Popup file type when cursor hovers over.
+ [977] Added: Upgraded to Spring 2.5
+ [944] Added: Feature #3825 - Entry tray.
+
+[1067] Release 1.3.1 (2007-12-22)
+[1066] Fixed: Sessions were not closed (only affects svn protocol).
+
+ [970] Release 1.3.0 (2007-11-28)
+
+ [934] Release 1.3 RC3 (2007-10-22)
+ [933] Fixed: Bug #12252 - Faulty escaping in log search result view.
+
+ [932] Release 1.3 RC2 (2007-10-22)
+ [921] Fixed: Bug #12143 - Unable to show properties for archive files.
+ [917] Fixed: Bug #12136 - Log message not escaped properly.
+
+ [916] Release 1.3 RC1 (2007-10-08)
+ [894] Added: Feature #3768 - Override mime-types in show file view.
+ [891] Added: Feature #3767 - Show content of files inside archives.
+ [874] Added: Feature #1571 - Browse specific date instead of revision.
+ [860] Added: Feature #953 - Blame.
+ [859] Added: Upgraded to SVNKit 1.1.4.
+ [856] Added: Feature #3345 - More details in RSS body.
+ [845] Added: Feature #3477 - Configurable feed sizes.
+ [844] Added: Feature #3498 - Visual feedback when skipping directories.
+ [843] Added: Feature #3341 - Log message popup div.
+
+ [883] Release 1.2.0 (2007-09-08)
+
+ [851] Release 1.2 RC3 (2007-07-21)
+ [848] Fixed: Bug #11430 - Cache functionality doesn't work with file-protocol.
+ [847] Fixed: Bug #11595 - EntryCache memory consumption.
+ [840] Fixed: Bug #11251 - RSS feed creation error.
+
+ [836] Release 1.2 RC2 (2007-05-18)
+ [834] Added: Feature #3348 - Fix sort order in the instance list.
+ [832] Fixed: Bug #10991 - ZIP download does not support non USASCII.
+ [829] Fixed: Bug #10920 - Could not update cache instance.
+
+ [825] Release 1.2 RC1 (2007-04-03)
+ [809] Added: Feature #2939 - Store cache files gzipped.
+ [808] Added: Feature #3089 - context sensitive feeds.
+ [798] Added: Upgraded to SVNKit 1.1.1.
+ [789] Fixed: Bug #10253 - Caches for all instances are locked during update.
+ [788] Added: Feature #3018 - Add next/previous in revinfo view.
+ [785] Added: Feature #3108 - Display file type icons.
+ [784] Added: Feature #3030 - Bypass empty middle directories.
+ [766] Added: Feature #3013 - Store state of search mode radio button.
+ [763] Fixed: Bug #7106 - View files with different encoding.
+ [763] Fixed: Bug #9847 - Directories should not be possible to diff.
+ [729] Added: Feature #2884 - N Latest Commit Infos.
+ [729] Added: Feature #2748 - Revision details ajaxified.
+ [724] Added: Feature #2887 - Customizable RSS body.
+ [720] Added: Feature #2853 - Warn if repository url is not root.
+
+ [794] Release 1.1.0 (2007-02-18)
+
+ [782] Release 1.1 RC4 (2007-01-28)
+ [779] Fixed: Bug #10132 - Cache does not survive SIGKILL.
+ [778] Added: Feature #3069 - Flushing of caches.
+
+ [754] Release 1.1 RC3 (2006-12-19)
+ [750] Fixed: Bug #9485 - Temp path (creation) error in JBoss.
+ [739] Fixed: Bug #9518 - IE cache problem - show files in flatten view.
+ [738] Added: Feature #2854 - Improve initial cache loading.
+
+ [717] Release 1.1 RC2 (2006-11-06)
+ [715] Fixed: Bug #9356 - More than one entry must be selected for zip download.
+       Fixed: Bug #9367 - More than one entry must be selected for view thumbnails.
+ [713] Fixed: Bug #9323 - Parse error in oc4j.
+ [712] Fixed: Bug #9315 - RSS feed.
+
+ [705] Release 1.1 RC1 (2006-10-30)
+ [699] Added: Upgraded to JavaSVN 1.1.0beta5.
+ [677] Added: Feature #2751 - Update the caches one by one.
+ [651] Added: Feature #2670 - Possibility to expand flattened dirs.
+ [611] Added: Feature #1570 - Support for multiple repositories.
+ [600] Fixed: Bug #8371 - Misspelled revision parameter in logs view.
+       Fixed: Bug #8370 - Revision parameter forgotten in back-link.
+ [594] Added: Feature #2417 - Search result order by.
+ [591] Added: Feature #2420 - File extension filtering in repobrowser.
+ [590] Added: Feature #1868 - Unified diff view.
+ [563] Added: Feature #2259 - Revision info cache.
+ [552] Added: Upgraded to JavaSVN 1.1.0beta2.
+ [546] Fixed: Redesign of entry cache.
+       Added: Feature #2175 - Commit message cache using Lucene.
+       Added: Upgraded to ehcache 1.2.
+       Added: Upgraded to JavaSVN 1.1.0b.
+
+ [582] Release 1.0.0 (2006-07-03)
+ [575] Fixed: Bug #7985 - Tooltip text wrap in browser view.
+ [573] Fixed: Bug #7983 - View log for a file renders incorrect navigation.
+
+ [544] Release 1.0 RC4 (2006-05-28)
+ [520] Fixed: Bug #7229 - Latest commit info not shown.
+ [519] Fixed: Bug #7230 - Wrong revision in links from 'latest commit info' box.
+
+ [513] Release 1.0 RC3 (2006-04-16)
+ [509] Fixed: Bug #7136 - The path link contains Chinese still doesn't work.
+ [501] Added: Upgraded to JavaSVN 1.0.4.
+ [499] Fixed: Bug #7000 - Chinese characters in file name doesn't work.
+
+ [496] Release 1.0 RC2 (2006-04-02)
+ [477] Added: Possibility to diff entries in browser and search result view.
+ [468] Added: Feature #1871 - Possibility to disable index.
+ [465] Added: Upgraded to JHighlight 1.0.
+ [450] Fixed: Flatten and search buttons are now disabled if not browsing HEAD.
+ [449] Fixed: Bug #6705 and #6374.
+ [444] Added: Feature #1867 - Raw file view.
+
+ [433] Release 1.0 RC1 (2006-02-14)
+ [423] Added: Upgraded to JavaSVN 1.0.3.
+ [408] Fixed: Renamed 'default-sventon.properties' to 'sventon.properties.
+ [398] Fixed: Bug #5662 - Uncaught exceptions causes stack trace on screen
+ [397] Added: Feature #1685 - Background index population.
+ [394] Added: Upgraded to Spring 1.2.6
+ [373] Added: Display of all current locks, recursively.
+ [365] Added: Upgraded to JavaSVN 1.0.2.
+ [356] Added: File lock display in browser view.
+ [350] Fixed: Removed mount point feature (too much pain, not enough gain).
+ [348] Added: Latest commit info stays visible when following a link from it.
+ [346] Fixed: RSS item layout.
+ [344] Added: Repository changes now published as an RSS feed.
+ [341] Added: Upgraded to JavaSVN 1.0.1.
+ [338] Added: More validation during configuration.
+ [336] Fixed: Revision changes are now sorted before applied to index.
+ [336] Fixed: Index is not stored to disk if empty.
+
+ [334] Release 0.9.2 (2005-12-18)
+ [328] Fixed: Bug #5884 - Index update fails when adding or removing directories.
+ [328] Added: Index is now written to disk directly after update.
+
+ [324] Release 0.9.1 (2005-12-11)
+ [318] Added: Default property values to get rid of empty default-sventon.properties.
+ [313] Fixed: Bug #5847 - Index update fails when files are removed.
+ [311] Fixed: User ended up in the wrong revision if following a link from the log details view.
+
+ [309] Release 0.9.0 (2005-12-05)
+ [276] Added: Possibility to do CamelCase searches.
+ [212] Added: View contents of zip archives (including jar).
+ [206] Added: Improve index update strategy.
+ [198] Added: Show selected (image) files as thumbnails.
+ [174] Added: Diff revisions of same file.
+ [171] Added: View all changes in one revision (log entry).
+ [157] Added: Serialize index to disk.
+ [145] Added: View metadata (e.g. mime types).
+ [142] Added: Thumbnail caching using ehcache.
+ [141] Added: Keyword expansion when viewing files.
+ [132] Added: Simple installation wizard.
+ [130] Added: "Show file" should display thumbnail preview of image files.
+ [130] Added: Style sheet usage to enable easy customization.
+ [113] Added: Possibility to flatten directory structure view.
+ [113] Added: Possibility to search for files and directories.
+  [97] Added: Possibility to configure a view only user + pwd to avoid end user authentication.
+  [97] Added: Support for language specific characters and white space in paths (WebDAV).
+  [79] Added: Download file at any given revision.
+  [76] Added: Clickable revision path info for quick navigation in browser.
+  [76] Added: Possibility to navigate in repository by typing path.
+  [76] Added: Browse repository for any given revision.
+  [76] Added: View logs for a file/directory.
+  [76] Added: Basic source code syntax highlighting.
+  [76] Added: View file for any given revision.
+  [76] Added: Browse WebDAV and svnserve repositories (anonymous and authorized login).
+
