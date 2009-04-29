@@ -101,7 +101,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<List<LogMessage>>() {
       public List<LogMessage> doInCompass(CompassSession session) throws CompassException {
-        final CompassHits compassHits = session.find("message:" + queryString + " OR author:*" + queryString + "*");
+        final CompassHits compassHits = session.find(queryString);
         final List<LogMessage> hits = new ArrayList<LogMessage>(compassHits.length());
         for (int i = 0; i < compassHits.length(); i++) {
           final LogMessage logMessage = (LogMessage) compassHits.hit(i).getData();

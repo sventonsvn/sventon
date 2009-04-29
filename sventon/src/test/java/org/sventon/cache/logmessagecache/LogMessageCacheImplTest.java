@@ -79,7 +79,7 @@ public class LogMessageCacheImplTest extends TestCase {
     cache.add(new LogMessage(create(130, "<This is a <code>log</code> message for &amp; revision 130.......")));
     assertEquals(8, cache.getSize());
 
-    logMessages = cache.find("autho");
+    logMessages = cache.find("*autho*");
     assertEquals(8, logMessages.size());
     assertTrue(StringUtils.isNotBlank(logMessages.get(0).getMessage()));
 
@@ -106,7 +106,6 @@ public class LogMessageCacheImplTest extends TestCase {
         "1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop " +
         "publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
         logMessages.get(0).getMessage());
-
   }
 
   public void testAddEmptyAndNull() throws Exception {
@@ -121,6 +120,13 @@ public class LogMessageCacheImplTest extends TestCase {
     final LogMessage message = cache.find("abc").get(0);
     assertEquals("<span class=\"searchhit\">abc</span>", message.getMessage());
     assertEquals(null, message.getAuthor());
+  }
+
+  public void testUsingAndLogic() throws Exception {
+    cache.add(new LogMessage(create(234, "one two three")));
+    assertEquals(1, cache.getSize());
+    final LogMessage message = cache.find("one AND two").get(0);
+    assertEquals("<span class=\"searchhit\">one</span> <span class=\"searchhit\">two</span> three", message.getMessage());
   }
 
 }
