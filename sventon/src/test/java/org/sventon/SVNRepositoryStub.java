@@ -278,6 +278,10 @@ public class SVNRepositoryStub extends SVNRepository {
     throw new UnsupportedOperationException("Not implemented!");
   }
 
+  protected long getDeletedRevisionImpl(String s, long l, long l1) throws SVNException {
+    throw new UnsupportedOperationException("Not implemented!");
+  }
+
   @Override
   protected void lock() {
     throw new UnsupportedOperationException("Not implemented!");
