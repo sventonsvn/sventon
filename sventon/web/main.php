@@ -19,6 +19,7 @@ Some of the features making sventon a great Subversion companion:
   <li>Show differences between paths.</li>
   <li>Support for multiple repositories</li>
   <li>Several authentication methods supported, including user based</li>
+  <li>Integrates with <a href="http://www.atlassian.com/software/jira/">JIRA</a>, <a href="https://hudson.dev.java.net/">Hudson</a>, <a href="http://luntbuild.javaforge.com/">Luntbuild</a> and <a href="http://tortoisesvn.net/">TortoiseSVN</a></li>
   <li>Easily keep track of changes using the 'latest commit' feature</li>
   <li>Lightning fast search for instantly finding files or log messages, including <a href="http://en.wikipedia.org/wiki/Camel_case">CamelCase</a> Search</li>
   <li>Flattening of directory structures for quickly finding the directory you're looking for</li>

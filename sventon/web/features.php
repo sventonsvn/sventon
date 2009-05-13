@@ -6,6 +6,7 @@
   <li>Support for multiple repositories.</li>
   <li>View and download files for any given revision or date in time.</li>
   <li>Friendly URL:s.</li>
+  <li>Integrates with <a href="http://www.atlassian.com/software/jira/">JIRA</a>, <a href="https://hudson.dev.java.net/">Hudson</a>, <a href="http://luntbuild.javaforge.com/">Luntbuild</a> and <a href="http://tortoisesvn.net/">TortoiseSVN</a></li>
   <li>Sort or filter directory listings.</li>
   <li>View contents of archives and files inside archives.</li>
   <li>View logs history and metadata for files and directories.</li>
