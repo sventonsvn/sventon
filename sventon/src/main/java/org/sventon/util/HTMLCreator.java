@@ -190,7 +190,7 @@ public final class HTMLCreator {
       }
 
       if (logEntryPath.getCopyPath() != null) {
-        sb.append("<br><b>Copy from</b> ");
+        sb.append("<br>(<i>Copy from</i> ");
         goToUrl = createGoToUrl(baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), repositoryName, false);
         if (response != null) {
           goToUrl = response.encodeURL(goToUrl);
@@ -206,7 +206,7 @@ public final class HTMLCreator {
         }
         sb.append("<a href=\"").append(revisionInfoUrl);
         sb.append("\">");
-        sb.append(logEntryPath.getCopyRevision()).append("</a>");
+        sb.append(logEntryPath.getCopyRevision()).append("</a>)");
       }
       sb.append("</td>\n");
       sb.append("  </tr>\n");

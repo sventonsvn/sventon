@@ -52,10 +52,8 @@
     <table class="sventonLogEntriesTable">
       <c:set var="rowCount" value="0"/>
       <tr>
-        <c:if test="${isFile}">
-          <th style="width: 10px">&nbsp;</th>
-          <th style="width: 10px">&nbsp;</th>
-        </c:if>
+        <th style="width: 10px; height: 22px;">&nbsp;</th>
+        <th style="width: 10px;">&nbsp;</th>
         <th><spring:message code="date"/></th>
         <th><spring:message code="author"/></th>
         <th><spring:message code="revision"/></th>
@@ -79,16 +77,21 @@
         </c:url>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-          <c:if test="${isFile}">
-            <td>
-              <input type="checkbox" name="entries" value="${entry.pathAtRevision}@${entry.revision}" onclick="verifyCheckBox(this)"/>
-            </td>
-            <td class="sventonCol2">
-              <div id="${entryTrayAddUrl}" class="entry">
-                <img src="images/icon_file.png" alt="file">
-              </div>
-            </td>
-          </c:if>
+          <c:choose>
+            <c:when test="${isFile}">
+              <td>
+                <input type="checkbox" name="entries" value="${entry.pathAtRevision}@${entry.revision}" onclick="verifyCheckBox(this)"/>
+              </td>
+              <td class="sventonCol2">
+                <div id="${entryTrayAddUrl}" class="entry">
+                  <img src="images/icon_file.png" alt="file">
+                </div>
+              </td>
+            </c:when>
+            <c:otherwise>
+              <td colspan="2" style="width: 10px; height: 22px;">&nbsp;</td>
+            </c:otherwise>
+          </c:choose>
           <td nowrap>
             <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
               <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
@@ -113,10 +116,8 @@
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
-          <c:if test="${isFile}">
-            <td colspan="2">&nbsp;</td>
-          </c:if>
-          <td valign="top"><b>Changed paths</b></td><td colspan="4">
+          <td colspan="2">&nbsp;</td>
+          <td colspan="5">
             <%=HTMLCreator.createChangedPathsTable(entry.getChangedPaths(), entry.getRevision(),
                 entry.getPathAtRevision(), "", command.getName(), false, false, response)%>
           </td>

@@ -86,7 +86,6 @@ line=Rad
 action=Åtgärd
 path=Sökväg
 paths=Sökvägare
-paths.changed=Ändrade sökvägar
 properties=Egenskaper
 properties.changed=Ändrade egenskaper
 

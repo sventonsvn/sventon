@@ -163,7 +163,8 @@ input.btn {
   background-color: #AFC4D2;
   border: 1px solid black;
   width: 100%;
-  border-spacing: 1px;
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 .sventonEntriesTable * TD {
@@ -178,11 +179,13 @@ input.btn {
 }
 
 .sventonEntryOdd {
+  height: 22px;
   color: #14233D;
   background-color: #AFC4D2;
 }
 
 .sventonEntryEven {
+  height: 22px;
   color: #14233D;
   background-color: #99ADBD;
 }
@@ -197,6 +200,8 @@ input.btn {
   background-color: #AFC4D2;
   border: 1px solid black;
   width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;  
 }
 
 .sventonStackTraceTable {
@@ -428,6 +433,8 @@ a.helpDivCloseLink {
   color: #14233D;
   background-color: #AFC4D2;
   border-top: 1px solid black;
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 .revisionInfoTable {

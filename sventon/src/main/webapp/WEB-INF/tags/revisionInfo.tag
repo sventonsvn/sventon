@@ -39,7 +39,6 @@
         </tr>
         <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
         <tr><td valign="top"><b><spring:message code="message"/>:</b></td><td>${fn:replace(fn:escapeXml(logEntry.message), br, '<br>')}</td></tr>
-        <tr><td colspan="2" valign="top"><b><spring:message code="paths.changed"/>:</b></td></tr>
       </table>
     </td>
   </tr>
