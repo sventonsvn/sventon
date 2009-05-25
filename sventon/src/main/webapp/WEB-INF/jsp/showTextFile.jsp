@@ -55,7 +55,7 @@
 
   <table id="textFileTable" class="codeBlock" cellspacing="0">
     <c:forEach items="${file.rows}" var="row">
-      <tr id="l${row.rowNumber}">
+      <tr id="L${row.rowNumber}">
         <td class="lineNo">${row.rowNumber}&nbsp;</td>
         <td class="lineContent">${row.content}</td>
       </tr>
