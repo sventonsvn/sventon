@@ -118,6 +118,6 @@ actions=Åtgärder...
 diff.show=Visa skillnader
 show=visa
 hide=dölj
-latest.revision.info=senaste arkiveringsinfon
+recent.changes=senaste ändringarna
 admin=Admin
 logout=Logga ut
