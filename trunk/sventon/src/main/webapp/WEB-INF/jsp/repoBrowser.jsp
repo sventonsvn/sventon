@@ -156,7 +156,7 @@
         <td/>
         <td/>
       </tr>
-      <tr>
+      <tr class="entriesTableFooter">
         <%@ include file="/WEB-INF/jspf/actionSelectList.jspf"%>
         <td colspan="5"/>
       </tr>
