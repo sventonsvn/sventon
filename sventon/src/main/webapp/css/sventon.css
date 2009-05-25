@@ -167,9 +167,9 @@ input.btn {
   border-collapse: collapse;
 }
 
-.sventonEntriesTable * TD {
+.sventonEntriesTable * TD, TH {
   padding: 0;
-  padding-right: 5px;
+  padding-right: 15px;
   border: 0;
 }
 

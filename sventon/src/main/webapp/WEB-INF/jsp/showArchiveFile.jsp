@@ -89,12 +89,12 @@
     </c:forEach>
 
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-      <td align="right"><b><spring:message code="total"/>:</b></td>
+      <td class="sventonColRightAlign"><b><spring:message code="total"/>:</b></td>
       <td><b>${rowCount} <spring:message code="entries"/></b></td>
-      <td align="right" title="${totalOrigSize} bytes">
+      <td class="sventonColRightAlign" title="${totalOrigSize} bytes">
         <b><sventon-ui:formatBytes size="${totalOrigSize}" locale="${pageContext.request.locale}"/></b>
       </td>
-      <td align="right" title="${totalCompSize} bytes">
+      <td class="sventonColRightAlign" title="${totalCompSize} bytes">
         <b><sventon-ui:formatBytes size="${totalCompSize}" locale="${pageContext.request.locale}"/></b>
       </td>
       <td>&nbsp;</td>

@@ -22,10 +22,10 @@
     <c:if test="${userRepositoryContext.sortType eq 'FULL_NAME'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="name"/></a>
   </th>
   <th/>
-  <th><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
+  <th class="sventonColRightAlign"><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
     <c:if test="${userRepositoryContext.sortType eq 'SIZE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="size"/></a>
   </th>
-  <th><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
+  <th class="sventonColRightAlign"><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
     <c:if test="${userRepositoryContext.sortType eq 'REVISION'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="revision"/></a>
   </th>
   <th><a href="${sortUrl}&sortType=AUTHOR&sortMode=${opositeSortType}" style="color: #000000;">
