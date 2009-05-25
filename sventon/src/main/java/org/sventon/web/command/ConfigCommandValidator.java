@@ -11,6 +11,8 @@
  */
 package org.sventon.web.command;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.sventon.RepositoryConnectionFactory;
@@ -30,6 +32,11 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  * @author patrik@sventon.org
  */
 public final class ConfigCommandValidator implements Validator {
+
+  /**
+   * Logger for this class.
+   */
+  private final Log logger = LogFactory.getLog(getClass().getName());
 
   /**
    * Controls whether repository connection should be tested or not.
@@ -104,7 +111,8 @@ public final class ConfigCommandValidator implements Validator {
         SVNURL url = null;
         try {
           url = SVNURL.parseURIDecoded(repositoryUrl);
-        } catch (SVNException ex) {
+        } catch (SVNException e) {
+          logger.info(e);
           errors.rejectValue("repositoryUrl", "config.error.illegal-url");
         }
         if (url != null && testConnections) {
@@ -147,6 +155,9 @@ public final class ConfigCommandValidator implements Validator {
       repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           credentials);
       repository.testConnection();
+    } catch (SVNException ex) {
+      logger.info(ex);
+      throw ex;
     } finally {
       if (repository != null) {
         repository.closeSession();
