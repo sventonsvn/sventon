@@ -55,7 +55,7 @@
         <c:param name="revision" value="${row.revision}" />
       </c:url>
 
-      <tr id="l${row.rowNumber}">
+      <tr id="L${row.rowNumber}">
         <td valign="top" style="background-color: white; text-align:right;" class="blameRev_${row.revision}">
           <a href="${showRevInfoUrl}" onmouseover="highlightBlameRev(${row.revision}); getLogMessage(${row.revision}, '${command.name}', '<fmt:formatDate type="both" value="${row.date}" dateStyle="short" timeStyle="short"/>');" onmouseout="restoreBlameRev(${row.revision});">
             ${row.revision}
