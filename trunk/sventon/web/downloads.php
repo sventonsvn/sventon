@@ -2,10 +2,10 @@
 
 <div style="padding-left:3px;padding-top:5px;">
 
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v210'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.1.0
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v211'); ">
+    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.1.1
   </a>
-  <a href="/download/sventon-2.1.0-bin.zip" onClick="javascript:urchinTracker ('/downloads/v210');">(mirror)</a>
+  <a href="/download/sventon-2.1.1-bin.zip" onClick="javascript:urchinTracker ('/downloads/v211');">(mirror)</a>
 
   <br/>
   <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v205'); ">
