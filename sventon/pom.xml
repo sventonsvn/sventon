@@ -3,7 +3,7 @@
   <groupId>org.sventon</groupId>
   <artifactId>sventon</artifactId>
   <name>sventon</name>
-  <version>2.1.1</version>
+  <version>2.1.2-SNAPSHOT</version>
   <packaging>war</packaging>
   <description>sventon is a web client for browsing Subversion repositories</description>
   <url>http://www.sventon.org/</url>
@@ -48,9 +48,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-2.1.1</connection>
-    <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-2.1.1</developerConnection>
-    <url>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/tags/sventon-2.1.1</url>
+    <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</connection>
+    <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</developerConnection>
+    <url>http://svn.sventon.org/</url>
   </scm>
   <properties>
     <spring.version>2.5.6</spring.version>
