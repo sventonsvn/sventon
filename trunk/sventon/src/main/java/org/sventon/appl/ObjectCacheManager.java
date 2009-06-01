@@ -81,7 +81,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     cachePath.mkdirs();
     logger.debug("Creating cache: " + cachePath.getAbsolutePath());
-    return new ObjectCacheImpl(
+    final ObjectCacheImpl objectCache = new ObjectCacheImpl(
         repositoryName.toString(),
         cachePath.getAbsolutePath(),
         maxElementsInMemory,
@@ -91,6 +91,8 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
         timeToIdleSeconds,
         diskPersistent,
         diskExpiryThreadIntervalSeconds);
+    objectCache.flush();
+    return objectCache;
   }
 
   /**

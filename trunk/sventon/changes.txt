@@ -1,8 +1,10 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1573] Bug #10132 - Cache does not survive SIGKILL (reopened).
+
 [1571] Release 2.1.1 (2009-05-26)
-[1561] Upgraded to SVNKit 1.3.0.
+[1561] Added: Upgraded to SVNKit 1.3.0.
 [1560] Fixed: Bug #15603 - Boolean queries not possible in log search.
 
 [1556] Release 2.1.0 (2009-04-19)
