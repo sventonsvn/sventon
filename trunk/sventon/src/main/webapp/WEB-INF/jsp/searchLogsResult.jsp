@@ -31,7 +31,8 @@
         </td>
         <td style="text-align: right;">
           <c:if test="${useCache}">
-            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}" searchMode="${userRepositoryContext.searchMode}"/>
+            <sventon:searchField command="${command}" isUpdating="${isUpdating}" isHead="${isHead}"
+                                 searchMode="${userRepositoryContext.searchMode}"/>
           </c:if>
         </td>
       </tr>
@@ -60,7 +61,7 @@
           </span>
         </td>
         <td>${logMessage.author}</td>
-        <td valign="top"><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logMessage.revision}</a></td>
+        <td><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logMessage.revision}</a></td>
         <td>${fn:replace(logMessage.message, br, '<br>')}</td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>

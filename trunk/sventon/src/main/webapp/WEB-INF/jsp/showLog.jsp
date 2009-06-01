@@ -134,7 +134,7 @@
       <c:choose>
         <c:when test="${morePages}">
           <tr>
-            <td colspan="5" align="center">
+            <td colspan="7" align="center">
               <b><a href="${showNextLogUrl}"><spring:message code="next"/> ${pageSize}</a></b>
             </td>
           </tr>
@@ -144,7 +144,7 @@
         <td colspan="2">
           <c:if test="${isFile}"><input type="submit" class="btn" value="<spring:message code='diff.show'/>"></c:if>
         </td>
-        <td colspan="3">&nbsp;</td>
+        <td colspan="5">&nbsp;</td>
       </tr>
     </table>
   </form:form>
