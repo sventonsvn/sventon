@@ -95,7 +95,11 @@ public class RepositoryServiceImpl implements RepositoryService {
     for (final SVNFileRevision fileRevision : targets) {
       logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(fileRevision.getRevision()));
-      revisionRootDir.mkdirs();
+
+      if (!revisionRootDir.mkdirs()) {
+        throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
+      }
+
       final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
           SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
