@@ -18,6 +18,7 @@ import org.sventon.appl.ConfigDirectory;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 /**
  * Temporary export file cleaner.
@@ -69,12 +70,16 @@ public final class TemporaryFileCleaner {
    * <p/>
    * All filenames matching <code>sventon-[millis].zip</code>
    * older than given threshold value will be deleted.
+   *
+   * @throws IOException if unable to delete temporary files.
    */
-  public void clean() {
+  public void clean() throws IOException {
     for (final File file : directory.listFiles(filenameFilter)) {
       if (expirationRule.hasExpired(file)) {
         logger.debug("Deleting tempfile [" + file.getAbsolutePath() + "]");
-        file.delete();
+        if (!file.delete()) {
+          throw new IOException("Unable to delete: " + file.getAbsolutePath());
+        }
       }
     }
   }

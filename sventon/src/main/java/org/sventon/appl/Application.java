@@ -195,7 +195,9 @@ public final class Application {
     for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
       if (!repositoryConfig.isPersisted()) {
         final File configDir = getConfigurationDirectoryForRepository(repositoryConfig.getName());
-        configDir.mkdirs();
+        if (!configDir.mkdirs()) {
+          throw new IOException("Unable to create directory: " + configDir.getAbsolutePath());
+        }
 
         final File configFile = new File(configDir, configurationFilename);
         logger.info("Storing configuration: " + configFile.getAbsolutePath());
