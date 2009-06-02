@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * EntryCacheImpl.
  */
-public class EntryCacheImpl implements EntryCache {
+public final class EntryCacheImpl implements EntryCache {
 
   /**
    * The logging instance.
@@ -103,24 +103,24 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void setLatestCachedRevisionNumber(final long revision) {
+  public void setLatestCachedRevisionNumber(final long revision) {
     this.cachedRevision.set(revision);
   }
 
   /**
    * {@inheritDoc}
    */
-  public final long getLatestCachedRevisionNumber() {
+  public long getLatestCachedRevisionNumber() {
     return cachedRevision.get();
   }
 
   /**
    * {@inheritDoc}
    */
-  public final int getSize() {
+  public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
-      public Integer doInCompass(CompassSession session) throws CompassException {
+      public Integer doInCompass(final CompassSession session) {
         final CompassHits compassHits = session.queryBuilder().matchAll().hits();
         return compassHits.length();
       }
@@ -130,10 +130,10 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void add(final RepositoryEntry... entries) {
+  public void add(final RepositoryEntry... entries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(CompassSession session) {
         for (RepositoryEntry entry : entries) {
           session.save(entry);
         }
@@ -144,10 +144,10 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void clear() {
+  public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(final CompassSession session) {
         session.delete(session.queryBuilder().matchAll());
       }
     });
@@ -156,10 +156,10 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void remove(final String pathAndName) {
+  public void remove(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(CompassSession session) {
         session.delete(RepositoryEntry.class, pathAndName);
       }
     });
@@ -168,12 +168,12 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void removeAndAdd(final List<RepositoryEntry> entriesToAdd,
-                                 final Map<String, RepositoryEntry.Kind> entriesToDelete) {
+  public void removeAndAdd(final List<RepositoryEntry> entriesToAdd,
+                           final Map<String, RepositoryEntry.Kind> entriesToDelete) {
 
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(final CompassSession session) {
         logger.debug("Applying changes inside transaction...");
 
         // Apply deletion...
@@ -202,10 +202,10 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final void removeDirectory(final String pathAndName) {
+  public void removeDirectory(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(final CompassSession session) {
         session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
         session.delete(RepositoryEntry.class, pathAndName);
       }
@@ -215,7 +215,7 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
+  public List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
     }
@@ -227,7 +227,8 @@ public class EntryCacheImpl implements EntryCache {
     return result;
   }
 
-  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern, String startPath) {
+  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
+                                                             final String startPath) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + camelCasePattern + "] starting in [" + startPath + "]");
     }
@@ -243,7 +244,7 @@ public class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public final List<RepositoryEntry> findDirectories(final String startPath) {
+  public List<RepositoryEntry> findDirectories(final String startPath) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding directories recursively from [" + startPath + "]");
     }
@@ -262,7 +263,7 @@ public class EntryCacheImpl implements EntryCache {
     return hits;
   }
 
-  protected void logResult(List<RepositoryEntry> result) {
+  protected void logResult(final List<RepositoryEntry> result) {
     if (logger.isDebugEnabled()) {
       logger.debug("Result count: " + result.size());
       logger.debug("Result: " + result);

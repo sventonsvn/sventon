@@ -23,7 +23,7 @@ import java.io.Serializable;
  *
  * @author jesper@sventon.org
  */
-public class Credentials implements Serializable {
+public final class Credentials implements Serializable {
 
   private static final long serialVersionUID = -30885545779723155L;
 
