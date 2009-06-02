@@ -1,7 +1,5 @@
 package carbonfive.spring.web.pathparameter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.util.PathMatcher;
 
 import java.io.UnsupportedEncodingException;
