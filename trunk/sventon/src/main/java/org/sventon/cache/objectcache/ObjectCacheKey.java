@@ -25,11 +25,12 @@ import java.io.Serializable;
  */
 public final class ObjectCacheKey implements Serializable {
 
+  private static final long serialVersionUID = 7546874623311095090L;
+
   /**
    * Path.
    */
   private final String path;
-
   /**
    * Checksum.
    */

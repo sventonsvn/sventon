@@ -102,11 +102,15 @@ public class ConfigDirectory implements ServletContextAware {
     repositoriesDirectory = new File(getConfigRootDirectory(), repositoriesDirectoryName);
 
     if (createDirectories) {
-      if (!configRootDirectory.mkdirs() || !exportDirectory.mkdirs() || !repositoriesDirectory.mkdirs()) {
-        throw new RuntimeException("Unable to create directory structure: " + configRootDirectory.getAbsolutePath());
-      }
+      createDirectoryStructure();
     }
     logger.info("Config root directory for current servlet context set to: " + configRootDirectory.getAbsolutePath());
+  }
+
+  private void createDirectoryStructure() {
+    if (!configRootDirectory.mkdirs() || !exportDirectory.mkdirs() || !repositoriesDirectory.mkdirs()) {
+      throw new RuntimeException("Unable to create directory structure: " + configRootDirectory.getAbsolutePath());
+    }
   }
 
   private void handleConfigDirectoryOverride() {
