@@ -1,9 +1,9 @@
 package carbonfive.spring.web.pathparameter;
 
-import org.springframework.util.PathMatcher;
-import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.PathMatcher;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
