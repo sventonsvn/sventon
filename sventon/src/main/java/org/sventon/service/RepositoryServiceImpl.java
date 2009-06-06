@@ -96,7 +96,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(fileRevision.getRevision()));
 
-      if (!revisionRootDir.mkdirs()) {
+      if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
         throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
       }
 

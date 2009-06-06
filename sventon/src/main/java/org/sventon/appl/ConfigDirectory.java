@@ -108,7 +108,9 @@ public class ConfigDirectory implements ServletContextAware {
   }
 
   private void createDirectoryStructure() {
-    if (!configRootDirectory.mkdirs() || !exportDirectory.mkdirs() || !repositoriesDirectory.mkdirs()) {
+    if ((!configRootDirectory.exists() && !configRootDirectory.mkdirs()) ||
+        (!exportDirectory.exists() && !exportDirectory.mkdirs()) ||
+        (!repositoriesDirectory.exists() && !repositoriesDirectory.mkdirs())) {
       throw new RuntimeException("Unable to create directory structure: " + configRootDirectory.getAbsolutePath());
     }
   }
