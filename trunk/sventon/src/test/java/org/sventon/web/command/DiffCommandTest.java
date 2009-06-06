@@ -1,6 +1,7 @@
 package org.sventon.web.command;
 
 import junit.framework.TestCase;
+import org.sventon.diff.DiffException;
 import org.sventon.util.SVNFileRevisionEditor;
 
 public class DiffCommandTest extends TestCase {
@@ -71,9 +72,9 @@ public class DiffCommandTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     try {
       command.setEntries(editor.convert(params));
-      fail("Should throw IllegalArgumentException");
+      fail("Should throw DiffException");
     }
-    catch (IllegalArgumentException ex) {
+    catch (DiffException ex) {
       // expected
     }
   }

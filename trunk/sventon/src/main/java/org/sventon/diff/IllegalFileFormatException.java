@@ -19,6 +19,8 @@ package org.sventon.diff;
  */
 public final class IllegalFileFormatException extends DiffException {
 
+  private static final long serialVersionUID = -3421014950459125952L;
+
   /**
    * Constructor.
    *

@@ -18,6 +18,8 @@ package org.sventon;
  */
 public class SventonException extends Exception {
 
+  private static final long serialVersionUID = -8138949099738603651L;
+
   /**
    * Constructor.
    *

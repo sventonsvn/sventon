@@ -14,6 +14,7 @@ package org.sventon.web.command;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.sventon.diff.DiffException;
 import org.sventon.model.DiffStyle;
 import org.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -65,13 +66,14 @@ public final class DiffCommand extends BaseCommand {
    * Used when diffing two arbitrary entries.
    *
    * @param entries Array containing two <code>SVNFileRevision</code> objects.
-   * @throws IllegalArgumentException if given list does not contain two entries.
+   * @throws IllegalArgumentException       if given list does not contain two entries.
+   * @throws org.sventon.diff.DiffException
    */
-  public void setEntries(final SVNFileRevision[] entries) {
+  public void setEntries(final SVNFileRevision[] entries) throws DiffException {
     Validate.notNull(entries);
 
     if (entries.length < 2) {
-      throw new IllegalArgumentException("The entry does not have a history.");
+      throw new DiffException("The entry does not have a history.");
     }
 
     Arrays.sort(entries, new Comparator<SVNFileRevision>() {
@@ -168,7 +170,7 @@ public final class DiffCommand extends BaseCommand {
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
-  
+
   /**
    * {@inheritDoc}
    */
