@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
+import org.sventon.diff.DiffException;
 import org.sventon.model.AvailableCharsets;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
@@ -211,6 +212,9 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     } catch (SVNAuthenticationException svnae) {
       logger.debug(svnae.getMessage());
       return prepareAuthenticationRequiredView(request);
+    } catch (DiffException ex) {
+      logger.warn(ex.getMessage());
+      return prepareExceptionModelAndView(errors, command);
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();

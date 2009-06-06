@@ -81,7 +81,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Creating cache: " + cachePath.getAbsolutePath());
 
-    if (!cachePath.mkdirs()) {
+    if (!cachePath.exists() && !cachePath.mkdirs()) {
       throw new CacheException("Unable to create directory: " + cachePath.getAbsolutePath());
     }
 
