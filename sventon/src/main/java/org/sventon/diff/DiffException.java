@@ -16,7 +16,9 @@ package org.sventon.diff;
  *
  * @author jesper@sventon.org
  */
-public class DiffException extends Exception {
+public class DiffException extends RuntimeException {
+
+  private static final long serialVersionUID = 2632337998838156265L;
 
   /**
    * Constructor.

@@ -20,6 +20,8 @@ import org.sventon.SventonException;
  */
 public class CacheException extends SventonException {
 
+  private static final long serialVersionUID = 7044111668643292134L;
+
   /**
    * Constructor.
    *
