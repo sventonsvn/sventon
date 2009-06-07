@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sventon</groupId>
   <artifactId>sventon</artifactId>
@@ -30,13 +31,13 @@
     <developer>
       <id>jesper</id>
       <name>Jesper Hammarback</name>
-      <email>jesper@sventon.org</email> 
-      <timezone>+1</timezone>    
+      <email>jesper@sventon.org</email>
+      <timezone>+1</timezone>
     </developer>
     <developer>
       <id>patrikfr</id>
       <name>Patrik Fredriksson</name>
-      <email>patrik@sventon.org</email>      
+      <email>patrik@sventon.org</email>
       <timezone>+1</timezone>
     </developer>
   </developers>
@@ -229,7 +230,7 @@
       <artifactId>compass</artifactId>
       <version>2.2.0-M2</version>
     </dependency>
- 
+
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
@@ -329,6 +330,11 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <version>2.0.1</version>
+        <configuration>
+          <findbugsXmlOutput>true</findbugsXmlOutput>
+          <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+          <xmlOutput>true</xmlOutput>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
