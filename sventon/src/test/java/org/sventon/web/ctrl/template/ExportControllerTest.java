@@ -25,7 +25,6 @@ public class ExportControllerTest extends TestCase {
     final File tempFile = File.createTempFile("sventon-", "-test");
     tempFile.deleteOnExit();
 
-    final ExportController ctrl = new ExportController();
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final UserRepositoryContext context = new UserRepositoryContext();
@@ -40,7 +39,7 @@ public class ExportControllerTest extends TestCase {
     assertFalse(context.getIsWaitingForExport());
     assertNull(context.getExportUuid());
 
-    ctrl.setExportExecutor(new ExportExecutor() {
+    final ExportController ctrl = new ExportController(new ExportExecutor() {
       public UUID submit(MultipleEntriesCommand command, SVNRepository repository, long pegRevision) {
         return UUID.fromString(UUID_STRING);
       }

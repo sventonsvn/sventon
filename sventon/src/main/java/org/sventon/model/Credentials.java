@@ -35,7 +35,7 @@ public final class Credentials implements Serializable {
   /**
    * Username.
    */
-  private final String username;
+  private final String userName;
 
   /**
    * Password.
@@ -45,21 +45,21 @@ public final class Credentials implements Serializable {
   /**
    * Constructor.
    *
-   * @param username Username.
+   * @param userName Username.
    * @param password Password.
    */
-  public Credentials(final String username, final String password) {
-    this.username = encodeBase64(username);
+  public Credentials(final String userName, final String password) {
+    this.userName = encodeBase64(userName);
     this.password = encodeBase64(password);
   }
 
   /**
-   * Gets the username.
+   * Gets the user name.
    *
-   * @return Username
+   * @return User name
    */
-  public String getUsername() {
-    return decodeBase64(username);
+  public String getUserName() {
+    return decodeBase64(userName);
   }
 
   /**
@@ -75,7 +75,7 @@ public final class Credentials implements Serializable {
    * @return True if credentials are empty/blank/null.
    */
   public boolean isEmpty() {
-    return StringUtils.isEmpty(username) && StringUtils.isEmpty(password);
+    return StringUtils.isEmpty(userName) && StringUtils.isEmpty(password);
   }
 
   private String encodeBase64(final String string) {
@@ -89,7 +89,7 @@ public final class Credentials implements Serializable {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-        append("username", username != null ? "*****" : "<null>").
+        append("userName", userName != null ? "*****" : "<null>").
         append("password", password != null ? "*****" : "<null>").
         toString();
   }

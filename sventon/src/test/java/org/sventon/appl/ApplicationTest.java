@@ -104,7 +104,7 @@ public class ApplicationTest extends TestCase {
 
     final Properties testConfig = new Properties();
     testConfig.put("repositoryRootUrl", "http://localhost");
-    testConfig.put("userName", "username");
+    testConfig.put("userName", "userName");
     testConfig.put("userPassword", "abc123");
     testConfig.put("useCache", "false");
     testConfig.put("allowZipDownloads", "false");

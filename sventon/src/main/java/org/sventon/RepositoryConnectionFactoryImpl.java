@@ -61,7 +61,7 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
     final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
     final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
-        configDirectory, credentials.getUsername(), credentials.getPassword(), false));
+        configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return repository;
   }

@@ -37,9 +37,8 @@ public class BlameControllerTest extends TestCase {
     command.setName(new RepositoryName("test"));
     command.setRevision(SVNRevision.create(12));
 
-    final BlameController ctrl = new BlameController();
+    final BlameController ctrl = new BlameController(colorer);
     ctrl.setRepositoryService(mockService);
-    ctrl.setColorer(colorer);
 
     expect(mockService.blame(null, command.getPath(), command.getRevisionNumber(), context.getCharset(), colorer)).andStubReturn(annotatedFile);
     replay(mockService);

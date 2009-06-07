@@ -15,7 +15,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.ArchiveFile;
 import org.sventon.model.TextFile;
@@ -42,7 +41,7 @@ import java.util.Map;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class ShowFileController extends AbstractTemplateController implements Controller {
+public final class ShowFileController extends AbstractTemplateController {
 
   /**
    * The colorer instance.
@@ -52,7 +51,7 @@ public final class ShowFileController extends AbstractTemplateController impleme
   /**
    * The mime/file type map.
    */
-  private FileTypeMap mimeFileTypeMap;
+  private final FileTypeMap mimeFileTypeMap;
 
   /**
    * Regex pattern that identifies text file extensions.
@@ -89,6 +88,15 @@ public final class ShowFileController extends AbstractTemplateController impleme
    * Request parameter indicating display should be done in a raw, unprocessed format.
    */
   private static final String RAW_DISPLAY_FORMAT = "raw";
+
+  /**
+   * Constructor.
+   *
+   * @param mimeFileTypeMap Mime file type map.
+   */
+  public ShowFileController(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
+  }
 
   /**
    * {@inheritDoc}
@@ -254,15 +262,6 @@ public final class ShowFileController extends AbstractTemplateController impleme
    */
   public void setArchiveFileExtensionPattern(final String fileExtensionPattern) {
     archiveFileExtensionPattern = fileExtensionPattern;
-  }
-
-  /**
-   * Sets the mime/file type map.
-   *
-   * @param mimeFileTypeMap Map.
-   */
-  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
-    this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
 }

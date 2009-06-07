@@ -69,7 +69,7 @@ public final class RepositoryConfiguration {
   /**
    * The logging instance.
    */
-  protected final Log logger = LogFactory.getLog(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Repository name.
@@ -210,11 +210,11 @@ public final class RepositoryConfiguration {
     properties.put(PROPERTY_KEY_REPOSITORY_URL, getRepositoryUrl());
     properties.put(PROPERTY_KEY_REPOSITORY_DISPLAY_URL, getRepositoryDisplayUrl());
     if (userCredentials != null) {
-      properties.put(PROPERTY_KEY_USER_NAME, userCredentials.getUsername());
+      properties.put(PROPERTY_KEY_USER_NAME, userCredentials.getUserName());
       properties.put(PROPERTY_KEY_USER_PASSWORD, userCredentials.getPassword());
     }
     if (cacheCredentials != null) {
-      properties.put(PROPERTY_KEY_CACHE_USER_NAME, cacheCredentials.getUsername());
+      properties.put(PROPERTY_KEY_CACHE_USER_NAME, cacheCredentials.getUserName());
       properties.put(PROPERTY_KEY_CACHE_USER_PASSWORD, cacheCredentials.getPassword());
     }
     properties.put(PROPERTY_KEY_USE_CACHE, isCacheUsed() ? "true" : "false");

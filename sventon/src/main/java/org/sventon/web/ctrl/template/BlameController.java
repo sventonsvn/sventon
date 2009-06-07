@@ -37,14 +37,14 @@ public final class BlameController extends AbstractTemplateController {
   /**
    * The colorer instance.
    */
-  private Colorer colorer;
+  private final Colorer colorer;
 
   /**
-   * Sets the <tt>Colorer</tt> instance.
+   * Constructor.
    *
-   * @param colorer The instance.
+   * @param colorer Colorer
    */
-  public void setColorer(final Colorer colorer) {
+  public BlameController(final Colorer colorer) {
     this.colorer = colorer;
   }
 

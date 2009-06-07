@@ -167,11 +167,11 @@
   </bean>
 
   <bean id="showFileController" class="org.sventon.web.ctrl.template.ShowFileController" parent="abstractTemplateController">
+    <constructor-arg ref="mimeFileTypeMap"/>
     <property name="textFileExtensionPattern" value=""/>
     <property name="binaryFileExtensionPattern" value="(bin|exe|pdf)"/>
     <property name="archiveFileExtensionPattern" value="(jar|zip|war|ear)"/>
     <property name="colorer" ref="colorer"/>
-    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
   </bean>
 
   <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractTemplateController">
@@ -183,19 +183,19 @@
   </bean>
 
   <bean id="showThumbnailsController" class="org.sventon.web.ctrl.template.ShowThumbnailsController" parent="abstractTemplateController">
+    <constructor-arg ref="mimeFileTypeMap"/>
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
-    <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="viewName" value="showThumbnails"/>
   </bean>
 
   <bean id="exportController" class="org.sventon.web.ctrl.template.ExportController" parent="abstractTemplateController">
+    <constructor-arg ref="exportExecutor"/>
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="repoBrowser"/>
-    <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
 
   <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractTemplateController">
-    <property name="colorer" ref="colorer"/>
+    <constructor-arg ref="colorer"/>
     <property name="viewName" value="blame"/>
   </bean>
 
@@ -204,12 +204,12 @@
   </bean>
 
   <bean id="configurationFormController" class="org.sventon.web.ctrl.ConfigurationFormController">
+    <constructor-arg ref="application"/>
     <property name="formView" value="config/configForm"/>
     <property name="successView" value="config/listConfigs"/>
     <property name="commandClass" value="org.sventon.web.command.ConfigCommand"/>
     <property name="sessionForm" value="false"/>
     <property name="bindOnNewForm" value="true"/>
-    <property name="application" ref="application"/>
     <property name="validator" ref="configCommandValidator"/>
   </bean>
 
@@ -227,7 +227,7 @@
   </bean>
 
   <bean id="configurationLoginController" class="org.sventon.web.ctrl.ConfigurationLoginController">
-    <property name="application" ref="application"/>
+    <constructor-arg ref="application"/>
     <property name="commandClass" value="org.sventon.web.command.ConfigLoginCommand"/>
     <property name="formView" value="config/login"/>
     <property name="successView" value="redirect:listconfigs"/>

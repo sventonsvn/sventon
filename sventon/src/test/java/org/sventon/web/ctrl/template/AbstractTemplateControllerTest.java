@@ -46,9 +46,9 @@ public class AbstractTemplateControllerTest extends TestCase {
 
     ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
       public SVNRepository createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
-        if ("shared".equals(credentials.getUsername())) {
+        if ("shared".equals(credentials.getUserName())) {
           usingSharedAuthSettings.setValue(true);
-        } else if ("user".equals(credentials.getUsername())) {
+        } else if ("user".equals(credentials.getUserName())) {
           usingSharedAuthSettings.setValue(false);
         }
         return null;

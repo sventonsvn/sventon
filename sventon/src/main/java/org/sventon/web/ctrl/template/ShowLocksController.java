@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * @author jesper@sventon.org
  */
-public final class ShowLocksController extends AbstractTemplateController implements Controller {
+public final class ShowLocksController extends AbstractTemplateController {
 
   /**
    * {@inheritDoc}

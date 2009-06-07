@@ -91,7 +91,7 @@
   </bean>
 
   <bean id="configAuthorizationFilter" class="org.sventon.appl.ConfigAuthorizationFilter">
-    <property name="application" ref="application"/>
+    <constructor-arg ref="application"/>
   </bean>
 
   <bean id="characterEncodingFilter" class="org.springframework.web.filter.CharacterEncodingFilter">

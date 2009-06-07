@@ -9,10 +9,9 @@ public class ShowFileControllerTest extends TestCase {
   private ShowFileController ctrl;
 
   protected void setUp() throws Exception {
-    ctrl = new ShowFileController();
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
     mftm.afterPropertiesSet();
-    ctrl.setMimeFileTypeMap(mftm);
+    ctrl = new ShowFileController(mftm);
     ctrl.setArchiveFileExtensionPattern("(jar|zip|war|ear)");
   }
 

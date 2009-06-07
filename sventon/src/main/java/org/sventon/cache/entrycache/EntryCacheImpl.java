@@ -312,7 +312,7 @@ public final class EntryCacheImpl implements EntryCache {
         inputStream = new ObjectInputStream(new FileInputStream(latestCachedRevisionFile));
         setLatestCachedRevisionNumber(inputStream.readLong());
         logger.debug("Revision: " + getLatestCachedRevisionNumber());
-      } catch (Exception ex) {
+      } catch (IOException ex) {
         throw new CacheException("Unable to read file from disk", ex);
       } finally {
         IOUtils.closeQuietly(inputStream);

@@ -31,14 +31,14 @@ public class ConfigurationLoginController extends SimpleFormController {
   /**
    * The application.
    */
-  private Application application;
+  private final Application application;
 
   /**
-   * Sets the application.
+   * Constructor.
    *
-   * @param application Application
+   * @param application Application instance
    */
-  public final void setApplication(final Application application) {
+  public ConfigurationLoginController(final Application application) {
     this.application = application;
   }
 

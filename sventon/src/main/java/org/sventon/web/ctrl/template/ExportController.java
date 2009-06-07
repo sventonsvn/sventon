@@ -38,7 +38,16 @@ public final class ExportController extends AbstractTemplateController {
   /**
    * The export executor instance.
    */
-  private ExportExecutor exportExecutor;
+  private final ExportExecutor exportExecutor;
+
+  /**
+   * Constructor.
+   *
+   * @param exportExecutor Export executor instance.
+   */
+  public ExportController(final ExportExecutor exportExecutor) {
+    this.exportExecutor = exportExecutor;
+  }
 
   /**
    * {@inheritDoc}
@@ -65,15 +74,6 @@ public final class ExportController extends AbstractTemplateController {
         command.getRevisionNumber()));
 
     return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createListUrl()), true), model);
-  }
-
-  /**
-   * Sets the export executor instance.
-   *
-   * @param exportExecutor Export executor instance.
-   */
-  public void setExportExecutor(final ExportExecutor exportExecutor) {
-    this.exportExecutor = exportExecutor;
   }
 
 }

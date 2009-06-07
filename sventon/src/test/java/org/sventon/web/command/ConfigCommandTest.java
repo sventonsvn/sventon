@@ -23,10 +23,10 @@ public class ConfigCommandTest extends TestCase {
     assertFalse(configuration.isAccessControlEnabled());
     assertTrue(configuration.isCacheUsed());
     assertTrue(configuration.isZippedDownloadsAllowed());
-    assertEquals("uid", configuration.getUserCredentials().getUsername());
+    assertEquals("uid", configuration.getUserCredentials().getUserName());
     assertEquals("pwd", configuration.getUserCredentials().getPassword());
 
-    assertEquals("cache uid", configuration.getCacheCredentials().getUsername());
+    assertEquals("cache uid", configuration.getCacheCredentials().getUserName());
     assertEquals("cache pwd", configuration.getCacheCredentials().getPassword());
   }
 

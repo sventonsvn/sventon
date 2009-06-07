@@ -6,15 +6,15 @@ public class CredentialsTest extends TestCase {
 
   public void testCredentials() throws Exception {
     Credentials credentials = new Credentials("userid", null);
-    assertEquals("userid", credentials.getUsername());
+    assertEquals("userid", credentials.getUserName());
     assertEquals(null, credentials.getPassword());
 
     credentials = new Credentials(null, "password");
-    assertEquals(null, credentials.getUsername());
+    assertEquals(null, credentials.getUserName());
     assertEquals("password", credentials.getPassword());
 
     credentials = new Credentials(null, null);
-    assertEquals(null, credentials.getUsername());
+    assertEquals(null, credentials.getUserName());
     assertEquals(null, credentials.getPassword());
   }
 
@@ -22,20 +22,20 @@ public class CredentialsTest extends TestCase {
   public void testToString() throws Exception {
 
     String testString = "Credentials[" +
-        "username=*****," +
+        "userName=*****," +
         "password=*****]";
 
     Credentials credentials = new Credentials("uid", "pwd");
     assertEquals(testString, credentials.toString());
 
     testString = "Credentials[" +
-        "username=<null>," +
+        "userName=<null>," +
         "password=*****]";
     credentials = new Credentials(null, "pwd");
     assertEquals(testString, credentials.toString());
 
     testString = "Credentials[" +
-        "username=<null>," +
+        "userName=<null>," +
         "password=<null>]";
     credentials = new Credentials(null, null);
     assertEquals(testString, credentials.toString());
