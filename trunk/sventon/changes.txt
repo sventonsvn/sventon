@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1588] Release 2.1.2 (2009-06-07)
 [1582] Added: Upgraded to SVNKit 1.3.0 (5903).
 [1573] Bug #10132 - Cache does not survive SIGKILL (reopened).
 
