@@ -22,14 +22,13 @@ public class ConfigAuthorizationFilterTest extends TestCase {
   }
 
   public void testDoFilterInternalApplicationNotConfigured() throws Exception {
-    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter();
+    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 
     final HttpServletRequest request = new MockHttpServletRequest();
     final HttpServletResponse response = EasyMock.createMock(HttpServletResponse.class);
     final MockFilterChain filterChain = new MockFilterChain();
 
     application.setConfigured(false);
-    filter.setApplication(application);
 
     EasyMock.replay(response);
     filter.doFilterInternal(request, response, filterChain);
@@ -40,7 +39,7 @@ public class ConfigAuthorizationFilterTest extends TestCase {
   }
 
   public void testDoFilterInternalApplicationConfiguredEditDisabled() throws Exception {
-    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter();
+    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 
     final HttpServletRequest request = new MockHttpServletRequest();
     final HttpServletResponse response = EasyMock.createMock(HttpServletResponse.class);
@@ -48,7 +47,6 @@ public class ConfigAuthorizationFilterTest extends TestCase {
 
     application.setConfigured(true);
     application.setEditableConfig(false);
-    filter.setApplication(application);
 
     response.sendRedirect("/repos/list");
 
@@ -61,7 +59,7 @@ public class ConfigAuthorizationFilterTest extends TestCase {
   }
 
   public void testDoFilterInternalApplicationConfiguredEditEnabledAlreadyLoggedIn() throws Exception {
-    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter();
+    final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 
     final MockHttpSession session = new MockHttpSession();
     session.setAttribute("isAdminLoggedIn", true);
@@ -74,7 +72,6 @@ public class ConfigAuthorizationFilterTest extends TestCase {
 
     application.setConfigured(true);
     application.setEditableConfig(true);
-    filter.setApplication(application);
 
     filter.doFilterInternal(request, response, filterChain);
 

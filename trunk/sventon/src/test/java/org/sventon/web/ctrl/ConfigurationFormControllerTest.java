@@ -10,8 +10,8 @@ import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryName;
 import org.sventon.model.Credentials;
+import org.sventon.model.RepositoryName;
 import org.sventon.web.command.ConfigCommand;
 import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
@@ -34,9 +34,8 @@ public class ConfigurationFormControllerTest extends TestCase {
   public void testShowForm() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest("GET", "");
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController(application);
     ctrl.setCommandClass(ConfigCommand.class);
-    ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.handleRequest(request, response);
     assertNotNull(modelAndView);
     assertEquals(3, modelAndView.getModel().size());
@@ -47,13 +46,12 @@ public class ConfigurationFormControllerTest extends TestCase {
   public void testShowFormConfiguredII() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest("GET", "");
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController(application);
 
     final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("repository1");
     application.setConfigured(false);
     application.addRepository(repositoryConfig);
     ctrl.setCommandClass(ConfigCommand.class);
-    ctrl.setApplication(application);
     final ModelAndView modelAndView = ctrl.handleRequest(request, response);
     assertNotNull(modelAndView);
     assertEquals(3, modelAndView.getModel().size());
@@ -62,10 +60,9 @@ public class ConfigurationFormControllerTest extends TestCase {
   public void testProcessFormSubmissionNonConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController(application);
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
-    ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     final String repositoryName = "testrepos";
     command.setName(repositoryName);
@@ -85,10 +82,9 @@ public class ConfigurationFormControllerTest extends TestCase {
 
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController(application);
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
-    ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     command.setName(repositoryName);
     command.setRepositoryUrl("http://localhost");
@@ -120,10 +116,9 @@ public class ConfigurationFormControllerTest extends TestCase {
 
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
-    final ConfigurationFormController ctrl = new ConfigurationFormController();
+    final ConfigurationFormController ctrl = new ConfigurationFormController(application);
     assertEquals(0, application.getRepositoryCount());
     assertFalse(application.isConfigured());
-    ctrl.setApplication(application);
     final ConfigCommand command = new ConfigCommand();
     command.setName(repositoryName);
     command.setRepositoryUrl("http://localhost");
@@ -152,7 +147,7 @@ public class ConfigurationFormControllerTest extends TestCase {
     assertTrue(configuration.isZippedDownloadsAllowed());
     assertEquals(Credentials.EMPTY, configuration.getUserCredentials()); //UID/PWD only for connection testing, not stored
 
-    assertEquals("cache uid", configuration.getCacheCredentials().getUsername()); //UID for cache
+    assertEquals("cache uid", configuration.getCacheCredentials().getUserName()); //UID for cache
     assertEquals("cache pwd", configuration.getCacheCredentials().getPassword()); //PWD for cache
   }
 

@@ -34,14 +34,14 @@ public final class ConfigurationFormController extends SimpleFormController {
   /**
    * The application.
    */
-  private Application application;
+  private final Application application;
 
   /**
-   * Sets the application.
+   * Constructor.
    *
-   * @param application Application
+   * @param application Application instance
    */
-  public void setApplication(final Application application) {
+  public ConfigurationFormController(final Application application) {
     this.application = application;
   }
 

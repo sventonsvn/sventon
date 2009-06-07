@@ -80,11 +80,11 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(userContext, session.getAttribute("userContext"));
     UserContext uCFromSession = (UserContext) session.getAttribute("userContext");
     UserRepositoryContext uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
-    assertEquals("UID1", uRC1FromSession.getCredentials().getUsername());
+    assertEquals("UID1", uRC1FromSession.getCredentials().getUserName());
     assertEquals("PWD1", uRC1FromSession.getCredentials().getPassword());
 
     UserRepositoryContext uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
-    assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
+    assertEquals("UID2", uRC2FromSession.getCredentials().getUserName());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
 
     //Now try again, this time with an incorrect repository name
@@ -95,11 +95,11 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
-    assertEquals("UID1", uRC1FromSession.getCredentials().getUsername());
+    assertEquals("UID1", uRC1FromSession.getCredentials().getUserName());
     assertEquals("PWD1", uRC1FromSession.getCredentials().getPassword());
 
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
-    assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
+    assertEquals("UID2", uRC2FromSession.getCredentials().getUserName());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
 
     //Now try again, this time with no repository name
@@ -109,11 +109,11 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
-    assertEquals("UID1", uRC1FromSession.getCredentials().getUsername());
+    assertEquals("UID1", uRC1FromSession.getCredentials().getUserName());
     assertEquals("PWD1", uRC1FromSession.getCredentials().getPassword());
 
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
-    assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
+    assertEquals("UID2", uRC2FromSession.getCredentials().getUserName());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
 
     //Now try again, this time with no logout param
@@ -124,11 +124,11 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(userContext, session.getAttribute("userContext"));
     uCFromSession = (UserContext) session.getAttribute("userContext");
     uRC1FromSession = uCFromSession.getUserRepositoryContext(repo1);
-    assertEquals("UID1", uRC1FromSession.getCredentials().getUsername());
+    assertEquals("UID1", uRC1FromSession.getCredentials().getUserName());
     assertEquals("PWD1", uRC1FromSession.getCredentials().getPassword());
 
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
-    assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
+    assertEquals("UID2", uRC2FromSession.getCredentials().getUserName());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
 
     //Now try again, this time supply correct logout param and repo name
@@ -143,7 +143,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertSame(Credentials.EMPTY, uRC1FromSession.getCredentials());
 
     uRC2FromSession = uCFromSession.getUserRepositoryContext(repo2);
-    assertEquals("UID2", uRC2FromSession.getCredentials().getUsername());
+    assertEquals("UID2", uRC2FromSession.getCredentials().getUserName());
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
   }
 

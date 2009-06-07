@@ -37,7 +37,16 @@ public final class ShowThumbnailsController extends AbstractTemplateController {
   /**
    * The mime/file type map.
    */
-  private FileTypeMap mimeFileTypeMap;
+  private final FileTypeMap mimeFileTypeMap;
+
+  /**
+   * Constructor.
+   *
+   * @param mimeFileTypeMap Mime file type map.
+   */
+  public ShowThumbnailsController(final FileTypeMap mimeFileTypeMap) {
+    this.mimeFileTypeMap = mimeFileTypeMap;
+  }
 
   /**
    * {@inheritDoc}
@@ -63,15 +72,6 @@ public final class ShowThumbnailsController extends AbstractTemplateController {
     logger.debug(imageEntries.size() + " entries out of " + command.getEntries().length + " are image files");
     model.put("thumbnailentries", imageEntries);
     return new ModelAndView(getViewName(), model);
-  }
-
-  /**
-   * Sets the mime/file type map.
-   *
-   * @param mimeFileTypeMap Map.
-   */
-  public void setMimeFileTypeMap(final FileTypeMap mimeFileTypeMap) {
-    this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
 }

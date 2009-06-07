@@ -28,6 +28,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,47 +65,24 @@ public final class RSSController extends AbstractBaseController {
     final BaseCommand command = (BaseCommand) cmd;
     logger.debug(command);
 
-    final Credentials credentialsFromUrlParameters = new Credentials(
-        ServletRequestUtils.getStringParameter(request, "userName", null),
-        ServletRequestUtils.getStringParameter(request, "userPassword", null));
-
     if (!application.isConfigured()) {
-      String errorMessage = "sventon has not been configured yet!";
-      logger.error(errorMessage);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+      handleError(response, "sventon has not been configured yet!");
       return null;
     }
 
     final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
     if (configuration == null) {
-      String errorMessage = "Repository [" + command.getName() + "] does not exist!";
-      logger.error(errorMessage);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+      handleError(response, "Repository [" + command.getName() + "] does not exist!");
       return null;
     }
 
-    response.setContentType(mimeType);
-    response.setHeader("Cache-Control", "no-cache");
+    addResponseHeaders(response);
 
     SVNRepository repository = null;
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    final Credentials credentials;
 
     try {
-      if (configuration.isAccessControlEnabled()) {
-        if (httpAuthenticationHandler.isLoginAttempt(request)) {
-          logger.debug("Basic HTTP authentication detected. Parsing credentials from request.");
-          credentials = httpAuthenticationHandler.parseCredentials(request);
-        } else {
-          logger.debug("Parsing credentials from url");
-          credentials = credentialsFromUrlParameters;
-        }
-      } else {
-        credentials = configuration.getUserCredentials();
-      }
-      repository = repositoryConnectionFactory.createConnection(configuration.getName(),
-          configuration.getSVNURL(), credentials);
-
+      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+      repository = createRepositoryConnection(request, configuration);
       command.translateRevision(getRepositoryService().getLatestRevision(repository), repository);
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
@@ -115,18 +93,68 @@ public final class RSSController extends AbstractBaseController {
       logger.info(aex.getMessage());
       httpAuthenticationHandler.sendChallenge(response);
     } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        logger.info(svnex.getMessage());
-      } else {
-        logger.error(svnex.getMessage());
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
-      }
+      handleSVNException(response, svnex);
     } finally {
-      if (repository != null) {
-        repository.closeSession();
-      }
+      close(repository);
     }
     return null;
+  }
+
+  private SVNRepository createRepositoryConnection(final HttpServletRequest request,
+                                                   final RepositoryConfiguration configuration) throws SVNException {
+    final Credentials credentials = extractCredentials(request, configuration);
+    return repositoryConnectionFactory.createConnection(configuration.getName(),
+        configuration.getSVNURL(), credentials);
+  }
+
+
+  private void close(SVNRepository repository) {
+    if (repository != null) {
+      repository.closeSession();
+    }
+  }
+
+  private void handleSVNException(HttpServletResponse response, SVNException svnex) throws IOException {
+    if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+      logger.info(svnex.getMessage());
+    } else {
+      logger.error(svnex.getMessage());
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
+    }
+  }
+
+  private void addResponseHeaders(HttpServletResponse response) {
+    response.setContentType(mimeType);
+    response.setHeader("Cache-Control", "no-cache");
+  }
+
+  private void handleError(HttpServletResponse response, String errorMessage) throws IOException {
+    logger.error(errorMessage);
+    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, errorMessage);
+  }
+
+  private Credentials extractCredentials(HttpServletRequest request, RepositoryConfiguration configuration) {
+    final Credentials credentialsFromUrlParameters = extractCredentialsFromRequest(request);
+
+    final Credentials credentials;
+    if (configuration.isAccessControlEnabled()) {
+      if (httpAuthenticationHandler.isLoginAttempt(request)) {
+        logger.debug("Basic HTTP authentication detected. Parsing credentials from request.");
+        credentials = httpAuthenticationHandler.parseCredentials(request);
+      } else {
+        logger.debug("Parsing credentials from url");
+        credentials = credentialsFromUrlParameters;
+      }
+    } else {
+      credentials = configuration.getUserCredentials();
+    }
+    return credentials;
+  }
+
+  private Credentials extractCredentialsFromRequest(HttpServletRequest request) {
+    return new Credentials(
+        ServletRequestUtils.getStringParameter(request, "userName", null),
+        ServletRequestUtils.getStringParameter(request, "userPassword", null));
   }
 
   /**

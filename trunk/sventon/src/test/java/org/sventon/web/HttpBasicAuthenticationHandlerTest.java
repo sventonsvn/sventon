@@ -33,7 +33,7 @@ public class HttpBasicAuthenticationHandlerTest extends TestCase {
         new String(Base64.encodeBase64(credentialString.getBytes())));
     credentials = handler.parseCredentials(request);
     assertFalse(credentials.isEmpty());
-    assertEquals("uid", credentials.getUsername());
+    assertEquals("uid", credentials.getUserName());
     assertEquals("pwd", credentials.getPassword());
   }
 

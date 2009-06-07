@@ -85,6 +85,8 @@ public final class RepositoryEntryTray implements Serializable {
    */
   private static class PeggedRepositoryEntryComparator implements Comparator<PeggedRepositoryEntry>, Serializable {
 
+    private static final long serialVersionUID = 4597643015545681872L;
+
     private final RepositoryEntryComparator comparator =
         new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true);
 

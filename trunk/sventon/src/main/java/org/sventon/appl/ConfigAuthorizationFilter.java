@@ -32,11 +32,11 @@ public class ConfigAuthorizationFilter extends OncePerRequestFilter {
   private Application application;
 
   /**
-   * Sets the application.
+   * Constructor.
    *
-   * @param application Application
+   * @param application Application instance.
    */
-  public final void setApplication(final Application application) {
+  public ConfigAuthorizationFilter(final Application application) {
     this.application = application;
   }
 
@@ -62,11 +62,9 @@ public class ConfigAuthorizationFilter extends OncePerRequestFilter {
     if (application.isConfigured()) {
       if (application.isEditableConfig()) {
         if (isAlreadyLoggedIn(request)) {
-          request.setAttribute("isEdit", true);
-          filterChain.doFilter(request, response);
+          dispatchRequest(request, response, filterChain);
         } else {
-          logger.debug("Login required for editing config");
-          response.sendRedirect(request.getContextPath() + "/repos/configlogin");
+          redirectToLoginPage(request, response);
         }
       } else {
         logger.debug("Already configured - returning to list repos view");
@@ -75,5 +73,15 @@ public class ConfigAuthorizationFilter extends OncePerRequestFilter {
     } else {
       filterChain.doFilter(request, response);
     }
+  }
+
+  private void dispatchRequest(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    request.setAttribute("isEdit", true);
+    filterChain.doFilter(request, response);
+  }
+
+  private void redirectToLoginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    logger.debug("Login required for editing config");
+    response.sendRedirect(request.getContextPath() + "/repos/configlogin");
   }
 }

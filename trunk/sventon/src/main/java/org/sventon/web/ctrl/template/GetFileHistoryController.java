@@ -34,7 +34,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
   /**
    * Request parameter identifying the arcived entry to display.
    */
-  protected static final String ARCHIVED_ENTRY = "archivedEntry";
+  static final String ARCHIVED_ENTRY = "archivedEntry";
 
   /**
    * Formatter for ISO 8601 format.

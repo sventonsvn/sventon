@@ -15,12 +15,11 @@ import java.util.Map;
 public class ShowThumbnailsControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
-    final MultipleEntriesCommand command = new MultipleEntriesCommand();
-    final ShowThumbnailsController ctrl = new ShowThumbnailsController();
-
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
     mftm.afterPropertiesSet();
-    ctrl.setMimeFileTypeMap(mftm);
+
+    final MultipleEntriesCommand command = new MultipleEntriesCommand();
+    final ShowThumbnailsController ctrl = new ShowThumbnailsController(mftm);
 
     final String[] pathEntries = new String[]{
         "file1.gif@123",
