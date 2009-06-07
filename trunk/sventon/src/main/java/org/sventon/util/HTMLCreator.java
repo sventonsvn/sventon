@@ -88,6 +88,8 @@ public final class HTMLCreator {
         case DELETED:
           deleted++;
           break;
+        default:
+          throw new IllegalArgumentException("Unsupported type: " + type);
       }
     }
     valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
@@ -187,6 +189,8 @@ public final class HTMLCreator {
           sb.append("<a href=\"").append(goToUrl);
           sb.append("\" title=\"Show previous revision\"><del>").append(logEntryPath.getPath()).append("</del></a>");
           break;
+        default:
+          throw new IllegalArgumentException("Unsupported type: " + actionType);
       }
 
       if (logEntryPath.getCopyPath() != null) {

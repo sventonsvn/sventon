@@ -117,8 +117,8 @@
   </bean>
 
   <bean id="exportProgressController" class="org.sventon.web.ctrl.template.ExportProgressController" parent="abstractTemplateController">
+    <constructor-arg ref="exportExecutor"/>
     <property name="viewName" value="ajax/exportProgress"/>
-    <property name="exportExecutor" ref="exportExecutor"/>
   </bean>
 
   <bean id="getStaticContentController" class="org.sventon.web.ctrl.GetStaticContentController">
