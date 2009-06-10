@@ -3,6 +3,7 @@ sventon change history
 
 [1588] Release 2.1.2 (2009-06-07)
 [1582] Added: Upgraded to SVNKit 1.3.0 (5903).
+       Fixed: Bug #15779 - SVNKit serialization problem.
 [1573] Bug #10132 - Cache does not survive SIGKILL (reopened).
 
 [1571] Release 2.1.1 (2009-05-26)
