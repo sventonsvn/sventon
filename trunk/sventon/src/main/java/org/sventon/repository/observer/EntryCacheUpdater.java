@@ -125,7 +125,6 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
     final int revisionCount = revisions.size();
-
     final long firstRevision = revisions.get(0).getRevision();
     final long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
@@ -192,7 +191,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     try {
       entryCache.clear();
-      long revision = repositoryService.getLatestRevision(repository);
+      final long revision = repositoryService.getLatestRevision(repository);
       final List<RepositoryEntry> entriesToAdd = new ArrayList<RepositoryEntry>();
       addDirectories(entriesToAdd, repository, "/", revision, repositoryService);
       updateAndFlushCache(entriesToAdd, Collections.EMPTY_MAP, revision, entryCache, revisionUpdate.isFlushAfterUpdate());
@@ -204,7 +203,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   private void updateAndFlushCache(final List<RepositoryEntry> entriesToAdd,
                                    final Map<String, RepositoryEntry.Kind> entriesToDelete,
                                    final long revision, EntryCache entryCache, boolean flushAfterUpdate) {
-    entryCache.removeAndAdd(entriesToAdd,entriesToDelete);
+    entryCache.removeAndAdd(entriesToDelete, entriesToAdd);
     entryCache.setLatestCachedRevisionNumber(revision);
 
     if (flushAfterUpdate) {

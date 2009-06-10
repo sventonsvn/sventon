@@ -168,8 +168,8 @@ public final class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public void removeAndAdd(final List<RepositoryEntry> entriesToAdd,
-                           final Map<String, RepositoryEntry.Kind> entriesToDelete) {
+  public void removeAndAdd(final Map<String, RepositoryEntry.Kind> entriesToDelete,
+                           final List<RepositoryEntry> entriesToAdd) {
 
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
