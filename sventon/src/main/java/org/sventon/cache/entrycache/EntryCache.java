@@ -72,7 +72,7 @@ public interface EntryCache extends Cache {
    * @param entriesToDelete Entries to delete.
    * @param entriesToAdd    Entries to add.
    */
-  void removeAndAdd(final Map<String, RepositoryEntry.Kind> entriesToDelete, final List<RepositoryEntry> entriesToAdd);
+  void update(final Map<String, RepositoryEntry.Kind> entriesToDelete, final List<RepositoryEntry> entriesToAdd);
 
   /**
    * Removes a directory entry including all children.
