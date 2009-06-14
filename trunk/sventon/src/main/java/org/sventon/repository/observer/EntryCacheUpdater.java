@@ -65,6 +65,12 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   private RepositoryConnectionFactory repositoryConnectionFactory;
 
   /**
+   * Max number of files in memory before buffer is flushed to the cache.
+   * Only used when cache is initially populated.
+   */
+  private int flushThreshold = 1000;
+
+  /**
    * Constructor.
    *
    * @param entryCacheManager The EntryCacheManager instance.
@@ -74,6 +80,15 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     LOGGER.info("Starting");
     this.entryCacheManager = entryCacheManager;
     this.application = application;
+  }
+
+  /**
+   * Sets the threshold.
+   *
+   * @param flushThreshold Max files in memory before flush.
+   */
+  public void setFlushThreshold(final int flushThreshold) {
+    this.flushThreshold = flushThreshold;
   }
 
   /**
@@ -130,7 +145,8 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     if (revisionCount > 0 && firstRevision == 1) {
       LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getRepositoryName());
-      doInitialCachePopulation(entryCache, repository, revisionUpdate);
+      doInitialCachePopulation(entryCache, repository, revisionUpdate.isFlushAfterUpdate());
+      LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
     } else {
       // Initial population has already been performed - only apply changes for now.
       if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
@@ -155,8 +171,8 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       // Sort the entriesToAdd to apply changes in right order
       Collections.sort(latestPathsList);
 
-      final List<RepositoryEntry> entriesToAdd = new ArrayList<RepositoryEntry>();
-      final Map<String, RepositoryEntry.Kind> entriesToDelete = new HashMap<String, RepositoryEntry.Kind>();
+      final EntriesToAdd entriesToAdd = new EntriesToAdd();
+      final EntriesToDelete entriesToDelete = new EntriesToDelete();
 
       for (final String entryPath : latestPathsList) {
         final SVNLogEntryPath logEntryPath = map.get(entryPath);
@@ -187,23 +203,25 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     }
   }
 
-  private void doInitialCachePopulation(EntryCache entryCache, SVNRepository repository, RevisionUpdate revisionUpdate) {
+  private void doInitialCachePopulation(final EntryCache entryCache, final SVNRepository repository,
+                                        final boolean flushAfterUpdate) {
 
     try {
       entryCache.clear();
       final long revision = repositoryService.getLatestRevision(repository);
-      final List<RepositoryEntry> entriesToAdd = new ArrayList<RepositoryEntry>();
+      final EntriesToAdd entriesToAdd = new AutoFlushBuffer(entryCache, flushThreshold);
       addDirectories(entriesToAdd, repository, "/", revision, repositoryService);
-      updateAndFlushCache(entriesToAdd, Collections.EMPTY_MAP, revision, entryCache, revisionUpdate.isFlushAfterUpdate());
+      updateAndFlushCache(entriesToAdd, new EntriesToDelete(),
+          revision, entryCache, flushAfterUpdate);
     } catch (SVNException svnex) {
       LOGGER.error("Unable to populate cache", svnex);
     }
   }
 
-  private void updateAndFlushCache(final List<RepositoryEntry> entriesToAdd,
-                                   final Map<String, RepositoryEntry.Kind> entriesToDelete,
+  private void updateAndFlushCache(final EntriesToAdd entriesToAdd,
+                                   final EntriesToDelete entriesToDelete,
                                    final long revision, EntryCache entryCache, boolean flushAfterUpdate) {
-    entryCache.removeAndAdd(entriesToDelete, entriesToAdd);
+    entryCache.update(entriesToDelete.getEntries(), entriesToAdd.getEntries());
     entryCache.setLatestCachedRevisionNumber(revision);
 
     if (flushAfterUpdate) {
@@ -225,12 +243,12 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheModify(final List<RepositoryEntry> entriesToAdd,
-                                  final Map<String, RepositoryEntry.Kind> entriesToDelete,
+  private void doEntryCacheModify(final EntriesToAdd entriesToAdd,
+                                  final EntriesToDelete entriesToDelete,
                                   final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                   final long revision) throws SVNException {
 
-    entriesToDelete.put(logEntryPath.getPath(), RepositoryEntry.Kind.ANY);
+    entriesToDelete.add(logEntryPath.getPath(), RepositoryEntry.Kind.ANY);
     final RepositoryEntry entry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), revision);
     entriesToAdd.add(entry);
   }
@@ -245,8 +263,8 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheReplace(final List<RepositoryEntry> entriesToAdd,
-                                   final Map<String, RepositoryEntry.Kind> entriesToDelete,
+  private void doEntryCacheReplace(final EntriesToAdd entriesToAdd,
+                                   final EntriesToDelete entriesToDelete,
                                    final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                    final long revision) throws SVNException {
 
@@ -262,7 +280,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision        The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheDelete(final Map<String, RepositoryEntry.Kind> entriesToDelete,
+  private void doEntryCacheDelete(final EntriesToDelete entriesToDelete,
                                   final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                   final long revision) throws SVNException {
 
@@ -272,7 +290,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     try {
       deletedEntry = repositoryService.getEntryInfo(repository, logEntryPath.getPath(), previousRevision);
-      entriesToDelete.put(logEntryPath.getPath(), deletedEntry.getKind());
+      entriesToDelete.add(logEntryPath.getPath(), deletedEntry.getKind());
     } catch (SVNException e) {
       if (SVNErrorCode.ENTRY_NOT_FOUND.equals(e.getErrorMessage().getErrorCode())) {
         LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
@@ -291,7 +309,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param revision     The log revision
    * @throws SVNException if subversion error occur.
    */
-  private void doEntryCacheAdd(final List<RepositoryEntry> entriesToAdd,
+  private void doEntryCacheAdd(final EntriesToAdd entriesToAdd,
                                final SVNRepository repository, final SVNLogEntryPath logEntryPath,
                                final long revision) throws SVNException {
 
@@ -322,7 +340,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * @param repositoryService Service
    * @throws SVNException if a Subversion error occurs.
    */
-  private void addDirectories(final List<RepositoryEntry> entriesToAdd, final SVNRepository repository, final String path,
+  private void addDirectories(final EntriesToAdd entriesToAdd, final SVNRepository repository, final String path,
                               final long revision, final RepositoryService repositoryService) throws SVNException {
 
     final List<RepositoryEntry> entriesList = repositoryService.list(repository, path, revision, null);
@@ -352,6 +370,107 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    */
   public void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
+  }
+
+
+  private class EntriesToAdd {
+
+    protected final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
+
+    /**
+     * Constructor.
+     */
+    public EntriesToAdd() {
+    }
+
+    /**
+     * Add.
+     *
+     * @param entries Entries
+     */
+    public void add(final RepositoryEntry... entries) {
+      this.entries.addAll(Arrays.asList(entries));
+    }
+
+    /**
+     * Get.
+     *
+     * @return entries
+     */
+    public List<RepositoryEntry> getEntries() {
+      return entries;
+    }
+  }
+
+
+  private class EntriesToDelete {
+
+    private final Map<String, RepositoryEntry.Kind> entries = new HashMap<String, RepositoryEntry.Kind>();
+
+    /**
+     * Constructor.
+     */
+    public EntriesToDelete() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param entries Entries
+     */
+    public EntriesToDelete(final Map<String, RepositoryEntry.Kind> entries) {
+      this.entries.putAll(entries);
+    }
+
+    /**
+     * Add.
+     *
+     * @param path Path
+     * @param kind Node kind
+     */
+    public void add(final String path, RepositoryEntry.Kind kind) {
+      entries.put(path, kind);
+    }
+
+    /**
+     * Get.
+     *
+     * @return entries
+     */
+    public Map<String, RepositoryEntry.Kind> getEntries() {
+      return entries;
+    }
+  }
+
+  class AutoFlushBuffer extends EntriesToAdd {
+
+    private final EntryCache entryCache;
+    private final int flushThreshold;
+
+    /**
+     * Constructor.
+     *
+     * @param entryCache     Cache instance.
+     * @param flushThreshold Threshold.
+     */
+    public AutoFlushBuffer(final EntryCache entryCache, final int flushThreshold) {
+      this.entryCache = entryCache;
+      this.flushThreshold = flushThreshold;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void add(RepositoryEntry... e) {
+      super.add(e);
+      final int entriesCount = entries.size();
+      if (entriesCount >= flushThreshold) {
+        LOGGER.debug("Flushing cache, size: " + entriesCount);
+        entryCache.update(Collections.EMPTY_MAP, entries);
+        entries.clear();
+      }
+    }
   }
 
 }
