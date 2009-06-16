@@ -84,7 +84,7 @@ public final class ZipFileWrapper {
       final de.schlichtherle.io.File destinationFile = new de.schlichtherle.io.File(zipFile);
       final de.schlichtherle.io.File dirToZip = new de.schlichtherle.io.File(directory);
       destinationFile.archiveCopyAllFrom(dirToZip, ArchiveDetector.NULL);
-      de.schlichtherle.io.File.umount();  // TODO: Is this the way to do it? Why is the method static? Is this thread safe?
+      de.schlichtherle.io.File.umount();
     }
   }
 
