@@ -22,7 +22,7 @@ import org.springframework.util.StopWatch;
  *
  * @author jesper@sventon.org
  */
-public class StopWatchAroundAdvice implements MethodInterceptor {
+public final class StopWatchAroundAdvice implements MethodInterceptor {
 
   /**
    * The logging instance.
