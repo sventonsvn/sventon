@@ -162,14 +162,25 @@
 
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
           <tr>
-            <td align="center">
+            <td class="boxBody">
+YourKit is kindly supporting open source projects with its full-featured Java Profiler.
+YourKit, LLC is the creator of innovative and intelligent tools for profiling
+Java and .NET applications. Take a look at YourKit's leading software products:
+<a href="http://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a> and
+<a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>.
+            </td>
+          </tr>
+        </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
+          <tr>
+            <td align="center" width="193px">
               <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_partner_badge"></script>
               <br>
               <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_users_logo"></script>
             </td>
           </tr>
         </table>
-
       </td>
     </tr>
   </table>

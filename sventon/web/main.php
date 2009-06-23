@@ -1,7 +1,7 @@
 <div class="header">Welcome to the sventon project!</div>
 <div class="body">
 <p>
-  sventon is a web client for browsing Subversion repositories. It is powerful, straightforward to use,
+  sventon is a free, open source, web client for browsing Subversion repositories. It is powerful, straightforward to use,
   and super easy to install.
   </p>
 <p>
