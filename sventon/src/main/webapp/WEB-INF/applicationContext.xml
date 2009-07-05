@@ -105,16 +105,16 @@
 
   <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
-  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager"
-        destroy-method="shutdown">
-    <constructor-arg index="0" ref="configDirectory"/>
-    <constructor-arg index="1" value="1000"/>
-    <constructor-arg index="2" value="true"/>
+  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager" destroy-method="shutdown">
+    <constructor-arg index="0" ref="ehCacheManager"/>
+    <constructor-arg index="1" ref="configDirectory"/>
+    <constructor-arg index="2" value="1000"/>
     <constructor-arg index="3" value="true"/>
-    <constructor-arg index="4" value="0"/>
+    <constructor-arg index="4" value="true"/>
     <constructor-arg index="5" value="0"/>
-    <constructor-arg index="6" value="true"/>
-    <constructor-arg index="7" value="120"/>
+    <constructor-arg index="6" value="0"/>
+    <constructor-arg index="7" value="true"/>
+    <constructor-arg index="8" value="120"/>
   </bean>
 
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -178,7 +178,7 @@
     <ref local="objectCacheManager"/>
     <ref local="revisionCacheManager"/>
   </util:list>
-  
+
   <!-- List of RevisionObservers registered to observe repository changes -->
   <util:list id="observerList">
     <ref local="entryCacheUpdater"/>
@@ -251,7 +251,7 @@
     <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
     <property name="repositoryService" ref="repositoryService"/>
   </bean>
-  
+
   <bean id="tempFileCleaner" class="org.sventon.export.TemporaryFileCleaner">
     <constructor-arg ref="configDirectory"/>
     <constructor-arg ref="exportFileFilter"/>
@@ -286,7 +286,29 @@
   <bean id="imageScaler" class="org.sventon.util.ImageScaler"/>
 
   <bean id="httpAuthenticationHandler" class="org.sventon.web.HttpBasicAuthenticationHandler">
-    <constructor-arg value="sventon rss feed"/>  
+    <constructor-arg value="sventon rss feed"/>
+  </bean>
+
+  <bean id="ehCacheMBeanRegistration" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="staticMethod" value="net.sf.ehcache.management.ManagementService.registerMBeans"/>
+    <property name="arguments">
+      <list>
+        <ref bean="ehCacheManager"/>
+        <ref bean="mbeanServer"/>
+        <value>true</value>
+        <value>true</value>
+        <value>true</value>
+        <value>true</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+    <property name="locateExistingServerIfPossible" value="true"/>
+  </bean>
+
+  <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <property name="shared" value="true"/>
   </bean>
 
 </beans>

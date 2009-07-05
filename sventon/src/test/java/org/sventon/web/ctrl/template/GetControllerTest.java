@@ -29,6 +29,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 
+import net.sf.ehcache.CacheManager;
+
 public class GetControllerTest extends TestCase {
 
   private Application application;
@@ -148,10 +150,11 @@ public class GetControllerTest extends TestCase {
     final RepositoryService repositoryServiceMock = EasyMock.createMock(RepositoryService.class);
 
     final ObjectCacheManager objectCacheManager = new ObjectCacheManager(
-        configDirectory, 0, false, false, 0, 0, false, 0) {
+        null, configDirectory, 0, false, false, 0, 0, false, 0) {
       @Override
       protected ObjectCache createCache(RepositoryName cacheName) throws CacheException {
-        return new ObjectCacheImpl(cacheName.toString(), null, 1000, false, false, 0, 0, false, 0);
+        final CacheManager cacheManager = CacheManager.create();
+        return new ObjectCacheImpl(cacheManager, cacheName.toString(), null, 1000, false, false, 0, 0, false, 0);
       }
     };
     objectCacheManager.register(repositoryName);

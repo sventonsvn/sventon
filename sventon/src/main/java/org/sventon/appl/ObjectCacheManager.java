@@ -29,6 +29,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * Root directory for cache files.
    */
   private final File repositoriesDirectory;
+
   private final int maxElementsInMemory;
   private final boolean overflowToDisk;
   private final boolean eternal;
@@ -37,9 +38,12 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
   private final boolean diskPersistent;
   private final int diskExpiryThreadIntervalSeconds;
 
+  private final net.sf.ehcache.CacheManager cacheManager;
+
   /**
    * Constructor.
    *
+   * @param cacheManager        EhCache manager.
    * @param configDirectory     Configuration directory.
    *                            Cache files will be stored in a sub dir called <tt>cache</tt>.
    * @param maxElementsInMemory Max elements in memory
@@ -51,7 +55,8 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @param diskExpiryThreadIntervalSeconds
    *                            Expiry thread interval
    */
-  public ObjectCacheManager(final ConfigDirectory configDirectory,
+  public ObjectCacheManager(final net.sf.ehcache.CacheManager cacheManager,
+                            final ConfigDirectory configDirectory,
                             final int maxElementsInMemory,
                             final boolean overflowToDisk,
                             final boolean eternal,
@@ -59,6 +64,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
                             final int timeToIdleSeconds,
                             final boolean diskPersistent,
                             final int diskExpiryThreadIntervalSeconds) {
+    this.cacheManager = cacheManager;
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
     this.maxElementsInMemory = maxElementsInMemory;
     this.overflowToDisk = overflowToDisk;
@@ -86,6 +92,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     }
 
     final ObjectCacheImpl objectCache = new ObjectCacheImpl(
+        cacheManager,
         repositoryName.toString(),
         cachePath.getAbsolutePath(),
         maxElementsInMemory,

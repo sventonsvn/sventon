@@ -6,11 +6,13 @@ import org.sventon.TestUtils;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import net.sf.ehcache.CacheManager;
 
 public class RevisionCacheImplTest extends TestCase {
 
   private ObjectCache createMemoryCache() throws Exception {
-    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
+    final CacheManager cacheManager = CacheManager.create();
+    return new ObjectCacheImpl(cacheManager, "sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testGetAndAdd() throws Exception {
