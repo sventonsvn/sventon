@@ -42,6 +42,7 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * Constructor.
    *
+   * @param cacheManager        EhCache manager.
    * @param cacheName           Name of the cache.
    * @param diskStorePath       Path where to store cache files
    * @param maxElementsInMemory Max elements in memory
@@ -54,7 +55,8 @@ public final class ObjectCacheImpl implements ObjectCache {
    *                            Expiry thread interval
    * @throws CacheException if unable to create cache.
    */
-  public ObjectCacheImpl(final String cacheName,
+  public ObjectCacheImpl(final CacheManager cacheManager,
+                         final String cacheName,
                          final String diskStorePath,
                          final int maxElementsInMemory,
                          final boolean overflowToDisk,
@@ -64,10 +66,10 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final boolean diskPersistent,
                          final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
-      cacheManager = CacheManager.create();
+      this.cacheManager = cacheManager;
       cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
-      cacheManager.addCache(cache);
+      this.cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
       throw new CacheException("Unable to create cache instance", ce);
     }
@@ -100,20 +102,6 @@ public final class ObjectCacheImpl implements ObjectCache {
   /**
    * {@inheritDoc}
    */
-  public long getHitCount() {
-    return cache.getHitCount();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public long getMissCount() {
-    return cache.getMissCountNotFound();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void flush() {
     cache.flush();
   }
@@ -135,6 +123,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    * @return List of keys.
    */
   public List<Object> getKeys() {
+    //noinspection unchecked
     return cache.getKeys();
   }
 }

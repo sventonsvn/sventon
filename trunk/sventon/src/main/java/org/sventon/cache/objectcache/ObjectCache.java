@@ -38,20 +38,6 @@ public interface ObjectCache extends Cache {
   Object get(final Object cacheKey);
 
   /**
-   * Gets the cache hit count.
-   *
-   * @return The cache hit count.
-   */
-  long getHitCount();
-
-  /**
-   * Gets the cache miss count.
-   *
-   * @return The cache miss count.
-   */
-  long getMissCount();
-
-  /**
    * Flushes the cache to disk. Only applies to <tt>DiskStore</tt> implementations.
    */
   void flush();
