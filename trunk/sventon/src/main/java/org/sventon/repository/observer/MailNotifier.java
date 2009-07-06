@@ -120,7 +120,6 @@ public final class MailNotifier extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
 
     executorService.execute(new Runnable() {
-
       public void run() {
         final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
@@ -134,31 +133,33 @@ public final class MailNotifier extends AbstractRevisionObserver {
           if (SVNUtils.isAccessible(logEntry)) {
             final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
             final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
-
             LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
-
-            try {
-              final Message msg = createMessage(logEntry, repositoryName, configuration.getMailTemplate());
-              final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
-
-              try {
-                if (auth) {
-                  transport.connect(host, user, password);
-                } else {
-                  transport.connect();
-                }
-                transport.sendMessage(msg, msg.getAllRecipients());
-                LOGGER.debug("Notification mail was sent successfully");
-              } finally {
-                transport.close();
-              }
-            } catch (Exception e) {
-              LOGGER.error("Unable to send notification mail", e);
-            }
+            sendMailMessage(logEntry, repositoryName, configuration);
           }
         }
       }
     });
+  }
+
+  private void sendMailMessage(SVNLogEntry logEntry, RepositoryName repositoryName, RepositoryConfiguration configuration) {
+    try {
+      final Message msg = createMessage(logEntry, repositoryName, configuration.getMailTemplate());
+      final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
+
+      try {
+        if (auth) {
+          transport.connect(host, user, password);
+        } else {
+          transport.connect();
+        }
+        transport.sendMessage(msg, msg.getAllRecipients());
+        LOGGER.debug("Notification mail was sent successfully");
+      } finally {
+        transport.close();
+      }
+    } catch (Exception e) {
+      LOGGER.error("Unable to send notification mail", e);
+    }
   }
 
   /**
