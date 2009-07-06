@@ -37,6 +37,8 @@ import java.util.Comparator;
  */
 public final class DiffCommand extends BaseCommand {
 
+  private static final FileRevisionComparator FILE_REVISION_COMPARATOR = new FileRevisionComparator();
+
   /**
    * From revision.
    */
@@ -67,7 +69,7 @@ public final class DiffCommand extends BaseCommand {
    *
    * @param entries Array containing two <code>SVNFileRevision</code> objects.
    * @throws IllegalArgumentException       if given list does not contain two entries.
-   * @throws org.sventon.diff.DiffException
+   * @throws org.sventon.diff.DiffException if entry does not have a history.
    */
   public void setEntries(final SVNFileRevision[] entries) throws DiffException {
     Validate.notNull(entries);
@@ -76,11 +78,7 @@ public final class DiffCommand extends BaseCommand {
       throw new DiffException("The entry does not have a history.");
     }
 
-    Arrays.sort(entries, new Comparator<SVNFileRevision>() {
-      public int compare(SVNFileRevision o1, SVNFileRevision o2) {
-        return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
-      }
-    });
+    Arrays.sort(entries, FILE_REVISION_COMPARATOR);
     toFileRevision = entries[0];
     fromFileRevision = entries[1];
   }
@@ -203,4 +201,11 @@ public final class DiffCommand extends BaseCommand {
     sb.append("}");
     return sb.toString();
   }
+
+  private static class FileRevisionComparator implements Comparator<SVNFileRevision> {
+    public int compare(SVNFileRevision o1, SVNFileRevision o2) {
+      return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
+    }
+  }
+
 }
