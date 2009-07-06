@@ -69,6 +69,7 @@ public final class ObjectCacheImpl implements ObjectCache {
       this.cacheManager = cacheManager;
       cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
+      cache.getCacheConfiguration().setClearOnFlush(false);
       this.cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
       throw new CacheException("Unable to create cache instance", ce);
