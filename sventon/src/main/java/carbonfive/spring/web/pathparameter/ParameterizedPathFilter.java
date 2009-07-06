@@ -107,7 +107,7 @@ public class ParameterizedPathFilter extends OncePerRequestFilter {
     }
   }
 
-  private class IteratorEnumeration implements Enumeration {
+  private static class IteratorEnumeration implements Enumeration {
     private Iterator it = null;
 
     public IteratorEnumeration(Iterator it) {
