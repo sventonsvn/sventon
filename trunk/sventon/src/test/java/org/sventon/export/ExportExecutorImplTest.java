@@ -43,10 +43,11 @@ public class ExportExecutorImplTest extends TestCase {
     final SVNRepository repositoryMock = createMock(SVNRepository.class);
 
     expect(configDirectoryMock.getExportDirectory()).andStubReturn(new File(TestUtils.TEMPDIR));
+    expect(exportDirectoryMock.getDirectory()).andReturn(new File("."));
+    expect(exportDirectoryMock.getUUID()).andStubReturn(UUID.fromString(UUID_STRING));
     expect(exportDirectoryMock.mkdirs()).andStubReturn(true);
     repositoryServiceMock.export(repositoryMock, entries, 123, exportDirectoryMock);
     exportDirectoryMock.delete();
-    expect(exportDirectoryMock.getUUID()).andStubReturn(UUID.fromString(UUID_STRING));
     expect(exportDirectoryMock.compress()).andStubReturn(new File(TestUtils.TEMPDIR));
 
     replay(configDirectoryMock);

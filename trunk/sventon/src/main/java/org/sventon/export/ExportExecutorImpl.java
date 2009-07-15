@@ -204,12 +204,15 @@ public class ExportExecutorImpl implements ExportExecutor {
     }
 
     public Void call() throws SVNException, IOException {
-      StopWatch stopWatch = new StopWatch();
-      stopWatch.start("Export of uuid: " + exportDirectory.getUUID());
+      final UUID uuid = exportDirectory.getUUID();
+      final StopWatch stopWatch = new StopWatch(
+          "Export of [" + exportDirectory.getDirectory().getAbsolutePath() + "] uuid: " + uuid);
+
+      stopWatch.start();
       try {
         exportDirectory.mkdirs();
         repositoryService.export(repository, entries, pegRevision, exportDirectory);
-        completedExports.put(exportDirectory.getUUID(), exportDirectory.compress());
+        completedExports.put(uuid, exportDirectory.compress());
       } finally {
         stopWatch.stop();
         logger.info(stopWatch.shortSummary());
