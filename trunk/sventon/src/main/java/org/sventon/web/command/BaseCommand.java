@@ -70,7 +70,7 @@ public class BaseCommand {
   /**
    * Repository name.
    */
-  private RepositoryName name;
+  private RepositoryName repositoryName;
 
   /**
    * The sort type.
@@ -273,7 +273,7 @@ public class BaseCommand {
    * @param name Repository name
    */
   public void setName(final RepositoryName name) {
-    this.name = name;
+    this.repositoryName = name;
   }
 
   /**
@@ -282,7 +282,7 @@ public class BaseCommand {
    * @return The repository name.
    */
   public RepositoryName getName() {
-    return name;
+    return repositoryName;
   }
 
   /**
@@ -342,7 +342,7 @@ public class BaseCommand {
    */
   public String createListUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/list" + getPathWithTrailingSlash();
+    return "/repos/" + repositoryName.toString() + "/list" + getPathWithTrailingSlash();
   }
 
   /**
@@ -354,11 +354,11 @@ public class BaseCommand {
    */
   public String createShowFileUrl() {
     assertNameSet();
-    return "/repos/" + name.toString() + "/show" + getPathStripTrailingSlash();
+    return "/repos/" + repositoryName.toString() + "/show" + getPathStripTrailingSlash();
   }
 
   private void assertNameSet() {
-    if (name == null) {
+    if (repositoryName == null) {
       throw new IllegalStateException("Name has not been set");
     }
   }
