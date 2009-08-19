@@ -217,7 +217,7 @@ public final class EntryCacheImpl implements EntryCache {
    */
   public List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding [" + searchString + "] starting in [" + startDir + "]");
+      logger.debug("Finding string [" + searchString + "] starting in [" + startDir + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
@@ -230,7 +230,7 @@ public final class EntryCacheImpl implements EntryCache {
   public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                              final String startPath) {
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding [" + camelCasePattern + "] starting in [" + startPath + "]");
+      logger.debug("Finding pattern [" + camelCasePattern + "] starting in [" + startPath + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
