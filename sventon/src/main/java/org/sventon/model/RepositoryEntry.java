@@ -38,7 +38,7 @@ public final class RepositoryEntry implements Serializable {
   @SearchableId
   private String id;
 
-  @SearchableProperty(index = Index.UN_TOKENIZED)
+  @SearchableProperty(index = Index.NOT_ANALYZED)
   private String path;
 
   @SearchableProperty
