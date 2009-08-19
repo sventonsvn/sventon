@@ -20,6 +20,7 @@ import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
+import static org.sventon.util.EncodingUtils.encode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +84,7 @@ public final class ListRepositoriesController extends AbstractController {
   }
 
   protected String createListUrl(final RepositoryName repositoryName) {
-    return EncodingUtils.encodeUrl("/repos/" + repositoryName + "/list/");
+    return "/repos/" + encode(repositoryName.toString()) + "/list/";
   }
 
   /**
