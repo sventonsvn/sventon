@@ -216,41 +216,49 @@ public final class EntryCacheImpl implements EntryCache {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
+    final String queryString = "path:" + startDir + "* (name:*" + searchString + "*" +
+        " OR lastAuthor:*" + searchString + "*)";
+
     if (logger.isDebugEnabled()) {
       logger.debug("Finding string [" + searchString + "] starting in [" + startDir + "]");
+      logger.debug("QueryString: " + queryString);
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startDir + "* (name:*" +
-        searchString + "*" + " OR lastAuthor:*" + searchString + "*)"));
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
   }
 
   public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                              final String startPath) {
+    final String queryString = "path:" + startPath +
+        "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*";
+
     if (logger.isDebugEnabled()) {
       logger.debug("Finding pattern [" + camelCasePattern + "] starting in [" + startPath + "]");
+      logger.debug("QueryString: " + queryString);
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startPath +
-        "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*"));
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
-
   }
 
   /**
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findDirectories(final String startPath) {
+    final String queryString = "path:" + startPath + "* kind:DIR";
+
     if (logger.isDebugEnabled()) {
       logger.debug("Finding directories recursively from [" + startPath + "]");
+      logger.debug("QueryString: " + queryString);
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach("path:" + startPath + "* kind:DIR"));
+    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
   }
