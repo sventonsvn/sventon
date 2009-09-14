@@ -51,8 +51,9 @@ public class EntryCacheTest extends TestCase {
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
 
-    assertEquals(2, entryCache.findEntries("tag", "/tags/").size());
-    assertEquals(2, entryCache.findEntries("tag", "/TAGS/").size());
+    assertEquals(2, entryCache.findEntries("tag", "/").size());
+    assertEquals(1, entryCache.findEntries("tag", "/TAGS/").size());
+    assertEquals(0, entryCache.findEntries("tag", "/tags/").size());
   }
 
   public void testFindEntryByAuthor() throws Exception {
@@ -61,7 +62,7 @@ public class EntryCacheTest extends TestCase {
     assertEquals(13, entryCache.getSize());
 
     assertEquals(11, entryCache.findEntries("jesper", "/").size());
-    assertEquals(2, entryCache.findEntries("jesper", "/tags/").size());
+    assertEquals(2, entryCache.findEntries("jesper", "/TAGS/").size());
   }
 
   public void testEntryCacheRemove() throws Exception {
@@ -85,7 +86,7 @@ public class EntryCacheTest extends TestCase {
     assertEquals(4, entryCache.getSize());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
-    entryCache.removeDirectory("/tags");
+    entryCache.removeDirectory("/TAGS");
     assertEquals(1, entryCache.getSize());
   }
 

@@ -84,6 +84,7 @@ public final class EntryCacheImpl implements EntryCache {
     compassConfiguration.setSetting(CompassEnvironment.CONNECTION, connectionString)
         .setSetting(CompassEnvironment.DEBUG, String.valueOf(true))
         .setSetting(CompassEnvironment.NAME, cacheDirectory.getParent())
+        .setSetting("compass.engine.queryParser.default.type", CustomizedLuceneQueryParser.class.getName())
         .addClass(RepositoryEntry.class);
     compass = compassConfiguration.buildCompass();
     latestCachedRevisionFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
