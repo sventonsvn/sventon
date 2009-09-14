@@ -59,12 +59,12 @@ public final class TestUtils {
   public static List<RepositoryEntry> getDirectoryList() {
     final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
     entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tags", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "TAGS", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/"));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "file1.java", SVNNodeKind.FILE, 64000, false, 1, new Date(), "jesper"), "/"));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "file2.html", SVNNodeKind.FILE, 32000, false, 2, new Date(), "jesper"), "/"));
 
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/tags/"));
-    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tagfile2.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/tags/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "tagfile.txt", SVNNodeKind.FILE, 3200, false, 2, new Date(), "jesper"), "/TAGS/"));
+    entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "test.txt", SVNNodeKind.FILE, 1600, false, 3, new Date(), "jesper"), "/TAGS/"));
 
     entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "code", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));
     entries.add(new RepositoryEntry(new SVNDirEntry(null, null, "src", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"), "/trunk/"));

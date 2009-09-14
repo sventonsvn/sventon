@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1622] Fixed: Bug #16111 - No result when searching for entries.
+
 [1605] Release 2.1.3 (2009-06-16)
 [1597] Fixed: Bug #15842 - High memory consumption when populating cache.
 
