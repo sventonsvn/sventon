@@ -14,6 +14,7 @@ running in no-time!
 Some of the features making sventon a great Subversion companion:
 <ul style="margin-left:40px">
   <li>Browse and download directories and files</li>
+  <li>Source code syntax highlighting for Java, HTML, XML, C, Groovy, Pascal/Delphi, VisualBasic, C# and JavaScript.</li>
   <li>View logs and blame individual files</li>
   <li>Diff your repository files, or view their properties</li>
   <li>Show differences between paths.</li>

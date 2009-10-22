@@ -5,7 +5,7 @@
   <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v214'); ">
     <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.1.4
   </a>
-  <a href="/download/sventon-2.1.3-bin.zip" onClick="javascript:urchinTracker ('/downloads/v214');">(mirror)</a>
+  <a href="/download/sventon-2.1.4-bin.zip" onClick="javascript:urchinTracker ('/downloads/v214');">(mirror)</a>
 
   <br/>
   <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v205'); ">
