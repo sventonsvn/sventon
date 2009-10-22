@@ -23,6 +23,7 @@ import org.sventon.util.SVNUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.activation.DataHandler;
+import javax.annotation.PostConstruct;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -104,6 +105,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
   /**
    * Initializes the component.
    */
+  @PostConstruct
   public void init() {
     final Properties mailProperties = new Properties();
     mailProperties.setProperty("mail.smtp.host", host);

@@ -16,6 +16,7 @@ import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
 
+import javax.annotation.PreDestroy;
 import java.io.File;
 
 /**
@@ -62,6 +63,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    *
    * @throws CacheException if unable to shutdown caches.
    */
+  @PreDestroy
   public void shutdown() throws CacheException {
     for (final LogMessageCache cache : caches.values()) {
       cache.shutdown();

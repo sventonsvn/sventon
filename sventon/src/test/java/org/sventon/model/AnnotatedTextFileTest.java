@@ -26,7 +26,7 @@ public class AnnotatedTextFileTest extends TestCase {
     final String row1 = "public class Test {";
     final String row2 = "}";
 
-    final String coloredRow1 = "<span class=\"java_keyword\">public</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_type\">Test</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_separator\">{</span><span class=\"java_plain\"></span>";
+    final String coloredRow1 = "<span class=\"java_keyword\">public</span><span class=\"java_plain\">&#160;</span><span class=\"java_keyword\">class</span><span class=\"java_plain\">&#160;</span><span class=\"java_type\">Test</span><span class=\"java_plain\">&#160;</span><span class=\"java_separator\">{</span><span class=\"java_plain\"></span>";
     final String coloredRow2 = "<span class=\"java_separator\">}</span><span class=\"java_plain\"></span>";
 
     file.addRow(new Date(), 1, "jesper", row1);

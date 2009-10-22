@@ -22,6 +22,7 @@ import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,6 +103,7 @@ public final class Application {
    * @throws IOException    if unable to load the instance configurations.
    * @throws CacheException if unable to initalize caches.
    */
+  @PostConstruct
   public void init() throws IOException, CacheException {
     initSvnSupport();
     loadRepositoryConfigurations();

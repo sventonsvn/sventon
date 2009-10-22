@@ -51,10 +51,10 @@ public class TextFileTest extends TestCase {
     final String content = "class Test {" + BR + "// <test> " + BR + "}";
     final TextFile textFile = new TextFile(content, "Test.java", "UTF-8", getColorer(), null, null);
     assertEquals(3, textFile.size());
-    assertEquals("<span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span>" +
-        "<span class=\"java_type\">Test</span><span class=\"java_plain\">&nbsp;</span>" +
+    assertEquals("<span class=\"java_keyword\">class</span><span class=\"java_plain\">&#160;</span>" +
+        "<span class=\"java_type\">Test</span><span class=\"java_plain\">&#160;</span>" +
         "<span class=\"java_separator\">{</span><span class=\"java_plain\"></span>" + BR +
-        "<span class=\"java_comment\">//&nbsp;&lt;test&gt;&nbsp;</span>" + BR +
+        "<span class=\"java_comment\">//&#160;&lt;test&gt;&#160;</span>" + BR +
         "<span class=\"java_separator\">}</span><span class=\"java_plain\"></span>" + BR, textFile.getContent());
   }
 

@@ -14,10 +14,16 @@ package org.sventon.cache.objectcache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
+import net.sf.ehcache.management.ManagementService;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.apache.commons.lang.Validate;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.CacheException;
 
+import javax.management.MBeanServer;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,19 +36,23 @@ import java.util.List;
 public final class ObjectCacheImpl implements ObjectCache {
 
   /**
-   * The cache manager instance.
-   */
-  private final CacheManager cacheManager;
-
-  /**
    * The cache instance.
    */
   private final Cache cache;
 
   /**
+   * The cache manager instance.
+   */
+  private final CacheManager cacheManager;
+
+  /**
+   * MBeanServer for JMX management.
+   */
+  private MBeanServer mBeanServer;
+
+  /**
    * Constructor.
    *
-   * @param cacheManager        EhCache manager.
    * @param cacheName           Name of the cache.
    * @param diskStorePath       Path where to store cache files
    * @param maxElementsInMemory Max elements in memory
@@ -55,8 +65,7 @@ public final class ObjectCacheImpl implements ObjectCache {
    *                            Expiry thread interval
    * @throws CacheException if unable to create cache.
    */
-  public ObjectCacheImpl(final CacheManager cacheManager,
-                         final String cacheName,
+  public ObjectCacheImpl(final String cacheName,
                          final String diskStorePath,
                          final int maxElementsInMemory,
                          final boolean overflowToDisk,
@@ -66,14 +75,46 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final boolean diskPersistent,
                          final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
-      this.cacheManager = cacheManager;
-      cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, diskStorePath,
+      final String cacheDiskStorePath = diskStorePath != null ? diskStorePath :
+          ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY;
+      cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, null,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
+      cacheManager = new CacheManager(createConfiguration(cacheDiskStorePath));
       cache.getCacheConfiguration().setClearOnFlush(false);
-      this.cacheManager.addCache(cache);
+      cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
       throw new CacheException("Unable to create cache instance", ce);
     }
+  }
+
+  /**
+   * Initializes the cache.
+   */
+  public void init() {
+    registerMBean();
+  }
+
+  private void registerMBean() {
+    if (mBeanServer != null) {
+      ManagementService.registerMBeans(cacheManager, mBeanServer, true, true, true, true);
+    }
+  }
+
+  protected Configuration createConfiguration(final String diskStorePath) {
+    final DiskStoreConfiguration diskStoreConfiguration = new DiskStoreConfiguration();
+    diskStoreConfiguration.setPath(diskStorePath);
+
+    final Configuration configuration = new Configuration();
+    configuration.addDiskStore(diskStoreConfiguration);
+    configuration.addDefaultCache(new CacheConfiguration());
+    return configuration;
+  }
+
+  /**
+   * @param mBeanServer MBean Server instance.
+   */
+  public void setMBeanServer(MBeanServer mBeanServer) {
+    this.mBeanServer = mBeanServer;
   }
 
   /**
