@@ -1,7 +1,7 @@
 <div class="header">Screenshots</div>
 <div class="body">
 
-(2.1.3 updates comming soon!)
+(2.1.4 updates comming shortly..)
 
 <hr>
 

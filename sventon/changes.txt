@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[1628] Release 2.1.4 (2009-10-22)
 [1625] Added: Feature #4864 - JMX exposure of cache statistics.
 [1625] Added: Feature #4863 - Syntax highlighting of more file formats.
 [1623] Added: Upgraded SVNKit to version 1.3.1.
