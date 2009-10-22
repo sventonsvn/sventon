@@ -21,6 +21,8 @@
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+  <context:annotation-config/>
+
   <bean id="sventonTempRootDir" class="java.io.File">
     <constructor-arg value="${java.io.tmpdir}"/>
     <constructor-arg value="sventon_config"/>
@@ -64,7 +66,7 @@
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="application" class="org.sventon.appl.Application" init-method="init">
+  <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
     <constructor-arg value="sventon_config.properties"/>
     <property name="cacheManagers" ref="cacheManagers"/>
@@ -105,16 +107,16 @@
 
   <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
-  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager" destroy-method="shutdown">
-    <constructor-arg index="0" ref="ehCacheManager"/>
-    <constructor-arg index="1" ref="configDirectory"/>
-    <constructor-arg index="2" value="1000"/>
+  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager">
+    <constructor-arg index="0" ref="configDirectory"/>
+    <constructor-arg index="1" value="1000"/>
+    <constructor-arg index="2" value="true"/>
     <constructor-arg index="3" value="true"/>
-    <constructor-arg index="4" value="true"/>
+    <constructor-arg index="4" value="0"/>
     <constructor-arg index="5" value="0"/>
-    <constructor-arg index="6" value="0"/>
-    <constructor-arg index="7" value="true"/>
-    <constructor-arg index="8" value="120"/>
+    <constructor-arg index="6" value="true"/>
+    <constructor-arg index="7" value="120"/>
+    <property name="MBeanServer" ref="mbeanServer"/>
   </bean>
 
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -188,7 +190,7 @@
   </util:list>
 
   <!-- NOTE: Make sure to change the parameters below! -->
-  <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier" init-method="init">
+  <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier">
     <property name="application" ref="application"/>
     <property name="baseUrl" value="http://yourserver.com/svn/"/>
     <property name="host" value="smtp.yourserver.com"/>
@@ -232,11 +234,11 @@
     <constructor-arg index="0" ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager" destroy-method="shutdown">
+  <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager" destroy-method="shutdown">
+  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
@@ -274,6 +276,13 @@
         <entry key="c++" value-ref="cppXhtmlRenderer"/>
         <entry key="c" value-ref="cppXhtmlRenderer"/>
         <entry key="groovy" value-ref="groovyXhtmlRenderer"/>
+
+        <entry key="pas" value-ref="pascalXhtmlRenderer"/>
+        <entry key="dpr" value-ref="pascalXhtmlRenderer"/>
+        <entry key="cs" value-ref="csharpXhtmlRenderer"/>
+        <entry key="vb" value-ref="visualBasicXhtmlRenderer"/>
+        <entry key="bas" value-ref="visualBasicXhtmlRenderer"/>
+        <entry key="js" value-ref="javaScriptXhtmlRenderer"/>
       </map>
     </property>
   </bean>
@@ -283,32 +292,19 @@
   <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
   <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
 
+  <bean id="pascalXhtmlRenderer" class="com.uwyn.jhighlight.renderer.PascalXhtmlRenderer"/>
+  <bean id="csharpXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CSharpXhtmlRenderer"/>
+  <bean id="visualBasicXhtmlRenderer" class="com.uwyn.jhighlight.renderer.VisualBasicXhtmlRenderer"/>
+  <bean id="javaScriptXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaScriptXhtmlRenderer"/>
+
   <bean id="imageScaler" class="org.sventon.util.ImageScaler"/>
 
   <bean id="httpAuthenticationHandler" class="org.sventon.web.HttpBasicAuthenticationHandler">
     <constructor-arg value="sventon rss feed"/>
   </bean>
 
-  <bean id="ehCacheMBeanRegistration" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="staticMethod" value="net.sf.ehcache.management.ManagementService.registerMBeans"/>
-    <property name="arguments">
-      <list>
-        <ref bean="ehCacheManager"/>
-        <ref bean="mbeanServer"/>
-        <value>true</value>
-        <value>true</value>
-        <value>true</value>
-        <value>true</value>
-      </list>
-    </property>
-  </bean>
-
   <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
     <property name="locateExistingServerIfPossible" value="true"/>
-  </bean>
-
-  <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-    <property name="shared" value="true"/>
   </bean>
 
 </beans>

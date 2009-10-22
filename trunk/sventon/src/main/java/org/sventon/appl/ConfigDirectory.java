@@ -53,6 +53,11 @@ public class ConfigDirectory implements ServletContextAware {
   private boolean createDirectories = true;
 
   /**
+   * Default, ie. java.io.tmpdir.
+   */
+  public static final String DEFAULT_TEMP_DIR = System.getProperty("java.io.tmpdir");
+
+  /**
    * Constructor.
    *
    * @param sventonConfigDirectory    Location where to store the sventon config root directory,

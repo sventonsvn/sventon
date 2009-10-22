@@ -16,6 +16,7 @@ import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
 
+import javax.annotation.PreDestroy;
 import java.io.File;
 
 /**
@@ -62,6 +63,7 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
    *
    * @throws CacheException if unable to shutdown caches.
    */
+  @PreDestroy
   public void shutdown() throws CacheException {
     for (final EntryCache cache : caches.values()) {
       cache.shutdown();

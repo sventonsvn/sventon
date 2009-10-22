@@ -16,6 +16,8 @@ import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.RepositoryName;
 
+import javax.annotation.PreDestroy;
+import javax.management.MBeanServer;
 import java.io.File;
 
 /**
@@ -37,13 +39,11 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
   private final int timeToIdleSeconds;
   private final boolean diskPersistent;
   private final int diskExpiryThreadIntervalSeconds;
-
-  private final net.sf.ehcache.CacheManager cacheManager;
+  private MBeanServer mBeanServer;
 
   /**
    * Constructor.
    *
-   * @param cacheManager        EhCache manager.
    * @param configDirectory     Configuration directory.
    *                            Cache files will be stored in a sub dir called <tt>cache</tt>.
    * @param maxElementsInMemory Max elements in memory
@@ -55,8 +55,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @param diskExpiryThreadIntervalSeconds
    *                            Expiry thread interval
    */
-  public ObjectCacheManager(final net.sf.ehcache.CacheManager cacheManager,
-                            final ConfigDirectory configDirectory,
+  public ObjectCacheManager(final ConfigDirectory configDirectory,
                             final int maxElementsInMemory,
                             final boolean overflowToDisk,
                             final boolean eternal,
@@ -64,7 +63,6 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
                             final int timeToIdleSeconds,
                             final boolean diskPersistent,
                             final int diskExpiryThreadIntervalSeconds) {
-    this.cacheManager = cacheManager;
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
     this.maxElementsInMemory = maxElementsInMemory;
     this.overflowToDisk = overflowToDisk;
@@ -73,6 +71,13 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     this.timeToIdleSeconds = timeToIdleSeconds;
     this.diskPersistent = diskPersistent;
     this.diskExpiryThreadIntervalSeconds = diskExpiryThreadIntervalSeconds;
+  }
+
+  /**
+   * @param mBeanServer mBeanServer instance.
+   */
+  public void setMBeanServer(final MBeanServer mBeanServer) {
+    this.mBeanServer = mBeanServer;
   }
 
   /**
@@ -91,18 +96,13 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
       throw new CacheException("Unable to create directory: " + cachePath.getAbsolutePath());
     }
 
-    final ObjectCacheImpl objectCache = new ObjectCacheImpl(
-        cacheManager,
-        repositoryName.toString(),
-        cachePath.getAbsolutePath(),
-        maxElementsInMemory,
-        overflowToDisk,
-        eternal,
-        timeToLiveSeconds,
-        timeToIdleSeconds,
-        diskPersistent,
+    final ObjectCacheImpl objectCache = new ObjectCacheImpl(repositoryName.toString(), cachePath.getAbsolutePath(),
+        maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
         diskExpiryThreadIntervalSeconds);
+
     objectCache.flush();
+    objectCache.setMBeanServer(mBeanServer);
+    objectCache.init();
     return objectCache;
   }
 
@@ -111,6 +111,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    *
    * @throws CacheException if unable to shutdown caches.
    */
+  @PreDestroy
   public void shutdown() throws CacheException {
     for (final ObjectCache cache : caches.values()) {
       cache.shutdown();

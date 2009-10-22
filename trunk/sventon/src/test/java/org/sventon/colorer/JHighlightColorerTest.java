@@ -1,5 +1,6 @@
 package org.sventon.colorer;
 
+import com.uwyn.jhighlight.renderer.CSharpXhtmlRenderer;
 import com.uwyn.jhighlight.renderer.JavaXhtmlRenderer;
 import com.uwyn.jhighlight.renderer.XmlXhtmlRenderer;
 import junit.framework.TestCase;
@@ -15,8 +16,17 @@ public class JHighlightColorerTest extends TestCase {
     colorer.setRendererMappings(getRendererMappings());
 
     // Should produce colorized java code
-    assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_keyword\">class</span><span class=\"java_plain\">&nbsp;</span><span class=\"java_type\">HelloWorld</span><span class=\"java_plain\"></span>",
+    assertEquals("<span class=\"java_keyword\">public</span><span class=\"java_plain\">&#160;</span>" +
+        "<span class=\"java_keyword\">class</span><span class=\"java_plain\">&#160;</span><span class=\"java_type\">" +
+        "HelloWorld</span><span class=\"java_plain\"></span>",
         (colorer.getColorizedContent("public class HelloWorld", "java", ENCODING)));
+
+    // Should produce colorized csharp code
+    assertEquals("<span class=\"csharp_keyword\">private</span><span class=\"csharp_plain\">&#160;</span>" +
+        "<span class=\"csharp_type\">void</span><span class=\"csharp_plain\">&#160;Build</span>" +
+        "<span class=\"csharp_separator\">(</span><span class=\"csharp_plain\">XmlNode&#160;node</span>" +
+        "<span class=\"csharp_separator\">)</span><span class=\"csharp_plain\"></span>",
+        colorer.getColorizedContent("private void Build(XmlNode node)", "cs", ENCODING));
 
     // Should produce content in plain text mode
     assertEquals("public class HelloWorld", (colorer.getColorizedContent("public class HelloWorld", "testing", ENCODING)));
@@ -60,13 +70,15 @@ public class JHighlightColorerTest extends TestCase {
     assertNull(colorer.getRenderer("htm"));
     assertTrue(colorer.getRenderer("java") instanceof JavaXhtmlRenderer);
     assertTrue(colorer.getRenderer("xml") instanceof XmlXhtmlRenderer);
+    assertTrue(colorer.getRenderer("cs") instanceof CSharpXhtmlRenderer);
   }
 
   private Properties getRendererMappings() {
     final Properties mappings = new Properties();
-    mappings.put("java", new com.uwyn.jhighlight.renderer.JavaXhtmlRenderer());
-    mappings.put("html", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
-    mappings.put("xml", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
+    mappings.put("java", new JavaXhtmlRenderer());
+    mappings.put("html", new XmlXhtmlRenderer());
+    mappings.put("xml", new XmlXhtmlRenderer());
+    mappings.put("cs", new CSharpXhtmlRenderer());
     return mappings;
   }
 

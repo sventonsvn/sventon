@@ -10,13 +10,10 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 public class RevisionCacheUpdaterTest extends TestCase {
 
   private ObjectCache createMemoryCache() throws Exception {
-    final CacheManager cacheManager = CacheManager.create();
-    return new ObjectCacheImpl(cacheManager, "sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
+    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   public void testUpdate() throws Exception {
