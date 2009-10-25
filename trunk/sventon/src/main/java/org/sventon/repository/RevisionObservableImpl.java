@@ -24,6 +24,7 @@ import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +107,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
    *
    * @param application Application
    */
+  @Autowired
   public void setApplication(final Application application) {
     this.application = application;
   }
@@ -115,6 +117,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
    *
    * @param objectCacheManager The cache manager instance.
    */
+  @Autowired
   public void setObjectCacheManager(final ObjectCacheManager objectCacheManager) {
     this.objectCacheManager = objectCacheManager;
   }
@@ -253,6 +256,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
    *
    * @param repositoryService The service instance.
    */
+  @Autowired
   public void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }
@@ -262,6 +266,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
    *
    * @param repositoryConnectionFactory Factory instance.
    */
+  @Autowired
   public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
   }

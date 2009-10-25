@@ -24,6 +24,7 @@ import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    *
    * @param entryCacheManager EntryCacheManager instance.
    */
+  @Autowired
   public void setEntryCacheManager(final EntryCacheManager entryCacheManager) {
     this.entryCacheManager = entryCacheManager;
   }
@@ -65,6 +67,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    *
    * @param logMessageCacheManager LogMessageCacheManager instance.
    */
+  @Autowired
   public void setLogMessageCacheManager(final LogMessageCacheManager logMessageCacheManager) {
     this.logMessageCacheManager = logMessageCacheManager;
   }
@@ -74,6 +77,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    *
    * @param revisionCacheManager RevisionCacheManager instance.
    */
+  @Autowired
   public void setRevisionCacheManager(final RevisionCacheManager revisionCacheManager) {
     this.revisionCacheManager = revisionCacheManager;
   }
