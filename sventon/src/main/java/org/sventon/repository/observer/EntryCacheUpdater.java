@@ -13,6 +13,7 @@ package org.sventon.repository.observer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
@@ -359,6 +360,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    *
    * @param repositoryConnectionFactory Factory instance.
    */
+  @Autowired
   public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
@@ -368,6 +370,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    *
    * @param repositoryService The service instance.
    */
+  @Autowired
   public void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }
@@ -467,7 +470,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       final int entriesCount = entries.size();
       if (entriesCount >= flushThreshold) {
         LOGGER.debug("Flushing cache, size: " + entriesCount);
-        entryCache.update(Collections.EMPTY_MAP, entries);
+        entryCache.update(Collections.<String, RepositoryEntry.Kind>emptyMap(), entries);
         entries.clear();
       }
     }

@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryName;
@@ -372,6 +373,7 @@ public final class Application {
    *
    * @param cacheManagers List of cache managers.
    */
+  @Autowired
   public void setCacheManagers(final List<CacheManager> cacheManagers) {
     this.cacheManagers.addAll(cacheManagers);
   }

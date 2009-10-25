@@ -19,6 +19,7 @@ import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    *
    * @param cacheGateway Cache gateway instance
    */
+  @Autowired
   public void setCacheGateway(final CacheGateway cacheGateway) {
     this.cacheGateway = cacheGateway;
   }
@@ -54,6 +56,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    *
    * @param application Application
    */
+  @Autowired
   public void setApplication(final Application application) {
     this.application = application;
   }

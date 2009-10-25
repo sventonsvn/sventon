@@ -69,21 +69,14 @@
   <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
     <constructor-arg value="sventon_config.properties"/>
-    <property name="cacheManagers" ref="cacheManagers"/>
     <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
   </bean>
 
   <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
-
-  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
-    <property name="application" ref="application"/>
-  </bean>
-
+  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator"/>
   <bean id="repositoryService" class="org.sventon.service.CacheAwareRepositoryServiceImpl">
     <property name="cacheGateway" ref="cacheGatewayBean"/>
-    <property name="application" ref="application"/>
   </bean>
 
   <bean id="rssFeedGenerator" class="org.sventon.rss.RssFeedGeneratorImpl">
@@ -151,27 +144,17 @@
   </bean>
 
   <!-- Advice class -->
-  <bean id="cacheUpdateBeforeAdvice" class="org.sventon.advice.CacheUpdateBeforeAdvice">
-    <property name="revisionObservable" ref="revisionObservable"/>
-  </bean>
+  <bean id="cacheUpdateBeforeAdvice" class="org.sventon.advice.CacheUpdateBeforeAdvice"/>
 
   <!-- Advice class -->
   <bean id="stopWatchAroundAdvice" class="org.sventon.advice.StopWatchAroundAdvice"/>
 
-  <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl">
-    <property name="entryCacheManager" ref="entryCacheManager"/>
-    <property name="logMessageCacheManager" ref="logMessageCacheManager"/>
-    <property name="revisionCacheManager" ref="revisionCacheManager"/>
-  </bean>
+  <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl"/>
 
   <!-- Monitors the repository and polls for changes -->
   <bean id="revisionObservable" class="org.sventon.repository.RevisionObservableImpl">
     <constructor-arg ref="observerList"/>
-    <property name="application" ref="application"/>
-    <property name="repositoryService" ref="repositoryService"/>
-    <property name="objectCacheManager" ref="objectCacheManager"/>
     <property name="maxRevisionCountPerUpdate" value="500"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
   </bean>
 
   <util:list id="cacheManagers">
@@ -214,24 +197,22 @@
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="revisionCacheUpdater" class="org.sventon.repository.observer.RevisionCacheUpdater">
-    <constructor-arg index="0" ref="revisionCacheManager"/>
+    <constructor-arg ref="revisionCacheManager"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="org.sventon.repository.observer.EntryCacheUpdater">
-    <constructor-arg index="0" ref="entryCacheManager"/>
-    <constructor-arg index="1" ref="application"/>
-    <property name="repositoryService" ref="repositoryService"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+    <constructor-arg ref="entryCacheManager"/>
+    <constructor-arg ref="application"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="logMessageCacheUpdater" class="org.sventon.repository.observer.LogMessageCacheUpdater">
-    <constructor-arg index="0" ref="logMessageCacheManager"/>
+    <constructor-arg ref="logMessageCacheManager"/>
   </bean>
 
   <bean id="revisionCacheManager" class="org.sventon.appl.RevisionCacheManager">
-    <constructor-arg index="0" ref="objectCacheManager"/>
+    <constructor-arg ref="objectCacheManager"/>
   </bean>
 
   <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager">
@@ -251,7 +232,6 @@
   <bean id="exportExecutor" class="org.sventon.export.ExportExecutorImpl">
     <constructor-arg ref="configDirectory"/>
     <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
-    <property name="repositoryService" ref="repositoryService"/>
   </bean>
 
   <bean id="tempFileCleaner" class="org.sventon.export.TemporaryFileCleaner">

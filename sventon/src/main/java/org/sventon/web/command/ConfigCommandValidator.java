@@ -13,6 +13,7 @@ package org.sventon.web.command;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.sventon.RepositoryConnectionFactory;
@@ -74,6 +75,7 @@ public final class ConfigCommandValidator implements Validator {
    *
    * @param application Application
    */
+  @Autowired
   public void setApplication(final Application application) {
     this.application = application;
   }
@@ -90,6 +92,7 @@ public final class ConfigCommandValidator implements Validator {
    *
    * @param repositoryConnectionFactory Factory instance.
    */
+  @Autowired
   public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
   }

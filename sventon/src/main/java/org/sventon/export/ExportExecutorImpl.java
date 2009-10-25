@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StopWatch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.EncodingUtils;
@@ -156,6 +157,7 @@ public class ExportExecutorImpl implements ExportExecutor {
    *
    * @param repositoryService Service.
    */
+  @Autowired
   public void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }

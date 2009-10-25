@@ -14,6 +14,7 @@ package org.sventon.advice;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionObservable;
 
@@ -41,6 +42,7 @@ public final class CacheUpdateBeforeAdvice implements MethodBeforeAdvice {
    *
    * @param revisionObservable The observable
    */
+  @Autowired
   public void setRevisionObservable(final RevisionObservable revisionObservable) {
     this.revisionObservable = revisionObservable;
   }
