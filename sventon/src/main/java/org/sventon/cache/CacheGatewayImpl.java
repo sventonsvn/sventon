@@ -11,8 +11,6 @@
  */
 package org.sventon.cache;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.LogMessageCacheManager;
 import org.sventon.appl.RevisionCacheManager;
@@ -39,18 +37,6 @@ public final class CacheGatewayImpl implements CacheGateway {
   private EntryCacheManager entryCacheManager;
   private LogMessageCacheManager logMessageCacheManager;
   private RevisionCacheManager revisionCacheManager;
-
-  /**
-   * The logging instance.
-   */
-  private final Log logger = LogFactory.getLog(getClass());
-
-  /**
-   * Constructor.
-   */
-  public CacheGatewayImpl() {
-    logger.info("Starting cache");
-  }
 
   /**
    * Sets the entry cache manager instance.
