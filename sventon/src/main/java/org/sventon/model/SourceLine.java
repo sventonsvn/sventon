@@ -35,7 +35,7 @@ public final class SourceLine {
   /**
    * The line's diff action.
    */
-  private DiffAction action;
+  private DiffAction action = DiffAction.UNCHANGED;
 
   /**
    * Constructor.
@@ -53,13 +53,11 @@ public final class SourceLine {
    * Constructor.
    *
    * @param rowNumber The row number, or <tt>null</tt> if unknown.
-   * @param action    The <tt>DiffAction</tt> code.
    * @param line      The source line.
    */
-  public SourceLine(final Integer rowNumber, final DiffAction action, final String line) {
+  public SourceLine(final Integer rowNumber, final String line) {
     this.rowNumber = rowNumber;
     this.line = line;
-    this.action = action;
   }
 
   /**

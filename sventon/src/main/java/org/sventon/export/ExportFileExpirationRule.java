@@ -39,7 +39,7 @@ public final class ExportFileExpirationRule implements ExpirationRule {
   /**
    * Temporary file expire time.
    */
-  private long temporaryFileExpireTimeMs;
+  private final long temporaryFileExpireTimeMs;
 
   /**
    * Constructor.

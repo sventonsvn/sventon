@@ -181,7 +181,7 @@ public interface RepositoryService {
    * @return Map containing path and locks.
    * @throws SVNException if a subversion error occur
    */
-  Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException;
+  Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) ;
 
   /**
    * @param repository The repository

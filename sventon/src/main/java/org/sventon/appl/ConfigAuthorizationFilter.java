@@ -29,7 +29,7 @@ public class ConfigAuthorizationFilter extends OncePerRequestFilter {
   /**
    * The application.
    */
-  private Application application;
+  private final Application application;
 
   /**
    * Constructor.

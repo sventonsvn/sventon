@@ -35,17 +35,17 @@ public final class TemporaryFileCleaner {
   /**
    * Temp file root directory.
    */
-  private File directory;
+  private final File directory;
 
   /**
    * File name filter to use.
    */
-  private FilenameFilter filenameFilter;
+  private final FilenameFilter filenameFilter;
 
   /**
    * Expiration rule.
    */
-  private ExpirationRule expirationRule;
+  private final ExpirationRule expirationRule;
 
   /**
    * Constructor.

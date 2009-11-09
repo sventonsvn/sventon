@@ -64,7 +64,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
   /**
    * UUID identifier for this export directory.
    */
-  private UUID uuid;
+  private final UUID uuid;
 
   /**
    * Creates an export directory in given parent directory using the name format
