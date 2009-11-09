@@ -43,7 +43,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
 
   private final CompassConfiguration compassConfiguration = new CompassConfiguration();
 
-  private boolean useDiskStore;
+  private final boolean useDiskStore;
 
   /**
    * Constructs an in-memory cache instance.
@@ -68,7 +68,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void init() throws CacheException {
+  public void init()  {
     final String connectionString;
 
     if (useDiskStore) {
@@ -93,7 +93,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final String queryString) throws CacheException {
+  public List<LogMessage> find(final String queryString)  {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
     }
@@ -129,7 +129,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void add(final LogMessage... logMessages) throws CacheException {
+  public void add(final LogMessage... logMessages)  {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
@@ -143,7 +143,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public int getSize() throws CacheException {
+  public int getSize()  {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
       public Integer doInCompass(CompassSession session) throws CompassException {
@@ -156,7 +156,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void clear() throws CacheException {
+  public void clear()  {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
@@ -168,7 +168,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void shutdown() throws CacheException {
+  public void shutdown()  {
     compass.close();
   }
 

@@ -97,16 +97,6 @@ public class BaseCommand {
   }
 
   /**
-   * Gets the path.
-   *
-   * @param appendTrailingSlashIfMissing True or false.
-   * @return The path.
-   */
-  public String getPath(boolean appendTrailingSlashIfMissing) {
-    return appendTrailingSlashIfMissing ? getPathWithTrailingSlash() : path;
-  }
-
-  /**
    * Set path. <code>null</code> and <code>""</code> arguments will be
    * converted <code>/</code>
    *
@@ -363,7 +353,7 @@ public class BaseCommand {
     }
   }
 
-  private String getPathWithTrailingSlash() {
+  public String getPathWithTrailingSlash() {
     String path = this.path;
     if (!path.endsWith("/")) {
       path += "/";

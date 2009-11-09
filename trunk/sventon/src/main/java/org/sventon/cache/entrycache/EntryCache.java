@@ -35,10 +35,8 @@ public interface EntryCache extends Cache {
 
   /**
    * Shuts down the cache.
-   *
-   * @throws CacheException if unable to shut down cache instance.
    */
-  public abstract void shutdown() throws CacheException;
+  public abstract void shutdown();
 
   /**
    * Flushes the cache. Will only have effect on disk persistent caches.

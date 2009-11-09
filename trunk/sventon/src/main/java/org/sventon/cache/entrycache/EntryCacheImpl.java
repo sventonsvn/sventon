@@ -47,7 +47,7 @@ public final class EntryCacheImpl implements EntryCache {
 
   private Compass compass;
 
-  private boolean useDiskStore;
+  private final boolean useDiskStore;
 
   /**
    * Constructs an in-memory cache instance.
@@ -97,7 +97,7 @@ public final class EntryCacheImpl implements EntryCache {
   /**
    * {@inheritDoc}
    */
-  public void shutdown() throws CacheException {
+  public void shutdown() {
     compass.close();
   }
 

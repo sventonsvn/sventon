@@ -167,7 +167,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) throws SVNException {
+  public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath)  {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
 

@@ -26,49 +26,40 @@ public interface LogMessageCache extends Cache {
 
   /**
    * Initializes the log message cache.
-   *
-   * @throws CacheException if unable to start up cache.
    */
-  public void init() throws CacheException;
+  public void init() ;
 
   /**
    * Finds occurencies of given search string among the cached log messages.
    *
    * @param queryString Index query string.
    * @return List of log messages.
-   * @throws CacheException if error.
    */
-  List<LogMessage> find(final String queryString) throws CacheException;
+  List<LogMessage> find(final String queryString) ;
 
   /**
    * Add one log message to the cache.
    *
    * @param logMessage The log message to cache.
-   * @throws CacheException if error.
    */
-  void add(final LogMessage... logMessage) throws CacheException;
+  void add(final LogMessage... logMessage) ;
 
   /**
    * Gets the size of the log message cache, i.e. the number
    * of cached messages.
    *
    * @return Cache size
-   * @throws CacheException if unable to get cache size.
    */
-  int getSize() throws CacheException;
+  int getSize() ;
 
   /**
    * Clears the entire cache.
-   *
-   * @throws CacheException if unable to clear cache.
    */
-  void clear() throws CacheException;
+  void clear() ;
 
   /**
    * Shuts down the cache.
-   *
-   * @throws CacheException if unable to shut down cache instance.
    */
-  public abstract void shutdown() throws CacheException;
+  public abstract void shutdown() ;
 
 }

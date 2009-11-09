@@ -143,7 +143,7 @@ public final class SideBySideDiffCreator {
     int lineNumber = 1;
 
     for (final String tempLine : sourceLines) {
-      resultLines.add(new SourceLine(lineNumber++, UNCHANGED, tempLine));
+      resultLines.add(new SourceLine(lineNumber++, tempLine));
     }
 
     int offset = 0;
