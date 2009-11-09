@@ -26,7 +26,7 @@ public interface LogMessageCache extends Cache {
   /**
    * Initializes the log message cache.
    */
-  public void init();
+  void init();
 
   /**
    * Finds occurencies of given search string among the cached log messages.
@@ -59,6 +59,6 @@ public interface LogMessageCache extends Cache {
   /**
    * Shuts down the cache.
    */
-  public abstract void shutdown();
+  abstract void shutdown();
 
 }
