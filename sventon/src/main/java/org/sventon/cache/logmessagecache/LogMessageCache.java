@@ -12,7 +12,6 @@
 package org.sventon.cache.logmessagecache;
 
 import org.sventon.cache.Cache;
-import org.sventon.cache.CacheException;
 import org.sventon.model.LogMessage;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public interface LogMessageCache extends Cache {
   /**
    * Initializes the log message cache.
    */
-  public void init() ;
+  public void init();
 
   /**
    * Finds occurencies of given search string among the cached log messages.
@@ -35,14 +34,14 @@ public interface LogMessageCache extends Cache {
    * @param queryString Index query string.
    * @return List of log messages.
    */
-  List<LogMessage> find(final String queryString) ;
+  List<LogMessage> find(final String queryString);
 
   /**
    * Add one log message to the cache.
    *
    * @param logMessage The log message to cache.
    */
-  void add(final LogMessage... logMessage) ;
+  void add(final LogMessage... logMessage);
 
   /**
    * Gets the size of the log message cache, i.e. the number
@@ -50,16 +49,16 @@ public interface LogMessageCache extends Cache {
    *
    * @return Cache size
    */
-  int getSize() ;
+  int getSize();
 
   /**
    * Clears the entire cache.
    */
-  void clear() ;
+  void clear();
 
   /**
    * Shuts down the cache.
    */
-  public abstract void shutdown() ;
+  public abstract void shutdown();
 
 }

@@ -17,7 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
-import org.sventon.cache.CacheException;
 import org.sventon.model.LogMessage;
 
 import java.io.File;
@@ -68,7 +67,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void init()  {
+  public void init() {
     final String connectionString;
 
     if (useDiskStore) {
@@ -93,7 +92,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final String queryString)  {
+  public List<LogMessage> find(final String queryString) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
     }
@@ -129,7 +128,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void add(final LogMessage... logMessages)  {
+  public void add(final LogMessage... logMessages) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
@@ -143,7 +142,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public int getSize()  {
+  public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
       public Integer doInCompass(CompassSession session) throws CompassException {
@@ -156,7 +155,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void clear()  {
+  public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
@@ -168,7 +167,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
-  public void shutdown()  {
+  public void shutdown() {
     compass.close();
   }
 

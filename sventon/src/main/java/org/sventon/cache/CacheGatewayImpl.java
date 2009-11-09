@@ -11,6 +11,7 @@
  */
 package org.sventon.cache;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.LogMessageCacheManager;
 import org.sventon.appl.RevisionCacheManager;
@@ -22,7 +23,6 @@ import org.sventon.model.LogMessage;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

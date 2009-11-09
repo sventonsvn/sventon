@@ -167,7 +167,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
-  public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath)  {
+  public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
 
@@ -426,12 +426,12 @@ public class RepositoryServiceImpl implements RepositoryService {
         SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), command.getFromRevision(),
         SVNURL.parseURIDecoded(repoRoot + command.getToPath()), command.getToRevision(),
         SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
-      public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
-        if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-          result.add(diffStatus);
-        }
-      }
-    });
+          public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
+            if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
+              result.add(diffStatus);
+            }
+          }
+        });
     return result;
   }
 
