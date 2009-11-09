@@ -1,8 +1,8 @@
 package org.sventon.cache.entrycache;
 
-import org.compass.core.lucene.engine.queryparser.DefaultLuceneQueryParser;
-import org.apache.lucene.queryParser.CompassQueryParser;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.queryParser.CompassQueryParser;
+import org.compass.core.lucene.engine.queryparser.DefaultLuceneQueryParser;
 
 /**
  * CustomizedLuceneQueryParser.

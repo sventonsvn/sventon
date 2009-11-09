@@ -19,7 +19,6 @@ import org.sventon.appl.Application;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.EncodingUtils;
 import static org.sventon.util.EncodingUtils.encode;
 
 import javax.servlet.http.HttpServletRequest;
