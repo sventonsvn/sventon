@@ -7,7 +7,7 @@
   <meta name="keywords" content="sventon, subversion, svn, repository, repositories, browse, browser, browsing, servlet, java, tomcat, web, search, track, log, scm, version control, versioning, view, show, display, files, directories, path, compass, lucene, cache">
   <meta name="ROBOTS" content="INDEX,FOLLOW">
   <meta name="author" content="sventon project team">
-  <meta name="copyright" content="Copyright (c) 2005-2009 sventon project.">
+  <meta name="copyright" content="Copyright (c) 2005-2010 sventon project.">
   <meta name="distribution" content="Global">
   <meta name="rating" content="General">
 
