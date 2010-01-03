@@ -128,7 +128,7 @@ public final class ShowFileController extends AbstractTemplateController {
     } else if (isArchiveFileExtension(command)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
-        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
+        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
         model.put("entries", archiveFile.getEntries());
         modelAndView = new ModelAndView("showArchiveFile", model);
@@ -139,7 +139,7 @@ public final class ShowFileController extends AbstractTemplateController {
         logger.debug("Detected content-type: " + contentType);
 
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
-          getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
+          getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + command.getPath() + "]");
           final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
           final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
@@ -154,7 +154,7 @@ public final class ShowFileController extends AbstractTemplateController {
       logger.debug("File identified as a binary file");
       modelAndView = new ModelAndView("showBinaryFile", model);
     } else if (isTextFileExtension(command) || isTextMimeType(fileProperties)) {
-      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), outStream);
+      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
