@@ -13,6 +13,7 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNErrorCode;
@@ -44,7 +45,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
+    final List<LogEntryWrapper> revisions = new ArrayList<LogEntryWrapper>();
     final long revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
 
     try {
@@ -52,7 +53,8 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
       final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(
           command.getName(), repository, headRevision, FIRST_REVISION, "/", revisionCount, false);
 
-      revisions.addAll(logEntries);
+      //TODO: Parse to apply Bugtraq links
+      revisions.addAll(LogEntryWrapper.convert(logEntries));
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (SVNException svnex) {
       model.put("errorMessage", translateToString(svnex));

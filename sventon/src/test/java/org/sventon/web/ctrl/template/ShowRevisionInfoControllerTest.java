@@ -7,10 +7,10 @@ import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
+import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
@@ -36,7 +36,7 @@ public class ShowRevisionInfoControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    final SVNLogEntry revision = (SVNLogEntry) model.get("revisionInfo");
+    final LogEntryWrapper revision = (LogEntryWrapper) model.get("revisionInfo");
     assertEquals(123, revision.getRevision());
   }
 }

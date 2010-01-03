@@ -20,11 +20,10 @@
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 
 <%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
-<%@ attribute name="logEntry" required="true" type="org.tmatesoft.svn.core.SVNLogEntry" %>
+<%@ attribute name="logEntry" required="true" type="org.sventon.model.LogEntryWrapper" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 
-<% application.setAttribute("br", "\n"); %>
 <table class="revisionInfoTable">
   <tr>
     <td>
@@ -40,7 +39,7 @@
         <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
         <tr>
           <td valign="top"><b><spring:message code="message"/>:</b></td>
-          <td>${fn:replace(fn:escapeXml(logEntry.message), br, '<br>')}</td>
+          <td>${logEntry.webFormattedMessage}</td>
         </tr>
       </table>
     </td>
