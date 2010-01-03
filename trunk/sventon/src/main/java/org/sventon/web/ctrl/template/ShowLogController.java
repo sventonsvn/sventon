@@ -72,20 +72,19 @@ public final class ShowLogController extends AbstractTemplateController {
 
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
-    // TODO: Safer parsing would be nice.
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-
     try {
-      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, revNumber, FIRST_REVISION,
-          nextPathParam, pageSize, stopOnCopy));
+      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), repository,
+          revNumber, FIRST_REVISION, nextPathParam, pageSize, stopOnCopy);
 
       String pathAtRevision = nextPathParam;
 
       for (final SVNLogEntry logEntry : logEntries) {
         logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
+
         //noinspection unchecked
         final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
         final Set<String> changedPaths = allChangedPaths.keySet();
+
         for (String entryPath : changedPaths) {
           int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
           if (i == -1) { // Same path

@@ -45,7 +45,6 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    assertEquals(revisions, model.get("revisions"));
     assertEquals(2, ((List) model.get("revisions")).size());
   }
 }

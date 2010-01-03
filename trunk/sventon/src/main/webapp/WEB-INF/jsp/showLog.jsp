@@ -64,7 +64,6 @@
       <c:set var="nextPath" value=""/>
       <c:set var="nextRev" value=""/>
 
-      <% pageContext.setAttribute("br", "\n"); %>
       <c:forEach items="${logEntriesPage}" var="entry">
         <c:set var="nextPath" value="${entry.pathAtRevision}"/>
         <c:set var="nextRev" value="${entry.revision}"/>
@@ -112,7 +111,7 @@
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
           </c:choose>
-          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${fn:replace(fn:escapeXml(entry.message), br, '<br>')}</a></td>
+          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${entry.webFormattedMessage}</a></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
