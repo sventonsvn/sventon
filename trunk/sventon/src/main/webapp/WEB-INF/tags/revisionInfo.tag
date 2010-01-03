@@ -38,13 +38,18 @@
           </td>
         </tr>
         <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
-        <tr><td valign="top"><b><spring:message code="message"/>:</b></td><td>${fn:replace(fn:escapeXml(logEntry.message), br, '<br>')}</td></tr>
+        <tr>
+          <td valign="top"><b><spring:message code="message"/>:</b></td>
+          <td>${fn:replace(fn:escapeXml(logEntry.message), br, '<br>')}</td>
+        </tr>
       </table>
     </td>
   </tr>
 
   <tr>
     <td colspan="2">
+      <!-- Make sure not to rely on unboxing -->
+      <!-- Cast of response variable needed by WAS -->
       <%=HTMLCreator.createChangedPathsTable(logEntry.getChangedPaths(), logEntry.getRevision(), null, "", name,
           keepVisible.booleanValue(), linkToHead.booleanValue(), (HttpServletResponse) response)%>
     </td>
