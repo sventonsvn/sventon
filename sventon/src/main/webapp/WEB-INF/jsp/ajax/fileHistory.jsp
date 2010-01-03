@@ -40,10 +40,16 @@
             <jsp:useBean id="fileRevision" type="org.tmatesoft.svn.core.io.SVNFileRevision"/>
             <%
               final String dateString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
+              final String authorString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.AUTHOR);
               final Date revDate = new SimpleDateFormat(GetFileHistoryController.ISO8601_FORMAT_PATTERN).parse(dateString);
             %>
             <option value="${showFileAtRevisionUrl}">
               <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>
+              <%
+                if (authorString != null) {
+                  out.print("(" + authorString + ")");
+                }
+              %>
             </option>
           </c:forEach>
         </select>
