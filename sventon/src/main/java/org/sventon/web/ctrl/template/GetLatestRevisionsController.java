@@ -49,20 +49,29 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
 
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
-      revisions.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision, FIRST_REVISION,
-          "/", revisionCount, false));
+      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(
+          command.getName(), repository, headRevision, FIRST_REVISION, "/", revisionCount, false);
+
+      revisions.addAll(logEntries);
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        logger.info(svnex.getMessage());
-        model.put("errorMessage", "There are no commits in this repository yet.");
-      } else {
-        logger.error(svnex.getMessage());
-        model.put("errorMessage", svnex.getMessage());
-      }
+      model.put("errorMessage", translateToString(svnex));
     }
-
     model.put("revisions", revisions);
     return new ModelAndView(getViewName(), model);
+  }
+
+  private String translateToString(SVNException svnex) {
+    if (isRepositoryEmpty(svnex)) {
+      logger.info(svnex.getMessage());
+      return "There are no commits in this repository yet.";
+    } else {
+      logger.error(svnex.getMessage());
+      return svnex.getMessage();
+    }
+  }
+
+  private boolean isRepositoryEmpty(SVNException svnex) {
+    return SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode();
   }
 }

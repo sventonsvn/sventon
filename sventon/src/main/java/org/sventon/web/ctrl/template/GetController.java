@@ -115,16 +115,16 @@ public class GetController extends AbstractTemplateController {
     if (CONTENT_DISPOSITION_ATTACHMENT.equals(displayType)) {
       logger.debug("Getting file as 'attachment'");
       prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
-      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
+      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
     } else if (CONTENT_DISPOSITION_INLINE.equals(displayType)) {
       if (isImageFile(command.getPath())) {
         logger.debug("Getting file as 'inline'");
         prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
-        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
+        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
       } else {
         logger.warn("File [" + command.getTarget() + "] is not an image file - unable to display it 'inline'");
         prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
-        getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), output);
+        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
       }
     } else if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
       if (isImageFile(command.getPath())) {
@@ -207,7 +207,7 @@ public class GetController extends AbstractTemplateController {
     final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
     final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
     try {
-      getRepositoryService().getFile(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
+      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
       final BufferedImage image = ImageIO.read(new ByteArrayInputStream(fullSizeImageData.toByteArray()));
       ImageIO.write(imageScaler.getThumbnail(image, maxThumbnailSize), imageFormatName, thumbnailImageData);
     } catch (final Exception ex) {

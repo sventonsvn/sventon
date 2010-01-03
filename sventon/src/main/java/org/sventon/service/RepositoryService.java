@@ -109,7 +109,7 @@ public interface RepositoryService {
       throws SVNException, IOException;
 
   /**
-   * Gets a file from the repository.
+   * Gets a file's contents from the repository and writes it to the given output stream.
    *
    * @param repository The repository
    * @param path       Target to get
@@ -117,7 +117,7 @@ public interface RepositoryService {
    * @param output     Output stream to write contents to
    * @throws SVNException if a subversion error occur
    */
-  void getFile(final SVNRepository repository, final String path, final long revision, final OutputStream output)
+  void getFileContents(final SVNRepository repository, final String path, final long revision, final OutputStream output)
       throws SVNException;
 
   /**
@@ -130,6 +130,17 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
+
+  /**
+   * Gets the path properties.
+   *
+   * @param repository The repository
+   * @param path       The entry path
+   * @param revision   The entry revision
+   * @return Properties
+   * @throws SVNException if a subversion error occur
+   */
+  SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision) throws SVNException;
 
   /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
@@ -179,7 +190,6 @@ public interface RepositoryService {
    * @param repository The repository
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
    * @return Map containing path and locks.
-   * @throws SVNException if a subversion error occur
    */
   Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath);
 
@@ -289,18 +299,6 @@ public interface RepositoryService {
    */
   AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision, final String charset,
                           final Colorer colorer) throws SVNException;
-
-  /**
-   * Gets the path properties.
-   *
-   * @param repository The repository
-   * @param path       The entry path
-   * @param revision   The entry revision
-   * @return Properties
-   * @throws SVNException if a subversion error occur
-   */
-  SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
-      throws SVNException;
 
   /**
    * Gets the node kind for given to/from entries.

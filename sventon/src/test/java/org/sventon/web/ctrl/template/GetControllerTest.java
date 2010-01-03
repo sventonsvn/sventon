@@ -131,7 +131,7 @@ public class GetControllerTest extends TestCase {
 
     request.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_THUMBNAIL);
 
-    repositoryServiceMock.getFile((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
+    repositoryServiceMock.getFileContents((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
 
     assertEquals(0, response.getContentAsByteArray().length);
@@ -185,7 +185,7 @@ public class GetControllerTest extends TestCase {
 
     EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
 
-    repositoryServiceMock.getFile((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
+    repositoryServiceMock.getFileContents((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
 
     assertEquals(0, response.getContentAsByteArray().length);

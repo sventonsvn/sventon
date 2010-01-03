@@ -114,22 +114,23 @@ public class RepositoryServiceImpl implements RepositoryService {
                                     final String charset) throws SVNException, IOException {
     logger.debug("Fetching file " + path + "@" + revision);
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    getFile(repository, path, revision, outStream);
+    getFileContents(repository, path, revision, outStream);
     return new TextFile(outStream.toString(charset));
   }
 
   /**
    * {@inheritDoc}
    */
-  public final void getFile(final SVNRepository repository, final String path, final long revision,
-                            final OutputStream output) throws SVNException {
+  public final void getFileContents(final SVNRepository repository, final String path, final long revision,
+                                      final OutputStream output) throws SVNException {
     repository.getFile(path, revision, null, output);
   }
 
   /**
    * {@inheritDoc}
    */
-  public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision) throws SVNException {
+  public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
     final SVNProperties props = new SVNProperties();
     repository.getFile(path, revision, props, null);
     return props;
@@ -138,8 +139,19 @@ public class RepositoryServiceImpl implements RepositoryService {
   /**
    * {@inheritDoc}
    */
+  public final SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
+      throws SVNException {
+    final SVNProperties properties = new SVNProperties();
+    repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
+    return properties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public final boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return SVNProperty.isTextMimeType(getFileProperties(repository, path, revision).getStringValue(SVNProperty.MIME_TYPE));
+    final String mimeType = getFileProperties(repository, path, revision).getStringValue(SVNProperty.MIME_TYPE);
+    return SVNProperty.isTextMimeType(mimeType);
   }
 
   /**
@@ -184,16 +196,6 @@ public class RepositoryServiceImpl implements RepositoryService {
       logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
     }
     return locks;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
-      throws SVNException {
-    final SVNProperties properties = new SVNProperties();
-    repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
-    return properties;
   }
 
   /**
