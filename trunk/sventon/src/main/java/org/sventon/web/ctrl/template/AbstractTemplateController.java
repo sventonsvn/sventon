@@ -185,7 +185,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
       final ModelAndView modelAndView = svnHandle(repository, command, headRevision, repositoryContext, request, response, errors);
 
-      // It's ok for svnHandle to return null in cases like GetController.
+      // It's ok for svnHandle to return null in cases like GetFileController.
       if (needModelPopulation(modelAndView)) {
         final Map<String, Object> model = new HashMap<String, Object>();
         logger.debug("'command' set to: " + command);

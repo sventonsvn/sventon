@@ -30,7 +30,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     command.setEntries(svnFileRevisionEditor.convert(pathEntries));
 
     final MockHttpServletRequest req = new MockHttpServletRequest();
-    req.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.CONTENT_DISPOSITION_INLINE);
+    req.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
 
     final ModelAndView modelAndView = ctrl.svnHandle(new SVNRepositoryStub(),
         command, 100, null, req, null, null);

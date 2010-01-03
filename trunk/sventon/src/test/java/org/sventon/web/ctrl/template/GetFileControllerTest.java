@@ -29,7 +29,7 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 
-public class GetControllerTest extends TestCase {
+public class GetFileControllerTest extends TestCase {
 
   private Application application;
   private ConfigDirectory configDirectory;
@@ -63,7 +63,7 @@ public class GetControllerTest extends TestCase {
     command.setName(repositoryName);
     command.setPath("/testimage.gif");
 
-    final GetController ctrl = new GetController();
+    final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
     ctrl.setRepositoryService(new RepositoryServiceImpl());
 
@@ -72,7 +72,7 @@ public class GetControllerTest extends TestCase {
     ctrl.setMimeFileTypeMap(mftm);
     final ModelAndView modelAndView;
 
-    request.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.CONTENT_DISPOSITION_INLINE);
+    request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
 
     final MockHttpServletResponse res = new MockHttpServletResponse();
     modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, request, res, null);
@@ -87,11 +87,11 @@ public class GetControllerTest extends TestCase {
     command.setName(repositoryName);
     command.setPath("/testimage.gif");
 
-    final GetController ctrl = new GetController();
+    final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
     ctrl.setRepositoryService(new RepositoryServiceImpl());
 
-    request.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, (String) null);
+    request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, (String) null);
 
     final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
     final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, request, mockResponse, null);
@@ -105,7 +105,7 @@ public class GetControllerTest extends TestCase {
   public void testCacheNotUsed() throws Exception {
     final RepositoryService repositoryServiceMock = EasyMock.createMock(RepositoryService.class);
 
-    final GetController ctrl = new GetController();
+    final GetFileController ctrl = new GetFileController();
 
     repositoryConfiguration.setCacheUsed(false);
 
@@ -129,7 +129,7 @@ public class GetControllerTest extends TestCase {
     command.setName(repositoryName);
     command.setPath("/test/target.jpg");
 
-    request.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_THUMBNAIL);
+    request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.DISPLAY_TYPE_THUMBNAIL);
 
     repositoryServiceMock.getFileContents((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
@@ -156,7 +156,7 @@ public class GetControllerTest extends TestCase {
     };
     objectCacheManager.register(repositoryName);
 
-    final GetController ctrl = new GetController();
+    final GetFileController ctrl = new GetFileController();
 
     repositoryConfiguration.setCacheUsed(true);
 
@@ -181,7 +181,7 @@ public class GetControllerTest extends TestCase {
     command.setName(repositoryName);
     command.setPath("/test/target.png");
 
-    request.addParameter(GetController.DISPLAY_REQUEST_PARAMETER, GetController.DISPLAY_TYPE_THUMBNAIL);
+    request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.DISPLAY_TYPE_THUMBNAIL);
 
     EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
 
