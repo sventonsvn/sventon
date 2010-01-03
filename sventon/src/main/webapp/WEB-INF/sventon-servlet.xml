@@ -45,7 +45,7 @@
         <prop key="/repos/(*:name)/show/(**/*:path)*">showFileController</prop>
         <prop key="/repos/(*:name)/blame/(**/*:path)*">blameController</prop>
         <prop key="/repos/(*:name)/log/(**/*:path)*">showLogsController</prop>
-        <prop key="/repos/(*:name)/get/(**/*:path)*">getController</prop>
+        <prop key="/repos/(*:name)/get/(**/*:path)*">getFileController</prop>
         <prop key="/repos/(*:name)/export/(**/*:path)*">exportController</prop>
         <prop key="/repos/(*:name)/diff/(**/*:path)*">diffController</prop>
         <prop key="/repos/(*:name)/goto/(**/*:path)*">goToController</prop>
@@ -174,7 +174,7 @@
     <property name="colorer" ref="colorer"/>
   </bean>
 
-  <bean id="getController" class="org.sventon.web.ctrl.template.GetController" parent="abstractTemplateController">
+  <bean id="getFileController" class="org.sventon.web.ctrl.template.GetFileController" parent="abstractTemplateController">
     <property name="mimeFileTypeMap" ref="mimeFileTypeMap"/>
     <property name="imageScaler" ref="imageScaler"/>
     <property name="objectCacheManager" ref="objectCacheManager"/>

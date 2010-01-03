@@ -50,7 +50,7 @@ import java.io.OutputStream;
  *
  * @author jesper@sventon.org
  */
-public class GetController extends AbstractTemplateController {
+public class GetFileController extends AbstractTemplateController {
 
   /**
    * The mime/file type map.
