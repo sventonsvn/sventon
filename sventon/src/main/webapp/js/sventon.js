@@ -178,7 +178,7 @@ function listFiles(rowNumber, name, path) {
     // Files are already listed - hide them instead
     var elements = document.getElementsByClassName('expandedDir' + rowNumber);
     for (var i = 0; i < elements.length; i++) {
-      Element.remove(elements[i])
+      Element.remove(elements[i]);
     }
     iconElement.src = 'images/icon_folder_go.png';
     iconElement.className = 'plus';
@@ -189,13 +189,13 @@ function listFiles(rowNumber, name, path) {
     var elementId = 'dir' + rowNumber;
     new Ajax.Updater({success: elementId}, url, {
       method: 'post', parameters: urlParams, onFailure: reportAjaxError, insertion:Insertion.After, onComplete:
-        function(response) {
+        function() {
           iconElement.src = 'images/icon_folder.png';
           iconElement.className = 'minus';
           // TODO: Optimize this - now we will re-create Draggables for already visible entries.
           var entries = document.getElementsByClassName('entries');
           for (var i = 0; i < entries.length; i++) {
-            new Draggable(entries[i].id, {revert:true})
+            new Draggable(entries[i].id, {revert:true});
           }
           Element.hide('spinner');
         }
@@ -224,7 +224,7 @@ function getLatestRevisions(name, count) {
   var urlParams = 'revision=head&revcount=' + count;
 
   new Ajax.Updater({success: $('latestCommitInfoDiv')}, url, {
-    method: 'post', parameters: urlParams, onFailure: reportAjaxError, onSuccess: function(request) {
+    method: 'post', parameters: urlParams, onFailure: reportAjaxError, onSuccess: function() {
     Element.show('latestCommitInfoDiv');
     Element.update('latestCommitLink', 'hide');
   }, onComplete: function() {
@@ -235,7 +235,7 @@ function getLatestRevisions(name, count) {
 }
 
 // General ajax error alert method
-function reportAjaxError(request) {
+function reportAjaxError() {
   alert('An error occured during asynchronous request.');
 }
 
@@ -285,7 +285,7 @@ function restoreBlameRev(revision) {
 
 function removeEntryFromTray(removeEntryUrl) {
   new Ajax.Updater({success: $('entryTray')}, removeEntryUrl, {
-    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+    method: 'post', onFailure: reportAjaxError, onComplete: function() {
     Element.hide('spinner');
   }});
   Element.show('spinner');
@@ -293,7 +293,7 @@ function removeEntryFromTray(removeEntryUrl) {
 
 function deleteExportFile(exportDeleteUrl) {
   new Ajax.Updater({success: $('downloadLinkDiv')}, exportDeleteUrl, {
-    method: 'post', onFailure: reportAjaxError, onComplete: function(request) {
+    method: 'post', onFailure: reportAjaxError, onComplete: function() {
   }});
 }
 
@@ -423,5 +423,5 @@ Array.prototype.contains = function (element) {
       return true;
     }
   }
-  return false
+  return false;
 };
