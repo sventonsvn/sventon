@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cache aware subclassed implementation of RepositoryService.
+ * Cache aware sub classed implementation of RepositoryService.
  *
  * @author jesper@sventon.org
  */
@@ -46,7 +46,6 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    *
    * @param cacheGateway Cache gateway instance
    */
-  @Autowired
   public void setCacheGateway(final CacheGateway cacheGateway) {
     this.cacheGateway = cacheGateway;
   }

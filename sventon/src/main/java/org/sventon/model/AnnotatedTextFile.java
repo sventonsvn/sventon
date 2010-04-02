@@ -61,7 +61,7 @@ public final class AnnotatedTextFile {
    * @param encoding      Encoding.
    * @param colorer       Colorer.
    * @param properties    Keywords to be substituted. If <tt>null</tt> no keywords will be processed.
-   * @param repositoryURL Respository URL for keyword substitution.
+   * @param repositoryURL Repository URL for keyword substitution.
    */
   public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer,
                            final SVNProperties properties, final String repositoryURL) {

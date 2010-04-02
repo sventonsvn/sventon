@@ -32,7 +32,7 @@ import java.util.*;
 public final class GetFileHistoryController extends AbstractTemplateController {
 
   /**
-   * Request parameter identifying the arcived entry to display.
+   * Request parameter identifying the archived entry to display.
    */
   static final String ARCHIVED_ENTRY = "archivedEntry";
 
@@ -56,8 +56,10 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     final List<SVNFileRevision> fileRevisions = new ArrayList<SVNFileRevision>();
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
-      fileRevisions.addAll(getRepositoryService().getFileRevisions(repository, command.getPath(),
-          command.getRevisionNumber()));
+      final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
+          repository, command.getPath(), command.getRevisionNumber());
+
+      fileRevisions.addAll(revisions);
       Collections.reverse(fileRevisions);
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());

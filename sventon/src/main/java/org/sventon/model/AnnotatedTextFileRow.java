@@ -48,8 +48,8 @@ public final class AnnotatedTextFileRow {
   /**
    * Constructor.
    *
-   * @param date      Date when changes including this line were commited to the repository.
-   * @param revision  The revision the changes were commited to.
+   * @param date      Date when changes including this line were committed to the repository.
+   * @param revision  The revision the changes were committed to.
    * @param author    The person who did the changes.
    * @param rowNumber Row number.
    * @param content   The line content.

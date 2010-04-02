@@ -64,7 +64,7 @@ public enum LogEntryActionType {
   }
 
   /**
-   * Parses given code and returns apropriate <code>LogEntryActionType</code>.
+   * Parses given code and returns appropriate <code>LogEntryActionType</code>.
    *
    * @param code Code to parse
    * @return The LogEntryActionType
@@ -75,7 +75,7 @@ public enum LogEntryActionType {
   }
 
   /**
-   * Parses given code and returns apropriate <code>LogEntryActionType</code>.
+   * Parses given code and returns appropriate <code>LogEntryActionType</code>.
    *
    * @param code Code to parse
    * @return The LogEntryActionType

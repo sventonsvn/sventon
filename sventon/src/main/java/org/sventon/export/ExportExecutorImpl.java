@@ -56,7 +56,7 @@ public class ExportExecutorImpl implements ExportExecutor {
   public static final String FALLBACK_CHARSET = "ISO-8859-1";
 
   /**
-   * The charset to use for filenames and comments in compressed archive file.
+   * The charset to use for file names and comments in compressed archive file.
    */
   private Charset archiveFileCharset = Charset.forName(FALLBACK_CHARSET);
 
@@ -143,7 +143,7 @@ public class ExportExecutorImpl implements ExportExecutor {
    *
    * @param request    Request
    * @param response   Response
-   * @param attachment Attachement
+   * @param attachment Attachment
    */
   protected void prepareResponse(final HttpServletRequest request, final HttpServletResponse response,
                                  final File attachment) {
@@ -163,7 +163,7 @@ public class ExportExecutorImpl implements ExportExecutor {
   }
 
   /**
-   * Sets the archive file charset to use for filenames and comments.
+   * Sets the archive file charset to use for file names and comments.
    * <p/>
    * If given charset does not exist, <code>iso-8859-1</code> will be used as a fallback.
    *
