@@ -39,17 +39,6 @@ public final class ZipFileWrapper {
 
   /**
    * Constructor.
-   * <p/>
-   * Uses VM default charset for file names and comments.
-   *
-   * @param zipFile Destination ZIP file.
-   */
-  public ZipFileWrapper(final File zipFile) {
-    this(zipFile, Charset.defaultCharset());
-  }
-
-  /**
-   * Constructor.
    *
    * @param zipFile Destination ZIP file.
    * @param charset Charset to use for file names and comments.

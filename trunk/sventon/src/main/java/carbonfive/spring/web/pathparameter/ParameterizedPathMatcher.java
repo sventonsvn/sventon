@@ -41,7 +41,7 @@ public class ParameterizedPathMatcher implements PathMatcher {
   private static final Pattern wildcardFreePattern = Pattern.compile("^[\\\\\\/]?([^\\(\\*\\?\\\\\\/]*[\\\\\\/])*([^\\(\\*\\?\\\\\\/]*$)?");
   private static final Pattern regexEscapePattern = Pattern.compile("[\\\\\\/\\[\\]\\^\\$\\.\\{\\}\\&\\?\\*\\+\\|\\<\\>\\!\\=]");
 
-  private Map<String, NamedPattern> patternCache = new HashMap<String, NamedPattern>();
+  private final Map<String, NamedPattern> patternCache = new HashMap<String, NamedPattern>();
 
   public boolean isPattern(String string) {
     return (string.indexOf('*') != -1 || string.indexOf('?') != -1 || string.indexOf('(') != -1);
@@ -70,7 +70,7 @@ public class ParameterizedPathMatcher implements PathMatcher {
    *
    * @param pattern given pattern containing parameter specification
    * @param path    to test against pattern
-   * @return A map with the specified parameter as key and the matched path segement as a value.
+   * @return A map with the specified parameter as key and the matched path segment as a value.
    */
   public Map<String, String> namedParameters(String pattern, String path) {
     return getOrCreatePattern(pattern).namedGroups(path);
@@ -88,7 +88,7 @@ public class ParameterizedPathMatcher implements PathMatcher {
   /**
    * Return the initial path segments of the given path up to the first wildcard of the given pattern
    *
-   * @param pattern pattern that may contain wildcards
+   * @param pattern pattern that may contain wild cards
    * @param path    path to test against pattern
    * @return in regex: ^[\\\/]?([^(\*\?\\\/]*[\\\/])*([^\(\*\?\\\/]*$)?
    */

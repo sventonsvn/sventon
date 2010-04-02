@@ -50,7 +50,7 @@ public class ImageScaler {
   protected Dimension getThumbnailSize(final int width, final int height, final int maxSize) {
     final int max = Math.max(width, height);
     if (max <= maxSize) {
-      // Image is smaller than maximum size - no need for a resize
+      // Image is smaller than maximum size - no need for a re-size
       return new Dimension(width, height);
     } else {
       final double scaleFactor = (double) max / maxSize;

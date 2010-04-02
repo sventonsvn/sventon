@@ -118,7 +118,7 @@ public final class DiffController extends AbstractTemplateController {
         break;
       case unified:
         modelAndView.setViewName("unifiedDiff");
-        model.put("diffResult", getRepositoryService().diffUnified(repository, command, pegRevision, charset, config));
+        model.put("diffResult", getRepositoryService().diffUnified(repository, command, pegRevision, charset));
         break;
       default:
         throw new IllegalStateException();

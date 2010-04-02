@@ -44,12 +44,11 @@ public interface CacheGateway {
    * @param repositoryName Cache repository name
    * @param searchString   String to search for
    * @param startDir       Start path
-   * @param includeAuthors If true, also the entry's author string will be included in the search.
    * @return List of entries with names (and/or author) matching given search string.
    * @throws CacheException if error
    */
   List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                    final String startDir, final boolean includeAuthors) throws CacheException;
+                                    final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.

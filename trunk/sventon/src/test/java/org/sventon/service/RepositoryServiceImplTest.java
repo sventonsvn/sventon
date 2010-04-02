@@ -55,7 +55,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING, configuration);
+      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
@@ -86,7 +86,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING, configuration);
+      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -125,7 +125,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING, configuration);
+      service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -170,7 +170,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final String s = service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING, configuration);
+    final String s = service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING);
     assertEquals("@@ -1 +1 @@" + BR + "-test left file contents" + BR + "+test right file contents", s.trim());
   }
 
