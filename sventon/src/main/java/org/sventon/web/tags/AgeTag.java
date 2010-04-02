@@ -60,7 +60,7 @@ public final class AgeTag extends TagSupport {
       return "";
     }
     final String s = DurationFormatUtils.formatDurationWords(stop.getTime() - start.getTime(), true, true);
-    Pattern p = Pattern.compile("(\\S+\\s{1}\\S+).*");
+    Pattern p = Pattern.compile("(\\S+\\s\\S+).*");
     Matcher m = p.matcher(s);
     m.matches();
     return m.group(1);

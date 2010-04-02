@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Abstract base class for use by controllers whishing to make use of basic
+ * Abstract base class for use by controllers wishing to make use of basic
  * plumbing functionality such as authorization and basic application configuration.
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
@@ -349,7 +349,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
   }
 
   /**
-   * Prepares the authentication model. This setus up a model and redirect view with
+   * Prepares the authentication model. This sets up a model and redirect view with
    * all stuff needed to redirect control to the login page.
    *
    * @param request Request.

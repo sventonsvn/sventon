@@ -305,7 +305,7 @@ public class RepositoryServiceImpl implements RepositoryService {
    * {@inheritDoc}
    */
   public final String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
-                                  final String charset, final RepositoryConfiguration configuration) throws SVNException, DiffException {
+                                  final String charset) throws SVNException, DiffException {
 
     assertNotBinary(repository, command, pegRevision);
 

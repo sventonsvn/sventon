@@ -246,18 +246,16 @@ public interface RepositoryService {
   /**
    * Creates a unified diff.
    *
-   * @param repository    The repository.
-   * @param command       DiffCommand.
-   * @param pegRevision   Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
-   * @param charset       The charset to use.
-   * @param configuration The repository configuration. @return The unified diff as a string.
+   * @param repository  The repository.
+   * @param command     DiffCommand.
+   * @param pegRevision Peg revision, or {@link SVNRevision#UNDEFINED} of n/a.
+   * @param charset     The charset to use.
    * @return Diff result.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
-  String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision, final String charset,
-                     final RepositoryConfiguration configuration)
-      throws SVNException, DiffException;
+  String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
+                     final String charset) throws SVNException, DiffException;
 
   /**
    * Creates an inline diff.

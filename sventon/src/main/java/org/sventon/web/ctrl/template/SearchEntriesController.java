@@ -36,8 +36,6 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
   public static final String START_DIR_PARAMETER = "startDir";
 
-  private boolean includeAuthorInSearch;
-
   /**
    * Available search types.
    */
@@ -67,7 +65,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
       entries.addAll(getCache().findEntriesByCamelCase(command.getName(), new CamelCasePattern(searchString), startDir));
       model.put("searchType", SearchType.CAMELCASE);
     } else {
-      entries.addAll(getCache().findEntries(command.getName(), searchString, startDir, includeAuthorInSearch));
+      entries.addAll(getCache().findEntries(command.getName(), searchString, startDir));
       model.put("searchType", SearchType.TEXT);
     }
 
@@ -84,13 +82,6 @@ public final class SearchEntriesController extends AbstractTemplateController {
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
-  }
-
-  /**
-   * @param includeAuthorInSearch True if the entry's author string should be included in the search.
-   */
-  public void setIncludeAuthorInSearch(final boolean includeAuthorInSearch) {
-    this.includeAuthorInSearch = includeAuthorInSearch;
   }
 
 }

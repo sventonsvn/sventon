@@ -41,9 +41,9 @@ public class CacheGatewayImplTest extends TestCase {
 
   public void testFindEntryInPath() throws Exception {
     final CacheGateway cache = createCache();
-    assertEquals(1, cache.findEntries(repositoryName, "html", "/trunk/src/", false).size());
-    assertEquals(5, cache.findEntries(repositoryName, "java", "/", false).size());
-    assertEquals(1, cache.findEntries(repositoryName, "code", "/", false).size());
+    assertEquals(1, cache.findEntries(repositoryName, "html", "/trunk/src/").size());
+    assertEquals(5, cache.findEntries(repositoryName, "java", "/").size());
+    assertEquals(1, cache.findEntries(repositoryName, "code", "/").size());
   }
 
 //  public void testFindEntryByCamelCase() throws Exception {

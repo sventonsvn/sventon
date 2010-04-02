@@ -72,7 +72,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    * {@inheritDoc}
    */
   public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                           final String startDir, final boolean includeAuthors)
+                                           final String startDir)
       throws CacheException {
     final EntryCache cache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
