@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StopWatch;
 
 /**
- * Around advice that loggs the method execution time.
+ * Around advice that logs the method execution time.
  *
  * @author jesper@sventon.org
  */

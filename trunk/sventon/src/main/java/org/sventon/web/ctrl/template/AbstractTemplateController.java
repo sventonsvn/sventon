@@ -80,7 +80,7 @@ import java.util.Map;
  * <dd>If a SVN authentication exception occurs during the call the request
  * will be forwarded to the authenticationfailuare.jsp page.
  * <dt>Other SVN exceptions
- * <dd>Other SVN exceptons are currently forwarded to a generic error handlng
+ * <dd>Other SVN exceptions are currently forwarded to a generic error handling
  * page.
  * </dl>
  *
@@ -385,7 +385,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
   }
 
   /**
-   * Abstract method to be implemented by the controller subclassing this
+   * Abstract method to be implemented by the controller sub classing this
    * controller. This is where the actual work takes place. See class
    * documentation for info on workflow and on how all this works together.
    *

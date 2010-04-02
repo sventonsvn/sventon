@@ -31,7 +31,7 @@ public class ImageScaler {
   public BufferedImage getThumbnail(final BufferedImage image, final int maxSize) {
     final Dimension thumbnailSize = getThumbnailSize(image.getWidth(), image.getHeight(), maxSize);
 
-    // Resize image.
+    // Re-size image.
     final Image rescaled = image.getScaledInstance((int) thumbnailSize.getWidth(),
         (int) thumbnailSize.getHeight(), Image.SCALE_AREA_AVERAGING);
 

@@ -170,7 +170,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
    * @param mailTemplate   Template
    * @return Message
    * @throws MessagingException If a message exception occurs.
-   * @throws IOException        if a IO exception occurs while creating the datasource.
+   * @throws IOException        if a IO exception occurs while creating the data source.
    */
   private Message createMessage(final SVNLogEntry logEntry, RepositoryName repositoryName, String mailTemplate)
       throws MessagingException, IOException {

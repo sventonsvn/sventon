@@ -55,7 +55,7 @@ public final class RepositoryEntryTray implements Serializable {
   }
 
   /**
-   * Removs an entry from the user's tray.
+   * Removes an entry from the user's tray.
    *
    * @param entry Entry to remove
    * @return True if removed.

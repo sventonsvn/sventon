@@ -43,7 +43,7 @@ public final class ShowLogController extends AbstractTemplateController {
 
   /**
    * Set page size.
-   * Max number of log entires shown at a time.
+   * Max number of log entries shown at a time.
    *
    * @param pageSize Page size.
    */

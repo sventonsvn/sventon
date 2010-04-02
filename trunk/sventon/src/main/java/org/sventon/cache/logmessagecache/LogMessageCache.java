@@ -29,7 +29,7 @@ public interface LogMessageCache extends Cache {
   void init();
 
   /**
-   * Finds occurencies of given search string among the cached log messages.
+   * Finds occurrences of given search string among the cached log messages.
    *
    * @param queryString Index query string.
    * @return List of log messages.

@@ -33,7 +33,7 @@ public final class Credentials implements Serializable {
   public static final Credentials EMPTY = new Credentials("", "");
 
   /**
-   * Username.
+   * User name.
    */
   private final String userName;
 
@@ -45,7 +45,7 @@ public final class Credentials implements Serializable {
   /**
    * Constructor.
    *
-   * @param userName Username.
+   * @param userName User name.
    * @param password Password.
    */
   public Credentials(final String userName, final String password) {

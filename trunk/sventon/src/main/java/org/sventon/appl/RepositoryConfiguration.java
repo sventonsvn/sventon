@@ -112,7 +112,7 @@ public final class RepositoryConfiguration {
   private boolean zipDownloadsAllowed;
 
   /**
-   * Decides wheter repository access control is enforced (this is configured on the
+   * Decides whether repository access control is enforced (this is configured on the
    * SVN server).
    */
   private boolean enableAccessControl;
@@ -123,7 +123,7 @@ public final class RepositoryConfiguration {
   private boolean enableEntryTray = true;
 
   /**
-   * Decides wheter the issue tracker integration should be used.
+   * Decides whether the issue tracker integration should be used.
    */
   private boolean enableIssueTrackerIntegration;
 

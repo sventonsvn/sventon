@@ -183,7 +183,7 @@ public class BaseCommand {
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
    *
-   * @return Path excluding taget (end/leaf)
+   * @return Path excluding target (end/leaf)
    */
   public String getParentPath() {
     String work = getPath();
@@ -211,7 +211,7 @@ public class BaseCommand {
    * The returned string will have a final "/". If the path info is empty, ""
    * (empty string) will be returned.
    *
-   * @return Path excluding taget (end/leaf)
+   * @return Path excluding target (end/leaf)
    */
   public String getPathPart() {
     return FilenameUtils.getFullPath(getPath());
@@ -295,7 +295,7 @@ public class BaseCommand {
    * Translates the revision and the peg revision into a number, if needed.
    * <p/>
    * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
-   * by getting the closest revision number before or at the specified datestamp.
+   * by getting the closest revision number before or at the specified date stamp.
    *
    * @param headRevision The current HEAD revision.
    * @param repository   Repository instance.

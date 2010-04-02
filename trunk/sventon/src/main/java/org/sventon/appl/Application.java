@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Represents the sventon application.
  * <p/>
  * Initializes sventon and performs SVNKit initialization, such as setting up logging
- * and repository access. It should be instanciated once (and only once), when
+ * and repository access. It should be instantiated once (and only once), when
  * the application starts.
  *
  * @author jesper@sventon.org
@@ -102,7 +102,7 @@ public final class Application {
    * Initializes the sventon application.
    *
    * @throws IOException    if unable to load the instance configurations.
-   * @throws CacheException if unable to initalize caches.
+   * @throws CacheException if unable to initialize caches.
    */
   @PostConstruct
   public void init() throws IOException, CacheException {

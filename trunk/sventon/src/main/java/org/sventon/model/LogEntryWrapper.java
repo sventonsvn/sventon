@@ -50,7 +50,7 @@ public final class LogEntryWrapper {
   }
 
   /**
-   * Contructor.
+   * Constructor.
    *
    * @param logEntry       The log entry
    * @param pathAtRevision The entry's path at given revision.

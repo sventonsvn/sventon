@@ -37,7 +37,7 @@ import java.util.Map;
  * This controller performs pretty much the same thing as the post handler in
  * {@link AbstractTemplateController}, but can be
  * called as a GET request. This gives a somewhat ugly redundancy that probably
- * should be rmoved.
+ * should be removed.
  *
  * @author patrik@sventon.org
  * @author jesper@sventon.org

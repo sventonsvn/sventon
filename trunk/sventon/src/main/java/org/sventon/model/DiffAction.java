@@ -60,7 +60,7 @@ public enum DiffAction {
   }
 
   /**
-   * Parses given code and returns apropriate <code>DiffAction</code>.
+   * Parses given code and returns appropriate <code>DiffAction</code>.
    *
    * @param code Code to parse
    * @return The DiffAction
@@ -71,7 +71,7 @@ public enum DiffAction {
   }
 
   /**
-   * Parses given code and returns apropriate <code>DiffAction</code>.
+   * Parses given code and returns appropriate <code>DiffAction</code>.
    *
    * @param code Code to parse
    * @return The DiffAction

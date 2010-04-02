@@ -228,7 +228,7 @@ public final class ConfigCommand {
 
 
   /**
-   * Create and populate a RepositoryConfiguration based on the contens of this config command instance.
+   * Create and populate a RepositoryConfiguration based on the contents of this config command instance.
    *
    * @return New, populated RepositoryConfiguration
    */

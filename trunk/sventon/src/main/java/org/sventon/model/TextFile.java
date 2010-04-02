@@ -57,7 +57,7 @@ public final class TextFile {
    * @param encoding      Encoding.
    * @param colorer       Colorer.
    * @param properties    Keywords to be substituted. If <tt>null</tt> no keywords will be processed.
-   * @param repositoryURL Respository URL for keyword substitution.
+   * @param repositoryURL Repository URL for keyword substitution.
    * @throws IOException if unable to read content.
    */
   public TextFile(final String content, final String path, final String encoding, final Colorer colorer,

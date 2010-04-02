@@ -42,7 +42,7 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
   /**
    * Create a new comparator for comparing <code>RepositoryEntry</code> objects.
    *
-   * @param sortType  Entry type property to perform the comparisions on. See enum constants
+   * @param sortType  Entry type property to perform the comparisons on. See enum constants
    *                  defined in this class.
    * @param groupDirs <code>true</code> to group directories, this will sort an entry
    *                  of kind <code>SVNNodeKind.DIR</code> before an entries of other
