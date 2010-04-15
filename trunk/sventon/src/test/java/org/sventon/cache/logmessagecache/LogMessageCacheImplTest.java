@@ -1,13 +1,16 @@
 package org.sventon.cache.logmessagecache;
 
 import junit.framework.TestCase;
+import org.apache.commons.lang.StringUtils;
 import org.sventon.model.LogMessage;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.apache.commons.lang.StringUtils;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LogMessageCacheImplTest extends TestCase {
 
@@ -26,7 +29,43 @@ public class LogMessageCacheImplTest extends TestCase {
     return new SVNLogEntry(null, revision, "theauthor", new Date(), message);
   }
 
-  public void testAdd() throws Exception {
+  private SVNLogEntry create(final long revision, final String message, final Map<String, SVNLogEntryPath> paths) {
+    return new SVNLogEntry(paths, revision, "theauthor", new Date(), message);
+  }
+
+  private Map<String, SVNLogEntryPath> createAndAddToMap(final String path, SVNLogEntryPath logEntryPath) {
+    final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
+    changedPaths.put(path, logEntryPath);
+    return changedPaths;
+  }
+
+  public void testAddAndFindWithStartDir() throws Exception {
+    List<LogMessage> logMessages;
+    cache.add(new LogMessage(create(123, "First message XYZ-123.",
+        createAndAddToMap("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1)))));
+
+    logMessages = cache.find("XYZ-123", "/");
+    assertEquals(1, logMessages.size());
+    assertEquals("First message <span class=\"searchhit\">XYZ-123</span>.", logMessages.get(0).getMessage());
+
+    cache.add(new LogMessage(create(456, "First message XYZ-456.",
+        createAndAddToMap("/test/file1.java", new SVNLogEntryPath("/test/file1.java", 'M', null, 1)))));
+
+    logMessages = cache.find("XYZ-456", "/");
+    assertEquals(1, logMessages.size());
+    assertEquals("First message <span class=\"searchhit\">XYZ-456</span>.", logMessages.get(0).getMessage());
+
+    logMessages = cache.find("XYZ*", "/");
+    assertEquals(2, logMessages.size());
+   
+    logMessages = cache.find("XYZ*", "/test/");
+    assertEquals(1, logMessages.size());
+
+    logMessages = cache.find("shouldnotfound", "/");
+    assertEquals(0, logMessages.size());
+  }
+
+  public void testAddAndFind() throws Exception {
     cache.add(new LogMessage(create(123, "First message XYZ-123.")));
 
     List<LogMessage> logMessages = cache.find("XYZ-123");

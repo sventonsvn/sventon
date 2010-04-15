@@ -37,6 +37,15 @@ public interface LogMessageCache extends Cache {
   List<LogMessage> find(final String queryString);
 
   /**
+   * Finds occurrences of given search string among the cached log messages.
+   *
+   * @param queryString Index query string.
+   * @param startDir    Directory/path to start in.
+   * @return List of log messages.
+   */
+  List<LogMessage> find(final String queryString, final String startDir);
+
+  /**
    * Add one log message to the cache.
    *
    * @param logMessage The log message to cache.

@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1649] Added: Feature #4990 - Logs search should respect startDir.
 [1646] Fixed: Bug #17048 - Error during startup if JSR-250 not supported.
 [1639] Added: Upgraded Compass to version 2.2.0.
 [1638] Added: Upgraded SVNKit to version 1.3.2.

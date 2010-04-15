@@ -49,9 +49,15 @@ public final class SearchLogsController extends AbstractTemplateController {
     final String searchString = ServletRequestUtils.getRequiredStringParameter(request, SEARCH_STRING_PARAMETER);
     final String startDir = ServletRequestUtils.getRequiredStringParameter(request, START_DIR_PARAMETER);
 
-    logger.debug("Searching logMessages for: " + searchString);
+    logger.debug("Searching logMessages for: " + searchString + " in path: " + startDir);
 
-    final List<LogMessage> logMessages = getCache().find(command.getName(), searchString);
+    final List<LogMessage> logMessages;
+    if (isRootDir(startDir)) {
+      logMessages = getCache().find(command.getName(), searchString);
+    } else {
+      logMessages = getCache().find(command.getName(), searchString, startDir);
+    }
+
     //TODO: Parse to apply Bugtraq links
     Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
@@ -62,4 +68,9 @@ public final class SearchLogsController extends AbstractTemplateController {
     model.put("isLogSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
   }
+
+  private boolean isRootDir(String startDir) {
+    return "/".equals(startDir);
+  }
+
 }
