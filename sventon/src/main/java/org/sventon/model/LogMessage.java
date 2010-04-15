@@ -11,6 +11,7 @@
  */
 package org.sventon.model;
 
+import org.compass.annotations.Index;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
@@ -18,6 +19,7 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * LogMessage.
@@ -26,6 +28,8 @@ import java.util.Date;
  */
 @Searchable(root = true)
 public final class LogMessage implements Serializable {
+
+  public static final String PATHS_DELIMITER = "\0";
 
   public static final String NOT_AVAILABLE_TAG = "_NA_";
 
@@ -43,10 +47,13 @@ public final class LogMessage implements Serializable {
   @SearchableProperty
   private String message;
 
+  @SearchableProperty(index = Index.NOT_ANALYZED)
+  private String paths;
+
   /**
    * Default constructor.
    */
-  LogMessage() {
+  protected LogMessage() {
   }
 
   /**
@@ -59,6 +66,25 @@ public final class LogMessage implements Serializable {
     this.author = svnLogEntry.getAuthor();
     this.date = svnLogEntry.getDate() != null ? (Date) svnLogEntry.getDate().clone() : null;
     this.message = svnLogEntry.getMessage();
+    this.paths = extractAndConcatinatePaths(svnLogEntry.getChangedPaths());
+  }
+
+  /**
+   * Concatinates given map of paths using {@link #PATHS_DELIMITER} as separator.
+   *
+   * @param changedPaths Changed paths for a certain revision.
+   * @return Concatinated string of paths, or null/empty string if no changed paths in revision.
+   */
+  private String extractAndConcatinatePaths(Map changedPaths) {
+    if (changedPaths != null) {
+      StringBuilder pathsStringBuilder = new StringBuilder();
+      for (Object path : changedPaths.keySet()) {
+        pathsStringBuilder.append(PATHS_DELIMITER).append(path);
+      }
+      return pathsStringBuilder.toString();
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -114,4 +140,23 @@ public final class LogMessage implements Serializable {
   public Date getDate() {
     return date != null ? (Date) date.clone() : null;
   }
+
+  /**
+   * Gets the paths.
+   *
+   * @return The paths.
+   */
+  public String getPaths() {
+    return paths;
+  }
+
+  /**
+   * Sets the paths.
+   *
+   * @param paths Paths.
+   */
+  public void setPaths(final String paths) {
+    this.paths = paths;
+  }
+
 }

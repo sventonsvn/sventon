@@ -71,6 +71,18 @@ public interface CacheGateway {
   List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
 
   /**
+   * Searches the cached log messages for given string.
+   *
+   * @param repositoryName Repository name
+   * @param queryString    String to search for.
+   * @param startDir       Directory/path to start in.
+   * @return List of log messages.
+   * @throws CacheException if error
+   */
+  List<LogMessage> find(final RepositoryName repositoryName, final String queryString, final String startDir)
+      throws CacheException;
+
+  /**
    * Gets a revision by number.
    *
    * @param repositoryName Repository name

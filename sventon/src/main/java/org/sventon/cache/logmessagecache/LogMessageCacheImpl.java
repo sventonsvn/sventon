@@ -128,6 +128,14 @@ public final class LogMessageCacheImpl implements LogMessageCache {
   /**
    * {@inheritDoc}
    */
+  public List<LogMessage> find(final String queryString, final String startDir) {
+    final String newQueryString = "message:" + queryString + " paths:" + LogMessage.PATHS_DELIMITER + startDir + "*";
+    return find(newQueryString);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void add(final LogMessage... logMessages) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {

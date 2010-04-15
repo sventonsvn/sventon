@@ -106,6 +106,15 @@ public final class CacheGatewayImpl implements CacheGateway {
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<LogMessage> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
+    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
+    assertCacheExists(cache, repositoryName);
+    return cache.find(queryString, startDir);
+  }
 
   /**
    * {@inheritDoc}

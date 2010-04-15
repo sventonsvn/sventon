@@ -40,7 +40,7 @@ public class SearchLogsControllerTest extends TestCase {
     final List<LogMessage> result = new ArrayList<LogMessage>();
     result.add(new LogMessage(new SVNLogEntry(null, 123, "jesper", new Date(), "Revision 123.")));
 
-    expect(mockCache.find(command.getName(), "abc")).andStubReturn(result);
+    expect(mockCache.find(command.getName(), "abc", "/trunk/")).andStubReturn(result);
     replay(mockCache);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
