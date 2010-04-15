@@ -306,7 +306,6 @@ public final class EntryCacheImpl implements EntryCache {
     logger.info("Saving file to disk, " + latestCachedRevisionFile);
     ObjectOutputStream out = null;
     try {
-      // Write to a temp file first, to keep the old file just in case.
       out = new ObjectOutputStream(new FileOutputStream(latestCachedRevisionFile));
       out.writeLong(getLatestCachedRevisionNumber());
       out.flush();
