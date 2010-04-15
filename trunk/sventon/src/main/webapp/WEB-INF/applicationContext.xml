@@ -154,7 +154,7 @@
   <!-- Monitors the repository and polls for changes -->
   <bean id="revisionObservable" class="org.sventon.repository.RevisionObservableImpl">
     <constructor-arg ref="observerList"/>
-    <property name="maxRevisionCountPerUpdate" value="500"/>
+    <property name="maxRevisionCountPerUpdate" value="100"/>
   </bean>
 
   <util:list id="cacheManagers">
