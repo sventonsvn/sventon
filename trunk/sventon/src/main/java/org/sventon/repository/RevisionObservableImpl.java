@@ -60,7 +60,12 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * Object cache key, <code>lastCachedLogRevision</code>.
    */
-  private static final String LAST_UPDATED_LOG_REVISION_CACHE_KEY = "lastCachedLogRevision";
+  private static final String LAST_UPDATED_REVISION_CACHE_KEY = "lastCachedRevision";
+
+  /**
+   * Cache format version. If incremented, caches will be scratched and rebuilt.
+   */
+  private static final int CACHE_FORMAT_VERSION = 1;
 
   /**
    * Maximum number of revisions to get each update.
@@ -135,7 +140,8 @@ public final class RevisionObservableImpl extends Observable implements Revision
 
     try {
       final long headRevision = repositoryService.getLatestRevision(repository);
-      Long lastUpdatedRevision = (Long) objectCache.get(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name);
+      final String lastUpdatedKeyName = getLastUpdatedKeyName(name);
+      Long lastUpdatedRevision = (Long) objectCache.get(lastUpdatedKeyName);
 
       boolean clearCacheBeforeUpdate = false;
 
@@ -164,7 +170,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
           notifyObservers(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
           lastUpdatedRevision = toRevision;
           logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
-          objectCache.put(LAST_UPDATED_LOG_REVISION_CACHE_KEY + name, lastUpdatedRevision);
+          objectCache.put(lastUpdatedKeyName, lastUpdatedRevision);
           objectCache.flush();
           clearCacheBeforeUpdate = false;
           revisionsLeftToFetchCount -= logEntries.size();
@@ -174,6 +180,10 @@ public final class RevisionObservableImpl extends Observable implements Revision
       logger.warn("Exception: " + svnex.getMessage());
       logger.debug("Exception [" + svnex.getErrorMessage().getErrorCode().toString() + "]", svnex);
     }
+  }
+
+  private String getLastUpdatedKeyName(RepositoryName name) {
+    return LAST_UPDATED_REVISION_CACHE_KEY + "_" + CACHE_FORMAT_VERSION + "_" + name;
   }
 
   /**
