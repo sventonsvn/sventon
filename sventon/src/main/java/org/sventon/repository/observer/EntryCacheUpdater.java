@@ -20,7 +20,7 @@ import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.model.LogEntryActionType;
+import org.sventon.model.LogEntryPathChangeType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
@@ -177,7 +177,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
       for (final String entryPath : latestPathsList) {
         final SVNLogEntryPath logEntryPath = map.get(entryPath);
-        switch (LogEntryActionType.parse(logEntryPath.getType())) {
+        switch (LogEntryPathChangeType.parse(logEntryPath.getType())) {
           case ADDED:
             LOGGER.debug("Adding entry to cache: " + logEntryPath.getPath());
             doEntryCacheAdd(entriesToAdd, repository, logEntryPath, revision);
