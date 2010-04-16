@@ -12,7 +12,7 @@
   */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
-<%@ page import="org.sventon.model.LogEntryActionType" %>
+<%@ page import="org.sventon.model.LogEntryPathChangeType" %>
 <%@ page import="org.apache.commons.lang.BooleanUtils" %>
 
 <html>
@@ -68,12 +68,12 @@
               <c:forEach items="${diffResult}" var="row">
                 <jsp:useBean id="row" type="org.tmatesoft.svn.core.wc.SVNDiffStatus"/>
                 <%
-                  final LogEntryActionType actionType;
+                  final LogEntryPathChangeType changeType;
                   final char actionCode = row.getModificationType().getCode();
                   if (actionCode == ' ') {
-                    actionType = null;
+                    changeType = null;
                   } else {
-                    actionType = LogEntryActionType.parse(actionCode);
+                    changeType = LogEntryPathChangeType.parse(actionCode);
                   }
                 %>
                 <tr>
@@ -83,12 +83,12 @@
                     <c:param name="revision" value="${command.toRevision}"/>
                   </c:url>
 
-                  <td valign="top"><i><%= actionType == null ? "" : actionType.name() %></i></td>
-                  <% if (LogEntryActionType.ADDED == actionType || LogEntryActionType.REPLACED == actionType) { %>
+                  <td valign="top"><i><%= changeType == null ? "" : changeType.name() %></i></td>
+                  <% if (LogEntryPathChangeType.ADDED == changeType || LogEntryPathChangeType.REPLACED == changeType) { %>
                   <td><a href="${goToUrl}?revision=${command.toRevision}" title="Show file">${row.path}</a></td>
-                  <% } else if (LogEntryActionType.DELETED == actionType) { %>
+                  <% } else if (LogEntryPathChangeType.DELETED == changeType) { %>
                   <td><a href="${goToUrl}?revision=${command.fromRevision}" title="Show file">${row.path}</a></td>
-                  <% } else if (LogEntryActionType.MODIFIED == actionType) { %>
+                  <% } else if (LogEntryPathChangeType.MODIFIED == changeType) { %>
                   <td><a href="${diffUrl}&entries=${command.fromPath}/${row.path}@${command.fromRevision}&entries=${command.toPath}/${row.path}@${command.toRevision}" title="Show Diff">${row.path}</a></td>
                   <% } else { %>
                   <td>${row.path}</td>

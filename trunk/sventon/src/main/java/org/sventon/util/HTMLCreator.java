@@ -14,7 +14,7 @@ package org.sventon.util;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
-import org.sventon.model.LogEntryActionType;
+import org.sventon.model.LogEntryPathChangeType;
 import org.sventon.model.RepositoryName;
 import static org.sventon.util.EncodingUtils.encode;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -74,7 +74,7 @@ public final class HTMLCreator {
     final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
 
     for (final String entryPath : latestPathsList) {
-      final LogEntryActionType type = LogEntryActionType.parse(latestChangedPaths.get(entryPath).getType());
+      final LogEntryPathChangeType type = LogEntryPathChangeType.parse(latestChangedPaths.get(entryPath).getType());
       switch (type) {
         case ADDED:
           added++;
@@ -136,15 +136,15 @@ public final class HTMLCreator {
 
     for (final String path : latestPathsList) {
       final SVNLogEntryPath logEntryPath = changedPaths.get(path);
-      final LogEntryActionType actionType = LogEntryActionType.parse(logEntryPath.getType());
+      final LogEntryPathChangeType changeType = LogEntryPathChangeType.parse(logEntryPath.getType());
 
       sb.append("  <tr>\n");
-      sb.append("    <td valign=\"top\"><i>").append(actionType).append("</i></td>\n");
+      sb.append("    <td valign=\"top\"><i>").append(changeType).append("</i></td>\n");
 
       sb.append("    <td>");
 
       String goToUrl;
-      switch (actionType) {
+      switch (changeType) {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
@@ -190,7 +190,7 @@ public final class HTMLCreator {
           sb.append("\" title=\"Show previous revision\"><del>").append(logEntryPath.getPath()).append("</del></a>");
           break;
         default:
-          throw new IllegalArgumentException("Unsupported type: " + actionType);
+          throw new IllegalArgumentException("Unsupported type: " + changeType);
       }
 
       if (logEntryPath.getCopyPath() != null) {

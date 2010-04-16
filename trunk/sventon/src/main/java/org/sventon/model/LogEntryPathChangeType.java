@@ -14,11 +14,11 @@ package org.sventon.model;
 import org.apache.commons.lang.Validate;
 
 /**
- * Type enum for log entry actions.
+ * Type enum for log entry path actions.
  *
  * @author jesper@sventon.org
  */
-public enum LogEntryActionType {
+public enum LogEntryPathChangeType {
 
   /**
    * Indicating entry was added.
@@ -58,29 +58,29 @@ public enum LogEntryActionType {
    * @param action The action
    * @param code   Code
    */
-  private LogEntryActionType(final String action, final char code) {
+  private LogEntryPathChangeType(final String action, final char code) {
     this.action = action;
     this.code = code;
   }
 
   /**
-   * Parses given code and returns appropriate <code>LogEntryActionType</code>.
+   * Parses given code and returns appropriate <code>LogEntryPathChangeType</code>.
    *
    * @param code Code to parse
-   * @return The LogEntryActionType
+   * @return The LogEntryPathChangeType
    */
-  public static LogEntryActionType parse(final String code) {
+  public static LogEntryPathChangeType parse(final String code) {
     Validate.notEmpty(code, "Given code was null or empty");
     return parse(code.charAt(0));
   }
 
   /**
-   * Parses given code and returns appropriate <code>LogEntryActionType</code>.
+   * Parses given code and returns appropriate <code>LogEntryPathChangeType</code>.
    *
    * @param code Code to parse
-   * @return The LogEntryActionType
+   * @return The LogEntryPathChangeType
    */
-  public static LogEntryActionType parse(final char code) {
+  public static LogEntryPathChangeType parse(final char code) {
     switch (code) {
       case 'D':
         return DELETED;
