@@ -14,7 +14,7 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.LogMessageComparator;
 import org.sventon.web.command.BaseCommand;
@@ -49,22 +49,22 @@ public final class SearchLogsController extends AbstractTemplateController {
     final String searchString = ServletRequestUtils.getRequiredStringParameter(request, SEARCH_STRING_PARAMETER);
     final String startDir = ServletRequestUtils.getRequiredStringParameter(request, START_DIR_PARAMETER);
 
-    logger.debug("Searching logMessages for: " + searchString + " in path: " + startDir);
+    logger.debug("Searching logs for: " + searchString + " in path: " + startDir);
 
-    final List<LogMessage> logMessages;
+    final List<LogEntry> logEntries;
     if (isRootDir(startDir)) {
-      logMessages = getCache().find(command.getName(), searchString);
+      logEntries = getCache().find(command.getName(), searchString);
     } else {
-      logMessages = getCache().find(command.getName(), searchString, startDir);
+      logEntries = getCache().find(command.getName(), searchString, startDir);
     }
 
     //TODO: Parse to apply Bugtraq links
-    Collections.sort(logMessages, new LogMessageComparator(LogMessageComparator.DESCENDING));
+    Collections.sort(logEntries, new LogMessageComparator(LogMessageComparator.DESCENDING));
 
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put(SEARCH_STRING_PARAMETER, searchString);
     model.put(START_DIR_PARAMETER, startDir);
-    model.put("logMessages", logMessages);
+    model.put("logEntries", logEntries);
     model.put("isLogSearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
   }

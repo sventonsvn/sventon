@@ -12,7 +12,7 @@
 package org.sventon.cache;
 
 import org.sventon.model.CamelCasePattern;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -61,25 +61,25 @@ public interface CacheGateway {
   List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException;
 
   /**
-   * Searches the cached log messages for given string.
+   * Searches the cached log entries for given string.
    *
    * @param repositoryName Repository name
    * @param queryString    String to search for.
-   * @return List of log messages.
+   * @return List of log entries.
    * @throws CacheException if error
    */
-  List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
+  List<LogEntry> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
 
   /**
-   * Searches the cached log messages for given string.
+   * Searches the cached log entries for given string.
    *
    * @param repositoryName Repository name
    * @param queryString    String to search for.
    * @param startDir       Directory/path to start in.
-   * @return List of log messages.
+   * @return List of log entries.
    * @throws CacheException if error
    */
-  List<LogMessage> find(final RepositoryName repositoryName, final String queryString, final String startDir)
+  List<LogEntry> find(final RepositoryName repositoryName, final String queryString, final String startDir)
       throws CacheException;
 
   /**

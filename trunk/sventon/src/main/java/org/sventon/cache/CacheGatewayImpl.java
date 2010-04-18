@@ -19,7 +19,7 @@ import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -101,16 +101,16 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
+  public List<LogEntry> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
     final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
-  
+
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
+  public List<LogEntry> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
     final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString, startDir);

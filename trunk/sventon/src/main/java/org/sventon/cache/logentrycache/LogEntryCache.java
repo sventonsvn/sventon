@@ -12,12 +12,12 @@
 package org.sventon.cache.logentrycache;
 
 import org.sventon.cache.Cache;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 
 import java.util.List;
 
 /**
- * Contains cached log messages.
+ * Contains cached log entries.
  *
  * @author jesper@sventon.org
  */
@@ -29,28 +29,28 @@ public interface LogEntryCache extends Cache {
   void init();
 
   /**
-   * Finds occurrences of given search string among the cached log messages.
+   * Finds occurrences of given search string among the cached log entries.
    *
    * @param queryString Index query string.
-   * @return List of log messages.
+   * @return List of log entries.
    */
-  List<LogMessage> find(final String queryString);
+  List<LogEntry> find(final String queryString);
 
   /**
-   * Finds occurrences of given search string among the cached log messages.
+   * Finds occurrences of given search string among the cached log entries.
    *
    * @param queryString Index query string.
    * @param startDir    Directory/path to start in.
-   * @return List of log messages.
+   * @return List of log entries.
    */
-  List<LogMessage> find(final String queryString, final String startDir);
+  List<LogEntry> find(final String queryString, final String startDir);
 
   /**
-   * Add one log message to the cache.
+   * Add one log entry to the cache.
    *
-   * @param logMessage The log message to cache.
+   * @param logEntry The log entry to cache.
    */
-  void add(final LogMessage... logMessage);
+  void add(final LogEntry... logEntry);
 
   /**
    * Gets the size of the log entry cache, i.e. the number
