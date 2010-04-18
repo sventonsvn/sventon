@@ -159,7 +159,7 @@
 
   <util:list id="cacheManagers">
     <ref local="entryCacheManager"/>
-    <ref local="logMessageCacheManager"/>
+    <ref local="logEntryCacheManager"/>
     <ref local="objectCacheManager"/>
     <ref local="revisionCacheManager"/>
   </util:list>
@@ -167,7 +167,7 @@
   <!-- List of RevisionObservers registered to observe repository changes -->
   <util:list id="observerList">
     <ref local="entryCacheUpdater"/>
-    <ref local="logMessageCacheUpdater"/>
+    <ref local="logEntryCacheUpdater"/>
     <ref local="revisionCacheUpdater"/>
     <!--<ref local="mailNotifier"/>-->
   </util:list>
@@ -207,8 +207,8 @@
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="logMessageCacheUpdater" class="org.sventon.repository.observer.LogMessageCacheUpdater">
-    <constructor-arg ref="logMessageCacheManager"/>
+  <bean id="logEntryCacheUpdater" class="org.sventon.repository.observer.LogEntryCacheUpdater">
+    <constructor-arg ref="logEntryCacheManager"/>
   </bean>
 
   <bean id="revisionCacheManager" class="org.sventon.appl.RevisionCacheManager">
@@ -219,7 +219,7 @@
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logMessageCacheManager" class="org.sventon.appl.LogMessageCacheManager">
+  <bean id="logEntryCacheManager" class="org.sventon.appl.LogEntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 

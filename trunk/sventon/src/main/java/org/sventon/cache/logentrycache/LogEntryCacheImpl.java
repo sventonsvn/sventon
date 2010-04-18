@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logmessagecache;
+package org.sventon.cache.logentrycache;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class LogMessageCacheImpl implements LogMessageCache {
+public final class LogEntryCacheImpl implements LogEntryCache {
 
   /**
    * The logging instance.
@@ -49,7 +49,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    *
    * @param cacheRootDirectory Cache root directory
    */
-  public LogMessageCacheImpl(final File cacheRootDirectory) {
+  public LogEntryCacheImpl(final File cacheRootDirectory) {
     this(cacheRootDirectory, false);
   }
 
@@ -59,7 +59,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    * @param cacheDirectory Cache directory
    * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public LogMessageCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+  public LogEntryCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
     this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }

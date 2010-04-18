@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logmessagecache;
+package org.sventon.cache.logentrycache;
 
 import org.sventon.cache.Cache;
 import org.sventon.model.LogMessage;
@@ -21,10 +21,10 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public interface LogMessageCache extends Cache {
+public interface LogEntryCache extends Cache {
 
   /**
-   * Initializes the log message cache.
+   * Initializes the log entry cache.
    */
   void init();
 
@@ -53,7 +53,7 @@ public interface LogMessageCache extends Cache {
   void add(final LogMessage... logMessage);
 
   /**
-   * Gets the size of the log message cache, i.e. the number
+   * Gets the size of the log entry cache, i.e. the number
    * of cached messages.
    *
    * @return Cache size
