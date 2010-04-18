@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1660] Release 2.1.5 (2010-04-18)
 [1649] Added: Feature #4990 - Logs search should respect startDir.
 [1646] Fixed: Bug #17048 - Error during startup if JSR-250 not supported.
 [1639] Added: Upgraded Compass to version 2.2.0.
