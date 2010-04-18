@@ -17,14 +17,14 @@ import org.apache.commons.logging.LogFactory;
 import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains cached log messages.
+ * Contains cached log entries.
  * This implementation uses <a href="http://lucene.apache.org">Lucene</a> internally.
  *
  * @author jesper@sventon.org
@@ -85,36 +85,36 @@ public final class LogEntryCacheImpl implements LogEntryCache {
         .setSetting("compass.engine.highlighter.default.formatter.simple.pre", "<span class=\"searchhit\">")
         .setSetting("compass.engine.highlighter.default.formatter.simple.post", "</span>")
         .setSetting("compass.engine.queryParser.default.allowConstantScorePrefixQuery", "false")
-        .addClass(LogMessage.class);
+        .addClass(LogEntry.class);
     compass = compassConfiguration.buildCompass();
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final String queryString) {
+  public List<LogEntry> find(final String queryString) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    return template.execute(new CompassCallback<List<LogMessage>>() {
-      public List<LogMessage> doInCompass(CompassSession session) throws CompassException {
+    return template.execute(new CompassCallback<List<LogEntry>>() {
+      public List<LogEntry> doInCompass(CompassSession session) throws CompassException {
         final CompassHits compassHits = session.find(queryString);
-        final List<LogMessage> hits = new ArrayList<LogMessage>(compassHits.length());
+        final List<LogEntry> hits = new ArrayList<LogEntry>(compassHits.length());
         for (int i = 0; i < compassHits.length(); i++) {
-          final LogMessage logMessage = (LogMessage) compassHits.hit(i).getData();
+          final LogEntry logEntry = (LogEntry) compassHits.hit(i).getData();
           compassHits.highlighter(i).fragment("message");
           compassHits.highlighter(i).fragment("author");
           final String highLightedMessage = compassHits.hit(i).getHighlightedText().getHighlightedText("message");
           final String highLightedAuthor = compassHits.hit(i).getHighlightedText().getHighlightedText("author");
           if (isAvailable(highLightedAuthor)) {
-            logMessage.setAuthor(highLightedAuthor);
+            logEntry.setAuthor(highLightedAuthor);
           }
           if (isAvailable(highLightedMessage)) {
-            logMessage.setMessage(highLightedMessage);
+            logEntry.setMessage(highLightedMessage);
           }
-          hits.add(logMessage);
+          hits.add(logEntry);
         }
         return hits;
       }
@@ -122,26 +122,26 @@ public final class LogEntryCacheImpl implements LogEntryCache {
   }
 
   private boolean isAvailable(String text) {
-    return StringUtils.isNotBlank(text) && !text.equals(LogMessage.NOT_AVAILABLE_TAG);
+    return StringUtils.isNotBlank(text) && !text.equals(LogEntry.NOT_AVAILABLE_TAG);
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<LogMessage> find(final String queryString, final String startDir) {
-    final String newQueryString = "message:" + queryString + " paths:" + LogMessage.PATHS_DELIMITER + startDir + "*";
+  public List<LogEntry> find(final String queryString, final String startDir) {
+    final String newQueryString = "message:" + queryString + " paths:" + LogEntry.PATHS_DELIMITER + startDir + "*";
     return find(newQueryString);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void add(final LogMessage... logMessages) {
+  public void add(final LogEntry... logEntries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
-        for (LogMessage logMessage : logMessages) {
-          session.save(logMessage);
+        for (LogEntry logEntry : logEntries) {
+          session.save(logEntry);
         }
       }
     });

@@ -8,7 +8,7 @@ import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.cache.CacheGateway;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.web.command.BaseCommand;
 import static org.sventon.web.ctrl.template.SearchLogsController.SEARCH_STRING_PARAMETER;
@@ -37,8 +37,8 @@ public class SearchLogsControllerTest extends TestCase {
     final SearchLogsController ctrl = new SearchLogsController();
     ctrl.setCacheGateway(mockCache);
 
-    final List<LogMessage> result = new ArrayList<LogMessage>();
-    result.add(new LogMessage(new SVNLogEntry(null, 123, "jesper", new Date(), "Revision 123.")));
+    final List<LogEntry> result = new ArrayList<LogEntry>();
+    result.add(new LogEntry(new SVNLogEntry(null, 123, "jesper", new Date(), "Revision 123.")));
 
     expect(mockCache.find(command.getName(), "abc", "/trunk/")).andStubReturn(result);
     replay(mockCache);
@@ -50,7 +50,7 @@ public class SearchLogsControllerTest extends TestCase {
     assertEquals(4, model.size());
     assertEquals("abc", (String) model.get(SEARCH_STRING_PARAMETER));
     assertEquals("/trunk/", (String) model.get(START_DIR_PARAMETER));
-    assertEquals(result, model.get("logMessages"));
+    assertEquals(result, model.get("logEntries"));
     assertTrue((Boolean) model.get("isLogSearch"));
   }
 }

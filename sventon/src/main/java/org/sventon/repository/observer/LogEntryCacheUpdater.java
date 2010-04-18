@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.LogEntryCacheManager;
 import org.sventon.cache.logentrycache.LogEntryCache;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -81,11 +81,11 @@ public final class LogEntryCacheUpdater extends AbstractRevisionObserver {
    */
   protected void updateInternal(final LogEntryCache logEntryCache, final List<SVNLogEntry> revisions) {
     try {
-      final List<LogMessage> logMessages = new ArrayList<LogMessage>();
+      final List<LogEntry> logEntries = new ArrayList<LogEntry>();
       for (final SVNLogEntry svnLogEntry : revisions) {
-        logMessages.add(new LogMessage(svnLogEntry));
+        logEntries.add(new LogEntry(svnLogEntry));
       }
-      logEntryCache.add(logMessages.toArray(new LogMessage[logMessages.size()]));
+      logEntryCache.add(logEntries.toArray(new LogEntry[logEntries.size()]));
     } catch (Exception ce) {
       LOGGER.error("Unable to update logEntryCache", ce);
     }

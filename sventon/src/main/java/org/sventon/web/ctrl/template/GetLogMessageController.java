@@ -13,7 +13,7 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.model.LogMessage;
+import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
@@ -42,15 +42,16 @@ public final class GetLogMessageController extends AbstractTemplateController {
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    LogMessage logMessage = null;
+    LogEntry logEntry = null;
     try {
       logger.debug("Getting log message from revision [" + command.getRevisionNumber() + "]");
-      final SVNLogEntry logEntry = getRepositoryService().getRevision(command.getName(), repository, command.getRevisionNumber());
-      logMessage = new LogMessage(logEntry); //TODO: Parse to apply Bugtraq link
+      final SVNLogEntry svnLogEntry = getRepositoryService().getRevision(
+          command.getName(), repository, command.getRevisionNumber());
+      logEntry = new LogEntry(svnLogEntry); //TODO: Parse to apply Bugtraq link
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());
     }
-    model.put("logMessage", logMessage);
+    model.put("logEntry", logEntry);
     return new ModelAndView(getViewName(), model);
   }
 }

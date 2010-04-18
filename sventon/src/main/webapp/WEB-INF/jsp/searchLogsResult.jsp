@@ -50,19 +50,19 @@
       <th><spring:message code="revision"/></th>
       <th><spring:message code="logmessage"/></th>
     </tr>
-    <c:forEach items="${logMessages}" var="logMessage">
+    <c:forEach items="${logEntries}" var="logEntry">
       <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-        <c:param name="revision" value="${logMessage.revision}" />
+        <c:param name="revision" value="${logEntry.revision}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td class="sventonColNoWrap">
-          <span onmouseover="Tip('<sventon-ui:age date="${logMessage.date}"/>');">
-            <fmt:formatDate type="both" value="${logMessage.date}" dateStyle="short" timeStyle="short"/>
+          <span onmouseover="Tip('<sventon-ui:age date="${logEntry.date}"/>');">
+            <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>
-        <td>${logMessage.author}</td>
-        <td><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logMessage.revision}</a></td>
-        <td>${fn:replace(logMessage.message, br, '<br>')}</td>
+        <td>${logEntry.author}</td>
+        <td><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logEntry.revision}</a></td>
+        <td>${fn:replace(logEntry.message, br, '<br>')}</td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>
     </c:forEach>
