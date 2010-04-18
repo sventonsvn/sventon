@@ -12,19 +12,19 @@
 package org.sventon.appl;
 
 import org.sventon.cache.CacheException;
-import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
+import org.sventon.cache.logentrycache.LogEntryCache;
+import org.sventon.cache.logentrycache.LogEntryCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
 
 /**
- * Handles LogMessageCache instances.
+ * Handles LogEntryCache instances.
  *
  * @author jesper@sventon.org
  */
-public final class LogMessageCacheManager extends CacheManager<LogMessageCache> {
+public final class LogEntryCacheManager extends CacheManager<LogEntryCache> {
 
   /**
    * Directory where to store cache files.
@@ -37,7 +37,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    *
    * @param configDirectory Root directory to use.
    */
-  public LogMessageCacheManager(final ConfigDirectory configDirectory) {
+  public LogEntryCacheManager(final ConfigDirectory configDirectory) {
     logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
   }
@@ -49,11 +49,11 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  protected LogMessageCache createCache(final RepositoryName repositoryName) throws CacheException {
+  protected LogEntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final LogMessageCache cache = new LogMessageCacheImpl(cacheDirectory, true);
+    final LogEntryCache cache = new LogEntryCacheImpl(cacheDirectory, true);
     cache.init();
     return cache;
   }
@@ -65,7 +65,7 @@ public final class LogMessageCacheManager extends CacheManager<LogMessageCache> 
    */
   @PreDestroy
   public void shutdown() throws CacheException {
-    for (final LogMessageCache cache : caches.values()) {
+    for (final LogEntryCache cache : caches.values()) {
       cache.shutdown();
     }
   }

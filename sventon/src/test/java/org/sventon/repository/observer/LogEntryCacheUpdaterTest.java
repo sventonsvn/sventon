@@ -2,18 +2,18 @@ package org.sventon.repository.observer;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
-import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
+import org.sventon.cache.logentrycache.LogEntryCache;
+import org.sventon.cache.logentrycache.LogEntryCacheImpl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
-public class LogMessageCacheUpdaterTest extends TestCase {
+public class LogEntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final LogMessageCache cache = new LogMessageCacheImpl(new File("test"), false);
+    final LogEntryCache cache = new LogEntryCacheImpl(new File("test"), false);
     cache.init();
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -21,8 +21,8 @@ public class LogMessageCacheUpdaterTest extends TestCase {
     logEntries.add(TestUtils.getLogEntryStub(124, "Log message for revision 124."));
 
     assertEquals(0, cache.getSize());
-    final LogMessageCacheUpdater logMessageCacheUpdater = new LogMessageCacheUpdater(null);
-    logMessageCacheUpdater.updateInternal(cache, logEntries);
+    final LogEntryCacheUpdater logEntryCacheUpdater = new LogEntryCacheUpdater(null);
+    logEntryCacheUpdater.updateInternal(cache, logEntries);
     assertEquals(2, cache.find("revision").size());
   }
 }

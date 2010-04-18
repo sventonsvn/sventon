@@ -1,4 +1,4 @@
-package org.sventon.cache.logmessagecache;
+package org.sventon.cache.logentrycache;
 
 import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LogMessageCacheImplTest extends TestCase {
+public class LogEntryCacheImplTest extends TestCase {
 
-  private LogMessageCacheImpl cache = null;
+  private LogEntryCacheImpl cache = null;
 
   protected void setUp() throws Exception {
-    cache = new LogMessageCacheImpl(new File("test"));
+    cache = new LogEntryCacheImpl(new File("test"));
     cache.init();
   }
 

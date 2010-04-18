@@ -13,10 +13,10 @@ package org.sventon.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.appl.EntryCacheManager;
-import org.sventon.appl.LogMessageCacheManager;
+import org.sventon.appl.LogEntryCacheManager;
 import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.cache.logmessagecache.LogMessageCache;
+import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.LogMessage;
@@ -35,7 +35,7 @@ import java.util.List;
 public final class CacheGatewayImpl implements CacheGateway {
 
   private EntryCacheManager entryCacheManager;
-  private LogMessageCacheManager logMessageCacheManager;
+  private LogEntryCacheManager logEntryCacheManager;
   private RevisionCacheManager revisionCacheManager;
 
   /**
@@ -49,13 +49,13 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   /**
-   * Sets the log message cache manager instance.
+   * Sets the log entry cache manager instance.
    *
-   * @param logMessageCacheManager LogMessageCacheManager instance.
+   * @param logEntryCacheManager LogEntryCacheManager instance.
    */
   @Autowired
-  public void setLogMessageCacheManager(final LogMessageCacheManager logMessageCacheManager) {
-    this.logMessageCacheManager = logMessageCacheManager;
+  public void setLogEntryCacheManager(final LogEntryCacheManager logEntryCacheManager) {
+    this.logEntryCacheManager = logEntryCacheManager;
   }
 
   /**
@@ -102,7 +102,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    * {@inheritDoc}
    */
   public List<LogMessage> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
-    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
+    final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
@@ -111,7 +111,7 @@ public final class CacheGatewayImpl implements CacheGateway {
    * {@inheritDoc}
    */
   public List<LogMessage> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
-    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
+    final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString, startDir);
   }
