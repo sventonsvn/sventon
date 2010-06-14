@@ -20,6 +20,7 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.diff.DiffException;
 import org.sventon.model.AvailableCharsets;
+import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntryComparator;
@@ -232,11 +233,12 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
   }
 
   // If the view is a RedirectView it's model has already been populated
+
   private boolean needModelPopulation(ModelAndView modelAndView) {
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<SVNLogEntry> getLatestRevisions(BaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<LogEntryWrapper> getLatestRevisions(BaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
@@ -249,7 +251,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
         logger.error(svnex.getMessage());
       }
     }
-    return logEntries;
+    return LogEntryWrapper.convert(logEntries);
   }
 
   /**
