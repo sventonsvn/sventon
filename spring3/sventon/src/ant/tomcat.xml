@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<project name="sventon tomcat support" basedir=".">
+  <property file="dev-build.properties"/>
+  <property file="default-dev-build.properties"/>
+
+  <property name="web.dir" value="../../target/svn"/>
+  <property name="name" value="svn"/>
+
+
+  <target name="deploy" description="Deploy application">
+    <echo message="Copying [${web.dir}]"/>
+    <copy todir="${deploy.path}/${name}" preservelastmodified="true">
+      <fileset dir="${web.dir}">
+        <include name="**/*.*"/>
+        <exclude name="**/*Test*"/>
+        <exclude name="**/*Mock*"/>
+        <exclude name="**/*Stub*"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <target name="deployAndRestart" description="Deploy and restart (stop/start) Tomcat" depends="deploy, stop, start">
+    <echo level="info">Re-deploy done.</echo>
+  </target>
+
+
+  <!-- ============================================================== -->
+  <!-- Tomcat tasks - remove these if you don't have Tomcat installed -->
+  <!-- ============================================================== -->
+
+  <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+    <classpath>
+      <path location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
+    <classpath>
+      <path location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
+    <classpath>
+      <path location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef name="start" classname="org.apache.catalina.ant.StartTask">
+    <classpath>
+      <path location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
+    <classpath>
+      <path location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    </classpath>
+  </taskdef>
+
+  <target name="install" description="Install application in Tomcat">
+    <install url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${name}"/>
+  </target>
+
+  <target name="reload" description="Reload application in Tomcat">
+    <reload url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}"/>
+  </target>
+
+  <target name="start" description="Start Tomcat application">
+    <start url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}"/>
+  </target>
+
+  <target name="stop" description="Stop Tomcat application">
+    <stop url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}"/>
+  </target>
+
+  <target name="list" description="List Tomcat applications">
+    <list url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}"/>
+  </target>
+
+  <!-- End Tomcat tasks -->
+
+</project>
