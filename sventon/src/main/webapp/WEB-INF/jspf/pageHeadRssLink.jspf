@@ -11,17 +11,4 @@
  * ====================================================================
  */
 %>
-<%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
-
-<html>
-<head>
-  <%@ include file="/WEB-INF/jspf/pageHead.jspf" %>
-  <title>sventon - error</title>
-</head>
-
-<body>
-  <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
-</body>
-
-<%@ include file="/WEB-INF/jspf/pageFootWithoutRssLink.jspf" %>
-</html>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="${pageContext.request.contextPath}/xml/${command.name}/rss${command.path}?revision=${command.revision}">

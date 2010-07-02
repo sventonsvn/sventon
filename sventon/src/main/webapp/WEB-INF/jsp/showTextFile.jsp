@@ -16,6 +16,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageHeadRssLink.jspf"%>
   <title>Show File - ${command.target}</title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jhighlight.css" >
 </head>

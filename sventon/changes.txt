@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1665] Added: Feature #4464 - Add a base URL config parameter.
 [1662] Fixed: Bug #17263 - Error when clicking on links in recent changes view.
 
 [1660] Release 2.1.5 (2010-04-18)

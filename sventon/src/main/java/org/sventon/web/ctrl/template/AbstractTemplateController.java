@@ -74,12 +74,12 @@ import java.util.Map;
  * Spring framework. If the extending controller is configured in the Spring
  * config file with a validator for the <code>BaseCommand</code> it will be
  * checked for binding errors. If binding errors were detected an exception
- * model will be created an control forwarded to an error view. respectively.
+ * model will be created an control forwarded to an error view respectively.
  * <b>Exception handling</b>
  * <dl>
  * <dt>Authentication exception
  * <dd>If a SVN authentication exception occurs during the call the request
- * will be forwarded to the authenticationfailuare.jsp page.
+ * will be forwarded to the 'authenticationfailure.jsp' page.
  * <dt>Other SVN exceptions
  * <dd>Other SVN exceptions are currently forwarded to a generic error handling
  * page.
@@ -203,6 +203,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
         model.put("maxRevisionsCount", getMaxRevisionsCount());
         model.put("charsets", availableCharsets.getCharsets());
         model.put("userRepositoryContext", repositoryContext);
+        model.put("baseURL", application.getBaseURL());
 
         if (showLatestRevInfo) {
           model.put("revisions", getLatestRevisions(command, repository, repositoryContext, headRevision));

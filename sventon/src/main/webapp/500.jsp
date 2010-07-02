@@ -22,7 +22,7 @@
 <html>
   <head>
     <title>Application Error</title>
-    <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
+    <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
   </head>
   <body>
   <%@ include file="/WEB-INF/jspf/spinner.jspf"%>

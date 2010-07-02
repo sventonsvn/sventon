@@ -14,7 +14,7 @@
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
 <html>
 <head>
-  <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf" %>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf" %>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/config.css">
   <title><spring:message code="window.title.configerror"/></title>
 </head>
