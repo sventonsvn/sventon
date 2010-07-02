@@ -15,7 +15,7 @@
 
 <html>
 <head>
-  <%@ include file="/WEB-INF/jspf/pageHeadWithoutRssLink.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
   <title><spring:message code="window.title.default"/></title>
 </head>
 

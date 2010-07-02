@@ -16,6 +16,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageHeadRssLink.jspf"%>
   <title>Revision information details</title>
 </head>
 

@@ -14,8 +14,15 @@
 <meta name="ROBOTS" content="nofollow">
 <meta name="Googlebot" content="nofollow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<c:choose>
+  <c:when test="${baseURL eq null}">
+    <base href="<%=org.sventon.util.WebUtils.extractBaseURLFromRequest(request)%>">
+  </c:when>
+  <c:otherwise>
+    <base href="${baseURL}">
+  </c:otherwise>
+</c:choose>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/sventon.css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="${pageContext.request.contextPath}/xml/${command.name}/rss${command.path}?revision=${command.revision}">
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
 <link rel="icon" href="${pageContext.request.contextPath}/images/favicon.ico" type="image/x-icon">
 <script language="javascript" type="text/javascript">
@@ -24,4 +31,3 @@
 <script language="javascript" src="${pageContext.request.contextPath}/js/sventon.js" type="text/javascript"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/js/prototype.js" type="text/javascript"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/js/scriptaculous.js?load=effects,dragdrop" type="text/javascript"></script>
-<base href="<%=org.sventon.util.WebUtils.extractBaseURLFromRequest(request)%>">

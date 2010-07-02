@@ -26,7 +26,7 @@ public class ApplicationTest extends TestCase {
       new Application(null, null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException iae) {
-      // exptected
+      // expected
     }
 
     final MockServletContext servletContext = new MockServletContext();
@@ -95,6 +95,25 @@ public class ApplicationTest extends TestCase {
     assertEquals(1, application.getRepositoryCount());
     application.addRepository(config2);
     assertEquals(2, application.getRepositoryCount());
+  }
+
+  public void testGetBaseURL() throws Exception {
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setCreateDirectories(false);
+    configDirectory.setServletContext(servletContext);
+    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+
+    assertNull(application.getBaseURL());
+
+    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "not-a-url");
+    assertNull(application.getBaseURL());
+
+    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "http://validurl");
+    assertEquals("http://validurl/", application.getBaseURL().toString());
+
+    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "http://validurl:81/");
+    assertEquals("http://validurl:81/", application.getBaseURL().toString());
   }
 
   public void testLoadRepositoryConfigurations() throws Exception {

@@ -17,6 +17,7 @@
 <html>
 <head>
   <%@ include file="/WEB-INF/jspf/pageHead.jspf"%>
+  <%@ include file="/WEB-INF/jspf/pageHeadRssLink.jspf"%>
   <title><spring:message code="window.title.default"/> - ${repositoryURL}</title>
 </head>
 <body>

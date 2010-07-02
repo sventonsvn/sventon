@@ -175,7 +175,7 @@
   <!-- NOTE: Make sure to change the parameters below! -->
   <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier">
     <property name="application" ref="application"/>
-    <property name="baseUrl" value="http://yourserver.com/svn/"/>
+    <property name="baseURL" value="http://yourserver.com/svn/"/>
     <property name="host" value="smtp.yourserver.com"/>
     <property name="from" value="sventon@yourserver.com"/>
     <property name="subject" value="@@repositoryName@@ - revision @@revision@@"/>

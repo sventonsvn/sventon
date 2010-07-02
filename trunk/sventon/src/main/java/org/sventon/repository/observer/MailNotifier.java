@@ -95,7 +95,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
   /**
    * Base URL where sventon is located.
    */
-  private String baseUrl;
+  private String baseURL;
 
   /**
    * Executor service.
@@ -180,7 +180,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
     msg.setSubject(formatSubject(subject, logEntry.getRevision(), repositoryName));
 
     msg.setDataHandler(new DataHandler(new ByteArrayDataSource(HTMLCreator.createRevisionDetailBody(
-        mailTemplate, logEntry, baseUrl, repositoryName, dateFormat, null), "text/html")));
+        mailTemplate, logEntry, baseURL, repositoryName, dateFormat, null), "text/html")));
 
     msg.setHeader("X-Mailer", "sventon");
     msg.setSentDate(new Date());
@@ -206,10 +206,10 @@ public final class MailNotifier extends AbstractRevisionObserver {
    * Sets the base URL used when creating HTML anchor links back to
    * the installed sventon application.
    *
-   * @param baseUrl Base URL, eg. http://yourserver.com/svn/.
+   * @param baseURL Base URL, eg. http://yourserver.com/svn/.
    */
-  public void setBaseUrl(final String baseUrl) {
-    this.baseUrl = baseUrl;
+  public void setBaseURL(final String baseURL) {
+    this.baseURL = baseURL;
   }
 
   /**
