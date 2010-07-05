@@ -35,7 +35,7 @@ public final class AnnotatedTextFile {
    */
   private final List<AnnotatedTextFileRow> rows = new ArrayList<AnnotatedTextFileRow>();
 
-  private static final String NEWLINE = System.getProperty("line.separator");
+  private static final String NL = System.getProperty("line.separator");
 
   private final String path;
   private final String encoding;
@@ -94,7 +94,7 @@ public final class AnnotatedTextFile {
 
     final StringBuilder sb = new StringBuilder();
     for (final AnnotatedTextFileRow row : rows) {
-      sb.append(row.getContent()).append(NEWLINE);
+      sb.append(row.getContent()).append(NL);
     }
 
     final String processedContent;
@@ -123,7 +123,7 @@ public final class AnnotatedTextFile {
   public String getContent() {
     final StringBuilder sb = new StringBuilder();
     for (final AnnotatedTextFileRow row : rows) {
-      sb.append(row.getContent()).append(NEWLINE);
+      sb.append(row.getContent()).append(NL);
     }
     return sb.toString();
   }

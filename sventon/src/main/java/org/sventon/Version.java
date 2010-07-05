@@ -34,7 +34,7 @@ public final class Version {
   /**
    * Release version property key.
    */
-  private static final String RELEASE_VERSION_KEY = "svn.release.version";
+  private static final String RELEASE_VERSION_KEY_PROPERTY_KEY = "svn.release.version";
 
   /**
    * Private.
@@ -49,7 +49,7 @@ public final class Version {
    */
   public static String getVersion() {
     assertMappingsLoaded();
-    return VERSION_PROPERTIES.getProperty(RELEASE_VERSION_KEY, "Unknown");
+    return VERSION_PROPERTIES.getProperty(RELEASE_VERSION_KEY_PROPERTY_KEY, "Unknown");
   }
 
   /**

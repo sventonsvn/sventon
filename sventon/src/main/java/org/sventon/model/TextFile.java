@@ -34,6 +34,7 @@ public final class TextFile {
    * The text file rows.
    */
   private final List<TextFileRow> rows = new ArrayList<TextFileRow>();
+  private static final String NL = System.getProperty("line.separator");
 
   /**
    * Constructor.
@@ -90,7 +91,7 @@ public final class TextFile {
   public String getContent() {
     final StringBuilder sb = new StringBuilder();
     for (final TextFileRow row : rows) {
-      sb.append(row.getContent()).append(System.getProperty("line.separator"));
+      sb.append(row.getContent()).append(NL);
     }
     return sb.toString();
   }

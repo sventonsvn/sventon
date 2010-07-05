@@ -26,7 +26,7 @@ import java.io.File;
  */
 public class ConfigDirectory implements ServletContextAware {
 
-  public static final String SVENTON_DIR_SYSTEM_PROPERTY_KEY = "sventon.dir";
+  public static final String PROPERTY_KEY_SVENTON_DIR_SYSTEM = "sventon.dir";
 
   /**
    * The logging instance.
@@ -38,7 +38,7 @@ public class ConfigDirectory implements ServletContextAware {
    */
   private ServletContext servletContext;
 
-  private final String sventonDirProperty = System.getProperty(SVENTON_DIR_SYSTEM_PROPERTY_KEY);
+  private final String sventonDirProperty = System.getProperty(PROPERTY_KEY_SVENTON_DIR_SYSTEM);
   private final String exportDirectoryName;
   private final String repositoriesDirectoryName;
 
