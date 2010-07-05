@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
+import org.compass.core.lucene.LuceneEnvironment;
 import org.sventon.cache.CacheException;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.RepositoryEntry;
@@ -60,6 +61,10 @@ public final class EntryCacheImpl implements EntryCache {
 
   private final boolean useDiskStore;
 
+  private static final String PROPERTY_KEY_MAX_CLAUSE_COUNT = "sventon.maxClauseCount";
+
+  private static final int MAX_CLAUSE_DEFAULT_COUNT = 1024;
+
   /**
    * Constructs an in-memory cache instance.
    *
@@ -96,6 +101,8 @@ public final class EntryCacheImpl implements EntryCache {
         .setSetting(CompassEnvironment.DEBUG, String.valueOf(true))
         .setSetting(CompassEnvironment.NAME, cacheDirectory.getParent())
         .setSetting("compass.engine.queryParser.default.type", CustomizedLuceneQueryParser.class.getName())
+        .setSetting(LuceneEnvironment.Query.MAX_CLAUSE_COUNT, System.getProperty(PROPERTY_KEY_MAX_CLAUSE_COUNT,
+            Integer.toString(MAX_CLAUSE_DEFAULT_COUNT)))
         .addClass(RepositoryEntry.class);
     compass = compassConfiguration.buildCompass();
     latestCachedRevisionFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
