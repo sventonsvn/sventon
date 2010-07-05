@@ -3,6 +3,7 @@ package org.sventon.rss;
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.TestUtils;
 import org.sventon.appl.RepositoryConfiguration;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -56,7 +57,7 @@ public class RssFeedGeneratorTest extends TestCase {
     if (tempFile.exists()) {
       tempFile.delete();
     } else {
-      fail("No rss feed file was created in " + System.getProperty("java.io.tmpdir"));
+      fail("No rss feed file was created in " + TestUtils.TEMP_DIR);
     }
   }
 

@@ -2,7 +2,7 @@ package org.sventon.util;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
-import static org.sventon.util.WebUtils.BR;
+import static org.sventon.util.WebUtils.NL;
 
 public class WebUtilsTest extends TestCase {
 
@@ -23,22 +23,22 @@ public class WebUtilsTest extends TestCase {
 
   public void testReplaceLeadingSpacesMultiline() throws Exception {
     String line = " one " +
-        BR + "  two  " +
-        BR + "          " +
-        BR + " three  four" + BR;
+        NL + "  two  " +
+        NL + "          " +
+        NL + " three  four" + NL;
 
     String expected = "&nbsp;one " +
-        BR + "&nbsp;&nbsp;two  " +
-        BR + "          " +
-        BR + "&nbsp;three  four" + BR;
+        NL + "&nbsp;&nbsp;two  " +
+        NL + "          " +
+        NL + "&nbsp;three  four" + NL;
 
     assertEquals(expected, WebUtils.replaceLeadingSpaces(line));
 
-    line = BR + " one " +
-        BR + "  two  ";
+    line = NL + " one " +
+        NL + "  two  ";
 
-    expected = BR + "&nbsp;one " +
-        BR + "&nbsp;&nbsp;two  " + BR;
+    expected = NL + "&nbsp;one " +
+        NL + "&nbsp;&nbsp;two  " + NL;
 
     assertEquals(expected, WebUtils.replaceLeadingSpaces(line));
   }

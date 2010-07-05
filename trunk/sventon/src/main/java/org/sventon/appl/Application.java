@@ -88,7 +88,7 @@ public final class Application {
   /**
    * System property, sventon.baseURL, used to set a base property for relative URL:s.
    */
-  public static final String SVENTON_BASE_URL_PROPERTY_KEY = "sventon.baseURL";
+  public static final String PROPERTY_KEY_SVENTON_BASE_URL = "sventon.baseURL";
 
   /**
    * Constructor.
@@ -119,7 +119,7 @@ public final class Application {
     initCaches();
     final URL baseURL = getBaseURL();
     if (baseURL != null) {
-      logger.info("Property [" + SVENTON_BASE_URL_PROPERTY_KEY + "] set to: " + baseURL);
+      logger.info("Property [" + PROPERTY_KEY_SVENTON_BASE_URL + "] set to: " + baseURL);
     }
   }
 
@@ -412,7 +412,7 @@ public final class Application {
    * @return The base URL or null if property <tt>sventon.baseURL</tt> was not set.
    */
   public URL getBaseURL() {
-    String baseURL = StringUtils.trimToEmpty(System.getProperty(SVENTON_BASE_URL_PROPERTY_KEY));
+    String baseURL = StringUtils.trimToEmpty(System.getProperty(PROPERTY_KEY_SVENTON_BASE_URL));
     if (!baseURL.isEmpty()) {
       if (!baseURL.endsWith("/")) {
         baseURL = baseURL + "/";
@@ -420,7 +420,7 @@ public final class Application {
       try {
         return new URL(baseURL);
       } catch (MalformedURLException e) {
-        logger.warn("Value of property '" + SVENTON_BASE_URL_PROPERTY_KEY + "' is not a valid URL: " + e.getMessage());
+        logger.warn("Value of property '" + PROPERTY_KEY_SVENTON_BASE_URL + "' is not a valid URL: " + e.getMessage());
       }
     }
     return null;

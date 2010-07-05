@@ -106,13 +106,13 @@ public class ApplicationTest extends TestCase {
 
     assertNull(application.getBaseURL());
 
-    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "not-a-url");
+    System.setProperty(Application.PROPERTY_KEY_SVENTON_BASE_URL, "not-a-url");
     assertNull(application.getBaseURL());
 
-    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "http://validurl");
+    System.setProperty(Application.PROPERTY_KEY_SVENTON_BASE_URL, "http://validurl");
     assertEquals("http://validurl/", application.getBaseURL().toString());
 
-    System.setProperty(Application.SVENTON_BASE_URL_PROPERTY_KEY, "http://validurl:81/");
+    System.setProperty(Application.PROPERTY_KEY_SVENTON_BASE_URL, "http://validurl:81/");
     assertEquals("http://validurl:81/", application.getBaseURL().toString());
   }
 

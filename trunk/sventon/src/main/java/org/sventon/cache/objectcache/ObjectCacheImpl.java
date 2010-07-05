@@ -76,7 +76,7 @@ public final class ObjectCacheImpl implements ObjectCache {
                          final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
       final String cacheDiskStorePath = diskStorePath != null ? diskStorePath :
-          ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY;
+          ConfigDirectory.PROPERTY_KEY_SVENTON_DIR_SYSTEM;
       cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, null,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
       cacheManager = new CacheManager(createConfiguration(cacheDiskStorePath));

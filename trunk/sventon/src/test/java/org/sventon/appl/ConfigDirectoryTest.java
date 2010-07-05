@@ -2,12 +2,13 @@ package org.sventon.appl;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
+import org.sventon.TestUtils;
 
 import java.io.File;
 
 public class ConfigDirectoryTest extends TestCase {
 
-  private static final File TEMP_DIR = new File(System.getProperty("java.io.tmpdir"));
+  private static final File TEMP_DIR = new File(TestUtils.TEMP_DIR);
   private static final String SEPARATOR = System.getProperty("file.separator");
 
   private static final String SERVLET_CONTEXT_PATH = "svn";
@@ -52,7 +53,7 @@ public class ConfigDirectoryTest extends TestCase {
   }
 
   public void testDirectoryOverrideBySettingSystemProperty() throws Exception {
-    System.setProperty(ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY, SEPARATOR + "override");
+    System.setProperty(ConfigDirectory.PROPERTY_KEY_SVENTON_DIR_SYSTEM, SEPARATOR + "override");
 
     final ConfigDirectory configDir = new ConfigDirectory(TEMP_DIR, EXPORT_DIR, REPOSITORIES_DIR);
     configDir.setCreateDirectories(false);
@@ -65,6 +66,6 @@ public class ConfigDirectoryTest extends TestCase {
     assertTrue(path.contains(SEPARATOR + "override" + SEPARATOR));
     assertTrue(path.endsWith(SERVLET_CONTEXT_PATH));
 
-    System.clearProperty(ConfigDirectory.SVENTON_DIR_SYSTEM_PROPERTY_KEY);
+    System.clearProperty(ConfigDirectory.PROPERTY_KEY_SVENTON_DIR_SYSTEM);
   }
 }

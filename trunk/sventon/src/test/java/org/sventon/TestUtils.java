@@ -9,7 +9,7 @@ import java.util.*;
 
 public final class TestUtils {
 
-  public static final String TEMPDIR = System.getProperty("java.io.tmpdir");
+  public static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
   public static final String CONFIG_FILE_NAME = "sventon_config.properties";
 
   private static final Map<String, SVNLogEntryPath> ONE_CHANED_PATH = new HashMap<String, SVNLogEntryPath>();
@@ -22,7 +22,7 @@ public final class TestUtils {
   }
 
   public static ConfigDirectory getTestConfigDirectory() {
-    return new ConfigDirectory(new File(TEMPDIR), "export_temp", "repositories");
+    return new ConfigDirectory(new File(TEMP_DIR), "export_temp", "repositories");
   }
 
   public static SVNLogEntry getLogEntryStub() {

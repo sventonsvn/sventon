@@ -32,7 +32,7 @@ public final class WebUtils {
    */
   public static final String CONTENT_DISPOSITION_HEADER = "Content-disposition";
 
-  public static final String BR = System.getProperty("line.separator");
+  public static final String NL = System.getProperty("line.separator");
   public static final String NBSP = "&nbsp;";
   public static final Pattern NL_REGEXP = Pattern.compile("(\r\n|\r|\n|\n\r)");
 
@@ -83,7 +83,7 @@ public final class WebUtils {
       }
       // Make sure to only append NEWLINE when multiple lines.
       if (lines.length > 1) {
-        sb.append(BR);
+        sb.append(NL);
       }
     }
     return sb.toString();

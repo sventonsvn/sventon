@@ -26,7 +26,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   private static final String ENCODING = "UTF-8";
 
-  private static final String BR = System.getProperty("line.separator");
+  private static final String NL = System.getProperty("line.separator");
 
   private SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
 
@@ -138,8 +138,8 @@ public class RepositoryServiceImplTest extends TestCase {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String leftFileContents = "test left file contents" + BR;
-        final String rightFileContents = "test right file contents" + BR;
+        final String leftFileContents = "test left file contents" + NL;
+        final String rightFileContents = "test right file contents" + NL;
         if (contents != null) {
           try {
             if (firstTime) {
@@ -171,7 +171,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     final String s = service.diffUnified(repository, command, SVNRevision.UNDEFINED, ENCODING);
-    assertEquals("@@ -1 +1 @@" + BR + "-test left file contents" + BR + "+test right file contents", s.trim());
+    assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
   }
 
   public void testDiffInline() throws Exception {
@@ -181,15 +181,15 @@ public class RepositoryServiceImplTest extends TestCase {
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
         final String leftFileContents =
-            "row one" + BR +
-                "row two" + BR +
-                "test left file contents" + BR +
-                "last row" + BR;
+            "row one" + NL +
+                "row two" + NL +
+                "test left file contents" + NL +
+                "last row" + NL;
 
         final String rightFileContents =
-            "row one" + BR +
-                "test right file contents" + BR +
-                "last row" + BR;
+            "row one" + NL +
+                "test right file contents" + NL +
+                "last row" + NL;
 
         if (contents != null) {
           try {
@@ -575,8 +575,8 @@ public class RepositoryServiceImplTest extends TestCase {
   public static class TestSVNRepositoryStub extends SVNRepositoryStub {
 
     private boolean first = true;
-    public String leftFileContents = "test left file contents" + BR;
-    public String rightFileContents = "test right file contents" + BR;
+    public String leftFileContents = "test left file contents" + NL;
+    public String rightFileContents = "test right file contents" + NL;
 
     @Override
     public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {

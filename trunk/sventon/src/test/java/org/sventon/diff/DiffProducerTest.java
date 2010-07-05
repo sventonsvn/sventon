@@ -17,42 +17,42 @@ import java.util.Map;
 
 public class DiffProducerTest extends TestCase {
 
-  public static final String LINE_BREAK = System.getProperty("line.separator");
+  public static final String NL = System.getProperty("line.separator");
 
   public void testDoNormalDiff() throws Exception {
     final String leftString =
-        "[.ShellClassInfo]" + LINE_BREAK +
-            "IconIndex=-238" + LINE_BREAK +
-            "[DeleteOnCopy]" + LINE_BREAK +
-            "Owner=Jesper" + LINE_BREAK +
-            "Owner=Patrik&Jesper" + LINE_BREAK +
-            "Personalized=14" + LINE_BREAK +
-            "PersonalizedName=Mina videoklipp" + LINE_BREAK;
+        "[.ShellClassInfo]" + NL +
+            "IconIndex=-238" + NL +
+            "[DeleteOnCopy]" + NL +
+            "Owner=Jesper" + NL +
+            "Owner=Patrik&Jesper" + NL +
+            "Personalized=14" + NL +
+            "PersonalizedName=Mina videoklipp" + NL;
 
     final String rightString =
-        "[.ShellClassInfo]" + LINE_BREAK +
-            "IconIndex=-2388" + LINE_BREAK +
-            "[DeleteOnCopy]" + LINE_BREAK +
-            "Owner=Jesper" + LINE_BREAK +
-            "Owner=Patrik&Jesper" + LINE_BREAK +
-            "Personalized=14" + LINE_BREAK +
-            "PersonalizedName=Mina videoklipp" + LINE_BREAK +
-            "OneMore=true" + LINE_BREAK +
-            "OneMore=1" + LINE_BREAK +
-            "OneMore=2" + LINE_BREAK +
-            "OneMore=3" + LINE_BREAK + LINE_BREAK;
+        "[.ShellClassInfo]" + NL +
+            "IconIndex=-2388" + NL +
+            "[DeleteOnCopy]" + NL +
+            "Owner=Jesper" + NL +
+            "Owner=Patrik&Jesper" + NL +
+            "Personalized=14" + NL +
+            "PersonalizedName=Mina videoklipp" + NL +
+            "OneMore=true" + NL +
+            "OneMore=1" + NL +
+            "OneMore=2" + NL +
+            "OneMore=3" + NL + NL;
 
     final String result =
-        "2c2" + LINE_BREAK +
-            "<IconIndex=-2388" + LINE_BREAK +
-            "---" + LINE_BREAK +
-            ">IconIndex=-238" + LINE_BREAK +
-            "8a8,12" + LINE_BREAK +
-            ">OneMore=true" + LINE_BREAK +
-            ">OneMore=1" + LINE_BREAK +
-            ">OneMore=2" + LINE_BREAK +
-            ">OneMore=3" + LINE_BREAK +
-            ">" + LINE_BREAK;
+        "2c2" + NL +
+            "<IconIndex=-2388" + NL +
+            "---" + NL +
+            ">IconIndex=-238" + NL +
+            "8a8,12" + NL +
+            ">OneMore=true" + NL +
+            ">OneMore=1" + NL +
+            ">OneMore=2" + NL +
+            ">OneMore=3" + NL +
+            ">" + NL;
 
     final InputStream left = IOUtils.toInputStream(leftString);
     final InputStream right = IOUtils.toInputStream(rightString);
@@ -82,62 +82,62 @@ public class DiffProducerTest extends TestCase {
 
   public void testDoNormalDiffII() throws Exception {
     final String leftString =
-        "/**" + LINE_BREAK +
-            " * $Author$" + LINE_BREAK +
-            " * $Revision$" + LINE_BREAK +
-            " * $Date:$" + LINE_BREAK +
-            " */" + LINE_BREAK +
-            "Test1" + LINE_BREAK +
-            "Another test!" + LINE_BREAK +
-            "More!" + LINE_BREAK +
-            "Even more!" + LINE_BREAK;
+        "/**" + NL +
+            " * $Author$" + NL +
+            " * $Revision$" + NL +
+            " * $Date:$" + NL +
+            " */" + NL +
+            "Test1" + NL +
+            "Another test!" + NL +
+            "More!" + NL +
+            "Even more!" + NL;
 
     final String rightString =
-        "/**" + LINE_BREAK +
-            " * $Id$" + LINE_BREAK +
-            " * $LastChangedDate$" + LINE_BREAK +
-            " * $Date$" + LINE_BREAK +
-            " * $LastChangedRevision$" + LINE_BREAK +
-            " * $Revision$" + LINE_BREAK +
-            " * $Rev$" + LINE_BREAK +
-            " * $LastChangedBy$" + LINE_BREAK +
-            " * $Author$" + LINE_BREAK +
-            " * $HeadURL$" + LINE_BREAK +
-            " * $URL$" + LINE_BREAK +
-            " * $Id$" + LINE_BREAK +
-            " */" + LINE_BREAK +
-            "Test1" + LINE_BREAK +
-            "Another test!" + LINE_BREAK +
-            "More!" + LINE_BREAK +
-            "Even more!" + LINE_BREAK +
-            LINE_BREAK +
-            "public String getRev {" + LINE_BREAK +
-            " return \"$Rev$\";" + LINE_BREAK +
-            LINE_BREAK +
-            "}" + LINE_BREAK;
+        "/**" + NL +
+            " * $Id$" + NL +
+            " * $LastChangedDate$" + NL +
+            " * $Date$" + NL +
+            " * $LastChangedRevision$" + NL +
+            " * $Revision$" + NL +
+            " * $Rev$" + NL +
+            " * $LastChangedBy$" + NL +
+            " * $Author$" + NL +
+            " * $HeadURL$" + NL +
+            " * $URL$" + NL +
+            " * $Id$" + NL +
+            " */" + NL +
+            "Test1" + NL +
+            "Another test!" + NL +
+            "More!" + NL +
+            "Even more!" + NL +
+            NL +
+            "public String getRev {" + NL +
+            " return \"$Rev$\";" + NL +
+            NL +
+            "}" + NL;
 
     final String result =
-        "2,8d2" + LINE_BREAK +
-            "< * $Id$" + LINE_BREAK +
-            "< * $LastChangedDate$" + LINE_BREAK +
-            "< * $Date$" + LINE_BREAK +
-            "< * $LastChangedRevision$" + LINE_BREAK +
-            "< * $Revision$" + LINE_BREAK +
-            "< * $Rev$" + LINE_BREAK +
-            "< * $LastChangedBy$" + LINE_BREAK +
-            "3,4c10,12" + LINE_BREAK +
-            "< * $Revision$" + LINE_BREAK +
-            "< * $Date:$" + LINE_BREAK +
-            "---" + LINE_BREAK +
-            "> * $HeadURL$" + LINE_BREAK +
-            "> * $URL$" + LINE_BREAK +
-            "> * $Id$" + LINE_BREAK +
-            "18,22d10" + LINE_BREAK +
-            "<" + LINE_BREAK +
-            "<public String getRev {" + LINE_BREAK +
-            "< return \"$Rev$\";" + LINE_BREAK +
-            "<" + LINE_BREAK +
-            "<}" + LINE_BREAK;
+        "2,8d2" + NL +
+            "< * $Id$" + NL +
+            "< * $LastChangedDate$" + NL +
+            "< * $Date$" + NL +
+            "< * $LastChangedRevision$" + NL +
+            "< * $Revision$" + NL +
+            "< * $Rev$" + NL +
+            "< * $LastChangedBy$" + NL +
+            "3,4c10,12" + NL +
+            "< * $Revision$" + NL +
+            "< * $Date:$" + NL +
+            "---" + NL +
+            "> * $HeadURL$" + NL +
+            "> * $URL$" + NL +
+            "> * $Id$" + NL +
+            "18,22d10" + NL +
+            "<" + NL +
+            "<public String getRev {" + NL +
+            "< return \"$Rev$\";" + NL +
+            "<" + NL +
+            "<}" + NL;
 
     final InputStream left = IOUtils.toInputStream(leftString);
     final InputStream right = IOUtils.toInputStream(rightString);
@@ -173,9 +173,9 @@ public class DiffProducerTest extends TestCase {
   }
 
   public void testDoNormalDiffIII() throws Exception {
-    final String leftString = LINE_BREAK + "test" + LINE_BREAK;
-    final String rightString = "test" + LINE_BREAK;
-    final String result = "1d1" + LINE_BREAK + "<" + LINE_BREAK;
+    final String leftString = NL + "test" + NL;
+    final String rightString = "test" + NL;
+    final String result = "1d1" + NL + "<" + NL;
 
     final InputStream left = new ByteArrayInputStream(leftString.getBytes());
     final InputStream right = new ByteArrayInputStream(rightString.getBytes());
@@ -188,12 +188,12 @@ public class DiffProducerTest extends TestCase {
 
   public void testDoNormalDiffNoDiff() throws Exception {
     final String leftString =
-        "More!" + LINE_BREAK +
-            "Even more!" + LINE_BREAK;
+        "More!" + NL +
+            "Even more!" + NL;
 
     final String rightString =
-        "More!" + LINE_BREAK +
-            "Even more!" + LINE_BREAK;
+        "More!" + NL +
+            "Even more!" + NL;
 
     final InputStream left = IOUtils.toInputStream(leftString);
     final InputStream right = IOUtils.toInputStream(rightString);
@@ -206,37 +206,37 @@ public class DiffProducerTest extends TestCase {
 
   public void testDoUnifiedDiffNoGutter() throws Exception {
     final String leftString =
-        "[.ShellClassInfo]" + LINE_BREAK +
-            "IconIndex=-238" + LINE_BREAK +
-            "[DeleteOnCopy]" + LINE_BREAK +
-            "Owner=Jesper" + LINE_BREAK +
-            "Owner=Patrik&Jesper" + LINE_BREAK +
-            "Personalized=14" + LINE_BREAK +
-            "PersonalizedName=Mina videoklipp" + LINE_BREAK;
+        "[.ShellClassInfo]" + NL +
+            "IconIndex=-238" + NL +
+            "[DeleteOnCopy]" + NL +
+            "Owner=Jesper" + NL +
+            "Owner=Patrik&Jesper" + NL +
+            "Personalized=14" + NL +
+            "PersonalizedName=Mina videoklipp" + NL;
 
     final String rightString =
-        "[.ShellClassInfo]" + LINE_BREAK +
-            "IconIndex=-2388" + LINE_BREAK +
-            "[DeleteOnCopy]" + LINE_BREAK +
-            "Owner=Jesper" + LINE_BREAK +
-            "Owner=Patrik&Jesper" + LINE_BREAK +
-            "Personalized=14" + LINE_BREAK +
-            "PersonalizedName=Mina videoklipp" + LINE_BREAK +
-            "OneMore=true" + LINE_BREAK +
-            "OneMore=1" + LINE_BREAK +
-            "OneMore=2" + LINE_BREAK +
-            "OneMore=3" + LINE_BREAK + LINE_BREAK;
+        "[.ShellClassInfo]" + NL +
+            "IconIndex=-2388" + NL +
+            "[DeleteOnCopy]" + NL +
+            "Owner=Jesper" + NL +
+            "Owner=Patrik&Jesper" + NL +
+            "Personalized=14" + NL +
+            "PersonalizedName=Mina videoklipp" + NL +
+            "OneMore=true" + NL +
+            "OneMore=1" + NL +
+            "OneMore=2" + NL +
+            "OneMore=3" + NL + NL;
 
     final String result =
-        "@@ -2 +2 @@" + LINE_BREAK +
-            "-IconIndex=-238" + LINE_BREAK +
-            "+IconIndex=-2388" + LINE_BREAK +
-            "@@ -8 +8,5 @@" + LINE_BREAK +
-            "+OneMore=true" + LINE_BREAK +
-            "+OneMore=1" + LINE_BREAK +
-            "+OneMore=2" + LINE_BREAK +
-            "+OneMore=3" + LINE_BREAK +
-            "+" + LINE_BREAK;
+        "@@ -2 +2 @@" + NL +
+            "-IconIndex=-238" + NL +
+            "+IconIndex=-2388" + NL +
+            "@@ -8 +8,5 @@" + NL +
+            "+OneMore=true" + NL +
+            "+OneMore=1" + NL +
+            "+OneMore=2" + NL +
+            "+OneMore=3" + NL +
+            "+" + NL;
 
 
     final InputStream left = IOUtils.toInputStream(leftString);
