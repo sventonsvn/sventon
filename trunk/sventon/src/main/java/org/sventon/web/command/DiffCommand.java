@@ -153,25 +153,16 @@ public final class DiffCommand extends BaseCommand {
     return toFileRevision != null ? SVNRevision.create(toFileRevision.getRevision()) : SVNRevision.UNDEFINED;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder();
@@ -203,6 +194,7 @@ public final class DiffCommand extends BaseCommand {
   }
 
   private static class FileRevisionComparator implements Comparator<SVNFileRevision> {
+    @Override
     public int compare(SVNFileRevision o1, SVNFileRevision o2) {
       return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
     }

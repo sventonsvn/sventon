@@ -47,9 +47,6 @@ public final class SearchHitDecoratorTag extends TagSupport {
    */
   private String text;
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int doStartTag() throws JspException {
     try {

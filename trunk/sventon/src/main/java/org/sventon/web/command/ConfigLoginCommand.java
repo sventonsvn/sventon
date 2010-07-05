@@ -46,9 +46,6 @@ public final class ConfigLoginCommand {
     this.userPassword = userPassword;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

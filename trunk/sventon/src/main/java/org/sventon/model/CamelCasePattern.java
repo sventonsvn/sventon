@@ -47,9 +47,6 @@ public final class CamelCasePattern {
     return pattern;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return pattern;

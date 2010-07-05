@@ -48,9 +48,6 @@ public final class BlameController extends AbstractTemplateController {
     this.colorer = colorer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,

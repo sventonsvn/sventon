@@ -84,17 +84,11 @@ public final class RevisionUpdate {
     return clearCacheBeforeUpdate;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public boolean equals(final Object o) {
     return EqualsBuilder.reflectionEquals(this, o);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);

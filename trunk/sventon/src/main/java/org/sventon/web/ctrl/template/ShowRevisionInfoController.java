@@ -31,9 +31,7 @@ import java.util.Map;
  */
 public final class ShowRevisionInfoController extends AbstractTemplateController {
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

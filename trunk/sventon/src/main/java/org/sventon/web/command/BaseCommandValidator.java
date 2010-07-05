@@ -22,16 +22,12 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
  */
 public final class BaseCommandValidator implements Validator {
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean supports(final Class clazz) {
     return BaseCommand.class.isAssignableFrom(clazz);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void validate(final Object target, final Errors errors) {
     final BaseCommand command = (BaseCommand) target;
 

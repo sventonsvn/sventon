@@ -61,8 +61,6 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
   }
 
   /**
-   * {@inheritDoc}
-   * <p/>
    * If the instance is configured to use the cache, and the cache is not
    * currently busy updating, a cached log entry instance will be returned.
    */
@@ -81,8 +79,6 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
   }
 
   /**
-   * {@inheritDoc}
-   * <p/>
    * If the instance is configured to use the cache, and the cache is not
    * currently busy updating, a cached log entry instance will be returned.
    */

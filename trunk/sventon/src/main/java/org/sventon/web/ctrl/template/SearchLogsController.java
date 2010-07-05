@@ -38,9 +38,7 @@ public final class SearchLogsController extends AbstractTemplateController {
 
   public static final String START_DIR_PARAMETER = "startDir";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

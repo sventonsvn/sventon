@@ -37,9 +37,6 @@ public final class ByteFormatterTag extends TagSupport {
    */
   private Locale locale;
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int doStartTag() throws JspException {
     if (size > 0) {

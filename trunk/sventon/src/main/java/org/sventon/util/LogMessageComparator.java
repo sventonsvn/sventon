@@ -61,9 +61,7 @@ public final class LogMessageComparator implements Comparator<LogEntry>, Seriali
     this.sortType = sortType;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int compare(final LogEntry message1, final LogEntry message2) {
     final long revision1 = message1.getRevision();
     final long revision2 = message2.getRevision();

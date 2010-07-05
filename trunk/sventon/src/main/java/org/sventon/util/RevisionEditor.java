@@ -22,17 +22,11 @@ import java.beans.PropertyEditorSupport;
  */
 public class RevisionEditor extends PropertyEditorSupport {
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void setAsText(final String text) {
     setValue(SVNRevision.parse(text));
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String getAsText() {
     return super.getValue().toString();

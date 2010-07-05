@@ -49,9 +49,7 @@ public final class ExportController extends AbstractTemplateController {
     this.exportExecutor = exportExecutor;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

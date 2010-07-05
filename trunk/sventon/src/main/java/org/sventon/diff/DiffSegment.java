@@ -106,9 +106,6 @@ final class DiffSegment {
     return segmentSides.get(side).getEnd();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return "DiffSegment: " + action

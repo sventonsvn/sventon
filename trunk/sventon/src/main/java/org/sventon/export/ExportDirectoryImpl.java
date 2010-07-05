@@ -82,9 +82,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
     uuid = UUID.randomUUID();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public File compress() throws IOException {
     final File zipFile = new File(exportDirectory.getParentFile(), createTempFilename(new Date()));
 
@@ -104,37 +102,26 @@ public final class ExportDirectoryImpl implements ExportDirectory {
     return repositoryName + "-" + new SimpleDateFormat(DATE_FORMAT_PATTERN).format(date) + ".zip";
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public File getDirectory() {
     return exportDirectory;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void delete() throws IOException {
     FileUtils.forceDelete(exportDirectory);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public UUID getUUID() {
     return uuid;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean mkdirs() {
     return exportDirectory.mkdirs();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return "ExportDirectory{" +

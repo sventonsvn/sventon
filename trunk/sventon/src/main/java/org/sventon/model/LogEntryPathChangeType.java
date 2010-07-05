@@ -104,9 +104,7 @@ public enum LogEntryPathChangeType {
     return code;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public String toString() {
     return action;
   }

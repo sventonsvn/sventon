@@ -145,9 +145,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   public static final long FIRST_REVISION = 1;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                    final Object cmd, final BindException errors) {
 

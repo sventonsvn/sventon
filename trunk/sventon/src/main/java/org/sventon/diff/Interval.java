@@ -57,9 +57,6 @@ final class Interval {
     return end;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return start + "-" + end;

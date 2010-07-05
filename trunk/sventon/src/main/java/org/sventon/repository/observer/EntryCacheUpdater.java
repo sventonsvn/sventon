@@ -461,9 +461,6 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
       this.flushThreshold = flushThreshold;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void add(RepositoryEntry... e) {
       super.add(e);

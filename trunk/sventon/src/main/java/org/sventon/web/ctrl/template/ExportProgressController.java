@@ -46,10 +46,7 @@ public final class ExportProgressController extends AbstractTemplateController {
     this.exportExecutor = exportExecutor;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

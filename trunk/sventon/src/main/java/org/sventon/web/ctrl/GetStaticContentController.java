@@ -35,9 +35,7 @@ public final class GetStaticContentController extends AbstractController {
    */
   private String path;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
     final String filename = ServletRequestUtils.getRequiredStringParameter(request, "id");
     final File file = new File(path, filename + ".html");

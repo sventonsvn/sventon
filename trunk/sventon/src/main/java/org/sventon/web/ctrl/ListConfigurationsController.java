@@ -42,9 +42,6 @@ public final class ListConfigurationsController extends AbstractController {
     this.application = application;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {

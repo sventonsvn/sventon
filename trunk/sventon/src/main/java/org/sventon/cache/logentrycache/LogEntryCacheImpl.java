@@ -64,9 +64,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     this.useDiskStore = useDiskStore;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void init() {
     final String connectionString;
 
@@ -89,9 +87,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     compass = compassConfiguration.buildCompass();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public List<LogEntry> find(final String queryString) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
@@ -125,17 +121,13 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     return StringUtils.isNotBlank(text) && !text.equals(LogEntry.NOT_AVAILABLE_TAG);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public List<LogEntry> find(final String queryString, final String startDir) {
     final String newQueryString = "message:" + queryString + " paths:" + LogEntry.PATHS_DELIMITER + startDir + "*";
     return find(newQueryString);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void add(final LogEntry... logEntries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -147,9 +139,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
@@ -160,9 +150,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -172,9 +160,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void shutdown() {
     compass.close();
   }

@@ -45,9 +45,6 @@ public final class ConfigurationFormController extends SimpleFormController {
     this.application = application;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -55,9 +52,6 @@ public final class ConfigurationFormController extends SimpleFormController {
     return model;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected ModelAndView onSubmit(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object command, final BindException errors) throws Exception {

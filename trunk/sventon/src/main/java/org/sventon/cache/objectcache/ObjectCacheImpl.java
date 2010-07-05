@@ -117,18 +117,14 @@ public final class ObjectCacheImpl implements ObjectCache {
     this.mBeanServer = mBeanServer;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void put(final Object cacheKey, final Object value) {
     Validate.notNull(cacheKey, "Cache key cannot be null");
     final Element element = new Element(cacheKey.toString(), (Serializable) value);
     cache.put(element);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object get(final Object cacheKey) {
     Validate.notNull(cacheKey, "Cache key cannot be null");
     final String key = cacheKey.toString();
@@ -141,16 +137,12 @@ public final class ObjectCacheImpl implements ObjectCache {
     return element != null ? element.getValue() : null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void flush() {
     cache.flush();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void shutdown() throws CacheException {
     try {
       cacheManager.shutdown();

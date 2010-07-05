@@ -60,9 +60,6 @@ public final class TextFileRow {
     return rowNumber;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

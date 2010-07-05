@@ -39,10 +39,7 @@ import java.util.Map;
  */
 public class ListDirectoryContentsController extends AbstractTemplateController {
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
