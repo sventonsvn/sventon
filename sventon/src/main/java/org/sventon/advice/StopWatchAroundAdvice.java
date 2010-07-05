@@ -29,9 +29,7 @@ public final class StopWatchAroundAdvice implements MethodInterceptor {
    */
   private final Log logger = LogFactory.getLog(getClass());
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public Object invoke(final MethodInvocation method) throws Throwable {
     final StopWatch stopWatch = new StopWatch();
     stopWatch.start();

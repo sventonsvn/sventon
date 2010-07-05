@@ -29,9 +29,6 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
    */
   private static final String DELIMITER = "@";
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void setAsText(final String entryAsString) {
     setValue(toSVNFileRevision(entryAsString));
@@ -46,9 +43,6 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
     return new SVNFileRevision(path, Long.parseLong(revision), null, null);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String getAsText() {
     final SVNFileRevision fileRevision = (SVNFileRevision) super.getValue();

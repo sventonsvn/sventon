@@ -98,9 +98,7 @@ public final class ShowFileController extends AbstractTemplateController {
     this.mimeFileTypeMap = mimeFileTypeMap;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

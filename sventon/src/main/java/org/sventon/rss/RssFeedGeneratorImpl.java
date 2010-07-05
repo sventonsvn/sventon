@@ -60,9 +60,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
    */
   private DateFormat dateFormat;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void outputFeed(final RepositoryConfiguration configuration, final List<SVNLogEntry> logEntries,
                          final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 

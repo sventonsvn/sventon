@@ -80,9 +80,7 @@ public class ConfigDirectory implements ServletContextAware {
     this.createDirectories = createDirectories;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void setServletContext(final ServletContext servletContext) {
     this.servletContext = servletContext;
     handleConfigDirectoryOverride();

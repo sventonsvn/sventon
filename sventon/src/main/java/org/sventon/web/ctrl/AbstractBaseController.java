@@ -61,9 +61,6 @@ public abstract class AbstractBaseController extends AbstractCommandController {
    */
   private PropertyEditor svnFileRevisionEditor;
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);

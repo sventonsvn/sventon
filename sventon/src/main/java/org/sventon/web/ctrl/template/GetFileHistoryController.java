@@ -41,10 +41,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
    */
   public static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

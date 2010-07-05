@@ -42,9 +42,6 @@ public class ConfigurationLoginController extends SimpleFormController {
     this.application = application;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected ModelAndView showForm(final HttpServletRequest request, final HttpServletResponse response,
                                   final BindException errors) throws Exception {
@@ -55,9 +52,6 @@ public class ConfigurationLoginController extends SimpleFormController {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected ModelAndView onSubmit(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object command, final BindException errors) throws Exception {

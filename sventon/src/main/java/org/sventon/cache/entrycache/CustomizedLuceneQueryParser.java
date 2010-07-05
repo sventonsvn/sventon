@@ -22,9 +22,6 @@ import org.compass.core.lucene.engine.queryparser.DefaultLuceneQueryParser;
  */
 public class CustomizedLuceneQueryParser extends DefaultLuceneQueryParser {
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected CompassQueryParser createQueryParser(String property, Analyzer analyzer, boolean forceAnalyzer) {
     final CompassQueryParser parser = super.createQueryParser(property, analyzer, forceAnalyzer);

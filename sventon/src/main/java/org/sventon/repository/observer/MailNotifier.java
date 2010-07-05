@@ -116,9 +116,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
     session.setDebug(LOGGER.isDebugEnabled());
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void update(final RevisionUpdate revisionUpdate) {
 
     executorService.execute(new Runnable() {

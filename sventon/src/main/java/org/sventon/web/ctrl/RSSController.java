@@ -54,9 +54,7 @@ public final class RSSController extends AbstractBaseController {
    */
   private HttpAuthenticationHandler httpAuthenticationHandler;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                 final Object cmd, final BindException errors) throws Exception {
 

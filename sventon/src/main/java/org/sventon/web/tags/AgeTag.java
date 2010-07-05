@@ -35,9 +35,6 @@ public final class AgeTag extends TagSupport {
    */
   private Date date;
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int doStartTag() throws JspException {
     try {

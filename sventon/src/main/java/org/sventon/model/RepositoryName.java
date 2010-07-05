@@ -45,17 +45,11 @@ public final class RepositoryName implements Serializable, Comparable {
 
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
@@ -71,17 +65,12 @@ public final class RepositoryName implements Serializable, Comparable {
     return !(name == null || name.length() == 0) && !StringUtils.containsWhitespace(name);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return name;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public int compareTo(Object o) {
     return name.compareTo(o.toString());
   }

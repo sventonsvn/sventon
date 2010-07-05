@@ -50,9 +50,6 @@ public class ConfigAuthorizationFilter extends OncePerRequestFilter {
     return request.getSession(true).getAttribute("isAdminLoggedIn") != null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                   final FilterChain filterChain) throws ServletException, IOException {

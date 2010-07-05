@@ -54,9 +54,6 @@ public final class FileTypeIconTag extends TagSupport {
   private static final String DEFAULT_FILE_ICON = "images/icon_file.png";
   private String fallbackIcon = DEFAULT_FILE_ICON;
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int doStartTag() throws JspException {
     try {

@@ -58,9 +58,7 @@ public final class SubmitConfigurationsController extends AbstractController {
     this.scheduler = scheduler;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 

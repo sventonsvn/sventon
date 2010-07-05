@@ -47,9 +47,7 @@ public final class DiffController extends AbstractTemplateController {
    */
   private DiffStyle preferredDiffStyle = DiffStyle.sidebyside;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

@@ -40,10 +40,7 @@ public final class RepositoryEntryTrayController extends AbstractTemplateControl
    */
   public static final String PARAMETER_REMOVE = "remove";
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

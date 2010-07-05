@@ -36,24 +36,18 @@ public final class RevisionCacheImpl implements RevisionCache {
     this.objectCache = objectCache;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public SVNLogEntry get(final long revision) {
     return (SVNLogEntry) objectCache.get(CacheKey.createKey(revision));
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void add(final SVNLogEntry logEntry) {
     Validate.notNull(logEntry, "Given logEntry was null");
     objectCache.put(CacheKey.createKey(logEntry.getRevision()), logEntry);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void flush() {
     objectCache.flush();
   }

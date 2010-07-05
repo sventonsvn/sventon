@@ -47,25 +47,16 @@ public final class ObjectCacheKey implements Serializable {
     this.checksum = checksum;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public boolean equals(final Object o) {
     return EqualsBuilder.reflectionEquals(this, o);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

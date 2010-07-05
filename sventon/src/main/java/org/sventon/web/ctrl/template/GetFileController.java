@@ -97,9 +97,7 @@ public class GetFileController extends AbstractTemplateController {
    */
   public static final String DISPLAY_TYPE_THUMBNAIL = "thumbnail";
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,

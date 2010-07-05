@@ -101,9 +101,6 @@ public final class InlineDiffRow {
     return 'u' == action.getCode();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

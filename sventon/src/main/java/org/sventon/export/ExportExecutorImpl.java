@@ -89,9 +89,7 @@ public class ExportExecutorImpl implements ExportExecutor {
     this.exportRootDirectory = configDirectory.getExportDirectory();
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public UUID submit(final MultipleEntriesCommand command, final SVNRepository repository, final long pegRevision) {
     final ExportDirectoryImpl exportDirectory = new ExportDirectoryImpl(command.getName(), exportRootDirectory, archiveFileCharset);
     final UUID uuid = exportDirectory.getUUID();
@@ -99,23 +97,17 @@ public class ExportExecutorImpl implements ExportExecutor {
     return uuid;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean isExported(final UUID uuid) {
     return completedExports.containsKey(uuid);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void delete(final UUID uuid) {
     completedExports.remove(uuid);
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void downloadByUUID(final UUID uuid, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
     if (!completedExports.containsKey(uuid)) {
       throw new IllegalStateException("No download with UUID: " + uuid);

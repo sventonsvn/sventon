@@ -21,9 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class AbstractHttpAuthenticationHandler implements HttpAuthenticationHandler {
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public boolean isLoginAttempt(final HttpServletRequest request) {
     return getAuthzHeader(request).toLowerCase().startsWith(getAuthScheme().toLowerCase());
   }
@@ -38,9 +36,7 @@ public abstract class AbstractHttpAuthenticationHandler implements HttpAuthentic
     return StringUtils.trimToEmpty(request.getHeader(AUTHORIZATION_HEADER));
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   public void sendChallenge(final HttpServletResponse response) {
     response.setHeader(AUTHENTICATE_HEADER, getAuthScheme() + " realm=\"" + getRealm() + "\"");
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

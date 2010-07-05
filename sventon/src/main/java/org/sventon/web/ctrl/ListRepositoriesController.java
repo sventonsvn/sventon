@@ -39,9 +39,7 @@ public final class ListRepositoriesController extends AbstractController {
    */
   private Application application;
 
-  /**
-   * {@inheritDoc}
-   */
+  @Override
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
