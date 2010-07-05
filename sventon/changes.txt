@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1671] Release 2.1.6 (2010-07-05)
 [1667] Added: Feature #5033 - Allow setting of MAX_CLAUSE_COUNT.
 [1665] Added: Feature #4464 - Add a base URL config parameter.
 [1662] Fixed: Bug #17263 - Error when clicking on links in recent changes view.
