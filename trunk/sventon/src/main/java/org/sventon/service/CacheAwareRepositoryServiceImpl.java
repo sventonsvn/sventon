@@ -92,9 +92,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       final List<Long> revisions = new ArrayList<Long>();
       if ("/".equals(path)) {
         // Requested path is root - simply return the revisions without checking with the repository
-        for (long i = fromRevision; i > fromRevision - limit; i--) {
-          revisions.add(i);
-        }
+        revisions.addAll(calculateRevisionsToFetch(fromRevision, limit));
       } else {
         // To be able to return cached revisions, we first have to get the revision numbers for given path
         // Doing a logs-call, skipping the details, to get them.
@@ -112,7 +110,15 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
     return logEntries;
   }
 
-  private boolean canReturnCachedRevisionsFor(RepositoryName repositoryName) {
+  protected List<Long> calculateRevisionsToFetch(final long fromRevision, final long limit) {
+    final List<Long> revisions = new ArrayList<Long>();
+    for (long i = fromRevision; i > (fromRevision - limit) && (i > 0); i--) {
+      revisions.add(i);
+    }
+    return revisions;
+  }
+
+  private boolean canReturnCachedRevisionsFor(final RepositoryName repositoryName) {
     return application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName);
   }
 
