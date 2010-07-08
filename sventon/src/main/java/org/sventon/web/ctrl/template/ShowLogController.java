@@ -57,24 +57,19 @@ public final class ShowLogController extends AbstractTemplateController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String nextPathParam = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
-    final SVNRevision nextRevParam = SVNRevision.parse(ServletRequestUtils.getStringParameter(request, "nextRevision", "head"));
+    final String nextPath = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
+    final SVNRevision nextRevision = SVNRevision.parse(ServletRequestUtils.getStringParameter(
+        request, "nextRevision", command.getRevision().toString()));
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
-
-    final long revNumber;
-    if (SVNRevision.HEAD.equals(nextRevParam)) {
-      revNumber = headRevision;
-    } else {
-      revNumber = nextRevParam.getNumber();
-    }
+    final long fromRevision = calculateFromRevision(headRevision, nextRevision);
 
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
     try {
       final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), repository,
-          revNumber, FIRST_REVISION, nextPathParam, pageSize, stopOnCopy);
+          fromRevision, FIRST_REVISION, nextPath, pageSize, stopOnCopy);
 
-      String pathAtRevision = nextPathParam;
+      String pathAtRevision = nextPath;
 
       for (final SVNLogEntry logEntry : logEntries) {
         logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
@@ -113,8 +108,18 @@ public final class ShowLogController extends AbstractTemplateController {
     model.put("pageSize", pageSize);
     model.put("isFile", getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
-    model.put("nextPath", nextPathParam);
-    model.put("nextRevision", revNumber);
+    model.put("nextPath", nextPath);
+    model.put("nextRevision", fromRevision);
     return new ModelAndView(getViewName(), model);
+  }
+
+  protected long calculateFromRevision(long headRevision, SVNRevision nextRevision) {
+    final long fromRevision;
+    if (SVNRevision.HEAD.equals(nextRevision)) {
+      fromRevision = headRevision;
+    } else {
+      fromRevision = nextRevision.getNumber();
+    }
+    return fromRevision;
   }
 }
