@@ -96,6 +96,18 @@ public class ParameterizedPathMatcher implements PathMatcher {
     return getOrCreatePattern(pattern).extractPathWithinPattern(path);
   }
 
+  public Map<String, String> extractUriTemplateVariables(String pattern, String path) {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public Comparator<String> getPatternComparator(String path) {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public String combine(String pattern1, String pattern2) {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
   private static class NamedPattern {
     private Pattern pattern = null;
     private List<String> names = null;
@@ -177,8 +189,8 @@ public class ParameterizedPathMatcher implements PathMatcher {
             throw new ParameterizedPathMatcherException("Named group does not contain name '" + m.group(2) + "'");
           names.add(m.group(2).substring(colonIndex + 1, m.group(2).length() - 1));
           translatedPattern.append("(")
-              .append(translatePattern(m.group(2).substring(1, colonIndex), nextSeparatorOptional))
-              .append(")");
+                  .append(translatePattern(m.group(2).substring(1, colonIndex), nextSeparatorOptional))
+                  .append(")");
         }
 
         lastFound = m.end();
