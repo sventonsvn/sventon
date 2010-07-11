@@ -104,7 +104,8 @@ public class ParameterizedUrlHandlerMapping extends SimpleUrlHandlerMapping {
     }
     if (bestPathMatch != null) {
       handler = handlerMap.get(bestPathMatch);
-      exposePathWithinMapping(this.pathMatcher.extractPathWithinPattern(bestPathMatch, urlPath), request);
+        //Parameter bestMatchingPattern is undocumented in Sping 3.0.3, set it to null for now.
+      exposePathWithinMapping(null, this.pathMatcher.extractPathWithinPattern(bestPathMatch, urlPath), request);
       request.setAttribute(PATH_PARAMETERS, bestParamters);
     }
     return handler;
