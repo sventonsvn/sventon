@@ -11,7 +11,7 @@
  */
 package org.sventon.util;
 
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.sventon.model.Revision;
 
 import java.beans.PropertyEditorSupport;
 
@@ -24,7 +24,7 @@ public class RevisionEditor extends PropertyEditorSupport {
 
   @Override
   public void setAsText(final String text) {
-    setValue(SVNRevision.parse(text));
+    setValue(Revision.parse(text));
   }
 
   @Override

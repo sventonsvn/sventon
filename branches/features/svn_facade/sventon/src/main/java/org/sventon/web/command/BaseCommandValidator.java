@@ -13,7 +13,7 @@ package org.sventon.web.command;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.sventon.model.Revision;
 
 /**
  * BaseCommandValidator.
@@ -31,8 +31,8 @@ public final class BaseCommandValidator implements Validator {
   public void validate(final Object target, final Errors errors) {
     final BaseCommand command = (BaseCommand) target;
 
-    if (SVNRevision.UNDEFINED.equals(command.getRevision())) {
-      command.setRevision(SVNRevision.HEAD);
+    if (Revision.UNDEFINED.equals(command.getRevision())) {
+      command.setRevision(Revision.HEAD);
       errors.rejectValue("revision", "browse.error.illegal-revision");
     }
   }

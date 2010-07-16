@@ -16,9 +16,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sventon.diff.DiffException;
 import org.sventon.model.DiffStyle;
+import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -122,8 +122,8 @@ public final class DiffCommand extends BaseCommand {
    *
    * @return The revision.
    */
-  public SVNRevision getFromRevision() {
-    return fromFileRevision != null ? SVNRevision.create(fromFileRevision.getRevision()) : SVNRevision.UNDEFINED;
+  public Revision getFromRevision() {
+    return fromFileRevision != null ? Revision.create(fromFileRevision.getRevision()) : Revision.UNDEFINED;
   }
 
   /**
@@ -149,8 +149,8 @@ public final class DiffCommand extends BaseCommand {
    *
    * @return The revision.
    */
-  public SVNRevision getToRevision() {
-    return toFileRevision != null ? SVNRevision.create(toFileRevision.getRevision()) : SVNRevision.UNDEFINED;
+  public Revision getToRevision() {
+    return toFileRevision != null ? Revision.create(toFileRevision.getRevision()) : Revision.UNDEFINED;
   }
 
   @Override
