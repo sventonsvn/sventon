@@ -21,12 +21,12 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * BaseCommand.
@@ -60,7 +60,7 @@ public class BaseCommand {
   /**
    * The revision.
    */
-  private SVNRevision revision = SVNRevision.HEAD;
+  private Revision revision = Revision.HEAD;
 
   /**
    * The revision number.
@@ -117,7 +117,7 @@ public class BaseCommand {
   /**
    * @return Returns the revision.
    */
-  public SVNRevision getRevision() {
+  public Revision getRevision() {
     return revision;
   }
 
@@ -130,7 +130,7 @@ public class BaseCommand {
    *
    * @param revision The revision to set.
    */
-  public void setRevision(final SVNRevision revision) {
+  public void setRevision(final Revision revision) {
     Validate.notNull(revision);
     this.revision = revision;
     this.revisionNumber = revision.getNumber();
@@ -298,7 +298,7 @@ public class BaseCommand {
    */
   public long translateRevision(long headRevision, final SVNRepository repository) throws SVNException {
     if (revision.getNumber() < 0 && revisionNumber < 0) {
-      if (SVNRevision.HEAD.equals(revision)) {
+      if (Revision.HEAD.equals(revision)) {
         revisionNumber = headRevision;
       } else if (revision.getNumber() == -1 && revision.getDate() != null) {
         revisionNumber = repository.getDatedRevision(revision.getDate());

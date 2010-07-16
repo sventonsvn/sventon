@@ -1,10 +1,14 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.expect;
+
 import org.easymock.classextension.EasyMock;
+
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,12 +18,12 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
 
@@ -48,7 +52,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
 
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));
-    command.setRevision(SVNRevision.create(10));
+    command.setRevision(Revision.create(10));
     command.setPegRevision(5);
 
     mockService = EasyMock.createMock(RepositoryService.class);

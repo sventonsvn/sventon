@@ -1,17 +1,21 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.expect;
+
 import org.easymock.classextension.EasyMock;
+
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ public class GetFileHistoryControllerTest extends TestCase {
 
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));
-    command.setRevision(SVNRevision.create(12));
+    command.setRevision(Revision.create(12));
 
     mockService = EasyMock.createMock(RepositoryService.class);
     request = new MockHttpServletRequest();

@@ -17,9 +17,9 @@ import org.sventon.RepositoryConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditor;
@@ -64,7 +64,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   @Override
   protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);
-    binder.registerCustomEditor(SVNRevision.class, revisionEditor);
+    binder.registerCustomEditor(Revision.class, revisionEditor);
     binder.registerCustomEditor(SVNFileRevision.class, svnFileRevisionEditor);
   }
 

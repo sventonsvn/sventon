@@ -1,19 +1,23 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.expect;
+
 import org.easymock.classextension.EasyMock;
+
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +33,7 @@ public class ListDirectoryContentsControllerTest extends TestCase {
 
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
-    command.setRevision(SVNRevision.create(12));
+    command.setRevision(Revision.create(12));
 
     final ListDirectoryContentsController ctrl = new ListDirectoryContentsController();
     ctrl.setRepositoryService(mockService);

@@ -2,9 +2,9 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import org.sventon.model.Revision;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 public class BaseCommandValidatorTest extends TestCase {
 
@@ -27,14 +27,14 @@ public class BaseCommandValidatorTest extends TestCase {
 
     // Valid (typical) input
     command.setPath("/test/Test.java");
-    command.setRevision(SVNRevision.parse("12"));
+    command.setRevision(Revision.parse("12"));
 
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     // Valid (typical) input
     command.setPath("/test/Test.java");
-    command.setRevision(SVNRevision.parse("12"));
+    command.setRevision(Revision.parse("12"));
 
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
@@ -42,38 +42,38 @@ public class BaseCommandValidatorTest extends TestCase {
     //Both HEAD and head (and HeAd) are valid revisions. These are not really
     //accepted by the validator in any other form than HEAD, but other case variations
     //are automatically converted when set using the setRevision method on BaseCommand
-    command.setRevision(SVNRevision.parse("HEAD"));
+    command.setRevision(Revision.parse("HEAD"));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRevision(SVNRevision.parse("{2007-01-01}"));
+    command.setRevision(Revision.parse("{2007-01-01}"));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRevision(SVNRevision.parse("head "));
+    command.setRevision(Revision.parse("head "));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRevision(SVNRevision.parse("HEad"));
+    command.setRevision(Revision.parse("HEad"));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRevision(SVNRevision.parse(" 123 "));
+    command.setRevision(Revision.parse(" 123 "));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
-    command.setRevision(SVNRevision.parse("{2007-01-01}"));
+    command.setRevision(Revision.parse("{2007-01-01}"));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
     //Other non numerical revisions are however not allowed
-    command.setRevision(SVNRevision.parse("2007-01-01"));
+    command.setRevision(Revision.parse("2007-01-01"));
     validator.validate(command, exception);
     assertEquals(1, exception.getAllErrors().size());
     assertEquals("browse.error.illegal-revision", exception.getFieldError("revision").getCode());
 
     exception = new BindException(command, "test2");
-    command.setRevision(SVNRevision.create(1));
+    command.setRevision(Revision.create(1));
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 

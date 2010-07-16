@@ -16,11 +16,11 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +58,7 @@ public final class ShowLogController extends AbstractTemplateController {
                                    final BindException exception) throws Exception {
 
     final String nextPath = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
-    final SVNRevision nextRevision = SVNRevision.parse(ServletRequestUtils.getStringParameter(
+    final Revision nextRevision = Revision.parse(ServletRequestUtils.getStringParameter(
         request, "nextRevision", command.getRevision().toString()));
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
@@ -113,9 +113,9 @@ public final class ShowLogController extends AbstractTemplateController {
     return new ModelAndView(getViewName(), model);
   }
 
-  protected long calculateFromRevision(long headRevision, SVNRevision nextRevision) {
+  protected long calculateFromRevision(long headRevision, Revision nextRevision) {
     final long fromRevision;
-    if (SVNRevision.HEAD.equals(nextRevision)) {
+    if (Revision.HEAD.equals(nextRevision)) {
       fromRevision = headRevision;
     } else {
       fromRevision = nextRevision.getNumber();

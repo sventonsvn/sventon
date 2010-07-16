@@ -6,10 +6,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public class GetLogMessageControllerTest extends TestCase {
 
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
-    command.setRevision(SVNRevision.create(12));
+    command.setRevision(Revision.create(12));
 
     final SVNLogEntry svnLogEntry = TestUtils.getLogEntryStub(command.getRevisionNumber());
     final GetLogMessageController ctrl = new GetLogMessageController();

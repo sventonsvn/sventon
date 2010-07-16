@@ -28,6 +28,7 @@ import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.*;
+import org.sventon.model.Revision;
 
 import java.io.*;
 import java.util.*;
@@ -110,7 +111,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
   @Override
   public final void getFileContents(final SVNRepository repository, final String path, final long revision,
-                                      final OutputStream output) throws SVNException {
+                                    final OutputStream output) throws SVNException {
     repository.getFile(path, revision, null, output);
   }
 
@@ -213,7 +214,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
   @Override
   public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand command,
-                                                      final SVNRevision pegRevision, final String charset,
+                                                      final Revision pegRevision, final String charset,
                                                       final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
     assertNotBinary(repository, command, pegRevision);
@@ -228,7 +229,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final SVNProperties leftFileProperties;
       final SVNProperties rightFileProperties;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (Revision.UNDEFINED.equals(pegRevision)) {
         leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
         leftFileProperties = getFileProperties(repository, command.getFromPath(), command.getFromRevision().getNumber());
@@ -268,7 +269,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
+  public final String diffUnified(final SVNRepository repository, final DiffCommand command, final Revision pegRevision,
                                   final String charset) throws SVNException, DiffException {
 
     assertNotBinary(repository, command, pegRevision);
@@ -279,7 +280,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (Revision.UNDEFINED.equals(pegRevision)) {
         leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
@@ -306,7 +307,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
+  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final Revision pegRevision,
                                               final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException {
 
@@ -319,7 +320,7 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      if (SVNRevision.UNDEFINED == pegRevision) {
+      if (Revision.UNDEFINED.equals(pegRevision)) {
         leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
@@ -385,8 +386,8 @@ public class RepositoryServiceImpl implements RepositoryService {
     final String repoRoot = repository.getLocation().toDecodedString();
 
     diffClient.doDiffStatus(
-        SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), command.getFromRevision(),
-        SVNURL.parseURIDecoded(repoRoot + command.getToPath()), command.getToRevision(),
+        SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
+        SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
         SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
           public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
             if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
@@ -402,7 +403,7 @@ public class RepositoryServiceImpl implements RepositoryService {
                                        final String charset, final Colorer colorer) throws SVNException {
 
     final long blameRevision;
-    if (SVNRevision.UNDEFINED.getNumber() == revision) {
+    if (Revision.UNDEFINED.getNumber() == revision) {
       blameRevision = repository.getLatestRevision();
     } else {
       blameRevision = revision;
@@ -468,12 +469,12 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
   }
 
-  private void assertNotBinary(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision)
+  private void assertNotBinary(final SVNRepository repository, final DiffCommand command, final Revision pegRevision)
       throws SVNException, IllegalFileFormatException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
-    if (SVNRevision.UNDEFINED.equals(pegRevision)) {
+    if (Revision.UNDEFINED.equals(pegRevision)) {
       isLeftFileTextType = isTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber());
       isRightFileTextType = isTextFile(repository, command.getToPath(), command.getToRevision().getNumber());
     } else {

@@ -19,6 +19,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.DiffStyle;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
@@ -27,7 +28,6 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.SVNDiffStatus;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -103,7 +103,7 @@ public final class DiffController extends AbstractTemplateController {
       throws SVNException, DiffException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final SVNRevision pegRevision = SVNRevision.create(command.getPegRevision());
+    final Revision pegRevision = Revision.create(command.getPegRevision());
 
     switch (command.getStyle()) {
       case inline:

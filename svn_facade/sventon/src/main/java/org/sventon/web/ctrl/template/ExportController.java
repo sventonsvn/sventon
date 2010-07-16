@@ -15,12 +15,12 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.export.ExportExecutor;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +68,7 @@ public final class ExportController extends AbstractTemplateController {
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", SVNRevision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
+    model.put("revision", Revision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
         command.getRevisionNumber()));
 
     return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createListUrl()), true), model);
