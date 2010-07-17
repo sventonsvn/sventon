@@ -11,59 +11,85 @@
  */
 package org.sventon.web.ctrl;
 
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.web.command.ConfigCommand;
+import org.sventon.web.command.ConfigCommandValidator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Form controller handling add/edit of repository configurations.
  *
  * @author jesper@sventon.org
  */
-public final class ConfigurationFormController extends SimpleFormController {
+@Controller("configurationFormController")
+@RequestMapping("/repos/config")
+public final class ConfigurationFormController {
+
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The application.
    */
   private final Application application;
 
+  private ConfigCommandValidator validator;
+
+  @Autowired
+  public void setValidator(ConfigCommandValidator validator) {
+    this.validator = validator;
+  }
+
   /**
    * Constructor.
    *
    * @param application Application instance
    */
+  @Autowired
   public ConfigurationFormController(final Application application) {
     this.application = application;
   }
 
-  @Override
-  protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("addedRepositories", application.getRepositoryNames());
-    return model;
+  @InitBinder("command")
+  public void bindValidator(WebDataBinder binder) {
+    binder.setValidator(validator);
   }
 
-  @Override
-  protected ModelAndView onSubmit(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object command, final BindException errors) throws Exception {
+  @RequestMapping(method = GET)
+  public ModelAndView setUpForm(ModelAndView modelAndView) throws Exception {
+    modelAndView.getModel().put("addedRepositories", application.getRepositoryNames());
+    modelAndView.getModel().put("command", new ConfigCommand());
+    modelAndView.setViewName("config/configForm");
+    return modelAndView;
+  }
 
-    final Map<String, Object> model = new HashMap<String, Object>();
-    final ConfigCommand confCommand = (ConfigCommand) command;
-    logger.debug("Adding configuration from command: " + confCommand);
-    final RepositoryConfiguration repositoryConfiguration = confCommand.createRepositoryConfiguration();
+  @RequestMapping(method = POST)
+  public String onFormSubmit(@ModelAttribute("command") @Valid ConfigCommand command, BindingResult result, Model model) {
+
+    if (result.hasErrors()) {
+      return "config/configForm";
+    }
+
+    logger.debug("Adding configuration from command: " + command);
+    final RepositoryConfiguration repositoryConfiguration = command.createRepositoryConfiguration();
     application.addRepository(repositoryConfiguration);
-    model.put("addedRepositories", application.getRepositoryNames());
-    model.put("latestAddedRepository", confCommand.getName());
-    return showForm(request, errors, getSuccessView(), model);
+    model.addAttribute("addedRepositories", application.getRepositoryNames());
+    model.addAttribute("latestAddedRepository", command.getName());
+    return "config/listConfigs";
   }
-
 }

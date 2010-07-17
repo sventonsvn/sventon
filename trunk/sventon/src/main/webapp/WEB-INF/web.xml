@@ -13,7 +13,7 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml  /WEB-INF/schedulingContext.xml</param-value>
+    <param-value>/WEB-INF/applicationContext.xml /WEB-INF/schedulingContext.xml</param-value>
   </context-param>
 
   <servlet>
@@ -22,13 +22,25 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
+  <servlet>
+    <servlet-name>sventon-old</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>sventon</servlet-name>
+    <url-pattern>/repos/config</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>sventon-old</servlet-name>
     <url-pattern>/repos/*</url-pattern>
   </servlet-mapping>
-  
+
+
   <servlet-mapping>
-    <servlet-name>sventon</servlet-name>
+    <servlet-name>sventon-old</servlet-name>
     <url-pattern>/ajax/*</url-pattern>
   </servlet-mapping>
 
@@ -97,7 +109,7 @@
     <filter-name>PathParameterFilter</filter-name>
     <url-pattern>/repos/*</url-pattern>
   </filter-mapping>
-  
+
   <filter-mapping>
     <filter-name>PathParameterFilter</filter-name>
     <url-pattern>/ajax/*</url-pattern>
