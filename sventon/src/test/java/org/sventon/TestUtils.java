@@ -1,5 +1,6 @@
 package org.sventon;
 
+import org.junit.Ignore;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryEntry;
 import org.tmatesoft.svn.core.*;
@@ -7,6 +8,8 @@ import org.tmatesoft.svn.core.*;
 import java.io.File;
 import java.util.*;
 
+
+@Ignore //Maven idiosyncrasy... http://jira.codehaus.org/browse/SUREFIRE-482
 public final class TestUtils {
 
   public static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
