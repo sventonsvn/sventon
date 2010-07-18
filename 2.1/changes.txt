@@ -1,5 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+
+[1685] Fixed: Bug #17366 - Release 2.1.6 requires Java 1.6.
 [1673] Fixed: Bug #17345 - 'Show Log' starts from HEAD instead of from current revision.
 
 [1671] Release 2.1.6 (2010-07-05)
