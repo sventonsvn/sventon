@@ -413,7 +413,7 @@ public final class Application {
    */
   public URL getBaseURL() {
     String baseURL = StringUtils.trimToEmpty(System.getProperty(PROPERTY_KEY_SVENTON_BASE_URL));
-    if (!baseURL.isEmpty()) {
+    if (!StringUtils.isEmpty(baseURL)) {
       if (!baseURL.endsWith("/")) {
         baseURL = baseURL + "/";
       }

@@ -223,7 +223,6 @@ public final class RevisionObservableImpl extends Observable implements Revision
     return notification.toString();
   }
 
-  @Override
   public void update(final RepositoryName repositoryName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
@@ -248,7 +247,6 @@ public final class RevisionObservableImpl extends Observable implements Revision
     }
   }
 
-  @Override
   public void updateAll() {
     if (application.isConfigured()) {
       for (final RepositoryName repositoryName : application.getRepositoryNames()) {

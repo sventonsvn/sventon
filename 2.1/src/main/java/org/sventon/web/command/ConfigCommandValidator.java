@@ -80,7 +80,6 @@ public final class ConfigCommandValidator implements Validator {
     this.application = application;
   }
 
-  @Override
   public boolean supports(final Class clazz) {
     return clazz.equals(ConfigCommand.class);
   }
@@ -95,7 +94,6 @@ public final class ConfigCommandValidator implements Validator {
     this.repositoryConnectionFactory = repositoryConnectionFactory;
   }
 
-  @Override
   public void validate(final Object obj, final Errors errors) {
     final ConfigCommand command = (ConfigCommand) obj;
 

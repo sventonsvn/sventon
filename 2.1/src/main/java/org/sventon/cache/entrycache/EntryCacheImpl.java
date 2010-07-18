@@ -85,7 +85,6 @@ public final class EntryCacheImpl implements EntryCache {
     this.useDiskStore = useDiskStore;
   }
 
-  @Override
   public void init() throws CacheException {
     final String connectionString;
 
@@ -110,22 +109,18 @@ public final class EntryCacheImpl implements EntryCache {
     }
   }
 
-  @Override
   public void shutdown() {
     compass.close();
   }
 
-  @Override
   public void setLatestCachedRevisionNumber(final long revision) {
     this.cachedRevision.set(revision);
   }
 
-  @Override
   public long getLatestCachedRevisionNumber() {
     return cachedRevision.get();
   }
 
-  @Override
   public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
@@ -136,7 +131,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public void add(final RepositoryEntry... entries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -148,7 +142,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -158,7 +151,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public void remove(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -168,7 +160,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public void update(final Map<String, RepositoryEntry.Kind> entriesToDelete,
                      final List<RepositoryEntry> entriesToAdd) {
 
@@ -200,7 +191,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public void removeDirectory(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -211,7 +201,6 @@ public final class EntryCacheImpl implements EntryCache {
     });
   }
 
-  @Override
   public List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
     final String queryString = "path:" + startDir + "* (name:*" + searchString + "*" +
         " OR lastAuthor:*" + searchString + "*)";
@@ -227,7 +216,6 @@ public final class EntryCacheImpl implements EntryCache {
     return result;
   }
 
-  @Override
   public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                              final String startPath) {
     final String queryString = "path:" + startPath +
@@ -244,7 +232,6 @@ public final class EntryCacheImpl implements EntryCache {
     return result;
   }
 
-  @Override
   public List<RepositoryEntry> findDirectories(final String startPath) {
     final String queryString = "path:" + startPath + "* kind:DIR";
 
@@ -274,7 +261,6 @@ public final class EntryCacheImpl implements EntryCache {
     }
   }
 
-  @Override
   public void flush() throws CacheException {
     if (useDiskStore) {
       saveLatestRevisionNumber();

@@ -21,7 +21,7 @@ public class RepositoryNameTest extends TestCase {
     assertTrue(RepositoryName.isValid("test-Repos"));
     assertTrue(RepositoryName.isValid("test-Repos_1"));
 
-    assertTrue(RepositoryName.isValid("åÄö"));
+    assertTrue(RepositoryName.isValid("Ã…Ã„Ã–"));
   }
 
 }
