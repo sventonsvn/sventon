@@ -1,0 +1,37 @@
+<%
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
+%>
+<tr class="entriesTableHeader">
+  <th/>
+  <th/>
+
+  <c:set var="sortModeArrow" value="${userRepositoryContext.sortMode eq 'ASC' ? 'icon_arrow_up.png' : 'icon_arrow_down.png'}"/>
+  <c:set var="opositeSortType" value="${userRepositoryContext.sortMode eq 'ASC' ? 'DESC' : 'ASC'}"/>
+
+  <th><a href="${sortUrl}&sortType=FULL_NAME&sortMode=${opositeSortType}" style="color: #000000;">
+    <c:if test="${userRepositoryContext.sortType eq 'FULL_NAME'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="name"/></a>
+  </th>
+  <th/>
+  <th class="sventonColRightAlign"><a href="${sortUrl}&sortType=SIZE&sortMode=${opositeSortType}" style="color: #000000;">
+    <c:if test="${userRepositoryContext.sortType eq 'SIZE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="size"/></a>
+  </th>
+  <th class="sventonColRightAlign"><a href="${sortUrl}&sortType=REVISION&sortMode=${opositeSortType}" style="color: #000000;">
+    <c:if test="${userRepositoryContext.sortType eq 'REVISION'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="revision"/></a>
+  </th>
+  <th><a href="${sortUrl}&sortType=AUTHOR&sortMode=${opositeSortType}" style="color: #000000;">
+    <c:if test="${userRepositoryContext.sortType eq 'AUTHOR'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="author"/></a>
+  </th>
+  <th><a href="${sortUrl}&sortType=DATE&sortMode=${opositeSortType}" style="color: #000000;">
+    <c:if test="${userRepositoryContext.sortType eq 'DATE'}"><img alt="${userRepositoryContext.sortType}" src="images/${sortModeArrow}"></c:if><spring:message code="date"/></a>
+  </th>
+</tr>
