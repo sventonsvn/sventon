@@ -44,7 +44,6 @@ public class RepositoryServiceImpl implements RepositoryService {
    */
   final Log logger = LogFactory.getLog(getClass());
 
-  @Override
   public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
       throws SVNException, SventonException {
 
@@ -52,7 +51,6 @@ public class RepositoryServiceImpl implements RepositoryService {
         true, false).iterator().next();
   }
 
-  @Override
   public final List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision,
                                                             final long toRevision) throws SVNException {
 
@@ -65,7 +63,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return revisions;
   }
 
-  @Override
   public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
@@ -80,7 +77,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return logEntries;
   }
 
-  @Override
   public final void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SVNException {
 
@@ -99,7 +95,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
   }
 
-  @Override
   public final TextFile getTextFile(final SVNRepository repository, final String path, final long revision,
                                     final String charset) throws SVNException, IOException {
     logger.debug("Fetching file " + path + "@" + revision);
@@ -108,13 +103,11 @@ public class RepositoryServiceImpl implements RepositoryService {
     return new TextFile(outStream.toString(charset));
   }
 
-  @Override
   public final void getFileContents(final SVNRepository repository, final String path, final long revision,
                                       final OutputStream output) throws SVNException {
     repository.getFile(path, revision, null, output);
   }
 
-  @Override
   public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
     final SVNProperties props = new SVNProperties();
@@ -122,7 +115,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return props;
   }
 
-  @Override
   public final SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
     final SVNProperties properties = new SVNProperties();
@@ -130,29 +122,24 @@ public class RepositoryServiceImpl implements RepositoryService {
     return properties;
   }
 
-  @Override
   public final boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
     final String mimeType = getFileProperties(repository, path, revision).getStringValue(SVNProperty.MIME_TYPE);
     return SVNProperty.isTextMimeType(mimeType);
   }
 
-  @Override
   public final String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
     return getFileProperties(repository, path, revision).getStringValue(SVNProperty.CHECKSUM);
   }
 
-  @Override
   public final long getLatestRevision(final SVNRepository repository) throws SVNException {
     return repository.getLatestRevision();
   }
 
-  @Override
   public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
     return repository.checkPath(path, revision);
   }
 
-  @Override
   public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
@@ -172,7 +159,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return locks;
   }
 
-  @Override
   public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
                                           final SVNProperties properties) throws SVNException {
     //noinspection unchecked
@@ -180,7 +166,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return RepositoryEntry.createEntryCollection(entries, path);
   }
 
-  @Override
   public final RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
@@ -193,7 +178,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
   }
 
-  @Override
   public final List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
       throws SVNException {
 
@@ -211,7 +195,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return svnFileRevisions;
   }
 
-  @Override
   public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand command,
                                                       final SVNRevision pegRevision, final String charset,
                                                       final RepositoryConfiguration configuration) throws SVNException, DiffException {
@@ -267,7 +250,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return sideBySideDiffCreator.createFromDiffResult(diffResultString);
   }
 
-  @Override
   public final String diffUnified(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                   final String charset) throws SVNException, DiffException {
 
@@ -305,7 +287,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return diffResultString;
   }
 
-  @Override
   public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final SVNRevision pegRevision,
                                               final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException {
@@ -373,7 +354,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return resultRows;
   }
 
-  @Override
   public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command,
                                              final RepositoryConfiguration configuration) throws SVNException {
 
@@ -397,7 +377,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return result;
   }
 
-  @Override
   public final AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
                                        final String charset, final Colorer colorer) throws SVNException {
 
@@ -432,7 +411,6 @@ public class RepositoryServiceImpl implements RepositoryService {
     return annotatedTextFile;
   }
 
-  @Override
   public SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command)
       throws SVNException, DiffException {
 

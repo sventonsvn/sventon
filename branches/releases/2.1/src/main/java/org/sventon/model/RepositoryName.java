@@ -70,7 +70,6 @@ public final class RepositoryName implements Serializable, Comparable {
     return name;
   }
 
-  @Override
   public int compareTo(Object o) {
     return name.compareTo(o.toString());
   }

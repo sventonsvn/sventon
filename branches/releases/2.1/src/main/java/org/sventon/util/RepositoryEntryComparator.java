@@ -54,7 +54,6 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
     this.sortType = sortType;
   }
 
-  @Override
   public int compare(final RepositoryEntry entry1, final RepositoryEntry entry2) {
     if (groupDirs) {
       final RepositoryEntry.Kind kind1 = entry1.getKind();

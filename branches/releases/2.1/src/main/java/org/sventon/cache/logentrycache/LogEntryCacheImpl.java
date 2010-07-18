@@ -64,7 +64,6 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     this.useDiskStore = useDiskStore;
   }
 
-  @Override
   public void init() {
     final String connectionString;
 
@@ -87,7 +86,6 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     compass = compassConfiguration.buildCompass();
   }
 
-  @Override
   public List<LogEntry> find(final String queryString) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
@@ -121,13 +119,11 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     return StringUtils.isNotBlank(text) && !text.equals(LogEntry.NOT_AVAILABLE_TAG);
   }
 
-  @Override
   public List<LogEntry> find(final String queryString, final String startDir) {
     final String newQueryString = "message:" + queryString + " paths:" + LogEntry.PATHS_DELIMITER + startDir + "*";
     return find(newQueryString);
   }
 
-  @Override
   public void add(final LogEntry... logEntries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -139,7 +135,6 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  @Override
   public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
@@ -150,7 +145,6 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  @Override
   public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -160,7 +154,6 @@ public final class LogEntryCacheImpl implements LogEntryCache {
     });
   }
 
-  @Override
   public void shutdown() {
     compass.close();
   }

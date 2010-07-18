@@ -49,7 +49,6 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
   /**
    * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
    */
-  @Override
   public SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SVNException {
 

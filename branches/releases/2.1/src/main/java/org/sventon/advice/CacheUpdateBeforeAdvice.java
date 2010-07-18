@@ -47,7 +47,6 @@ public final class CacheUpdateBeforeAdvice implements MethodBeforeAdvice {
     this.revisionObservable = revisionObservable;
   }
 
-  @Override
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     final RepositoryName repositoryName = (RepositoryName) args[0];
     logger.debug("Updating cache for repository [" + repositoryName + "] (if needed)");

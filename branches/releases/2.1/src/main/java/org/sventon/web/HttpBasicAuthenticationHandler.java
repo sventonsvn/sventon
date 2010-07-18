@@ -43,12 +43,10 @@ public class HttpBasicAuthenticationHandler extends AbstractHttpAuthenticationHa
     this.realm = realm;
   }
 
-  @Override
   public String getAuthScheme() {
     return HttpServletRequest.BASIC_AUTH;
   }
 
-  @Override
   public Credentials parseCredentials(final HttpServletRequest request) {
     final String header = getAuthzHeader(request);
     if (!isLoginAttempt(request)) {
@@ -60,7 +58,6 @@ public class HttpBasicAuthenticationHandler extends AbstractHttpAuthenticationHa
     return new Credentials(credentialString[0], credentialString[1]);
   }
 
-  @Override
   public String getRealm() {
     return realm;
   }

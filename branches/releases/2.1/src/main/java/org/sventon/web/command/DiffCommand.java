@@ -194,7 +194,6 @@ public final class DiffCommand extends BaseCommand {
   }
 
   private static class FileRevisionComparator implements Comparator<SVNFileRevision> {
-    @Override
     public int compare(SVNFileRevision o1, SVNFileRevision o2) {
       return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
     }

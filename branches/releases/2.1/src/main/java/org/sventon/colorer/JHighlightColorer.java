@@ -40,7 +40,6 @@ public final class JHighlightColorer implements Colorer {
    */
   private Properties rendererMappings = new Properties();
 
-  @Override
   public String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException {
     logger.debug("Colorizing content, file extension: " + fileExtension);
 

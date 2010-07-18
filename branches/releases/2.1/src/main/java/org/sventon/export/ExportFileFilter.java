@@ -19,7 +19,6 @@ import java.io.FilenameFilter;
  */
 public final class ExportFileFilter implements FilenameFilter {
 
-  @Override
   public boolean accept(final File dir, final String name) {
     return name.matches("[^\\s]+-[0-9]{17}\\.zip");
   }
