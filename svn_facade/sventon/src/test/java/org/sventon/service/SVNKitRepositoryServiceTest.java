@@ -14,6 +14,7 @@ import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
 import org.sventon.util.SVNFileRevisionEditor;
 import org.sventon.util.WebUtils;
+import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -22,6 +23,7 @@ import org.tmatesoft.svn.core.SVNProperty;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 
 public class SVNKitRepositoryServiceTest extends TestCase {
@@ -573,6 +575,31 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     assertEquals(rightResult, sb.toString());
 
   }
+
+  public void testTranslateRevision() throws Exception {
+    final BaseCommand command = new BaseCommand();
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
+
+    command.setRevision(Revision.parse("head"));
+    assertEquals(100, service.translateRevision(command.getRevision(), 100, null));
+    assertEquals(Revision.HEAD, command.getRevision());
+
+    command.setRevision(Revision.parse(""));
+    assertEquals(100, service.translateRevision(command.getRevision(), 100, null));
+    assertEquals(Revision.UNDEFINED, command.getRevision());
+
+    command.setRevision(Revision.parse("123"));
+    service.translateRevision(command.getRevision(), 200, null);
+    assertEquals(Revision.create(123), command.getRevision());
+
+    command.setRevision(Revision.parse("{2007-01-01}"));
+    assertEquals(123, service.translateRevision(command.getRevision(), 200, new SVNKitConnection(new SVNRepositoryStub()) {
+      public long getDatedRevision(final Date date) throws SVNException {
+        return 123;
+      }
+    }));
+  }
+
 
   public static class TestSVNRepositoryStub extends SVNRepositoryStub {
 

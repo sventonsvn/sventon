@@ -472,6 +472,23 @@ public class SVNKitRepositoryService implements RepositoryService {
     return nodeKind1;
   }
 
+  public long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SVNException {
+    final long revisionNumber = revision.getNumber();
+
+    if (revisionNumber < 0) {
+      if (Revision.HEAD.equals(revision)) {
+        return headRevision;
+      } else if (revisionNumber == -1 && revision.getDate() != null) {
+        return connection.getDelegate().getDatedRevision(revision.getDate());
+      } else {
+        logger.warn("Unexpected revision: " + revision);
+        return headRevision;
+      }
+    }
+    return revisionNumber;
+  }
+
+
   private void assertSameKind(final SVNNodeKind nodeKind1, final SVNNodeKind nodeKind2) throws DiffException {
     if (nodeKind1 != nodeKind2) {
       throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);

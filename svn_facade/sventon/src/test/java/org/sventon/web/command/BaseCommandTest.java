@@ -1,13 +1,8 @@
 package org.sventon.web.command;
 
 import junit.framework.TestCase;
-import org.sventon.SVNKitConnection;
-import org.sventon.SVNRepositoryStub;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
-import org.tmatesoft.svn.core.SVNException;
-
-import java.util.Date;
 
 public class BaseCommandTest extends TestCase {
 
@@ -64,31 +59,6 @@ public class BaseCommandTest extends TestCase {
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/src/File.java");
     assertEquals("/trunk/src/File.java", command.getPath());
-  }
-
-  public void testTranslateRevision() throws Exception {
-    final BaseCommand command = new BaseCommand();
-    command.setRevision(Revision.parse("head"));
-    command.translateRevision(100, null);
-    assertEquals(Revision.HEAD, command.getRevision());
-    assertEquals(100, command.getRevisionNumber());
-
-    command.setRevision(Revision.parse(""));
-    command.translateRevision(100, null);
-    assertEquals(Revision.UNDEFINED, command.getRevision());
-    assertEquals(100, command.getRevisionNumber());
-
-    command.setRevision(Revision.parse("123"));
-    command.translateRevision(200, null);
-    assertEquals(Revision.create(123), command.getRevision());
-
-    command.setRevision(Revision.parse("{2007-01-01}"));
-    command.translateRevision(200, new SVNKitConnection(new SVNRepositoryStub()) {
-      public long getDatedRevision(final Date date) throws SVNException {
-        return 123;
-      }
-    });
-    assertEquals(123, command.getRevisionNumber());
   }
 
   public void testGetParentPath() {

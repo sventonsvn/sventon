@@ -20,14 +20,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.SVNConnection;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * BaseCommand.
@@ -162,7 +159,7 @@ public class BaseCommand {
    * @return Revision number.
    */
   public long getRevisionNumber() {
-    return revision.getNumber() < 0 ? revisionNumber : revision.getNumber();
+    return revision.getNumber();
   }
 
   /**
@@ -284,32 +281,6 @@ public class BaseCommand {
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  /**
-   * Translates the revision and the peg revision into a number, if needed.
-   * <p/>
-   * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
-   * by getting the closest revision number before or at the specified date stamp.
-   *
-   * @param headRevision The current HEAD revision.
-   * @param connection   Repository connection.
-   * @return The revision number.
-   * @throws SVNException if unable to communicate with repository.
-   */
-  public long translateRevision(long headRevision, final SVNConnection connection) throws SVNException {
-    final SVNRepository repository = connection.getDelegate();
-    if (revision.getNumber() < 0 && revisionNumber < 0) {
-      if (Revision.HEAD.equals(revision)) {
-        revisionNumber = headRevision;
-      } else if (revision.getNumber() == -1 && revision.getDate() != null) {
-        revisionNumber = repository.getDatedRevision(revision.getDate());
-      } else {
-        logger.warn("Unexpected revision: " + revision);
-        revisionNumber = headRevision;
-      }
-    }
-    return revisionNumber;
   }
 
   /**
