@@ -16,6 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
@@ -28,7 +29,6 @@ import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.wc.*;
-import org.sventon.model.Revision;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +38,7 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
-public class RepositoryServiceImpl implements RepositoryService {
+public class SVNKitRepositoryService implements RepositoryService {
 
   /**
    * Logger for this class and subclasses.
@@ -46,17 +46,19 @@ public class RepositoryServiceImpl implements RepositoryService {
   final Log logger = LogFactory.getLog(getClass());
 
   @Override
-  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SVNException, SventonException {
 
+    final SVNRepository repository = connection.getDelegate();
     return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
         true, false).iterator().next();
   }
 
   @Override
-  public final List<SVNLogEntry> getRevisionsFromRepository(final SVNRepository repository, final long fromRevision,
+  public final List<SVNLogEntry> getRevisionsFromRepository(final SVNConnection connection, final long fromRevision,
                                                             final long toRevision) throws SVNException {
 
+    final SVNRepository repository = connection.getDelegate();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
@@ -67,11 +69,12 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
+  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNConnection connection,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
+    final SVNRepository repository = connection.getDelegate();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     repository.log(new String[]{path}, fromRevision, toRevision, true, stopOnCopy, limit, new ISVNLogEntryHandler() {
       public void handleLogEntry(final SVNLogEntry logEntry) {
@@ -82,9 +85,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final void export(final SVNRepository repository, final List<SVNFileRevision> targets, final long pegRevision,
+  public final void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SVNException {
 
+    final SVNRepository repository = connection.getDelegate();
     for (final SVNFileRevision fileRevision : targets) {
       logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(fileRevision.getRevision()));
@@ -101,65 +105,71 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final TextFile getTextFile(final SVNRepository repository, final String path, final long revision,
+  public final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
                                     final String charset) throws SVNException, IOException {
     logger.debug("Fetching file " + path + "@" + revision);
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    getFileContents(repository, path, revision, outStream);
+    getFileContents(connection, path, revision, outStream);
     return new TextFile(outStream.toString(charset));
   }
 
   @Override
-  public final void getFileContents(final SVNRepository repository, final String path, final long revision,
+  public final void getFileContents(final SVNConnection connection, final String path, final long revision,
                                     final OutputStream output) throws SVNException {
+    final SVNRepository repository = connection.getDelegate();
     repository.getFile(path, revision, null, output);
   }
 
   @Override
-  public final SVNProperties getFileProperties(final SVNRepository repository, final String path, final long revision)
+  public final SVNProperties getFileProperties(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
     final SVNProperties props = new SVNProperties();
+    final SVNRepository repository = connection.getDelegate();
     repository.getFile(path, revision, props, null);
     return props;
   }
 
   @Override
-  public final SVNProperties getPathProperties(final SVNRepository repository, final String path, final long revision)
+  public final SVNProperties getPathProperties(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
+    final SVNRepository repository = connection.getDelegate();
     final SVNProperties properties = new SVNProperties();
     repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
     return properties;
   }
 
   @Override
-  public final boolean isTextFile(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    final String mimeType = getFileProperties(repository, path, revision).getStringValue(SVNProperty.MIME_TYPE);
+  public final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SVNException {
+    final String mimeType = getFileProperties(connection, path, revision).getStringValue(SVNProperty.MIME_TYPE);
     return SVNProperty.isTextMimeType(mimeType);
   }
 
   @Override
-  public final String getFileChecksum(final SVNRepository repository, final String path, final long revision) throws SVNException {
-    return getFileProperties(repository, path, revision).getStringValue(SVNProperty.CHECKSUM);
+  public final String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SVNException {
+    return getFileProperties(connection, path, revision).getStringValue(SVNProperty.CHECKSUM);
   }
 
   @Override
-  public final long getLatestRevision(final SVNRepository repository) throws SVNException {
+  public final long getLatestRevision(final SVNConnection connection) throws SVNException {
+    final SVNRepository repository = connection.getDelegate();
     return repository.getLatestRevision();
   }
 
   @Override
-  public final SVNNodeKind getNodeKind(final SVNRepository repository, final String path, final long revision)
+  public final SVNNodeKind getNodeKind(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
+    final SVNRepository repository = connection.getDelegate();
     return repository.checkPath(path, revision);
   }
 
   @Override
-  public Map<String, SVNLock> getLocks(final SVNRepository repository, final String startPath) {
+  public Map<String, SVNLock> getLocks(final SVNConnection connection, final String startPath) {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
 
     final Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
-    SVNLock[] locksArray;
+    final SVNRepository repository = connection.getDelegate();
+    final SVNLock[] locksArray;
 
     try {
       locksArray = repository.getLocks(path);
@@ -174,17 +184,19 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<RepositoryEntry> list(final SVNRepository repository, final String path, final long revision,
+  public final List<RepositoryEntry> list(final SVNConnection connection, final String path, final long revision,
                                           final SVNProperties properties) throws SVNException {
     //noinspection unchecked
+    final SVNRepository repository = connection.getDelegate();
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
     return RepositoryEntry.createEntryCollection(entries, path);
   }
 
   @Override
-  public final RepositoryEntry getEntryInfo(final SVNRepository repository, final String path, final long revision)
+  public final RepositoryEntry getEntryInfo(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
 
+    final SVNRepository repository = connection.getDelegate();
     final SVNDirEntry dirEntry = repository.info(path, revision);
     if (dirEntry != null) {
       return new RepositoryEntry(dirEntry, FilenameUtils.getFullPath(path));
@@ -195,10 +207,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<SVNFileRevision> getFileRevisions(final SVNRepository repository, final String path, final long revision)
+  public final List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
 
     //noinspection unchecked
+    final SVNRepository repository = connection.getDelegate();
     final List<SVNFileRevision> svnFileRevisions =
         (List<SVNFileRevision>) repository.getFileRevisions(path, null, 0, revision);
 
@@ -213,11 +226,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<SideBySideDiffRow> diffSideBySide(final SVNRepository repository, final DiffCommand command,
+  public final List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
                                                       final Revision pegRevision, final String charset,
                                                       final RepositoryConfiguration configuration) throws SVNException, DiffException {
 
-    assertNotBinary(repository, command, pegRevision);
+    assertNotBinary(connection, command, pegRevision);
 
     String diffResultString;
     SideBySideDiffCreator sideBySideDiffCreator;
@@ -230,15 +243,15 @@ public class RepositoryServiceImpl implements RepositoryService {
       final SVNProperties rightFileProperties;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
-        leftFileProperties = getFileProperties(repository, command.getFromPath(), command.getFromRevision().getNumber());
-        rightFileProperties = getFileProperties(repository, command.getToPath(), command.getToRevision().getNumber());
+        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFileProperties = getFileProperties(connection, command.getFromPath(), command.getFromRevision().getNumber());
+        rightFileProperties = getFileProperties(connection, command.getToPath(), command.getToRevision().getNumber());
       } else {
-        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
-        leftFileProperties = getFileProperties(repository, command.getFromPath(), pegRevision.getNumber());
-        rightFileProperties = getFileProperties(repository, command.getToPath(), pegRevision.getNumber());
+        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFileProperties = getFileProperties(connection, command.getFromPath(), pegRevision.getNumber());
+        rightFileProperties = getFileProperties(connection, command.getToPath(), pegRevision.getNumber());
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -269,10 +282,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final String diffUnified(final SVNRepository repository, final DiffCommand command, final Revision pegRevision,
+  public final String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
                                   final String charset) throws SVNException, DiffException {
 
-    assertNotBinary(repository, command, pegRevision);
+    assertNotBinary(connection, command, pegRevision);
 
     String diffResultString;
 
@@ -281,11 +294,11 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile rightFile;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -307,11 +320,11 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<InlineDiffRow> diffInline(final SVNRepository repository, final DiffCommand command, final Revision pegRevision,
+  public final List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
                                               final String charset, final RepositoryConfiguration configuration)
       throws SVNException, DiffException {
 
-    assertNotBinary(repository, command, pegRevision);
+    assertNotBinary(connection, command, pegRevision);
 
     String diffResultString;
     final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
@@ -321,11 +334,11 @@ public class RepositoryServiceImpl implements RepositoryService {
       final TextFile rightFile;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(repository, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(repository, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
       final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
@@ -375,9 +388,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final List<SVNDiffStatus> diffPaths(final SVNRepository repository, final DiffCommand command,
+  public final List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
                                              final RepositoryConfiguration configuration) throws SVNException {
 
+    final SVNRepository repository = connection.getDelegate();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(null,
         repository.getAuthenticationManager()).getDiffClient();
 
@@ -399,9 +413,10 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public final AnnotatedTextFile blame(final SVNRepository repository, final String path, final long revision,
+  public final AnnotatedTextFile blame(final SVNConnection connection, final String path, final long revision,
                                        final String charset, final Colorer colorer) throws SVNException {
 
+    final SVNRepository repository = connection.getDelegate();
     final long blameRevision;
     if (Revision.UNDEFINED.getNumber() == revision) {
       blameRevision = repository.getLatestRevision();
@@ -411,7 +426,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
 
-    final SVNProperties properties = getFileProperties(repository, path, revision);
+    final SVNProperties properties = getFileProperties(connection, path, revision);
 
     final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
         path, charset, colorer, properties, repository.getLocation().toDecodedString());
@@ -434,7 +449,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
-  public SVNNodeKind getNodeKindForDiff(final SVNRepository repository, final DiffCommand command)
+  public SVNNodeKind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
       throws SVNException, DiffException {
 
     final long fromRevision;
@@ -448,8 +463,8 @@ public class RepositoryServiceImpl implements RepositoryService {
       toRevision = command.getToRevision().getNumber();
     }
 
-    final SVNNodeKind nodeKind1 = getNodeKind(repository, command.getFromPath(), fromRevision);
-    final SVNNodeKind nodeKind2 = getNodeKind(repository, command.getToPath(), toRevision);
+    final SVNNodeKind nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
+    final SVNNodeKind nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
 
     assertFileOrDir(nodeKind1, command.getFromPath(), fromRevision);
     assertFileOrDir(nodeKind2, command.getToPath(), toRevision);
@@ -469,17 +484,17 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
   }
 
-  private void assertNotBinary(final SVNRepository repository, final DiffCommand command, final Revision pegRevision)
+  private void assertNotBinary(final SVNConnection connection, final DiffCommand command, final Revision pegRevision)
       throws SVNException, IllegalFileFormatException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
     if (Revision.UNDEFINED.equals(pegRevision)) {
-      isLeftFileTextType = isTextFile(repository, command.getFromPath(), command.getFromRevision().getNumber());
-      isRightFileTextType = isTextFile(repository, command.getToPath(), command.getToRevision().getNumber());
+      isLeftFileTextType = isTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber());
+      isRightFileTextType = isTextFile(connection, command.getToPath(), command.getToRevision().getNumber());
     } else {
-      isLeftFileTextType = isTextFile(repository, command.getFromPath(), pegRevision.getNumber());
-      isRightFileTextType = isTextFile(repository, command.getToPath(), pegRevision.getNumber());
+      isLeftFileTextType = isTextFile(connection, command.getFromPath(), pegRevision.getNumber());
+      isRightFileTextType = isTextFile(connection, command.getToPath(), pegRevision.getNumber());
     }
 
     if (!isLeftFileTextType && !isRightFileTextType) {

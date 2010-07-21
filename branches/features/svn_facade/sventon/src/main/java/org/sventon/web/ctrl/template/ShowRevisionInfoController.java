@@ -13,11 +13,11 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.SVNConnection;
 import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,14 +32,14 @@ import java.util.Map;
 public final class ShowRevisionInfoController extends AbstractTemplateController {
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final long revisionNumber = command.getRevisionNumber();
     logger.debug("Getting revision info details for revision: " + revisionNumber);
-    final SVNLogEntry revision = getRepositoryService().getRevision(command.getName(), repository, revisionNumber);
+    final SVNLogEntry revision = getRepositoryService().getRevision(command.getName(), connection, revisionNumber);
     final LogEntryWrapper logEntryWrapper = new LogEntryWrapper(revision);
     //TODO: Parse to apply Bugtraq link
     final Map<String, Object> model = new HashMap<String, Object>();

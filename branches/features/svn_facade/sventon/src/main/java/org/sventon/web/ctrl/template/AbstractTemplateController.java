@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
@@ -167,22 +168,22 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       return prepareExceptionModelAndView(errors, command);
     }
 
-    SVNRepository repository = null;
+    SVNConnection connection = null;
     try {
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
       final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
 
-      repository = createConnection(configuration, repositoryContext);
-      final long headRevision = getRepositoryService().getLatestRevision(repository);
-      command.translateRevision(headRevision, repository);
+      connection = createConnection(configuration, repositoryContext);
+      final long headRevision = getRepositoryService().getLatestRevision(connection);
+      command.translateRevision(headRevision, connection);
 
       parseAndUpdateSortParameters(command, repositoryContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, repositoryContext);
       parseAndUpdateCharsetParameter(request, repositoryContext);
       parseAndUpdateSearchModeParameter(request, repositoryContext);
 
-      final ModelAndView modelAndView = svnHandle(repository, command, headRevision, repositoryContext, request, response, errors);
+      final ModelAndView modelAndView = svnHandle(connection, command, headRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetFileController.
       if (needModelPopulation(modelAndView)) {
@@ -204,7 +205,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
         model.put("baseURL", application.getBaseURL());
 
         if (showLatestRevInfo) {
-          model.put("revisions", getLatestRevisions(command, repository, repositoryContext, headRevision));
+          model.put("revisions", getLatestRevisions(command, connection, repositoryContext, headRevision));
         }
         modelAndView.addAllObjects(model);
       }
@@ -225,8 +226,8 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       }
       return prepareExceptionModelAndView(errors, command);
     } finally {
-      if (repository != null) {
-        repository.closeSession();
+      if (connection != null) {
+        connection.closeSession();
       }
     }
   }
@@ -237,11 +238,11 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<LogEntryWrapper> getLatestRevisions(BaseCommand command, SVNRepository repository, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<LogEntryWrapper> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
-      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, headRevision,
+      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), connection, headRevision,
           FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
@@ -261,17 +262,17 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * @return Connection
    * @throws SVNException if a subversion error occur.
    */
-  protected SVNRepository createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
-    final SVNRepository repository;
+  protected SVNConnection createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
+    final SVNConnection connection;
     final RepositoryName repositoryName = configuration.getName();
     final SVNURL svnurl = configuration.getSVNURL();
 
     if (configuration.isAccessControlEnabled()) {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
+      connection = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
     } else {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
+      connection = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
     }
-    return repository;
+    return connection;
   }
 
   /**
@@ -390,7 +391,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * controller. This is where the actual work takes place. See class
    * documentation for info on workflow and on how all this works together.
    *
-   * @param repository            Reference to the repository, prepared with authentication
+   * @param connection            Reference to the repository, prepared with authentication
    *                              if applicable.
    * @param command               Command (basically request parameters submitted in user
    *                              request)
@@ -403,7 +404,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * @return Model and view to render.
    * @throws Exception Thrown if exception occurs during SVN operations.
    */
-  protected abstract ModelAndView svnHandle(final SVNRepository repository,
+  protected abstract ModelAndView svnHandle(final SVNConnection connection,
                                             final BaseCommand command,
                                             final long headRevision,
                                             final UserRepositoryContext userRepositoryContext,

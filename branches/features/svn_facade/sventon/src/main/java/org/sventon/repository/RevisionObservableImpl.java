@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnection;
 import org.sventon.appl.Application;
 import org.sventon.appl.ObjectCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
@@ -24,7 +25,6 @@ import org.sventon.repository.observer.RevisionObserver;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,15 +131,15 @@ public final class RevisionObservableImpl extends Observable implements Revision
    * Update.
    *
    * @param name             The Repository name
-   * @param repository       Repository to use for update.
+   * @param connection       Repository to use for update.
    * @param objectCache      ObjectCache instance to read/write information about last observed revisions.
    * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  protected void update(final RepositoryName name, final SVNRepository repository, final ObjectCache objectCache,
+  protected void update(final RepositoryName name, final SVNConnection connection, final ObjectCache objectCache,
                         final boolean flushAfterUpdate) {
 
     try {
-      final long headRevision = repositoryService.getLatestRevision(repository);
+      final long headRevision = repositoryService.getLatestRevision(connection);
       final String lastUpdatedKeyName = getLastUpdatedKeyName(name);
       Long lastUpdatedRevision = (Long) objectCache.get(lastUpdatedKeyName);
 
@@ -163,7 +163,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
               ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getRevisionsFromRepository(repository, fromRevision, toRevision));
+          logEntries.addAll(repositoryService.getRevisionsFromRepository(connection, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           setChanged();
           logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
@@ -230,17 +230,17 @@ public final class RevisionObservableImpl extends Observable implements Revision
 
       if (configuration.isCacheUsed() && !application.isUpdating(repositoryName)) {
         application.setUpdatingCache(repositoryName, true);
-        SVNRepository repository = null;
+        SVNConnection connection = null;
         try {
-          repository = repositoryConnectionFactory.createConnection(configuration.getName(),
+          connection = repositoryConnectionFactory.createConnection(configuration.getName(),
               configuration.getSVNURL(), configuration.getCacheCredentials());
           final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
-          update(repositoryName, repository, objectCache, flushAfterUpdate);
+          update(repositoryName, connection, objectCache, flushAfterUpdate);
         } catch (final Exception ex) {
           logger.warn("Unable to establish repository connection", ex);
         } finally {
-          if (repository != null) {
-            repository.closeSession();
+          if (connection != null) {
+            connection.closeSession();
           }
           application.setUpdatingCache(repositoryName, false);
         }

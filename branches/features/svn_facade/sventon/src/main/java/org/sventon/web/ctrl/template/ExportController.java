@@ -14,13 +14,13 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +50,7 @@ public final class ExportController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -62,7 +62,7 @@ public final class ExportController extends AbstractTemplateController {
       throw new IllegalStateException("Export already in progress");
     }
 
-    final UUID uuid = exportExecutor.submit(command, repository, pegRevision);
+    final UUID uuid = exportExecutor.submit(command, connection, pegRevision);
     userRepositoryContext.setExportUuid(uuid);
     userRepositoryContext.setIsWaitingForExport(true);
 

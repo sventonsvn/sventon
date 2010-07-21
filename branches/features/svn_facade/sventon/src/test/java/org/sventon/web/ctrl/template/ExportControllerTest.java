@@ -4,13 +4,13 @@ import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +40,7 @@ public class ExportControllerTest extends TestCase {
     assertNull(context.getExportUuid());
 
     final ExportController ctrl = new ExportController(new ExportExecutor() {
-      public UUID submit(MultipleEntriesCommand command, SVNRepository repository, long pegRevision) {
+      public UUID submit(MultipleEntriesCommand command, SVNConnection connection, long pegRevision) {
         return UUID.fromString(UUID_STRING);
       }
 

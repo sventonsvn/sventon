@@ -1,20 +1,21 @@
 package org.sventon.export;
 
 import junit.framework.TestCase;
-import static org.easymock.classextension.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.SVNConnection;
 import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.WebUtils;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static org.easymock.classextension.EasyMock.*;
 
 public class ExportExecutorImplTest extends TestCase {
 
@@ -40,31 +41,31 @@ public class ExportExecutorImplTest extends TestCase {
     final ConfigDirectory configDirectoryMock = createMock(ConfigDirectory.class);
     final ExportDirectory exportDirectoryMock = createMock(ExportDirectory.class);
     final RepositoryService repositoryServiceMock = createMock(RepositoryService.class);
-    final SVNRepository repositoryMock = createMock(SVNRepository.class);
+    final SVNConnection connection = createMock(SVNConnection.class);
 
     expect(configDirectoryMock.getExportDirectory()).andStubReturn(new File(TestUtils.TEMP_DIR));
     expect(exportDirectoryMock.getDirectory()).andReturn(new File("."));
     expect(exportDirectoryMock.getUUID()).andStubReturn(UUID.fromString(UUID_STRING));
     expect(exportDirectoryMock.mkdirs()).andStubReturn(true);
-    repositoryServiceMock.export(repositoryMock, entries, 123, exportDirectoryMock);
+    repositoryServiceMock.export(connection, entries, 123, exportDirectoryMock);
     exportDirectoryMock.delete();
     expect(exportDirectoryMock.compress()).andStubReturn(new File(TestUtils.TEMP_DIR));
 
     replay(configDirectoryMock);
     replay(exportDirectoryMock);
-    replay(repositoryMock);
+    replay(connection);
 
     final ExportExecutorImpl exportExecutor = new ExportExecutorImpl(configDirectoryMock);
 
     exportExecutor.setRepositoryService(repositoryServiceMock);
 
     final ExportExecutorImpl.ExportTask exportTask = exportExecutor.new ExportTask(exportDirectoryMock,
-        repositoryMock, entries, 123);
+        connection, entries, 123);
 
     exportTask.call();
 
     verify(configDirectoryMock);
     verify(exportDirectoryMock);
-    verify(repositoryMock);
+    verify(connection);
   }
 }

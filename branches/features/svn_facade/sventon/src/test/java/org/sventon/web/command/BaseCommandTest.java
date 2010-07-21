@@ -1,6 +1,7 @@
 package org.sventon.web.command;
 
 import junit.framework.TestCase;
+import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
@@ -82,7 +83,7 @@ public class BaseCommandTest extends TestCase {
     assertEquals(Revision.create(123), command.getRevision());
 
     command.setRevision(Revision.parse("{2007-01-01}"));
-    command.translateRevision(200, new SVNRepositoryStub() {
+    command.translateRevision(200, new SVNKitConnection(new SVNRepositoryStub()) {
       public long getDatedRevision(final Date date) throws SVNException {
         return 123;
       }

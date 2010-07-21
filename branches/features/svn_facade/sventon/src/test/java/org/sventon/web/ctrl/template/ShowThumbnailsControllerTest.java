@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.util.SVNFileRevisionEditor;
 import org.sventon.web.command.MultipleEntriesCommand;
@@ -32,7 +33,7 @@ public class ShowThumbnailsControllerTest extends TestCase {
     final MockHttpServletRequest req = new MockHttpServletRequest();
     req.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
 
-    final ModelAndView modelAndView = ctrl.svnHandle(new SVNRepositoryStub(),
+    final ModelAndView modelAndView = ctrl.svnHandle(new SVNKitConnection(new SVNRepositoryStub()),
         command, 100, null, req, null, null);
 
     final Map model = modelAndView.getModel();

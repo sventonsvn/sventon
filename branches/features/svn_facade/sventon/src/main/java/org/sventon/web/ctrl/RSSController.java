@@ -14,23 +14,24 @@ package org.sventon.web.ctrl;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.web.HttpAuthenticationHandler;
 import org.sventon.web.command.BaseCommand;
-import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 
 /**
  * Controller used for generating RSS feeds.
@@ -76,15 +77,15 @@ public final class RSSController extends AbstractBaseController {
 
     addResponseHeaders(response);
 
-    SVNRepository repository = null;
+    SVNConnection connection = null;
 
     try {
       final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-      repository = createRepositoryConnection(request, configuration);
-      command.translateRevision(getRepositoryService().getLatestRevision(repository), repository);
+      connection = createRepositoryConnection(request, configuration);
+      command.translateRevision(getRepositoryService().getLatestRevision(connection), connection);
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
-      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), repository, command.getRevisionNumber(),
+      logEntries.addAll(getRepositoryService().getRevisions(command.getName(), connection, command.getRevisionNumber(),
           FIRST_REVISION, command.getPath(), configuration.getRssItemsCount(), false));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (SVNAuthenticationException aex) {
@@ -93,12 +94,12 @@ public final class RSSController extends AbstractBaseController {
     } catch (SVNException svnex) {
       handleSVNException(response, svnex);
     } finally {
-      close(repository);
+      close(connection);
     }
     return null;
   }
 
-  private SVNRepository createRepositoryConnection(final HttpServletRequest request,
+  private SVNConnection createRepositoryConnection(final HttpServletRequest request,
                                                    final RepositoryConfiguration configuration) throws SVNException {
     final Credentials credentials = extractCredentials(request, configuration);
     return repositoryConnectionFactory.createConnection(configuration.getName(),
@@ -106,9 +107,9 @@ public final class RSSController extends AbstractBaseController {
   }
 
 
-  private void close(SVNRepository repository) {
-    if (repository != null) {
-      repository.closeSession();
+  private void close(SVNConnection connection) {
+    if (connection != null) {
+      connection.closeSession();
     }
   }
 

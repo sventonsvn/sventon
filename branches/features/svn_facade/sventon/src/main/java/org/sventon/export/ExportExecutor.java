@@ -11,8 +11,8 @@
  */
 package org.sventon.export;
 
+import org.sventon.SVNConnection;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,11 +30,11 @@ public interface ExportExecutor {
    * Creates an export directory.
    *
    * @param command     Command
-   * @param repository  Repository
+   * @param connection  Repository
    * @param pegRevision Peg revision
    * @return Directory instance.
    */
-  UUID submit(final MultipleEntriesCommand command, final SVNRepository repository, long pegRevision);
+  UUID submit(final MultipleEntriesCommand command, final SVNConnection connection, long pegRevision);
 
   /**
    * Downloads the compressed export file.

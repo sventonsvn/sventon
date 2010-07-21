@@ -1,6 +1,8 @@
 package org.sventon.service;
 
 import junit.framework.TestCase;
+import org.sventon.SVNConnection;
+import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
@@ -22,7 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-public class RepositoryServiceImplTest extends TestCase {
+public class SVNKitRepositoryServiceTest extends TestCase {
 
   private static final String ENCODING = "UTF-8";
 
@@ -31,7 +33,7 @@ public class RepositoryServiceImplTest extends TestCase {
   private SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
 
   public void testDiffUnifiedBinaryFile() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -43,9 +45,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -55,7 +57,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, Revision.UNDEFINED, ENCODING);
+      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
@@ -63,7 +65,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnifiedIdenticalFiles1() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -74,9 +76,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -86,7 +88,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, Revision.UNDEFINED, ENCODING);
+      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -94,7 +96,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnifiedIdenticalFiles2() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -113,9 +115,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -125,7 +127,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(repository, command, Revision.UNDEFINED, ENCODING);
+      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -133,7 +135,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffUnified() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
       private boolean firstTime = true;
 
       @Override
@@ -159,9 +161,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -170,12 +172,12 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final String s = service.diffUnified(repository, command, Revision.UNDEFINED, ENCODING);
+    final String s = service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
     assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
   }
 
   public void testDiffInline() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
       private boolean firstTime = true;
 
       @Override
@@ -210,9 +212,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -221,7 +223,7 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final List<InlineDiffRow> list = service.diffInline(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+    final List<InlineDiffRow> list = service.diffInline(connection, command, Revision.UNDEFINED, ENCODING, configuration);
 
     assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
     assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
@@ -232,7 +234,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideBinaryFile() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -244,9 +246,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -256,7 +258,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
@@ -265,7 +267,7 @@ public class RepositoryServiceImplTest extends TestCase {
 
   public void testDiffSideBySideIdenticalFiles1() throws Exception {
 
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -276,9 +278,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -288,7 +290,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -296,7 +298,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideDirectories() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -315,9 +317,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.DIR;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -327,7 +329,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (DiffException e) {
       // expected
@@ -335,7 +337,7 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySideIdenticalFiles2() throws Exception {
-    final SVNRepositoryStub repository = new SVNRepositoryStub() {
+    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
 
       @Override
       public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
@@ -354,9 +356,9 @@ public class RepositoryServiceImplTest extends TestCase {
       public SVNNodeKind checkPath(String path, long revision) throws SVNException {
         return SVNNodeKind.FILE;
       }
-    };
+    });
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -366,7 +368,7 @@ public class RepositoryServiceImplTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
       fail("Binary files cannot be diffed");
     } catch (IdenticalFilesException e) {
       // expected
@@ -374,9 +376,9 @@ public class RepositoryServiceImplTest extends TestCase {
   }
 
   public void testDiffSideBySide() throws Exception {
-    final TestSVNRepositoryStub repository = new TestSVNRepositoryStub();
+    final SVNConnection connection = new SVNKitConnection(new TestSVNRepositoryStub());
 
-    final RepositoryService service = new RepositoryServiceImpl();
+    final RepositoryService service = new SVNKitRepositoryService();
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
@@ -385,10 +387,10 @@ public class RepositoryServiceImplTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    List<SideBySideDiffRow> diff = service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+    List<SideBySideDiffRow> diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
     assertEquals(1, diff.size());
 
-    repository.leftFileContents = "/**\n" +
+    ((TestSVNRepositoryStub) connection.getDelegate()).leftFileContents = "/**\n" +
         " * $Author$\n" +
         " * $Revision$\n" +
         " * $Date:$\n" +
@@ -398,7 +400,7 @@ public class RepositoryServiceImplTest extends TestCase {
         "More!\n" +
         "Even more!\n";
 
-    repository.rightFileContents = "/**\n" +
+    ((TestSVNRepositoryStub) connection.getDelegate()).rightFileContents = "/**\n" +
         " * $Id$\n" +
         " * $LastChangedDate$\n" +
         " * $Date$\n" +
@@ -470,7 +472,7 @@ public class RepositoryServiceImplTest extends TestCase {
             "21a\n" +
             "22a}\n";
 
-    diff = service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+    diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
@@ -492,7 +494,7 @@ public class RepositoryServiceImplTest extends TestCase {
     }
     assertEquals(rightResult, sb.toString());
 
-    repository.leftFileContents =
+    ((TestSVNRepositoryStub) connection.getDelegate()).leftFileContents =
         "[.ShellClassInfo]\n" +
             "InfoTip=@Shell32.dll,-12690\n" +
             "IconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
@@ -502,7 +504,7 @@ public class RepositoryServiceImplTest extends TestCase {
             "Personalized=14\n" +
             "PersonalizedName=Mina videoklipp\n";
 
-    repository.rightFileContents =
+    ((TestSVNRepositoryStub) connection.getDelegate()).rightFileContents =
         "[.ShellClassInfo]\n" +
             "IconIndex=-2388\n" +
             "[DeleteOnCopy]\n" +
@@ -548,7 +550,7 @@ public class RepositoryServiceImplTest extends TestCase {
             "11aOneMore=6\n" +
             "12aOneMore=9\n";
 
-    diff = service.diffSideBySide(repository, command, Revision.UNDEFINED, ENCODING, configuration);
+    diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
