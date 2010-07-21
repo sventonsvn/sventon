@@ -20,16 +20,12 @@ import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.diff.DiffException;
-import org.sventon.model.AvailableCharsets;
-import org.sventon.model.LogEntryWrapper;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.model.*;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,7 +42,7 @@ import java.util.Map;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
+ * <code>{@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
  * HttpServletRequest,HttpServletResponse,BindException)}</code>.
  * <p/>
  * Workflow for this controller:
@@ -58,14 +54,14 @@ import java.util.Map;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
+ * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
  * HttpServletRequest,HttpServletResponse,BindException)}
  * method with the given {@link org.sventon.web.command.BaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNRepository, org.sventon.web.command.BaseCommand ,long, org.sventon.model.UserRepositoryContext ,
+ * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long, org.sventon.model.UserRepositoryContext ,
  * HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
@@ -176,7 +172,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
       connection = createConnection(configuration, repositoryContext);
       final long headRevision = getRepositoryService().getLatestRevision(connection);
-      command.translateRevision(headRevision, connection);
+      command.setRevision(Revision.create(getRepositoryService().translateRevision(command.getRevision(), headRevision, connection)));
 
       parseAndUpdateSortParameters(command, repositoryContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, repositoryContext);

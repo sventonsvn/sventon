@@ -309,4 +309,19 @@ public interface RepositoryService {
    */
   SVNNodeKind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
       throws SVNException, DiffException;
+
+  /**
+   * Translates the revision and the peg revision into a number, if needed.
+   * <p/>
+   * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
+   * by getting the closest revision number before or at the specified date stamp.
+   *
+   * @param revision     Revision to translate
+   * @param headRevision The current HEAD revision.
+   * @param connection   Repository connection.
+   * @return The revision number.
+   * @throws SVNException if unable to communicate with repository.
+   */
+  long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SVNException;
+
 }
