@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnection;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
@@ -24,7 +25,6 @@ import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * ConfigCommandValidator.
@@ -149,17 +149,17 @@ public final class ConfigCommandValidator implements Validator {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName.toString());
     configuration.setRepositoryUrl(repositoryUrl);
 
-    SVNRepository repository = null;
+    SVNConnection connection = null;
     try {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
+      connection = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           credentials);
-      repository.testConnection();
+      connection.getDelegate().testConnection();
     } catch (SVNException ex) {
       logger.info(ex);
       throw ex;
     } finally {
-      if (repository != null) {
-        repository.closeSession();
+      if (connection != null) {
+        connection.closeSession();
       }
     }
   }

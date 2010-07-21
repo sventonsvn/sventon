@@ -14,11 +14,11 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +41,7 @@ public final class RepositoryEntryTrayController extends AbstractTemplateControl
   public static final String PARAMETER_REMOVE = "remove";
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -54,7 +54,7 @@ public final class RepositoryEntryTrayController extends AbstractTemplateControl
 
     final RepositoryEntry entry;
     try {
-      entry = getRepositoryService().getEntryInfo(repository, command.getPath(), pegRevision);
+      entry = getRepositoryService().getEntryInfo(connection, command.getPath(), pegRevision);
     } catch (SVNException e) {
       return modelAndView;
     }

@@ -33,6 +33,6 @@ public interface RepositoryConnectionFactory {
    * @return The repository connection.
    * @throws SVNException if unable to create repository connection.
    */
-  SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
+  SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                  final Credentials credentials) throws SVNException;
 }

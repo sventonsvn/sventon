@@ -14,11 +14,11 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,7 +42,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
   public static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -54,7 +54,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
       final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
-          repository, command.getPath(), command.getRevisionNumber());
+          connection, command.getPath(), command.getRevisionNumber());
 
       fileRevisions.addAll(revisions);
       Collections.reverse(fileRevisions);

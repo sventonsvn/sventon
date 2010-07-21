@@ -12,6 +12,7 @@
 package org.sventon.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheGateway;
@@ -29,7 +30,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl {
+public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryService {
 
   /**
    * The cache instance.
@@ -65,7 +66,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNRepository repository, final long revision)
+  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
@@ -73,7 +74,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {
-      logEntry = super.getRevision(repositoryName, repository, revision);
+      logEntry = super.getRevision(repositoryName, connection, revision);
     }
     return logEntry;
   }
@@ -83,10 +84,11 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNRepository repository,
+  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNConnection connection,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
+    final SVNRepository repository = connection.getDelegate();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     if (canReturnCachedRevisionsFor(repositoryName)) {
       final List<Long> revisions = new ArrayList<Long>();
@@ -105,7 +107,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
       logger.debug("Fetching [" + limit + "] cached revisions: " + revisions);
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getRevisions(repositoryName, repository, fromRevision, toRevision, path, limit, stopOnCopy));
+      logEntries.addAll(super.getRevisions(repositoryName, connection, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
   }

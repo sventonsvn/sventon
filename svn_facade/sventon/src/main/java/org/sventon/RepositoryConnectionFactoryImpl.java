@@ -50,7 +50,7 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
    * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
    */
   @Override
-  public SVNRepository createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
+  public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SVNException {
 
     if (svnUrl == null) {
@@ -62,6 +62,6 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
         configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
-    return repository;
+    return new SVNKitConnection(repository);
   }
 }

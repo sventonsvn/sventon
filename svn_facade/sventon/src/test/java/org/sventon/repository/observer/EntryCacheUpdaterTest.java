@@ -2,6 +2,7 @@ package org.sventon.repository.observer;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
+import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -10,7 +11,7 @@ import org.sventon.cache.entrycache.EntryCache;
 import org.sventon.cache.entrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
-import org.sventon.service.RepositoryServiceImpl;
+import org.sventon.service.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.*;
 
 import java.io.File;
@@ -43,8 +44,8 @@ public class EntryCacheUpdaterTest extends TestCase {
     final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
 
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
-    cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
-    cacheUpdater.updateInternal(entryCache, new TestRepository(),
+    cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
+    cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),
         new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
 
     assertEquals(4, entryCache.getSize());
@@ -67,8 +68,8 @@ public class EntryCacheUpdaterTest extends TestCase {
 
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setFlushThreshold(2);
-    cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
-    cacheUpdater.updateInternal(entryCache, new TestRepository(),
+    cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
+    cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),
         new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
 
     assertEquals(3, entryCache.getSize());

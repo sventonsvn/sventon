@@ -15,12 +15,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +52,7 @@ public final class ShowLogController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -66,7 +66,7 @@ public final class ShowLogController extends AbstractTemplateController {
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
     try {
-      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), repository,
+      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), connection,
           fromRevision, FIRST_REVISION, nextPath, pageSize, stopOnCopy);
 
       String pathAtRevision = nextPath;
@@ -106,7 +106,7 @@ public final class ShowLogController extends AbstractTemplateController {
     model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
-    model.put("isFile", getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
+    model.put("isFile", getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
     model.put("nextPath", nextPath);
     model.put("nextRevision", fromRevision);

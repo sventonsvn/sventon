@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.SVNConnection;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
@@ -292,11 +293,12 @@ public class BaseCommand {
    * by getting the closest revision number before or at the specified date stamp.
    *
    * @param headRevision The current HEAD revision.
-   * @param repository   Repository instance.
+   * @param connection   Repository connection.
    * @return The revision number.
    * @throws SVNException if unable to communicate with repository.
    */
-  public long translateRevision(long headRevision, final SVNRepository repository) throws SVNException {
+  public long translateRevision(long headRevision, final SVNConnection connection) throws SVNException {
+    final SVNRepository repository = connection.getDelegate();
     if (revision.getNumber() < 0 && revisionNumber < 0) {
       if (Revision.HEAD.equals(revision)) {
         revisionNumber = headRevision;

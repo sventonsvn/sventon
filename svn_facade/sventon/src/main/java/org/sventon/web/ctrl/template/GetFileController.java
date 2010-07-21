@@ -14,6 +14,7 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.appl.ObjectCacheManager;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheKey;
@@ -21,9 +22,7 @@ import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
-import static org.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
 import javax.imageio.ImageIO;
@@ -33,6 +32,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+
+import static org.sventon.util.WebUtils.CONTENT_DISPOSITION_HEADER;
 
 /**
  * Controller used when downloading single files.
@@ -98,7 +99,7 @@ public class GetFileController extends AbstractTemplateController {
   public static final String DISPLAY_TYPE_THUMBNAIL = "thumbnail";
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -113,23 +114,23 @@ public class GetFileController extends AbstractTemplateController {
     if (CONTENT_DISPOSITION_ATTACHMENT.equals(displayType)) {
       logger.debug("Getting file as 'attachment'");
       prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
-      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
+      getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), output);
     } else if (CONTENT_DISPOSITION_INLINE.equals(displayType)) {
       if (isImageFile(command.getPath())) {
         logger.debug("Getting file as 'inline'");
         prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
-        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
+        getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), output);
       } else {
         logger.warn("File [" + command.getTarget() + "] is not an image file - unable to display it 'inline'");
         prepareResponse(CONTENT_DISPOSITION_ATTACHMENT, request, response, getMimeType(command.getTarget().toLowerCase()), command);
-        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), output);
+        getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), output);
       }
     } else if (DISPLAY_TYPE_THUMBNAIL.equals(displayType)) {
       if (isImageFile(command.getPath())) {
         logger.debug("Getting file as 'thumbnail'");
         prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
         if (cacheUsed) {
-          final String checksum = getRepositoryService().getFileChecksum(repository, command.getPath(), command.getRevisionNumber());
+          final String checksum = getRepositoryService().getFileChecksum(connection, command.getPath(), command.getRevisionNumber());
           objectCache = objectCacheManager.getCache(command.getName());
           cacheKey = new ObjectCacheKey(command.getPath(), checksum);
           logger.debug("Using cachekey: " + cacheKey);
@@ -137,14 +138,14 @@ public class GetFileController extends AbstractTemplateController {
 
           if (thumbnailData == null) {
             // Thumbnail did not exist - create it and cache it
-            thumbnailData = createThumbnail(repository, command);
+            thumbnailData = createThumbnail(connection, command);
             logger.debug("Caching thumbnail. Using cachekey: " + cacheKey);
             objectCache.put(cacheKey, thumbnailData);
             objectCache.flush();
           }
         } else {
           // Cache is not used - always recreate the thumbnail
-          thumbnailData = createThumbnail(repository, command);
+          thumbnailData = createThumbnail(connection, command);
         }
         output.write(thumbnailData);
       } else {
@@ -196,16 +197,16 @@ public class GetFileController extends AbstractTemplateController {
   /**
    * Creates a thumbnail version of a full size image.
    *
-   * @param repository Repository
+   * @param connection Repository
    * @param command    Command
    * @return array of image bytes
    */
-  private byte[] createThumbnail(final SVNRepository repository, final BaseCommand command) {
+  private byte[] createThumbnail(final SVNConnection connection, final BaseCommand command) {
     logger.debug("Creating thumbnail for: " + command.getPath());
     final ByteArrayOutputStream fullSizeImageData = new ByteArrayOutputStream();
     final ByteArrayOutputStream thumbnailImageData = new ByteArrayOutputStream();
     try {
-      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
+      getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), fullSizeImageData);
       final BufferedImage image = ImageIO.read(new ByteArrayInputStream(fullSizeImageData.toByteArray()));
       ImageIO.write(imageScaler.getThumbnail(image, maxThumbnailSize), imageFormatName, thumbnailImageData);
     } catch (final Exception ex) {

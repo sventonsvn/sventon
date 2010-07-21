@@ -14,6 +14,7 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.SVNConnection;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
@@ -21,7 +22,6 @@ import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ import java.util.Map;
 public final class GoToController extends AbstractTemplateController {
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -54,7 +54,7 @@ public final class GoToController extends AbstractTemplateController {
     SVNNodeKind kind = null;
 
     try {
-      kind = getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber());
+      kind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
       logger.debug("Node kind of [" + command.getPath() + "]: " + kind);
     } catch (SVNException svnex) {
       if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
