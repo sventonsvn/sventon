@@ -6,10 +6,11 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.model.Credentials;
+import org.sventon.model.RepositoryName;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
@@ -127,32 +128,71 @@ public class ApplicationTest extends TestCase {
     final Application application = new Application(configDirectory);
     application.setConfigurationFileName(configFileName);
 
-    OutputStream os = null;
-    InputStream is = null;
-
-    final File configDir = new File(configDirectory.getRepositoriesDirectory(), "defaultsvn");
+    final String name = "defaultsvn";
+    final File configDir = new File(configDirectory.getRepositoriesDirectory(), name);
     configDir.mkdirs();
 
+    final File configFile = new File(configDir, configFileName);
+    storeProperties(configFile, createDummyConfigProperties(name));
+
+    assertFalse(application.hasConfigurations());
+    assertFalse(application.isConfigured());
+    application.loadRepositoryConfigurations(application.getConfigDirectories());
+    assertEquals(1, application.getRepositoryConfigurationCount());
+    assertTrue(application.isConfigured());
+  }
+
+  public void testReloadRepositoryConfigurations() throws Exception {
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    final String configFileName = "sventon-config-test.tmp";
+    final Application application = new Application(configDirectory);
+    application.setConfigurationFileName(configFileName);
+
+    final String name1 = "defaultsvn1";
+    final String name2 = "defaultsvn2";
+
+    final File configDir1 = new File(configDirectory.getRepositoriesDirectory(), name1);
+    configDir1.mkdirs();
+
+    final File configDir2 = new File(configDirectory.getRepositoriesDirectory(), name2);
+    configDir2.mkdirs();
+
+    storeProperties(new File(configDir1, configFileName), createDummyConfigProperties(name1));
+
+    assertFalse(application.hasConfigurations());
+    assertFalse(application.isConfigured());
+    application.loadRepositoryConfigurations(application.getConfigDirectories());
+    assertEquals(1, application.getRepositoryConfigurationCount());
+    assertTrue(application.isConfigured());
+    assertNotNull(application.getConfiguration(new RepositoryName(name1)));
+    assertNull(application.getConfiguration(new RepositoryName(name2)));
+
+    storeProperties(new File(configDir2, configFileName), createDummyConfigProperties(name2));
+
+    application.loadRepositoryConfigurations(application.getConfigDirectories());
+
+    assertEquals(2, application.getRepositoryConfigurationCount());
+    assertNotNull(application.getConfiguration(new RepositoryName(name1)));
+    assertNotNull(application.getConfiguration(new RepositoryName(name2)));
+  }
+
+  private OutputStream storeProperties(File configFile, Properties properties) throws IOException {
+    OutputStream os = null;
     try {
-      final Properties testConfig = createDummyConfigProperties();
-      os = new FileOutputStream(new File(configDir, configFileName));
-      testConfig.store(os, null);
-
-      assertFalse(application.hasConfigurations());
-      assertFalse(application.isConfigured());
-
-      application.loadRepositoryConfigurations(application.getConfigDirectories());
-
-      assertEquals(1, application.getRepositoryConfigurationCount());
-      assertTrue(application.isConfigured());
+      os = new FileOutputStream(configFile);
+      properties.store(os, null);
+      return os;
     } finally {
-      IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
     }
   }
 
-  private Properties createDummyConfigProperties() {
+  private Properties createDummyConfigProperties(String name) {
     final Properties testConfig = new Properties();
+    testConfig.put("name", name);
     testConfig.put("repositoryRootUrl", "http://localhost");
     testConfig.put("userName", "userName");
     testConfig.put("userPassword", "abc123");
