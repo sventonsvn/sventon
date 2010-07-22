@@ -69,7 +69,7 @@ public final class Application {
   /**
    * Application configuration file name.
    */
-  private final String configurationFilename;
+  private String configurationFileName;
 
   /**
    * Toggles the possibility to edit the config after initial setup.
@@ -93,17 +93,12 @@ public final class Application {
   /**
    * Constructor.
    *
-   * @param configDirectory       Configuration root directory. Directory will be created if it does not already exist,
-   *                              not {@code null} Configuration settings will be stored in this directory.
-   * @param configurationFilename Path and file name of sventon configuration file, not {@code null}
-   * @throws IOException if IO error occur
+   * @param configDirectory Configuration root directory. Directory will be created if it does not already exist,
+   *                        not {@code null} Configuration settings will be stored in this directory.
    */
-  public Application(final ConfigDirectory configDirectory, final String configurationFilename) throws IOException {
+  public Application(final ConfigDirectory configDirectory) {
     Validate.notNull(configDirectory, "Config directory cannot be null");
-    Validate.notNull(configurationFilename, "Config filename cannot be null");
-
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
-    this.configurationFilename = configurationFilename;
   }
 
   /**
@@ -154,7 +149,7 @@ public final class Application {
    * Loads the repository configurations from the file at path
    * {@code configurationRootDirectory / [repository name] / configurationFilename}
    * <p/>
-   * If a config file is found an configuration is successful this repository will be marked as configured.
+   * If a config file is found and configuration is successful this repository will be marked as configured.
    * If no file is found initialization will fail silently and the repository will not be marked as configured.
    * <p/>
    * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
@@ -166,7 +161,7 @@ public final class Application {
    */
   protected void loadRepositoryConfigurations() throws IOException {
     final File[] configDirs = repositoriesDirectory.listFiles(
-        new SventonConfigDirectoryFileFilter(configurationFilename));
+        new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
 
     if (configDirs.length == 0) {
       logger.debug("No configuration files were found below: " + repositoriesDirectory.getAbsolutePath());
@@ -178,7 +173,7 @@ public final class Application {
       InputStream is = null;
       try {
         final Properties properties = new Properties();
-        is = new FileInputStream(new File(configDir, configurationFilename));
+        is = new FileInputStream(new File(configDir, getConfigurationFileName()));
         properties.load(is);
         final String repositoryName = configDir.getName();
         logger.info("Configuring repository: " + repositoryName);
@@ -214,7 +209,7 @@ public final class Application {
           throw new IOException("Unable to create directory: " + configDir.getAbsolutePath());
         }
 
-        final File configFile = new File(configDir, configurationFilename);
+        final File configFile = new File(configDir, getConfigurationFileName());
         logger.info("Storing configuration: " + configFile.getAbsolutePath());
 
         FileOutputStream fileOutputStream = null;
@@ -253,8 +248,8 @@ public final class Application {
     }
     final RepositoryConfiguration configuration = repositoryConfigurations.get(name);
     if (configuration.isPersisted()) {
-      final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
-      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
+      final File configFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName());
+      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName() + "_bak");
       logger.info("Disabling repository configuration for [" + name.toString() + "]");
       if (configFile.renameTo(configBackupFile)) {
         logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
@@ -266,6 +261,24 @@ public final class Application {
       // Repository has not yet been stored and the user wants to delete it. Simply remove reference.
       repositoryConfigurations.remove(name);
     }
+  }
+
+  /**
+   * @param configurationFileName Path and file name of sventon configuration file, not {@code null}
+   */
+  public void setConfigurationFileName(String configurationFileName) {
+    Validate.notNull(configurationFileName, "Config filename cannot be null");
+    this.configurationFileName = configurationFileName;
+  }
+
+  /**
+   * @return The configuration file name
+   */
+  public String getConfigurationFileName() {
+    if (configurationFileName == null) {
+      throw new IllegalStateException("Configuration file name has not been set!");
+    }
+    return configurationFileName;
   }
 
   /**

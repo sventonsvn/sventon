@@ -1,7 +1,6 @@
 package org.sventon.repository;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.easymock.EasyMock.*;
 
 public class RevisionObservableImplTest extends TestCase {
 
@@ -57,7 +58,7 @@ public class RevisionObservableImplTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
 
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     final RepositoryConfiguration configuration = new RepositoryConfiguration("name");
     configuration.setCacheUsed(true);

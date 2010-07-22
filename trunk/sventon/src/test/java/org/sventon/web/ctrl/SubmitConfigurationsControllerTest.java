@@ -26,7 +26,8 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
-    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    application = new Application(configDirectory);
+    application.setConfigurationFileName(TestUtils.CONFIG_FILE_NAME);
   }
 
   public void testHandleRequestInternalConfigured() throws Exception {

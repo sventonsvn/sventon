@@ -1,10 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +20,10 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
+
 public class RepositoryEntryTrayControllerTest extends TestCase {
 
   private final BaseCommand command = new BaseCommand();
@@ -38,7 +39,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
     configuration.setEnableEntryTray(true);

@@ -51,7 +51,7 @@ public class GetFileControllerTest extends TestCase {
     configDirectory.setCreateDirectories(false);
     configDirectory.setServletContext(servletContext);
 
-    application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    application = new Application(configDirectory);
     application.setConfigured(true);
 
     repositoryConfiguration = new RepositoryConfiguration(repositoryName.toString());
