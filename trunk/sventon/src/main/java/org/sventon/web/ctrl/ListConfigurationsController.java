@@ -49,15 +49,11 @@ public final class ListConfigurationsController extends AbstractController {
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("addedRepositories", application.getRepositoryNames());
 
-    if (hasConfigurations()) {
+    if (application.hasConfigurations()) {
       return new ModelAndView("config/listConfigs", model);
     } else {
       return new ModelAndView(new RedirectView("/repos/config", true));
     }
-  }
-
-  private boolean hasConfigurations() {
-    return application.getRepositoryCount() > 0;
   }
 
 }

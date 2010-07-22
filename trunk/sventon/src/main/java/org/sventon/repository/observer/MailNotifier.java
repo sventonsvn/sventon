@@ -132,7 +132,7 @@ public final class MailNotifier extends AbstractRevisionObserver {
         for (final SVNLogEntry logEntry : revisions) {
           if (SVNUtils.isAccessible(logEntry)) {
             final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
-            final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+            final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
             LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
             sendMailMessage(logEntry, repositoryName, configuration);
           }

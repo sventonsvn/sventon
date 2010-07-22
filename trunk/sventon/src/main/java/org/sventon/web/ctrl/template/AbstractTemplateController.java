@@ -169,7 +169,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
     SVNRepository repository = null;
     try {
-      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
+      final RepositoryConfiguration configuration = application.getConfiguration(command.getName());
       final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
 
@@ -378,7 +378,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   @SuppressWarnings("unchecked")
   final ModelAndView prepareExceptionModelAndView(final BindException exception, final BaseCommand command) {
-    final RepositoryConfiguration repositoryConfiguration = application.getRepositoryConfiguration(command.getName());
+    final RepositoryConfiguration repositoryConfiguration = application.getConfiguration(command.getName());
     final Map<String, Object> model = exception.getModel();
     model.put("command", command);
     model.put("repositoryURL", repositoryConfiguration != null ? repositoryConfiguration.getRepositoryDisplayUrl() : "");

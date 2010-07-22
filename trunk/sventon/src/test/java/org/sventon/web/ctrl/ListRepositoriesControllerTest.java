@@ -43,8 +43,8 @@ public class ListRepositoriesControllerTest extends TestCase {
     // Not configured
     assertTrue(modelAndView.getView() instanceof RedirectView);
 
-    application.addRepository(createTestRepository("test1"));
-    application.addRepository(createTestRepository("test2"));
+    application.addConfiguration(createTestRepository("test1"));
+    application.addConfiguration(createTestRepository("test2"));
     application.setConfigured(true);
 
     modelAndView = ctrl.handleRequestInternal(request, response);
@@ -70,8 +70,8 @@ public class ListRepositoriesControllerTest extends TestCase {
     request.setSession(session);
 
     final ListRepositoriesController controller = new ListRepositoriesController();
-    application.addRepository(createTestRepository("test1"));
-    application.addRepository(createTestRepository("test2"));
+    application.addConfiguration(createTestRepository("test1"));
+    application.addConfiguration(createTestRepository("test2"));
     application.setConfigured(true);
     controller.setApplication(application);
 
@@ -171,7 +171,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     }
 
     // Configured with one instance
-    application.addRepository(createTestRepository("test1"));
+    application.addConfiguration(createTestRepository("test1"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
 
@@ -179,7 +179,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertEquals("/repos/test1/list/", view.getUrl());
 
     // Configured with two instances
-    application.addRepository(createTestRepository("test2"));
+    application.addConfiguration(createTestRepository("test2"));
 
     modelAndView = ctrl.handleRequestInternal(mockRequest, null);
     assertEquals("listRepositories", modelAndView.getViewName());

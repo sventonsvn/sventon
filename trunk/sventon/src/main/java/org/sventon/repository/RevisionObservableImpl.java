@@ -226,7 +226,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
   @Override
   public void update(final RepositoryName repositoryName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
-      final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
+      final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
 
       if (configuration.isCacheUsed() && !application.isUpdating(repositoryName)) {
         application.setUpdatingCache(repositoryName, true);

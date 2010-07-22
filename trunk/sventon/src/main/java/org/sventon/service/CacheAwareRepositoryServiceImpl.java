@@ -119,7 +119,7 @@ public final class CacheAwareRepositoryServiceImpl extends RepositoryServiceImpl
   }
 
   private boolean canReturnCachedRevisionsFor(final RepositoryName repositoryName) {
-    return application.getRepositoryConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName);
+    return application.getConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName);
   }
 
 }

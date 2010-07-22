@@ -35,7 +35,7 @@ public class ApplicationTest extends TestCase {
     configDirectory.setServletContext(servletContext);
     final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
     assertFalse(application.isConfigured());
-    assertEquals(0, application.getRepositoryCount());
+    assertFalse(application.hasConfigurations());
   }
 
   public void testStoreRepositoryConfigurations() throws Exception {
@@ -61,8 +61,8 @@ public class ApplicationTest extends TestCase {
       repositoryConfiguration2.setCacheUsed(false);
       repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-      application.addRepository(repositoryConfiguration1);
-      application.addRepository(repositoryConfiguration2);
+      application.addConfiguration(repositoryConfiguration1);
+      application.addConfiguration(repositoryConfiguration2);
 
       assertFalse(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
       assertFalse(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
@@ -90,11 +90,11 @@ public class ApplicationTest extends TestCase {
     config2.setRepositoryUrl("http://repo2");
     config2.setUserCredentials(new Credentials("", ""));
 
-    assertEquals(0, application.getRepositoryCount());
-    application.addRepository(config1);
-    assertEquals(1, application.getRepositoryCount());
-    application.addRepository(config2);
-    assertEquals(2, application.getRepositoryCount());
+    assertEquals(0, application.getRepositoryConfigurationCount());
+    application.addConfiguration(config1);
+    assertEquals(1, application.getRepositoryConfigurationCount());
+    application.addConfiguration(config2);
+    assertEquals(2, application.getRepositoryConfigurationCount());
   }
 
   public void testGetBaseURL() throws Exception {
@@ -131,7 +131,7 @@ public class ApplicationTest extends TestCase {
     final String configFilename = "sventon-config-test.tmp";
     final Application application = new Application(configDirectory, configFilename);
 
-    assertEquals(0, application.getRepositoryCount());
+    assertFalse(application.hasConfigurations());
     assertFalse(application.isConfigured());
 
     OutputStream os = null;
@@ -146,7 +146,7 @@ public class ApplicationTest extends TestCase {
 
       application.loadRepositoryConfigurations();
 
-      assertEquals(1, application.getRepositoryCount());
+      assertEquals(1, application.getRepositoryConfigurationCount());
       assertTrue(application.isConfigured());
     } finally {
       IOUtils.closeQuietly(is);

@@ -75,8 +75,8 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     repositoryConfiguration2.setCacheUsed(false);
     repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-    application.addRepository(repositoryConfiguration1);
-    application.addRepository(repositoryConfiguration2);
+    application.addConfiguration(repositoryConfiguration1);
+    application.addConfiguration(repositoryConfiguration2);
     application.setConfigured(false);
     ctrl.setApplication(application);
     ctrl.setServletContext(new MockServletContext());
