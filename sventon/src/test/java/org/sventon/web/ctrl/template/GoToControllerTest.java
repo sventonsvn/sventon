@@ -1,9 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
-import static org.easymock.classextension.EasyMock.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
@@ -19,6 +17,9 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.*;
 
 public class GoToControllerTest extends TestCase {
 
@@ -38,7 +39,7 @@ public class GoToControllerTest extends TestCase {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     application.setConfigured(true);
     ctrl.setServletContext(new MockServletContext());

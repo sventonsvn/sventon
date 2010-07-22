@@ -68,7 +68,7 @@
 
   <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
-    <constructor-arg value="sventon_config.properties"/>
+    <property name="configurationFileName" value="sventon_config.properties"/>
     <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
   </bean>

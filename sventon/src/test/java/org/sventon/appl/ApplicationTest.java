@@ -21,9 +21,14 @@ public class ApplicationTest extends TestCase {
     configDirectory = TestUtils.getTestConfigDirectory();
   }
 
-  public void testApplication() throws Exception {
+  @Override
+  protected void tearDown() throws Exception {
+    FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
+  }
+
+  public void testApplicationWithoutConfigurations() throws Exception {
     try {
-      new Application(null, null);
+      new Application(null);
       fail("Should throw IAE");
     } catch (IllegalArgumentException iae) {
       // expected
@@ -33,12 +38,12 @@ public class ApplicationTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setCreateDirectories(false);
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
     assertFalse(application.isConfigured());
     assertFalse(application.hasConfigurations());
   }
 
-  public void testStoreRepositoryConfigurations() throws Exception {
+  public void testPersistRepositoryConfigurations() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
@@ -46,33 +51,30 @@ public class ApplicationTest extends TestCase {
     final File repos1 = new File(configDirectory.getRepositoriesDirectory(), "testrepos1");
     final File repos2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
 
-    try {
-      final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
+    application.setConfigurationFileName(TestUtils.CONFIG_FILE_NAME);
 
-      final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
-      repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
-      repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
-      repositoryConfiguration1.setCacheUsed(false);
-      repositoryConfiguration1.setZippedDownloadsAllowed(false);
+    final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
+    repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
+    repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
+    repositoryConfiguration1.setCacheUsed(false);
+    repositoryConfiguration1.setZippedDownloadsAllowed(false);
 
-      final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
-      repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
-      repositoryConfiguration2.setUserCredentials(new Credentials("user2", "123abc"));
-      repositoryConfiguration2.setCacheUsed(false);
-      repositoryConfiguration2.setZippedDownloadsAllowed(false);
+    final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
+    repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
+    repositoryConfiguration2.setUserCredentials(new Credentials("user2", "123abc"));
+    repositoryConfiguration2.setCacheUsed(false);
+    repositoryConfiguration2.setZippedDownloadsAllowed(false);
 
-      application.addConfiguration(repositoryConfiguration1);
-      application.addConfiguration(repositoryConfiguration2);
+    application.addConfiguration(repositoryConfiguration1);
+    application.addConfiguration(repositoryConfiguration2);
 
-      assertFalse(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
-      assertFalse(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
-      application.persistRepositoryConfigurations();
-      //File should now be written
-      assertTrue(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
-      assertTrue(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
-    } finally {
-      FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
-    }
+    assertFalse(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
+    assertFalse(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
+    application.persistRepositoryConfigurations();
+    //File should now be written
+    assertTrue(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
+    assertTrue(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
   }
 
   public void testGetConfigurationAsProperties() throws Exception {
@@ -80,7 +82,7 @@ public class ApplicationTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setCreateDirectories(false);
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     final RepositoryConfiguration config1 = new RepositoryConfiguration("test1");
     config1.setRepositoryUrl("http://repo1");
@@ -102,7 +104,7 @@ public class ApplicationTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setCreateDirectories(false);
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     assertNull(application.getBaseURL());
 
@@ -121,15 +123,9 @@ public class ApplicationTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
 
-    final Properties testConfig = new Properties();
-    testConfig.put("repositoryRootUrl", "http://localhost");
-    testConfig.put("userName", "userName");
-    testConfig.put("userPassword", "abc123");
-    testConfig.put("useCache", "false");
-    testConfig.put("allowZipDownloads", "false");
-
-    final String configFilename = "sventon-config-test.tmp";
-    final Application application = new Application(configDirectory, configFilename);
+    final String configFileName = "sventon-config-test.tmp";
+    final Application application = new Application(configDirectory);
+    application.setConfigurationFileName(configFileName);
 
     assertFalse(application.hasConfigurations());
     assertFalse(application.isConfigured());
@@ -141,7 +137,8 @@ public class ApplicationTest extends TestCase {
     configDir.mkdirs();
 
     try {
-      os = new FileOutputStream(new File(configDir, configFilename));
+      final Properties testConfig = createDummyConfigProperties();
+      os = new FileOutputStream(new File(configDir, configFileName));
       testConfig.store(os, null);
 
       application.loadRepositoryConfigurations();
@@ -151,8 +148,17 @@ public class ApplicationTest extends TestCase {
     } finally {
       IOUtils.closeQuietly(is);
       IOUtils.closeQuietly(os);
-      FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
     }
+  }
+
+  private Properties createDummyConfigProperties() {
+    final Properties testConfig = new Properties();
+    testConfig.put("repositoryRootUrl", "http://localhost");
+    testConfig.put("userName", "userName");
+    testConfig.put("userPassword", "abc123");
+    testConfig.put("useCache", "false");
+    testConfig.put("allowZipDownloads", "false");
+    return testConfig;
   }
 
 }

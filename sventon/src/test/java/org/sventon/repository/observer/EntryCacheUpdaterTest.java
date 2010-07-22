@@ -40,7 +40,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(new RepositoryServiceImpl());
@@ -63,7 +63,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
+    final Application application = new Application(configDirectory);
 
     final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
     cacheUpdater.setFlushThreshold(2);
