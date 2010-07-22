@@ -55,7 +55,7 @@ public class GetFileControllerTest extends TestCase {
     application.setConfigured(true);
 
     repositoryConfiguration = new RepositoryConfiguration(repositoryName.toString());
-    application.addRepository(repositoryConfiguration);
+    application.addConfiguration(repositoryConfiguration);
   }
 
   public void testSvnHandleGetImageAsInline() throws Exception {

@@ -37,7 +37,7 @@ public class ConfigurationFormControllerTest {
 
     final RepositoryConfiguration repositoryConfig = new RepositoryConfiguration("repository1");
     application.setConfigured(false);
-    application.addRepository(repositoryConfig);
+    application.addConfiguration(repositoryConfig);
     ctrl.setCommandClass(ConfigCommand.class);
     final ModelAndView modelAndView = ctrl.handleRequest(request, response);
     assertNotNull(modelAndView);
@@ -48,7 +48,7 @@ public class ConfigurationFormControllerTest {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationFormController ctrl = new ConfigurationFormController(application);
-    assertEquals(0, application.getRepositoryCount());
+    assertEquals(0, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final ConfigCommand command = new ConfigCommand();
     final String repositoryName = "testrepos";
@@ -58,7 +58,7 @@ public class ConfigurationFormControllerTest {
     final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
     assertEquals(4, modelAndView.getModel().size());
-    assertEquals(1, application.getRepositoryCount());
+    assertEquals(1, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
     assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
@@ -70,7 +70,7 @@ public class ConfigurationFormControllerTest {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationFormController ctrl = new ConfigurationFormController(application);
-    assertEquals(0, application.getRepositoryCount());
+    assertEquals(0, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final ConfigCommand command = new ConfigCommand();
     command.setName(repositoryName);
@@ -84,13 +84,13 @@ public class ConfigurationFormControllerTest {
     final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
 
-    assertEquals(1, application.getRepositoryCount());
+    assertEquals(1, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
     assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
 
     //assert that the config was created correctly:
-    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(new RepositoryName(repositoryName));
+    final RepositoryConfiguration configuration = application.getConfiguration(new RepositoryName(repositoryName));
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());
@@ -104,7 +104,7 @@ public class ConfigurationFormControllerTest {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final ConfigurationFormController ctrl = new ConfigurationFormController(application);
-    assertEquals(0, application.getRepositoryCount());
+    assertEquals(0, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final ConfigCommand command = new ConfigCommand();
     command.setName(repositoryName);
@@ -122,13 +122,13 @@ public class ConfigurationFormControllerTest {
     final ModelAndView modelAndView = ctrl.onSubmit(request, response, command, exception);
     assertNotNull(modelAndView);
 
-    assertEquals(1, application.getRepositoryCount());
+    assertEquals(1, application.getRepositoryConfigurationCount());
     assertFalse(application.isConfigured());
     final Map model = modelAndView.getModel();
     assertEquals(new RepositoryName(repositoryName), ((Set) model.get("addedRepositories")).iterator().next());
 
     //assert that the config was created correctly:
-    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(new RepositoryName(repositoryName));
+    final RepositoryConfiguration configuration = application.getConfiguration(new RepositoryName(repositoryName));
     assertEquals("http://localhost", configuration.getRepositoryUrl());
     assertTrue(configuration.isAccessControlEnabled());
     assertTrue(configuration.isZippedDownloadsAllowed());

@@ -87,7 +87,7 @@ public final class ConfigurationFormController {
 
     logger.debug("Adding configuration from command: " + command);
     final RepositoryConfiguration repositoryConfiguration = command.createRepositoryConfiguration();
-    application.addRepository(repositoryConfiguration);
+    application.addConfiguration(repositoryConfiguration);
     model.addAttribute("addedRepositories", application.getRepositoryNames());
     model.addAttribute("latestAddedRepository", command.getName());
     return "config/listConfigs";

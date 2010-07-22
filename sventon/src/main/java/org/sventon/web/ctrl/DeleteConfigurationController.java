@@ -51,7 +51,7 @@ public final class DeleteConfigurationController extends AbstractController {
 
     if (StringUtils.hasText(repositoryToDelete)) {
       final RepositoryName repositoryName = new RepositoryName(repositoryToDelete);
-      application.deleteRepository(repositoryName);
+      application.deleteConfiguration(repositoryName);
     }
     return new ModelAndView(new RedirectView("/repos/listconfigs", true));
   }

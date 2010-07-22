@@ -68,7 +68,7 @@ public final class RSSController extends AbstractBaseController {
       return null;
     }
 
-    final RepositoryConfiguration configuration = application.getRepositoryConfiguration(command.getName());
+    final RepositoryConfiguration configuration = application.getConfiguration(command.getName());
     if (configuration == null) {
       handleError(response, "Repository [" + command.getName() + "] does not exist!");
       return null;

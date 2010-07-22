@@ -111,7 +111,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
    * @return ApplicationConfiguration
    */
   protected final RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
-    return application.getRepositoryConfiguration(name);
+    return application.getConfiguration(name);
   }
 
   /**

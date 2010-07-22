@@ -61,7 +61,7 @@ public class RevisionObservableImplTest extends TestCase {
 
     final RepositoryConfiguration configuration = new RepositoryConfiguration("name");
     configuration.setCacheUsed(true);
-    application.addRepository(configuration);
+    application.addConfiguration(configuration);
     application.setConfigured(true);
 
     final ObjectCache cache = createMemoryCache();

@@ -53,7 +53,7 @@ public final class Application {
   /**
    * Map of added subversion repository names and their configurations.
    */
-  private final Map<RepositoryName, RepositoryConfiguration> repositories =
+  private final Map<RepositoryName, RepositoryConfiguration> repositoryConfigurations =
       new ConcurrentHashMap<RepositoryName, RepositoryConfiguration>();
 
   /**
@@ -130,7 +130,7 @@ public final class Application {
    */
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
-    for (final RepositoryConfiguration repositoryConfiguration : repositories.values()) {
+    for (final RepositoryConfiguration repositoryConfiguration : repositoryConfigurations.values()) {
       final RepositoryName repositoryName = repositoryConfiguration.getName();
       if (repositoryConfiguration.isCacheUsed()) {
         registerCacheManagers(cacheManagers, repositoryName);
@@ -184,14 +184,14 @@ public final class Application {
         logger.info("Configuring repository: " + repositoryName);
         final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
         configuration.setPersisted();
-        addRepository(configuration);
+        addConfiguration(configuration);
       } finally {
         IOUtils.closeQuietly(is);
       }
     }
 
-    if (getRepositoryCount() > 0) {
-      logger.info(getRepositoryCount() + " repositories configured");
+    if (hasConfigurations()) {
+      logger.info(getRepositoryConfigurationCount() + " repositories configured");
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
@@ -207,7 +207,7 @@ public final class Application {
    * @throws IOException if IO error occur during file operations.
    */
   public void persistRepositoryConfigurations() throws IOException {
-    for (final RepositoryConfiguration repositoryConfig : repositories.values()) {
+    for (final RepositoryConfiguration repositoryConfig : repositoryConfigurations.values()) {
       if (!repositoryConfig.isPersisted()) {
         final File configDir = getConfigurationDirectoryForRepository(repositoryConfig.getName());
         if (!configDir.exists() && !configDir.mkdirs()) {
@@ -237,8 +237,8 @@ public final class Application {
    *
    * @param configuration The repository configuration to add.
    */
-  public void addRepository(final RepositoryConfiguration configuration) {
-    repositories.put(configuration.getName(), configuration);
+  public void addConfiguration(final RepositoryConfiguration configuration) {
+    repositoryConfigurations.put(configuration.getName(), configuration);
   }
 
   /**
@@ -247,24 +247,24 @@ public final class Application {
    *
    * @param name Name of repository to delete from the sventon configuration.
    */
-  public void deleteRepository(final RepositoryName name) {
-    if (!repositories.containsKey(name)) {
+  public void deleteConfiguration(final RepositoryName name) {
+    if (!repositoryConfigurations.containsKey(name)) {
       throw new IllegalArgumentException("Unknown repository name: " + name);
     }
-    final RepositoryConfiguration configuration = repositories.get(name);
+    final RepositoryConfiguration configuration = repositoryConfigurations.get(name);
     if (configuration.isPersisted()) {
       final File configFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename);
       final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), configurationFilename + "_bak");
       logger.info("Disabling repository configuration for [" + name.toString() + "]");
       if (configFile.renameTo(configBackupFile)) {
         logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
-        repositories.remove(name);
+        repositoryConfigurations.remove(name);
       } else {
         logger.error("Unable to rename config file: " + configFile.getAbsolutePath());
       }
     } else {
       // Repository has not yet been stored and the user wants to delete it. Simply remove reference.
-      repositories.remove(name);
+      repositoryConfigurations.remove(name);
     }
   }
 
@@ -284,7 +284,7 @@ public final class Application {
    * @return Collection of repository names.
    */
   public Set<RepositoryName> getRepositoryNames() {
-    return new TreeSet<RepositoryName>(repositories.keySet());
+    return new TreeSet<RepositoryName>(repositoryConfigurations.keySet());
   }
 
   /**
@@ -293,8 +293,8 @@ public final class Application {
    * @param name Repository name.
    * @return Collection of repository names.
    */
-  public RepositoryConfiguration getRepositoryConfiguration(final RepositoryName name) {
-    return repositories.get(name);
+  public RepositoryConfiguration getConfiguration(final RepositoryName name) {
+    return repositoryConfigurations.get(name);
   }
 
   /**
@@ -303,8 +303,15 @@ public final class Application {
    *
    * @return Number of repositories.
    */
-  public int getRepositoryCount() {
-    return repositories.size();
+  public int getRepositoryConfigurationCount() {
+    return repositoryConfigurations.size();
+  }
+
+  /**
+   * @return True if at least one repository configuration has been added.
+   */
+  public boolean hasConfigurations() {
+    return getRepositoryConfigurationCount() > 0;
   }
 
   /**

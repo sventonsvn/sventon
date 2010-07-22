@@ -62,7 +62,7 @@ public final class SubmitConfigurationsController extends AbstractController {
   protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
       throws Exception {
 
-    if (application.getRepositoryCount() == 0) {
+    if (!application.hasConfigurations()) {
       logger.warn("No repository has been configured and added");
       return new ModelAndView("error/configurationError");
     }
