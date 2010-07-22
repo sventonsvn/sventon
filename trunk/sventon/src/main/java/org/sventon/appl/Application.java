@@ -177,7 +177,6 @@ public final class Application {
    * @see #isConfigured()
    */
   protected void loadRepositoryConfigurations(final File[] configDirectories) throws IOException {
-
     for (final File configDir : configDirectories) {
       InputStream is = null;
       try {
