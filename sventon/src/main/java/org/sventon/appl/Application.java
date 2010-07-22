@@ -110,12 +110,28 @@ public final class Application {
   @PostConstruct
   public void init() throws IOException, CacheException {
     initSvnSupport();
-    loadRepositoryConfigurations();
-    initCaches();
+
+    final File[] configDirectories = getConfigDirectories();
+    if (configDirectories.length > 0) {
+      loadRepositoryConfigurations(configDirectories);
+      initCaches();
+    } else {
+      logger.debug("No configuration files were found below: " + repositoriesDirectory.getAbsolutePath());
+      logger.info("No repository has been configured yet. Access sventon web application to start the setup");
+    }
+
     final URL baseURL = getBaseURL();
     if (baseURL != null) {
       logger.info("Property [" + PROPERTY_KEY_SVENTON_BASE_URL + "] set to: " + baseURL);
     }
+  }
+
+  /**
+   * @return The configuration root directories for each repository.
+   */
+  public File[] getConfigDirectories() {
+    return repositoriesDirectory.listFiles(
+        new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
   }
 
   /**
@@ -156,27 +172,20 @@ public final class Application {
    * {@code configurationRootDirectory} and {@code configurationFilename} must be set before calling this method, or bad
    * things will most certainly happen...
    *
+   * @param configDirectories Repository configuration directories.
    * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()
    */
-  protected void loadRepositoryConfigurations() throws IOException {
-    final File[] configDirs = repositoriesDirectory.listFiles(
-        new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
+  protected void loadRepositoryConfigurations(final File[] configDirectories) throws IOException {
 
-    if (configDirs.length == 0) {
-      logger.debug("No configuration files were found below: " + repositoriesDirectory.getAbsolutePath());
-      logger.info("No repository has been configured yet. Access sventon web application to start the setup");
-      return;
-    }
-
-    for (final File configDir : configDirs) {
+    for (final File configDir : configDirectories) {
       InputStream is = null;
       try {
         final Properties properties = new Properties();
         is = new FileInputStream(new File(configDir, getConfigurationFileName()));
         properties.load(is);
         final String repositoryName = configDir.getName();
-        logger.info("Configuring repository: " + repositoryName);
+        logger.info("Loading repository config: " + repositoryName);
         final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
         configuration.setPersisted();
         addConfiguration(configuration);
@@ -186,7 +195,7 @@ public final class Application {
     }
 
     if (hasConfigurations()) {
-      logger.info(getRepositoryConfigurationCount() + " repositories configured");
+      logger.info(getRepositoryConfigurationCount() + " repository configuration(s) loaded");
       configured = true;
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
