@@ -127,9 +127,6 @@ public class ApplicationTest extends TestCase {
     final Application application = new Application(configDirectory);
     application.setConfigurationFileName(configFileName);
 
-    assertFalse(application.hasConfigurations());
-    assertFalse(application.isConfigured());
-
     OutputStream os = null;
     InputStream is = null;
 
@@ -141,7 +138,10 @@ public class ApplicationTest extends TestCase {
       os = new FileOutputStream(new File(configDir, configFileName));
       testConfig.store(os, null);
 
-      application.loadRepositoryConfigurations();
+      assertFalse(application.hasConfigurations());
+      assertFalse(application.isConfigured());
+
+      application.loadRepositoryConfigurations(application.getConfigDirectories());
 
       assertEquals(1, application.getRepositoryConfigurationCount());
       assertTrue(application.isConfigured());
