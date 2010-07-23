@@ -175,12 +175,21 @@ Java and .NET applications. Take a look at YourKit's leading software products:
         <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
           <tr>
             <td align="center" width="193px">
+               <a href="http://www.zeroturnaround.com/jrebel/"><img src="http://www.zeroturnaround.com/wp-content/themes/zeroturnaround3.0/gfx/logo.gif" height="60%" width="60%"></a>
+            </td>
+          </tr>
+        </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="3" style="margin-top:20px">
+          <tr>
+            <td align="center" width="193px">
               <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_partner_badge"></script>
               <br>
               <script type="text/javascript" src="https://www.ohloh.net/projects/9261/widgets/project_users_logo"></script>
             </td>
           </tr>
         </table>
+
       </td>
     </tr>
   </table>
