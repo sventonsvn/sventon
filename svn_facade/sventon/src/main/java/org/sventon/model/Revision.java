@@ -14,7 +14,9 @@ package org.sventon.model;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a revision in Subversion.
@@ -28,6 +30,8 @@ public class Revision implements Serializable {
   public static final Revision HEAD = new Revision(SVNRevision.HEAD);
 
   private static final Map<String, Revision> NAMED_REVISIONS = new HashMap<String, Revision>();
+
+  public static final long FIRST = 1;
 
   private final SVNRevision revision;
 
