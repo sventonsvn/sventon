@@ -16,6 +16,8 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
+import org.sventon.SVNException;
+import org.sventon.SVNURL;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
@@ -25,7 +27,8 @@ import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNAuthenticationException;
+import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -137,11 +140,6 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   private static final String REVISION_COUNT_REQUEST_PARAMETER = "revcount";
 
-  /**
-   * The first possible repository revision.
-   */
-  public static final long FIRST_REVISION = 1;
-
   @Override
   public final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                    final Object cmd, final BindException errors) {
@@ -239,13 +237,9 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
       logEntries.addAll(getRepositoryService().getRevisions(command.getName(), connection, headRevision,
-          FIRST_REVISION, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
-    } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        logger.info(svnex.getMessage());
-      } else {
-        logger.error(svnex.getMessage());
-      }
+          Revision.FIRST, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
+    } catch (Exception e) {
+      logger.error(e.getMessage());
     }
     return LogEntryWrapper.convert(logEntries);
   }

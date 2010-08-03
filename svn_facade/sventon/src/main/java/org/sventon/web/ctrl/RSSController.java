@@ -14,15 +14,16 @@ package org.sventon.web.ctrl;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.NoSuchRevisionException;
+import org.sventon.SVNAuthenticationException;
 import org.sventon.SVNConnection;
+import org.sventon.SVNException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
+import org.sventon.model.Revision;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.web.HttpAuthenticationHandler;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 
 /**
  * Controller used for generating RSS feeds.
@@ -86,13 +85,16 @@ public final class RSSController extends AbstractBaseController {
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getRevisions(command.getName(), connection, command.getRevisionNumber(),
-          FIRST_REVISION, command.getPath(), configuration.getRssItemsCount(), false));
+          Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (SVNAuthenticationException aex) {
       logger.info(aex.getMessage());
       httpAuthenticationHandler.sendChallenge(response);
+    } catch (NoSuchRevisionException nsre) {
+      logger.info(nsre.getMessage());
     } catch (SVNException svnex) {
-      handleSVNException(response, svnex);
+      logger.error(svnex.getMessage());
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
     } finally {
       close(connection);
     }
@@ -110,15 +112,6 @@ public final class RSSController extends AbstractBaseController {
   private void close(SVNConnection connection) {
     if (connection != null) {
       connection.closeSession();
-    }
-  }
-
-  private void handleSVNException(HttpServletResponse response, SVNException svnex) throws IOException {
-    if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-      logger.info(svnex.getMessage());
-    } else {
-      logger.error(svnex.getMessage());
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
     }
   }
 

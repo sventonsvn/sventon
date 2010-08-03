@@ -15,8 +15,6 @@ import org.apache.commons.lang.Validate;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
@@ -46,22 +44,20 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
     this.configurationDirectory = configDirectory;
   }
 
-  /**
-   * Note: Be sure to call <code>repository.closeSession()</code> when connection is not needed anymore.
-   */
   @Override
   public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SVNException {
-
-    if (svnUrl == null) {
-      return null;
+    final SVNRepository repository;
+    try {
+      repository = SVNRepositoryFactory.create(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(svnUrl.getUrl()));
+    } catch (org.tmatesoft.svn.core.SVNException e) {
+      throw new org.sventon.SVNException(e.getMessage());
     }
-
-    final SVNRepository repository = SVNRepositoryFactory.create(svnUrl);
     final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
         configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
     return new SVNKitConnection(repository);
   }
+
 }

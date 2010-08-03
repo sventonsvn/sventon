@@ -8,10 +8,10 @@ import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import static org.sventon.web.ctrl.template.AbstractTemplateController.FIRST_REVISION;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 
-    expect(mockService.getRevisions(command.getName(), null, 100, FIRST_REVISION, "/",
+    expect(mockService.getRevisions(command.getName(), null, 100, Revision.FIRST, "/",
         userRepositoryContext.getLatestRevisionsDisplayCount(), false)).andStubReturn(revisions);
 
     replay(mockService);

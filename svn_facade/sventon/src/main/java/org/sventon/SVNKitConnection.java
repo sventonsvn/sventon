@@ -26,4 +26,9 @@ public class SVNKitConnection extends SVNConnection {
   public void closeSession() {
     delegate.closeSession();
   }
+
+  @Override
+  public String getURL() {
+    return delegate.getLocation().toDecodedString();
+  }
 }

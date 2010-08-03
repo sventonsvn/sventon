@@ -10,4 +10,6 @@ public abstract class SVNConnection {
   public abstract SVNRepository getDelegate();
 
   public abstract void closeSession();
+
+  public abstract String getURL();
 }

@@ -67,7 +67,7 @@ public final class ShowLogController extends AbstractTemplateController {
 
     try {
       final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), connection,
-          fromRevision, FIRST_REVISION, nextPath, pageSize, stopOnCopy);
+          fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy);
 
       String pathAtRevision = nextPath;
 

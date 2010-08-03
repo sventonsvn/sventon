@@ -6,6 +6,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.RepositoryConnectionFactory;
 import org.sventon.SVNConnection;
+import org.sventon.SVNException;
+import org.sventon.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
@@ -13,8 +15,6 @@ import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.RepositoryEntryComparator;
 import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

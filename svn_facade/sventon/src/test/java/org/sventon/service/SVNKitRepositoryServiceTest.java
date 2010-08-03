@@ -50,7 +50,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     });
 
     final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -81,7 +80,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     });
 
     final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -120,7 +118,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     });
 
     final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -166,7 +163,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     });
 
     final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -592,12 +588,15 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     service.translateRevision(command.getRevision(), 200, null);
     assertEquals(Revision.create(123), command.getRevision());
 
-    command.setRevision(Revision.parse("{2007-01-01}"));
-    assertEquals(123, service.translateRevision(command.getRevision(), 200, new SVNKitConnection(new SVNRepositoryStub()) {
-      public long getDatedRevision(final Date date) throws SVNException {
+    final SVNRepositoryStub repositoryStub = new SVNRepositoryStub() {
+      @Override
+      public long getDatedRevision(Date date) throws SVNException {
         return 123;
       }
-    }));
+    };
+    command.setRevision(Revision.parse("{2007-01-01}"));
+    final SVNKitConnection connection = new SVNKitConnection(repositoryStub);
+    assertEquals(123, service.translateRevision(command.getRevision(), 200, connection));
   }
 
 
