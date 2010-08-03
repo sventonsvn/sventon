@@ -12,9 +12,6 @@
 package org.sventon.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.sventon.appl.EntryCacheManager;
-import org.sventon.appl.LogEntryCacheManager;
-import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.cache.revisioncache.RevisionCache;

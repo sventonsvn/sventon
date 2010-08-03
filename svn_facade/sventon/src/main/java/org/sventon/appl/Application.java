@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.CacheManager;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PostConstruct;
@@ -80,6 +81,9 @@ public final class Application {
 
   private final List<CacheManager> cacheManagers = new ArrayList<CacheManager>();
 
+  /**
+   * Map of update markers.
+   */
   private final ConcurrentLinkedQueue<RepositoryName> updating = new ConcurrentLinkedQueue<RepositoryName>();
 
   /**
