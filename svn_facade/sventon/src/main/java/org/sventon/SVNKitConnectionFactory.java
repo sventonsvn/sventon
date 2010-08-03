@@ -12,13 +12,19 @@
 package org.sventon;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
+import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 
 /**
@@ -27,6 +33,11 @@ import java.io.File;
  * @author jesper@sventon.org
  */
 public class SVNKitConnectionFactory implements SVNConnectionFactory {
+
+  /**
+   * The logging instance.
+   */
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Root directory where to place the svn config files.
@@ -42,6 +53,17 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
   public SVNKitConnectionFactory(final ConfigDirectory configDirectory) {
     Validate.notNull(configDirectory, "Configuration directory cannot be null!");
     this.configurationDirectory = configDirectory;
+  }
+
+  /**
+   * Initializes SVNKit.
+   */
+  @PostConstruct
+  public void init() {
+    logger.info("Initializing SVNKit version " + org.tmatesoft.svn.util.Version.getSVNVersion());
+    SVNRepositoryFactoryImpl.setup();
+    DAVRepositoryFactory.setup();
+    FSRepositoryFactory.setup();
   }
 
   @Override
