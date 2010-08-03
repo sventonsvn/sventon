@@ -9,11 +9,9 @@ import org.sventon.SVNConnection;
 import org.sventon.SVNException;
 import org.sventon.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.Credentials;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.model.*;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +30,8 @@ public class AbstractTemplateControllerTest extends TestCase {
     assertEquals("ASC", userRepositoryContext.getSortMode().toString());
     assertEquals("FULL_NAME", userRepositoryContext.getSortType().toString());
 
-    command.setSortType(RepositoryEntryComparator.SortType.SIZE);
-    command.setSortMode(RepositoryEntrySorter.SortMode.DESC);
+    command.setSortType(DirEntryComparator.SortType.SIZE);
+    command.setSortMode(DirEntrySorter.SortMode.DESC);
 
     ctrl.parseAndUpdateSortParameters(command, userRepositoryContext);
     assertEquals("DESC", userRepositoryContext.getSortMode().toString());

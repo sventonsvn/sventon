@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.cache.direntrycache;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -41,7 +41,7 @@ public final class EntryCacheImpl implements EntryCache {
   /**
    * Default filename for storing the latest cached revision number.
    */
-  private static final String ENTRY_CACHE_FILENAME = "entrycache.ser";
+  private static final String ENTRY_CACHE_FILENAME = "direntrycache.ser";
 
   /**
    * The cache file.

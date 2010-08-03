@@ -16,9 +16,9 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.model.CamelCasePattern;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +72,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
           + userRepositoryContext.getSortMode());
     }
 
-    new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
+    new DirEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     model.put("svndir", entries);
     model.put("searchString", searchString);

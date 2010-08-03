@@ -1,12 +1,11 @@
-package org.sventon.util;
+package org.sventon.model;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
-import org.sventon.model.RepositoryEntry;
 
 import java.util.List;
 
-public class RepositoryEntryKindFilterTest extends TestCase {
+public class DirEntryKindFilterTest extends TestCase {
 
   public void testFilter() throws Exception {
 
@@ -14,34 +13,34 @@ public class RepositoryEntryKindFilterTest extends TestCase {
     List<RepositoryEntry> filteredList;
 
     try {
-      new RepositoryEntryKindFilter(RepositoryEntry.Kind.NONE).filter(list);
+      new DirEntryKindFilter(RepositoryEntry.Kind.NONE).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      new RepositoryEntryKindFilter(RepositoryEntry.Kind.ANY).filter(list);
+      new DirEntryKindFilter(RepositoryEntry.Kind.ANY).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      new RepositoryEntryKindFilter(RepositoryEntry.Kind.UNKNOWN).filter(list);
+      new DirEntryKindFilter(RepositoryEntry.Kind.UNKNOWN).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
-    filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.DIR).filter(list);
+    filteredList = new DirEntryKindFilter(RepositoryEntry.Kind.DIR).filter(list);
     assertEquals(4, filteredList.size());
 
-    filteredList = new RepositoryEntryKindFilter(RepositoryEntry.Kind.FILE).filter(list);
+    filteredList = new DirEntryKindFilter(RepositoryEntry.Kind.FILE).filter(list);
     assertEquals(9, filteredList.size());
 
     try {
-      new RepositoryEntryKindFilter(null).filter(list);
+      new DirEntryKindFilter(null).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected

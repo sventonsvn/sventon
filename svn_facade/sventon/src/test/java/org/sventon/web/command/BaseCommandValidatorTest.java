@@ -2,9 +2,9 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.springframework.validation.BindException;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.model.Revision;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
 
 public class BaseCommandValidatorTest extends TestCase {
 
@@ -84,8 +84,8 @@ public class BaseCommandValidatorTest extends TestCase {
     assertEquals(0, exception.getAllErrors().size());
 
     exception = new BindException(command, "test2");
-    command.setSortMode(RepositoryEntrySorter.SortMode.ASC);
-    command.setSortType(RepositoryEntryComparator.SortType.SIZE);
+    command.setSortMode(DirEntrySorter.SortMode.ASC);
+    command.setSortType(DirEntryComparator.SortType.SIZE);
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 

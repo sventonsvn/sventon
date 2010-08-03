@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.cache.direntrycache;
 
 import org.sventon.cache.Cache;
 import org.sventon.cache.CacheException;

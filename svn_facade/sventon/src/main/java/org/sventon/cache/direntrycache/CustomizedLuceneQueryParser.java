@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.cache.direntrycache;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.CompassQueryParser;

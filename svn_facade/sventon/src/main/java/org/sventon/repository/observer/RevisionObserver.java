@@ -19,7 +19,7 @@ import java.util.Observer;
  * RevisionObserver. Interface to be implemented by
  * observers interested in getting published repository changes.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public interface RevisionObserver extends Observer {
 

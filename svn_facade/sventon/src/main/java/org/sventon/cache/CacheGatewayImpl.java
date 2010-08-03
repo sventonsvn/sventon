@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.LogEntryCacheManager;
 import org.sventon.appl.RevisionCacheManager;
-import org.sventon.cache.entrycache.EntryCache;
+import org.sventon.cache.direntrycache.EntryCache;
 import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;

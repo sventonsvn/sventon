@@ -1,4 +1,4 @@
-package org.sventon.cache.entrycache;
+package org.sventon.cache.direntrycache;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;

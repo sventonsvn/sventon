@@ -16,7 +16,7 @@ import org.sventon.model.RepositoryName;
 /**
  * Interface to be implemented by repository change monitor classes.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public interface RevisionObservable {
 

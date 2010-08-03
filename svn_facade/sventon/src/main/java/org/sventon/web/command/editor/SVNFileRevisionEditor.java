@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.web.command.editor;
 
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 

@@ -18,8 +18,8 @@ import org.sventon.SVNConnection;
 import org.sventon.model.FileExtensionList;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.util.FileExtensionFilter;
-import org.sventon.util.RepositoryEntrySorter;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +70,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
     }
 
     logger.debug("Sort params: " + userRepositoryContext.getSortType().name() + ", " + userRepositoryContext.getSortMode());
-    new RepositoryEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
+    new DirEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");
     model.put("svndir", entries);

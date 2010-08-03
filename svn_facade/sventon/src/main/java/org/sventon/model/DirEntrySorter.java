@@ -9,10 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.model;
 
 import org.apache.commons.lang.Validate;
-import org.sventon.model.RepositoryEntry;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryEntrySorter {
+public final class DirEntrySorter {
 
   /**
    * Available sort modes.
@@ -44,7 +43,7 @@ public final class RepositoryEntrySorter {
   /**
    * Field to sort on.
    */
-  private final RepositoryEntryComparator.SortType sortType;
+  private final DirEntryComparator.SortType sortType;
 
   /**
    * The sort mode, ascending or descending.
@@ -57,7 +56,7 @@ public final class RepositoryEntrySorter {
    * @param sortType Field to sort on.
    * @param sortMode Sort mode, ascending or descending.
    */
-  public RepositoryEntrySorter(final RepositoryEntryComparator.SortType sortType, final SortMode sortMode) {
+  public DirEntrySorter(final DirEntryComparator.SortType sortType, final SortMode sortMode) {
     Validate.notNull(sortType, "sortType cannot be null");
     Validate.notNull(sortMode, "sortMode cannot be null");
     this.sortType = sortType;
@@ -72,9 +71,9 @@ public final class RepositoryEntrySorter {
   public void sort(final List<RepositoryEntry> entries) {
     final Comparator<RepositoryEntry> comparator;
     if (sortMode == SortMode.DESC) {
-      comparator = Collections.reverseOrder(new RepositoryEntryComparator(sortType, true));
+      comparator = Collections.reverseOrder(new DirEntryComparator(sortType, true));
     } else {
-      comparator = new RepositoryEntryComparator(sortType, true);
+      comparator = new DirEntryComparator(sortType, true);
     }
     Collections.sort(entries, comparator);
   }

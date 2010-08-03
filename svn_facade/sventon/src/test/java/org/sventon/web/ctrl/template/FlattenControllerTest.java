@@ -12,12 +12,9 @@ import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.cache.CacheGateway;
-import org.sventon.model.RepositoryEntry;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.model.*;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.List;
@@ -35,8 +32,8 @@ public class FlattenControllerTest extends TestCase {
     command.setRevision(Revision.create(12));
 
     final UserRepositoryContext context = new UserRepositoryContext();
-    context.setSortMode(RepositoryEntrySorter.SortMode.DESC);
-    context.setSortType(RepositoryEntryComparator.SortType.REVISION);
+    context.setSortMode(DirEntrySorter.SortMode.DESC);
+    context.setSortType(DirEntryComparator.SortType.REVISION);
 
     final FlattenController ctrl = new FlattenController();
     ctrl.setCacheGateway(mockCache);

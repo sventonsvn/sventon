@@ -20,7 +20,7 @@ import java.util.Observable;
  * RevisionObserver. Abstract class to be extended by
  * observers interested in getting published repository changes.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public abstract class AbstractRevisionObserver implements RevisionObserver {
 

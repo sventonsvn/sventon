@@ -12,8 +12,8 @@
 package org.sventon.appl;
 
 import org.sventon.cache.CacheException;
-import org.sventon.cache.entrycache.EntryCache;
-import org.sventon.cache.entrycache.EntryCacheImpl;
+import org.sventon.cache.direntrycache.EntryCache;
+import org.sventon.cache.direntrycache.EntryCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
