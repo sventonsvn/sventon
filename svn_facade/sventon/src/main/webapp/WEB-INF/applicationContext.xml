@@ -173,7 +173,7 @@
   </util:list>
 
   <!-- NOTE: Make sure to change the parameters below! -->
-  <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier">
+  <bean id="mailNotifier" class="org.sventon.mail.MailNotifier">
     <property name="application" ref="application"/>
     <property name="baseURL" value="http://yourserver.com/svn/"/>
     <property name="host" value="smtp.yourserver.com"/>
@@ -196,18 +196,18 @@
   </util:list>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="revisionCacheUpdater" class="org.sventon.repository.observer.RevisionCacheUpdater">
+  <bean id="revisionCacheUpdater" class="org.sventon.cache.revisioncache.RevisionCacheUpdater">
     <constructor-arg ref="revisionCacheManager"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="entryCacheUpdater" class="org.sventon.repository.observer.EntryCacheUpdater">
+  <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.EntryCacheUpdater">
     <constructor-arg ref="entryCacheManager"/>
     <constructor-arg ref="application"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="logEntryCacheUpdater" class="org.sventon.repository.observer.LogEntryCacheUpdater">
+  <bean id="logEntryCacheUpdater" class="org.sventon.cache.logentrycache.LogEntryCacheUpdater">
     <constructor-arg ref="logEntryCacheManager"/>
   </bean>
 

@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.repository.observer;
+package org.sventon.mail;
 
 import com.sun.mail.smtp.SMTPTransport;
 import org.apache.commons.logging.Log;

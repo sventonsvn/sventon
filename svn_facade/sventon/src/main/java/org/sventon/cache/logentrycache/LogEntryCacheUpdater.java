@@ -9,12 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.repository.observer;
+package org.sventon.cache.logentrycache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.LogEntryCacheManager;
-import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
