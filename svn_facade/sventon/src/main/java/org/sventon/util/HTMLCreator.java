@@ -14,7 +14,7 @@ package org.sventon.util;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
-import org.sventon.model.LogEntryPathChangeType;
+import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryName;
 import static org.sventon.util.EncodingUtils.encode;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -74,7 +74,7 @@ public final class HTMLCreator {
     final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
 
     for (final String entryPath : latestPathsList) {
-      final LogEntryPathChangeType type = LogEntryPathChangeType.parse(latestChangedPaths.get(entryPath).getType());
+      final DirEntryChangeType type = DirEntryChangeType.parse(latestChangedPaths.get(entryPath).getType());
       switch (type) {
         case ADDED:
           added++;
@@ -136,7 +136,7 @@ public final class HTMLCreator {
 
     for (final String path : latestPathsList) {
       final SVNLogEntryPath logEntryPath = changedPaths.get(path);
-      final LogEntryPathChangeType changeType = LogEntryPathChangeType.parse(logEntryPath.getType());
+      final DirEntryChangeType changeType = DirEntryChangeType.parse(logEntryPath.getType());
 
       sb.append("  <tr>\n");
       sb.append("    <td valign=\"top\"><i>").append(changeType).append("</i></td>\n");

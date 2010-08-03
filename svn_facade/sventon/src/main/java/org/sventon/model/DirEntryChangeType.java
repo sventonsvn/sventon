@@ -14,11 +14,11 @@ package org.sventon.model;
 import org.apache.commons.lang.Validate;
 
 /**
- * Type enum for log entry path actions.
+ * Type enum for subversion directory entry actions.
  *
  * @author jesper@sventon.org
  */
-public enum LogEntryPathChangeType {
+public enum DirEntryChangeType {
 
   /**
    * Indicating entry was added.
@@ -37,8 +37,7 @@ public enum LogEntryPathChangeType {
 
   /**
    * Indicating entry was replaced (meaning that the object is first deleted,
-   * then another object of the same name is added,
-   * all within a single revision).
+   * then another object of the same name is added, all within a single revision).
    */
   REPLACED("Replaced", 'R');
 
@@ -58,29 +57,29 @@ public enum LogEntryPathChangeType {
    * @param action The action
    * @param code   Code
    */
-  private LogEntryPathChangeType(final String action, final char code) {
+  private DirEntryChangeType(final String action, final char code) {
     this.action = action;
     this.code = code;
   }
 
   /**
-   * Parses given code and returns appropriate <code>LogEntryPathChangeType</code>.
+   * Parses given code and returns appropriate <code>DirEntryChangeType</code>.
    *
    * @param code Code to parse
-   * @return The LogEntryPathChangeType
+   * @return The DirEntryChangeType
    */
-  public static LogEntryPathChangeType parse(final String code) {
+  public static DirEntryChangeType parse(final String code) {
     Validate.notEmpty(code, "Given code was null or empty");
     return parse(code.charAt(0));
   }
 
   /**
-   * Parses given code and returns appropriate <code>LogEntryPathChangeType</code>.
+   * Parses given code and returns appropriate <code>DirEntryChangeType</code>.
    *
    * @param code Code to parse
-   * @return The LogEntryPathChangeType
+   * @return The DirEntryChangeType
    */
-  public static LogEntryPathChangeType parse(final char code) {
+  public static DirEntryChangeType parse(final char code) {
     switch (code) {
       case 'D':
         return DELETED;

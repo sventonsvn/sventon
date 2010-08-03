@@ -6,19 +6,19 @@ public class LogEntryPathChangeTypeTest extends TestCase {
 
   public void testLogEntryPAthChange() throws Exception {
     // Yes - really stupid tests, I know.. :-)
-    assertEquals("Added", LogEntryPathChangeType.ADDED.toString());
-    assertEquals("Modified", LogEntryPathChangeType.MODIFIED.toString());
-    assertEquals("Replaced", LogEntryPathChangeType.REPLACED.toString());
-    assertEquals("Deleted", LogEntryPathChangeType.DELETED.toString());
+    assertEquals("Added", DirEntryChangeType.ADDED.toString());
+    assertEquals("Modified", DirEntryChangeType.MODIFIED.toString());
+    assertEquals("Replaced", DirEntryChangeType.REPLACED.toString());
+    assertEquals("Deleted", DirEntryChangeType.DELETED.toString());
   }
 
   public void testLogEntryPAthChangeValueOf() throws Exception {
-    assertEquals(LogEntryPathChangeType.DELETED, LogEntryPathChangeType.parse("D"));
-    assertEquals("Deleted", LogEntryPathChangeType.parse("D").toString());
+    assertEquals(DirEntryChangeType.DELETED, DirEntryChangeType.parse("D"));
+    assertEquals("Deleted", DirEntryChangeType.parse("D").toString());
   }
 
   public void testLogEntryPathChangeSwitch() throws Exception {
-    switch (LogEntryPathChangeType.MODIFIED) {
+    switch (DirEntryChangeType.MODIFIED) {
       case ADDED:
         fail();
       case MODIFIED:

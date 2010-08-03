@@ -12,7 +12,7 @@
   */
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf" %>
-<%@ page import="org.sventon.model.LogEntryPathChangeType" %>
+<%@ page import="org.sventon.model.DirEntryChangeType" %>
 <%@ page import="org.apache.commons.lang.BooleanUtils" %>
 
 <html>
@@ -69,12 +69,12 @@
               <c:forEach items="${diffResult}" var="row">
                 <jsp:useBean id="row" type="org.tmatesoft.svn.core.wc.SVNDiffStatus"/>
                 <%
-                  final LogEntryPathChangeType changeType;
+                  final DirEntryChangeType changeType;
                   final char actionCode = row.getModificationType().getCode();
                   if (actionCode == ' ') {
                     changeType = null;
                   } else {
-                    changeType = LogEntryPathChangeType.parse(actionCode);
+                    changeType = DirEntryChangeType.parse(actionCode);
                   }
                 %>
                 <tr>
@@ -85,11 +85,11 @@
                   </c:url>
 
                   <td valign="top"><i><%= changeType == null ? "" : changeType.toString() %></i></td>
-                  <% if (LogEntryPathChangeType.ADDED == changeType || LogEntryPathChangeType.REPLACED == changeType) { %>
+                  <% if (DirEntryChangeType.ADDED == changeType || DirEntryChangeType.REPLACED == changeType) { %>
                   <td><a href="${goToUrl}?revision=${command.toRevision}" title="Show file">${row.path}</a></td>
-                  <% } else if (LogEntryPathChangeType.DELETED == changeType) { %>
+                  <% } else if (DirEntryChangeType.DELETED == changeType) { %>
                   <td><a href="${goToUrl}?revision=${command.fromRevision}" title="Show file">${row.path}</a></td>
-                  <% } else if (LogEntryPathChangeType.MODIFIED == changeType) { %>
+                  <% } else if (DirEntryChangeType.MODIFIED == changeType) { %>
                   <td><a href="${diffUrl}&entries=${command.fromPath}/${row.path}@${command.fromRevision}&entries=${command.toPath}/${row.path}@${command.toRevision}" title="Show Diff">${row.path}</a></td>
                   <% } else { %>
                   <td>${row.path}</td>
