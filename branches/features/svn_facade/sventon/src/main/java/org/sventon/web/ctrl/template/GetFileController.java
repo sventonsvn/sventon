@@ -15,7 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.appl.ObjectCacheManager;
+import org.sventon.cache.ObjectCacheManager;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheKey;
 import org.sventon.model.UserRepositoryContext;
