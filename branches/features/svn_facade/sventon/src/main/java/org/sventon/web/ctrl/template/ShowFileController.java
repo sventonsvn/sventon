@@ -143,7 +143,7 @@ public final class ShowFileController extends AbstractTemplateController {
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + command.getPath() + "]");
           final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
           final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
-              archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
+              archivedEntry, charset, colorer, fileProperties, connection.getURL());
           model.put("file", textFile);
           modelAndView = new ModelAndView("showTextFile", model);
         } else {
@@ -158,7 +158,7 @@ public final class ShowFileController extends AbstractTemplateController {
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
-            repository.getLocation().toDecodedString() + command.getPath());
+            connection.getURL() + command.getPath());
         final String content = keywordHandler.substitute(outStream.toString(charset), charset);
         response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
             "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
@@ -167,7 +167,7 @@ public final class ShowFileController extends AbstractTemplateController {
         return null;
       } else {
         final TextFile textFile = new TextFile(outStream.toString(charset), command.getPath(), charset,
-            colorer, fileProperties, repository.getLocation().toDecodedString());
+            colorer, fileProperties, connection.getURL());
         model.put("file", textFile);
       }
       modelAndView = new ModelAndView("showTextFile", model);

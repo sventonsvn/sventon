@@ -13,9 +13,6 @@ package org.sventon;
 
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * Interface for factory responsible for creating subversion repository connections.

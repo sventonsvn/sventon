@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNErrorCode;
@@ -48,7 +49,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
       final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(
-          command.getName(), connection, headRevision, FIRST_REVISION, "/", revisionCount, false);
+          command.getName(), connection, headRevision, Revision.FIRST, "/", revisionCount, false);
 
       //TODO: Parse to apply Bugtraq links
       revisions.addAll(LogEntryWrapper.convert(logEntries));
