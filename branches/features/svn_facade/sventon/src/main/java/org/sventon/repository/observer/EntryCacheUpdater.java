@@ -20,7 +20,7 @@ import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.direntrycache.EntryCache;
+import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
@@ -105,7 +105,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
     SVNConnection connection = null;
     try {
-      final EntryCache entryCache = entryCacheManager.getCache(repositoryName);
+      final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
       connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           configuration.getCacheCredentials());
@@ -132,11 +132,11 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
    * </td><td>Entry's details are updated</td></tr>
    * </table>
    *
-   * @param entryCache     EntryCache.
+   * @param entryCache     DirEntryCache.
    * @param connection     Repository.
    * @param revisionUpdate Update
    */
-  protected void updateInternal(final EntryCache entryCache, final SVNConnection connection,
+  protected void updateInternal(final DirEntryCache entryCache, final SVNConnection connection,
                                 final RevisionUpdate revisionUpdate) {
 
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
@@ -160,7 +160,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     }
   }
 
-  private void addRevisionToCache(final EntryCache entryCache, final SVNConnection connection,
+  private void addRevisionToCache(final DirEntryCache entryCache, final SVNConnection connection,
                                   final SVNLogEntry logEntry, boolean flushAfterUpdate) {
     try {
       final long revision = logEntry.getRevision();
@@ -204,7 +204,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     }
   }
 
-  private void doInitialCachePopulation(final EntryCache entryCache, final SVNConnection connection,
+  private void doInitialCachePopulation(final DirEntryCache entryCache, final SVNConnection connection,
                                         final boolean flushAfterUpdate) {
 
     try {
@@ -221,7 +221,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
   private void updateAndFlushCache(final EntriesToAdd entriesToAdd,
                                    final EntriesToDelete entriesToDelete,
-                                   final long revision, EntryCache entryCache, boolean flushAfterUpdate) {
+                                   final long revision, DirEntryCache entryCache, boolean flushAfterUpdate) {
     entryCache.update(entriesToDelete.getEntries(), entriesToAdd.getEntries());
     entryCache.setLatestCachedRevisionNumber(revision);
 
@@ -447,7 +447,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
 
   class AutoFlushBuffer extends EntriesToAdd {
 
-    private final EntryCache entryCache;
+    private final DirEntryCache entryCache;
     private final int flushThreshold;
 
     /**
@@ -456,7 +456,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
      * @param entryCache     Cache instance.
      * @param flushThreshold Threshold.
      */
-    public AutoFlushBuffer(final EntryCache entryCache, final int flushThreshold) {
+    public AutoFlushBuffer(final DirEntryCache entryCache, final int flushThreshold) {
       this.entryCache = entryCache;
       this.flushThreshold = flushThreshold;
     }

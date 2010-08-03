@@ -12,19 +12,19 @@
 package org.sventon.appl;
 
 import org.sventon.cache.CacheException;
-import org.sventon.cache.direntrycache.EntryCache;
-import org.sventon.cache.direntrycache.EntryCacheImpl;
+import org.sventon.cache.direntrycache.DirEntryCache;
+import org.sventon.cache.direntrycache.CompassDirEntryCache;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
 
 /**
- * Handles EntryCache instances.
+ * Handles DirEntryCache instances.
  *
  * @author jesper@sventon.org
  */
-public final class EntryCacheManager extends CacheManager<EntryCache> {
+public final class EntryCacheManager extends CacheManager<DirEntryCache> {
 
   /**
    * Root directory for cache files.
@@ -48,13 +48,13 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  protected EntryCache createCache(final RepositoryName repositoryName) throws CacheException {
+  protected DirEntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final EntryCache cache = new EntryCacheImpl(cacheDirectory, true);
-    cache.init();
-    return cache;
+    final DirEntryCache entryCache = new CompassDirEntryCache(cacheDirectory, true);
+    entryCache.init();
+    return entryCache;
   }
 
 
@@ -65,8 +65,8 @@ public final class EntryCacheManager extends CacheManager<EntryCache> {
    */
   @PreDestroy
   public void shutdown() throws CacheException {
-    for (final EntryCache cache : caches.values()) {
-      cache.shutdown();
+    for (final DirEntryCache entryCache : caches.values()) {
+      entryCache.shutdown();
     }
   }
 }

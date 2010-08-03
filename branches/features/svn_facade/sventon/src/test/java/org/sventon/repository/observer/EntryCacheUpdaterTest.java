@@ -7,8 +7,8 @@ import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.cache.direntrycache.EntryCache;
-import org.sventon.cache.direntrycache.EntryCacheImpl;
+import org.sventon.cache.direntrycache.CompassDirEntryCache;
+import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.SVNKitRepositoryService;
@@ -20,7 +20,7 @@ import java.util.*;
 public class EntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final EntryCache entryCache = new EntryCacheImpl(new File("test"));
+    final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 
@@ -52,7 +52,7 @@ public class EntryCacheUpdaterTest extends TestCase {
   }
 
   public void testInitialUpdate() throws Exception {
-    final EntryCache entryCache = new EntryCacheImpl(new File("test"));
+    final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 

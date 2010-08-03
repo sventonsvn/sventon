@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author jesper@sventon.org
  */
-public interface EntryCache extends Cache {
+public interface DirEntryCache extends Cache {
 
   /**
    * Initializes the cache.
