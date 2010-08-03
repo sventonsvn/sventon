@@ -20,7 +20,6 @@ import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -134,17 +133,6 @@ public interface RepositoryService {
   SVNProperties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SVNException;
 
   /**
-   * Gets the path properties.
-   *
-   * @param connection The repository connection
-   * @param path       The entry path
-   * @param revision   The entry revision
-   * @return Properties
-   * @throws SVNException if a subversion error occur
-   */
-  SVNProperties getPathProperties(final SVNConnection connection, final String path, final long revision) throws SVNException;
-
-  /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
    *
    * @param connection The repository connection
@@ -193,7 +181,7 @@ public interface RepositoryService {
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
    * @return Map containing path and locks.
    */
-  Map<String, SVNLock> getLocks(final SVNConnection connection, final String startPath);
+  Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath);
 
   /**
    * @param connection The repository connection

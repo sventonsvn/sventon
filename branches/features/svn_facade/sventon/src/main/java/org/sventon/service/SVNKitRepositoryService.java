@@ -130,15 +130,6 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final SVNProperties getPathProperties(final SVNConnection connection, final String path, final long revision)
-      throws SVNException {
-    final SVNRepository repository = connection.getDelegate();
-    final SVNProperties properties = new SVNProperties();
-    repository.getDir(path, revision, properties, (ISVNDirEntryHandler) null);
-    return properties;
-  }
-
-  @Override
   public final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SVNException {
     final String mimeType = getFileProperties(connection, path, revision).getStringValue(SVNProperty.MIME_TYPE);
     return SVNProperty.isTextMimeType(mimeType);
@@ -164,19 +155,19 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Map<String, SVNLock> getLocks(final SVNConnection connection, final String startPath) {
+  public Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath) {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
 
-    final Map<String, SVNLock> locks = new HashMap<String, SVNLock>();
+    final Map<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
     final SVNRepository repository = connection.getDelegate();
-    final SVNLock[] locksArray;
 
     try {
-      locksArray = repository.getLocks(path);
-      for (final SVNLock lock : locksArray) {
+      for (final SVNLock lock : repository.getLocks(path)) {
         logger.debug("Lock found: " + lock);
-        locks.put(lock.getPath(), lock);
+        final DirEntryLock dirEntryLock = new DirEntryLock(lock.getID(), lock.getPath(), lock.getOwner(),
+            lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
+        locks.put(lock.getPath(), dirEntryLock);
       }
     } catch (SVNException svne) {
       logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
@@ -184,10 +175,10 @@ public class SVNKitRepositoryService implements RepositoryService {
     return locks;
   }
 
+  @SuppressWarnings({"unchecked"})
   @Override
   public final List<RepositoryEntry> list(final SVNConnection connection, final String path, final long revision,
                                           final SVNProperties properties) throws SVNException {
-    //noinspection unchecked
     final SVNRepository repository = connection.getDelegate();
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
     return RepositoryEntry.createEntryCollection(entries, path);
@@ -207,6 +198,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     }
   }
 
+  @SuppressWarnings({"unchecked"})
   @Override
   public final List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
