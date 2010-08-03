@@ -14,25 +14,24 @@ package org.sventon.repository;
 import org.sventon.model.RepositoryName;
 
 /**
- * Interface to be implemented by repository change monitor classes.
+ * Repository change monitor.
  *
  * @author jesper@sventon.org
  */
-public interface RevisionObservable {
+public interface RepositoryChangeMonitor {
 
   /**
-   * Updates the observable. For each configured repository, polls the repository
-   * and looks for new revisions to fetch and publish to registered observers.
+   * Updates the monitor. For each configured repository, the monitor will poll the repository
+   * and look for new revisions to fetch and publish them to the registered listeners.
    */
   void updateAll();
 
   /**
-   * Updates the observable for a single configured repository, polls the repository
-   * and looks for new revisions to fetch and publish to registered observers.
+   * Updates the monitor for a single configured repository, polls the repository
+   * and looks for new revisions to fetch and publish to registered listeners.
    *
-   * @param repositoryName   Repository name
-   * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
+   * @param repositoryName Repository name
    */
-  void update(final RepositoryName repositoryName, boolean flushAfterUpdate);
+  void update(final RepositoryName repositoryName);
 
 }

@@ -9,7 +9,6 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
-import org.sventon.repository.observer.RevisionObserver;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -19,10 +18,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class RevisionObservableImplTest extends TestCase {
+public class RepositoryChangeMonitorImplTest extends TestCase {
 
   private RepositoryService repositoryServiceMock = createMock(RepositoryService.class);
-  private RevisionObserver revisionObserverMock = createMock(RevisionObserver.class);
+  private RepositoryChangeListener repositoryChangeListenerMock = createMock(RepositoryChangeListener.class);
   private List<SVNLogEntry> firstBatchOfRevisions;
   private List<SVNLogEntry> secondBatchOfRevisions;
 
@@ -43,7 +42,7 @@ public class RevisionObservableImplTest extends TestCase {
   @Override
   protected void tearDown() throws Exception {
     reset(repositoryServiceMock);
-    reset(revisionObserverMock);
+    reset(repositoryChangeListenerMock);
   }
 
   private ObjectCache createMemoryCache() throws Exception {
@@ -67,26 +66,26 @@ public class RevisionObservableImplTest extends TestCase {
     final ObjectCache cache = createMemoryCache();
 
     try {
-      final List<RevisionObserver> observers = new ArrayList<RevisionObserver>();
-      observers.add(revisionObserverMock);
-      final RevisionObservableImpl revisionObservable = new RevisionObservableImpl(observers);
-      revisionObservable.setMaxRevisionCountPerUpdate(3);
-      revisionObservable.setApplication(application);
+      final List<RepositoryChangeListener> listeners = new ArrayList<RepositoryChangeListener>();
+      listeners.add(repositoryChangeListenerMock);
+      final RepositoryChangeMonitorImpl changeMonitor = new RepositoryChangeMonitorImpl(listeners);
+      changeMonitor.setMaxRevisionCountPerUpdate(3);
+      changeMonitor.setApplication(application);
 
-      revisionObservable.setRepositoryService(repositoryServiceMock);
+      changeMonitor.setRepositoryService(repositoryServiceMock);
       assertFalse(application.isUpdating(configuration.getName()));
 
       expect(repositoryServiceMock.getLatestRevision(null)).andReturn(6L);
       expect(repositoryServiceMock.getRevisionsFromRepository(null, 1L, 3L)).andReturn(firstBatchOfRevisions);
-      revisionObserverMock.update(isA(RevisionObservableImpl.class), isA(RevisionUpdate.class));
+      repositoryChangeListenerMock.update(isA(RevisionUpdate.class));
       expect(repositoryServiceMock.getRevisionsFromRepository(null, 4L, 6L)).andReturn(secondBatchOfRevisions);
-      revisionObserverMock.update(isA(RevisionObservableImpl.class), isA(RevisionUpdate.class));
+      repositoryChangeListenerMock.update(isA(RevisionUpdate.class));
 
       replay(repositoryServiceMock);
-      replay(revisionObserverMock);
-      revisionObservable.update(configuration.getName(), null, cache, false);
+      replay(repositoryChangeListenerMock);
+      changeMonitor.update(configuration.getName(), null, cache, false);
       verify(repositoryServiceMock);
-      verify(revisionObserverMock);
+      verify(repositoryChangeListenerMock);
 
       assertFalse(application.isUpdating(configuration.getName()));
     } finally {

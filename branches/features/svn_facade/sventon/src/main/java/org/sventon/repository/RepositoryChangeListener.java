@@ -9,22 +9,18 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.repository.observer;
-
-import org.sventon.repository.RevisionUpdate;
-
-import java.util.Observer;
+package org.sventon.repository;
 
 /**
- * RevisionObserver. Interface to be implemented by
- * observers interested in getting published repository changes.
+ * Interface to be implemented by classes interested in getting
+ * notified about repository changes.
  *
  * @author jesper@sventon.org
  */
-public interface RevisionObserver extends Observer {
+public interface RepositoryChangeListener {
 
   /**
-   * Called to update the observer.
+   * Called when a repository update is detected.
    *
    * @param revisionUpdate The updated revisions.
    */

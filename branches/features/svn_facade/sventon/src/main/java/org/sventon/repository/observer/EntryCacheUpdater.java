@@ -14,8 +14,8 @@ package org.sventon.repository.observer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.sventon.SVNConnectionFactory;
 import org.sventon.SVNConnection;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
@@ -24,6 +24,7 @@ import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNErrorCode;
@@ -38,7 +39,7 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
-public final class EntryCacheUpdater extends AbstractRevisionObserver {
+public final class EntryCacheUpdater implements RepositoryChangeListener {
 
   /**
    * The static logging instance.
@@ -100,7 +101,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   public void update(final RevisionUpdate revisionUpdate) {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
 
-    LOGGER.info("Observer got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for repository: "
+    LOGGER.info("Listener got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for repository: "
         + repositoryName);
 
     SVNConnection connection = null;
