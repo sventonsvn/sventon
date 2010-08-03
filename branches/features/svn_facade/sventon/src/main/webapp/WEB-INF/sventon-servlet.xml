@@ -108,7 +108,7 @@
     <property name="viewName" value="ajax/logMessage"/>
   </bean>
 
-  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractTemplateController">
+  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.DirEntryTrayController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="ajax/entryTray"/>
   </bean>

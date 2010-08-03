@@ -58,7 +58,7 @@ public final class UserRepositoryContext implements Serializable {
   /**
    * The user's repository entry tray.
    */
-  private final RepositoryEntryTray repositoryEntryTray = new RepositoryEntryTray();
+  private final DirEntryTray dirEntryTray = new DirEntryTray();
 
   /**
    * Search mode.
@@ -223,8 +223,8 @@ public final class UserRepositoryContext implements Serializable {
    *
    * @return The entry tray instance.
    */
-  public RepositoryEntryTray getRepositoryEntryTray() {
-    return repositoryEntryTray;
+  public DirEntryTray getDirEntryTray() {
+    return dirEntryTray;
   }
 
   /**

@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryEntryTrayController extends AbstractTemplateController {
+public final class DirEntryTrayController extends AbstractTemplateController {
 
   /**
    * Request parameter indicating entry should be added to tray.
@@ -59,7 +59,7 @@ public final class RepositoryEntryTrayController extends AbstractTemplateControl
       return modelAndView;
     }
 
-    final RepositoryEntryTray entryTray = userRepositoryContext.getRepositoryEntryTray();
+    final DirEntryTray entryTray = userRepositoryContext.getDirEntryTray();
 
     if (PARAMETER_ADD.equals(actionParameter)) {
       logger.debug("Adding entry to tray: " + entry.getFullEntryName());

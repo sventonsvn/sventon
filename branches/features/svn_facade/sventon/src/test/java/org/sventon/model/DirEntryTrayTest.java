@@ -8,10 +8,10 @@ import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.Date;
 
-public class RepositoryEntryTrayTest extends TestCase {
+public class DirEntryTrayTest extends TestCase {
 
   public void testEntryTray() throws SVNException {
-    final RepositoryEntryTray entryTray = new RepositoryEntryTray();
+    final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
     final PeggedRepositoryEntry entry = new PeggedRepositoryEntry(new RepositoryEntry(
@@ -26,7 +26,7 @@ public class RepositoryEntryTrayTest extends TestCase {
   }
 
   public void testDuplicateEntries() throws SVNException {
-    final RepositoryEntryTray entryTray = new RepositoryEntryTray();
+    final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
     final RepositoryEntry entry1 = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
