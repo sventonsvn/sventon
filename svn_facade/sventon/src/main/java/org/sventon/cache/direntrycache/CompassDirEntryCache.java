@@ -29,9 +29,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * EntryCacheImpl.
+ * CompassDirEntryCache.
  */
-public final class EntryCacheImpl implements EntryCache {
+public final class CompassDirEntryCache implements DirEntryCache {
 
   /**
    * The logging instance.
@@ -70,7 +70,7 @@ public final class EntryCacheImpl implements EntryCache {
    *
    * @param cacheRootDirectory Cache root directory
    */
-  public EntryCacheImpl(final File cacheRootDirectory) {
+  public CompassDirEntryCache(final File cacheRootDirectory) {
     this(cacheRootDirectory, false);
   }
 
@@ -80,7 +80,7 @@ public final class EntryCacheImpl implements EntryCache {
    * @param cacheDirectory Cache directory
    * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public EntryCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+  public CompassDirEntryCache(final File cacheDirectory, final boolean useDiskStore) {
     this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }

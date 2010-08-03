@@ -10,11 +10,11 @@ import java.util.List;
 
 public class EntryCacheTest extends TestCase {
 
-  private EntryCache entryCache;
+  private DirEntryCache entryCache;
 
   @Override
   protected void setUp() throws Exception {
-    entryCache = new EntryCacheImpl(new File("."));
+    entryCache = new CompassDirEntryCache(new File("."));
     entryCache.init();
   }
 
@@ -23,7 +23,7 @@ public class EntryCacheTest extends TestCase {
     entryCache.shutdown();
   }
 
-  private void addAll(EntryCache entryCache, List<RepositoryEntry> entries) {
+  private void addAll(DirEntryCache entryCache, List<RepositoryEntry> entries) {
     entryCache.add(entries.toArray(new RepositoryEntry[entries.size()]));
   }
 
