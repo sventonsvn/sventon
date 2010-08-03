@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.repository.observer;
+package org.sventon.cache.direntrycache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +20,6 @@ import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;

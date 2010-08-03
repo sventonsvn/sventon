@@ -1,4 +1,4 @@
-package org.sventon.repository.observer;
+package org.sventon.cache.direntrycache;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
@@ -7,8 +7,6 @@ import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.cache.direntrycache.CompassDirEntryCache;
-import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.SVNKitRepositoryService;

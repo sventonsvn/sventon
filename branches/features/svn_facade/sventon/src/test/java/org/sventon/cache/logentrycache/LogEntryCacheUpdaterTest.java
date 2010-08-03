@@ -1,9 +1,7 @@
-package org.sventon.repository.observer;
+package org.sventon.cache.logentrycache;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
-import org.sventon.cache.logentrycache.LogEntryCache;
-import org.sventon.cache.logentrycache.LogEntryCacheImpl;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;

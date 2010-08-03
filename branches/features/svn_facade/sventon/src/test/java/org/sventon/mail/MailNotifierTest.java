@@ -1,4 +1,4 @@
-package org.sventon.repository.observer;
+package org.sventon.mail;
 
 import junit.framework.TestCase;
 import org.sventon.model.RepositoryName;
