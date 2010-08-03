@@ -9,35 +9,34 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.cache;
 
-import org.sventon.cache.CacheException;
-import org.sventon.cache.logentrycache.LogEntryCache;
-import org.sventon.cache.logentrycache.LogEntryCacheImpl;
+import org.sventon.appl.ConfigDirectory;
+import org.sventon.cache.direntrycache.DirEntryCache;
+import org.sventon.cache.direntrycache.CompassDirEntryCache;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
 
 /**
- * Handles LogEntryCache instances.
+ * Handles DirEntryCache instances.
  *
  * @author jesper@sventon.org
  */
-public final class LogEntryCacheManager extends CacheManager<LogEntryCache> {
+public final class EntryCacheManager extends CacheManager<DirEntryCache> {
 
   /**
-   * Directory where to store cache files.
+   * Root directory for cache files.
    */
   private final File repositoriesDirectory;
-
 
   /**
    * Constructor.
    *
-   * @param configDirectory Root directory to use.
+   * @param configDirectory Directory where to store cache files.
    */
-  public LogEntryCacheManager(final ConfigDirectory configDirectory) {
+  public EntryCacheManager(final ConfigDirectory configDirectory) {
     logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
   }
@@ -49,14 +48,15 @@ public final class LogEntryCacheManager extends CacheManager<LogEntryCache> {
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
-  protected LogEntryCache createCache(final RepositoryName repositoryName) throws CacheException {
+  protected DirEntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final LogEntryCache cache = new LogEntryCacheImpl(cacheDirectory, true);
-    cache.init();
-    return cache;
+    final DirEntryCache entryCache = new CompassDirEntryCache(cacheDirectory, true);
+    entryCache.init();
+    return entryCache;
   }
+
 
   /**
    * Shuts all the caches down.
@@ -65,9 +65,8 @@ public final class LogEntryCacheManager extends CacheManager<LogEntryCache> {
    */
   @PreDestroy
   public void shutdown() throws CacheException {
-    for (final LogEntryCache cache : caches.values()) {
-      cache.shutdown();
+    for (final DirEntryCache entryCache : caches.values()) {
+      entryCache.shutdown();
     }
   }
-
 }

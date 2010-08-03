@@ -85,7 +85,7 @@
     <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
   </bean>
 
-  <bean id="configAuthorizationFilter" class="org.sventon.appl.ConfigAuthorizationFilter">
+  <bean id="configAuthorizationFilter" class="org.sventon.web.filter.ConfigAuthorizationFilter">
     <constructor-arg ref="application"/>
   </bean>
 
@@ -100,7 +100,7 @@
 
   <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
-  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager">
+  <bean id="objectCacheManager" class="org.sventon.cache.ObjectCacheManager">
     <constructor-arg index="0" ref="configDirectory"/>
     <constructor-arg index="1" value="1000"/>
     <constructor-arg index="2" value="true"/>
@@ -201,7 +201,7 @@
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.EntryCacheUpdater">
+  <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.DirEntryCacheUpdater">
     <constructor-arg ref="entryCacheManager"/>
     <constructor-arg ref="application"/>
   </bean>
@@ -211,15 +211,15 @@
     <constructor-arg ref="logEntryCacheManager"/>
   </bean>
 
-  <bean id="revisionCacheManager" class="org.sventon.appl.RevisionCacheManager">
+  <bean id="revisionCacheManager" class="org.sventon.cache.RevisionCacheManager">
     <constructor-arg ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager">
+  <bean id="entryCacheManager" class="org.sventon.cache.EntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logEntryCacheManager" class="org.sventon.appl.LogEntryCacheManager">
+  <bean id="logEntryCacheManager" class="org.sventon.cache.LogEntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 

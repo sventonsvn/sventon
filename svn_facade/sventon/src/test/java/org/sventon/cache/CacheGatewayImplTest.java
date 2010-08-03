@@ -5,7 +5,6 @@ import org.springframework.mock.web.MockServletContext;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.appl.EntryCacheManager;
 import org.sventon.cache.direntrycache.CompassDirEntryCache;
 import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.RepositoryEntry;

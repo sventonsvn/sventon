@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
-import org.sventon.appl.EntryCacheManager;
+import org.sventon.cache.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.model.DirEntryChangeType;

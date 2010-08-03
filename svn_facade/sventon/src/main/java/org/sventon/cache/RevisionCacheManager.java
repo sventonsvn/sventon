@@ -9,9 +9,8 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.cache;
 
-import org.sventon.cache.CacheException;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.cache.revisioncache.RevisionCacheImpl;
 import org.sventon.model.RepositoryName;

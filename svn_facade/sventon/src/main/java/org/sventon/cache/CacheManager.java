@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.appl;
+package org.sventon.cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

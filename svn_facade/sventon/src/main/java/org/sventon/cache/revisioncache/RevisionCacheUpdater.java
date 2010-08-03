@@ -13,7 +13,7 @@ package org.sventon.cache.revisioncache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.appl.RevisionCacheManager;
+import org.sventon.cache.RevisionCacheManager;
 import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;

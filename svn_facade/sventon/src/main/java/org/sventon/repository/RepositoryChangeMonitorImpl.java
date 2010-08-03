@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
-import org.sventon.appl.ObjectCacheManager;
+import org.sventon.cache.ObjectCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.model.RepositoryName;
