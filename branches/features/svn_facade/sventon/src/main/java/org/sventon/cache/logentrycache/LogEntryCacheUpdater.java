@@ -13,7 +13,7 @@ package org.sventon.cache.logentrycache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.appl.LogEntryCacheManager;
+import org.sventon.cache.LogEntryCacheManager;
 import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
