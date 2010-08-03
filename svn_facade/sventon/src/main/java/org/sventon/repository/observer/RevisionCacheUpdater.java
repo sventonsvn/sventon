@@ -17,6 +17,7 @@ import org.sventon.appl.RevisionCacheManager;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class RevisionCacheUpdater extends AbstractRevisionObserver {
+public final class RevisionCacheUpdater implements RepositoryChangeListener {
 
   /**
    * The static logging instance.
@@ -58,7 +59,7 @@ public final class RevisionCacheUpdater extends AbstractRevisionObserver {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
     final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
 
-    LOGGER.info("Observer got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
+    LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
     try {
       final RevisionCache revisionCache = revisionCacheManager.getCache(repositoryName);

@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
+import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.util.HTMLCreator;
 import org.sventon.util.SVNUtils;
@@ -41,7 +42,7 @@ import java.util.concurrent.Executors;
 /**
  * Class for notifying users about new revisions.
  */
-public final class MailNotifier extends AbstractRevisionObserver {
+public final class MailNotifier implements RepositoryChangeListener {
 
   /**
    * The static logging instance.

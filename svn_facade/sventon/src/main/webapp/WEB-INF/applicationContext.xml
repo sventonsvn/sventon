@@ -152,7 +152,7 @@
   <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl"/>
 
   <!-- Monitors the repository and polls for changes -->
-  <bean id="revisionObservable" class="org.sventon.repository.RevisionObservableImpl">
+  <bean id="repositoryChangeMonitor" class="org.sventon.repository.RepositoryChangeMonitorImpl">
     <constructor-arg ref="observerList"/>
     <property name="maxRevisionCountPerUpdate" value="100"/>
   </bean>
