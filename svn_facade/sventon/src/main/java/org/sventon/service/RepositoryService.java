@@ -19,7 +19,10 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNDiffStatus;
 
@@ -173,7 +176,7 @@ public interface RepositoryService {
   long getLatestRevision(final SVNConnection connection) throws SVNException;
 
   /**
-   * Gets the node type for given path (with or without leaf).
+   * Gets the node kind for given path (with or without leaf).
    *
    * @param connection The repository connection
    * @param path       The path, with or without leaf.
@@ -181,7 +184,7 @@ public interface RepositoryService {
    * @return The node kind
    * @throws SVNException if a subversion error occur
    */
-  SVNNodeKind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  RepositoryEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SVNException;
 
   /**
    * Gets the repository locks recursively, starting from given path.
@@ -307,7 +310,7 @@ public interface RepositoryService {
    * @throws DiffException Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
    *                       of if one of the given entries does not exist in given revision.
    */
-  SVNNodeKind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
+  RepositoryEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
       throws SVNException, DiffException;
 
   /**

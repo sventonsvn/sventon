@@ -15,13 +15,13 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
+import org.sventon.model.RepositoryEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +51,7 @@ public final class GoToController extends AbstractTemplateController {
                                    final BindException exception) throws Exception {
 
     String redirectUrl;
-    SVNNodeKind kind = null;
+    RepositoryEntry.Kind kind = null;
 
     try {
       kind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
@@ -64,9 +64,9 @@ public final class GoToController extends AbstractTemplateController {
       }
     }
 
-    if (SVNNodeKind.DIR == kind) {
+    if (RepositoryEntry.Kind.DIR == kind) {
       redirectUrl = command.createListUrl();
-    } else if (SVNNodeKind.FILE == kind) {
+    } else if (RepositoryEntry.Kind.FILE == kind) {
       redirectUrl = command.createShowFileUrl();
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");

@@ -20,12 +20,12 @@ import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.DiffStyle;
+import org.sventon.model.RepositoryEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.wc.SVNDiffStatus;
 
@@ -64,10 +64,10 @@ public final class DiffController extends AbstractTemplateController {
     handleDiffStyle(command);
 
     try {
-      final SVNNodeKind nodeKind = getRepositoryService().getNodeKindForDiff(connection, command);
-      if (SVNNodeKind.DIR == nodeKind) {
+      final RepositoryEntry.Kind nodeKind = getRepositoryService().getNodeKindForDiff(connection, command);
+      if (RepositoryEntry.Kind.DIR == nodeKind) {
         model.putAll(handlePathDiff(connection, modelAndView, command, config));
-      } else if (SVNNodeKind.FILE == nodeKind) {
+      } else if (RepositoryEntry.Kind.FILE == nodeKind) {
         model.putAll(handleFileDiff(connection, modelAndView, command, config, charset));
       }
     } catch (final IdenticalFilesException ife) {

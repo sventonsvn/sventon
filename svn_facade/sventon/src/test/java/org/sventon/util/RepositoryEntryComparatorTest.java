@@ -2,16 +2,17 @@ package org.sventon.util;
 
 import junit.framework.TestCase;
 import org.sventon.model.RepositoryEntry;
-import static org.sventon.util.RepositoryEntryComparator.SortType.*;
 import org.tmatesoft.svn.core.SVNDirEntry;
-import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
-import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static org.sventon.util.RepositoryEntryComparator.SortType.*;
+import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
+import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
 public class RepositoryEntryComparatorTest extends TestCase {
 
