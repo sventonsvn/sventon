@@ -14,7 +14,7 @@ package org.sventon.repository.observer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.SVNConnection;
 import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
@@ -63,7 +63,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   /**
    * The repository factory.
    */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
+  private SVNConnectionFactory connectionFactory;
 
   /**
    * Max number of files in memory before buffer is flushed to the cache.
@@ -107,7 +107,7 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
     try {
       final EntryCache entryCache = entryCacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getRepositoryConfiguration(repositoryName);
-      connection = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
+      connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           configuration.getCacheCredentials());
       updateInternal(entryCache, connection, revisionUpdate);
     } catch (final Exception ex) {
@@ -356,13 +356,13 @@ public final class EntryCacheUpdater extends AbstractRevisionObserver {
   }
 
   /**
-   * Sets the repository connection factory instance.
+   * Sets the connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
   @Autowired
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 
   /**

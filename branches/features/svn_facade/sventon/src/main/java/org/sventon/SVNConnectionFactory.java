@@ -19,7 +19,7 @@ import org.sventon.model.RepositoryName;
  *
  * @author jesper@sventon.org
  */
-public interface RepositoryConnectionFactory {
+public interface SVNConnectionFactory {
 
   /**
    * Gets a repository connection configured using given connection info.

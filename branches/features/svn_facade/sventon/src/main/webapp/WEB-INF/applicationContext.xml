@@ -62,7 +62,7 @@
 
   <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
 
-  <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactoryImpl">
+  <bean id="connectionFactory" class="org.sventon.SVNKitConnectionFactory">
     <constructor-arg ref="configDirectory"/>
   </bean>
 

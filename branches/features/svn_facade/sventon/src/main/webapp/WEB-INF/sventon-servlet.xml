@@ -81,7 +81,7 @@
     <property name="svnFileRevisionEditor" ref="svnFileRevisionEditor"/>
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+    <property name="connectionFactory" ref="connectionFactory"/>
   </bean>
 
   <bean id="abstractTemplateController" class="org.sventon.web.ctrl.template.AbstractTemplateController" parent="abstractBaseController" abstract="true">

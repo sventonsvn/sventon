@@ -104,7 +104,7 @@ public final class RSSController extends AbstractBaseController {
   private SVNConnection createRepositoryConnection(final HttpServletRequest request,
                                                    final RepositoryConfiguration configuration) throws SVNException {
     final Credentials credentials = extractCredentials(request, configuration);
-    return repositoryConnectionFactory.createConnection(configuration.getName(),
+    return connectionFactory.createConnection(configuration.getName(),
         configuration.getSVNURL(), credentials);
   }
 

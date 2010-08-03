@@ -26,7 +26,7 @@ import java.io.File;
  *
  * @author jesper@sventon.org
  */
-public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFactory {
+public class SVNKitConnectionFactory implements SVNConnectionFactory {
 
   /**
    * Root directory where to place the svn config files.
@@ -39,7 +39,7 @@ public class RepositoryConnectionFactoryImpl implements RepositoryConnectionFact
    * @param configDirectory Root directory where to place the svn config files.
    *                        If the directory does not exist, it will be created.
    */
-  public RepositoryConnectionFactoryImpl(final ConfigDirectory configDirectory) {
+  public SVNKitConnectionFactory(final ConfigDirectory configDirectory) {
     Validate.notNull(configDirectory, "Configuration directory cannot be null!");
     this.configurationDirectory = configDirectory;
   }

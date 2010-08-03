@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.SVNConnection;
 import org.sventon.SVNException;
 import org.sventon.SVNURL;
@@ -44,7 +44,7 @@ public class AbstractTemplateControllerTest extends TestCase {
     final AbstractTemplateController ctrl = new TestController();
     final MutableBoolean usingSharedAuthSettings = new MutableBoolean(false);
 
-    ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
+    ctrl.setConnectionFactory(new SVNConnectionFactory() {
       public SVNConnection createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
         if ("shared".equals(credentials.getUserName())) {
           usingSharedAuthSettings.setValue(true);

@@ -27,7 +27,6 @@ import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -121,7 +120,6 @@ public final class ShowFileController extends AbstractTemplateController {
     model.put("properties", fileProperties);
     final ModelAndView modelAndView;
 
-    final SVNRepository repository = connection.getDelegate();
     if (isImageFileExtension(command)) {
       logger.debug("File identified as an image file");
       modelAndView = new ModelAndView("showImageFile", model);

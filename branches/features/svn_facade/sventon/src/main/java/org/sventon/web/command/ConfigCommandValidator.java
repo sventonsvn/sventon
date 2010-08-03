@@ -43,7 +43,7 @@ public final class ConfigCommandValidator implements Validator {
   /**
    * The repository factory.
    */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
+  private SVNConnectionFactory connectionFactory;
 
   /**
    * The application.
@@ -82,13 +82,13 @@ public final class ConfigCommandValidator implements Validator {
   }
 
   /**
-   * Sets the repository connection factory instance.
+   * Sets the connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
   @Autowired
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 
   @Override
@@ -147,7 +147,7 @@ public final class ConfigCommandValidator implements Validator {
 
     SVNConnection connection = null;
     try {
-      connection = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
+      connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           credentials);
       connection.getDelegate().testConnection();
     } catch (org.tmatesoft.svn.core.SVNException ex) {

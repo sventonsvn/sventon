@@ -14,7 +14,7 @@ package org.sventon.repository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.SVNConnection;
 import org.sventon.appl.Application;
 import org.sventon.appl.ObjectCacheManager;
@@ -80,7 +80,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * Repository factory.
    */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
+  private SVNConnectionFactory connectionFactory;
 
   /**
    * Constructor.
@@ -232,7 +232,7 @@ public final class RevisionObservableImpl extends Observable implements Revision
         application.setUpdatingCache(repositoryName, true);
         SVNConnection connection = null;
         try {
-          connection = repositoryConnectionFactory.createConnection(configuration.getName(),
+          connection = connectionFactory.createConnection(configuration.getName(),
               configuration.getSVNURL(), configuration.getCacheCredentials());
           final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
           update(repositoryName, connection, objectCache, flushAfterUpdate);
@@ -270,10 +270,10 @@ public final class RevisionObservableImpl extends Observable implements Revision
   /**
    * Sets the repository connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
   @Autowired
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 }
