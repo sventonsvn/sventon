@@ -52,7 +52,7 @@
       <th><spring:message code="expireDate"/></th>
     </tr>
     <c:forEach items="${currentLocks}" var="lock">
-      <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
+      <jsp:useBean id="lock" type="org.sventon.model.DirEntryLock" />
 
       <c:url value="/repos/${command.name}/show${lock.path}" var="showUrl">
         <c:param name="revision" value="${command.revision}" />

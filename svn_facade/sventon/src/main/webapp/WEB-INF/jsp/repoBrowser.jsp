@@ -128,7 +128,7 @@
           <td class="sventonCol4" align="center">
             <c:set var="lock" value="${locks[entry.fullEntryName]}" scope="page"/>
             <c:if test="${!empty lock}">
-              <jsp:useBean id="lock" type="org.tmatesoft.svn.core.SVNLock" />
+              <jsp:useBean id="lock" type="org.sventon.model.DirEntryLock" />
               <span onmouseover="Tip('<table><tr><td><b>Owner</b></td><td><%=StringEscapeUtils.escapeJavaScript(lock.getOwner())%></td></tr><tr><td><b>Comment</b></td><td style=\'white-space: nowrap\'>${lock.comment}</td></tr><tr><td><b>Created</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/></td></tr><tr><td><b>Expires</b></td><td style=\'white-space: nowrap\'><fmt:formatDate type="both" value="${lock.expirationDate}" dateStyle="short" timeStyle="short"/></td></tr></table>')"><img alt="Lock" src="images/icon_lock.png"></span>
             </c:if>
           </td>
