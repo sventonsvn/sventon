@@ -258,9 +258,9 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     final SVNURL svnurl = configuration.getSVNURL();
 
     if (configuration.isAccessControlEnabled()) {
-      connection = repositoryConnectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
+      connection = connectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
     } else {
-      connection = repositoryConnectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
+      connection = connectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
     }
     return connection;
   }

@@ -13,7 +13,7 @@ package org.sventon.web.ctrl;
 
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
@@ -44,7 +44,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   /**
    * The repository factory.
    */
-  protected RepositoryConnectionFactory repositoryConnectionFactory;
+  protected SVNConnectionFactory connectionFactory;
 
   /**
    * Name property editor instance.
@@ -133,12 +133,12 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   }
 
   /**
-   * Sets the repository connection factory instance.
+   * Sets the connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 
 }
