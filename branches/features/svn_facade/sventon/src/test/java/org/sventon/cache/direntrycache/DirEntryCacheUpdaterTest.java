@@ -15,7 +15,7 @@ import org.tmatesoft.svn.core.*;
 import java.io.File;
 import java.util.*;
 
-public class EntryCacheUpdaterTest extends TestCase {
+public class DirEntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
     final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
@@ -41,7 +41,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     configDirectory.setServletContext(servletContext);
     final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
 
-    final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
+    final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
     cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),
         new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
@@ -64,7 +64,7 @@ public class EntryCacheUpdaterTest extends TestCase {
     configDirectory.setServletContext(servletContext);
     final Application application = new Application(configDirectory, TestUtils.CONFIG_FILE_NAME);
 
-    final EntryCacheUpdater cacheUpdater = new EntryCacheUpdater(null, application);
+    final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
     cacheUpdater.setFlushThreshold(2);
     cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
     cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),

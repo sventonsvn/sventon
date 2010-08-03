@@ -38,12 +38,12 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
-public final class EntryCacheUpdater implements RepositoryChangeListener {
+public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
   /**
    * The static logging instance.
    */
-  private static final Log LOGGER = LogFactory.getLog(EntryCacheUpdater.class);
+  private static final Log LOGGER = LogFactory.getLog(DirEntryCacheUpdater.class);
 
   /**
    * The EntryCacheManager instance.
@@ -77,7 +77,7 @@ public final class EntryCacheUpdater implements RepositoryChangeListener {
    * @param entryCacheManager The EntryCacheManager instance.
    * @param application       Application
    */
-  public EntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application) {
+  public DirEntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application) {
     LOGGER.info("Starting");
     this.entryCacheManager = entryCacheManager;
     this.application = application;
