@@ -156,10 +156,11 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final SVNNodeKind getNodeKind(final SVNConnection connection, final String path, final long revision)
+  public final RepositoryEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision)
       throws SVNException {
     final SVNRepository repository = connection.getDelegate();
-    return repository.checkPath(path, revision);
+    final SVNNodeKind nodeKind = repository.checkPath(path, revision);
+    return RepositoryEntry.Kind.valueOf(nodeKind.toString().toUpperCase());
   }
 
   @Override
@@ -449,7 +450,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public SVNNodeKind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
+  public RepositoryEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
       throws SVNException, DiffException {
 
     final long fromRevision;
@@ -463,8 +464,8 @@ public class SVNKitRepositoryService implements RepositoryService {
       toRevision = command.getToRevision().getNumber();
     }
 
-    final SVNNodeKind nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
-    final SVNNodeKind nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
+    final RepositoryEntry.Kind nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
+    final RepositoryEntry.Kind nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
 
     assertFileOrDir(nodeKind1, command.getFromPath(), fromRevision);
     assertFileOrDir(nodeKind2, command.getToPath(), toRevision);
@@ -489,14 +490,14 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
 
-  private void assertSameKind(final SVNNodeKind nodeKind1, final SVNNodeKind nodeKind2) throws DiffException {
+  private void assertSameKind(final RepositoryEntry.Kind nodeKind1, final RepositoryEntry.Kind nodeKind2) throws DiffException {
     if (nodeKind1 != nodeKind2) {
       throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
     }
   }
 
-  private void assertFileOrDir(final SVNNodeKind nodeKind, final String path, final long revision) throws DiffException {
-    if (SVNNodeKind.DIR != nodeKind && SVNNodeKind.FILE != nodeKind) {
+  private void assertFileOrDir(final RepositoryEntry.Kind nodeKind, final String path, final long revision) throws DiffException {
+    if (RepositoryEntry.Kind.DIR != nodeKind && RepositoryEntry.Kind.FILE != nodeKind) {
       throw new DiffException("Path [" + path + "] does not exist as revision [" + revision + "]");
     }
   }
