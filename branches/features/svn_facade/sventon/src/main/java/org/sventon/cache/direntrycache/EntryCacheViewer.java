@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.entrycache;
+package org.sventon.cache.direntrycache;
 
 /**
  * Simple viewer utility for the sventon entry cache file.
@@ -44,7 +44,7 @@ public final class EntryCacheViewer {
     System.out.println("Cached revision: " + cachedRevision);
     System.out.println("--------------------------------------------------------");
 
-    Collections.sort(new ArrayList<RepositoryEntry>(entries), new RepositoryEntryComparator(RepositoryEntryComparator.SortType.FULL_NAME, false));
+    Collections.sort(new ArrayList<RepositoryEntry>(entries), new DirEntryComparator(DirEntryComparator.SortType.FULL_NAME, false));
 
     for (RepositoryEntry entry : entries) {
       System.out.println(entry);

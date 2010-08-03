@@ -15,9 +15,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntryKindFilter;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.RepositoryEntryKindFilter;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ public final class ListFilesController extends ListDirectoryContentsController {
 
     final Map<String, Object> model = modelAndView.getModel();
     final List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
-    final RepositoryEntryKindFilter entryFilter = new RepositoryEntryKindFilter(RepositoryEntry.Kind.FILE);
+    final DirEntryKindFilter entryFilter = new DirEntryKindFilter(RepositoryEntry.Kind.FILE);
     final int rowNumber = ServletRequestUtils.getRequiredIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");

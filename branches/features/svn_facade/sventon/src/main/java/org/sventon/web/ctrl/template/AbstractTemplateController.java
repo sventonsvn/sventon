@@ -23,8 +23,8 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.diff.DiffException;
 import org.sventon.model.*;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
@@ -330,13 +330,13 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     if (command.getSortType() != null) {
       userContext.setSortType(command.getSortType());
     } else if (userContext.getSortType() == null) {
-      userContext.setSortType(RepositoryEntryComparator.SortType.FULL_NAME);
+      userContext.setSortType(DirEntryComparator.SortType.FULL_NAME);
     }
 
     if (command.getSortMode() != null) {
       userContext.setSortMode(command.getSortMode());
     } else if (userContext.getSortMode() == null) {
-      userContext.setSortMode(RepositoryEntrySorter.SortMode.ASC);
+      userContext.setSortMode(DirEntrySorter.SortMode.ASC);
     }
   }
 

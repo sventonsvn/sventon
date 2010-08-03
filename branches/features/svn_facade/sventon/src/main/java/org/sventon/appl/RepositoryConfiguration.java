@@ -29,7 +29,7 @@ import java.util.Properties;
  * Sventon application configuration class holding configuration parameters
  * and repository connection information for a single configured repositories.
  *
- * @author patrikfr@user.berlios.de
+ * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
 public final class RepositoryConfiguration {

@@ -44,9 +44,9 @@
 
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="nameEditor" class="org.sventon.util.RepositoryNameEditor"/>
-  <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
-  <bean id="svnFileRevisionEditor" class="org.sventon.util.SVNFileRevisionEditor"/>
+  <bean id="nameEditor" class="org.sventon.web.command.editor.RepositoryNameEditor"/>
+  <bean id="revisionEditor" class="org.sventon.web.command.editor.RevisionEditor"/>
+  <bean id="svnFileRevisionEditor" class="org.sventon.web.command.editor.SVNFileRevisionEditor"/>
 
   <bean id="maxRevisionsCount" class="java.lang.Integer">
     <constructor-arg value="10"/>

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Class responsible for updating one or more log entry cache instances.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public final class LogEntryCacheUpdater extends AbstractRevisionObserver {
 

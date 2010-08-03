@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.model;
 
 import org.apache.commons.lang.Validate;
 import org.sventon.model.RepositoryEntry;
@@ -27,7 +27,7 @@ import java.util.Date;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class RepositoryEntryComparator implements Comparator<RepositoryEntry>, Serializable {
+public final class DirEntryComparator implements Comparator<RepositoryEntry>, Serializable {
 
   private static final long serialVersionUID = -823291078109887289L;
 
@@ -48,7 +48,7 @@ public final class RepositoryEntryComparator implements Comparator<RepositoryEnt
    *                  of kind <code>SVNNodeKind.DIR</code> before an entries of other
    *                  kinds.
    */
-  public RepositoryEntryComparator(final SortType sortType, final boolean groupDirs) {
+  public DirEntryComparator(final SortType sortType, final boolean groupDirs) {
     Validate.notNull(sortType, "sortType cannot be null");
     this.groupDirs = groupDirs;
     this.sortType = sortType;

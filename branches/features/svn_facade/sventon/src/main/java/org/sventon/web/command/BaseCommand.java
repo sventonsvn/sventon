@@ -20,11 +20,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
 
 /**
  * BaseCommand.
@@ -73,12 +73,12 @@ public class BaseCommand {
   /**
    * The sort type.
    */
-  private RepositoryEntryComparator.SortType sortType;
+  private DirEntryComparator.SortType sortType;
 
   /**
    * Sort mode.
    */
-  private RepositoryEntrySorter.SortMode sortMode;
+  private DirEntrySorter.SortMode sortMode;
 
   /**
    * Logger for this class and sub classes.
@@ -220,7 +220,7 @@ public class BaseCommand {
    *
    * @return Sort type
    */
-  public RepositoryEntryComparator.SortType getSortType() {
+  public DirEntryComparator.SortType getSortType() {
     return sortType;
   }
 
@@ -229,7 +229,7 @@ public class BaseCommand {
    *
    * @param sortType Sort type
    */
-  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
+  public void setSortType(final DirEntryComparator.SortType sortType) {
     if (sortType != null) {
       this.sortType = sortType;
     }
@@ -240,7 +240,7 @@ public class BaseCommand {
    *
    * @return Sort mode
    */
-  public RepositoryEntrySorter.SortMode getSortMode() {
+  public DirEntrySorter.SortMode getSortMode() {
     return sortMode;
   }
 
@@ -249,7 +249,7 @@ public class BaseCommand {
    *
    * @param sortMode Sort mode
    */
-  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
+  public void setSortMode(final DirEntrySorter.SortMode sortMode) {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }

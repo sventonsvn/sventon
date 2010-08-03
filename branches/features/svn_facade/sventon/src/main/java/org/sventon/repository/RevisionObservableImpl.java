@@ -37,7 +37,7 @@ import java.util.Observable;
  * If it differs, the revision delta will be fetched and published
  * to registered observers.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public final class RevisionObservableImpl extends Observable implements RevisionObservable {
 

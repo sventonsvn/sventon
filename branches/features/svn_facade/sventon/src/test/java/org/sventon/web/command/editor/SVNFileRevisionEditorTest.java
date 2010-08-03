@@ -1,4 +1,4 @@
-package org.sventon.util;
+package org.sventon.web.command.editor;
 
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.io.SVNFileRevision;

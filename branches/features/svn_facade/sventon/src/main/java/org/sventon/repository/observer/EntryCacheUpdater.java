@@ -20,7 +20,7 @@ import org.sventon.appl.Application;
 import org.sventon.appl.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.entrycache.EntryCache;
+import org.sventon.cache.direntrycache.EntryCache;
 import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;

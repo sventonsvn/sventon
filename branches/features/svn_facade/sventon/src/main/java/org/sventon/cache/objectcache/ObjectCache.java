@@ -17,7 +17,7 @@ import org.sventon.cache.CacheException;
 /**
  * Interface to be implemented by sventon object cache class.
  *
- * @author jesper@user.berlios.de
+ * @author jesper@sventon.org
  */
 public interface ObjectCache extends Cache {
 

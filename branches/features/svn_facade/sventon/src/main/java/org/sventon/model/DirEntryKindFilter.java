@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.model;
 
 import org.sventon.model.RepositoryEntry;
 
@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class RepositoryEntryKindFilter {
+public final class DirEntryKindFilter {
 
   /**
    * The kind to filter.
@@ -35,14 +35,13 @@ public final class RepositoryEntryKindFilter {
    *
    * @param kind Entry kind to filter (i.e. keep).
    */
-  public RepositoryEntryKindFilter(final RepositoryEntry.Kind kind) {
+  public DirEntryKindFilter(final RepositoryEntry.Kind kind) {
     if (kind == null
         || RepositoryEntry.Kind.ANY == kind
         || RepositoryEntry.Kind.UNKNOWN == kind
         || RepositoryEntry.Kind.NONE == kind) {
       throw new IllegalArgumentException("Illegal kind: " + kind);
     }
-
     this.kind = kind;
   }
 

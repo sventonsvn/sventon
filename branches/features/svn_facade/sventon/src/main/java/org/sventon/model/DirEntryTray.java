@@ -11,8 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.util.RepositoryEntryComparator;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
@@ -87,8 +85,8 @@ public final class DirEntryTray implements Serializable {
 
     private static final long serialVersionUID = 4597643015545681872L;
 
-    private final RepositoryEntryComparator comparator =
-        new RepositoryEntryComparator(RepositoryEntryComparator.SortType.NAME, true);
+    private final DirEntryComparator comparator =
+        new DirEntryComparator(DirEntryComparator.SortType.NAME, true);
 
     public int compare(final PeggedRepositoryEntry o1, final PeggedRepositoryEntry o2) {
       return comparator.compare(o1.getEntry(), o2.getEntry());

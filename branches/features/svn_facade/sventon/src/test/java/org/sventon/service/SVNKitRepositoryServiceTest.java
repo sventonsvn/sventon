@@ -12,7 +12,7 @@ import org.sventon.model.InlineDiffRow;
 import org.sventon.model.Revision;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
-import org.sventon.util.SVNFileRevisionEditor;
+import org.sventon.web.command.editor.SVNFileRevisionEditor;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;

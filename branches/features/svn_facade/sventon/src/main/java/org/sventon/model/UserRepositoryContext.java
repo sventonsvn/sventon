@@ -17,8 +17,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.util.WebUtils;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,12 +36,12 @@ public final class UserRepositoryContext implements Serializable {
   /**
    * The sort type.
    */
-  private RepositoryEntryComparator.SortType sortType;
+  private DirEntryComparator.SortType sortType;
 
   /**
    * Sort mode.
    */
-  private RepositoryEntrySorter.SortMode sortMode;
+  private DirEntrySorter.SortMode sortMode;
 
   /**
    * Revisions display count. Default set to 1.
@@ -125,7 +123,7 @@ public final class UserRepositoryContext implements Serializable {
    *
    * @return Sort type
    */
-  public RepositoryEntryComparator.SortType getSortType() {
+  public DirEntryComparator.SortType getSortType() {
     return sortType;
   }
 
@@ -134,7 +132,7 @@ public final class UserRepositoryContext implements Serializable {
    *
    * @param sortType Sort type
    */
-  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
+  public void setSortType(final DirEntryComparator.SortType sortType) {
     if (sortType != null) {
       this.sortType = sortType;
     }
@@ -145,7 +143,7 @@ public final class UserRepositoryContext implements Serializable {
    *
    * @return Sort mode
    */
-  public RepositoryEntrySorter.SortMode getSortMode() {
+  public DirEntrySorter.SortMode getSortMode() {
     return sortMode;
   }
 
@@ -154,7 +152,7 @@ public final class UserRepositoryContext implements Serializable {
    *
    * @param sortMode Sort mode
    */
-  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
+  public void setSortMode(final DirEntrySorter.SortMode sortMode) {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
