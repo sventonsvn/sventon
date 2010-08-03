@@ -27,12 +27,12 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Map;
 
-public class RepositoryEntryTrayControllerTest extends TestCase {
+public class DirEntryTrayControllerTest extends TestCase {
 
   private final BaseCommand command = new BaseCommand();
   private RepositoryService mockService;
   private MockHttpServletRequest request;
-  private RepositoryEntryTrayController ctrl;
+  private DirEntryTrayController ctrl;
   private RepositoryEntry entry;
   private UserRepositoryContext context;
 
@@ -57,7 +57,7 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
 
     mockService = EasyMock.createMock(RepositoryService.class);
     request = new MockHttpServletRequest();
-    ctrl = new RepositoryEntryTrayController();
+    ctrl = new DirEntryTrayController();
     ctrl.setRepositoryService(mockService);
     ctrl.setApplication(application);
     context = new UserRepositoryContext();
@@ -76,22 +76,22 @@ public class RepositoryEntryTrayControllerTest extends TestCase {
   }
 
   public void testAddAndRemove() throws Exception {
-    request.setParameter("action", RepositoryEntryTrayController.PARAMETER_ADD);
-    assertEquals(0, context.getRepositoryEntryTray().getSize());
+    request.setParameter("action", DirEntryTrayController.PARAMETER_ADD);
+    assertEquals(0, context.getDirEntryTray().getSize());
 
     Map model = executeTest();
 
     assertEquals(0, model.size());
-    assertEquals(1, context.getRepositoryEntryTray().getSize());
+    assertEquals(1, context.getDirEntryTray().getSize());
 
     EasyMock.reset(mockService);
 
-    request.setParameter("action", RepositoryEntryTrayController.PARAMETER_REMOVE);
+    request.setParameter("action", DirEntryTrayController.PARAMETER_REMOVE);
 
     model = executeTest();
 
     assertEquals(0, model.size());
-    assertEquals(0, context.getRepositoryEntryTray().getSize());
+    assertEquals(0, context.getDirEntryTray().getSize());
   }
 
 }
