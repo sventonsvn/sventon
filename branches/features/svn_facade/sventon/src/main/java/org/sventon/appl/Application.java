@@ -20,9 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -114,7 +111,7 @@ public final class Application {
    */
   @PostConstruct
   public void init() throws IOException, CacheException {
-    initSvnSupport();
+    logger.info("Initializing sventon version " + Version.getVersion());
     loadRepositoryConfigurations();
     initCaches();
     final URL baseURL = getBaseURL();
@@ -266,16 +263,6 @@ public final class Application {
       // Repository has not yet been stored and the user wants to delete it. Simply remove reference.
       repositories.remove(name);
     }
-  }
-
-  /**
-   * Initializes the logger and the SVNKit library.
-   */
-  private void initSvnSupport() {
-    logger.info("Initializing sventon version " + Version.getVersion());
-    SVNRepositoryFactoryImpl.setup();
-    DAVRepositoryFactory.setup();
-    FSRepositoryFactory.setup();
   }
 
   /**
