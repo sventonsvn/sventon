@@ -40,6 +40,12 @@
       <email>patrik@sventon.org</email>
       <timezone>+1</timezone>
     </developer>
+    <developer>
+      <id>jorgenfalk</id>
+      <name>Jorgen Falk</name>
+      <email>jorgn.p.falk@gmail.com</email>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
   <licenses>
     <license>
