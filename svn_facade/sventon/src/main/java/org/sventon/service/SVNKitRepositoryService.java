@@ -55,7 +55,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final List<SVNLogEntry> getRevisionsFromRepository(final SVNConnection connection, final long fromRevision,
+  public final List<SVNLogEntry> getLogFromRepository(final SVNConnection connection, final long fromRevision,
                                                             final long toRevision) throws SVNException {
 
     final SVNRepository repository = connection.getDelegate();
