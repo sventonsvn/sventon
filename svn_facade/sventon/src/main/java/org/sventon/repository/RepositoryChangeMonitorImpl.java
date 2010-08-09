@@ -172,7 +172,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
               ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getLogFromRepository(connection, fromRevision, toRevision));
+          logEntries.addAll(repositoryService.getLogEntriesFromRepository(connection, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
           notifyListeners(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));

@@ -36,7 +36,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 
-    expect(mockService.getLog(command.getName(), null, 100, Revision.FIRST, "/",
+    expect(mockService.getLogEntries(command.getName(), null, 100, Revision.FIRST, "/",
         userRepositoryContext.getLatestRevisionsDisplayCount(), false)).andStubReturn(revisions);
 
     replay(mockService);

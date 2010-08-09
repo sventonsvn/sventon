@@ -236,7 +236,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
-      logEntries.addAll(getRepositoryService().getLog(command.getName(), connection, headRevision,
+      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, headRevision,
           Revision.FIRST, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
     } catch (Exception e) {
       logger.error(e.getMessage());
