@@ -61,7 +61,7 @@ public interface RepositoryService {
    * @return The log entries
    * @throws SVNException if subversion error
    */
-  List<SVNLogEntry> getRevisionsFromRepository(final SVNConnection connection, final long fromRevision, final long toRevision)
+  List<SVNLogEntry> getLogFromRepository(final SVNConnection connection, final long fromRevision, final long toRevision)
       throws SVNException;
 
   /**
