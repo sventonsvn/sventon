@@ -79,7 +79,7 @@ public interface RepositoryService {
    * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
-  List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNConnection connection,
+  List<SVNLogEntry> getLog(final RepositoryName repositoryName, final SVNConnection connection,
                                  final long fromRevision, final long toRevision, final String path,
                                  final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
 
