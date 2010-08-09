@@ -67,7 +67,7 @@ public final class ShowLogController extends AbstractTemplateController {
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
     try {
-      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), connection,
+      final List<SVNLogEntry> logEntries = getRepositoryService().getLog(command.getName(), connection,
           fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy);
 
       String pathAtRevision = nextPath;

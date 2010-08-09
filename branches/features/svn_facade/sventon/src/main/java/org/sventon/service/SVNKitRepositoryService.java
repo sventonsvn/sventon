@@ -69,7 +69,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNConnection connection,
+  public List<SVNLogEntry> getLog(final RepositoryName repositoryName, final SVNConnection connection,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 

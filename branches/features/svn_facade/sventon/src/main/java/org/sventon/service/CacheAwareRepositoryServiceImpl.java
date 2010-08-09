@@ -84,7 +84,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final SVNConnection connection,
+  public List<SVNLogEntry> getLog(final RepositoryName repositoryName, final SVNConnection connection,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
@@ -107,7 +107,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
       logger.debug("Fetching [" + limit + "] cached revisions: " + revisions);
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getRevisions(repositoryName, connection, fromRevision, toRevision, path, limit, stopOnCopy));
+      logEntries.addAll(super.getLog(repositoryName, connection, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
   }
