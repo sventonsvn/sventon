@@ -48,7 +48,7 @@ public interface RepositoryService {
    * @throws SVNException                 if subversion error
    * @throws org.sventon.SventonException if a sventon specific error occurs
    */
-  SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SVNException, SventonException;
 
   /**
@@ -61,7 +61,7 @@ public interface RepositoryService {
    * @return The log entries
    * @throws SVNException if subversion error
    */
-  List<SVNLogEntry> getLogFromRepository(final SVNConnection connection, final long fromRevision, final long toRevision)
+  List<SVNLogEntry> getLogEntriesFromRepository(final SVNConnection connection, final long fromRevision, final long toRevision)
       throws SVNException;
 
   /**
@@ -79,7 +79,7 @@ public interface RepositoryService {
    * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
-  List<SVNLogEntry> getLog(final RepositoryName repositoryName, final SVNConnection connection,
+  List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
                                  final long fromRevision, final long toRevision, final String path,
                                  final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
 

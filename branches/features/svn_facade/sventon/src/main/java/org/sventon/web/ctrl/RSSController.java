@@ -84,7 +84,7 @@ public final class RSSController extends AbstractBaseController {
       getRepositoryService().translateRevision(command.getRevision(), getRepositoryService().getLatestRevision(connection), connection);
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
-      logEntries.addAll(getRepositoryService().getLog(command.getName(), connection, command.getRevisionNumber(),
+      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
           Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (SVNAuthenticationException aex) {

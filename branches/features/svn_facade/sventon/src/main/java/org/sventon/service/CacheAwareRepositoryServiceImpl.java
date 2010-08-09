@@ -66,7 +66,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public SVNLogEntry getRevision(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  public SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SVNException, SventonException {
 
     final SVNLogEntry logEntry;
@@ -74,7 +74,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {
-      logEntry = super.getRevision(repositoryName, connection, revision);
+      logEntry = super.getLogEntry(repositoryName, connection, revision);
     }
     return logEntry;
   }
@@ -84,7 +84,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public List<SVNLogEntry> getLog(final RepositoryName repositoryName, final SVNConnection connection,
+  public List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
                                         final long fromRevision, final long toRevision, final String path,
                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
@@ -107,7 +107,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
       logger.debug("Fetching [" + limit + "] cached revisions: " + revisions);
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getLog(repositoryName, connection, fromRevision, toRevision, path, limit, stopOnCopy));
+      logEntries.addAll(super.getLogEntries(repositoryName, connection, fromRevision, toRevision, path, limit, stopOnCopy));
     }
     return logEntries;
   }

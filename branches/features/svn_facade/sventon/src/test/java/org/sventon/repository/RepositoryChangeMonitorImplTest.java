@@ -76,9 +76,9 @@ public class RepositoryChangeMonitorImplTest extends TestCase {
       assertFalse(application.isUpdating(configuration.getName()));
 
       expect(repositoryServiceMock.getLatestRevision(null)).andReturn(6L);
-      expect(repositoryServiceMock.getLogFromRepository(null, 1L, 3L)).andReturn(firstBatchOfRevisions);
+      expect(repositoryServiceMock.getLogEntriesFromRepository(null, 1L, 3L)).andReturn(firstBatchOfRevisions);
       repositoryChangeListenerMock.update(isA(RevisionUpdate.class));
-      expect(repositoryServiceMock.getLogFromRepository(null, 4L, 6L)).andReturn(secondBatchOfRevisions);
+      expect(repositoryServiceMock.getLogEntriesFromRepository(null, 4L, 6L)).andReturn(secondBatchOfRevisions);
       repositoryChangeListenerMock.update(isA(RevisionUpdate.class));
 
       replay(repositoryServiceMock);

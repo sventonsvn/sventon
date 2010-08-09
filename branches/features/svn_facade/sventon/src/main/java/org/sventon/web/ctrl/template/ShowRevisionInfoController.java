@@ -39,7 +39,7 @@ public final class ShowRevisionInfoController extends AbstractTemplateController
 
     final long revisionNumber = command.getRevisionNumber();
     logger.debug("Getting revision info details for revision: " + revisionNumber);
-    final SVNLogEntry revision = getRepositoryService().getRevision(command.getName(), connection, revisionNumber);
+    final SVNLogEntry revision = getRepositoryService().getLogEntry(command.getName(), connection, revisionNumber);
     final LogEntryWrapper logEntryWrapper = new LogEntryWrapper(revision);
     //TODO: Parse to apply Bugtraq link
     final Map<String, Object> model = new HashMap<String, Object>();
