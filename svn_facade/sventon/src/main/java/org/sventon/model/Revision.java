@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Represents a revision in Subversion.
  */
-public class Revision implements Serializable {
+public class Revision implements Serializable, Comparable<Revision> {
 
   private static final long serialVersionUID = 2663123883312721991L;
 
@@ -84,6 +84,11 @@ public class Revision implements Serializable {
    */
   public Date getDate() {
     return revision.getDate();
+  }
+
+  @Override
+  public int compareTo(Revision o) {
+    return o.getNumber() < getNumber() ? -1 : (o.getNumber() == getNumber() ? 0 : 1);
   }
 
   @Override
