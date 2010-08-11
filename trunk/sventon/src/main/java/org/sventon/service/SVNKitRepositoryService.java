@@ -422,38 +422,39 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final AnnotatedTextFile blame(final SVNConnection connection, final String path, final long revision,
-                                       final String charset, final Colorer colorer) throws SVNException {
+                                       final String charset, final Colorer colorer) throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
-    final long blameRevision;
-    if (Revision.UNDEFINED.getNumber() == revision) {
-      blameRevision = repository.getLatestRevision();
-    } else {
-      blameRevision = revision;
-    }
-
-    logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
-
-    final SVNProperties properties = getFileProperties(connection, path, revision);
-
-    final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
-        path, charset, colorer, properties, repository.getLocation().toDecodedString());
-
-    final SVNLogClient logClient = SVNClientManager.newInstance(
-        null, repository.getAuthenticationManager()).getLogClient();
-
-    final AnnotationHandler handler = new AnnotationHandler(annotatedTextFile);
-    final SVNRevision startRev = SVNRevision.create(0);
-    final SVNRevision endRev = SVNRevision.create(blameRevision);
-
-    logClient.doAnnotate(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), endRev, startRev,
-        endRev, false, handler, charset);
     try {
-      annotatedTextFile.colorize();
-    } catch (IOException ioex) {
-      logger.warn("Unable to colorize [" + path + "]", ioex);
+      final SVNRepository repository = connection.getDelegate();
+      final long blameRevision;
+      if (Revision.UNDEFINED.getNumber() == revision) {
+        blameRevision = repository.getLatestRevision();
+      } else {
+        blameRevision = revision;
+      }
+
+      logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
+      final SVNProperties properties = getFileProperties(connection, path, revision);
+      final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
+          path, charset, colorer, properties, repository.getLocation().toDecodedString());
+      final SVNLogClient logClient = SVNClientManager.newInstance(
+          null, repository.getAuthenticationManager()).getLogClient();
+
+      final AnnotationHandler handler = new AnnotationHandler(annotatedTextFile);
+      final SVNRevision startRev = SVNRevision.create(0);
+      final SVNRevision endRev = SVNRevision.create(blameRevision);
+
+      logClient.doAnnotate(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), endRev, startRev,
+          endRev, false, handler, charset);
+      try {
+        annotatedTextFile.colorize();
+      } catch (IOException ioex) {
+        logger.warn("Unable to colorize [" + path + "]", ioex);
+      }
+      return annotatedTextFile;
+    } catch (SVNException e) {
+      throw new SventonException("Error blaming [" + path + "@" + revision + "]: " + e.toString());
     }
-    return annotatedTextFile;
   }
 
   @Override

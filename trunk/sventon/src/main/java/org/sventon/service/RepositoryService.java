@@ -267,10 +267,10 @@ public interface RepositoryService {
    * @param charset    Charset encoding to use
    * @param colorer    Colorer instance.
    * @return List of BlameLines
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
   AnnotatedTextFile blame(final SVNConnection connection, final String path, final long revision, final String charset,
-                          final Colorer colorer) throws SVNException;
+                          final Colorer colorer) throws SventonException;
 
   /**
    * Gets the node kind for given to/from entries.
