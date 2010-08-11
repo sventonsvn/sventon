@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNAuthenticationException;
 import org.sventon.SVNConnection;
-import org.sventon.SVNException;
+import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.Revision;
@@ -92,7 +92,7 @@ public final class RSSController extends AbstractBaseController {
       httpAuthenticationHandler.sendChallenge(response);
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
-    } catch (SVNException svnex) {
+    } catch (SventonException svnex) {
       logger.error(svnex.getMessage());
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
     } finally {
@@ -102,7 +102,7 @@ public final class RSSController extends AbstractBaseController {
   }
 
   private SVNConnection createRepositoryConnection(final HttpServletRequest request,
-                                                   final RepositoryConfiguration configuration) throws SVNException {
+                                                   final RepositoryConfiguration configuration) throws SventonException {
     final Credentials credentials = extractCredentials(request, configuration);
     return connectionFactory.createConnection(configuration.getName(),
         configuration.getSVNURL(), credentials);

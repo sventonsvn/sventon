@@ -68,12 +68,12 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
 
   @Override
   public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
-                                        final Credentials credentials) throws SVNException {
+                                        final Credentials credentials) throws SventonException {
     final SVNRepository repository;
     try {
       repository = SVNRepositoryFactory.create(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(svnUrl.getUrl()));
     } catch (org.tmatesoft.svn.core.SVNException e) {
-      throw new org.sventon.SVNException(e.getMessage());
+      throw new SventonException(e.getMessage());
     }
     final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(

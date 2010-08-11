@@ -154,9 +154,9 @@ public interface RepositoryService {
    * @param path       The path, with or without leaf.
    * @param revision   The revision
    * @return The node kind
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
-  DirEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  DirEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets the repository locks recursively, starting from given path.
@@ -278,12 +278,12 @@ public interface RepositoryService {
    * @param connection The repository connection
    * @param command    DiffCommand.
    * @return Node kind
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
-   *                       of if one of the given entries does not exist in given revision.
+   * @throws SventonException if a subversion error occur
+   * @throws DiffException    Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
+   *                          of if one of the given entries does not exist in given revision.
    */
   DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
-      throws SVNException, DiffException;
+      throws SventonException, DiffException;
 
   /**
    * Translates the revision and the peg revision into a number, if needed.

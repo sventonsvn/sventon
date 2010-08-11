@@ -16,15 +16,12 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
-import org.sventon.SVNException;
 import org.sventon.SVNURL;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.diff.DiffException;
 import org.sventon.model.*;
-import org.sventon.model.DirEntryComparator;
-import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
 import org.tmatesoft.svn.core.SVNAuthenticationException;
@@ -240,7 +237,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
           Revision.FIRST, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
     } catch (Exception e) {
       logger.error(e.getMessage());
-      }
+    }
     return LogEntryWrapper.convert(logEntries);
   }
 
@@ -252,7 +249,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * @return Connection
    * @throws SVNException if a subversion error occur.
    */
-  protected SVNConnection createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SVNException {
+  protected SVNConnection createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SventonException {
     final SVNConnection connection;
     final RepositoryName repositoryName = configuration.getName();
     final SVNURL svnurl = configuration.getSVNURL();

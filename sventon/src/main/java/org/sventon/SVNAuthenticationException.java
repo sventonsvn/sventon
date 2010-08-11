@@ -14,7 +14,7 @@ package org.sventon;
 /**
  * SVNAuthenticationException.
  */
-public class SVNAuthenticationException extends SVNException {
+public class SVNAuthenticationException extends SventonException {
 
   /**
    * Constructor.

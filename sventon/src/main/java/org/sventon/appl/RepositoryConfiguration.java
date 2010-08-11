@@ -15,8 +15,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.SVNException;
 import org.sventon.SVNURL;
+import org.sventon.SventonException;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 
@@ -295,7 +295,7 @@ public final class RepositoryConfiguration {
 
     try {
       svnUrl = SVNURL.parse(this.repositoryUrl);
-    } catch (final SVNException ex) {
+    } catch (final SventonException ex) {
       logger.warn("Unable to parse URL [" + repositoryUrl + "]", ex);
     }
   }
