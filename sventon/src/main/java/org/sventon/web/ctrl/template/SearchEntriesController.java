@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntrySorter;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
@@ -56,7 +56,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
 
     logger.debug("Searching cache for [" + searchString + "] in directory [" + startDir + "]");
-    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<DirEntry> entries = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
 
     if (CamelCasePattern.isValid(searchString)) {
       logger.debug("Search string was in upper case only - performing CamelCase cache search");

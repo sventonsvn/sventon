@@ -22,7 +22,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.DiffStyle;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
@@ -66,10 +66,10 @@ public final class DiffController extends AbstractTemplateController {
     handleDiffStyle(command);
 
     try {
-      final RepositoryEntry.Kind nodeKind = getRepositoryService().getNodeKindForDiff(connection, command);
-      if (RepositoryEntry.Kind.DIR == nodeKind) {
+      final DirEntry.Kind nodeKind = getRepositoryService().getNodeKindForDiff(connection, command);
+      if (DirEntry.Kind.DIR == nodeKind) {
         model.putAll(handlePathDiff(connection, modelAndView, command, config));
-      } else if (RepositoryEntry.Kind.FILE == nodeKind) {
+      } else if (DirEntry.Kind.FILE == nodeKind) {
         model.putAll(handleFileDiff(connection, modelAndView, command, config, charset));
       }
     } catch (final IdenticalFilesException ife) {

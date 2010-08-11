@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Sorts collections of <code>RepositoryEntry</code> instances.
+ * Sorts collections of <code>DirEntry</code> instances.
  *
  * @author jesper@sventon.org
  */
@@ -68,8 +68,8 @@ public final class DirEntrySorter {
    *
    * @param entries Entries to sort.
    */
-  public void sort(final List<RepositoryEntry> entries) {
-    final Comparator<RepositoryEntry> comparator;
+  public void sort(final List<DirEntry> entries) {
+    final Comparator<DirEntry> comparator;
     if (sortMode == SortMode.DESC) {
       comparator = Collections.reverseOrder(new DirEntryComparator(sortType, true));
     } else {

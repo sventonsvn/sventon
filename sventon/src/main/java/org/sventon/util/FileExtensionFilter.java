@@ -13,7 +13,7 @@ package org.sventon.util;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.Validate;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,10 +48,10 @@ public final class FileExtensionFilter {
    * @param entries List of entries to filter.
    * @return List of entries matching given extension.
    */
-  public List<RepositoryEntry> filter(final List<RepositoryEntry> entries) {
-    final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+  public List<DirEntry> filter(final List<DirEntry> entries) {
+    final List<DirEntry> dir = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
 
-    for (final RepositoryEntry entry : entries) {
+    for (final DirEntry entry : entries) {
       final String fileExtension = FilenameUtils.getExtension(entry.getName()).toLowerCase();
       if (filterExtension.equals(fileExtension)) {
         dir.add(entry);

@@ -25,7 +25,7 @@ public class FlattenControllerTest extends TestCase {
   public void testSvnHandle() throws Exception {
     final CacheGateway mockCache = EasyMock.createMock(CacheGateway.class);
 
-    final List<RepositoryEntry> entries = TestUtils.getFlattenedDirectoriesList();
+    final List<DirEntry> entries = TestUtils.getFlattenedDirectoriesList();
 
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
@@ -46,7 +46,7 @@ public class FlattenControllerTest extends TestCase {
     verify(mockCache);
 
     assertEquals(2, model.size());
-    assertEquals(entries.get(2), ((List<RepositoryEntry>) model.get("svndir")).get(0));
+    assertEquals(entries.get(2), ((List<DirEntry>) model.get("svndir")).get(0));
     assertEquals(Boolean.TRUE, model.get("isFlatten"));
   }
 

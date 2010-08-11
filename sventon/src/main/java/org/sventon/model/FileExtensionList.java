@@ -37,8 +37,8 @@ public final class FileExtensionList {
    *
    * @param entries List of entries.
    */
-  public FileExtensionList(final List<RepositoryEntry> entries) {
-    for (final RepositoryEntry entry : entries) {
+  public FileExtensionList(final List<DirEntry> entries) {
+    for (final DirEntry entry : entries) {
       final String fileExtension = FilenameUtils.getExtension(entry.getName()).toLowerCase();
       if (!"".equals(fileExtension)) {
         existingExtensions.add(fileExtension);

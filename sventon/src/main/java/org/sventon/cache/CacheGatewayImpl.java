@@ -16,8 +16,8 @@ import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.logentrycache.LogEntryCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;
+import org.sventon.model.DirEntry;
 import org.sventon.model.LogEntry;
-import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -66,7 +66,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   @Override
-  public List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
+  public List<DirEntry> findEntries(final RepositoryName repositoryName, final String searchString,
                                            final String startDir)
       throws CacheException {
     final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
@@ -75,7 +75,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   @Override
-  public List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
+  public List<DirEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
                                                       final String startDir) throws CacheException {
     final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
@@ -83,7 +83,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   @Override
-  public List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
+  public List<DirEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
     final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
     return entryCache.findDirectories(fromPath);

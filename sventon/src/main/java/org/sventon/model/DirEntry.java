@@ -29,7 +29,7 @@ import java.util.*;
  * @author jesper@sventon.org
  */
 @Searchable(root = true)
-public final class RepositoryEntry implements Serializable {
+public final class DirEntry implements Serializable {
 
   public static final int FULL_ENTRY_NAME_MAX_LENGTH = 70;
 
@@ -69,7 +69,7 @@ public final class RepositoryEntry implements Serializable {
   /**
    * Default constructor.
    */
-  private RepositoryEntry() {
+  private DirEntry() {
   }
 
   /**
@@ -78,7 +78,7 @@ public final class RepositoryEntry implements Serializable {
    * @param entry     The <code>SVNDirEntry</code>.
    * @param entryPath The entry repository path.
    */
-  public RepositoryEntry(final SVNDirEntry entry, final String entryPath) {
+  public DirEntry(final SVNDirEntry entry, final String entryPath) {
 
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
@@ -110,19 +110,19 @@ public final class RepositoryEntry implements Serializable {
   }
 
   /**
-   * Creates a collection of <code>RepositoryEntry</code> objects based
+   * Creates a collection of <code>DirEntry</code> objects based
    * on given collection of <code>SVNDirEntry</code> instances.
    *
    * @param entries  Collection of SVNDirEntry.
    * @param basePath Base repository path for the entries.
    * @return The collection of entries.
    */
-  public static List<RepositoryEntry> createEntryCollection(final Collection<SVNDirEntry> entries,
+  public static List<DirEntry> createEntryCollection(final Collection<SVNDirEntry> entries,
                                                             final String basePath) {
 
-    final List<RepositoryEntry> dir = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<DirEntry> dir = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
     for (final SVNDirEntry entry : entries) {
-      dir.add(new RepositoryEntry(entry, basePath));
+      dir.add(new DirEntry(entry, basePath));
     }
     return dir;
   }

@@ -15,8 +15,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntry;
 import org.sventon.model.FileExtensionList;
-import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.model.DirEntrySorter;
 import org.sventon.util.FileExtensionFilter;
@@ -50,11 +50,11 @@ public final class RepoBrowserController extends ListDirectoryContentsController
     final String filterExtension = ServletRequestUtils.getStringParameter(request, "filterExtension", "all");
     logger.debug("filterExtension: " + filterExtension);
 
-    List<RepositoryEntry> entries = (List<RepositoryEntry>) model.get("svndir");
+    List<DirEntry> entries = (List<DirEntry>) model.get("svndir");
 
     if (bypassEmpty && entries.size() == 1) {
-      final RepositoryEntry entry = entries.get(0);
-      if (RepositoryEntry.Kind.DIR == entry.getKind()) {
+      final DirEntry entry = entries.get(0);
+      if (DirEntry.Kind.DIR == entry.getKind()) {
         logger.debug("Bypassing empty directory: " + command.getPath());
         command.setPath(command.getPath() + entry.getName() + "/");
         final ModelAndView bypassedModelAndView =

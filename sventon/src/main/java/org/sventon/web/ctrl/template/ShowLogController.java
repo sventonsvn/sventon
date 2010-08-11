@@ -16,8 +16,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntry;
 import org.sventon.model.LogEntryWrapper;
-import org.sventon.model.RepositoryEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
@@ -103,11 +103,11 @@ public final class ShowLogController extends AbstractTemplateController {
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final RepositoryEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
+    final DirEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
     model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
-    model.put("isFile", nodeKind == RepositoryEntry.Kind.FILE);
+    model.put("isFile", nodeKind == DirEntry.Kind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
     model.put("nextPath", nextPath);
     model.put("nextRevision", fromRevision);
