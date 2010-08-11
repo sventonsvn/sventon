@@ -14,10 +14,10 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +45,8 @@ public final class GetLogMessageController extends AbstractTemplateController {
       final SVNLogEntry svnLogEntry = getRepositoryService().getLogEntry(
           command.getName(), connection, command.getRevisionNumber());
       logEntry = new LogEntry(svnLogEntry); //TODO: Parse to apply Bugtraq link
-    } catch (SVNException svnex) {
-      logger.error(svnex.getMessage());
+    } catch (SventonException ex) {
+      logger.error(ex.getMessage());
     }
     model.put("logEntry", logEntry);
     return new ModelAndView(getViewName(), model);
