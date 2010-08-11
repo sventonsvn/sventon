@@ -30,7 +30,7 @@ public final class DirEntryTray implements Serializable {
   /**
    * List of entries in tray.
    */
-  private final Set<PeggedRepositoryEntry> entries = new TreeSet<PeggedRepositoryEntry>(new PeggedRepositoryEntryComparator());
+  private final Set<PeggedDirEntry> entries = new TreeSet<PeggedDirEntry>(new PeggedDirEntryComparator());
 
 
   /**
@@ -48,7 +48,7 @@ public final class DirEntryTray implements Serializable {
    * @param entry Entry to add.
    * @return True if added.
    */
-  public boolean add(final PeggedRepositoryEntry entry) {
+  public boolean add(final PeggedDirEntry entry) {
     return entries.add(entry);
   }
 
@@ -58,7 +58,7 @@ public final class DirEntryTray implements Serializable {
    * @param entry Entry to remove
    * @return True if removed.
    */
-  public boolean remove(final PeggedRepositoryEntry entry) {
+  public boolean remove(final PeggedDirEntry entry) {
     return entries.remove(entry);
   }
 
@@ -67,7 +67,7 @@ public final class DirEntryTray implements Serializable {
    *
    * @return Entries
    */
-  public Set<PeggedRepositoryEntry> getUnmodifiableEntries() {
+  public Set<PeggedDirEntry> getUnmodifiableEntries() {
     return Collections.unmodifiableSet(entries);
   }
 
@@ -81,14 +81,14 @@ public final class DirEntryTray implements Serializable {
   /**
    * Comparator for pegged entries.
    */
-  private static class PeggedRepositoryEntryComparator implements Comparator<PeggedRepositoryEntry>, Serializable {
+  private static class PeggedDirEntryComparator implements Comparator<PeggedDirEntry>, Serializable {
 
     private static final long serialVersionUID = 4597643015545681872L;
 
     private final DirEntryComparator comparator =
         new DirEntryComparator(DirEntryComparator.SortType.NAME, true);
 
-    public int compare(final PeggedRepositoryEntry o1, final PeggedRepositoryEntry o2) {
+    public int compare(final PeggedDirEntry o1, final PeggedDirEntry o2) {
       return comparator.compare(o1.getEntry(), o2.getEntry());
     }
   }

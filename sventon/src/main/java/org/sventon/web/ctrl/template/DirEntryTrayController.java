@@ -63,10 +63,10 @@ public final class DirEntryTrayController extends AbstractTemplateController {
 
     if (PARAMETER_ADD.equals(actionParameter)) {
       logger.debug("Adding entry to tray: " + entry.getFullEntryName());
-      entryTray.add(new PeggedRepositoryEntry(entry, pegRevision));
+      entryTray.add(new PeggedDirEntry(entry, pegRevision));
     } else if (PARAMETER_REMOVE.equals(actionParameter)) {
       logger.debug("Removing entry from tray: " + entry.getFullEntryName());
-      entryTray.remove(new PeggedRepositoryEntry(entry, pegRevision));
+      entryTray.remove(new PeggedDirEntry(entry, pegRevision));
     } else {
       throw new UnsupportedOperationException(actionParameter);
     }
