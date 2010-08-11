@@ -20,8 +20,8 @@ import org.sventon.appl.Application;
 import org.sventon.cache.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
+import org.sventon.model.DirEntry;
 import org.sventon.model.DirEntryChangeType;
-import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
@@ -249,8 +249,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
                                   final SVNConnection connection, final SVNLogEntryPath logEntryPath,
                                   final long revision) throws SVNException {
 
-    entriesToDelete.add(logEntryPath.getPath(), RepositoryEntry.Kind.ANY);
-    final RepositoryEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
+    entriesToDelete.add(logEntryPath.getPath(), DirEntry.Kind.ANY);
+    final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
     entriesToAdd.add(entry);
   }
 
@@ -287,7 +287,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
     // Have to find out if deleted entry was a file or directory
     final long previousRevision = revision - 1;
-    RepositoryEntry deletedEntry;
+    DirEntry deletedEntry;
 
     try {
       deletedEntry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), previousRevision);
@@ -315,13 +315,13 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
                                final long revision) throws SVNException {
 
     // Have to find out if added entry was a file or directory
-    final RepositoryEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
+    final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
 
     // If the entry is a directory and a copyPath exists, the entry is
     // a moved or copied directory (branch). In that case we have to recursively
     // add the entry. If entry is a directory but does not have a copyPath
     // the contents will be added one by one as single entriesToAdd.
-    if (entry.getKind() == RepositoryEntry.Kind.DIR && logEntryPath.getCopyPath() != null) {
+    if (entry.getKind() == DirEntry.Kind.DIR && logEntryPath.getCopyPath() != null) {
       // Directory node added
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       // Add directory contents
@@ -344,10 +344,10 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   private void addDirectories(final EntriesToAdd entriesToAdd, final SVNConnection connection, final String path,
                               final long revision, final RepositoryService repositoryService) throws SVNException {
 
-    final List<RepositoryEntry> entriesList = repositoryService.list(connection, path, revision, null);
-    for (final RepositoryEntry entry : entriesList) {
+    final List<DirEntry> entriesList = repositoryService.list(connection, path, revision, null);
+    for (final DirEntry entry : entriesList) {
       entriesToAdd.add(entry);
-      if (entry.getKind() == RepositoryEntry.Kind.DIR) {
+      if (entry.getKind() == DirEntry.Kind.DIR) {
         final String pathToAdd = path + entry.getName() + "/";
         LOGGER.debug("Adding: " + pathToAdd);
         addDirectories(entriesToAdd, connection, pathToAdd, revision, repositoryService);
@@ -378,7 +378,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
   private class EntriesToAdd {
 
-    protected final List<RepositoryEntry> entries = new ArrayList<RepositoryEntry>();
+    protected final List<DirEntry> entries = new ArrayList<DirEntry>();
 
     /**
      * Constructor.
@@ -391,7 +391,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
      *
      * @param entries Entries
      */
-    public void add(final RepositoryEntry... entries) {
+    public void add(final DirEntry... entries) {
       this.entries.addAll(Arrays.asList(entries));
     }
 
@@ -400,7 +400,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
      *
      * @return entries
      */
-    public List<RepositoryEntry> getEntries() {
+    public List<DirEntry> getEntries() {
       return entries;
     }
   }
@@ -408,7 +408,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
   private class EntriesToDelete {
 
-    private final Map<String, RepositoryEntry.Kind> entries = new HashMap<String, RepositoryEntry.Kind>();
+    private final Map<String, DirEntry.Kind> entries = new HashMap<String, DirEntry.Kind>();
 
     /**
      * Constructor.
@@ -421,7 +421,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
      *
      * @param entries Entries
      */
-    public EntriesToDelete(final Map<String, RepositoryEntry.Kind> entries) {
+    public EntriesToDelete(final Map<String, DirEntry.Kind> entries) {
       this.entries.putAll(entries);
     }
 
@@ -431,7 +431,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
      * @param path Path
      * @param kind Node kind
      */
-    public void add(final String path, RepositoryEntry.Kind kind) {
+    public void add(final String path, DirEntry.Kind kind) {
       entries.put(path, kind);
     }
 
@@ -440,7 +440,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
      *
      * @return entries
      */
-    public Map<String, RepositoryEntry.Kind> getEntries() {
+    public Map<String, DirEntry.Kind> getEntries() {
       return entries;
     }
   }
@@ -462,12 +462,12 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
     }
 
     @Override
-    public void add(RepositoryEntry... e) {
+    public void add(DirEntry... e) {
       super.add(e);
       final int entriesCount = entries.size();
       if (entriesCount >= flushThreshold) {
         LOGGER.debug("Flushing cache, size: " + entriesCount);
-        entryCache.update(Collections.<String, RepositoryEntry.Kind>emptyMap(), entries);
+        entryCache.update(Collections.<String, DirEntry.Kind>emptyMap(), entries);
         entries.clear();
       }
     }

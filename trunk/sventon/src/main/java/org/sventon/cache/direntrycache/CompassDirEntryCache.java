@@ -20,7 +20,7 @@ import org.compass.core.config.CompassEnvironment;
 import org.compass.core.lucene.LuceneEnvironment;
 import org.sventon.cache.CacheException;
 import org.sventon.model.CamelCasePattern;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
         .setSetting("compass.engine.queryParser.default.type", CustomizedLuceneQueryParser.class.getName())
         .setSetting(LuceneEnvironment.Query.MAX_CLAUSE_COUNT, System.getProperty(PROPERTY_KEY_MAX_CLAUSE_COUNT,
             Integer.toString(MAX_CLAUSE_DEFAULT_COUNT)))
-        .addClass(RepositoryEntry.class);
+        .addClass(DirEntry.class);
     compass = compassConfiguration.buildCompass();
     latestCachedRevisionFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
 
@@ -137,11 +137,11 @@ public final class CompassDirEntryCache implements DirEntryCache {
   }
 
   @Override
-  public void add(final RepositoryEntry... entries) {
+  public void add(final DirEntry... entries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) {
-        for (RepositoryEntry entry : entries) {
+        for (DirEntry entry : entries) {
           session.save(entry);
         }
       }
@@ -163,14 +163,14 @@ public final class CompassDirEntryCache implements DirEntryCache {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) {
-        session.delete(RepositoryEntry.class, pathAndName);
+        session.delete(DirEntry.class, pathAndName);
       }
     });
   }
 
   @Override
-  public void update(final Map<String, RepositoryEntry.Kind> entriesToDelete,
-                     final List<RepositoryEntry> entriesToAdd) {
+  public void update(final Map<String, DirEntry.Kind> entriesToDelete,
+                     final List<DirEntry> entriesToAdd) {
 
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
@@ -179,20 +179,20 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
         // Apply deletion...
         for (String id : entriesToDelete.keySet()) {
-          final RepositoryEntry.Kind kind = entriesToDelete.get(id);
-          if (kind == RepositoryEntry.Kind.DIR) {
+          final DirEntry.Kind kind = entriesToDelete.get(id);
+          if (kind == DirEntry.Kind.DIR) {
             // Directory node deleted
             logger.debug(id + " is a directory. Doing a recursive delete");
             session.delete(session.queryBuilder().queryString("path:" + id + "*").toQuery());
-            session.delete(RepositoryEntry.class, id);
+            session.delete(DirEntry.class, id);
           } else {
             // Single entry delete
-            session.delete(RepositoryEntry.class, id);
+            session.delete(DirEntry.class, id);
           }
         }
 
         // Apply adds...
-        for (RepositoryEntry entry : entriesToAdd) {
+        for (DirEntry entry : entriesToAdd) {
           session.save(entry);
         }
 
@@ -206,13 +206,13 @@ public final class CompassDirEntryCache implements DirEntryCache {
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(final CompassSession session) {
         session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
-        session.delete(RepositoryEntry.class, pathAndName);
+        session.delete(DirEntry.class, pathAndName);
       }
     });
   }
 
   @Override
-  public List<RepositoryEntry> findEntries(final String searchString, final String startDir) {
+  public List<DirEntry> findEntries(final String searchString, final String startDir) {
     final String queryString = "path:" + startDir + "* (name:*" + searchString + "*" +
         " OR lastAuthor:*" + searchString + "*)";
 
@@ -222,13 +222,13 @@ public final class CompassDirEntryCache implements DirEntryCache {
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
+    final List<DirEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
   }
 
   @Override
-  public List<RepositoryEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
+  public List<DirEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                              final String startPath) {
     final String queryString = "path:" + startPath +
         "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*";
@@ -239,13 +239,13 @@ public final class CompassDirEntryCache implements DirEntryCache {
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
+    final List<DirEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
   }
 
   @Override
-  public List<RepositoryEntry> findDirectories(final String startPath) {
+  public List<DirEntry> findDirectories(final String startPath) {
     final String queryString = "path:" + startPath + "* kind:DIR";
 
     if (logger.isDebugEnabled()) {
@@ -254,20 +254,20 @@ public final class CompassDirEntryCache implements DirEntryCache {
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    final List<RepositoryEntry> result = toEntriesList(template.findWithDetach(queryString));
+    final List<DirEntry> result = toEntriesList(template.findWithDetach(queryString));
     logResult(result);
     return result;
   }
 
-  protected List<RepositoryEntry> toEntriesList(final CompassDetachedHits compassHits) {
-    final List<RepositoryEntry> hits = new ArrayList<RepositoryEntry>(compassHits.length());
+  protected List<DirEntry> toEntriesList(final CompassDetachedHits compassHits) {
+    final List<DirEntry> hits = new ArrayList<DirEntry>(compassHits.length());
     for (CompassHit compassHit : compassHits) {
-      hits.add((RepositoryEntry) compassHit.getData());
+      hits.add((DirEntry) compassHit.getData());
     }
     return hits;
   }
 
-  protected void logResult(final List<RepositoryEntry> result) {
+  protected void logResult(final List<DirEntry> result) {
     if (logger.isDebugEnabled()) {
       logger.debug("Result count: " + result.size());
       logger.debug("Result: " + result);

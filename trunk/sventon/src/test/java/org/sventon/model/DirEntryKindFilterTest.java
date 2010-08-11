@@ -9,34 +9,34 @@ public class DirEntryKindFilterTest extends TestCase {
 
   public void testFilter() throws Exception {
 
-    final List<RepositoryEntry> list = TestUtils.getDirectoryList();
-    List<RepositoryEntry> filteredList;
+    final List<DirEntry> list = TestUtils.getDirectoryList();
+    List<DirEntry> filteredList;
 
     try {
-      new DirEntryKindFilter(RepositoryEntry.Kind.NONE).filter(list);
+      new DirEntryKindFilter(DirEntry.Kind.NONE).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      new DirEntryKindFilter(RepositoryEntry.Kind.ANY).filter(list);
+      new DirEntryKindFilter(DirEntry.Kind.ANY).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
     try {
-      new DirEntryKindFilter(RepositoryEntry.Kind.UNKNOWN).filter(list);
+      new DirEntryKindFilter(DirEntry.Kind.UNKNOWN).filter(list);
       fail("Should throw IllegalArgumentException");
     } catch (IllegalArgumentException iae) {
       // expected
     }
 
-    filteredList = new DirEntryKindFilter(RepositoryEntry.Kind.DIR).filter(list);
+    filteredList = new DirEntryKindFilter(DirEntry.Kind.DIR).filter(list);
     assertEquals(4, filteredList.size());
 
-    filteredList = new DirEntryKindFilter(RepositoryEntry.Kind.FILE).filter(list);
+    filteredList = new DirEntryKindFilter(DirEntry.Kind.FILE).filter(list);
     assertEquals(9, filteredList.size());
 
     try {

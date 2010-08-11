@@ -12,7 +12,7 @@ import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
@@ -29,7 +29,7 @@ public class ListDirectoryContentsControllerTest extends TestCase {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     request.setParameter("rowNumber", "12");
 
-    final List<RepositoryEntry> entries = TestUtils.getFileEntriesDirectoryList();
+    final List<DirEntry> entries = TestUtils.getFileEntriesDirectoryList();
 
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
@@ -46,7 +46,7 @@ public class ListDirectoryContentsControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(2, model.size());
-    assertEquals(entries.get(0), ((List<RepositoryEntry>) model.get("svndir")).get(0));
+    assertEquals(entries.get(0), ((List<DirEntry>) model.get("svndir")).get(0));
     assertNull(modelAndView.getViewName());
   }
 

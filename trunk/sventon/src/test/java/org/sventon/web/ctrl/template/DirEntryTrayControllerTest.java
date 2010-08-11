@@ -16,7 +16,7 @@ import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
@@ -33,7 +33,7 @@ public class DirEntryTrayControllerTest extends TestCase {
   private RepositoryService mockService;
   private MockHttpServletRequest request;
   private DirEntryTrayController ctrl;
-  private RepositoryEntry entry;
+  private DirEntry entry;
   private UserRepositoryContext context;
 
   protected void setUp() throws Exception {
@@ -48,7 +48,7 @@ public class DirEntryTrayControllerTest extends TestCase {
     configuration.setEnableEntryTray(true);
     application.addConfiguration(configuration);
 
-    entry = new RepositoryEntry(new SVNDirEntry(null, null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
+    entry = new DirEntry(new SVNDirEntry(null, null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
 
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));

@@ -14,8 +14,8 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntry;
 import org.sventon.model.DirEntrySorter;
-import org.sventon.model.RepositoryEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
@@ -36,7 +36,7 @@ public final class FlattenController extends AbstractTemplateController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final List<RepositoryEntry> entries = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+    final List<DirEntry> entries = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
 
     logger.debug("Flattening directories below: " + command.getPath());
     entries.addAll(getCache().findDirectories(command.getName(), command.getPath()));

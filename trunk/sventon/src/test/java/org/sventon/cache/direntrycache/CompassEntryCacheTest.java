@@ -3,7 +3,7 @@ package org.sventon.cache.direntrycache;
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
 import org.sventon.model.CamelCasePattern;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 
 import java.io.File;
 import java.util.List;
@@ -23,8 +23,8 @@ public class CompassEntryCacheTest extends TestCase {
     entryCache.shutdown();
   }
 
-  private void addAll(DirEntryCache entryCache, List<RepositoryEntry> entries) {
-    entryCache.add(entries.toArray(new RepositoryEntry[entries.size()]));
+  private void addAll(DirEntryCache entryCache, List<DirEntry> entries) {
+    entryCache.add(entries.toArray(new DirEntry[entries.size()]));
   }
 
   public void testEntryCache() throws Exception {
@@ -98,8 +98,8 @@ public class CompassEntryCacheTest extends TestCase {
     assertEquals(2, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("DF"), "/").size());
   }
 
-  private void print(List<RepositoryEntry> entries) {
-    for (RepositoryEntry entry : entries) {
+  private void print(List<DirEntry> entries) {
+    for (DirEntry entry : entries) {
       System.out.println(entry);
     }
   }

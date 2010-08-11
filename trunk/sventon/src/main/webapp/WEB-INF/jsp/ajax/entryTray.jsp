@@ -37,7 +37,7 @@
     <c:set var="rowCount" value="0"/>
     <c:forEach var="peggedEntry" items="${userRepositoryContext.dirEntryTray.unmodifiableEntries}">
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
-      <jsp:useBean id="trayEntry" type="org.sventon.model.RepositoryEntry"/>
+      <jsp:useBean id="trayEntry" type="org.sventon.model.DirEntry"/>
       
       <c:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayListUrl">
         <c:param name="revision" value="${peggedEntry.pegRevision}" />

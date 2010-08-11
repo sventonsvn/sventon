@@ -28,7 +28,7 @@ public class PeggedRepositoryEntry implements Serializable {
   /**
    * The wrapped repository entry
    */
-  private final RepositoryEntry entry;
+  private final DirEntry entry;
 
   /**
    * Peg revision.
@@ -38,10 +38,10 @@ public class PeggedRepositoryEntry implements Serializable {
   /**
    * Constructor.
    *
-   * @param entry       The <code>RepositoryEntry</code>.
+   * @param entry       The <code>DirEntry</code>.
    * @param pegRevision The peg revision.
    */
-  public PeggedRepositoryEntry(final RepositoryEntry entry, final long pegRevision) {
+  public PeggedRepositoryEntry(final DirEntry entry, final long pegRevision) {
     this.entry = entry;
     this.pegRevision = pegRevision;
   }
@@ -60,7 +60,7 @@ public class PeggedRepositoryEntry implements Serializable {
    *
    * @return Entry
    */
-  public RepositoryEntry getEntry() {
+  public DirEntry getEntry() {
     return entry;
   }
 

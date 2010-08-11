@@ -7,7 +7,7 @@ import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.cache.direntrycache.CompassDirEntryCache;
 import org.sventon.cache.direntrycache.DirEntryCache;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.*;
 
@@ -30,8 +30,8 @@ public class CacheGatewayImplTest extends TestCase {
     entryCache.init();
     cacheManager.addCache(repositoryName, entryCache);
 
-    for (RepositoryEntry repositoryEntry : TestUtils.getDirectoryList()) {
-      entryCache.add(repositoryEntry);
+    for (DirEntry dirEntry : TestUtils.getDirectoryList()) {
+      entryCache.add(dirEntry);
     }
     final CacheGatewayImpl cache = new CacheGatewayImpl();
     cache.setEntryCacheManager(cacheManager);

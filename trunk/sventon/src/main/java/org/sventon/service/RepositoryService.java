@@ -172,7 +172,7 @@ public interface RepositoryService {
    * @return The node kind
    * @throws SVNException if a subversion error occur
    */
-  RepositoryEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  DirEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision) throws SVNException;
 
   /**
    * Gets the repository locks recursively, starting from given path.
@@ -191,7 +191,7 @@ public interface RepositoryService {
    * @return List of entries
    * @throws SVNException if a subversion error occur
    */
-  List<RepositoryEntry> list(final SVNConnection connection, final String path, final long revision,
+  List<DirEntry> list(final SVNConnection connection, final String path, final long revision,
                              final SVNProperties properties) throws SVNException;
 
   /**
@@ -204,7 +204,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur. If the SVNErrorMessage SVNErrorCode is set to ENTRY_NOT_FOUND,
    *                      no entry exists at given path and revision.
    */
-  RepositoryEntry getEntryInfo(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  DirEntry getEntryInfo(final SVNConnection connection, final String path, final long revision) throws SVNException;
 
   /**
    * Gets the revisions for a specific entry.
@@ -298,7 +298,7 @@ public interface RepositoryService {
    * @throws DiffException Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
    *                       of if one of the given entries does not exist in given revision.
    */
-  RepositoryEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
+  DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
       throws SVNException, DiffException;
 
   /**

@@ -52,7 +52,7 @@ public final class DirEntryTrayController extends AbstractTemplateController {
 
     final ModelAndView modelAndView = new ModelAndView(getViewName());
 
-    final RepositoryEntry entry;
+    final DirEntry entry;
     try {
       entry = getRepositoryService().getEntryInfo(connection, command.getPath(), pegRevision);
     } catch (SVNException e) {

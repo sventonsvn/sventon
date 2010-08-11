@@ -2,7 +2,7 @@ package org.sventon.util;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ public class FileExtensionFilterTest extends TestCase {
 
   public void testFilter() throws Exception {
 
-    final List<RepositoryEntry> list = TestUtils.getFileEntriesDirectoryList();
+    final List<DirEntry> list = TestUtils.getFileEntriesDirectoryList();
 
-    List<RepositoryEntry> filteredList;
+    List<DirEntry> filteredList;
     filteredList = new FileExtensionFilter("jpg").filter(list);
     assertEquals(1, filteredList.size());
 

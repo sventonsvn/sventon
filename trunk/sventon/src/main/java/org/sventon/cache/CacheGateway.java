@@ -13,7 +13,7 @@ package org.sventon.cache;
 
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.LogEntry;
-import org.sventon.model.RepositoryEntry;
+import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -35,7 +35,7 @@ public interface CacheGateway {
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
+  List<DirEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
                                                final String startDir) throws CacheException;
 
   /**
@@ -47,7 +47,7 @@ public interface CacheGateway {
    * @return List of entries with names (and/or author) matching given search string.
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findEntries(final RepositoryName repositoryName, final String searchString,
+  List<DirEntry> findEntries(final RepositoryName repositoryName, final String searchString,
                                     final String startDir) throws CacheException;
 
   /**
@@ -58,7 +58,7 @@ public interface CacheGateway {
    * @return List of entries
    * @throws CacheException if error
    */
-  List<RepositoryEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException;
+  List<DirEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException;
 
   /**
    * Searches the cached log entries for given string.

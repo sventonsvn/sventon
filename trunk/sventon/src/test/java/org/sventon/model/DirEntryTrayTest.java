@@ -14,7 +14,7 @@ public class DirEntryTrayTest extends TestCase {
     final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final PeggedRepositoryEntry entry = new PeggedRepositoryEntry(new RepositoryEntry(
+    final PeggedRepositoryEntry entry = new PeggedRepositoryEntry(new DirEntry(
         new SVNDirEntry(null, url, "file1.java", SVNNodeKind.FILE, 123, false, 1, new Date(), "jesper"), "/"), 123);
 
     assertEquals(0, entryTray.getSize());
@@ -29,13 +29,13 @@ public class DirEntryTrayTest extends TestCase {
     final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final RepositoryEntry entry1 = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
+    final DirEntry entry1 = new DirEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
 
-    final RepositoryEntry entry1Duplicate = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
+    final DirEntry entry1Duplicate = new DirEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
 
-    final RepositoryEntry entry2 = new RepositoryEntry(new SVNDirEntry(null, url, "file1.java",
+    final DirEntry entry2 = new DirEntry(new SVNDirEntry(null, url, "file1.java",
         SVNNodeKind.FILE, 10, false, 2, new Date(), "jesper"), "/");
 
     assertEquals(0, entryTray.getSize());

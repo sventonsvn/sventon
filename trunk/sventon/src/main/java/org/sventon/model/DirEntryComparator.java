@@ -12,7 +12,6 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.Validate;
-import org.sventon.model.RepositoryEntry;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -20,14 +19,14 @@ import java.util.Date;
 
 /**
  * <code>java.util.Comparator&lt;T&gt;</code> implementation to support
- * ordering of <code>RepositoryEntry</code> objects.
+ * ordering of <code>DirEntry</code> objects.
  * <p/>
  * The comparator can be configured during construction to tweak sorting behavior.
  *
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class DirEntryComparator implements Comparator<RepositoryEntry>, Serializable {
+public final class DirEntryComparator implements Comparator<DirEntry>, Serializable {
 
   private static final long serialVersionUID = -823291078109887289L;
 
@@ -40,7 +39,7 @@ public final class DirEntryComparator implements Comparator<RepositoryEntry>, Se
   private final SortType sortType;
 
   /**
-   * Create a new comparator for comparing <code>RepositoryEntry</code> objects.
+   * Create a new comparator for comparing <code>DirEntry</code> objects.
    *
    * @param sortType  Entry type property to perform the comparisons on. See enum constants
    *                  defined in this class.
@@ -55,15 +54,15 @@ public final class DirEntryComparator implements Comparator<RepositoryEntry>, Se
   }
 
   @Override
-  public int compare(final RepositoryEntry entry1, final RepositoryEntry entry2) {
+  public int compare(final DirEntry entry1, final DirEntry entry2) {
     if (groupDirs) {
-      final RepositoryEntry.Kind kind1 = entry1.getKind();
-      final RepositoryEntry.Kind kind2 = entry2.getKind();
+      final DirEntry.Kind kind1 = entry1.getKind();
+      final DirEntry.Kind kind2 = entry2.getKind();
       if (kind1 != kind2) {
         // Not equal kinds, have to inspect.
-        if (RepositoryEntry.Kind.DIR == kind1) {
+        if (DirEntry.Kind.DIR == kind1) {
           return -1;
-        } else if (RepositoryEntry.Kind.DIR == kind2) {
+        } else if (DirEntry.Kind.DIR == kind2) {
           return 1;
         }
       } // not equal kind, but neither is DIR

@@ -9,26 +9,26 @@ import java.util.Date;
 public class RepositoryEntryTest extends TestCase {
 
   public void testGetShortenedFullEntryName() throws Exception {
-    RepositoryEntry entry;
+    DirEntry entry;
 
     entry = toEntry("/source/com/bli/bla/blu/saaaaaoooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/", "test.fil");
     assertEquals("/source/com/bli/bla/blu/saaaaaoooooooooooaaaaaaaaaaaaaaaaa.../test.fil", entry.getShortenedFullEntryName());
-    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
+    assertEquals(DirEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
 
     entry = toEntry("/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", "reallylongfilenamejustfortestingpurposes.fil");
     assertEquals("/source/com/bli/bla/bl.../reallylongfilenamejustfortestingpurposes.fil", entry.getShortenedFullEntryName());
-    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
+    assertEquals(DirEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
 
     entry = toEntry("/source/com/bli/bla/blu/", "test.fil");
     assertEquals("/source/com/bli/bla/blu/test.fil", entry.getShortenedFullEntryName());
 
     entry = toEntry("/source/com/bli/bla/blu/", "thisisafilenamewithmorethanenoughcharactersinitreallynotperfectlookingontheweb.fil");
     assertEquals(".../thisisafilenamewithmorethanenoughcharactersinitreallynotperfectlookingontheweb.fil", entry.getShortenedFullEntryName());
-    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH + 16, entry.getShortenedFullEntryName().length());
+    assertEquals(DirEntry.FULL_ENTRY_NAME_MAX_LENGTH + 16, entry.getShortenedFullEntryName().length());
 
     entry = toEntry("/source/com/bli/bla/blu/saaaaa/bbbbbb/ccccccccc/dddddddd/aaaaaaaaaaaaaaaaaa/", "reallylongfilenamejustfortestingpurposesonly.fil");
     assertEquals("/source/com/bli/bl.../reallylongfilenamejustfortestingpurposesonly.fil", entry.getShortenedFullEntryName());
-    assertEquals(RepositoryEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
+    assertEquals(DirEntry.FULL_ENTRY_NAME_MAX_LENGTH, entry.getShortenedFullEntryName().length());
 
     final String path = "/abcde/fghijk/lmnopqrs/";
 
@@ -55,8 +55,8 @@ public class RepositoryEntryTest extends TestCase {
     assertEquals(".../abc", toEntry(path, "abc").getShortenedFullEntryName(0));
   }
 
-  private RepositoryEntry toEntry(final String path, final String filename) {
-    return new RepositoryEntry(new SVNDirEntry(null, null, filename, SVNNodeKind.FILE, 1, false, 1, new Date(), "A"), path);
+  private DirEntry toEntry(final String path, final String filename) {
+    return new DirEntry(new SVNDirEntry(null, null, filename, SVNNodeKind.FILE, 1, false, 1, new Date(), "A"), path);
   }
 
 }

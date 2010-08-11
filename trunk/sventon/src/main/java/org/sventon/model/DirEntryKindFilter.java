@@ -11,8 +11,6 @@
  */
 package org.sventon.model;
 
-import org.sventon.model.RepositoryEntry;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,18 +26,18 @@ public final class DirEntryKindFilter {
   /**
    * The kind to filter.
    */
-  private RepositoryEntry.Kind kind;
+  private DirEntry.Kind kind;
 
   /**
    * Constructor.
    *
    * @param kind Entry kind to filter (i.e. keep).
    */
-  public DirEntryKindFilter(final RepositoryEntry.Kind kind) {
+  public DirEntryKindFilter(final DirEntry.Kind kind) {
     if (kind == null
-        || RepositoryEntry.Kind.ANY == kind
-        || RepositoryEntry.Kind.UNKNOWN == kind
-        || RepositoryEntry.Kind.NONE == kind) {
+        || DirEntry.Kind.ANY == kind
+        || DirEntry.Kind.UNKNOWN == kind
+        || DirEntry.Kind.NONE == kind) {
       throw new IllegalArgumentException("Illegal kind: " + kind);
     }
     this.kind = kind;
@@ -51,10 +49,10 @@ public final class DirEntryKindFilter {
    * @param entries List of entries to filter.
    * @return List of entries matching given kind.
    */
-  public List<RepositoryEntry> filter(final List<RepositoryEntry> entries) {
-    final List<RepositoryEntry> list = Collections.checkedList(new ArrayList<RepositoryEntry>(), RepositoryEntry.class);
+  public List<DirEntry> filter(final List<DirEntry> entries) {
+    final List<DirEntry> list = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
 
-    for (final RepositoryEntry entry : entries) {
+    for (final DirEntry entry : entries) {
       if (kind == entry.getKind()) {
         list.add(entry);
       }
