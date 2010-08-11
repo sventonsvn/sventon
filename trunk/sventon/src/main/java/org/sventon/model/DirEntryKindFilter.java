@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * RepositoryEntryKind filter.
+ * DirEntryKindFilter filter.
  * Filters out given entry kind and removes entries with non-matching kinds.
  *
  * @author jesper@sventon.org

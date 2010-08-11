@@ -14,7 +14,7 @@ public class DirEntryTrayTest extends TestCase {
     final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final PeggedRepositoryEntry entry = new PeggedRepositoryEntry(new DirEntry(
+    final PeggedDirEntry entry = new PeggedDirEntry(new DirEntry(
         new SVNDirEntry(null, url, "file1.java", SVNNodeKind.FILE, 123, false, 1, new Date(), "jesper"), "/"), 123);
 
     assertEquals(0, entryTray.getSize());
@@ -39,11 +39,11 @@ public class DirEntryTrayTest extends TestCase {
         SVNNodeKind.FILE, 10, false, 2, new Date(), "jesper"), "/");
 
     assertEquals(0, entryTray.getSize());
-    assertTrue(entryTray.add(new PeggedRepositoryEntry(entry1, -1)));
+    assertTrue(entryTray.add(new PeggedDirEntry(entry1, -1)));
     assertEquals(1, entryTray.getSize());
-    assertFalse(entryTray.add(new PeggedRepositoryEntry(entry1Duplicate, -1)));
+    assertFalse(entryTray.add(new PeggedDirEntry(entry1Duplicate, -1)));
     assertEquals(1, entryTray.getSize());
-    assertTrue(entryTray.add(new PeggedRepositoryEntry(entry2, -1)));
+    assertTrue(entryTray.add(new PeggedDirEntry(entry2, -1)));
     assertEquals(2, entryTray.getSize());
 
     entryTray.removeAll();

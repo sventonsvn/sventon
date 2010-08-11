@@ -6,7 +6,7 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Date;
 
-public class RepositoryEntryTest extends TestCase {
+public class DirEntryTest extends TestCase {
 
   public void testGetShortenedFullEntryName() throws Exception {
     DirEntry entry;

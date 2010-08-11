@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author jesper@sventon.org
  */
-public class PeggedRepositoryEntry implements Serializable {
+public class PeggedDirEntry implements Serializable {
 
   private static final long serialVersionUID = 3629810826053736323L;
 
@@ -41,7 +41,7 @@ public class PeggedRepositoryEntry implements Serializable {
    * @param entry       The <code>DirEntry</code>.
    * @param pegRevision The peg revision.
    */
-  public PeggedRepositoryEntry(final DirEntry entry, final long pegRevision) {
+  public PeggedDirEntry(final DirEntry entry, final long pegRevision) {
     this.entry = entry;
     this.pegRevision = pegRevision;
   }
