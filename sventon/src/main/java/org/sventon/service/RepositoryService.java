@@ -25,7 +25,6 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +44,10 @@ public interface RepositoryService {
    * @param connection     The repository
    * @param revision       Revision number
    * @return The log entry
-   * @throws SVNException                 if subversion error
-   * @throws org.sventon.SventonException if a sventon specific error occurs
+   * @throws SventonException if a sventon specific error occurs
    */
   SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
-      throws SVNException, SventonException;
+      throws SventonException;
 
   /**
    * Gets revision details for given revision interval.
@@ -80,8 +78,8 @@ public interface RepositoryService {
    * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
-                                 final long fromRevision, final long toRevision, final String path,
-                                 final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
+                                  final long fromRevision, final long toRevision, final String path,
+                                  final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
 
   /**
    * Exports given list of target entries to the given destination export directory.
@@ -94,20 +92,6 @@ public interface RepositoryService {
    */
   void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
               final ExportDirectory exportDirectory) throws SventonException;
-
-  /**
-   * Gets a file from the repository as a raw text file.
-   *
-   * @param connection The repository connection
-   * @param path       Path
-   * @param revision   Revision
-   * @param charset    Charset encoding to use
-   * @return The text file instance
-   * @throws SVNException if a subversion error occur
-   * @throws IOException  if given charset encoding is invalid
-   */
-  TextFile getTextFile(final SVNConnection connection, final String path, final long revision, final String charset)
-      throws SVNException, IOException;
 
   /**
    * Gets a file's contents from the repository and writes it to the given output stream.
@@ -192,7 +176,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   List<DirEntry> list(final SVNConnection connection, final String path, final long revision,
-                             final SVNProperties properties) throws SVNException;
+                      final SVNProperties properties) throws SVNException;
 
   /**
    * Gets entry info from the subversion repository.
@@ -269,7 +253,7 @@ public interface RepositoryService {
    * @param command       DiffCommand.
    * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff status.
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
   List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
                                 final RepositoryConfiguration configuration) throws SventonException;

@@ -50,11 +50,15 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
-      throws SVNException, SventonException {
+      throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
-    return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
-        true, false).iterator().next();
+    try {
+      return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
+          true, false).iterator().next();
+    } catch (SVNException e) {
+      throw new SventonException("Error getting log entry: " + e.toString());
+    }
   }
 
   @Override
@@ -108,14 +112,13 @@ public class SVNKitRepositoryService implements RepositoryService {
             org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), entryToExport,
             SVNRevision.create(pegRevision), SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
       } catch (SVNException e) {
-        throw new SventonException("Error exporting [" + path + "@" + revision + "]: " + e.getMessage());
+        throw new SventonException("Error exporting [" + path + "@" + revision + "]: " + e.toString());
       }
     }
   }
 
-  @Override
-  public final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
-                                    final String charset) throws SVNException, IOException {
+  protected final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
+                                       final String charset) throws SVNException, IOException {
     logger.debug("Fetching file " + path + "@" + revision);
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFileContents(connection, path, revision, outStream);

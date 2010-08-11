@@ -67,7 +67,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    */
   @Override
   public SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
-      throws SVNException, SventonException {
+      throws SventonException {
 
     final SVNLogEntry logEntry;
     if (canReturnCachedRevisionsFor(repositoryName)) {
