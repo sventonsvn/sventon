@@ -17,12 +17,12 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
@@ -197,7 +197,7 @@ public class ExportExecutorImpl implements ExportExecutor {
       this.pegRevision = pegRevision;
     }
 
-    public Void call() throws SVNException, IOException {
+    public Void call() throws SventonException, IOException {
       final UUID uuid = exportDirectory.getUUID();
       final StopWatch stopWatch = new StopWatch(
           "Export of [" + exportDirectory.getDirectory().getAbsolutePath() + "] uuid: " + uuid);

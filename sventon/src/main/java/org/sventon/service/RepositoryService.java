@@ -90,10 +90,10 @@ public interface RepositoryService {
    * @param targets         Targets to export.
    * @param pegRevision     Peg revision
    * @param exportDirectory Destination directory
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
   void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
-              final ExportDirectory exportDirectory) throws SVNException;
+              final ExportDirectory exportDirectory) throws SventonException;
 
   /**
    * Gets a file from the repository as a raw text file.
