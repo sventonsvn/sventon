@@ -16,8 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.SVNConnection;
-import org.sventon.SventonException;
+import org.sventon.*;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
@@ -25,10 +24,28 @@ import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.ISVNLogEntryHandler;
+import org.tmatesoft.svn.core.SVNDepth;
+import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNErrorMessage;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNProperty;
+//import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.*;
+import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
+import org.tmatesoft.svn.core.wc.ISVNDiffStatusHandler;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNDiffClient;
+import org.tmatesoft.svn.core.wc.SVNLogClient;
+import org.tmatesoft.svn.core.wc.SVNRevision;
+
+
 
 import java.io.*;
 import java.util.*;
@@ -99,7 +116,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
       final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
       SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
-          SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
+          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
           SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, SVNDepth.INFINITY);
     }
   }
@@ -385,20 +402,19 @@ public class SVNKitRepositoryService implements RepositoryService {
                                              final RepositoryConfiguration configuration) throws SVNException {
 
     final SVNRepository repository = connection.getDelegate();
-    final SVNDiffClient diffClient = SVNClientManager.newInstance(null,
-        repository.getAuthenticationManager()).getDiffClient();
+    final SVNDiffClient diffClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getDiffClient();
 
     final List<SVNDiffStatus> result = new ArrayList<SVNDiffStatus>();
 
     final String repoRoot = repository.getLocation().toDecodedString();
 
     diffClient.doDiffStatus(
-        SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
-        SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
+        org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
+        org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
         SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
-          public void handleDiffStatus(final SVNDiffStatus diffStatus) throws SVNException {
-            if (diffStatus.getModificationType() != SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-              result.add(diffStatus);
+          public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
+            if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
+              result.add(new SVNDiffStatus(SVNStatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
             }
           }
         });
@@ -431,7 +447,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     final SVNRevision startRev = SVNRevision.create(0);
     final SVNRevision endRev = SVNRevision.create(blameRevision);
 
-    logClient.doAnnotate(SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), endRev, startRev,
+    logClient.doAnnotate(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), endRev, startRev,
         endRev, false, handler, charset);
     try {
       annotatedTextFile.colorize();
