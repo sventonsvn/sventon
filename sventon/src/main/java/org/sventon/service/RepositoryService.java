@@ -272,7 +272,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                                final RepositoryConfiguration configuration) throws SVNException;
+                                final RepositoryConfiguration configuration) throws SventonException;
 
   /**
    * Blame (annotates) the given file.
