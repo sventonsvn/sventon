@@ -399,7 +399,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                                             final RepositoryConfiguration configuration) throws SVNException {
+                                             final RepositoryConfiguration configuration) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getDiffClient();
@@ -408,16 +408,20 @@ public class SVNKitRepositoryService implements RepositoryService {
 
     final String repoRoot = repository.getLocation().toDecodedString();
 
-    diffClient.doDiffStatus(
-        org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
-        org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
-        SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
-          public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
-            if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-              result.add(new SVNDiffStatus(SVNStatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
+    try {
+      diffClient.doDiffStatus(
+          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
+          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
+          SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
+            public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
+              if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
+                result.add(new SVNDiffStatus(SVNStatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
+              }
             }
-          }
-        });
+          });
+    } catch (SVNException e) {
+      throw new SventonException("Could not calculate diff for " + command.toString(), e);
+    }
     return result;
   }
 

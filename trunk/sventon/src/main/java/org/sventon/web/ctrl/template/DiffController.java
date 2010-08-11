@@ -16,6 +16,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SVNDiffStatus;
+import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
@@ -129,12 +130,14 @@ public final class DiffController extends AbstractTemplateController {
 
   private Map<String, Object> handlePathDiff(final SVNConnection connection, final ModelAndView modelAndView,
                                              final DiffCommand command, final RepositoryConfiguration config)
-      throws SVNException {
+      throws SventonException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Diffing dirs");
     modelAndView.setViewName("pathDiff");
+
     final List<SVNDiffStatus> diffResult = getRepositoryService().diffPaths(connection, command, config);
+
     logger.debug("Number of path diffs: " + diffResult.size());
     model.put("isIdentical", diffResult.isEmpty());
     model.put("diffResult", diffResult);
