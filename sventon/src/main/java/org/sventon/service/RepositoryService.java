@@ -12,6 +12,7 @@
 package org.sventon.service;
 
 import org.sventon.SVNConnection;
+import org.sventon.SVNDiffStatus;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
@@ -23,7 +24,6 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNDiffStatus;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -67,7 +67,7 @@
               <jsp:useBean id="diffResult" type="java.util.ArrayList" />
 
               <c:forEach items="${diffResult}" var="row">
-                <jsp:useBean id="row" type="org.tmatesoft.svn.core.wc.SVNDiffStatus"/>
+                <jsp:useBean id="row" type="org.sventon.SVNDiffStatus"/>
                 <%
                   final DirEntryChangeType changeType;
                   final char actionCode = row.getModificationType().getCode();
@@ -94,7 +94,7 @@
                   <% } else { %>
                   <td>${row.path}</td>
                   <% } %>
-                  <td><%= BooleanUtils.toStringYesNo(row.isPropertiesModified()) %></td>
+                  <td><%= BooleanUtils.toStringYesNo(row.isPropertyModified()) %></td>
                 </tr>
               </c:forEach>
               <tr>
