@@ -14,14 +14,14 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.model.DirEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,12 +56,10 @@ public final class GoToController extends AbstractTemplateController {
     try {
       kind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
       logger.debug("Node kind of [" + command.getPath() + "]: " + kind);
-    } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        logger.info(svnex.getMessage());
-      } else {
-        logger.error(svnex.getMessage());
-      }
+    } catch (NoSuchRevisionException nsre) {
+      logger.info(nsre.getMessage());
+    } catch (SventonException svnex) {
+      logger.error(svnex.getMessage());
     }
 
     if (DirEntry.Kind.DIR == kind) {

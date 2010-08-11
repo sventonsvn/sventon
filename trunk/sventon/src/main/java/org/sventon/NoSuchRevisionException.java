@@ -14,7 +14,7 @@ package org.sventon;
 /**
  * NoSuchRevisionException.
  */
-public class NoSuchRevisionException extends SVNException {
+public class NoSuchRevisionException extends SventonException {
 
   /**
    * Constructor.

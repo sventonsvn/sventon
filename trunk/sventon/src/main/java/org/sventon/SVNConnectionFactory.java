@@ -28,8 +28,8 @@ public interface SVNConnectionFactory {
    * @param svnUrl         Subversion repository URL
    * @param credentials    User credentials
    * @return The repository connection.
-   * @throws SVNException if unable to create repository connection.
+   * @throws SventonException if unable to create repository connection.
    */
   SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
-                                 final Credentials credentials) throws SVNException;
+                                 final Credentials credentials) throws SventonException;
 }

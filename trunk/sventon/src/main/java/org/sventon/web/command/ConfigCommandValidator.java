@@ -104,7 +104,7 @@ public final class ConfigCommandValidator implements Validator {
         SVNURL url = null;
         try {
           url = SVNURL.parse(repositoryUrl);
-        } catch (SVNException e) {
+        } catch (SventonException e) {
           logger.info(e);
           errors.rejectValue("repositoryUrl", "config.error.illegal-url");
         }
@@ -118,7 +118,7 @@ public final class ConfigCommandValidator implements Validator {
             testConnection(repositoryName, repositoryUrl, credentials);
           } catch (SVNAuthenticationException e) {
             errors.rejectValue("accessMethod", "config.error.authentication-error");
-          } catch (SVNException e) {
+          } catch (SventonException e) {
             errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{repositoryUrl},
                 "Unable to connect to repository [" + repositoryUrl + "]. Check URL.");
           }
@@ -128,7 +128,7 @@ public final class ConfigCommandValidator implements Validator {
             try {
               credentials = new Credentials(command.getCacheUserName(), command.getCacheUserPassword());
               testConnection(repositoryName, repositoryUrl, credentials);
-            } catch (SVNException e) {
+            } catch (SventonException e) {
               errors.rejectValue("cacheUsed", "config.error.authentication-error");
             }
           }
@@ -138,7 +138,7 @@ public final class ConfigCommandValidator implements Validator {
   }
 
   private void testConnection(final RepositoryName repositoryName, final String repositoryUrl,
-                              final Credentials credentials) throws SVNException {
+                              final Credentials credentials) throws SventonException {
 
     final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName.toString());
     configuration.setRepositoryUrl(repositoryUrl);
@@ -150,7 +150,7 @@ public final class ConfigCommandValidator implements Validator {
       connection.getDelegate().testConnection();
     } catch (org.tmatesoft.svn.core.SVNException ex) {
       logger.info(ex);
-      throw new SVNException(ex.getMessage());
+      throw new SventonException(ex.getMessage());
     } finally {
       if (connection != null) {
         connection.closeSession();

@@ -160,10 +160,18 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final DirEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision)
-      throws SVNException {
-    final SVNRepository repository = connection.getDelegate();
-    final SVNNodeKind nodeKind = repository.checkPath(path, revision);
-    return DirEntry.Kind.valueOf(nodeKind.toString().toUpperCase());
+      throws SventonException {
+    try {
+      final SVNRepository repository = connection.getDelegate();
+      final SVNNodeKind nodeKind = repository.checkPath(path, revision);
+      return DirEntry.Kind.valueOf(nodeKind.toString().toUpperCase());
+    } catch (SVNException svnex) {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
+        throw new NoSuchRevisionException("Unable to get node kind for: " + path + "@" + revision);
+      } else {
+        throw new SventonException("Unable to get node kind for: " + path + "@" + revision);
+      }
+    }
   }
 
   @Override
@@ -459,7 +467,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
-      throws SVNException, DiffException {
+      throws SventonException, DiffException {
 
     final long fromRevision;
     final long toRevision;
@@ -472,8 +480,10 @@ public class SVNKitRepositoryService implements RepositoryService {
       toRevision = command.getToRevision().getNumber();
     }
 
-    final DirEntry.Kind nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
-    final DirEntry.Kind nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
+    final DirEntry.Kind nodeKind1;
+    final DirEntry.Kind nodeKind2;
+    nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
+    nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
 
     assertFileOrDir(nodeKind1, command.getFromPath(), fromRevision);
     assertFileOrDir(nodeKind2, command.getToPath(), toRevision);

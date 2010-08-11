@@ -27,11 +27,11 @@ public class SVNURL {
     this.url = url;
   }
 
-  public static SVNURL parse(String url) throws SVNException {
+  public static SVNURL parse(String url) throws SventonException {
     try {
       return new SVNURL(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(url).toString());
     } catch (org.tmatesoft.svn.core.SVNException e) {
-      throw new SVNException("Unable to parse URL: " + url);
+      throw new SventonException("Unable to parse URL: " + url);
     }
   }
 
