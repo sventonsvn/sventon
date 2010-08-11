@@ -1,10 +1,11 @@
 package org.sventon.appl;
 
 import junit.framework.TestCase;
-import static org.sventon.appl.RepositoryConfiguration.*;
-import org.tmatesoft.svn.core.SVNURL;
+import org.sventon.SVNURL;
 
 import java.util.Properties;
+
+import static org.sventon.appl.RepositoryConfiguration.*;
 
 public class RepositoryConfigurationTest extends TestCase {
 
@@ -52,7 +53,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertEquals("userPassword", conf.getUserCredentials().getPassword());
     assertEquals(repositoryUrl, conf.getRepositoryUrl());
     assertEquals(repositoryUrl, conf.getRepositoryDisplayUrl());
-    assertEquals(SVNURL.parseURIDecoded(conf.getRepositoryUrl()), conf.getSVNURL());
+    assertEquals(SVNURL.parse(conf.getRepositoryUrl()), conf.getSVNURL());
 
     assertFalse(conf.isCacheUsed());
     assertEquals(20, conf.getRssItemsCount());
@@ -63,21 +64,21 @@ public class RepositoryConfigurationTest extends TestCase {
 
     conf.setRepositoryUrl("svn://localhost/svn");
     assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
-    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+    assertEquals(SVNURL.parse("svn://localhost/svn"), conf.getSVNURL());
 
     //trailing slashes should be removed
     conf.setRepositoryUrl("svn://localhost/svn/");
     assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
-    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+    assertEquals(SVNURL.parse("svn://localhost/svn"), conf.getSVNURL());
 
     //so should trailing spaces
     conf.setRepositoryUrl("svn://localhost/svn/    ");
     assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
-    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+    assertEquals(SVNURL.parse("svn://localhost/svn"), conf.getSVNURL());
 
     conf.setRepositoryUrl("svn://localhost/svn    ");
     assertEquals("svn://localhost/svn", conf.getRepositoryUrl());
-    assertEquals(SVNURL.parseURIDecoded("svn://localhost/svn"), conf.getSVNURL());
+    assertEquals(SVNURL.parse("svn://localhost/svn"), conf.getSVNURL());
 
   }
 

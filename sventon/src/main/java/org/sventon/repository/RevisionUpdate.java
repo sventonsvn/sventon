@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * A RevisionUpdate object will be created when a repository change has been detected.
- * The object will be communicated to all {@link org.sventon.repository.observer.RevisionObserver}s and contains the
+ * The object will be communicated to all {@link RepositoryChangeListener}s and contains the
  * new revisions including repository information.
  *
  * @author jesper@sventon.org

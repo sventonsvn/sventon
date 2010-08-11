@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.model.RepositoryName;
-import org.sventon.repository.RevisionObservable;
+import org.sventon.repository.RepositoryChangeMonitor;
 
 import java.lang.reflect.Method;
 
@@ -33,24 +33,24 @@ public final class CacheUpdateBeforeAdvice implements MethodBeforeAdvice {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * The Observable. Used to trigger cache updates.
+   * The change monitor. Used to trigger new revision notifications.
    */
-  private RevisionObservable revisionObservable;
+  private RepositoryChangeMonitor repositoryChangeMonitor;
 
   /**
-   * Sets the observable. Needed to trigger cache updates.
+   * Sets the change monitor. Needed to trigger new revision notifications.
    *
-   * @param revisionObservable The observable
+   * @param repositoryChangeMonitor The monitor
    */
   @Autowired
-  public void setRevisionObservable(final RevisionObservable revisionObservable) {
-    this.revisionObservable = revisionObservable;
+  public void setRepositoryChangeMonitor(final RepositoryChangeMonitor repositoryChangeMonitor) {
+    this.repositoryChangeMonitor = repositoryChangeMonitor;
   }
 
   @Override
   public void before(final Method method, final Object[] args, final Object target) throws Throwable {
     final RepositoryName repositoryName = (RepositoryName) args[0];
     logger.debug("Updating cache for repository [" + repositoryName + "] (if needed)");
-    revisionObservable.update(repositoryName, false);
+    repositoryChangeMonitor.update(repositoryName);
   }
 }

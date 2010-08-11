@@ -13,13 +13,13 @@ package org.sventon.web.ctrl;
 
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.mvc.AbstractCommandController;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditor;
@@ -44,7 +44,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   /**
    * The repository factory.
    */
-  protected RepositoryConnectionFactory repositoryConnectionFactory;
+  protected SVNConnectionFactory connectionFactory;
 
   /**
    * Name property editor instance.
@@ -64,7 +64,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   @Override
   protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);
-    binder.registerCustomEditor(SVNRevision.class, revisionEditor);
+    binder.registerCustomEditor(Revision.class, revisionEditor);
     binder.registerCustomEditor(SVNFileRevision.class, svnFileRevisionEditor);
   }
 
@@ -133,12 +133,12 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   }
 
   /**
-   * Sets the repository connection factory instance.
+   * Sets the connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 
 }

@@ -1,18 +1,22 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.expect;
+
 import org.easymock.classextension.EasyMock;
+
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.AnnotatedTextFile;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,7 +39,7 @@ public class BlameControllerTest extends TestCase {
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/test");
     command.setName(new RepositoryName("test"));
-    command.setRevision(SVNRevision.create(12));
+    command.setRevision(Revision.create(12));
 
     final BlameController ctrl = new BlameController(colorer);
     ctrl.setRepositoryService(mockService);

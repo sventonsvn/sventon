@@ -80,7 +80,7 @@
     <property name="svnFileRevisionEditor" ref="svnFileRevisionEditor"/>
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
-    <property name="repositoryConnectionFactory" ref="repositoryConnectionFactory"/>
+    <property name="connectionFactory" ref="connectionFactory"/>
   </bean>
 
   <bean id="abstractTemplateController" class="org.sventon.web.ctrl.template.AbstractTemplateController" parent="abstractBaseController" abstract="true">
@@ -107,7 +107,7 @@
     <property name="viewName" value="ajax/logMessage"/>
   </bean>
 
-  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.RepositoryEntryTrayController" parent="abstractTemplateController">
+  <bean id="entryTrayController" class="org.sventon.web.ctrl.template.DirEntryTrayController" parent="abstractTemplateController">
     <property name="commandClass" value="org.sventon.web.command.MultipleEntriesCommand"/>
     <property name="viewName" value="ajax/entryTray"/>
   </bean>

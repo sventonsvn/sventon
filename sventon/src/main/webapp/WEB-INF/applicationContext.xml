@@ -44,9 +44,9 @@
 
   <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
-  <bean id="nameEditor" class="org.sventon.util.RepositoryNameEditor"/>
-  <bean id="revisionEditor" class="org.sventon.util.RevisionEditor"/>
-  <bean id="svnFileRevisionEditor" class="org.sventon.util.SVNFileRevisionEditor"/>
+  <bean id="nameEditor" class="org.sventon.web.command.editor.RepositoryNameEditor"/>
+  <bean id="revisionEditor" class="org.sventon.web.command.editor.RevisionEditor"/>
+  <bean id="svnFileRevisionEditor" class="org.sventon.web.command.editor.SVNFileRevisionEditor"/>
 
   <bean id="maxRevisionsCount" class="java.lang.Integer">
     <constructor-arg value="10"/>
@@ -62,7 +62,7 @@
 
   <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
 
-  <bean id="repositoryConnectionFactory" class="org.sventon.RepositoryConnectionFactoryImpl">
+  <bean id="connectionFactory" class="org.sventon.SVNKitConnectionFactory">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
@@ -85,7 +85,7 @@
     <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
   </bean>
 
-  <bean id="configAuthorizationFilter" class="org.sventon.appl.ConfigAuthorizationFilter">
+  <bean id="configAuthorizationFilter" class="org.sventon.web.filter.ConfigAuthorizationFilter">
     <constructor-arg ref="application"/>
   </bean>
 
@@ -100,7 +100,7 @@
 
   <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
 
-  <bean id="objectCacheManager" class="org.sventon.appl.ObjectCacheManager">
+  <bean id="objectCacheManager" class="org.sventon.cache.ObjectCacheManager">
     <constructor-arg index="0" ref="configDirectory"/>
     <constructor-arg index="1" value="1000"/>
     <constructor-arg index="2" value="true"/>
@@ -152,7 +152,7 @@
   <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl"/>
 
   <!-- Monitors the repository and polls for changes -->
-  <bean id="revisionObservable" class="org.sventon.repository.RevisionObservableImpl">
+  <bean id="repositoryChangeMonitor" class="org.sventon.repository.RepositoryChangeMonitorImpl">
     <constructor-arg ref="observerList"/>
     <property name="maxRevisionCountPerUpdate" value="100"/>
   </bean>
@@ -173,7 +173,7 @@
   </util:list>
 
   <!-- NOTE: Make sure to change the parameters below! -->
-  <bean id="mailNotifier" class="org.sventon.repository.observer.MailNotifier">
+  <bean id="mailNotifier" class="org.sventon.mail.MailNotifier">
     <property name="application" ref="application"/>
     <property name="baseURL" value="http://yourserver.com/svn/"/>
     <property name="host" value="smtp.yourserver.com"/>
@@ -196,30 +196,30 @@
   </util:list>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="revisionCacheUpdater" class="org.sventon.repository.observer.RevisionCacheUpdater">
+  <bean id="revisionCacheUpdater" class="org.sventon.cache.revisioncache.RevisionCacheUpdater">
     <constructor-arg ref="revisionCacheManager"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="entryCacheUpdater" class="org.sventon.repository.observer.EntryCacheUpdater">
+  <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.DirEntryCacheUpdater">
     <constructor-arg ref="entryCacheManager"/>
     <constructor-arg ref="application"/>
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="logEntryCacheUpdater" class="org.sventon.repository.observer.LogEntryCacheUpdater">
+  <bean id="logEntryCacheUpdater" class="org.sventon.cache.logentrycache.LogEntryCacheUpdater">
     <constructor-arg ref="logEntryCacheManager"/>
   </bean>
 
-  <bean id="revisionCacheManager" class="org.sventon.appl.RevisionCacheManager">
+  <bean id="revisionCacheManager" class="org.sventon.cache.RevisionCacheManager">
     <constructor-arg ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.appl.EntryCacheManager">
+  <bean id="entryCacheManager" class="org.sventon.cache.EntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="logEntryCacheManager" class="org.sventon.appl.LogEntryCacheManager">
+  <bean id="logEntryCacheManager" class="org.sventon.cache.LogEntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 

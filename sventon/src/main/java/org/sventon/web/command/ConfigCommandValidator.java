@@ -16,15 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.*;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * ConfigCommandValidator.
@@ -47,7 +43,7 @@ public final class ConfigCommandValidator implements Validator {
   /**
    * The repository factory.
    */
-  private RepositoryConnectionFactory repositoryConnectionFactory;
+  private SVNConnectionFactory connectionFactory;
 
   /**
    * The application.
@@ -85,13 +81,13 @@ public final class ConfigCommandValidator implements Validator {
   }
 
   /**
-   * Sets the repository connection factory instance.
+   * Sets the connection factory instance.
    *
-   * @param repositoryConnectionFactory Factory instance.
+   * @param connectionFactory Factory instance.
    */
   @Autowired
-  public void setRepositoryConnectionFactory(final RepositoryConnectionFactory repositoryConnectionFactory) {
-    this.repositoryConnectionFactory = repositoryConnectionFactory;
+  public void setConnectionFactory(final SVNConnectionFactory connectionFactory) {
+    this.connectionFactory = connectionFactory;
   }
 
   public void validate(final Object obj, final Errors errors) {
@@ -107,7 +103,7 @@ public final class ConfigCommandValidator implements Validator {
       } else {
         SVNURL url = null;
         try {
-          url = SVNURL.parseURIDecoded(repositoryUrl);
+          url = SVNURL.parse(repositoryUrl);
         } catch (SVNException e) {
           logger.info(e);
           errors.rejectValue("repositoryUrl", "config.error.illegal-url");
@@ -147,17 +143,17 @@ public final class ConfigCommandValidator implements Validator {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName.toString());
     configuration.setRepositoryUrl(repositoryUrl);
 
-    SVNRepository repository = null;
+    SVNConnection connection = null;
     try {
-      repository = repositoryConnectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
+      connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           credentials);
-      repository.testConnection();
-    } catch (SVNException ex) {
+      connection.getDelegate().testConnection();
+    } catch (org.tmatesoft.svn.core.SVNException ex) {
       logger.info(ex);
-      throw ex;
+      throw new SVNException(ex.getMessage());
     } finally {
-      if (repository != null) {
-        repository.closeSession();
+      if (connection != null) {
+        connection.closeSession();
       }
     }
   }

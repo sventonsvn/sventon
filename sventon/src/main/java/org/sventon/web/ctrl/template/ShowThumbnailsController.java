@@ -13,11 +13,11 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +49,7 @@ public final class ShowThumbnailsController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand cmd,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {

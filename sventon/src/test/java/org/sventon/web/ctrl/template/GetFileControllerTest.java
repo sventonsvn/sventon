@@ -7,24 +7,25 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
+import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.appl.ObjectCacheManager;
+import org.sventon.cache.ObjectCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.service.RepositoryServiceImpl;
+import org.sventon.service.SVNKitRepositoryService;
 import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
@@ -65,7 +66,7 @@ public class GetFileControllerTest extends TestCase {
 
     final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
-    ctrl.setRepositoryService(new RepositoryServiceImpl());
+    ctrl.setRepositoryService(new SVNKitRepositoryService());
 
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
     mftm.afterPropertiesSet();
@@ -75,7 +76,7 @@ public class GetFileControllerTest extends TestCase {
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
 
     final MockHttpServletResponse res = new MockHttpServletResponse();
-    modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, request, res, null);
+    modelAndView = ctrl.svnHandle(new SVNKitConnection(new TestRepository()), command, 100, null, request, res, null);
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
@@ -89,12 +90,12 @@ public class GetFileControllerTest extends TestCase {
 
     final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
-    ctrl.setRepositoryService(new RepositoryServiceImpl());
+    ctrl.setRepositoryService(new SVNKitRepositoryService());
 
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, (String) null);
 
     final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-    final ModelAndView modelAndView = ctrl.svnHandle(new TestRepository(), command, 100, null, request, mockResponse, null);
+    final ModelAndView modelAndView = ctrl.svnHandle(new SVNKitConnection(new TestRepository()), command, 100, null, request, mockResponse, null);
 
     assertNull(modelAndView);
 
@@ -131,7 +132,7 @@ public class GetFileControllerTest extends TestCase {
 
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.DISPLAY_TYPE_THUMBNAIL);
 
-    repositoryServiceMock.getFileContents((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
+    repositoryServiceMock.getFileContents((SVNConnection) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
 
     assertEquals(0, response.getContentAsByteArray().length);
@@ -185,7 +186,7 @@ public class GetFileControllerTest extends TestCase {
 
     EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
 
-    repositoryServiceMock.getFileContents((SVNRepository) EasyMock.isNull(), EasyMock.matches(command.getPath()),
+    repositoryServiceMock.getFileContents((SVNConnection) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
 
     assertEquals(0, response.getContentAsByteArray().length);

@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
+import org.sventon.SVNConnection;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.EncodingUtils;
@@ -23,7 +24,6 @@ import org.sventon.util.WebUtils;
 import org.sventon.web.command.MultipleEntriesCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,10 +90,10 @@ public class ExportExecutorImpl implements ExportExecutor {
   }
 
   @Override
-  public UUID submit(final MultipleEntriesCommand command, final SVNRepository repository, final long pegRevision) {
+  public UUID submit(final MultipleEntriesCommand command, final SVNConnection connection, final long pegRevision) {
     final ExportDirectoryImpl exportDirectory = new ExportDirectoryImpl(command.getName(), exportRootDirectory, archiveFileCharset);
     final UUID uuid = exportDirectory.getUUID();
-    executorService.submit(new ExportTask(exportDirectory, repository, Arrays.asList(command.getEntries()), pegRevision));
+    executorService.submit(new ExportTask(exportDirectory, connection, Arrays.asList(command.getEntries()), pegRevision));
     return uuid;
   }
 
@@ -185,14 +185,14 @@ public class ExportExecutorImpl implements ExportExecutor {
   protected class ExportTask implements Callable<Void> {
 
     private final ExportDirectory exportDirectory;
-    private final SVNRepository repository;
+    private final SVNConnection connection;
     private final List<SVNFileRevision> entries;
     private final long pegRevision;
 
-    public ExportTask(final ExportDirectory exportDirectory, final SVNRepository repository,
+    public ExportTask(final ExportDirectory exportDirectory, final SVNConnection connection,
                       final List<SVNFileRevision> entries, final long pegRevision) {
       this.exportDirectory = exportDirectory;
-      this.repository = repository;
+      this.connection = connection;
       this.entries = entries;
       this.pegRevision = pegRevision;
     }
@@ -205,7 +205,7 @@ public class ExportExecutorImpl implements ExportExecutor {
       stopWatch.start();
       try {
         exportDirectory.mkdirs();
-        repositoryService.export(repository, entries, pegRevision, exportDirectory);
+        repositoryService.export(connection, entries, pegRevision, exportDirectory);
         completedExports.put(uuid, exportDirectory.compress());
       } finally {
         stopWatch.stop();

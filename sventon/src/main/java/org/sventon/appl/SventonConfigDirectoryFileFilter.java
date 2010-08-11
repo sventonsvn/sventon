@@ -39,10 +39,10 @@ class SventonConfigDirectoryFileFilter implements FileFilter {
   /**
    * Checks to see if the file is a sventon configuration directory.
    *
-   * @param pathname the File to check
+   * @param path the Path to check
    * @return true if the file is a sventon configuration directory.
    */
-  public boolean accept(final File pathname) {
-    return pathname.isDirectory() && new File(pathname, configurationFilename).exists();
+  public boolean accept(final File path) {
+    return path.isDirectory() && new File(path, configurationFilename).exists();
   }
 }
