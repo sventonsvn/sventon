@@ -1,19 +1,15 @@
 package org.sventon.web.command;
 
 import junit.framework.TestCase;
-import org.sventon.SVNRepositoryStub;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-
-import java.util.Date;
+import org.sventon.model.Revision;
 
 public class BaseCommandTest extends TestCase {
 
   public void testDefaultValues() {
     final BaseCommand command = new BaseCommand();
     assertEquals("/", command.getPath());
-    assertEquals(SVNRevision.HEAD, command.getRevision());
+    assertEquals(Revision.HEAD, command.getRevision());
   }
 
   public void testSetPath() {
@@ -39,55 +35,30 @@ public class BaseCommandTest extends TestCase {
     } catch (IllegalArgumentException e) {
       // expected
     }
-    assertEquals(SVNRevision.HEAD, command.getRevision());
+    assertEquals(Revision.HEAD, command.getRevision());
 
-    command.setRevision(SVNRevision.parse("2"));
-    assertEquals(SVNRevision.create(2), command.getRevision());
+    command.setRevision(Revision.parse("2"));
+    assertEquals(Revision.create(2), command.getRevision());
 
     //Drutten is accepted as a revision here, but not by the BaseCommandValidator
-    command.setRevision(SVNRevision.parse("Drutten"));
-    assertEquals(SVNRevision.UNDEFINED, command.getRevision());
+    command.setRevision(Revision.parse("Drutten"));
+    assertEquals(Revision.UNDEFINED, command.getRevision());
 
     //HEAD in different cases are converted to HEAD
-    command.setRevision(SVNRevision.parse("HEAD"));
-    assertEquals(SVNRevision.HEAD, command.getRevision());
+    command.setRevision(Revision.parse("HEAD"));
+    assertEquals(Revision.HEAD, command.getRevision());
 
-    command.setRevision(SVNRevision.parse("head"));
-    assertEquals(SVNRevision.HEAD, command.getRevision());
+    command.setRevision(Revision.parse("head"));
+    assertEquals(Revision.HEAD, command.getRevision());
 
-    command.setRevision(SVNRevision.parse("HEad"));
-    assertEquals(SVNRevision.HEAD, command.getRevision());
+    command.setRevision(Revision.parse("HEad"));
+    assertEquals(Revision.HEAD, command.getRevision());
   }
 
   public void testGetCompletePath() {
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/src/File.java");
     assertEquals("/trunk/src/File.java", command.getPath());
-  }
-
-  public void testTranslateRevision() throws Exception {
-    final BaseCommand command = new BaseCommand();
-    command.setRevision(SVNRevision.parse("head"));
-    command.translateRevision(100, null);
-    assertEquals(SVNRevision.HEAD, command.getRevision());
-    assertEquals(100, command.getRevisionNumber());
-
-    command.setRevision(SVNRevision.parse(""));
-    command.translateRevision(100, null);
-    assertEquals(SVNRevision.UNDEFINED, command.getRevision());
-    assertEquals(100, command.getRevisionNumber());
-
-    command.setRevision(SVNRevision.parse("123"));
-    command.translateRevision(200, null);
-    assertEquals(SVNRevision.create(123), command.getRevision());
-
-    command.setRevision(SVNRevision.parse("{2007-01-01}"));
-    command.translateRevision(200, new SVNRepositoryStub() {
-      public long getDatedRevision(final Date date) throws SVNException {
-        return 123;
-      }
-    });
-    assertEquals(123, command.getRevisionNumber());
   }
 
   public void testGetParentPath() {

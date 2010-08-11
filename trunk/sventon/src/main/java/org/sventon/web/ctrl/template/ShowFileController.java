@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.ArchiveFile;
 import org.sventon.model.TextFile;
@@ -26,7 +27,6 @@ import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -99,7 +99,7 @@ public final class ShowFileController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -112,7 +112,7 @@ public final class ShowFileController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     final SVNProperties fileProperties = getRepositoryService().getFileProperties(
-        repository, command.getPath(), command.getRevisionNumber());
+        connection, command.getPath(), command.getRevisionNumber());
 
     final String charset = userRepositoryContext.getCharset();
     logger.debug("Using charset encoding: " + charset);
@@ -126,7 +126,7 @@ public final class ShowFileController extends AbstractTemplateController {
     } else if (isArchiveFileExtension(command)) {
       if (archivedEntry == null) {
         logger.debug("File identified as an archive file");
-        getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
+        getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), outStream);
         final ArchiveFile archiveFile = new ArchiveFile(outStream.toByteArray());
         model.put("entries", archiveFile.getEntries());
         modelAndView = new ModelAndView("showArchiveFile", model);
@@ -137,11 +137,11 @@ public final class ShowFileController extends AbstractTemplateController {
         logger.debug("Detected content-type: " + contentType);
 
         if (contentType != null && contentType.startsWith("text") || forceDisplay) {
-          getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
+          getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), outStream);
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + command.getPath() + "]");
           final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
           final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
-              archivedEntry, charset, colorer, fileProperties, repository.getLocation().toDecodedString());
+              archivedEntry, charset, colorer, fileProperties, connection.getURL());
           model.put("file", textFile);
           modelAndView = new ModelAndView("showTextFile", model);
         } else {
@@ -152,11 +152,11 @@ public final class ShowFileController extends AbstractTemplateController {
       logger.debug("File identified as a binary file");
       modelAndView = new ModelAndView("showBinaryFile", model);
     } else if (isTextFileExtension(command) || isTextMimeType(fileProperties)) {
-      getRepositoryService().getFileContents(repository, command.getPath(), command.getRevisionNumber(), outStream);
+      getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
-            repository.getLocation().toDecodedString() + command.getPath());
+            connection.getURL() + command.getPath());
         final String content = keywordHandler.substitute(outStream.toString(charset), charset);
         response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
             "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
@@ -165,7 +165,7 @@ public final class ShowFileController extends AbstractTemplateController {
         return null;
       } else {
         final TextFile textFile = new TextFile(outStream.toString(charset), command.getPath(), charset,
-            colorer, fileProperties, repository.getLocation().toDecodedString());
+            colorer, fileProperties, connection.getURL());
         model.put("file", textFile);
       }
       modelAndView = new ModelAndView("showTextFile", model);

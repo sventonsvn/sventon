@@ -1,7 +1,13 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
+
+import static org.easymock.EasyMock.expect;
+
 import org.easymock.classextension.EasyMock;
+
+import static org.easymock.classextension.EasyMock.*;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
@@ -10,11 +16,12 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.RepositoryEntry;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.util.Map;
 
@@ -30,7 +37,7 @@ public class GoToControllerTest extends TestCase {
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
     command.setPath("/file.txt");
-    command.setRevision(SVNRevision.create(12));
+    command.setRevision(Revision.create(12));
 
     final GoToController ctrl = new GoToController();
 
@@ -47,7 +54,7 @@ public class GoToControllerTest extends TestCase {
     ctrl.setRepositoryService(mockService);
 
     // Test NodeKind.FILE
-    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(SVNNodeKind.FILE);
+    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(RepositoryEntry.Kind.FILE);
     replay(mockService);
 
     ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, mockRequest, null, null);
@@ -62,7 +69,7 @@ public class GoToControllerTest extends TestCase {
     command.setPath("/dir");
 
     // Test NodeKind.DIR
-    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(SVNNodeKind.DIR);
+    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(RepositoryEntry.Kind.DIR);
     replay(mockService);
 
     modelAndView = ctrl.svnHandle(null, command, 100, null, mockRequest, null, null);
@@ -76,7 +83,7 @@ public class GoToControllerTest extends TestCase {
     reset(mockService);
 
     // Test NodeKind.UNKNOWN
-    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(SVNNodeKind.UNKNOWN);
+    expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(RepositoryEntry.Kind.UNKNOWN);
     replay(mockService);
 
     final BindException errors = new BindException(command, "test");

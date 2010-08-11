@@ -13,12 +13,12 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ import java.util.Map;
 public final class GetLogMessageController extends AbstractTemplateController {
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
@@ -42,8 +42,8 @@ public final class GetLogMessageController extends AbstractTemplateController {
     LogEntry logEntry = null;
     try {
       logger.debug("Getting log message from revision [" + command.getRevisionNumber() + "]");
-      final SVNLogEntry svnLogEntry = getRepositoryService().getRevision(
-          command.getName(), repository, command.getRevisionNumber());
+      final SVNLogEntry svnLogEntry = getRepositoryService().getLogEntry(
+          command.getName(), connection, command.getRevisionNumber());
       logEntry = new LogEntry(svnLogEntry); //TODO: Parse to apply Bugtraq link
     } catch (SVNException svnex) {
       logger.error(svnex.getMessage());

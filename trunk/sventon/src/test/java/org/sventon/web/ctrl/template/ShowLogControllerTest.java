@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.sventon.model.Revision;
 
 public class ShowLogControllerTest extends TestCase {
 
@@ -13,7 +13,7 @@ public class ShowLogControllerTest extends TestCase {
   }
 
   public void testCalculateFromRevision() throws Exception {
-    assertEquals(2, controller.calculateFromRevision(2, SVNRevision.HEAD));
-    assertEquals(1, controller.calculateFromRevision(2, SVNRevision.create(1)));
+    assertEquals(2, controller.calculateFromRevision(2, Revision.HEAD));
+    assertEquals(1, controller.calculateFromRevision(2, Revision.create(1)));
   }
 }

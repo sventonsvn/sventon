@@ -20,13 +20,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 /**
  * BaseCommand.
@@ -60,7 +58,7 @@ public class BaseCommand {
   /**
    * The revision.
    */
-  private SVNRevision revision = SVNRevision.HEAD;
+  private Revision revision = Revision.HEAD;
 
   /**
    * The revision number.
@@ -75,12 +73,12 @@ public class BaseCommand {
   /**
    * The sort type.
    */
-  private RepositoryEntryComparator.SortType sortType;
+  private DirEntryComparator.SortType sortType;
 
   /**
    * Sort mode.
    */
-  private RepositoryEntrySorter.SortMode sortMode;
+  private DirEntrySorter.SortMode sortMode;
 
   /**
    * Logger for this class and sub classes.
@@ -117,7 +115,7 @@ public class BaseCommand {
   /**
    * @return Returns the revision.
    */
-  public SVNRevision getRevision() {
+  public Revision getRevision() {
     return revision;
   }
 
@@ -130,7 +128,7 @@ public class BaseCommand {
    *
    * @param revision The revision to set.
    */
-  public void setRevision(final SVNRevision revision) {
+  public void setRevision(final Revision revision) {
     Validate.notNull(revision);
     this.revision = revision;
     this.revisionNumber = revision.getNumber();
@@ -161,7 +159,7 @@ public class BaseCommand {
    * @return Revision number.
    */
   public long getRevisionNumber() {
-    return revision.getNumber() < 0 ? revisionNumber : revision.getNumber();
+    return revision.getNumber();
   }
 
   /**
@@ -222,7 +220,7 @@ public class BaseCommand {
    *
    * @return Sort type
    */
-  public RepositoryEntryComparator.SortType getSortType() {
+  public DirEntryComparator.SortType getSortType() {
     return sortType;
   }
 
@@ -231,7 +229,7 @@ public class BaseCommand {
    *
    * @param sortType Sort type
    */
-  public void setSortType(final RepositoryEntryComparator.SortType sortType) {
+  public void setSortType(final DirEntryComparator.SortType sortType) {
     if (sortType != null) {
       this.sortType = sortType;
     }
@@ -242,7 +240,7 @@ public class BaseCommand {
    *
    * @return Sort mode
    */
-  public RepositoryEntrySorter.SortMode getSortMode() {
+  public DirEntrySorter.SortMode getSortMode() {
     return sortMode;
   }
 
@@ -251,7 +249,7 @@ public class BaseCommand {
    *
    * @param sortMode Sort mode
    */
-  public void setSortMode(final RepositoryEntrySorter.SortMode sortMode) {
+  public void setSortMode(final DirEntrySorter.SortMode sortMode) {
     if (sortMode != null) {
       this.sortMode = sortMode;
     }
@@ -283,31 +281,6 @@ public class BaseCommand {
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
-  }
-
-  /**
-   * Translates the revision and the peg revision into a number, if needed.
-   * <p/>
-   * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
-   * by getting the closest revision number before or at the specified date stamp.
-   *
-   * @param headRevision The current HEAD revision.
-   * @param repository   Repository instance.
-   * @return The revision number.
-   * @throws SVNException if unable to communicate with repository.
-   */
-  public long translateRevision(long headRevision, final SVNRepository repository) throws SVNException {
-    if (revision.getNumber() < 0 && revisionNumber < 0) {
-      if (SVNRevision.HEAD.equals(revision)) {
-        revisionNumber = headRevision;
-      } else if (revision.getNumber() == -1 && revision.getDate() != null) {
-        revisionNumber = repository.getDatedRevision(revision.getDate());
-      } else {
-        logger.warn("Unexpected revision: " + revision);
-        revisionNumber = headRevision;
-      }
-    }
-    return revisionNumber;
   }
 
   /**

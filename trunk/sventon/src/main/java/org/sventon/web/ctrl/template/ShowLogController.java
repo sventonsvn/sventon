@@ -15,12 +15,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.SVNConnection;
 import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.RepositoryEntry;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.*;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,13 +53,13 @@ public final class ShowLogController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
     final String nextPath = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
-    final SVNRevision nextRevision = SVNRevision.parse(ServletRequestUtils.getStringParameter(
+    final Revision nextRevision = Revision.parse(ServletRequestUtils.getStringParameter(
         request, "nextRevision", command.getRevision().toString()));
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
@@ -66,8 +67,8 @@ public final class ShowLogController extends AbstractTemplateController {
     final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
 
     try {
-      final List<SVNLogEntry> logEntries = getRepositoryService().getRevisions(command.getName(), repository,
-          fromRevision, FIRST_REVISION, nextPath, pageSize, stopOnCopy);
+      final List<SVNLogEntry> logEntries = getRepositoryService().getLogEntries(command.getName(), connection,
+          fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy);
 
       String pathAtRevision = nextPath;
 
@@ -102,20 +103,20 @@ public final class ShowLogController extends AbstractTemplateController {
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
-
+    final RepositoryEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
     model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntryWrappers);
     model.put("pageSize", pageSize);
-    model.put("isFile", getRepositoryService().getNodeKind(repository, command.getPath(), command.getRevisionNumber()) == SVNNodeKind.FILE);
+    model.put("isFile", nodeKind == RepositoryEntry.Kind.FILE);
     model.put("morePages", logEntryWrappers.size() == pageSize);
     model.put("nextPath", nextPath);
     model.put("nextRevision", fromRevision);
     return new ModelAndView(getViewName(), model);
   }
 
-  protected long calculateFromRevision(long headRevision, SVNRevision nextRevision) {
+  protected long calculateFromRevision(long headRevision, Revision nextRevision) {
     final long fromRevision;
-    if (SVNRevision.HEAD.equals(nextRevision)) {
+    if (Revision.HEAD.equals(nextRevision)) {
       fromRevision = headRevision;
     } else {
       fromRevision = nextRevision.getNumber();

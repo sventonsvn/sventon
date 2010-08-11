@@ -35,7 +35,7 @@
       <td/>
     </tr>
     <c:set var="rowCount" value="0"/>
-    <c:forEach var="peggedEntry" items="${userRepositoryContext.repositoryEntryTray.unmodifiableEntries}">
+    <c:forEach var="peggedEntry" items="${userRepositoryContext.dirEntryTray.unmodifiableEntries}">
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="org.sventon.model.RepositoryEntry"/>
       

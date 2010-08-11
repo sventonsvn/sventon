@@ -15,10 +15,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.SVNException;
+import org.sventon.SVNURL;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.Properties;
  * Sventon application configuration class holding configuration parameters
  * and repository connection information for a single configured repositories.
  *
- * @author patrikfr@user.berlios.de
+ * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
 public final class RepositoryConfiguration {
@@ -294,7 +294,7 @@ public final class RepositoryConfiguration {
     this.repositoryUrl = repositoryUrl;
 
     try {
-      svnUrl = SVNURL.parseURIDecoded(this.repositoryUrl);
+      svnUrl = SVNURL.parse(this.repositoryUrl);
     } catch (final SVNException ex) {
       logger.warn("Unable to parse URL [" + repositoryUrl + "]", ex);
     }

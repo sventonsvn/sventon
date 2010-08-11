@@ -19,10 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.CacheManager;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -83,6 +81,9 @@ public final class Application {
 
   private final List<CacheManager> cacheManagers = new ArrayList<CacheManager>();
 
+  /**
+   * Map of update markers.
+   */
   private final ConcurrentLinkedQueue<RepositoryName> updating = new ConcurrentLinkedQueue<RepositoryName>();
 
   /**
@@ -109,7 +110,7 @@ public final class Application {
    */
   @PostConstruct
   public void init() throws IOException, CacheException {
-    initSvnSupport();
+    logger.info("Initializing sventon version " + Version.getVersion());
 
     final File[] configDirectories = getConfigDirectories();
     if (configDirectories.length > 0) {
@@ -287,16 +288,6 @@ public final class Application {
       throw new IllegalStateException("Configuration file name has not been set!");
     }
     return configurationFileName;
-  }
-
-  /**
-   * Initializes the logger and the SVNKit library.
-   */
-  private void initSvnSupport() {
-    logger.info("Initializing sventon version " + Version.getVersion());
-    SVNRepositoryFactoryImpl.setup();
-    DAVRepositoryFactory.setup();
-    FSRepositoryFactory.setup();
   }
 
   /**

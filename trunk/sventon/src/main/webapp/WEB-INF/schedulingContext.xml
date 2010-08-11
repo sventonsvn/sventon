@@ -22,20 +22,20 @@
         <property name="waitForJobsToCompleteOnShutdown" value="true"/>
         <property name="triggers">
             <list>
-                <ref local="cacheUpdateTrigger"/>
+                <ref local="repositoryChangeMonitorUpdateTrigger"/>
                 <ref local="tempFileCleanerTrigger"/>
             </list>
         </property>
     </bean>
 
-    <bean id="cacheUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-        <property name="jobDetail" ref="cacheUpdateJobDetail"/>
+    <bean id="repositoryChangeMonitorUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="repositoryChangeMonitorUpdateJobDetail"/>
         <property name="startDelay" value="0"/>
         <property name="repeatInterval" value="600000"/>
     </bean>
 
-    <bean id="cacheUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="revisionObservable"/>
+    <bean id="repositoryChangeMonitorUpdateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="repositoryChangeMonitor"/>
         <property name="targetMethod" value="updateAll"/>
     </bean>
 

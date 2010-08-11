@@ -2,7 +2,7 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.sventon.diff.DiffException;
-import org.sventon.util.SVNFileRevisionEditor;
+import org.sventon.web.command.editor.SVNFileRevisionEditor;
 
 public class DiffCommandTest extends TestCase {
 

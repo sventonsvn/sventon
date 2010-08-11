@@ -4,17 +4,15 @@ import junit.framework.TestCase;
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.RepositoryConnectionFactory;
+import org.sventon.SVNConnectionFactory;
+import org.sventon.SVNConnection;
+import org.sventon.SVNException;
+import org.sventon.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.Credentials;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.RepositoryEntryComparator;
-import org.sventon.util.RepositoryEntrySorter;
+import org.sventon.model.*;
+import org.sventon.model.DirEntryComparator;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +30,8 @@ public class AbstractTemplateControllerTest extends TestCase {
     assertEquals("ASC", userRepositoryContext.getSortMode().toString());
     assertEquals("FULL_NAME", userRepositoryContext.getSortType().toString());
 
-    command.setSortType(RepositoryEntryComparator.SortType.SIZE);
-    command.setSortMode(RepositoryEntrySorter.SortMode.DESC);
+    command.setSortType(DirEntryComparator.SortType.SIZE);
+    command.setSortMode(DirEntrySorter.SortMode.DESC);
 
     ctrl.parseAndUpdateSortParameters(command, userRepositoryContext);
     assertEquals("DESC", userRepositoryContext.getSortMode().toString());
@@ -44,8 +42,8 @@ public class AbstractTemplateControllerTest extends TestCase {
     final AbstractTemplateController ctrl = new TestController();
     final MutableBoolean usingSharedAuthSettings = new MutableBoolean(false);
 
-    ctrl.setRepositoryConnectionFactory(new RepositoryConnectionFactory() {
-      public SVNRepository createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
+    ctrl.setConnectionFactory(new SVNConnectionFactory() {
+      public SVNConnection createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SVNException {
         if ("shared".equals(credentials.getUserName())) {
           usingSharedAuthSettings.setValue(true);
         } else if ("user".equals(credentials.getUserName())) {
@@ -75,7 +73,7 @@ public class AbstractTemplateControllerTest extends TestCase {
   }
 
   private static class TestController extends AbstractTemplateController {
-    protected ModelAndView svnHandle(final SVNRepository repository, final BaseCommand command,
+    protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                      final long headRevision, final UserRepositoryContext userRepositoryContext,
                                      final HttpServletRequest request, final HttpServletResponse response,
                                      final BindException exception) throws Exception {
