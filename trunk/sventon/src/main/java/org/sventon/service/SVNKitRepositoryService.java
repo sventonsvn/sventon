@@ -17,6 +17,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
+import org.sventon.SVNDiffStatus;
+import org.sventon.SVNStatusType;
+import org.sventon.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
@@ -24,28 +27,11 @@ import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNDepth;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNErrorMessage;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLock;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
-//import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.wc.ISVNAnnotateHandler;
-import org.tmatesoft.svn.core.wc.ISVNDiffStatusHandler;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNDiffClient;
-import org.tmatesoft.svn.core.wc.SVNLogClient;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-
-
+import org.tmatesoft.svn.core.wc.*;
 
 import java.io.*;
 import java.util.*;
@@ -73,7 +59,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final List<SVNLogEntry> getLogEntriesFromRepository(final SVNConnection connection, final long fromRevision,
-                                                            final long toRevision) throws SVNException {
+                                                             final long toRevision) throws SVNException {
 
     final SVNRepository repository = connection.getDelegate();
     final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
@@ -87,8 +73,8 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
-                                        final long fromRevision, final long toRevision, final String path,
-                                        final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
+                                         final long fromRevision, final long toRevision, final String path,
+                                         final long limit, final boolean stopOnCopy) throws SVNException, SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
     final SVNRepository repository = connection.getDelegate();
@@ -103,21 +89,27 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
-                           final ExportDirectory exportDirectory) throws SVNException {
+                           final ExportDirectory exportDirectory) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
     for (final SVNFileRevision fileRevision : targets) {
-      logger.debug("Exporting file [" + fileRevision.getPath() + "] revision [" + fileRevision.getRevision() + "]");
-      final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(fileRevision.getRevision()));
+      final String path = fileRevision.getPath();
+      final long revision = fileRevision.getRevision();
+      final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
+      logger.debug("Exporting file [" + path + "] revision [" + revision + "]");
       if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
         throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
       }
 
-      final File entryToExport = new File(revisionRootDir, fileRevision.getPath());
-      SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
-          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + fileRevision.getPath()), entryToExport,
-          SVNRevision.create(pegRevision), SVNRevision.create(fileRevision.getRevision()), null, true, SVNDepth.INFINITY);
+      try {
+        final File entryToExport = new File(revisionRootDir, path);
+        SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
+            org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), entryToExport,
+            SVNRevision.create(pegRevision), SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
+      } catch (SVNException e) {
+        throw new SventonException("Error exporting [" + path + "@" + revision + "]: " + e.getMessage());
+      }
     }
   }
 
@@ -195,7 +187,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   @SuppressWarnings({"unchecked"})
   @Override
   public final List<DirEntry> list(final SVNConnection connection, final String path, final long revision,
-                                          final SVNProperties properties) throws SVNException {
+                                   final SVNProperties properties) throws SVNException {
     final SVNRepository repository = connection.getDelegate();
     final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
     return DirEntry.createEntryCollection(entries, path);
