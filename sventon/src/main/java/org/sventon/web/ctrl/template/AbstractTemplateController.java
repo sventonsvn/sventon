@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import org.sventon.AuthenticationException;
 import org.sventon.SVNConnection;
 import org.sventon.SVNURL;
 import org.sventon.SventonException;
@@ -24,7 +25,6 @@ import org.sventon.diff.DiffException;
 import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
-import org.tmatesoft.svn.core.SVNAuthenticationException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -201,8 +201,8 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
         modelAndView.addAllObjects(model);
       }
       return modelAndView;
-    } catch (SVNAuthenticationException svnae) {
-      logger.debug(svnae.getMessage());
+    } catch (AuthenticationException ae) {
+      logger.debug(ae.getMessage());
       return prepareAuthenticationRequiredView(request);
     } catch (DiffException ex) {
       logger.warn(ex.getMessage());
@@ -247,7 +247,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * @param configuration     Configuration
    * @param repositoryContext Context
    * @return Connection
-   * @throws SVNException if a subversion error occur.
+   * @throws SventonException if a subversion error occur.
    */
   protected SVNConnection createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SventonException {
     final SVNConnection connection;

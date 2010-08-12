@@ -57,7 +57,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
           true, false).iterator().next();
     } catch (SVNException ex) {
-      throw new SventonException("Error getting log entry: ", ex);
+      return translateSVNException("Error getting log entry: ", ex);
     }
   }
 
@@ -74,7 +74,7 @@ public class SVNKitRepositoryService implements RepositoryService {
         }
       });
     } catch (SVNException ex) {
-      throw new SventonException("Unable to get logs", ex);
+      return translateSVNException("Unable to get logs", ex);
     }
     return revisions;
   }
@@ -94,7 +94,7 @@ public class SVNKitRepositoryService implements RepositoryService {
         }
       });
     } catch (SVNException ex) {
-      throw new SventonException("Unable to get logs", ex);
+      return translateSVNException("Unable to get logs", ex);
     }
     return logEntries;
   }
@@ -120,7 +120,7 @@ public class SVNKitRepositoryService implements RepositoryService {
             org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), entryToExport,
             SVNRevision.create(pegRevision), SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
       } catch (SVNException ex) {
-        throw new SventonException("Error exporting [" + path + "@" + revision + "]", ex);
+        translateSVNException("Error exporting [" + path + "@" + revision + "]", ex);
       }
     }
   }
@@ -140,7 +140,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       repository.getFile(path, revision, null, output);
     } catch (SVNException ex) {
-      throw new SventonException("Cannot get contents of file [" + path + "@" + revision + "]", ex);
+      translateSVNException("Cannot get contents of file [" + path + "@" + revision + "]", ex);
     }
   }
 
@@ -152,7 +152,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       repository.getFile(path, revision, props, null);
     } catch (SVNException e) {
-      throw new SventonException("Could not get file properties for " + path + " at revision " + revision, e);
+      return translateSVNException("Could not get file properties for " + path + " at revision " + revision, e);
     }
 
     final Properties properties = new Properties();
@@ -176,12 +176,12 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final long getLatestRevision(final SVNConnection connection) throws SventonException {
+  public final Long getLatestRevision(final SVNConnection connection) throws SventonException {
     final SVNRepository repository = connection.getDelegate();
     try {
       return repository.getLatestRevision();
-    } catch (SVNException e) {
-      throw new SventonException("Cannot get latest revision");
+    } catch (SVNException ex) {
+      return translateSVNException("Cannot get latest revision", ex);
     }
   }
 
@@ -193,11 +193,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       final SVNNodeKind nodeKind = repository.checkPath(path, revision);
       return DirEntry.Kind.valueOf(nodeKind.toString().toUpperCase());
     } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        throw new NoSuchRevisionException("Unable to get node kind for: " + path + "@" + revision);
-      } else {
-        throw new SventonException("Unable to get node kind for: " + path + "@" + revision, svnex);
-      }
+      return translateSVNException("Unable to get node kind for: " + path + "@" + revision, svnex);
     }
   }
 
@@ -232,7 +228,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       entries = repository.getDir(path, revision, properties, (Collection) null);
     } catch (SVNException ex) {
-      throw new SventonException("Could not get directory listing from [" + path + "@" + revision + "]", ex);
+      return translateSVNException("Could not get directory listing from [" + path + "@" + revision + "]", ex);
     }
     return DirEntry.createDirectoryList(entries, path, properties);
   }
@@ -246,7 +242,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       final SVNRepository repository = connection.getDelegate();
       dirEntry = repository.info(path, revision);
     } catch (SVNException ex) {
-      throw new SventonException("Cannot get info for [" + path + "@" + revision + "]", ex);
+      return translateSVNException("Cannot get info for [" + path + "@" + revision + "]", ex);
     }
 
     if (dirEntry != null) {
@@ -269,7 +265,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       svnFileRevisions = (List<SVNFileRevision>) repository.getFileRevisions(
           path, null, 0, revision);
     } catch (SVNException ex) {
-      throw new SventonException("Cannot get file revisions for [" + path + "@" + "]", ex);
+      return translateSVNException("Cannot get file revisions for [" + path + "@" + "]", ex);
     }
 
     if (logger.isDebugEnabled()) {
@@ -467,7 +463,7 @@ public class SVNKitRepositoryService implements RepositoryService {
             }
           });
     } catch (SVNException e) {
-      throw new SventonException("Could not calculate diff for " + command.toString(), e);
+      return translateSVNException("Could not calculate diff for " + command.toString(), e);
     }
     return result;
   }
@@ -505,7 +501,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
       return annotatedTextFile;
     } catch (SVNException ex) {
-      throw new SventonException("Error blaming [" + path + "@" + revision + "]", ex);
+      return translateSVNException("Error blaming [" + path + "@" + revision + "]", ex);
     }
   }
 
@@ -536,7 +532,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException {
+  public Long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException {
     final long revisionNumber = revision.getNumber();
 
     try {
@@ -552,7 +548,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
       return revisionNumber;
     } catch (SVNException ex) {
-      throw new SventonException("Unable to translate revision: " + revision, ex);
+      return translateSVNException("Unable to translate revision: " + revision, ex);
     }
   }
 
@@ -587,6 +583,18 @@ public class SVNKitRepositoryService implements RepositoryService {
       throw new IllegalFileFormatException("Cannot diff binary file: " + command.getFromPath());
     } else if (!isRightFileTextType) {
       throw new IllegalFileFormatException("Cannot diff binary file: " + command.getToPath());
+    }
+  }
+
+  private <T extends Object> T translateSVNException(String errorMessage, SVNException exception) throws SventonException {
+    if (exception instanceof SVNAuthenticationException) {
+      throw new AuthenticationException(exception.getMessage(), exception);
+    } else {
+      if (SVNErrorCode.FS_NO_SUCH_REVISION == exception.getErrorMessage().getErrorCode()) {
+        throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
+      } else {
+        throw new SventonException(errorMessage);
+      }
     }
   }
 
