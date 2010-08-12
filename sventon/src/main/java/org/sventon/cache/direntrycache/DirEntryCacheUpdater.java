@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
+import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
@@ -216,6 +217,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
           revision, entryCache, flushAfterUpdate);
     } catch (SVNException svnex) {
       LOGGER.error("Unable to populate cache", svnex);
+    } catch (SventonException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
   }
 
@@ -325,7 +328,11 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       // Directory node added
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       // Add directory contents
-      addDirectories(entriesToAdd, connection, logEntryPath.getPath() + "/", revision, repositoryService);
+      try {
+        addDirectories(entriesToAdd, connection, logEntryPath.getPath() + "/", revision, repositoryService);
+      } catch (SventonException e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      }
     }
     entriesToAdd.add(entry);
   }
@@ -342,9 +349,10 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @throws SVNException if a Subversion error occurs.
    */
   private void addDirectories(final EntriesToAdd entriesToAdd, final SVNConnection connection, final String path,
-                              final long revision, final RepositoryService repositoryService) throws SVNException {
+                              final long revision, final RepositoryService repositoryService) throws SventonException {
 
-    final List<DirEntry> entriesList = repositoryService.list(connection, path, revision, null);
+    final List<DirEntry> entriesList = repositoryService.list(connection, path, revision).getEntries();
+
     for (final DirEntry entry : entriesList) {
       entriesToAdd.add(entry);
       if (entry.getKind() == DirEntry.Kind.DIR) {

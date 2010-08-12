@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.model.DirEntry;
+import org.sventon.model.DirList;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNProperties;
@@ -46,14 +47,14 @@ public class ListDirectoryContentsController extends AbstractTemplateController 
                                    final BindException exception) throws Exception {
 
     logger.debug("Getting directory contents for: " + command.getPath());
-    final SVNProperties properties = new SVNProperties();
-    final List<DirEntry> entries = getRepositoryService().list(
-        connection, command.getPathWithTrailingSlash(), command.getRevisionNumber(), properties);
+    final DirList dirList = getRepositoryService().list(
+        connection, command.getPathWithTrailingSlash(), command.getRevisionNumber());
+    final List<DirEntry> entries = dirList.getEntries();
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Directory entries: " + entries.size());
     model.put("svndir", entries);
-    model.put("properties", properties);
+    model.put("properties", dirList.getProperties());
     final ModelAndView modelAndView = new ModelAndView();
     modelAndView.addAllObjects(model);
     return modelAndView;

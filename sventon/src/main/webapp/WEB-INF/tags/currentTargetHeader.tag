@@ -15,13 +15,15 @@
 <%@ tag import="org.tmatesoft.svn.core.SVNPropertyValue" %>
 <%@ tag import="org.sventon.util.WebUtils" %>
 <%@ tag import="java.util.Iterator" %>
+<%@ tag import="org.sventon.model.PropertyValue" %>
+<%@ tag import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ attribute name="title" required="true" type="java.lang.String" %>
 <%@ attribute name="target" required="true" type="java.lang.String" %>
-<%@ attribute name="properties" required="true" type="org.tmatesoft.svn.core.SVNProperties" %>
+<%@ attribute name="properties" required="true" type="org.sventon.model.Properties" %>
 
 <div id="sventonHeaderDiv">
   <table class="sventonHeader">
@@ -44,21 +46,21 @@
 <c:if test="${properties ne null}">
   <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
     <br>
-      <table class="sventonPropertiesTable">
-        <c:set var="properties" value="${properties}"/>
-        <jsp:useBean id="properties" type="org.tmatesoft.svn.core.SVNProperties" />
-        <%
-          for (Iterator it = properties.nameSet().iterator(); it.hasNext();) {
-            final String name = (String) it.next();
-            final SVNPropertyValue value = properties.getSVNPropertyValue(name);
-        %>
+    <table class="sventonPropertiesTable">
+      <c:set var="properties" value="${properties}"/>
+      <jsp:useBean id="properties" type="org.sventon.model.Properties" />
+      <%
+        for (Map.Entry<String, PropertyValue> entry : properties.entrySet()) {
+          final String name = entry.getKey();
+          final PropertyValue value = entry.getValue();
+      %>
           <tr>
             <td valign="top"><b><%=name%>:&nbsp;</b></td>
-            <td><%=WebUtils.nl2br(value.getString())%></td>
+            <td><%=WebUtils.nl2br(value.getValue())%></td>
           </tr>
-        <%
-          }
-        %>
-      </table>
+      <%
+        }
+      %>
+    </table>
   </div>
 </c:if>

@@ -171,12 +171,11 @@ public interface RepositoryService {
    * @param connection The repository connection
    * @param path       The entry path
    * @param revision   The revision
-   * @param properties The entry properties
    * @return List of entries
    * @throws SVNException if a subversion error occur
    */
-  List<DirEntry> list(final SVNConnection connection, final String path, final long revision,
-                      final SVNProperties properties) throws SVNException;
+  DirList list(final SVNConnection connection, final String path, final long revision
+  ) throws SventonException;
 
   /**
    * Gets entry info from the subversion repository.

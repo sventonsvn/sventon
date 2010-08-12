@@ -197,11 +197,17 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @SuppressWarnings({"unchecked"})
   @Override
-  public final List<DirEntry> list(final SVNConnection connection, final String path, final long revision,
-                                   final SVNProperties properties) throws SVNException {
+  public final DirList list(final SVNConnection connection, final String path, final long revision
+  ) throws SventonException {
     final SVNRepository repository = connection.getDelegate();
-    final Collection<SVNDirEntry> entries = repository.getDir(path, revision, properties, (Collection) null);
-    return DirEntry.createEntryCollection(entries, path);
+    SVNProperties properties = new SVNProperties();
+    final Collection<SVNDirEntry> entries;
+    try {
+      entries = repository.getDir(path, revision, properties, (Collection) null);
+    } catch (SVNException e) {
+      throw new SventonException("Could not get directory listing from " + path + " at revision " + revision, e);
+    }
+    return DirEntry.createDirectoryList(entries, path, properties);
   }
 
   @Override
