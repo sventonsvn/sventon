@@ -8,7 +8,7 @@ public enum Property {
   CHECKSUM(Property.SVN_ENTRY_PREFIX + "checksum"),
   COMMITTED_DATE(Property.SVN_ENTRY_PREFIX + "committed-date"),
   COMMITTED_REVISION(Property.SVN_ENTRY_PREFIX + "committed-rev"),
-  LAST_AUTHOR(Property.SVN_ENTRY_PREFIX + "last_author"),
+  LAST_AUTHOR(Property.SVN_ENTRY_PREFIX + "last-author"),
 
   REVISION(Property.SVN_ENTRY_PREFIX + "revision"),
   HAS_PROPS(Property.SVN_ENTRY_PREFIX + "has-props"),
