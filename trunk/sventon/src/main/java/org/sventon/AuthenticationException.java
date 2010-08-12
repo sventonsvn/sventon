@@ -12,16 +12,19 @@
 package org.sventon;
 
 /**
- * SVNAuthenticationException.
+ * AuthenticationException.
+ *
+ * @author jesper@sventon.org
  */
-public class SVNAuthenticationException extends SventonException {
+public class AuthenticationException extends SventonException {
 
   /**
    * Constructor.
    *
    * @param message Exception message.
    */
-  public SVNAuthenticationException(String message) {
+  public AuthenticationException(String message) {
     super(message);
   }
+
 }

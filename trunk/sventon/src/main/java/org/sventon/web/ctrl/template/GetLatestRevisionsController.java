@@ -13,13 +13,13 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,24 +54,14 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
       //TODO: Parse to apply Bugtraq links
       revisions.addAll(LogEntryWrapper.convert(logEntries));
       logger.debug("Got [" + revisions.size() + "] revisions");
-    } catch (SVNException svnex) {
-      model.put("errorMessage", translateToString(svnex));
+    } catch (NoSuchRevisionException nsre) {
+      logger.info(nsre.getMessage());
+      model.put("errorMessage", "There are no commits in this repository yet.");
+    } catch (SventonException svnex) {
+      logger.error(svnex.getMessage());
+      model.put("errorMessage", svnex.getMessage());
     }
     model.put("revisions", revisions);
     return new ModelAndView(getViewName(), model);
-  }
-
-  private String translateToString(SVNException svnex) {
-    if (isRepositoryEmpty(svnex)) {
-      logger.info(svnex.getMessage());
-      return "There are no commits in this repository yet.";
-    } else {
-      logger.error(svnex.getMessage());
-      return svnex.getMessage();
-    }
-  }
-
-  private boolean isRepositoryEmpty(SVNException svnex) {
-    return SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode();
   }
 }

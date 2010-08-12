@@ -15,9 +15,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,8 +58,8 @@ public final class GetFileHistoryController extends AbstractTemplateController {
 
       fileRevisions.addAll(revisions);
       Collections.reverse(fileRevisions);
-    } catch (SVNException svnex) {
-      logger.error(svnex.getMessage());
+    } catch (SventonException ex) {
+      logger.error(ex.getMessage());
     }
 
     model.put("currentRevision", command.getRevisionNumber());

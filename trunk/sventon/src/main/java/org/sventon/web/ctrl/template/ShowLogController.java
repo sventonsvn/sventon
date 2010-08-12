@@ -15,13 +15,16 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.model.DirEntry;
 import org.sventon.model.LogEntryWrapper;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.*;
+import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -94,12 +97,10 @@ public final class ShowLogController extends AbstractTemplateController {
           }
         }
       }
-    } catch (SVNException svnex) {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == svnex.getErrorMessage().getErrorCode()) {
-        logger.info(svnex.getMessage());
-      } else {
-        logger.error(svnex.getMessage());
-      }
+    } catch (NoSuchRevisionException nsre) {
+      logger.info(nsre.getMessage());
+    } catch (SventonException ex) {
+      logger.error(ex.getMessage());
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();

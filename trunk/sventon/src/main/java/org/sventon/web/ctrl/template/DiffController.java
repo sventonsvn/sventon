@@ -27,9 +27,7 @@ import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +81,7 @@ public final class DiffController extends AbstractTemplateController {
     return modelAndView;
   }
 
-  private void handleDiffPrevious(SVNConnection connection, DiffCommand command) throws SVNException {
+  private void handleDiffPrevious(SVNConnection connection, DiffCommand command) throws SventonException {
     if (!command.hasEntries()) {
       logger.debug("No entries has been set - diffing with previous");
       final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(

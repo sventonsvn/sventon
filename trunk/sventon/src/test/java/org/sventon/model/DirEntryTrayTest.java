@@ -2,7 +2,6 @@ package org.sventon.model;
 
 import junit.framework.TestCase;
 import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNURL;
 
@@ -10,7 +9,7 @@ import java.util.Date;
 
 public class DirEntryTrayTest extends TestCase {
 
-  public void testEntryTray() throws SVNException {
+  public void testEntryTray() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
@@ -25,7 +24,7 @@ public class DirEntryTrayTest extends TestCase {
     assertEquals(0, entryTray.getSize());
   }
 
-  public void testDuplicateEntries() throws SVNException {
+  public void testDuplicateEntries() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
     SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 

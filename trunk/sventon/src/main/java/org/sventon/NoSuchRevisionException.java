@@ -13,6 +13,8 @@ package org.sventon;
 
 /**
  * NoSuchRevisionException.
+ *
+ * @author jesper@sventon.org
  */
 public class NoSuchRevisionException extends SventonException {
 
