@@ -27,4 +27,14 @@ public class AuthenticationException extends SventonException {
     super(message);
   }
 
+  /**
+   * Constructor.
+   *
+   * @param message Exception message.
+   * @param cause   Cause.
+   */
+  public AuthenticationException(String message, Exception cause) {
+    super(message, cause);
+  }
+
 }

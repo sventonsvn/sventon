@@ -577,11 +577,11 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     command.setRevision(Revision.parse("head"));
-    assertEquals(100, service.translateRevision(command.getRevision(), 100, null));
+    assertEquals(100, service.translateRevision(command.getRevision(), 100, null).longValue());
     assertEquals(Revision.HEAD, command.getRevision());
 
     command.setRevision(Revision.parse(""));
-    assertEquals(100, service.translateRevision(command.getRevision(), 100, null));
+    assertEquals(100, service.translateRevision(command.getRevision(), 100, null).longValue());
     assertEquals(Revision.UNDEFINED, command.getRevision());
 
     command.setRevision(Revision.parse("123"));
@@ -596,7 +596,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     };
     command.setRevision(Revision.parse("{2007-01-01}"));
     final SVNKitConnection connection = new SVNKitConnection(repositoryStub);
-    assertEquals(123, service.translateRevision(command.getRevision(), 200, connection));
+    assertEquals(123, service.translateRevision(command.getRevision(), 200, connection).longValue());
   }
 
 

@@ -131,7 +131,7 @@ public interface RepositoryService {
    * @return The HEAD revision.
    * @throws SventonException if a subversion error occur
    */
-  long getLatestRevision(final SVNConnection connection) throws SventonException;
+  Long getLatestRevision(final SVNConnection connection) throws SventonException;
 
   /**
    * Gets the node kind for given path (with or without leaf).
@@ -281,6 +281,6 @@ public interface RepositoryService {
    * @return The revision number.
    * @throws SventonException if unable to communicate with repository.
    */
-  long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException;
+  Long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException;
 
 }
