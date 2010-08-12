@@ -13,8 +13,8 @@ package org.sventon.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
+import org.sventon.model.Properties;
+import org.sventon.model.Property;
 import org.tmatesoft.svn.core.internal.wc.admin.SVNTranslator;
 
 import java.io.UnsupportedEncodingException;
@@ -69,11 +69,12 @@ public final class KeywordHandler {
    * @param url        The full url to the repository entry
    */
   @SuppressWarnings({"unchecked"})
-  public KeywordHandler(final SVNProperties properties, final String url) {
-    final String author = properties.getStringValue(SVNProperty.LAST_AUTHOR);
-    final String date = properties.getStringValue(SVNProperty.COMMITTED_DATE);
-    final String revision = properties.getStringValue(SVNProperty.COMMITTED_REVISION);
-    final String keywords = properties.getStringValue(SVNProperty.KEYWORDS);
+  public KeywordHandler(final Properties properties, final String url) {
+    final String author = properties.getStringValue(Property.LAST_AUTHOR);
+    final String date = properties.getStringValue(Property.COMMITTED_DATE);
+    final String revision = properties.getStringValue(Property.COMMITTED_REVISION);
+    final String keywords = properties.getStringValue(Property.KEYWORDS);
+    
     keywordsMap = SVNTranslator.computeKeywords(keywords, url, author, date, revision, null);
   }
 

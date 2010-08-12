@@ -15,7 +15,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.sventon.colorer.Colorer;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
-import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public final class AnnotatedTextFile {
   private final String path;
   private final String encoding;
   private final Colorer colorer;
-  private final SVNProperties properties;
+  private final Properties properties;
   private final String repositoryURL;
 
   /**
@@ -64,7 +63,7 @@ public final class AnnotatedTextFile {
    * @param repositoryURL Repository URL for keyword substitution.
    */
   public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer,
-                           final SVNProperties properties, final String repositoryURL) {
+                           final Properties properties, final String repositoryURL) {
     this.path = path;
     this.encoding = encoding;
     this.colorer = colorer;

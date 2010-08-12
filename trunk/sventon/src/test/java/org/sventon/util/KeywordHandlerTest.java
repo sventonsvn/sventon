@@ -1,17 +1,18 @@
 package org.sventon.util;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
+import org.sventon.model.Properties;
+import org.sventon.model.Property;
+import org.sventon.model.PropertyValue;
 
 public class KeywordHandlerTest extends TestCase {
 
   public void testSubstitute() throws Exception {
-    final SVNProperties keywordsMap = new SVNProperties();
-    keywordsMap.put(SVNProperty.KEYWORDS, "Id Author Date Revision URL");
-    keywordsMap.put(SVNProperty.LAST_AUTHOR, "domain\\user");
-    keywordsMap.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");
-    keywordsMap.put(SVNProperty.COMMITTED_REVISION, "33");
+    final Properties keywordsMap = new Properties();
+    keywordsMap.put(Property.KEYWORDS, new PropertyValue("Id Author Date Revision URL"));
+    keywordsMap.put(Property.LAST_AUTHOR, new PropertyValue("domain\\user"));
+    keywordsMap.put(Property.COMMITTED_DATE, new PropertyValue("2005-09-05T18:27:48.718750Z"));
+    keywordsMap.put(Property.COMMITTED_REVISION, new PropertyValue("33"));
 
     final String url = "http://server/file.dat";
     final KeywordHandler handler = new KeywordHandler(keywordsMap, url);
@@ -33,7 +34,7 @@ public class KeywordHandlerTest extends TestCase {
   }
 
   public void testComputeKeywordsNull() throws Exception {
-    final SVNProperties keywordsMap = new SVNProperties();
+    final Properties keywordsMap = new Properties();
     assertEquals("No change", new KeywordHandler(keywordsMap, null).substitute("No change", "UTF-8"));
   }
 

@@ -12,11 +12,10 @@
   */
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
-<%@ tag import="org.tmatesoft.svn.core.SVNPropertyValue" %>
 <%@ tag import="org.sventon.util.WebUtils" %>
-<%@ tag import="java.util.Iterator" %>
 <%@ tag import="org.sventon.model.PropertyValue" %>
 <%@ tag import="java.util.Map" %>
+<%@ tag import="org.sventon.model.Property" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -50,8 +49,8 @@
       <c:set var="properties" value="${properties}"/>
       <jsp:useBean id="properties" type="org.sventon.model.Properties" />
       <%
-        for (Map.Entry<String, PropertyValue> entry : properties.entrySet()) {
-          final String name = entry.getKey();
+        for (Map.Entry<Property, PropertyValue> entry : properties.entrySet()) {
+          final String name = entry.getKey().getName();
           final PropertyValue value = entry.getValue();
       %>
           <tr>

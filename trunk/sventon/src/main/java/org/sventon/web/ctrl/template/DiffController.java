@@ -102,7 +102,7 @@ public final class DiffController extends AbstractTemplateController {
   private Map<String, Object> handleFileDiff(final SVNConnection connection, final ModelAndView modelAndView,
                                              final DiffCommand command, final RepositoryConfiguration config,
                                              final String charset)
-      throws SVNException, DiffException {
+      throws SventonException, DiffException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     final Revision pegRevision = Revision.create(command.getPegRevision());
