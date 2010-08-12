@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.sventon.colorer.Colorer;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
-import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public final class TextFile {
    * @throws IOException if unable to read content.
    */
   public TextFile(final String content, final String path, final String encoding, final Colorer colorer,
-                  final SVNProperties properties, final String repositoryURL) throws IOException {
+                  final Properties properties, final String repositoryURL) throws IOException {
 
     String processedContent;
 

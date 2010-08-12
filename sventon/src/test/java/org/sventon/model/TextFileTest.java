@@ -3,10 +3,7 @@ package org.sventon.model;
 import junit.framework.TestCase;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
-
-import java.util.Properties;
+import org.sventon.model.Properties;
 
 public class TextFileTest extends TestCase {
 
@@ -34,11 +31,11 @@ public class TextFileTest extends TestCase {
   }
 
   public void testTextFilePlainWebsafeExpandedKeywords() throws Exception {
-    final SVNProperties props = new SVNProperties();
-    props.put(SVNProperty.KEYWORDS, "Author Date Revision URL");
-    props.put(SVNProperty.LAST_AUTHOR, "domain\\user");
-    props.put(SVNProperty.COMMITTED_DATE, "2005-09-05T18:27:48.718750Z");
-    props.put(SVNProperty.COMMITTED_REVISION, "1234");
+    final Properties props = new Properties();
+    props.put(Property.KEYWORDS, new PropertyValue("Author Date Revision URL"));
+    props.put(Property.LAST_AUTHOR, new PropertyValue("domain\\user"));
+    props.put(Property.COMMITTED_DATE, new PropertyValue("2005-09-05T18:27:48.718750Z"));
+    props.put(Property.COMMITTED_REVISION, new PropertyValue("1234"));
 
     final String content = "$Revision$" + BR + "$Author$";
     final TextFile textFile = new TextFile(content, "Test.java", "UTF-8", null, props, "http://localhost/svn");
@@ -60,7 +57,7 @@ public class TextFileTest extends TestCase {
 
   private Colorer getColorer() {
     final JHighlightColorer col = new JHighlightColorer();
-    final Properties mappings = new Properties();
+    final java.util.Properties mappings = new java.util.Properties();
     mappings.put("java", new com.uwyn.jhighlight.renderer.JavaXhtmlRenderer());
     mappings.put("html", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
     mappings.put("xml", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());

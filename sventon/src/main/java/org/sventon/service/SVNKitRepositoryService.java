@@ -25,6 +25,7 @@ import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
+import org.sventon.model.Properties;
 import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
@@ -118,7 +119,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   protected final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
-                                       final String charset) throws SVNException, IOException {
+                                       final String charset) throws SventonException, IOException {
     logger.debug("Fetching file " + path + "@" + revision);
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
     getFileContents(connection, path, revision, outStream);
@@ -127,29 +128,45 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final void getFileContents(final SVNConnection connection, final String path, final long revision,
-                                    final OutputStream output) throws SVNException {
+                                    final OutputStream output) throws SventonException {
     final SVNRepository repository = connection.getDelegate();
-    repository.getFile(path, revision, null, output);
+    try {
+      repository.getFile(path, revision, null, output);
+    } catch (SVNException e) {
+      throw new SventonException("Could not get file contents for " + path + " at revision " + revision, e);
+    }
   }
 
   @Override
-  public final SVNProperties getFileProperties(final SVNConnection connection, final String path, final long revision)
-      throws SVNException {
+  public final Properties getFileProperties(final SVNConnection connection, final String path, final long revision)
+      throws SventonException {
     final SVNProperties props = new SVNProperties();
     final SVNRepository repository = connection.getDelegate();
-    repository.getFile(path, revision, props, null);
-    return props;
+    try {
+      repository.getFile(path, revision, props, null);
+    } catch (SVNException e) {
+      throw new SventonException("Could not get file properties for " + path + " at revision " + revision, e);
+    }
+
+    final Properties properties = new Properties();
+    for (Object o : props.nameSet()) {
+      final String key = (String) o;
+      final String value = props.getSVNPropertyValue(key).getString();
+      properties.put(Property.fromName(key), new PropertyValue(value));
+    }
+
+    return properties;
   }
 
   @Override
-  public final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SVNException {
-    final String mimeType = getFileProperties(connection, path, revision).getStringValue(SVNProperty.MIME_TYPE);
-    return SVNProperty.isTextMimeType(mimeType);
+  public final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SventonException {
+    final String mimeType = getFileProperties(connection, path, revision).getStringValue(Property.MIME_TYPE);
+    return Property.isTextMimeType(mimeType);
   }
 
   @Override
-  public final String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SVNException {
-    return getFileProperties(connection, path, revision).getStringValue(SVNProperty.CHECKSUM);
+  public final String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException {
+    return getFileProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
   }
 
   @Override
@@ -247,7 +264,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   @Override
   public final List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
                                                       final Revision pegRevision, final String charset,
-                                                      final RepositoryConfiguration configuration) throws SVNException, DiffException {
+                                                      final RepositoryConfiguration configuration) throws DiffException, SventonException {
 
     assertNotBinary(connection, command, pegRevision);
 
@@ -258,8 +275,8 @@ public class SVNKitRepositoryService implements RepositoryService {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      final SVNProperties leftFileProperties;
-      final SVNProperties rightFileProperties;
+      final Properties leftFileProperties;
+      final Properties rightFileProperties;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
         leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
@@ -302,7 +319,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                                  final String charset) throws SVNException, DiffException {
+                                  final String charset) throws SventonException, DiffException {
 
     assertNotBinary(connection, command, pegRevision);
 
@@ -341,7 +358,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   @Override
   public final List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
                                               final String charset, final RepositoryConfiguration configuration)
-      throws SVNException, DiffException {
+      throws SventonException, DiffException {
 
     assertNotBinary(connection, command, pegRevision);
 
@@ -448,7 +465,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
 
       logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
-      final SVNProperties properties = getFileProperties(connection, path, revision);
+      final Properties properties = getFileProperties(connection, path, revision);
       final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
           path, charset, colorer, properties, repository.getLocation().toDecodedString());
       final SVNLogClient logClient = SVNClientManager.newInstance(
@@ -527,7 +544,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   private void assertNotBinary(final SVNConnection connection, final DiffCommand command, final Revision pegRevision)
-      throws SVNException, IllegalFileFormatException {
+      throws SventonException, IllegalFileFormatException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;

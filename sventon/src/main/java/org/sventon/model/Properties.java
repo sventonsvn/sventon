@@ -19,17 +19,23 @@ import java.util.Set;
  *
  */
 public class Properties {
-  private Map<String, PropertyValue> properties = new HashMap<String, PropertyValue>();
+  private Map<Property, PropertyValue> properties = new HashMap<Property, PropertyValue>();
 
-  public void put(String key, PropertyValue propertyValue) {
+
+  public void put(Property key, PropertyValue propertyValue) {
     properties.put(key, propertyValue);
   }
 
-  public PropertyValue get(final String key){
+  public PropertyValue get(final Property key){
     return properties.get(key);
   }
 
-  public Set<Map.Entry<String, PropertyValue>> entrySet(){
+  public String getStringValue(final Property key){
+    final PropertyValue value = this.get(key);
+    return (value == null) ? null : value.getValue();
+  }
+
+  public Set<Map.Entry<Property,PropertyValue>> entrySet(){
     return properties.entrySet();
   }
 }

@@ -22,7 +22,6 @@ import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.io.OutputStream;
@@ -103,7 +102,7 @@ public interface RepositoryService {
    * @throws SVNException if a subversion error occur
    */
   void getFileContents(final SVNConnection connection, final String path, final long revision, final OutputStream output)
-      throws SVNException;
+      throws SventonException;
 
   /**
    * Gets a file's properties from the repository.
@@ -114,7 +113,7 @@ public interface RepositoryService {
    * @return The file's properties
    * @throws SVNException if a subversion error occur
    */
-  SVNProperties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  Properties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Checks whether given target file is a text file, by inspecting it's mime-type property.
@@ -123,9 +122,9 @@ public interface RepositoryService {
    * @param path       Target of target to get properties for
    * @param revision   The revision
    * @return <code>true</code> if file is a text file, <code>false</code> if not.
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
-  boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets a file's checksum.
@@ -136,7 +135,7 @@ public interface RepositoryService {
    * @return The file's checksum
    * @throws SVNException if a subversion error occur
    */
-  String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets the latest (HEAD) repository revision.
@@ -205,7 +204,7 @@ public interface RepositoryService {
    *
    * @param connection    The repository connection.
    * @param command       DiffCommand.
-   * @param pegRevision   Peg revision, or {@link Revision#UNDEFINED} of n/a.
+   * @param pegRevision   Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return Ordered list of diffed rows.
    * @return List of diff rows.
@@ -214,21 +213,21 @@ public interface RepositoryService {
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
                                          final Revision pegRevision, final String charset, final RepositoryConfiguration configuration)
-      throws SVNException, DiffException;
+      throws DiffException, SventonException;
 
   /**
    * Creates a unified diff.
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED} of n/a.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return Diff result.
    * @throws SVNException  if a subversion error occur
    * @throws DiffException if unable to produce diff.
    */
   String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                     final String charset) throws SVNException, DiffException;
+                     final String charset) throws SventonException, DiffException;
 
   /**
    * Creates an inline diff.
@@ -243,7 +242,7 @@ public interface RepositoryService {
    * @throws DiffException if unable to produce diff.
    */
   List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision, final String charset,
-                                 final RepositoryConfiguration configuration) throws SVNException, DiffException;
+                                 final RepositoryConfiguration configuration) throws SventonException, DiffException;
 
   /**
    * Creates a path diff.

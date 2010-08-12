@@ -18,7 +18,6 @@ import org.sventon.model.DirEntry;
 import org.sventon.model.DirList;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

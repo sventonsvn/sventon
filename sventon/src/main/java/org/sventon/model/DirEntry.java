@@ -132,7 +132,7 @@ public final class DirEntry implements Serializable {
     for (Object o : properties.asMap().keySet()) {
       final String key = (String) o;
       final String value = properties.getSVNPropertyValue(key).getString();
-      props.put(key, new PropertyValue(value));
+      props.put(Property.fromName(key), new PropertyValue(value));
     }
     
     return new DirList(dir, props);

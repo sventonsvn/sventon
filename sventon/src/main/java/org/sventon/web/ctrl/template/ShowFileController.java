@@ -17,16 +17,11 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.colorer.Colorer;
-import org.sventon.model.ArchiveFile;
-import org.sventon.model.TextFile;
-import org.sventon.model.UserRepositoryContext;
-import org.sventon.model.ZipFileWrapper;
+import org.sventon.model.*;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +106,7 @@ public final class ShowFileController extends AbstractTemplateController {
     final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final SVNProperties fileProperties = getRepositoryService().getFileProperties(
+    final Properties fileProperties = getRepositoryService().getFileProperties(
         connection, command.getPath(), command.getRevisionNumber());
 
     final String charset = userRepositoryContext.getCharset();
@@ -182,8 +177,8 @@ public final class ShowFileController extends AbstractTemplateController {
    * @param properties The svn properties for given file.
    * @return True if text file, false if not.
    */
-  protected boolean isTextMimeType(final SVNProperties properties) {
-    return SVNProperty.isTextMimeType(properties.getStringValue(SVNProperty.MIME_TYPE));
+  protected boolean isTextMimeType(final Properties properties) {
+    return Property.isTextMimeType(properties.getStringValue(Property.MIME_TYPE));
   }
 
   /**
