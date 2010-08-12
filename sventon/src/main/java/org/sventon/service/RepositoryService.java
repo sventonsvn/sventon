@@ -20,7 +20,6 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
@@ -56,10 +55,10 @@ public interface RepositoryService {
    * @param fromRevision From revision
    * @param toRevision   To revision
    * @return The log entries
-   * @throws SVNException if subversion error
+   * @throws SventonException if subversion error
    */
-  List<SVNLogEntry> getLogEntriesFromRepository(final SVNConnection connection, final long fromRevision, final long toRevision)
-      throws SVNException;
+  List<SVNLogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision, final long toRevision)
+      throws SventonException;
 
   /**
    * Gets revision details for given revision interval and a specific path with limit.
@@ -73,12 +72,11 @@ public interface RepositoryService {
    * @param limit          Revision limit
    * @param stopOnCopy     Stop on copy
    * @return The log entries
-   * @throws SVNException     if subversion error
    * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
                                   final long fromRevision, final long toRevision, final String path,
-                                  final long limit, final boolean stopOnCopy) throws SVNException, SventonException;
+                                  final long limit, final boolean stopOnCopy) throws SventonException;
 
   /**
    * Exports given list of target entries to the given destination export directory.
@@ -99,7 +97,7 @@ public interface RepositoryService {
    * @param path       Target to get
    * @param revision   The revision
    * @param output     Output stream to write contents to
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
   void getFileContents(final SVNConnection connection, final String path, final long revision, final OutputStream output)
       throws SventonException;
@@ -111,20 +109,9 @@ public interface RepositoryService {
    * @param path       Target of target to get properties for
    * @param revision   The revision
    * @return The file's properties
-   * @throws SVNException if a subversion error occur
-   */
-  Properties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
-
-  /**
-   * Checks whether given target file is a text file, by inspecting it's mime-type property.
-   *
-   * @param connection The repository connection
-   * @param path       Target of target to get properties for
-   * @param revision   The revision
-   * @return <code>true</code> if file is a text file, <code>false</code> if not.
    * @throws SventonException if a subversion error occur
    */
-  boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SventonException;
+  Properties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets a file's checksum.
@@ -133,7 +120,7 @@ public interface RepositoryService {
    * @param path       Target of target to get properties for
    * @param revision   The revision
    * @return The file's checksum
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
   String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
@@ -142,9 +129,9 @@ public interface RepositoryService {
    *
    * @param connection The repository connection
    * @return The HEAD revision.
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
-  long getLatestRevision(final SVNConnection connection) throws SVNException;
+  long getLatestRevision(final SVNConnection connection) throws SventonException;
 
   /**
    * Gets the node kind for given path (with or without leaf).
@@ -171,10 +158,9 @@ public interface RepositoryService {
    * @param path       The entry path
    * @param revision   The revision
    * @return List of entries
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
-  DirList list(final SVNConnection connection, final String path, final long revision
-  ) throws SventonException;
+  DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets entry info from the subversion repository.
@@ -183,10 +169,10 @@ public interface RepositoryService {
    * @param path       The entry path
    * @param revision   The entry revision
    * @return Entry
-   * @throws SVNException if a subversion error occur. If the SVNErrorMessage SVNErrorCode is set to ENTRY_NOT_FOUND,
-   *                      no entry exists at given path and revision.
+   * @throws SventonException if a subversion error occur. If the SVNErrorMessage SVNErrorCode is set to ENTRY_NOT_FOUND,
+   *                          no entry exists at given path and revision.
    */
-  DirEntry getEntryInfo(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  DirEntry getEntryInfo(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets the revisions for a specific entry.
@@ -195,9 +181,9 @@ public interface RepositoryService {
    * @param path       The entry path
    * @param revision   The entry revision
    * @return List of file revisions
-   * @throws SVNException if a subversion error occur
+   * @throws SventonException if a subversion error occur
    */
-  List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SVNException;
+  List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Creates a side-by-side diff.
@@ -208,12 +194,12 @@ public interface RepositoryService {
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return Ordered list of diffed rows.
    * @return List of diff rows.
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException if unable to produce diff.
+   * @throws SventonException if a subversion error occur
+   * @throws DiffException    if unable to produce diff.
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
                                          final Revision pegRevision, final String charset, final RepositoryConfiguration configuration)
-      throws DiffException, SventonException;
+      throws SventonException, DiffException;
 
   /**
    * Creates a unified diff.
@@ -223,8 +209,8 @@ public interface RepositoryService {
    * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return Diff result.
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException if unable to produce diff.
+   * @throws SventonException if a subversion error occur
+   * @throws DiffException    if unable to produce diff.
    */
   String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
                      final String charset) throws SventonException, DiffException;
@@ -238,8 +224,8 @@ public interface RepositoryService {
    * @param charset       The charset to use.
    * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff rows.
-   * @throws SVNException  if a subversion error occur
-   * @throws DiffException if unable to produce diff.
+   * @throws SventonException if a subversion error occur
+   * @throws DiffException    if unable to produce diff.
    */
   List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision, final String charset,
                                  final RepositoryConfiguration configuration) throws SventonException, DiffException;
@@ -293,8 +279,8 @@ public interface RepositoryService {
    * @param headRevision The current HEAD revision.
    * @param connection   Repository connection.
    * @return The revision number.
-   * @throws SVNException if unable to communicate with repository.
+   * @throws SventonException if unable to communicate with repository.
    */
-  long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SVNException;
+  long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException;
 
 }

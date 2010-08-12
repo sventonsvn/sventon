@@ -15,10 +15,10 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +55,7 @@ public final class DirEntryTrayController extends AbstractTemplateController {
     final DirEntry entry;
     try {
       entry = getRepositoryService().getEntryInfo(connection, command.getPath(), pegRevision);
-    } catch (SVNException e) {
+    } catch (SventonException e) {
       return modelAndView;
     }
 

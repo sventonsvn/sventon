@@ -116,7 +116,7 @@ public final class ConfigCommandValidator implements Validator {
           try {
             credentials = new Credentials(command.getUserName(), command.getUserPassword());
             testConnection(repositoryName, repositoryUrl, credentials);
-          } catch (SVNAuthenticationException e) {
+          } catch (AuthenticationException e) {
             errors.rejectValue("accessMethod", "config.error.authentication-error");
           } catch (SventonException e) {
             errors.rejectValue("repositoryUrl", "config.error.connection-error", new String[]{repositoryUrl},

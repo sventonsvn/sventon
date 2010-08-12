@@ -16,13 +16,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
+import org.sventon.SventonException;
 import org.sventon.appl.Application;
-import org.sventon.cache.ObjectCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.cache.ObjectCacheManager;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
@@ -172,7 +172,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
               ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
           final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-          logEntries.addAll(repositoryService.getLogEntriesFromRepository(connection, fromRevision, toRevision));
+          logEntries.addAll(repositoryService.getLogEntriesFromRepositoryRoot(connection, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
           notifyListeners(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
@@ -184,9 +184,9 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
           revisionsLeftToFetchCount -= logEntries.size();
         } while (revisionsLeftToFetchCount > 0);
       }
-    } catch (SVNException svnex) {
+    } catch (SventonException svnex) {
       logger.warn("Exception: " + svnex.getMessage());
-      logger.debug("Exception [" + svnex.getErrorMessage().getErrorCode().toString() + "]", svnex);
+      logger.debug("Exception [" + svnex.toString() + "]", svnex);
     }
   }
 

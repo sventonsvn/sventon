@@ -14,21 +14,20 @@ package org.sventon.cache.direntrycache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.sventon.DirEntryNotFoundException;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
-import org.sventon.cache.EntryCacheManager;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.EntryCacheManager;
 import org.sventon.model.DirEntry;
 import org.sventon.model.DirEntryChangeType;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.SVNErrorCode;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 
@@ -200,7 +199,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
         }
       }
       updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache, flushAfterUpdate);
-    } catch (SVNException svnex) {
+    } catch (SventonException svnex) {
       LOGGER.error("Unable to update entryCache", svnex);
     }
   }
@@ -215,10 +214,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       addDirectories(entriesToAdd, connection, "/", revision, repositoryService);
       updateAndFlushCache(entriesToAdd, new EntriesToDelete(),
           revision, entryCache, flushAfterUpdate);
-    } catch (SVNException svnex) {
+    } catch (SventonException svnex) {
       LOGGER.error("Unable to populate cache", svnex);
-    } catch (SventonException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
   }
 
@@ -245,12 +242,12 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param connection      Repository
    * @param logEntryPath    The log entry path
    * @param revision        The log revision
-   * @throws SVNException if subversion error occur.
+   * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheModify(final EntriesToAdd entriesToAdd,
                                   final EntriesToDelete entriesToDelete,
                                   final SVNConnection connection, final SVNLogEntryPath logEntryPath,
-                                  final long revision) throws SVNException {
+                                  final long revision) throws SventonException {
 
     entriesToDelete.add(logEntryPath.getPath(), DirEntry.Kind.ANY);
     final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
@@ -265,12 +262,12 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param connection      Repository
    * @param logEntryPath    The log entry path
    * @param revision        The log revision
-   * @throws SVNException if subversion error occur.
+   * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheReplace(final EntriesToAdd entriesToAdd,
                                    final EntriesToDelete entriesToDelete,
                                    final SVNConnection connection, final SVNLogEntryPath logEntryPath,
-                                   final long revision) throws SVNException {
+                                   final long revision) throws SventonException {
 
     doEntryCacheModify(entriesToAdd, entriesToDelete, connection, logEntryPath, revision);
   }
@@ -282,11 +279,11 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param connection      Repository
    * @param logEntryPath    The log entry path
    * @param revision        The log revision
-   * @throws SVNException if subversion error occur.
+   * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheDelete(final EntriesToDelete entriesToDelete,
                                   final SVNConnection connection, final SVNLogEntryPath logEntryPath,
-                                  final long revision) throws SVNException {
+                                  final long revision) throws SventonException {
 
     // Have to find out if deleted entry was a file or directory
     final long previousRevision = revision - 1;
@@ -295,12 +292,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
     try {
       deletedEntry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), previousRevision);
       entriesToDelete.add(logEntryPath.getPath(), deletedEntry.getKind());
-    } catch (SVNException e) {
-      if (SVNErrorCode.ENTRY_NOT_FOUND.equals(e.getErrorMessage().getErrorCode())) {
-        LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
-      } else {
-        throw e;
-      }
+    } catch (DirEntryNotFoundException ex) {
+      LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
     }
   }
 
@@ -311,11 +304,11 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param connection   Repository
    * @param logEntryPath The log entry path
    * @param revision     The log revision
-   * @throws SVNException if subversion error occur.
+   * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheAdd(final EntriesToAdd entriesToAdd,
                                final SVNConnection connection, final SVNLogEntryPath logEntryPath,
-                               final long revision) throws SVNException {
+                               final long revision) throws SventonException {
 
     // Have to find out if added entry was a file or directory
     final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
@@ -328,11 +321,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       // Directory node added
       LOGGER.debug(logEntryPath.getPath() + " is a directory. Doing a recursive add");
       // Add directory contents
-      try {
-        addDirectories(entriesToAdd, connection, logEntryPath.getPath() + "/", revision, repositoryService);
-      } catch (SventonException e) {
-        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-      }
+      addDirectories(entriesToAdd, connection, logEntryPath.getPath() + "/", revision, repositoryService);
     }
     entriesToAdd.add(entry);
   }
@@ -346,7 +335,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param path              The path to add.
    * @param revision          Revision
    * @param repositoryService Service
-   * @throws SVNException if a Subversion error occurs.
+   * @throws SventonException if a Subversion error occurs.
    */
   private void addDirectories(final EntriesToAdd entriesToAdd, final SVNConnection connection, final String path,
                               final long revision, final RepositoryService repositoryService) throws SventonException {

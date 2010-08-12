@@ -15,7 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
-import org.sventon.SVNAuthenticationException;
+import org.sventon.AuthenticationException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
@@ -87,7 +87,7 @@ public final class RSSController extends AbstractBaseController {
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
           Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
-    } catch (SVNAuthenticationException aex) {
+    } catch (AuthenticationException aex) {
       logger.info(aex.getMessage());
       httpAuthenticationHandler.sendChallenge(response);
     } catch (NoSuchRevisionException nsre) {
