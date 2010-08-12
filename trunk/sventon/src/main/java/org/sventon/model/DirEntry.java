@@ -19,6 +19,7 @@ import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNProperties;
 
 import java.io.Serializable;
 import java.util.*;
@@ -111,20 +112,30 @@ public final class DirEntry implements Serializable {
 
   /**
    * Creates a collection of <code>DirEntry</code> objects based
-   * on given collection of <code>SVNDirEntry</code> instances.
+   * on given collection of <code>SVNDirEntry</code> instances and <code>SVNProperties</code>.
    *
    * @param entries  Collection of SVNDirEntry.
    * @param basePath Base repository path for the entries.
-   * @return The collection of entries.
+   * @param properties The SVNProperties for these entries
+   * @return The directory list instance containing a List<DirEntry> and Properties.
    */
-  public static List<DirEntry> createEntryCollection(final Collection<SVNDirEntry> entries,
-                                                            final String basePath) {
+  // TODO: Move the conversion of SVNEntry and SVNProperties to a SVNKit unique package/module
+  public static DirList createDirectoryList(final Collection<SVNDirEntry> entries,
+                                            final String basePath, SVNProperties properties) {
 
     final List<DirEntry> dir = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
     for (final SVNDirEntry entry : entries) {
       dir.add(new DirEntry(entry, basePath));
     }
-    return dir;
+
+    final Properties props = new Properties();
+    for (Object o : properties.asMap().keySet()) {
+      final String key = (String) o;
+      final String value = properties.getSVNPropertyValue(key).getString();
+      props.put(key, new PropertyValue(value));
+    }
+    
+    return new DirList(dir, props);
   }
 
   private void copyEntry(final String path, final SVNDirEntry entry) {

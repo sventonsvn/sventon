@@ -13,11 +13,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.DirEntry;
+import org.sventon.model.DirList;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNProperties;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class ListDirectoryContentsControllerTest extends TestCase {
     final ListDirectoryContentsController ctrl = new ListDirectoryContentsController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.list(null, command.getPath(), command.getRevisionNumber(), new SVNProperties())).andStubReturn(entries);
+    expect(mockService.list(null, command.getPath(), command.getRevisionNumber())).andStubReturn(new DirList(entries, null));
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
