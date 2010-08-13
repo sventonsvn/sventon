@@ -67,7 +67,7 @@
               <jsp:useBean id="diffResult" type="java.util.ArrayList" />
 
               <c:forEach items="${diffResult}" var="row">
-                <jsp:useBean id="row" type="org.sventon.SVNDiffStatus"/>
+                <jsp:useBean id="row" type="org.sventon.model.DiffStatus"/>
                 <%
                   final DirEntryChangeType changeType;
                   final char actionCode = row.getModificationType().getCode();

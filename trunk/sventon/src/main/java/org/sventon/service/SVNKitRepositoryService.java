@@ -17,9 +17,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
-import org.sventon.SVNDiffStatus;
-import org.sventon.SVNStatusType;
-import org.sventon.SVNURL;
+import org.sventon.model.DiffStatus;
+import org.sventon.model.StatusType;
+import org.sventon.model.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
@@ -441,13 +441,13 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
+  public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
                                              final RepositoryConfiguration configuration) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getDiffClient();
 
-    final List<SVNDiffStatus> result = new ArrayList<SVNDiffStatus>();
+    final List<DiffStatus> result = new ArrayList<DiffStatus>();
 
     final String repoRoot = repository.getLocation().toDecodedString();
 
@@ -458,7 +458,7 @@ public class SVNKitRepositoryService implements RepositoryService {
           SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
             public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
               if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-                result.add(new SVNDiffStatus(SVNStatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
+                result.add(new DiffStatus(StatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
               }
             }
           });

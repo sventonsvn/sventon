@@ -9,7 +9,9 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon;
+package org.sventon.model;
+
+import org.sventon.SventonException;
 
 /**
  * SVNURL.

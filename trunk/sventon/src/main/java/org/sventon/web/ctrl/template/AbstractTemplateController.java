@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.AuthenticationException;
 import org.sventon.SVNConnection;
-import org.sventon.SVNURL;
+import org.sventon.model.SVNURL;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
