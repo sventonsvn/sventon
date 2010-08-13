@@ -1,7 +1,7 @@
 package org.sventon.appl;
 
 import junit.framework.TestCase;
-import org.sventon.SVNURL;
+import org.sventon.model.SVNURL;
 
 import java.util.Properties;
 

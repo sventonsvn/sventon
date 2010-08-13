@@ -21,6 +21,7 @@ import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.SVNURL;
 
 /**
  * ConfigCommandValidator.

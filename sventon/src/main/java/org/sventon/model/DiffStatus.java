@@ -9,18 +9,18 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon;
+package org.sventon.model;
 
 /**
  *
  */
-public class SVNDiffStatus {
-  private final SVNStatusType modificationType;
+public class DiffStatus {
+  private final StatusType modificationType;
   private final SVNURL url;
   private final String path;
   private final boolean propertyModified;
 
-  public SVNDiffStatus(SVNStatusType modificationType, SVNURL url, String path, boolean propertyModified) {
+  public DiffStatus(StatusType modificationType, SVNURL url, String path, boolean propertyModified) {
     this.modificationType = modificationType;
     this.url = url;
     this.path = path;
@@ -34,7 +34,7 @@ public class SVNDiffStatus {
    *
    * @return a path change type
    */
-  public SVNStatusType getModificationType() {
+  public StatusType getModificationType() {
     return modificationType;
   }
 

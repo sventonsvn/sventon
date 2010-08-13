@@ -12,7 +12,7 @@
 package org.sventon.service;
 
 import org.sventon.SVNConnection;
-import org.sventon.SVNDiffStatus;
+import org.sventon.model.DiffStatus;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
@@ -239,7 +239,7 @@ public interface RepositoryService {
    * @return List of diff status.
    * @throws SventonException if a subversion error occur
    */
-  List<SVNDiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
+  List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
                                 final RepositoryConfiguration configuration) throws SventonException;
 
   /**

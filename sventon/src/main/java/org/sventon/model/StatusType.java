@@ -10,13 +10,13 @@
  * ====================================================================
  */
 
-package org.sventon;
+package org.sventon.model;
 
 /**
  * This enum holds all status operation types. The status types reports from
  * merge, copy and lock operations are not included here.
  */
-public enum SVNStatusType {
+public enum StatusType {
 
   /**
    * In a status operation (if it's being running with an option to report
@@ -112,7 +112,7 @@ public enum SVNStatusType {
   private final char code;
 
 
-  SVNStatusType(int id, String name, char code) {
+  StatusType(int id, String name, char code) {
     this.id = id;
     this.name = name;
     this.code = code;
@@ -130,8 +130,8 @@ public enum SVNStatusType {
     return code;
   }
 
-  public static SVNStatusType fromId(final int id){
-    for (SVNStatusType statusType : SVNStatusType.values()) {
+  public static StatusType fromId(final int id){
+    for (StatusType statusType : StatusType.values()) {
       if (statusType.getId() == id){
         return statusType;
       }

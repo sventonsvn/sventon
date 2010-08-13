@@ -13,6 +13,7 @@ package org.sventon;
 
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.SVNURL;
 
 /**
  * Interface for factory responsible for creating subversion repository connections.

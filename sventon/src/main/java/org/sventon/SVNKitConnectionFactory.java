@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.SVNURL;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
