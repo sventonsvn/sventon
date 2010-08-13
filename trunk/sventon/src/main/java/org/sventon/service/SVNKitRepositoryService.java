@@ -138,7 +138,7 @@ public class SVNKitRepositoryService implements RepositoryService {
                                     final OutputStream output) throws SventonException {
     final SVNRepository repository = connection.getDelegate();
     try {
-      repository.getFile(path, revision, null, output);
+      repository.getFile(path, revision, new SVNProperties(), output);
     } catch (SVNException ex) {
       translateSVNException("Cannot get contents of file [" + path + "@" + revision + "]", ex);
     }
@@ -158,8 +158,8 @@ public class SVNKitRepositoryService implements RepositoryService {
     final Properties properties = new Properties();
     for (Object o : props.nameSet()) {
       final String key = (String) o;
-      final String value = props.getSVNPropertyValue(key).getString();
-      properties.put(Property.fromName(key), new PropertyValue(value));
+      final String value = SVNPropertyValue.getPropertyAsString(props.getSVNPropertyValue(key));
+      properties.put(new Property(key), new PropertyValue(value));
     }
 
     return properties;
@@ -589,13 +589,13 @@ public class SVNKitRepositoryService implements RepositoryService {
   private <T extends Object> T translateSVNException(String errorMessage, SVNException exception) throws SventonException {
     if (exception instanceof SVNAuthenticationException) {
       throw new AuthenticationException(exception.getMessage(), exception);
-    } else {
-      if (SVNErrorCode.FS_NO_SUCH_REVISION == exception.getErrorMessage().getErrorCode()) {
-        throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
-      } else {
-        throw new SventonException(errorMessage);
-      }
     }
+
+    if (SVNErrorCode.FS_NO_SUCH_REVISION == exception.getErrorMessage().getErrorCode()) {
+      throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
+    }
+
+    throw new SventonException(errorMessage);
   }
 
   private static class AnnotationHandler implements ISVNAnnotateHandler {

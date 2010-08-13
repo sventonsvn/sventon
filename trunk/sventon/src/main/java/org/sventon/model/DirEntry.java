@@ -20,6 +20,7 @@ import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNPropertyValue;
 
 import java.io.Serializable;
 import java.util.*;
@@ -131,8 +132,8 @@ public final class DirEntry implements Serializable {
     final Properties props = new Properties();
     for (Object o : properties.asMap().keySet()) {
       final String key = (String) o;
-      final String value = properties.getSVNPropertyValue(key).getString();
-      props.put(Property.fromName(key), new PropertyValue(value));
+      final String value = SVNPropertyValue.getPropertyAsString(properties.getSVNPropertyValue(key));
+      props.put(new Property(key), new PropertyValue(value));
     }
     
     return new DirList(dir, props);
