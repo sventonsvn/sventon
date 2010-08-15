@@ -63,19 +63,21 @@ public interface RepositoryService {
    * Gets revision details for given revision interval and a specific path with limit.
    * If caching is enabled in the {@link org.sventon.appl.RepositoryConfiguration}, cached revisions will be returned.
    *
-   * @param repositoryName Repository name.
-   * @param connection     The repository
-   * @param fromRevision   From revision
-   * @param toRevision     To revision
-   * @param path           The repository path
-   * @param limit          Revision limit
-   * @param stopOnCopy     Stop on copy
+   * @param repositoryName      Repository name.
+   * @param connection          The repository
+   * @param fromRevision        From revision
+   * @param toRevision          To revision
+   * @param path                The repository path
+   * @param limit               Revision limit
+   * @param stopOnCopy          Stop on copy
+   * @param includeChangedPaths If <code>true</code>, all changed paths will be included in the resulting objects.
    * @return The log entries
    * @throws SventonException if a sventon specific error occurs
    */
   List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
                                   final long fromRevision, final long toRevision, final String path,
-                                  final long limit, final boolean stopOnCopy) throws SventonException;
+                                  final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
+      throws SventonException;
 
   /**
    * Exports given list of target entries to the given destination export directory.
@@ -280,6 +282,17 @@ public interface RepositoryService {
    * @return The revision number.
    * @throws SventonException if unable to communicate with repository.
    */
-  Long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException;
+  Long translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException;
 
+  /**
+   * Gets the <code>n</code> latest revisions.
+   *
+   * @param repositoryName Repository name.
+   * @param connection     Repository connection
+   * @param revisionCount  Number of revisions to include in the result
+   * @return List of the latest revisions.
+   * @throws SventonException if unable to communicate with repository.
+   */
+  List<SVNLogEntry> getLatestRevisions(final RepositoryName repositoryName, final SVNConnection connection,
+                                       final int revisionCount) throws SventonException;
 }

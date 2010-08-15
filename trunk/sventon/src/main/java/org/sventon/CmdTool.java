@@ -1,5 +1,9 @@
 package org.sventon;
 
+import org.sventon.appl.ConfigDirectory;
+import org.sventon.service.RepositoryService;
+import org.sventon.service.SVNKitRepositoryService;
+import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -10,6 +14,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Test class.
@@ -49,6 +54,13 @@ public class CmdTool {
 
       long latestRevision = repository.getLatestRevision();
       System.out.println("[" + location.toString() + "] latest revision: " + latestRevision);
+
+      RepositoryService service = new SVNKitRepositoryService();
+
+      final List<SVNLogEntry> logEntries = service.getLatestRevisions(null, new SVNKitConnection(repository), 2);
+      for (SVNLogEntry logEntry : logEntries) {
+        System.out.println("logEntry = " + logEntry);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();

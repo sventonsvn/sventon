@@ -85,7 +85,7 @@ public final class RSSController extends AbstractBaseController {
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
-          Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false));
+          Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false, true));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (AuthenticationException aex) {
       logger.info(aex.getMessage());

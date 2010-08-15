@@ -80,7 +80,8 @@ public class SVNKitRepositoryService implements RepositoryService {
   @Override
   public List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
                                          final long fromRevision, final long toRevision, final String path,
-                                         final long limit, final boolean stopOnCopy) throws SventonException {
+                                         final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
+      throws SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
     final SVNRepository repository = connection.getDelegate();
@@ -548,6 +549,11 @@ public class SVNKitRepositoryService implements RepositoryService {
     } catch (SVNException ex) {
       return translateSVNException("Unable to translate revision: " + revision, ex);
     }
+  }
+
+  @Override
+  public List<SVNLogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
+    return getLogEntries(repositoryName, connection, -1, Revision.FIRST, "/", revisionCount, false, true);
   }
 
   private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {
