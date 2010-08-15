@@ -1,14 +1,10 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
-import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
@@ -17,6 +13,10 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class GetLatestRevisionsControllerTest extends TestCase {
 
@@ -36,8 +36,8 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 
-    expect(mockService.getLogEntries(command.getName(), null, 100, Revision.FIRST, "/",
-        userRepositoryContext.getLatestRevisionsDisplayCount(), false, true)).andStubReturn(revisions);
+    expect(mockService.getLatestRevisions(command.getName(), null,
+        userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);
 
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, userRepositoryContext, null, null, null);
