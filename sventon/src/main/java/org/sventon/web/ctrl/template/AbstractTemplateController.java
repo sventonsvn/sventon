@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.AuthenticationException;
 import org.sventon.SVNConnection;
-import org.sventon.model.SVNURL;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -231,13 +229,8 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
   private List<LogEntryWrapper> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    try {
-      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, headRevision,
-          Revision.FIRST, "/", repositoryContext.getLatestRevisionsDisplayCount(), false));
-    } catch (Exception e) {
-      logger.error(e.getMessage());
-    }
+    final List<SVNLogEntry> logEntries = getRepositoryService().getLatestRevisions(
+        command.getName(), connection, repositoryContext.getLatestRevisionsDisplayCount());
     return LogEntryWrapper.convert(logEntries);
   }
 
