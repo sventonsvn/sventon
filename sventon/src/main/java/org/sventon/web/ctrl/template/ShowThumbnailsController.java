@@ -14,10 +14,10 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
+import org.sventon.model.PathRevision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -57,12 +57,12 @@ public final class ShowThumbnailsController extends AbstractTemplateController {
     final MultipleEntriesCommand command = (MultipleEntriesCommand) cmd;
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final List<SVNFileRevision> imageEntries = new ArrayList<SVNFileRevision>();
+    final List<PathRevision> imageEntries = new ArrayList<PathRevision>();
 
     logger.debug("Showing thumbnail images");
     // Check what entries are image files - and add them to the list of thumbnails.
-    for (final SVNFileRevision entry : command.getEntries()) {
-      logger.debug("entry: " + entry.getPath() + "@" + entry.getRevision());
+    for (final PathRevision entry : command.getEntries()) {
+      logger.debug("entry: " + entry);
       if (mimeFileTypeMap.getContentType(entry.getPath()).startsWith("image")) {
         imageEntries.add(entry);
       }

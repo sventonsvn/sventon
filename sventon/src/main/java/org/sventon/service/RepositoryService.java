@@ -12,7 +12,6 @@
 package org.sventon.service;
 
 import org.sventon.SVNConnection;
-import org.sventon.model.DiffStatus;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
@@ -87,7 +86,7 @@ public interface RepositoryService {
    * @param exportDirectory Destination directory
    * @throws SventonException if a subversion error occur
    */
-  void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
+  void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
               final ExportDirectory exportDirectory) throws SventonException;
 
   /**
@@ -240,7 +239,7 @@ public interface RepositoryService {
    * @throws SventonException if a subversion error occur
    */
   List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                                final RepositoryConfiguration configuration) throws SventonException;
+                             final RepositoryConfiguration configuration) throws SventonException;
 
   /**
    * Blame (annotates) the given file.

@@ -15,22 +15,19 @@ import org.apache.commons.lang.Validate;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.model.DiffStatus;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.model.DiffStyle;
-import org.sventon.model.DirEntry;
-import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,8 +83,17 @@ public final class DiffController extends AbstractTemplateController {
       logger.debug("No entries has been set - diffing with previous");
       final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
-      command.setEntries(revisions.toArray(new SVNFileRevision[revisions.size()]));
+      command.setEntries(convert(revisions));
     }
+  }
+
+  // TODO: move this conversion.
+  private PathRevision[] convert(List<SVNFileRevision> revisions) {
+    final List<PathRevision> pathRevisions = new ArrayList<PathRevision>(revisions.size());
+    for (SVNFileRevision fileRevision : revisions) {
+      pathRevisions.add(new PathRevision(fileRevision.getPath(), Revision.create(fileRevision.getRevision())));
+    }
+    return pathRevisions.toArray(new PathRevision[pathRevisions.size()]);
   }
 
   private void handleDiffStyle(DiffCommand command) {

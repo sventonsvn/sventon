@@ -6,11 +6,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
+import org.sventon.model.PathRevision;
 import org.sventon.model.RepositoryName;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +29,9 @@ public class ExportControllerTest extends TestCase {
     final MockHttpServletResponse response = new MockHttpServletResponse();
     final UserRepositoryContext context = new UserRepositoryContext();
     final MultipleEntriesCommand command = new MultipleEntriesCommand();
-    final SVNFileRevision[] entriesToExport = new SVNFileRevision[]{
-        new SVNFileRevision("/trunk/file1", 100, new SVNProperties(), new SVNProperties()),
-        new SVNFileRevision("/tags/test/file2", 101, new SVNProperties(), new SVNProperties())
+    final PathRevision[] entriesToExport = new PathRevision[]{
+        new PathRevision("/trunk/file1", Revision.create(100)),
+        new PathRevision("/tags/test/file2", Revision.create(101))
     };
     command.setName(new RepositoryName("test"));
     command.setEntries(entriesToExport);

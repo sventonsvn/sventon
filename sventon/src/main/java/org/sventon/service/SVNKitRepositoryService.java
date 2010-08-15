@@ -17,15 +17,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
-import org.sventon.model.DiffStatus;
-import org.sventon.model.StatusType;
-import org.sventon.model.SVNURL;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
+import org.sventon.model.SVNURL;
 import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
@@ -100,13 +98,13 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final void export(final SVNConnection connection, final List<SVNFileRevision> targets, final long pegRevision,
+  public final void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
-    for (final SVNFileRevision fileRevision : targets) {
+    for (final PathRevision fileRevision : targets) {
       final String path = fileRevision.getPath();
-      final long revision = fileRevision.getRevision();
+      final long revision = fileRevision.getRevision().getNumber();
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
       logger.debug("Exporting file [" + path + "] revision [" + revision + "]");
@@ -442,7 +440,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                                             final RepositoryConfiguration configuration) throws SventonException {
+                                          final RepositoryConfiguration configuration) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
     final SVNDiffClient diffClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getDiffClient();

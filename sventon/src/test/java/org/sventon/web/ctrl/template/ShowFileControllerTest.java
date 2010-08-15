@@ -9,9 +9,9 @@ public class ShowFileControllerTest extends TestCase {
   private ShowFileController ctrl;
 
   protected void setUp() throws Exception {
-    final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
-    mftm.afterPropertiesSet();
-    ctrl = new ShowFileController(mftm);
+    final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
+    fileTypeMap.afterPropertiesSet();
+    ctrl = new ShowFileController(fileTypeMap);
     ctrl.setArchiveFileExtensionPattern("(jar|zip|war|ear)");
   }
 
@@ -36,18 +36,18 @@ public class ShowFileControllerTest extends TestCase {
   }
 
   public void testConfigurableMimeFileTypeMap() {
-    final ConfigurableMimeFileTypeMap ftm = new ConfigurableMimeFileTypeMap();
-    ftm.afterPropertiesSet();
+    final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
+    fileTypeMap.afterPropertiesSet();
 
-    assertEquals("application/octet-stream", ftm.getContentType("file.abc"));
-    assertEquals("application/zip", ftm.getContentType("file.zip"));
-    assertEquals("image/jpeg", ftm.getContentType("file.jpg"));
-    assertEquals("image/jpeg", ftm.getContentType("file.jpe"));
-    assertEquals("image/jpeg", ftm.getContentType("file.jpeg"));
-    assertEquals("image/gif", ftm.getContentType("file.gif"));
-    assertEquals("image/x-png", ftm.getContentType("file.png"));
-    assertEquals("application/octet-stream", ftm.getContentType("filenamejpg"));
-    assertEquals("image/gif", ftm.getContentType("/dir/file.gif"));
+    assertEquals("application/octet-stream", fileTypeMap.getContentType("file.abc"));
+    assertEquals("application/zip", fileTypeMap.getContentType("file.zip"));
+    assertEquals("image/jpeg", fileTypeMap.getContentType("file.jpg"));
+    assertEquals("image/jpeg", fileTypeMap.getContentType("file.jpe"));
+    assertEquals("image/jpeg", fileTypeMap.getContentType("file.jpeg"));
+    assertEquals("image/gif", fileTypeMap.getContentType("file.gif"));
+    assertEquals("image/x-png", fileTypeMap.getContentType("file.png"));
+    assertEquals("application/octet-stream", fileTypeMap.getContentType("filenamejpg"));
+    assertEquals("image/gif", fileTypeMap.getContentType("/dir/file.gif"));
   }
 
   public void testIsImageFileExtension() throws Exception {

@@ -16,12 +16,11 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.sventon.diff.DiffException;
 import org.sventon.model.DiffStyle;
+import org.sventon.model.PathRevision;
 import org.sventon.model.Revision;
 import org.sventon.util.PathUtil;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * DiffCommand.
@@ -30,24 +29,22 @@ import java.util.Comparator;
  * <p/>
  * A diff can be made between two arbitrary entries or by a single entry and
  * it's previous revision. In the first case, the method
- * {@link #setEntries(org.tmatesoft.svn.core.io.SVNFileRevision[])} setEntries} will be used.
+ * {@link #setEntries(PathRevision[])} setEntries} will be used.
  * A diff with previous revision will use the main path set by calling {@link #setPath(String)} }
  *
  * @author jesper@sventon.org
  */
 public final class DiffCommand extends BaseCommand {
 
-  private static final FileRevisionComparator FILE_REVISION_COMPARATOR = new FileRevisionComparator();
-
   /**
    * From revision.
    */
-  private SVNFileRevision fromFileRevision;
+  private PathRevision fromFileRevision;
 
   /**
    * To revision.
    */
-  private SVNFileRevision toFileRevision;
+  private PathRevision toFileRevision;
 
   /**
    * The requested diff style.
@@ -67,24 +64,24 @@ public final class DiffCommand extends BaseCommand {
   /**
    * Used when diffing two arbitrary entries.
    *
-   * @param entries Array containing two <code>SVNFileRevision</code> objects.
+   * @param entries Array containing two <code>PathRevision</code> objects.
    * @throws IllegalArgumentException       if given list does not contain two entries.
    * @throws org.sventon.diff.DiffException if entry does not have a history.
    */
-  public void setEntries(final SVNFileRevision[] entries) throws DiffException {
+  public void setEntries(final PathRevision[] entries) throws DiffException {
     Validate.notNull(entries);
 
     if (entries.length < 2) {
       throw new DiffException("The entry does not have a history.");
     }
 
-    Arrays.sort(entries, FILE_REVISION_COMPARATOR);
+    Arrays.sort(entries);
     toFileRevision = entries[0];
     fromFileRevision = entries[1];
   }
 
   /**
-   * @return True if entries has been set (using {@link #setEntries(org.tmatesoft.svn.core.io.SVNFileRevision[])}).
+   * @return True if entries has been set (using {@link #setEntries(PathRevision[])}).
    */
   public boolean hasEntries() {
     return toFileRevision != null && fromFileRevision != null;
@@ -123,7 +120,7 @@ public final class DiffCommand extends BaseCommand {
    * @return The revision.
    */
   public Revision getFromRevision() {
-    return fromFileRevision != null ? Revision.create(fromFileRevision.getRevision()) : Revision.UNDEFINED;
+    return fromFileRevision != null ? fromFileRevision.getRevision() : Revision.UNDEFINED;
   }
 
   /**
@@ -150,7 +147,7 @@ public final class DiffCommand extends BaseCommand {
    * @return The revision.
    */
   public Revision getToRevision() {
-    return toFileRevision != null ? Revision.create(toFileRevision.getRevision()) : Revision.UNDEFINED;
+    return toFileRevision != null ? toFileRevision.getRevision() : Revision.UNDEFINED;
   }
 
   @Override
@@ -191,13 +188,6 @@ public final class DiffCommand extends BaseCommand {
     sb.append(getStyle());
     sb.append("}");
     return sb.toString();
-  }
-
-  private static class FileRevisionComparator implements Comparator<SVNFileRevision> {
-    @Override
-    public int compare(SVNFileRevision o1, SVNFileRevision o2) {
-      return (o2.getRevision() < o1.getRevision() ? -1 : (o2.getRevision() == o1.getRevision() ? 0 : 1));
-    }
   }
 
 }

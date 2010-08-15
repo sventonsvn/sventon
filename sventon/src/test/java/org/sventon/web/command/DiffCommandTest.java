@@ -2,11 +2,11 @@ package org.sventon.web.command;
 
 import junit.framework.TestCase;
 import org.sventon.diff.DiffException;
-import org.sventon.web.command.editor.SVNFileRevisionEditor;
+import org.sventon.web.command.editor.PathRevisionEditor;
 
 public class DiffCommandTest extends TestCase {
 
-  private final SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
+  private final PathRevisionEditor editor = new PathRevisionEditor();
 
   public void testDiffCommandNull() throws Exception {
     DiffCommand command = new DiffCommand();

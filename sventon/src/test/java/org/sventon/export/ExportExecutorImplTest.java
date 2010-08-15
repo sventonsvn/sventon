@@ -6,9 +6,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.sventon.SVNConnection;
 import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.PathRevision;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.WebUtils;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ExportExecutorImplTest extends TestCase {
   }
 
   public void testExportTask() throws Exception {
-    final List<SVNFileRevision> entries = new ArrayList<SVNFileRevision>();
+    final List<PathRevision> entries = new ArrayList<PathRevision>();
 
     final ConfigDirectory configDirectoryMock = createMock(ConfigDirectory.class);
     final ExportDirectory exportDirectoryMock = createMock(ExportDirectory.class);
