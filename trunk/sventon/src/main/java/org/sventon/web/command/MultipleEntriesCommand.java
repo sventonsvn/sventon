@@ -15,7 +15,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.sventon.model.PathRevision;
 
 /**
  * MultipleEntriesCommand.
@@ -33,14 +33,14 @@ public class MultipleEntriesCommand extends BaseCommand {
   /**
    * Entries.
    */
-  private SVNFileRevision[] entries = new SVNFileRevision[0];
+  private PathRevision[] entries = new PathRevision[0];
 
   /**
    * Gets the entries.
    *
    * @return Entries
    */
-  public SVNFileRevision[] getEntries() {
+  public PathRevision[] getEntries() {
     return entries;
   }
 
@@ -49,7 +49,7 @@ public class MultipleEntriesCommand extends BaseCommand {
    *
    * @param entries Entries.
    */
-  public void setEntries(final SVNFileRevision[] entries) {
+  public void setEntries(final PathRevision[] entries) {
     this.entries = entries;
   }
 

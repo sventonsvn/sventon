@@ -16,10 +16,10 @@ import org.springframework.web.servlet.mvc.AbstractCommandController;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.PathRevision;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyEditor;
@@ -59,13 +59,13 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   /**
    * Revision editor instance.
    */
-  private PropertyEditor svnFileRevisionEditor;
+  private PropertyEditor pathRevisionEditor;
 
   @Override
   protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);
     binder.registerCustomEditor(Revision.class, revisionEditor);
-    binder.registerCustomEditor(SVNFileRevision.class, svnFileRevisionEditor);
+    binder.registerCustomEditor(PathRevision.class, pathRevisionEditor);
   }
 
   /**
@@ -89,10 +89,10 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   /**
    * Sets the editor.
    *
-   * @param svnFileRevisionEditor Editor.
+   * @param pathRevisionEditor Editor.
    */
-  public void setSvnFileRevisionEditor(final PropertyEditor svnFileRevisionEditor) {
-    this.svnFileRevisionEditor = svnFileRevisionEditor;
+  public void setPathRevisionEditor(final PropertyEditor pathRevisionEditor) {
+    this.pathRevisionEditor = pathRevisionEditor;
   }
 
   /**

@@ -19,11 +19,11 @@ import org.springframework.util.StopWatch;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.PathRevision;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -186,11 +186,11 @@ public class ExportExecutorImpl implements ExportExecutor {
 
     private final ExportDirectory exportDirectory;
     private final SVNConnection connection;
-    private final List<SVNFileRevision> entries;
+    private final List<PathRevision> entries;
     private final long pegRevision;
 
     public ExportTask(final ExportDirectory exportDirectory, final SVNConnection connection,
-                      final List<SVNFileRevision> entries, final long pegRevision) {
+                      final List<PathRevision> entries, final long pegRevision) {
       this.exportDirectory = exportDirectory;
       this.connection = connection;
       this.entries = entries;

@@ -12,7 +12,7 @@ import org.sventon.model.InlineDiffRow;
 import org.sventon.model.Revision;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
-import org.sventon.web.command.editor.SVNFileRevisionEditor;
+import org.sventon.web.command.editor.PathRevisionEditor;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
@@ -32,7 +32,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
 
   private static final String NL = System.getProperty("line.separator");
 
-  private SVNFileRevisionEditor editor = new SVNFileRevisionEditor();
+  private PathRevisionEditor editor = new PathRevisionEditor();
 
   public void testDiffUnifiedBinaryFile() throws Exception {
     final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {

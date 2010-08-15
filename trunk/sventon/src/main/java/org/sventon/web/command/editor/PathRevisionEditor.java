@@ -11,18 +11,19 @@
  */
 package org.sventon.web.command.editor;
 
-import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.sventon.model.PathRevision;
+import org.sventon.model.Revision;
 
 import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom property editor for repository name.
+ * Custom property editor for a path/revision combination.
  *
  * @author jesper@sventon.org
  */
-public class SVNFileRevisionEditor extends PropertyEditorSupport {
+public class PathRevisionEditor extends PropertyEditorSupport {
 
   /**
    * The delimiter between the path and the revision values.
@@ -31,21 +32,21 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
 
   @Override
   public void setAsText(final String entryAsString) {
-    setValue(toSVNFileRevision(entryAsString));
+    setValue(toPathRevision(entryAsString));
   }
 
-  private SVNFileRevision toSVNFileRevision(final String entry) {
+  private PathRevision toPathRevision(final String entry) {
     if (!entry.contains(DELIMITER)) {
       throw new IllegalArgumentException("Illegal parameter. No delimiter in entry: " + entry);
     }
     final String path = entry.substring(0, entry.lastIndexOf(DELIMITER));
     final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 1);
-    return new SVNFileRevision(path, Long.parseLong(revision), null, null);
+    return new PathRevision(path, Revision.create(Long.parseLong(revision)));
   }
 
   @Override
   public String getAsText() {
-    final SVNFileRevision fileRevision = (SVNFileRevision) super.getValue();
+    final PathRevision fileRevision = (PathRevision) super.getValue();
     if (fileRevision == null) {
       return "";
     } else {
@@ -53,12 +54,12 @@ public class SVNFileRevisionEditor extends PropertyEditorSupport {
     }
   }
 
-  public SVNFileRevision[] convert(final String[] entries) {
-    final List<SVNFileRevision> fileEntries = new ArrayList<SVNFileRevision>();
+  public PathRevision[] convert(final String[] entries) {
+    final List<PathRevision> fileEntries = new ArrayList<PathRevision>();
     for (String entry : entries) {
-      fileEntries.add(toSVNFileRevision(entry));
+      fileEntries.add(toPathRevision(entry));
     }
-    return fileEntries.toArray(new SVNFileRevision[fileEntries.size()]);
+    return fileEntries.toArray(new PathRevision[fileEntries.size()]);
   }
 
 }

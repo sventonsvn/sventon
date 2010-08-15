@@ -6,9 +6,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
-import org.sventon.web.command.editor.SVNFileRevisionEditor;
+import org.sventon.model.PathRevision;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
+import org.sventon.web.command.editor.PathRevisionEditor;
 
 import java.util.List;
 import java.util.Map;
@@ -16,19 +16,19 @@ import java.util.Map;
 public class ShowThumbnailsControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
-    final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
-    mftm.afterPropertiesSet();
+    final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
+    fileTypeMap.afterPropertiesSet();
 
     final MultipleEntriesCommand command = new MultipleEntriesCommand();
-    final ShowThumbnailsController ctrl = new ShowThumbnailsController(mftm);
+    final ShowThumbnailsController ctrl = new ShowThumbnailsController(fileTypeMap);
 
     final String[] pathEntries = new String[]{
         "file1.gif@123",
         "file2.jpg@123",
         "file.abc@123"};
 
-    final SVNFileRevisionEditor svnFileRevisionEditor = new SVNFileRevisionEditor();
-    command.setEntries(svnFileRevisionEditor.convert(pathEntries));
+    final PathRevisionEditor pathRevisionEditor = new PathRevisionEditor();
+    command.setEntries(pathRevisionEditor.convert(pathEntries));
 
     final MockHttpServletRequest req = new MockHttpServletRequest();
     req.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
@@ -41,9 +41,9 @@ public class ShowThumbnailsControllerTest extends TestCase {
 
     assertEquals(2, entries.size());
 
-    final SVNFileRevision entry0 = (SVNFileRevision) entries.get(0);
+    final PathRevision entry0 = (PathRevision) entries.get(0);
     assertEquals("file1.gif", entry0.getPath());
-    assertEquals(123, entry0.getRevision());
+    assertEquals(123, entry0.getRevision().getNumber());
   }
 
 }

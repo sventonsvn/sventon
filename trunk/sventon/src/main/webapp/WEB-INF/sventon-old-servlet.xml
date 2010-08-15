@@ -77,7 +77,7 @@
     <property name="validator" ref="baseCommandValidator"/>
     <property name="nameEditor" ref="nameEditor"/>
     <property name="revisionEditor" ref="revisionEditor"/>
-    <property name="svnFileRevisionEditor" ref="svnFileRevisionEditor"/>
+    <property name="pathRevisionEditor" ref="pathRevisionEditor"/>
     <property name="application" ref="application"/>
     <property name="repositoryService" ref="repositoryService"/>
     <property name="connectionFactory" ref="connectionFactory"/>
