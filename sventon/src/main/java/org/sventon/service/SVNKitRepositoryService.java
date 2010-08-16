@@ -254,7 +254,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @SuppressWarnings({"unchecked"})
   @Override
-  public final List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
+  public final List<PathRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
       throws SventonException {
 
     //noinspection unchecked
@@ -274,7 +274,27 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
       logger.debug("Found revisions: " + fileRevisionNumbers);
     }
-    return svnFileRevisions;
+    return convertFileRevisions(svnFileRevisions);
+  }
+
+  // TODO: Introduce commons collections with transformer etc?
+  private List<PathRevision> convertFileRevisions(List<SVNFileRevision> revisions) {
+    final List<PathRevision> pathRevisions = new ArrayList<PathRevision>(revisions.size());
+    for (SVNFileRevision fileRevision : revisions) {
+      final PathRevision revision = new PathRevision(fileRevision.getPath(), Revision.create(fileRevision.getRevision()));
+
+      final SVNProperties svnProperties = fileRevision.getRevisionProperties();
+      for (Object o : svnProperties.nameSet()) {
+        final String revisionPropertyName = (String) o;
+        final String revisionPropertyValue = svnProperties.getStringValue(revisionPropertyName);
+        final RevisionProperty revisionProperty = RevisionProperty.byName(revisionPropertyName);
+        revision.addProperty(revisionProperty, revisionPropertyValue);
+      }
+
+
+      pathRevisions.add(revision);
+    }
+    return pathRevisions;
   }
 
   @Override

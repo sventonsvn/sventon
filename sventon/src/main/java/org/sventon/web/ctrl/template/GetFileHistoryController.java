@@ -16,13 +16,16 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
+import org.sventon.model.PathRevision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Gets the file revision history for a given entry.
@@ -36,11 +39,6 @@ public final class GetFileHistoryController extends AbstractTemplateController {
    */
   static final String ARCHIVED_ENTRY = "archivedEntry";
 
-  /**
-   * Formatter for ISO 8601 format.
-   */
-  public static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
-
   @Override
   protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
@@ -50,23 +48,21 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
     final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
 
-    final List<SVNFileRevision> fileRevisions = new ArrayList<SVNFileRevision>();
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
-      final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
+      final List<PathRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
+      Collections.reverse(revisions);
 
-      fileRevisions.addAll(revisions);
-      Collections.reverse(fileRevisions);
+      model.put("currentRevision", command.getRevisionNumber());
+      model.put("fileRevisions", revisions);
+      if (archivedEntry != null) {
+        model.put(ARCHIVED_ENTRY, archivedEntry);
+      }
     } catch (SventonException ex) {
       logger.error(ex.getMessage());
     }
 
-    model.put("currentRevision", command.getRevisionNumber());
-    model.put("fileRevisions", fileRevisions);
-    if (archivedEntry != null) {
-      model.put(ARCHIVED_ENTRY, archivedEntry);
-    }
     return new ModelAndView(getViewName(), model);
   }
 }

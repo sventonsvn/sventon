@@ -18,10 +18,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ page import="org.sventon.model.RevisionProperty" %>
+<%@ page import="org.sventon.util.DateUtil" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="org.tmatesoft.svn.core.SVNRevisionProperty" %>
-<%@ page import="org.sventon.web.ctrl.template.GetFileHistoryController" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 
 <c:if test="${fn:length(fileRevisions) > 1}">
 <table class="fileHistoryTable">
@@ -37,11 +36,11 @@
                 <c:param name="forceDisplay" value="true" />
               </c:if>
             </c:url>
-            <jsp:useBean id="fileRevision" type="org.tmatesoft.svn.core.io.SVNFileRevision"/>
+            <jsp:useBean id="fileRevision" type="org.sventon.model.PathRevision"/>
             <%
-              final String dateString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.DATE);
-              final String authorString = fileRevision.getRevisionProperties().getStringValue(SVNRevisionProperty.AUTHOR);
-              final Date revDate = new SimpleDateFormat(GetFileHistoryController.ISO8601_FORMAT_PATTERN).parse(dateString);
+              final String dateString = fileRevision.getProperty(RevisionProperty.DATE);
+              final String authorString = fileRevision.getProperty(RevisionProperty.AUTHOR);
+              final Date revDate = DateUtil.parseISO8601(dateString);
             %>
             <option value="${showFileAtRevisionUrl}">
               <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>

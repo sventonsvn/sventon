@@ -23,11 +23,9 @@ import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,20 +79,12 @@ public final class DiffController extends AbstractTemplateController {
   private void handleDiffPrevious(SVNConnection connection, DiffCommand command) throws SventonException {
     if (!command.hasEntries()) {
       logger.debug("No entries has been set - diffing with previous");
-      final List<SVNFileRevision> revisions = getRepositoryService().getFileRevisions(
+      final List<PathRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
-      command.setEntries(convert(revisions));
+      command.setEntries((PathRevision[]) revisions.toArray()); //TODO: Why PathRevision[] and not a List?
     }
   }
 
-  // TODO: move this conversion.
-  private PathRevision[] convert(List<SVNFileRevision> revisions) {
-    final List<PathRevision> pathRevisions = new ArrayList<PathRevision>(revisions.size());
-    for (SVNFileRevision fileRevision : revisions) {
-      pathRevisions.add(new PathRevision(fileRevision.getPath(), Revision.create(fileRevision.getRevision())));
-    }
-    return pathRevisions.toArray(new PathRevision[pathRevisions.size()]);
-  }
 
   private void handleDiffStyle(DiffCommand command) {
     if (DiffStyle.unspecified == command.getStyle()) {
