@@ -87,7 +87,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     final SVNRepository repository = connection.getDelegate();
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
     try {
-      repository.log(new String[]{path}, fromRevision, toRevision, true, stopOnCopy, limit, new ISVNLogEntryHandler() {
+      repository.log(new String[]{path}, fromRevision, toRevision, includeChangedPaths, stopOnCopy, limit, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
           logEntries.add(logEntry);
         }
