@@ -20,7 +20,6 @@ import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -184,7 +183,7 @@ public interface RepositoryService {
    * @return List of file revisions
    * @throws SventonException if a subversion error occur
    */
-  List<SVNFileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SventonException;
+  List<PathRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Creates a side-by-side diff.
