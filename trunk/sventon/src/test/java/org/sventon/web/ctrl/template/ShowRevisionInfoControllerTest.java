@@ -1,23 +1,20 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.expect;
-
 import org.easymock.classextension.EasyMock;
-
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
-import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class ShowRevisionInfoControllerTest extends TestCase {
 
@@ -40,7 +37,7 @@ public class ShowRevisionInfoControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    final LogEntryWrapper revision = (LogEntryWrapper) model.get("revisionInfo");
+    final LogEntry revision = (LogEntry) model.get("revisionInfo");
     assertEquals(123, revision.getRevision());
   }
 }

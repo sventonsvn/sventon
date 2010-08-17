@@ -69,7 +69,7 @@
         <c:set var="nextPath" value="${entry.pathAtRevision}"/>
         <c:set var="nextRev" value="${entry.revision}"/>
 
-        <jsp:useBean id="entry" type="org.sventon.model.LogEntryWrapper" />
+        <jsp:useBean id="entry" type="org.sventon.model.LogEntry" />
 
         <c:url value="/ajax/${command.name}/entrytray${entry.pathAtRevision}" var="entryTrayAddUrl">
           <c:param name="pegRevision" value="${entry.revision}" />

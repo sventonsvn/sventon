@@ -227,11 +227,11 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<LogEntryWrapper> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<LogEntry> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     final List<SVNLogEntry> logEntries = getRepositoryService().getLatestRevisions(
         command.getName(), connection, repositoryContext.getLatestRevisionsDisplayCount());
-    return LogEntryWrapper.convert(logEntries);
+    return LogEntry.convert(logEntries);
   }
 
   /**

@@ -20,7 +20,7 @@
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 
 <%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
-<%@ attribute name="logEntry" required="true" type="org.sventon.model.LogEntryWrapper" %>
+<%@ attribute name="logEntry" required="true" type="org.sventon.model.LogEntry" %>
 <%@ attribute name="keepVisible" required="true" type="java.lang.Boolean" %>
 <%@ attribute name="linkToHead" required="true" type="java.lang.Boolean" %>
 

@@ -12,9 +12,9 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.sventon.util.WebUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.sventon.util.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * LogEntryWrapper.
+ * LogEntry.
  *
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class LogEntryWrapper {
+public final class LogEntry {
 
   /**
    * Subversion log entry.
@@ -44,7 +44,7 @@ public final class LogEntryWrapper {
    *
    * @param logEntry The log entry
    */
-  public LogEntryWrapper(final SVNLogEntry logEntry) {
+  public LogEntry(final SVNLogEntry logEntry) {
     svnLogEntry = logEntry;
     this.pathAtRevision = null;
   }
@@ -55,7 +55,7 @@ public final class LogEntryWrapper {
    * @param logEntry       The log entry
    * @param pathAtRevision The entry's path at given revision.
    */
-  public LogEntryWrapper(final SVNLogEntry logEntry, final String pathAtRevision) {
+  public LogEntry(final SVNLogEntry logEntry, final String pathAtRevision) {
     svnLogEntry = logEntry;
     this.pathAtRevision = pathAtRevision;
   }
@@ -122,10 +122,10 @@ public final class LogEntryWrapper {
    * @param logEntries SVN Log entries
    * @return List of wrappers
    */
-  public static List<LogEntryWrapper> convert(List<SVNLogEntry> logEntries) {
-    final List<LogEntryWrapper> wrappers = new ArrayList<LogEntryWrapper>();
+  public static List<LogEntry> convert(List<SVNLogEntry> logEntries) {
+    final List<LogEntry> wrappers = new ArrayList<LogEntry>();
     for (SVNLogEntry logEntry : logEntries) {
-      wrappers.add(new LogEntryWrapper(logEntry));
+      wrappers.add(new LogEntry(logEntry));
     }
     return wrappers;
   }

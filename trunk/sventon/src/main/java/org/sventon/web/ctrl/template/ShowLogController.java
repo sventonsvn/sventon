@@ -19,7 +19,7 @@ import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.model.DirEntry;
-import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.LogEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
@@ -67,7 +67,7 @@ public final class ShowLogController extends AbstractTemplateController {
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
 
-    final List<LogEntryWrapper> logEntryWrappers = new ArrayList<LogEntryWrapper>();
+    final List<LogEntry> logEntryWrappers = new ArrayList<LogEntry>();
 
     try {
       final List<SVNLogEntry> logEntries = getRepositoryService().getLogEntries(command.getName(), connection,
@@ -76,7 +76,7 @@ public final class ShowLogController extends AbstractTemplateController {
       String pathAtRevision = nextPath;
 
       for (final SVNLogEntry logEntry : logEntries) {
-        logEntryWrappers.add(new LogEntryWrapper(logEntry, pathAtRevision));
+        logEntryWrappers.add(new LogEntry(logEntry, pathAtRevision));
 
         //noinspection unchecked
         final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();

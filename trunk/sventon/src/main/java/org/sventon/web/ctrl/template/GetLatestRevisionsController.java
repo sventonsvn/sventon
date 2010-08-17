@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.model.LogEntryWrapper;
+import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -42,7 +42,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    final List<LogEntryWrapper> revisions = new ArrayList<LogEntryWrapper>();
+    final List<LogEntry> revisions = new ArrayList<LogEntry>();
     final int revisionCount = userRepositoryContext.getLatestRevisionsDisplayCount();
 
     try {
@@ -50,7 +50,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
       final List<SVNLogEntry> logEntries = getRepositoryService().getLatestRevisions(command.getName(), connection, revisionCount);
 
       //TODO: Parse to apply Bugtraq links
-      revisions.addAll(LogEntryWrapper.convert(logEntries));
+      revisions.addAll(LogEntry.convert(logEntries));
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());

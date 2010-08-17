@@ -13,7 +13,7 @@ public class LogEntryWrapperTest extends TestCase {
   }
 
   private String wrap(String message) {
-    return new LogEntryWrapper(TestUtils.getLogEntryStub(1, message)).getWebFormattedMessage();
+    return new LogEntry(TestUtils.getLogEntryStub(1, message)).getWebFormattedMessage();
   }
 
 }
