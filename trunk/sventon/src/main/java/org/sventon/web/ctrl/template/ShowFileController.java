@@ -19,7 +19,6 @@ import org.sventon.SVNConnection;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.*;
 import org.sventon.util.EncodingUtils;
-import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 
@@ -136,7 +135,7 @@ public final class ShowFileController extends AbstractTemplateController {
           logger.debug("Extracting [" + archivedEntry + "] from archive [" + command.getPath() + "]");
           final ZipFileWrapper zipFileWrapper = new ZipFileWrapper(outStream.toByteArray());
           final TextFile textFile = new TextFile(new String(zipFileWrapper.extractFile(archivedEntry), charset),
-              archivedEntry, charset, colorer, fileProperties, connection.getURL());
+              archivedEntry, charset, colorer);
           model.put("file", textFile);
           modelAndView = new ModelAndView("showTextFile", model);
         } else {
@@ -150,17 +149,14 @@ public final class ShowFileController extends AbstractTemplateController {
       getRepositoryService().getFileContents(connection, command.getPath(), command.getRevisionNumber(), outStream);
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
-        final KeywordHandler keywordHandler = new KeywordHandler(fileProperties,
-            connection.getURL() + command.getPath());
-        final String content = keywordHandler.substitute(outStream.toString(charset), charset);
+        final String content = outStream.toString(charset);
         response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
             "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
         response.getOutputStream().write(content.getBytes(charset));
         return null;
       } else {
-        final TextFile textFile = new TextFile(outStream.toString(charset), command.getPath(), charset,
-            colorer, fileProperties, connection.getURL());
+        final TextFile textFile = new TextFile(outStream.toString(charset), command.getPath(), charset, colorer);
         model.put("file", textFile);
       }
       modelAndView = new ModelAndView("showTextFile", model);

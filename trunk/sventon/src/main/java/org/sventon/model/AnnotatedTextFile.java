@@ -13,7 +13,6 @@ package org.sventon.model;
 
 import org.apache.commons.io.FilenameUtils;
 import org.sventon.colorer.Colorer;
-import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
 
 import java.io.IOException;
@@ -39,8 +38,6 @@ public final class AnnotatedTextFile {
   private final String path;
   private final String encoding;
   private final Colorer colorer;
-  private final Properties properties;
-  private final String repositoryURL;
 
   /**
    * Constructor.
@@ -50,25 +47,20 @@ public final class AnnotatedTextFile {
       public String getColorizedContent(final String content, final String fileExtension, final String encoding) {
         return content;
       }
-    }, null, null);
+    });
   }
 
   /**
    * Constructor.
    *
-   * @param path          Path.
-   * @param encoding      Encoding.
-   * @param colorer       Colorer.
-   * @param properties    Keywords to be substituted. If <tt>null</tt> no keywords will be processed.
-   * @param repositoryURL Repository URL for keyword substitution.
+   * @param path     Path.
+   * @param encoding Encoding.
+   * @param colorer  Colorer.
    */
-  public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer,
-                           final Properties properties, final String repositoryURL) {
+  public AnnotatedTextFile(final String path, final String encoding, final Colorer colorer) {
     this.path = path;
     this.encoding = encoding;
     this.colorer = colorer;
-    this.properties = properties;
-    this.repositoryURL = repositoryURL;
   }
 
   /**
@@ -96,16 +88,8 @@ public final class AnnotatedTextFile {
       sb.append(row.getContent()).append(NL);
     }
 
-    final String processedContent;
-    if (properties != null) {
-      final KeywordHandler keywordHandler = new KeywordHandler(properties, repositoryURL + path);
-      processedContent = keywordHandler.substitute(sb.toString(), encoding);
-    } else {
-      processedContent = sb.toString();
-    }
-
     final String colorizedContent = colorer.getColorizedContent(
-        processedContent, FilenameUtils.getExtension(path), encoding);
+        sb.toString(), FilenameUtils.getExtension(path), encoding);
 
     final String[] fileRows = WebUtils.NL_REGEXP.split(colorizedContent);
     int count = 0;

@@ -17,7 +17,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
-import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
@@ -25,7 +24,6 @@ import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
-import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -116,9 +114,11 @@ public class SVNKitRepositoryService implements RepositoryService {
 
       try {
         final File entryToExport = new File(revisionRootDir, path);
-        SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getUpdateClient().doExport(
-            org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repository.getLocation().toDecodedString() + path), entryToExport,
-            SVNRevision.create(pegRevision), SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
+        final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
+        final SVNUpdateClient updateClient = clientManager.getUpdateClient();
+        updateClient.doExport(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(
+            repository.getLocation().toDecodedString() + path), entryToExport, SVNRevision.create(pegRevision),
+            SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
       } catch (SVNException ex) {
         translateSVNException("Error exporting [" + path + "@" + revision + "]", ex);
       }
@@ -134,11 +134,15 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final void getFileContents(final SVNConnection connection, final String path, final long revision,
-                                    final OutputStream output) throws SventonException {
+  public void getFileContents(final SVNConnection connection, final String path, final long revision,
+                              final OutputStream output) throws SventonException {
     final SVNRepository repository = connection.getDelegate();
     try {
-      repository.getFile(path, revision, new SVNProperties(), output);
+      final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
+      final SVNWCClient wcClient = clientManager.getWCClient();
+      final org.tmatesoft.svn.core.SVNURL fileURL = org.tmatesoft.svn.core.SVNURL.parseURIDecoded(
+          repository.getLocation().toDecodedString() + path);
+      wcClient.doGetFileContents(fileURL, SVNRevision.create(revision), SVNRevision.create(revision), true, output);
     } catch (SVNException ex) {
       translateSVNException("Cannot get contents of file [" + path + "@" + revision + "]", ex);
     }
@@ -278,61 +282,28 @@ public class SVNKitRepositoryService implements RepositoryService {
     return Converter.convertFileRevisions(svnFileRevisions);
   }
 
-
   @Override
   public final List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
-                                                      final Revision pegRevision, final String charset,
-                                                      final RepositoryConfiguration configuration) throws SventonException, DiffException {
+                                                      final Revision pegRevision, final String charset)
+      throws SventonException, DiffException {
 
     assertNotBinary(connection, command, pegRevision);
-
-    String diffResultString;
-    SideBySideDiffCreator sideBySideDiffCreator;
 
     try {
       final TextFile leftFile;
       final TextFile rightFile;
 
-      final Properties leftFileProperties;
-      final Properties rightFileProperties;
-
       if (Revision.UNDEFINED.equals(pegRevision)) {
         leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
         rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
-        leftFileProperties = getFileProperties(connection, command.getFromPath(), command.getFromRevision().getNumber());
-        rightFileProperties = getFileProperties(connection, command.getToPath(), command.getToRevision().getNumber());
       } else {
         leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
         rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
-        leftFileProperties = getFileProperties(connection, command.getFromPath(), pegRevision.getNumber());
-        rightFileProperties = getFileProperties(connection, command.getToPath(), pegRevision.getNumber());
       }
-
-      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
-      final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
-      final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
-
-      diffProducer.doNormalDiff(diffResult);
-      diffResultString = diffResult.toString(charset);
-
-      if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
-      }
-
-      final KeywordHandler fromFileKeywordHandler =
-          new KeywordHandler(leftFileProperties, configuration.getRepositoryUrl() + command.getFromPath());
-      final KeywordHandler toFileKeywordHandler =
-          new KeywordHandler(rightFileProperties, configuration.getRepositoryUrl() + command.getToPath());
-
-      sideBySideDiffCreator = new SideBySideDiffCreator(leftFile, fromFileKeywordHandler, charset, rightFile,
-          toFileKeywordHandler, charset);
-
+      return createSideBySideDiff(command, charset, leftFile, rightFile);
     } catch (IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
     }
-
-    return sideBySideDiffCreator.createFromDiffResult(diffResultString);
   }
 
   @Override
@@ -341,8 +312,6 @@ public class SVNKitRepositoryService implements RepositoryService {
 
     assertNotBinary(connection, command, pegRevision);
 
-    String diffResultString;
-
     try {
       final TextFile leftFile;
       final TextFile rightFile;
@@ -354,35 +323,19 @@ public class SVNKitRepositoryService implements RepositoryService {
         leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
         rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
       }
-
-      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
-          new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
-
-      diffProducer.doUnifiedDiff(diffResult);
-
-      diffResultString = diffResult.toString(charset);
-      if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
-      }
-
+      return createUnifiedDiff(command, charset, leftFile, rightFile);
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
     }
-
-    return diffResultString;
   }
 
   @Override
-  public final List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                                              final String charset, final RepositoryConfiguration configuration)
+  public final List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command,
+                                              final Revision pegRevision, final String charset)
       throws SventonException, DiffException {
 
     assertNotBinary(connection, command, pegRevision);
 
-    String diffResultString;
-    final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
-
     try {
       final TextFile leftFile;
       final TextFile rightFile;
@@ -395,61 +348,21 @@ public class SVNKitRepositoryService implements RepositoryService {
         rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
-      final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-      final Map generatorProperties = new HashMap();
-      final int maxLines = Math.max(leftFile.getRows().size(), rightFile.getRows().size());
-      //noinspection unchecked
-      generatorProperties.put(QDiffGeneratorFactory.GUTTER_PROPERTY, maxLines);
-      final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
-          new ByteArrayInputStream(rightFile.getContent().getBytes()), charset, generatorProperties);
+      return createInlineDiff(command, charset, leftFile, rightFile);
 
-      diffProducer.doUnifiedDiff(diffResult);
-
-      diffResultString = diffResult.toString(charset);
-      if ("".equals(diffResultString)) {
-        throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
-      }
-
-      int rowNumberLeft = 1;
-      int rowNumberRight = 1;
-      //noinspection unchecked
-      for (final String row : (List<String>) IOUtils.readLines(new StringReader(diffResultString))) {
-        if (!row.startsWith("@@")) {
-          final char action = row.charAt(0);
-          switch (action) {
-            case ' ':
-              resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
-              rowNumberLeft++;
-              rowNumberRight++;
-              break;
-            case '+':
-              resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
-              rowNumberRight++;
-              break;
-            case '-':
-              resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
-              rowNumberLeft++;
-              break;
-            default:
-              throw new IllegalArgumentException("Unknown action: " + action);
-          }
-        }
-      }
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce inline diff", ioex);
     }
-    return resultRows;
   }
 
   @Override
-  public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                                          final RepositoryConfiguration configuration) throws SventonException {
+  public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command)
+      throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
-    final SVNDiffClient diffClient = SVNClientManager.newInstance(null, repository.getAuthenticationManager()).getDiffClient();
-
+    final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
+    final SVNDiffClient diffClient = clientManager.getDiffClient();
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
-
     final String repoRoot = repository.getLocation().toDecodedString();
 
     try {
@@ -459,7 +372,8 @@ public class SVNKitRepositoryService implements RepositoryService {
           SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
             public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
               if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-                result.add(new DiffStatus(StatusType.fromId(diffStatus.getModificationType().getID()), new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
+                result.add(new DiffStatus(StatusType.fromId(diffStatus.getModificationType().getID()),
+                    new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
               }
             }
           });
@@ -483,12 +397,9 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
 
       logger.debug("Blaming file [" + path + "] revision [" + revision + "]");
-      final Properties properties = getFileProperties(connection, path, revision);
-      final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(
-          path, charset, colorer, properties, repository.getLocation().toDecodedString());
-      final SVNLogClient logClient = SVNClientManager.newInstance(
-          null, repository.getAuthenticationManager()).getLogClient();
-
+      final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(path, charset, colorer);
+      final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
+      final SVNLogClient logClient = clientManager.getLogClient();
       final AnnotationHandler handler = new AnnotationHandler(annotatedTextFile);
       final SVNRevision startRev = SVNRevision.create(0);
       final SVNRevision endRev = SVNRevision.create(blameRevision);
@@ -558,6 +469,80 @@ public class SVNKitRepositoryService implements RepositoryService {
     return getLogEntries(repositoryName, connection, -1, Revision.FIRST, "/", revisionCount, false, true);
   }
 
+  protected List<SideBySideDiffRow> createSideBySideDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
+    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
+    final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
+
+    diffProducer.doNormalDiff(diffResult);
+    final String diffResultString = diffResult.toString(charset);
+
+    if ("".equals(diffResultString)) {
+      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+    }
+    return new SideBySideDiffCreator(leftFile, rightFile).createFromDiffResult(diffResultString);
+  }
+
+  protected String createUnifiedDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+    final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
+        new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
+
+    diffProducer.doUnifiedDiff(diffResult);
+
+    final String diffResultString = diffResult.toString(charset);
+    if ("".equals(diffResultString)) {
+      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+    }
+    return diffResultString;
+  }
+
+  protected List<InlineDiffRow> createInlineDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+    final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
+    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+    final Map generatorProperties = new HashMap();
+    final int maxLines = Math.max(leftFile.getRows().size(), rightFile.getRows().size());
+    //noinspection unchecked
+    generatorProperties.put(QDiffGeneratorFactory.GUTTER_PROPERTY, maxLines);
+    final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
+        new ByteArrayInputStream(rightFile.getContent().getBytes()), charset, generatorProperties);
+
+    diffProducer.doUnifiedDiff(diffResult);
+
+    final String diffResultString = diffResult.toString(charset);
+    if ("".equals(diffResultString)) {
+      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+    }
+
+    int rowNumberLeft = 1;
+    int rowNumberRight = 1;
+    //noinspection unchecked
+    for (final String row : (List<String>) IOUtils.readLines(new StringReader(diffResultString))) {
+      if (!row.startsWith("@@")) {
+        final char action = row.charAt(0);
+        switch (action) {
+          case ' ':
+            resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
+            rowNumberLeft++;
+            rowNumberRight++;
+            break;
+          case '+':
+            resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
+            rowNumberRight++;
+            break;
+          case '-':
+            resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
+            rowNumberLeft++;
+            break;
+          default:
+            throw new IllegalArgumentException("Unknown action: " + action);
+        }
+      }
+    }
+    return resultRows;
+  }
+
   private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {
     if (nodeKind1 != nodeKind2) {
       throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
@@ -601,7 +586,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
     }
 
-    throw new SventonException(errorMessage);
+    throw new SventonException(errorMessage, exception);
   }
 
   private static class AnnotationHandler implements ISVNAnnotateHandler {

@@ -14,8 +14,7 @@ public class SideBySideDiffCreatorTest extends TestCase {
     final TextFile fromFile = new TextFile("\r\ntest\r\nfile\r\n");
     final TextFile toFile = new TextFile("test\r\nfile\r\n");
 
-    final SideBySideDiffCreator diffCreator = new SideBySideDiffCreator(
-        fromFile, null, "UTF-8", toFile, null, "UTF-8");
+    final SideBySideDiffCreator diffCreator = new SideBySideDiffCreator(fromFile, toFile);
 
     final List<SideBySideDiffRow> result = diffCreator.createFromDiffResult(diffResult);
     assertEquals(3, result.size());

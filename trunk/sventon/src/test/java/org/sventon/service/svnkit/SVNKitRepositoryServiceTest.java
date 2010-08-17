@@ -3,14 +3,10 @@ package org.sventon.service.svnkit;
 import junit.framework.TestCase;
 import org.sventon.SVNConnection;
 import org.sventon.SVNRepositoryStub;
-import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.model.InlineDiffRow;
-import org.sventon.model.Revision;
-import org.sventon.model.SideBySideDiffRow;
-import org.sventon.model.SourceLine;
+import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
@@ -21,7 +17,6 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
@@ -65,21 +60,8 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
   }
 
-  public void testDiffUnifiedIdenticalFiles1() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
+  public void testDiffUnifiedIdenticalEmptyFiles() throws Exception {
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -88,36 +70,15 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
-      fail("Binary files cannot be diffed");
+      service.createUnifiedDiff(command, ENCODING, new TextFile(""), new TextFile(""));
+      fail("Exception expected");
     } catch (IdenticalFilesException e) {
       // expected
     }
   }
 
-  public void testDiffUnifiedIdenticalFiles2() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String fileContents = "test file contents";
-        if (contents != null) {
-          try {
-            contents.write(fileContents.getBytes());
-          } catch (IOException e) {
-            throw new RuntimeException("FAILED!");
-          }
-        }
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
+  public void testDiffUnifiedIdenticalFiles() throws Exception {
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -126,43 +87,20 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
-      fail("Binary files cannot be diffed");
+      final String contents = "test file contents";
+      service.createUnifiedDiff(command, ENCODING, new TextFile(contents), new TextFile(contents));
+      fail("No result should be produced for identical files");
     } catch (IdenticalFilesException e) {
       // expected
     }
   }
 
   public void testDiffUnified() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-      private boolean firstTime = true;
 
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String leftFileContents = "test left file contents" + NL;
-        final String rightFileContents = "test right file contents" + NL;
-        if (contents != null) {
-          try {
-            if (firstTime) {
-              contents.write(leftFileContents.getBytes());
-              firstTime = false;
-            } else {
-              contents.write(rightFileContents.getBytes());
-            }
-          } catch (IOException e) {
-            throw new RuntimeException("FAILED!");
-          }
-        }
-        return 0;
-      }
+    final TextFile leftFile = new TextFile("test left file contents" + NL);
+    final TextFile rightFile = new TextFile("test right file contents" + NL);
 
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -170,50 +108,23 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final String s = service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
+    final String s = service.createUnifiedDiff(command, ENCODING, leftFile, rightFile);
     assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
   }
 
   public void testDiffInline() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-      private boolean firstTime = true;
+    final TextFile leftFile = new TextFile(
+        "row one" + NL +
+            "row two" + NL +
+            "test left file contents" + NL +
+            "last row" + NL);
 
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String leftFileContents =
-            "row one" + NL +
-                "row two" + NL +
-                "test left file contents" + NL +
-                "last row" + NL;
+    final TextFile rightFile = new TextFile(
+        "row one" + NL +
+            "test right file contents" + NL +
+            "last row" + NL);
 
-        final String rightFileContents =
-            "row one" + NL +
-                "test right file contents" + NL +
-                "last row" + NL;
-
-        if (contents != null) {
-          try {
-            if (firstTime) {
-              contents.write(leftFileContents.getBytes());
-              firstTime = false;
-            } else {
-              contents.write(rightFileContents.getBytes());
-            }
-          } catch (IOException e) {
-            throw new RuntimeException("FAILED!");
-          }
-        }
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -221,7 +132,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final List<InlineDiffRow> list = service.diffInline(connection, command, Revision.UNDEFINED, ENCODING, configuration);
+    final List<InlineDiffRow> list = service.createInlineDiff(command, ENCODING, leftFile, rightFile);
 
     assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
     assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
@@ -247,7 +158,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     });
 
     final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -256,30 +166,15 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
+      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING);
       fail("Binary files cannot be diffed");
     } catch (IllegalFileFormatException e) {
       // expected
     }
   }
 
-  public void testDiffSideBySideIdenticalFiles1() throws Exception {
-
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+  public void testDiffSideBySideIdenticalEmptyFiles() throws Exception {
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -288,76 +183,18 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
-      fail("Binary files cannot be diffed");
+      service.createSideBySideDiff(command, ENCODING, new TextFile(""), new TextFile(""));
+      fail("Expected exception!");
     } catch (IdenticalFilesException e) {
       // expected
     }
   }
 
-  public void testDiffSideBySideDirectories() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
+  public void testDiffSideBySideIdenticalFiles() throws Exception {
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String fileContents = "test file contents";
-        if (contents != null) {
-          try {
-            contents.write(fileContents.getBytes());
-          } catch (IOException e) {
-            throw new RuntimeException("FAILED!");
-          }
-        }
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.DIR;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
-
-    final String[] revisions = new String[]{
-        "/bug/code/try1@91",
-        "/bug/code/try2@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
-
-    try {
-      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
-      fail("Binary files cannot be diffed");
-    } catch (DiffException e) {
-      // expected
-    }
-  }
-
-  public void testDiffSideBySideIdenticalFiles2() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        final String fileContents = "test file contents";
-        if (contents != null) {
-          try {
-            contents.write(fileContents.getBytes());
-          } catch (IOException e) {
-            throw new RuntimeException("FAILED!");
-          }
-        }
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+    final TextFile leftFile = new TextFile("test file contents");
+    final TextFile rightFile = new TextFile("test file contents");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -366,18 +203,18 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setEntries(editor.convert(revisions));
 
     try {
-      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
-      fail("Binary files cannot be diffed");
+      service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
+      fail("Expected exception");
     } catch (IdenticalFilesException e) {
       // expected
     }
   }
 
   public void testDiffSideBySide() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new TestSVNRepositoryStub());
+    final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-    final RepositoryService service = new SVNKitRepositoryService();
-    final RepositoryConfiguration configuration = new RepositoryConfiguration("test");
+    final TextFile leftFile = new TextFile("left file");
+    final TextFile rightFile = new TextFile("right file");
 
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -385,10 +222,10 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    List<SideBySideDiffRow> diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
+    List<SideBySideDiffRow> diff = service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
     assertEquals(1, diff.size());
 
-    ((TestSVNRepositoryStub) connection.getDelegate()).leftFileContents = "/**\n" +
+    final TextFile leftFile2 = new TextFile("/**\n" +
         " * $Author$\n" +
         " * $Revision$\n" +
         " * $Date:$\n" +
@@ -396,9 +233,9 @@ public class SVNKitRepositoryServiceTest extends TestCase {
         "Test1\n" +
         "Another test!\n" +
         "More!\n" +
-        "Even more!\n";
+        "Even more!\n");
 
-    ((TestSVNRepositoryStub) connection.getDelegate()).rightFileContents = "/**\n" +
+    final TextFile rightFile2 = new TextFile("/**\n" +
         " * $Id$\n" +
         " * $LastChangedDate$\n" +
         " * $Date$\n" +
@@ -419,8 +256,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
         "public String getRev {\n" +
         " return \"$Rev$\";\n" +
         "\n" +
-        "}\n";
-
+        "}\n");
 
     String leftResult =
         "1u/**\n" +
@@ -470,7 +306,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
             "21a\n" +
             "22a}\n";
 
-    diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
+    diff = service.createSideBySideDiff(command, ENCODING, leftFile2, rightFile2);
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
@@ -492,7 +328,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
     assertEquals(rightResult, sb.toString());
 
-    ((TestSVNRepositoryStub) connection.getDelegate()).leftFileContents =
+    final TextFile leftFile3 = new TextFile(
         "[.ShellClassInfo]\n" +
             "InfoTip=@Shell32.dll,-12690\n" +
             "IconFile=%SystemRoot%\\system32\\SHELL32.dll\n" +
@@ -500,9 +336,9 @@ public class SVNKitRepositoryServiceTest extends TestCase {
             "[DeleteOnCopy]\n" +
             "Owner=Jesper\n" +
             "Personalized=14\n" +
-            "PersonalizedName=Mina videoklipp\n";
+            "PersonalizedName=Mina videoklipp\n");
 
-    ((TestSVNRepositoryStub) connection.getDelegate()).rightFileContents =
+    final TextFile rightFile3 = new TextFile(
         "[.ShellClassInfo]\n" +
             "IconIndex=-2388\n" +
             "[DeleteOnCopy]\n" +
@@ -514,7 +350,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
             "OneMore=4\n" +
             "OneMore=5\n" +
             "OneMore=6\n" +
-            "OneMore=9\n";
+            "OneMore=9\n");
 
     leftResult =
         "1u[.ShellClassInfo]\n" +
@@ -548,7 +384,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
             "11aOneMore=6\n" +
             "12aOneMore=9\n";
 
-    diff = service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING, configuration);
+    diff = service.createSideBySideDiff(command, ENCODING, leftFile3, rightFile3);
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
@@ -597,38 +433,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     command.setRevision(Revision.parse("{2007-01-01}"));
     final SVNKitConnection connection = new SVNKitConnection(repositoryStub);
     assertEquals(123, service.translateRevision(command.getRevision(), 200, connection).longValue());
-  }
-
-
-  public static class TestSVNRepositoryStub extends SVNRepositoryStub {
-
-    private boolean first = true;
-    public String leftFileContents = "test left file contents" + NL;
-    public String rightFileContents = "test right file contents" + NL;
-
-    @Override
-    public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-      if (contents != null) {
-        try {
-          if (first) {
-            contents.write(leftFileContents.getBytes());
-            first = false;
-          } else {
-            contents.write(rightFileContents.getBytes());
-            first = true;
-          }
-        } catch (IOException e) {
-          throw new RuntimeException("FAILED!");
-        }
-      }
-      return 0;
-    }
-
-    @Override
-    public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-      return SVNNodeKind.FILE;
-    }
-
   }
 
 }
