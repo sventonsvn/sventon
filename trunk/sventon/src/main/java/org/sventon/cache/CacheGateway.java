@@ -12,8 +12,8 @@
 package org.sventon.cache;
 
 import org.sventon.model.CamelCasePattern;
-import org.sventon.model.LogEntry;
 import org.sventon.model.DirEntry;
+import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -68,7 +68,7 @@ public interface CacheGateway {
    * @return List of log entries.
    * @throws CacheException if error
    */
-  List<LogEntry> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
+  List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString) throws CacheException;
 
   /**
    * Searches the cached log entries for given string.
@@ -79,7 +79,7 @@ public interface CacheGateway {
    * @return List of log entries.
    * @throws CacheException if error
    */
-  List<LogEntry> find(final RepositoryName repositoryName, final String queryString, final String startDir)
+  List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString, final String startDir)
       throws CacheException;
 
   /**

@@ -15,7 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.LogMessageComparator;
 import org.sventon.web.command.BaseCommand;
@@ -49,7 +49,7 @@ public final class SearchLogsController extends AbstractTemplateController {
 
     logger.debug("Searching logs for: " + searchString + " in path: " + startDir);
 
-    final List<LogEntry> logEntries;
+    final List<LogMessageSearchItem> logEntries;
     if (isRootDir(startDir)) {
       logEntries = getCache().find(command.getName(), searchString);
     } else {

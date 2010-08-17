@@ -22,12 +22,12 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * LogEntry.
+ * LogMessageSearchItem.
  *
  * @author jesper@sventon.org
  */
 @Searchable(root = true)
-public final class LogEntry implements Serializable {
+public final class LogMessageSearchItem implements Serializable {
 
   public static final String PATHS_DELIMITER = "\0";
 
@@ -53,7 +53,7 @@ public final class LogEntry implements Serializable {
   /**
    * Default constructor.
    */
-  protected LogEntry() {
+  protected LogMessageSearchItem() {
   }
 
   /**
@@ -61,7 +61,7 @@ public final class LogEntry implements Serializable {
    *
    * @param svnLogEntry SVN log entry
    */
-  public LogEntry(final SVNLogEntry svnLogEntry) {
+  public LogMessageSearchItem(final SVNLogEntry svnLogEntry) {
     this.revision = svnLogEntry.getRevision();
     this.author = svnLogEntry.getAuthor();
     this.date = svnLogEntry.getDate() != null ? (Date) svnLogEntry.getDate().clone() : null;

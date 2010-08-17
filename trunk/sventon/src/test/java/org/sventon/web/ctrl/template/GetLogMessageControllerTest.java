@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
@@ -38,7 +38,7 @@ public class GetLogMessageControllerTest extends TestCase {
     verify(mockService);
 
     assertEquals(1, model.size());
-    final LogEntry logEntry = (LogEntry) model.get("logEntry");
+    final LogMessageSearchItem logEntry = (LogMessageSearchItem) model.get("logEntry");
     assertEquals(logEntry.getMessage(), logEntry.getMessage());
     assertEquals(command.getRevisionNumber(), logEntry.getRevision());
   }
