@@ -17,14 +17,23 @@ import java.util.Date;
 
 /**
  * Misc helper for date operations such as uniform formatting etc
- * 
  */
 public class DateUtil {
   public static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
   // TODO: is this really ISO8601 or can we be more precise, like saying something like svn date format or...
   // TODO: What to do when parsing fails? Try another format? 
-  public static Date parseISO8601(final String date) throws ParseException {
-    return new SimpleDateFormat(ISO8601_FORMAT_PATTERN).parse(date);
+
+  public static Date parseISO8601(final String date) {
+    try {
+      return new SimpleDateFormat(ISO8601_FORMAT_PATTERN).parse(date);
+    } catch (ParseException e) {
+      throw new IllegalArgumentException(e.getMessage());
+    }
   }
+
+  public static String formatISO8601(final Date date) {
+    return new SimpleDateFormat(ISO8601_FORMAT_PATTERN).format(date);
+  }
+
 }
