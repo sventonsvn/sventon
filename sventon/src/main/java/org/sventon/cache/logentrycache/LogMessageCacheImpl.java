@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class LogEntryCacheImpl implements LogEntryCache {
+public final class LogMessageCacheImpl implements LogMessageCache {
 
   /**
    * The logging instance.
@@ -49,7 +49,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
    *
    * @param cacheRootDirectory Cache root directory
    */
-  public LogEntryCacheImpl(final File cacheRootDirectory) {
+  public LogMessageCacheImpl(final File cacheRootDirectory) {
     this(cacheRootDirectory, false);
   }
 
@@ -59,7 +59,7 @@ public final class LogEntryCacheImpl implements LogEntryCache {
    * @param cacheDirectory Cache directory
    * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public LogEntryCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+  public LogMessageCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
     this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }
@@ -83,23 +83,23 @@ public final class LogEntryCacheImpl implements LogEntryCache {
         .setSetting("compass.engine.highlighter.default.formatter.simple.pre", "<span class=\"searchhit\">")
         .setSetting("compass.engine.highlighter.default.formatter.simple.post", "</span>")
         .setSetting("compass.engine.queryParser.default.allowConstantScorePrefixQuery", "false")
-        .addClass(LogEntry.class);
+        .addClass(LogMessageSearchItem.class);
     compass = compassConfiguration.buildCompass();
   }
 
   @Override
-  public List<LogEntry> find(final String queryString) {
+  public List<LogMessageSearchItem> find(final String queryString) {
     if (logger.isDebugEnabled()) {
       logger.debug("Finding [" + queryString + "]");
     }
 
     final CompassTemplate template = new CompassTemplate(compass);
-    return template.execute(new CompassCallback<List<LogEntry>>() {
-      public List<LogEntry> doInCompass(CompassSession session) throws CompassException {
+    return template.execute(new CompassCallback<List<LogMessageSearchItem>>() {
+      public List<LogMessageSearchItem> doInCompass(CompassSession session) throws CompassException {
         final CompassHits compassHits = session.find(queryString);
-        final List<LogEntry> hits = new ArrayList<LogEntry>(compassHits.length());
+        final List<LogMessageSearchItem> hits = new ArrayList<LogMessageSearchItem>(compassHits.length());
         for (int i = 0; i < compassHits.length(); i++) {
-          final LogEntry logEntry = (LogEntry) compassHits.hit(i).getData();
+          final LogMessageSearchItem logEntry = (LogMessageSearchItem) compassHits.hit(i).getData();
           compassHits.highlighter(i).fragment("message");
           compassHits.highlighter(i).fragment("author");
           final String highLightedMessage = compassHits.hit(i).getHighlightedText().getHighlightedText("message");
@@ -118,21 +118,21 @@ public final class LogEntryCacheImpl implements LogEntryCache {
   }
 
   private boolean isAvailable(String text) {
-    return StringUtils.isNotBlank(text) && !text.equals(LogEntry.NOT_AVAILABLE_TAG);
+    return StringUtils.isNotBlank(text) && !text.equals(LogMessageSearchItem.NOT_AVAILABLE_TAG);
   }
 
   @Override
-  public List<LogEntry> find(final String queryString, final String startDir) {
-    final String newQueryString = "message:" + queryString + " paths:" + LogEntry.PATHS_DELIMITER + startDir + "*";
+  public List<LogMessageSearchItem> find(final String queryString, final String startDir) {
+    final String newQueryString = "message:" + queryString + " paths:" + LogMessageSearchItem.PATHS_DELIMITER + startDir + "*";
     return find(newQueryString);
   }
 
   @Override
-  public void add(final LogEntry... logEntries) {
+  public void add(final LogMessageSearchItem... logEntries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
-        for (LogEntry logEntry : logEntries) {
+        for (LogMessageSearchItem logEntry : logEntries) {
           session.save(logEntry);
         }
       }

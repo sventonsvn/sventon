@@ -4,14 +4,14 @@ import junit.framework.TestCase;
 import org.sventon.TestUtils;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 
-public class LogEntryCacheUpdaterTest extends TestCase {
+public class LogMessageCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final LogEntryCache cache = new LogEntryCacheImpl(new File("test"), false);
+    final LogMessageCache cache = new LogMessageCacheImpl(new File("test"), false);
     cache.init();
 
     final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
@@ -19,8 +19,8 @@ public class LogEntryCacheUpdaterTest extends TestCase {
     logEntries.add(TestUtils.getLogEntryStub(124, "Log message for revision 124."));
 
     assertEquals(0, cache.getSize());
-    final LogEntryCacheUpdater logEntryCacheUpdater = new LogEntryCacheUpdater(null);
-    logEntryCacheUpdater.updateInternal(cache, logEntries);
+    final LogMessageCacheUpdater logMessageCacheUpdater = new LogMessageCacheUpdater(null);
+    logMessageCacheUpdater.updateInternal(cache, logEntries);
     assertEquals(2, cache.find("revision").size());
   }
 }

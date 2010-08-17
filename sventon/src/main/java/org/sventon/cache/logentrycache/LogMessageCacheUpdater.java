@@ -14,7 +14,7 @@ package org.sventon.cache.logentrycache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.cache.LogEntryCacheManager;
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
@@ -28,12 +28,12 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class LogEntryCacheUpdater implements RepositoryChangeListener {
+public final class LogMessageCacheUpdater implements RepositoryChangeListener {
 
   /**
    * The static logging instance.
    */
-  private static final Log LOGGER = LogFactory.getLog(LogEntryCacheUpdater.class);
+  private static final Log LOGGER = LogFactory.getLog(LogMessageCacheUpdater.class);
 
   /**
    * The cache manager instance.
@@ -45,7 +45,7 @@ public final class LogEntryCacheUpdater implements RepositoryChangeListener {
    *
    * @param logEntryCacheManager The cache manager instance.
    */
-  public LogEntryCacheUpdater(final LogEntryCacheManager logEntryCacheManager) {
+  public LogMessageCacheUpdater(final LogEntryCacheManager logEntryCacheManager) {
     LOGGER.info("Starting");
     this.logEntryCacheManager = logEntryCacheManager;
   }
@@ -62,12 +62,12 @@ public final class LogEntryCacheUpdater implements RepositoryChangeListener {
     LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
     try {
-      final LogEntryCache logEntryCache = logEntryCacheManager.getCache(repositoryName);
+      final LogMessageCache logMessageCache = logEntryCacheManager.getCache(repositoryName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
         LOGGER.info("Clearing cache before population");
-        logEntryCache.clear();
+        logMessageCache.clear();
       }
-      updateInternal(logEntryCache, revisions);
+      updateInternal(logMessageCache, revisions);
     } catch (final Exception ex) {
       LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
     }
@@ -76,18 +76,18 @@ public final class LogEntryCacheUpdater implements RepositoryChangeListener {
   /**
    * Internal update method. Made protected for testing purposes only.
    *
-   * @param logEntryCache Cache instance
+   * @param logMessageCache Cache instance
    * @param revisions       Revisions
    */
-  protected void updateInternal(final LogEntryCache logEntryCache, final List<SVNLogEntry> revisions) {
+  protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
     try {
-      final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+      final List<LogMessageSearchItem> logEntries = new ArrayList<LogMessageSearchItem>();
       for (final SVNLogEntry svnLogEntry : revisions) {
-        logEntries.add(new LogEntry(svnLogEntry));
+        logEntries.add(new LogMessageSearchItem(svnLogEntry));
       }
-      logEntryCache.add(logEntries.toArray(new LogEntry[logEntries.size()]));
+      logMessageCache.add(logEntries.toArray(new LogMessageSearchItem[logEntries.size()]));
     } catch (Exception ce) {
-      LOGGER.error("Unable to update logEntryCache", ce);
+      LOGGER.error("Unable to update logMessageCache", ce);
     }
   }
 }

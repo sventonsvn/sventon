@@ -11,7 +11,7 @@
  */
 package org.sventon.util;
 
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -26,7 +26,7 @@ import java.util.Set;
  *
  * @author jesper@sventon.org
  */
-public final class LogMessageComparator implements Comparator<LogEntry>, Serializable {
+public final class LogMessageComparator implements Comparator<LogMessageSearchItem>, Serializable {
 
   private static final long serialVersionUID = -123291078109887289L;
 
@@ -62,7 +62,7 @@ public final class LogMessageComparator implements Comparator<LogEntry>, Seriali
   }
 
   @Override
-  public int compare(final LogEntry message1, final LogEntry message2) {
+  public int compare(final LogMessageSearchItem message1, final LogMessageSearchItem message2) {
     final long revision1 = message1.getRevision();
     final long revision2 = message2.getRevision();
     if (sortType == ASCENDING) {

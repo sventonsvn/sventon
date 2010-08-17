@@ -13,11 +13,11 @@ package org.sventon.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.cache.direntrycache.DirEntryCache;
-import org.sventon.cache.logentrycache.LogEntryCache;
+import org.sventon.cache.logentrycache.LogMessageCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntry;
-import org.sventon.model.LogEntry;
+import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
@@ -90,15 +90,15 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   @Override
-  public List<LogEntry> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
-    final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
+  public List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
+    final LogMessageCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
 
   @Override
-  public List<LogEntry> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
-    final LogEntryCache cache = logEntryCacheManager.getCache(repositoryName);
+  public List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
+    final LogMessageCache cache = logEntryCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString, startDir);
   }
