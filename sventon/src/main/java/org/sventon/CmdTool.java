@@ -1,8 +1,8 @@
 package org.sventon;
 
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
-import org.sventon.service.SVNKitRepositoryService;
+import org.sventon.service.svnkit.SVNKitConnection;
+import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
