@@ -4,9 +4,9 @@ import junit.framework.TestCase;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.model.PathRevision;
+import org.sventon.service.svnkit.SVNKitConnection;
 import org.sventon.web.command.MultipleEntriesCommand;
 import org.sventon.web.command.editor.PathRevisionEditor;
 

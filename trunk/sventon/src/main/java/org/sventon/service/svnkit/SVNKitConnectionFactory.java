@@ -9,11 +9,14 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon;
+package org.sventon.service.svnkit;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.SVNConnection;
+import org.sventon.SVNConnectionFactory;
+import org.sventon.SventonException;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;

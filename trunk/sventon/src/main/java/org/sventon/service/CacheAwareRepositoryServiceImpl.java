@@ -11,12 +11,15 @@
  */
 package org.sventon.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.RepositoryName;
+import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
@@ -31,6 +34,11 @@ import java.util.List;
  * @author jesper@sventon.org
  */
 public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryService {
+
+  /**
+   * Logger for this class and subclasses.
+   */
+  final Log logger = LogFactory.getLog(getClass());
 
   /**
    * The cache instance.
