@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
+import static org.junit.Assert.fail;
+
 /**
  *
  */
@@ -29,4 +31,24 @@ public class DateUtilTest {
 
     Assert.assertEquals(cal.getTime(), DateUtil.parseISO8601("2010-01-01T12:34:56.000000Z"));
   }
+  @Test
+  public void formatISO8601() throws Exception {
+    //yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
+    final Calendar cal = Calendar.getInstance();
+    cal.set(2010, 00, 01, 12, 34, 56);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    Assert.assertEquals("2010-01-01T12:34:56.000000Z", DateUtil.formatISO8601(cal.getTime()));
+  }
+
+  @Test
+  public void parseError() throws Exception {
+    try {
+      DateUtil.parseISO8601("2010-01-01 12:34:56");
+      fail("Parse error should throw IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // Expected
+    }
+  }
+
 }
