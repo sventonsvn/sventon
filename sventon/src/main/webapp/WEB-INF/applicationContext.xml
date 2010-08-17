@@ -207,7 +207,7 @@
   </bean>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="logEntryCacheUpdater" class="org.sventon.cache.logentrycache.LogMessageCacheUpdater">
+  <bean id="logEntryCacheUpdater" class="org.sventon.cache.logmessagecache.LogMessageCacheUpdater">
     <constructor-arg ref="logEntryCacheManager"/>
   </bean>
 

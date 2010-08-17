@@ -13,7 +13,7 @@ package org.sventon.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.cache.direntrycache.DirEntryCache;
-import org.sventon.cache.logentrycache.LogMessageCache;
+import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntry;

@@ -12,8 +12,8 @@
 package org.sventon.cache;
 
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.cache.logentrycache.LogMessageCache;
-import org.sventon.cache.logentrycache.LogMessageCacheImpl;
+import org.sventon.cache.logmessagecache.LogMessageCache;
+import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;

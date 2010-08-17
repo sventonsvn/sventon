@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.cache.logentrycache;
+package org.sventon.cache.logmessagecache;
 
 import org.sventon.cache.Cache;
 import org.sventon.model.LogMessageSearchItem;
