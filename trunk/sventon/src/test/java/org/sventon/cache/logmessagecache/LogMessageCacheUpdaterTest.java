@@ -1,4 +1,4 @@
-package org.sventon.cache.logentrycache;
+package org.sventon.cache.logmessagecache;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
