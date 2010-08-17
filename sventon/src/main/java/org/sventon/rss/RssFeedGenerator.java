@@ -12,7 +12,7 @@
 package org.sventon.rss;
 
 import org.sventon.appl.RepositoryConfiguration;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.LogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,7 @@ public interface RssFeedGenerator {
    * @throws Exception if unable to output feed.
    */
   void outputFeed(final RepositoryConfiguration repositoryConfiguration,
-                  final List<SVNLogEntry> logEntries,
+                  final List<LogEntry> logEntries,
                   final HttpServletRequest request,
                   final HttpServletResponse response) throws Exception;
 }

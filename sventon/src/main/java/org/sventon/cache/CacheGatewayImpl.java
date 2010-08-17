@@ -15,11 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.revisioncache.RevisionCache;
-import org.sventon.model.CamelCasePattern;
-import org.sventon.model.DirEntry;
-import org.sventon.model.LogMessageSearchItem;
-import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +63,7 @@ public final class CacheGatewayImpl implements CacheGateway {
 
   @Override
   public List<DirEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                           final String startDir)
+                                    final String startDir)
       throws CacheException {
     final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
@@ -76,7 +72,7 @@ public final class CacheGatewayImpl implements CacheGateway {
 
   @Override
   public List<DirEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
-                                                      final String startDir) throws CacheException {
+                                               final String startDir) throws CacheException {
     final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
     return entryCache.findEntriesByCamelCasePattern(pattern, startDir);
@@ -104,17 +100,17 @@ public final class CacheGatewayImpl implements CacheGateway {
   }
 
   @Override
-  public SVNLogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException {
+  public LogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException {
     final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.get(revision);
   }
 
   @Override
-  public List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException {
+  public List<LogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException {
     final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
-    final List<SVNLogEntry> cachedRevisions = new ArrayList<SVNLogEntry>();
+    final List<LogEntry> cachedRevisions = new ArrayList<LogEntry>();
     for (final Long revision : revisions) {
       cachedRevisions.add(cache.get(revision));
     }

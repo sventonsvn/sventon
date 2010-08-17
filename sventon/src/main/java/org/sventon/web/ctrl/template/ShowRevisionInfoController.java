@@ -17,7 +17,6 @@ import org.sventon.SVNConnection;
 import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,8 +38,7 @@ public final class ShowRevisionInfoController extends AbstractTemplateController
 
     final long revisionNumber = command.getRevisionNumber();
     logger.debug("Getting revision info details for revision: " + revisionNumber);
-    final SVNLogEntry revision = getRepositoryService().getLogEntry(command.getName(), connection, revisionNumber);
-    final LogEntry logEntry = new LogEntry(revision);
+    final LogEntry logEntry = getRepositoryService().getLogEntry(command.getName(), connection, revisionNumber);
     //TODO: Parse to apply Bugtraq link
     final Map<String, Object> model = new HashMap<String, Object>();
     model.put("revisionInfo", logEntry);

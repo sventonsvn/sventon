@@ -11,8 +11,6 @@
  */
 package org.sventon.util;
 
-import org.tmatesoft.svn.core.SVNLogEntry;
-
 /**
  * Misc SVNKit utilities.
  *
@@ -26,17 +24,4 @@ public final class SVNUtils {
   private SVNUtils() {
   }
 
-  /**
-   * Checks if given log entry contains accessible information, i.e. it was
-   * fetched from the repository by a user with access to the affected paths.
-   *
-   * @param logEntry Log entry.
-   * @return True if accessible, false if not.
-   */
-  public static boolean isAccessible(final SVNLogEntry logEntry) {
-    return logEntry != null
-        && logEntry.getDate() != null
-        && (logEntry.getChangedPaths() != null
-        && !logEntry.getChangedPaths().isEmpty());
-  }
 }

@@ -11,11 +11,7 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.CamelCasePattern;
-import org.sventon.model.DirEntry;
-import org.sventon.model.LogMessageSearchItem;
-import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.*;
 
 import java.util.List;
 
@@ -36,7 +32,7 @@ public interface CacheGateway {
    * @throws CacheException if error
    */
   List<DirEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
-                                               final String startDir) throws CacheException;
+                                        final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for given string (name fragment) starting from given directory.
@@ -48,7 +44,7 @@ public interface CacheGateway {
    * @throws CacheException if error
    */
   List<DirEntry> findEntries(final RepositoryName repositoryName, final String searchString,
-                                    final String startDir) throws CacheException;
+                             final String startDir) throws CacheException;
 
   /**
    * Searches the cached entries for all directories below given start dir.
@@ -90,7 +86,7 @@ public interface CacheGateway {
    * @return The revision info
    * @throws CacheException if error.
    */
-  SVNLogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException;
+  LogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException;
 
   /**
    * Gets multiple revisions by number.
@@ -100,6 +96,6 @@ public interface CacheGateway {
    * @return List containing the revisions
    * @throws CacheException if error.
    */
-  List<SVNLogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException;
+  List<LogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException;
 
 }

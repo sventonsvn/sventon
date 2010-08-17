@@ -1,8 +1,8 @@
 package org.sventon.util;
 
 import junit.framework.TestCase;
+import org.sventon.TestUtils;
 import org.sventon.model.LogMessageSearchItem;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +13,9 @@ public class LogMessageComparatorTest extends TestCase {
 
   public void testCompare() throws Exception {
     List<LogMessageSearchItem> entries = new ArrayList<LogMessageSearchItem>();
-    LogMessageSearchItem c1 = new LogMessageSearchItem(new SVNLogEntry(null, 1, "jesper", new Date(), "Message 1"));
-    LogMessageSearchItem c2 = new LogMessageSearchItem(new SVNLogEntry(null, 12, "jesper", new Date(), "Message 2"));
-    LogMessageSearchItem c3 = new LogMessageSearchItem(new SVNLogEntry(null, 123, "jesper", new Date(), "Message 3"));
+    LogMessageSearchItem c1 = new LogMessageSearchItem(TestUtils.createLogEntry(1, "jesper", new Date(), "Message 1"));
+    LogMessageSearchItem c2 = new LogMessageSearchItem(TestUtils.createLogEntry(12, "jesper", new Date(), "Message 2"));
+    LogMessageSearchItem c3 = new LogMessageSearchItem(TestUtils.createLogEntry(123, "jesper", new Date(), "Message 3"));
 
     entries.add(c3);
     entries.add(c2);

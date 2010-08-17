@@ -4,12 +4,12 @@ import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.sventon.TestUtils;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +39,7 @@ public class SearchLogsControllerTest extends TestCase {
     ctrl.setCacheGateway(mockCache);
 
     final List<LogMessageSearchItem> result = new ArrayList<LogMessageSearchItem>();
-    result.add(new LogMessageSearchItem(new SVNLogEntry(null, 123, "jesper", new Date(), "Revision 123.")));
+    result.add(new LogMessageSearchItem(TestUtils.createLogEntry(123, "jesper", new Date(), "Revision 123.", null)));
 
     expect(mockCache.find(command.getName(), "abc", "/trunk/")).andStubReturn(result);
     replay(mockCache);

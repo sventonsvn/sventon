@@ -48,28 +48,28 @@ public class SVNKitRepositoryService implements RepositoryService {
   final Log logger = LogFactory.getLog(getClass());
 
   @Override
-  public SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  public LogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
     try {
-      return (SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
-          true, false).iterator().next();
+      return Converter.toLogEntry((SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
+          true, false).iterator().next());
     } catch (SVNException ex) {
       return translateSVNException("Error getting log entry: ", ex);
     }
   }
 
   @Override
-  public final List<SVNLogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision,
-                                                                 final long toRevision) throws SventonException {
+  public final List<LogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision,
+                                                              final long toRevision) throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
-    final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
+    final List<LogEntry> revisions = new ArrayList<LogEntry>();
     try {
       repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
-          revisions.add(logEntry);
+          revisions.add(Converter.toLogEntry(logEntry));
         }
       });
     } catch (SVNException ex) {
@@ -79,18 +79,18 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
-                                         final long fromRevision, final long toRevision, final String path,
-                                         final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
+  public List<LogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
+                                      final long fromRevision, final long toRevision, final String path,
+                                      final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
       throws SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
     final SVNRepository repository = connection.getDelegate();
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
       repository.log(new String[]{path}, fromRevision, toRevision, includeChangedPaths, stopOnCopy, limit, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
-          logEntries.add(logEntry);
+          logEntries.add(Converter.toLogEntry(logEntry));
         }
       });
     } catch (SVNException ex) {
@@ -255,7 +255,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @SuppressWarnings({"unchecked"})
   @Override
-  public final List<PathRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
+  public final List<FileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision)
       throws SventonException {
 
     //noinspection unchecked
@@ -275,28 +275,9 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
       logger.debug("Found revisions: " + fileRevisionNumbers);
     }
-    return convertFileRevisions(svnFileRevisions);
+    return Converter.convertFileRevisions(svnFileRevisions);
   }
 
-  // TODO: Introduce commons collections with transformer etc?
-  private List<PathRevision> convertFileRevisions(List<SVNFileRevision> revisions) {
-    final List<PathRevision> pathRevisions = new ArrayList<PathRevision>(revisions.size());
-    for (SVNFileRevision fileRevision : revisions) {
-      final PathRevision revision = new PathRevision(fileRevision.getPath(), Revision.create(fileRevision.getRevision()));
-
-      final SVNProperties svnProperties = fileRevision.getRevisionProperties();
-      for (Object o : svnProperties.nameSet()) {
-        final String revisionPropertyName = (String) o;
-        final String revisionPropertyValue = svnProperties.getStringValue(revisionPropertyName);
-        final RevisionProperty revisionProperty = RevisionProperty.byName(revisionPropertyName);
-        revision.addProperty(revisionProperty, revisionPropertyValue);
-      }
-
-
-      pathRevisions.add(revision);
-    }
-    return pathRevisions;
-  }
 
   @Override
   public final List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
@@ -573,7 +554,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<SVNLogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
+  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
     return getLogEntries(repositoryName, connection, -1, Revision.FIRST, "/", revisionCount, false, true);
   }
 

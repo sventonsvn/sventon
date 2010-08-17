@@ -14,16 +14,19 @@ package org.sventon.util;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrSubstitutor;
-import org.sventon.model.DirEntryChangeType;
+import org.sventon.model.ChangeType;
+import org.sventon.model.ChangedPath;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
-import static org.sventon.util.EncodingUtils.encode;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
+
+import static org.sventon.util.EncodingUtils.encode;
 
 /**
  * Class responsible for creating HTML formatted content.
@@ -58,7 +61,7 @@ public final class HTMLCreator {
    * @param dateFormat     Date formatter instance.
    * @return Result
    */
-  public static String createRevisionDetailBody(final String bodyTemplate, final SVNLogEntry logEntry, final String baseURL,
+  public static String createRevisionDetailBody(final String bodyTemplate, final LogEntry logEntry, final String baseURL,
                                                 final RepositoryName repositoryName, final DateFormat dateFormat,
                                                 final HttpServletResponse response) {
 
@@ -70,11 +73,10 @@ public final class HTMLCreator {
     int deleted = 0;
 
     //noinspection unchecked
-    final Map<String, SVNLogEntryPath> latestChangedPaths = logEntry.getChangedPaths();
-    final List<String> latestPathsList = new ArrayList<String>(latestChangedPaths.keySet());
+    final Set<ChangedPath> latestChangedPaths = logEntry.getChangedPaths();
 
-    for (final String entryPath : latestPathsList) {
-      final DirEntryChangeType type = DirEntryChangeType.parse(latestChangedPaths.get(entryPath).getType());
+    for (final ChangedPath entryPath : latestChangedPaths) {
+      final ChangeType type = entryPath.getType();
       switch (type) {
         case ADDED:
           added++;
@@ -120,7 +122,7 @@ public final class HTMLCreator {
    * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
-  public static String createChangedPathsTable(final Map<String, SVNLogEntryPath> changedPaths, final long revision,
+  public static String createChangedPathsTable(final Set<ChangedPath> changedPaths, final long revision,
                                                final String pathAtRevision, final String baseURL,
                                                final RepositoryName repositoryName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {
@@ -131,12 +133,8 @@ public final class HTMLCreator {
     sb.append("    <th align=\"left\">Path</th>\n");
     sb.append("  </tr>\n");
 
-    final List<String> latestPathsList = new ArrayList<String>(changedPaths.keySet());
-    Collections.sort(latestPathsList);
-
-    for (final String path : latestPathsList) {
-      final SVNLogEntryPath logEntryPath = changedPaths.get(path);
-      final DirEntryChangeType changeType = DirEntryChangeType.parse(logEntryPath.getType());
+    for (final ChangedPath path : changedPaths) {
+      final ChangeType changeType = path.getType();
 
       sb.append("  <tr>\n");
       sb.append("    <td valign=\"top\"><i>").append(changeType).append("</i></td>\n");
@@ -148,7 +146,7 @@ public final class HTMLCreator {
         case ADDED: // fall thru
         case REPLACED:
           // goToUrl
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), revision, repositoryName, linkToHead);
+          goToUrl = createGoToUrl(baseURL, path.getPath(), revision, repositoryName, linkToHead);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
@@ -157,15 +155,15 @@ public final class HTMLCreator {
             sb.append("&showlatestrevinfo=true");
           }
           sb.append("\" title=\"Show\">");
-          if (logEntryPath.getPath().equals(pathAtRevision)) {
-            sb.append("<i>").append(logEntryPath.getPath()).append("</i>").append("</a>");
+          if (path.getPath().equals(pathAtRevision)) {
+            sb.append("<i>").append(path.getPath()).append("</i>").append("</a>");
           } else {
-            sb.append(logEntryPath.getPath()).append("</a>");
+            sb.append(path.getPath()).append("</a>");
           }
           break;
         case MODIFIED:
           // diffUrl
-          String diffUrl = createDiffUrl(baseURL, logEntryPath.getPath(), revision, repositoryName, linkToHead);
+          String diffUrl = createDiffUrl(baseURL, path.getPath(), revision, repositoryName, linkToHead);
           if (response != null) {
             diffUrl = response.encodeURL(diffUrl);
           }
@@ -174,28 +172,28 @@ public final class HTMLCreator {
             sb.append("&showlatestrevinfo=true");
           }
           sb.append("\" title=\"Diff with previous version\">");
-          if (logEntryPath.getPath().equals(pathAtRevision)) {
-            sb.append("<i>").append(logEntryPath.getPath()).append("</i>").append("</a>");
+          if (path.getPath().equals(pathAtRevision)) {
+            sb.append("<i>").append(path.getPath()).append("</i>").append("</a>");
           } else {
-            sb.append(logEntryPath.getPath()).append("</a>");
+            sb.append(path.getPath()).append("</a>");
           }
           break;
         case DELETED:
           // del
-          goToUrl = createGoToUrl(baseURL, logEntryPath.getPath(), revision - 1, repositoryName, false);
+          goToUrl = createGoToUrl(baseURL, path.getPath(), revision - 1, repositoryName, false);
           if (response != null) {
             goToUrl = response.encodeURL(goToUrl);
           }
           sb.append("<a href=\"").append(goToUrl);
-          sb.append("\" title=\"Show previous revision\"><del>").append(logEntryPath.getPath()).append("</del></a>");
+          sb.append("\" title=\"Show previous revision\"><del>").append(path.getPath()).append("</del></a>");
           break;
         default:
           throw new IllegalArgumentException("Unsupported type: " + changeType);
       }
 
-      if (logEntryPath.getCopyPath() != null) {
+      if (path.getCopyPath() != null) {
         sb.append("<br>(<i>Copy from</i> ");
-        goToUrl = createGoToUrl(baseURL, logEntryPath.getCopyPath(), logEntryPath.getCopyRevision(), repositoryName, false);
+        goToUrl = createGoToUrl(baseURL, path.getCopyPath(), path.getCopyRevision(), repositoryName, false);
         if (response != null) {
           goToUrl = response.encodeURL(goToUrl);
         }
@@ -203,14 +201,14 @@ public final class HTMLCreator {
         if (showLatestRevInfo) {
           sb.append("&showlatestrevinfo=true");
         }
-        sb.append("\" title=\"Show\">").append(logEntryPath.getCopyPath()).append("</a>").append(" @ ");
-        String revisionInfoUrl = createRevisionInfoUrl(baseURL, logEntryPath.getCopyRevision(), repositoryName);
+        sb.append("\" title=\"Show\">").append(path.getCopyPath()).append("</a>").append(" @ ");
+        String revisionInfoUrl = createRevisionInfoUrl(baseURL, path.getCopyRevision(), repositoryName);
         if (response != null) {
           revisionInfoUrl = response.encodeURL(revisionInfoUrl);
         }
         sb.append("<a href=\"").append(revisionInfoUrl);
         sb.append("\">");
-        sb.append(logEntryPath.getCopyRevision()).append("</a>)");
+        sb.append(path.getCopyRevision()).append("</a>)");
       }
       sb.append("</td>\n");
       sb.append("  </tr>\n");

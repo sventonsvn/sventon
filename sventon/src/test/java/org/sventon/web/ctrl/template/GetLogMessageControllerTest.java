@@ -4,12 +4,12 @@ import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
+import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class GetLogMessageControllerTest extends TestCase {
     command.setName(new RepositoryName("test"));
     command.setRevision(Revision.create(12));
 
-    final SVNLogEntry svnLogEntry = TestUtils.getLogEntryStub(command.getRevisionNumber());
+    final LogEntry svnLogEntry = TestUtils.getLogEntryStub(command.getRevisionNumber());
     final GetLogMessageController ctrl = new GetLogMessageController();
     ctrl.setRepositoryService(mockService);
 

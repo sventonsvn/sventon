@@ -16,7 +16,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.model.PathRevision;
+import org.sventon.model.FileRevision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
@@ -50,7 +50,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
 
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
-      final List<PathRevision> revisions = getRepositoryService().getFileRevisions(
+      final List<FileRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
       Collections.reverse(revisions);
 

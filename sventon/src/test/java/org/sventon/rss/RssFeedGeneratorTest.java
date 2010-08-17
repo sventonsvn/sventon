@@ -5,8 +5,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.sventon.TestUtils;
 import org.sventon.appl.RepositoryConfiguration;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.sventon.model.ChangeType;
+import org.sventon.model.ChangedPath;
+import org.sventon.model.LogEntry;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -21,24 +22,24 @@ public class RssFeedGeneratorTest extends TestCase {
     generator.setLogMessageLength(20);
     generator.setDateFormat("yyyyMMdd HH:mm:ss");
 
-    List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    Map<String, SVNLogEntryPath> changedPaths;
+    List<LogEntry> logEntries = new ArrayList<LogEntry>();
+    Set<ChangedPath> changedPaths;
 
     final String logMessage = "&lt; &gt; / &amp; ' ; \\";
 
-    changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
-    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 1));
-    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 1, "jesper", new Date(), logMessage));
+    changedPaths = new TreeSet<ChangedPath>();
+    changedPaths.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
+    changedPaths.add(new ChangedPath("/file2.html", null, 1, ChangeType.DELETED));
+    changedPaths.add(new ChangedPath("/file3.abc", null, 1, ChangeType.ADDED));
+    changedPaths.add(new ChangedPath("/file4.def", null, 1, ChangeType.REPLACED));
+    logEntries.add(TestUtils.createLogEntry(1, "jesper", new Date(), logMessage, changedPaths));
 
-    changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put("/anotherfile1.java", new SVNLogEntryPath("/file1.java", 'M', null, 2));
-    changedPaths.put("/anotherfile2.html", new SVNLogEntryPath("/file2.html", 'D', null, 2));
-    changedPaths.put("/anotherfile3.abc", new SVNLogEntryPath("/file3.abc", 'A', null, 2));
-    changedPaths.put("/anotherfile4.def", new SVNLogEntryPath("/file4.def", 'R', "/file44.def", 1));
-    logEntries.add(new SVNLogEntry(changedPaths, 2, "jesper", new Date(), "Another\nlog message."));
+    changedPaths = new TreeSet<ChangedPath>();
+    changedPaths.add(new ChangedPath("/file1.java", null, 2, ChangeType.MODIFIED));
+    changedPaths.add(new ChangedPath("/file2.html", null, 2, ChangeType.DELETED));
+    changedPaths.add(new ChangedPath("/file3.abc", null, 2, ChangeType.ADDED));
+    changedPaths.add(new ChangedPath("/file4.def", "/file44.def", 1, ChangeType.REPLACED));
+    logEntries.add(TestUtils.createLogEntry(2, "jesper", new Date(), "Another\nlog message.", changedPaths));
 
     final File tempFile = File.createTempFile("sventon-rss-test", null);
     final PrintWriter pw = new PrintWriter(tempFile);

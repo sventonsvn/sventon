@@ -3,7 +3,6 @@ package org.sventon.model;
 import junit.framework.TestCase;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
-import org.sventon.model.Properties;
 
 public class TextFileTest extends TestCase {
 

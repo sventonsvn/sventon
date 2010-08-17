@@ -11,20 +11,16 @@
  */
 package org.sventon.model;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- *
- */
-public class PathRevisionTest {
+public class FileRevisionTest {
   private static final String THE_AUTHOR = "Edgar Allan Poe";
 
   @Test
   public void properties() throws Exception {
-    final PathRevision revision = new PathRevision("/poems/The Raven", Revision.create(1));
+    final FileRevision revision = new FileRevision("/poems/The Raven", Revision.create(1));
 
     revision.addProperty(RevisionProperty.AUTHOR, THE_AUTHOR);
     revision.addProperty(RevisionProperty.DATE, "1845-01-29");

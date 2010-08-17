@@ -2,15 +2,17 @@ package org.sventon.cache.logmessagecache;
 
 import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
+import org.sventon.TestUtils;
+import org.sventon.model.ChangeType;
+import org.sventon.model.ChangedPath;
+import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class LogMessageCacheImplTest extends TestCase {
 
@@ -25,31 +27,31 @@ public class LogMessageCacheImplTest extends TestCase {
     cache.shutdown();
   }
 
-  private SVNLogEntry create(final long revision, final String message) {
-    return new SVNLogEntry(null, revision, "theauthor", new Date(), message);
+  private LogEntry create(final long revision, final String message) {
+    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message);
   }
 
-  private SVNLogEntry create(final long revision, final String message, final Map<String, SVNLogEntryPath> paths) {
-    return new SVNLogEntry(paths, revision, "theauthor", new Date(), message);
+  private LogEntry create(final long revision, final String message, final Set<ChangedPath> paths) {
+    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message, paths);
   }
 
-  private Map<String, SVNLogEntryPath> createAndAddToMap(final String path, SVNLogEntryPath logEntryPath) {
-    final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put(path, logEntryPath);
+  private Set<ChangedPath> createAndAddToMap(ChangedPath changedPath) {
+    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+    changedPaths.add(changedPath);
     return changedPaths;
   }
 
   public void testAddAndFindWithStartDir() throws Exception {
     List<LogMessageSearchItem> logEntries;
     cache.add(new LogMessageSearchItem(create(123, "First message XYZ-123.",
-        createAndAddToMap("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1)))));
+        createAndAddToMap(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED)))));
 
     logEntries = cache.find("XYZ-123", "/");
     assertEquals(1, logEntries.size());
     assertEquals("First message <span class=\"searchhit\">XYZ-123</span>.", logEntries.get(0).getMessage());
 
     cache.add(new LogMessageSearchItem(create(456, "First message XYZ-456.",
-        createAndAddToMap("/test/file1.java", new SVNLogEntryPath("/test/file1.java", 'M', null, 1)))));
+        createAndAddToMap(new ChangedPath("/test/file1.java", null, -1, ChangeType.MODIFIED)))));
 
     logEntries = cache.find("XYZ-456", "/");
     assertEquals(1, logEntries.size());
@@ -154,7 +156,7 @@ public class LogMessageCacheImplTest extends TestCase {
     cache.add(new LogMessageSearchItem(create(124, null)));
     assertEquals(2, cache.getSize());
 
-    cache.add(new LogMessageSearchItem(new SVNLogEntry(null, 125, null, new Date(), "abc")));
+    cache.add(new LogMessageSearchItem(TestUtils.createLogEntry(125, null, new Date(), "abc")));
     assertEquals(3, cache.getSize());
     final LogMessageSearchItem logEntry = cache.find("abc").get(0);
     assertEquals("<span class=\"searchhit\">abc</span>", logEntry.getMessage());

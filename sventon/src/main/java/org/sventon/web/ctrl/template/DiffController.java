@@ -79,9 +79,9 @@ public final class DiffController extends AbstractTemplateController {
   private void handleDiffPrevious(SVNConnection connection, DiffCommand command) throws SventonException {
     if (!command.hasEntries()) {
       logger.debug("No entries has been set - diffing with previous");
-      final List<PathRevision> revisions = getRepositoryService().getFileRevisions(
+      final List<FileRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
-      command.setEntries((PathRevision[]) revisions.toArray()); //TODO: Why PathRevision[] and not a List?
+      command.setEntries((FileRevision[]) revisions.toArray());
     }
   }
 

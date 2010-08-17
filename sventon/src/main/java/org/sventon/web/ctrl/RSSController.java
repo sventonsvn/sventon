@@ -14,17 +14,17 @@ package org.sventon.web.ctrl;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.NoSuchRevisionException;
 import org.sventon.AuthenticationException;
+import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
+import org.sventon.model.LogEntry;
 import org.sventon.model.Revision;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.web.HttpAuthenticationHandler;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +79,7 @@ public final class RSSController extends AbstractBaseController {
     SVNConnection connection = null;
 
     try {
-      final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+      final List<LogEntry> logEntries = new ArrayList<LogEntry>();
       connection = createRepositoryConnection(request, configuration);
       getRepositoryService().translateRevision(command.getRevision(), getRepositoryService().getLatestRevision(connection), connection);
 

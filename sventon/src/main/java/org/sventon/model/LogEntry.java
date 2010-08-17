@@ -12,14 +12,15 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.sventon.util.DateUtil;
 import org.sventon.util.WebUtils;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * LogEntry.
@@ -27,37 +28,43 @@ import java.util.Map;
  * @author patrik@sventon.org
  * @author jesper@sventon.org
  */
-public final class LogEntry {
-
-  /**
-   * Subversion log entry.
-   */
-  private final SVNLogEntry svnLogEntry;
+public final class LogEntry implements Serializable {
 
   /**
    * The path at revision.
    */
-  private final String pathAtRevision;
+  private String pathAtRevision;
+
+  /**
+   * Revision.
+   */
+  private final long revision;
+
+  /**
+   * Changed paths.
+   */
+  private final Set<ChangedPath> changedPaths;
+
+  /**
+   * Map holding the RevisionProperties and the corresponding (String) value.
+   */
+  private Map<RevisionProperty, String> properties = new HashMap<RevisionProperty, String>();
 
   /**
    * Constructor.
    *
-   * @param logEntry The log entry
+   * @param revision
+   * @param properties
+   * @param changedPaths
    */
-  public LogEntry(final SVNLogEntry logEntry) {
-    svnLogEntry = logEntry;
-    this.pathAtRevision = null;
+  public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final Set<ChangedPath> changedPaths) {
+    this.revision = revision;
+    this.properties = properties;
+    this.changedPaths = changedPaths;
   }
 
-  /**
-   * Constructor.
-   *
-   * @param logEntry       The log entry
-   * @param pathAtRevision The entry's path at given revision.
-   */
-  public LogEntry(final SVNLogEntry logEntry, final String pathAtRevision) {
-    svnLogEntry = logEntry;
-    this.pathAtRevision = pathAtRevision;
+  public void setPathAtRevision(String path) {
+    pathAtRevision = path;
   }
 
   /**
@@ -72,37 +79,39 @@ public final class LogEntry {
   /**
    * @return Map of the changed paths.
    */
-  public Map<String, SVNLogEntryPath> getChangedPaths() {
+  public Set<ChangedPath> getChangedPaths() {
     //noinspection unchecked
-    return svnLogEntry.getChangedPaths();
+    return changedPaths;
   }
 
   /**
    * @return Revision number.
    */
   public long getRevision() {
-    return svnLogEntry.getRevision();
+    return revision;
   }
 
   /**
    * @return Author.
    */
   public String getAuthor() {
-    return svnLogEntry.getAuthor();
+    return properties.get(RevisionProperty.AUTHOR);
   }
 
   /**
    * @return Log entry date.
    */
   public Date getDate() {
-    return svnLogEntry.getDate();
+    final String date = properties.get(RevisionProperty.DATE);
+    if (StringUtils.isEmpty(date)) return null;
+    return DateUtil.parseISO8601(date);
   }
 
   /**
    * @return The log message.
    */
   public String getMessage() {
-    return svnLogEntry.getMessage();
+    return properties.get(RevisionProperty.LOG);
   }
 
   /**
@@ -113,21 +122,18 @@ public final class LogEntry {
    * @return Web format log message.
    */
   public String getWebFormattedMessage() {
-    return WebUtils.nl2br(StringEscapeUtils.escapeXml(svnLogEntry.getMessage()));
+    return WebUtils.nl2br(StringEscapeUtils.escapeXml(getMessage()));
   }
 
   /**
-   * Creates a list of wrappers based on given list of log entries.
+   * Checks if given log entry contains accessible information, i.e. it was
+   * fetched from the repository by a user with access to the affected paths.
    *
-   * @param logEntries SVN Log entries
-   * @return List of wrappers
+   * @return True if accessible, false if not.
    */
-  public static List<LogEntry> convert(List<SVNLogEntry> logEntries) {
-    final List<LogEntry> wrappers = new ArrayList<LogEntry>();
-    for (SVNLogEntry logEntry : logEntries) {
-      wrappers.add(new LogEntry(logEntry));
-    }
-    return wrappers;
+  public boolean isAccessible() {
+    return getDate() != null
+        && (getChangedPaths() != null
+        && !getChangedPaths().isEmpty());
   }
-
 }

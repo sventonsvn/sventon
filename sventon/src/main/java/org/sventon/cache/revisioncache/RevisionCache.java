@@ -12,7 +12,7 @@
 package org.sventon.cache.revisioncache;
 
 import org.sventon.cache.Cache;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.LogEntry;
 
 /**
  * Contains cached revisions.
@@ -27,14 +27,14 @@ public interface RevisionCache extends Cache {
    * @param revision Revision number of revision to get.
    * @return The revision info
    */
-  SVNLogEntry get(final long revision);
+  LogEntry get(final long revision);
 
   /**
    * Add one revision to the cache.
    *
    * @param logEntry The revision info to cache.
    */
-  void add(final SVNLogEntry logEntry);
+  void add(final LogEntry logEntry);
 
   /**
    * Flush cache to disk.

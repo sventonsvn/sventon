@@ -5,7 +5,9 @@ import junit.framework.TestCase;
 import org.sventon.TestUtils;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.LogEntry;
+
+import java.util.Date;
 
 public class RevisionCacheImplTest extends TestCase {
 
@@ -18,13 +20,15 @@ public class RevisionCacheImplTest extends TestCase {
     final RevisionCacheImpl revisionCache = new RevisionCacheImpl(cache);
     try {
       assertNull(revisionCache.get(123));
-      revisionCache.add(TestUtils.getLogEntryStub());
-      final SVNLogEntry result = revisionCache.get(123);
+      final String author = "TestAuthor";
+      final String message = "TestMessage";
+      revisionCache.add(TestUtils.createLogEntry(123, author, new Date(), message));
+      final LogEntry result = revisionCache.get(123);
       assertNotNull(result);
       assertEquals(123, result.getRevision());
-      assertEquals("TestAuthor", result.getAuthor());
+      assertEquals(author, result.getAuthor());
       assertNotNull(result.getDate());
-      assertEquals("TestMessage", result.getMessage());
+      assertEquals(message, result.getMessage());
     } finally {
       cache.shutdown();
     }
