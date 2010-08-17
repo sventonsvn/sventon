@@ -4,11 +4,11 @@ import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class GetLatestRevisionsControllerTest extends TestCase {
     final BaseCommand command = new BaseCommand();
     command.setName(new RepositoryName("test"));
 
-    final List<SVNLogEntry> revisions = new ArrayList<SVNLogEntry>();
+    final List<LogEntry> revisions = new ArrayList<LogEntry>();
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 

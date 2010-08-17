@@ -6,6 +6,9 @@ import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.ChangeType;
+import org.sventon.model.ChangedPath;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.svnkit.SVNKitConnection;
@@ -15,6 +18,8 @@ import org.tmatesoft.svn.core.*;
 import java.io.File;
 import java.util.*;
 
+import static org.sventon.TestUtils.createLogEntry;
+
 public class DirEntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
@@ -22,17 +27,17 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    final Map<String, SVNLogEntryPath> changedPaths1 = new HashMap<String, SVNLogEntryPath>();
-    changedPaths1.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, -1));
-    changedPaths1.put("/file2.abc", new SVNLogEntryPath("/file2.abc", 'A', null, -1));
-    changedPaths1.put("/trunk/file3.def", new SVNLogEntryPath("/trunk/file3.def", 'R', null, -1));
-    logEntries.add(new SVNLogEntry(changedPaths1, 123, "author", new Date(), "Log message for revision 123."));
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+    final Set<ChangedPath> changedPaths1 = new TreeSet<ChangedPath>();
+    changedPaths1.add(new ChangedPath("/file1.java", null, -1, ChangeType.MODIFIED));
+    changedPaths1.add(new ChangedPath("/file2.abc", null, -1, ChangeType.ADDED));
+    changedPaths1.add(new ChangedPath("/trunk/file3.def", null, -1, ChangeType.REPLACED));
+    logEntries.add(createLogEntry(123, "author", new Date(), "Log message for revision 123.", changedPaths1));
 
-    final Map<String, SVNLogEntryPath> changedPaths2 = new HashMap<String, SVNLogEntryPath>();
-    changedPaths2.put("/branch", new SVNLogEntryPath("/branch", 'A', "/trunk", 123));
-    changedPaths2.put("/branch/file3.def", new SVNLogEntryPath("/branch/file3.def", 'D', null, -1));
-    logEntries.add(new SVNLogEntry(changedPaths2, 124, "author", new Date(), "Log message for revision 124."));
+    final Set<ChangedPath> changedPaths2 = new TreeSet<ChangedPath>();
+    changedPaths2.add(new ChangedPath("/branch", "/trunk", 123, ChangeType.ADDED));
+    changedPaths2.add(new ChangedPath("/branch/file3.def", null, -1, ChangeType.DELETED));
+    logEntries.add(createLogEntry(124, "author", new Date(), "Log message for revision 124.", changedPaths2));
 
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
@@ -54,8 +59,8 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
-    logEntries.add(new SVNLogEntry(Collections.EMPTY_MAP, 1, "author", new Date(), "Log message for revision 1."));
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+    logEntries.add(createLogEntry(1, "author", new Date(), "Log message for revision 1.", null));
 
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);

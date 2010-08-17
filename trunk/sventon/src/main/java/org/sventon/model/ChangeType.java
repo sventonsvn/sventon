@@ -18,7 +18,7 @@ import org.apache.commons.lang.Validate;
  *
  * @author jesper@sventon.org
  */
-public enum DirEntryChangeType {
+public enum ChangeType {
 
   /**
    * Indicating entry was added.
@@ -57,29 +57,29 @@ public enum DirEntryChangeType {
    * @param action The action
    * @param code   Code
    */
-  private DirEntryChangeType(final String action, final char code) {
+  private ChangeType(final String action, final char code) {
     this.action = action;
     this.code = code;
   }
 
   /**
-   * Parses given code and returns appropriate <code>DirEntryChangeType</code>.
+   * Parses given code and returns appropriate <code>ChangeType</code>.
    *
    * @param code Code to parse
-   * @return The DirEntryChangeType
+   * @return The ChangeType
    */
-  public static DirEntryChangeType parse(final String code) {
+  public static ChangeType parse(final String code) {
     Validate.notEmpty(code, "Given code was null or empty");
     return parse(code.charAt(0));
   }
 
   /**
-   * Parses given code and returns appropriate <code>DirEntryChangeType</code>.
+   * Parses given code and returns appropriate <code>ChangeType</code>.
    *
    * @param code Code to parse
-   * @return The DirEntryChangeType
+   * @return The ChangeType
    */
-  public static DirEntryChangeType parse(final char code) {
+  public static ChangeType parse(final char code) {
     switch (code) {
       case 'D':
         return DELETED;

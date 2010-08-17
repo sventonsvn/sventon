@@ -21,9 +21,9 @@ import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.ObjectCacheManager;
 import org.sventon.cache.objectcache.ObjectCache;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,7 +171,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
           final long toRevision = revisionsLeftToFetchCount > maxRevisionCountPerUpdate
               ? lastUpdatedRevision + maxRevisionCountPerUpdate : headRevision;
 
-          final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+          final List<LogEntry> logEntries = new ArrayList<LogEntry>();
           logEntries.addAll(repositoryService.getLogEntriesFromRepositoryRoot(connection, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));

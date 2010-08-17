@@ -13,12 +13,12 @@ package org.sventon.cache.revisioncache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.cache.RevisionCacheManager;
 import org.sventon.cache.CacheException;
+import org.sventon.cache.RevisionCacheManager;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public final class RevisionCacheUpdater implements RepositoryChangeListener {
    */
   public void update(final RevisionUpdate revisionUpdate) {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
-    final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+    final List<LogEntry> revisions = revisionUpdate.getRevisions();
 
     LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
@@ -74,9 +74,9 @@ public final class RevisionCacheUpdater implements RepositoryChangeListener {
    * @param revisionCache Cache instance
    * @param revisions     Revisions
    */
-  protected void updateInternal(final RevisionCache revisionCache, final List<SVNLogEntry> revisions) {
-    for (final SVNLogEntry svnLogEntry : revisions) {
-      revisionCache.add(svnLogEntry);
+  protected void updateInternal(final RevisionCache revisionCache, final List<LogEntry> revisions) {
+    for (final LogEntry logEntry : revisions) {
+      revisionCache.add(logEntry);
       revisionCache.flush();
     }
   }

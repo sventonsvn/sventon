@@ -24,7 +24,6 @@ import org.sventon.diff.DiffException;
 import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -229,9 +228,8 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
   private List<LogEntry> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-    final List<SVNLogEntry> logEntries = getRepositoryService().getLatestRevisions(
+    return getRepositoryService().getLatestRevisions(
         command.getName(), connection, repositoryContext.getLatestRevisionsDisplayCount());
-    return LogEntry.convert(logEntries);
   }
 
   /**

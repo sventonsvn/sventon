@@ -13,8 +13,8 @@ package org.sventon.repository;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import java.util.List;
 public final class RevisionUpdate {
 
   private final RepositoryName repositoryName;
-  private final List<SVNLogEntry> logEntries;
+  private final List<LogEntry> logEntries;
   private final boolean flushAfterUpdate;
   private final boolean clearCacheBeforeUpdate;
 
@@ -40,7 +40,7 @@ public final class RevisionUpdate {
    * @param flushAfterUpdate       If <tt>true</tt>, caches will be flushed after update.
    * @param clearCacheBeforeUpdate Clear cache before update, to make sure we don't get duplicates.
    */
-  public RevisionUpdate(final RepositoryName repositoryName, final List<SVNLogEntry> logEntries, final boolean flushAfterUpdate,
+  public RevisionUpdate(final RepositoryName repositoryName, final List<LogEntry> logEntries, final boolean flushAfterUpdate,
                         final boolean clearCacheBeforeUpdate) {
     this.repositoryName = repositoryName;
     this.logEntries = logEntries;
@@ -53,7 +53,7 @@ public final class RevisionUpdate {
    *
    * @return The log entries.
    */
-  public List<SVNLogEntry> getRevisions() {
+  public List<LogEntry> getRevisions() {
     return logEntries;
   }
 

@@ -1,9 +1,9 @@
 package org.sventon;
 
+import org.sventon.model.LogEntry;
 import org.sventon.service.RepositoryService;
 import org.sventon.service.svnkit.SVNKitConnection;
 import org.sventon.service.svnkit.SVNKitRepositoryService;
-import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -57,8 +57,8 @@ public class CmdTool {
 
       RepositoryService service = new SVNKitRepositoryService();
 
-      final List<SVNLogEntry> logEntries = service.getLatestRevisions(null, new SVNKitConnection(repository), 2);
-      for (SVNLogEntry logEntry : logEntries) {
+      final List<LogEntry> logEntries = service.getLatestRevisions(null, new SVNKitConnection(repository), 2);
+      for (LogEntry logEntry : logEntries) {
         System.out.println("logEntry = " + logEntry);
       }
 

@@ -18,11 +18,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.util.HTMLCreator;
-import org.sventon.util.SVNUtils;
 import org.sventon.util.WebUtils;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +60,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
   private DateFormat dateFormat;
 
   @Override
-  public void outputFeed(final RepositoryConfiguration configuration, final List<SVNLogEntry> logEntries,
+  public void outputFeed(final RepositoryConfiguration configuration, final List<LogEntry> logEntries,
                          final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 
     final SyndFeed feed = new SyndFeedImpl();
@@ -86,7 +85,7 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
    * @return List of RSS feed items
    * @throws IOException if unable to produce feed items.
    */
-  private List<SyndEntry> createEntries(final RepositoryConfiguration configuration, final List<SVNLogEntry> logEntries,
+  private List<SyndEntry> createEntries(final RepositoryConfiguration configuration, final List<LogEntry> logEntries,
                                         final String baseURL, final HttpServletResponse response) throws IOException {
 
     final List<SyndEntry> entries = new ArrayList<SyndEntry>();
@@ -98,8 +97,8 @@ public final class RssFeedGeneratorImpl implements RssFeedGenerator {
     logger.debug("Generating [" + logEntries.size() + "] RSS feed items for repository [" + repositoryName + "]");
 
     // One logEntry is one commit (or revision)
-    for (final SVNLogEntry logEntry : logEntries) {
-      if (SVNUtils.isAccessible(logEntry)) {
+    for (final LogEntry logEntry : logEntries) {
+      if (logEntry.isAccessible()) {
         entry = new SyndEntryImpl();
         entry.setTitle("Revision " + logEntry.getRevision() + " - " + StringUtils.trimToEmpty(getAbbreviatedLogMessage(
             StringEscapeUtils.escapeHtml(logEntry.getMessage()), logMessageLength)));

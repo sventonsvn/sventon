@@ -81,7 +81,7 @@ public final class DiffCommand extends BaseCommand {
   }
 
   /**
-   * @return True if entries has been set (using {@link #setEntries(PathRevision[])}).
+   * @return True if entries has been set (using {@link #setEntries(Pathvision[])}).
    */
   public boolean hasEntries() {
     return toFileRevision != null && fromFileRevision != null;

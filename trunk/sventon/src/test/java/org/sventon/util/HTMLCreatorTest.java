@@ -2,13 +2,15 @@ package org.sventon.util;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.sventon.TestUtils;
+import org.sventon.model.ChangeType;
+import org.sventon.model.ChangedPath;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class HTMLCreatorTest extends TestCase {
 
@@ -36,13 +38,13 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "</table>";
 
-    final Map<String, SVNLogEntryPath> changedPaths = new HashMap<String, SVNLogEntryPath>();
-    changedPaths.put("/file1.java", new SVNLogEntryPath("/file1.java", 'M', null, 1));
-    changedPaths.put("/file2.html", new SVNLogEntryPath("/file2.html", 'D', null, 1));
-    changedPaths.put("/file3.abc", new SVNLogEntryPath("/file3.abc", 'A', "/branch/file3.abc", 1));
-    changedPaths.put("/file4.def", new SVNLogEntryPath("/file4.def", 'R', null, 1));
+    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+    changedPaths.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
+    changedPaths.add(new ChangedPath("/file2.html", null, 1, ChangeType.DELETED));
+    changedPaths.add(new ChangedPath("/file3.abc", "/branch/file3.abc", 1, ChangeType.ADDED));
+    changedPaths.add(new ChangedPath("/file4.def", null, 1, ChangeType.REPLACED));
 
-    final SVNLogEntry logEntry = new SVNLogEntry(changedPaths, 1, "jesper", new Date(), "Testing");
+    final LogEntry logEntry = TestUtils.createLogEntry(1, "jesper", new Date(), "Testing", changedPaths);
 
     assertEquals(result, HTMLCreator.createChangedPathsTable(logEntry.getChangedPaths(), logEntry.getRevision(),
         "/file1.java", "", new RepositoryName("sandbox"), false, false, new MockHttpServletResponse()));

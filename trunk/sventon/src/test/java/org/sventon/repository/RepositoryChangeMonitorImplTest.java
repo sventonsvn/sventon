@@ -1,7 +1,6 @@
 package org.sventon.repository;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -9,34 +8,34 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
+import org.sventon.model.LogEntry;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+
+import static org.easymock.EasyMock.*;
 
 public class RepositoryChangeMonitorImplTest extends TestCase {
 
   private RepositoryService repositoryServiceMock = createMock(RepositoryService.class);
   private RepositoryChangeListener repositoryChangeListenerMock = createMock(RepositoryChangeListener.class);
-  private List<SVNLogEntry> firstBatchOfRevisions;
-  private List<SVNLogEntry> secondBatchOfRevisions;
+  private List<LogEntry> firstBatchOfRevisions;
+  private List<LogEntry> secondBatchOfRevisions;
 
   @Override
   protected void setUp() throws Exception {
-    firstBatchOfRevisions = new ArrayList<SVNLogEntry>();
-    secondBatchOfRevisions = new ArrayList<SVNLogEntry>();
+    firstBatchOfRevisions = new ArrayList<LogEntry>();
+    secondBatchOfRevisions = new ArrayList<LogEntry>();
 
-    firstBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 1, "jesper1", new Date(), "Log message for revision 1."));
-    firstBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 2, "jesper2", new Date(), "Log message for revision 2."));
-    firstBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 3, "jesper3", new Date(), "Log message for revision 3."));
+    firstBatchOfRevisions.add(TestUtils.createLogEntry(1, "jesper1", new Date(), "Log message for revision 1."));
+    firstBatchOfRevisions.add(TestUtils.createLogEntry(2, "jesper2", new Date(), "Log message for revision 2."));
+    firstBatchOfRevisions.add(TestUtils.createLogEntry(3, "jesper3", new Date(), "Log message for revision 3."));
 
-    secondBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 4, "jesper4", new Date(), "Log message for revision 4."));
-    secondBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 5, "jesper5", new Date(), "Log message for revision 5."));
-    secondBatchOfRevisions.add(new SVNLogEntry(new HashMap<String, SVNLogEntryPath>(), 6, "jesper6", new Date(), "Log message for revision 6."));
+    secondBatchOfRevisions.add(TestUtils.createLogEntry(4, "jesper4", new Date(), "Log message for revision 4."));
+    secondBatchOfRevisions.add(TestUtils.createLogEntry(5, "jesper5", new Date(), "Log message for revision 5."));
+    secondBatchOfRevisions.add(TestUtils.createLogEntry(6, "jesper6", new Date(), "Log message for revision 6."));
   }
 
   @Override

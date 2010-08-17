@@ -15,11 +15,10 @@ import org.compass.annotations.Index;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * LogMessageSearchItem.
@@ -61,7 +60,7 @@ public final class LogMessageSearchItem implements Serializable {
    *
    * @param svnLogEntry SVN log entry
    */
-  public LogMessageSearchItem(final SVNLogEntry svnLogEntry) {
+  public LogMessageSearchItem(final LogEntry svnLogEntry) {
     this.revision = svnLogEntry.getRevision();
     this.author = svnLogEntry.getAuthor();
     this.date = svnLogEntry.getDate() != null ? (Date) svnLogEntry.getDate().clone() : null;
@@ -75,11 +74,11 @@ public final class LogMessageSearchItem implements Serializable {
    * @param changedPaths Changed paths for a certain revision.
    * @return Concatinated string of paths, or null/empty string if no changed paths in revision.
    */
-  private String extractAndConcatinatePaths(Map changedPaths) {
+  private String extractAndConcatinatePaths(Set<ChangedPath> changedPaths) {
     if (changedPaths != null) {
       StringBuilder pathsStringBuilder = new StringBuilder();
-      for (Object path : changedPaths.keySet()) {
-        pathsStringBuilder.append(PATHS_DELIMITER).append(path);
+      for (ChangedPath changedPath : changedPaths) {
+        pathsStringBuilder.append(PATHS_DELIMITER).append(changedPath.getPath());
       }
       return pathsStringBuilder.toString();
     } else {

@@ -18,13 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.model.DirEntry;
-import org.sventon.model.LogEntry;
-import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.model.*;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,32 +62,28 @@ public final class ShowLogController extends AbstractTemplateController {
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
 
-    final List<LogEntry> logEntryWrappers = new ArrayList<LogEntry>();
-
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
-      final List<SVNLogEntry> logEntries = getRepositoryService().getLogEntries(command.getName(), connection,
-          fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy, true);
+      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection,
+          fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy, true));
 
       String pathAtRevision = nextPath;
 
-      for (final SVNLogEntry logEntry : logEntries) {
-        logEntryWrappers.add(new LogEntry(logEntry, pathAtRevision));
+      for (final LogEntry logEntry : logEntries) {
+        logEntry.setPathAtRevision(pathAtRevision);
 
         //noinspection unchecked
-        final Map<String, SVNLogEntryPath> allChangedPaths = logEntry.getChangedPaths();
-        final Set<String> changedPaths = allChangedPaths.keySet();
+        final Set<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
 
-        for (String entryPath : changedPaths) {
-          int i = StringUtils.indexOfDifference(entryPath, pathAtRevision);
+        for (ChangedPath entryPath : allChangedPaths) {
+          int i = StringUtils.indexOfDifference(entryPath.getPath(), pathAtRevision);
           if (i == -1) { // Same path
-            final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
-            if (logEntryPath.getCopyPath() != null) {
-              pathAtRevision = logEntryPath.getCopyPath();
+            if (entryPath.getCopyPath() != null) {
+              pathAtRevision = entryPath.getCopyPath();
             }
-          } else if (entryPath.length() == i) { // Part path, can be a branch
-            final SVNLogEntryPath logEntryPath = allChangedPaths.get(entryPath);
-            if (logEntryPath.getCopyPath() != null) {
-              pathAtRevision = logEntryPath.getCopyPath() + pathAtRevision.substring(i);
+          } else if (entryPath.getPath().length() == i) { // Part path, can be a branch
+            if (entryPath.getCopyPath() != null) {
+              pathAtRevision = entryPath.getCopyPath() + pathAtRevision.substring(i);
             }
           }
         }
@@ -106,10 +97,10 @@ public final class ShowLogController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
     final DirEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
     model.put("stopOnCopy", stopOnCopy);
-    model.put("logEntriesPage", logEntryWrappers);
+    model.put("logEntriesPage", logEntries);
     model.put("pageSize", pageSize);
     model.put("isFile", nodeKind == DirEntry.Kind.FILE);
-    model.put("morePages", logEntryWrappers.size() == pageSize);
+    model.put("morePages", logEntries.size() == pageSize);
     model.put("nextPath", nextPath);
     model.put("nextRevision", fromRevision);
     return new ModelAndView(getViewName(), model);

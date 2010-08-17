@@ -17,18 +17,18 @@ import java.util.Date;
 
 /**
  * Misc helper for date operations such as uniform formatting etc
- * 
  */
 public class DateUtil {
   private static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
-  private static final String SHORT_FORMAT_PATTERN =  "yyyy-MM-dd' 'HH:mm:ss'Z'";
+  private static final String SHORT_FORMAT_PATTERN = "yyyy-MM-dd' 'HH:mm:ss'Z'";
 
   // TODO: is this really ISO8601 or can we be more precise, like saying something like svn date format or...
+
   public static Date parseISO8601(final String date) {
     return parse(date, ISO8601_FORMAT_PATTERN);
   }
 
-   
+
   public static Date parseShort(final String date) {
     return parse(date, SHORT_FORMAT_PATTERN);
   }
@@ -43,6 +43,7 @@ public class DateUtil {
 
 
   public static String formatISO8601(final Date date) {
+    if (date == null) return "";
     return new SimpleDateFormat(ISO8601_FORMAT_PATTERN).format(date);
   }
 

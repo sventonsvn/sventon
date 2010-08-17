@@ -22,14 +22,13 @@ import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.EntryCacheManager;
+import org.sventon.model.ChangedPath;
 import org.sventon.model.DirEntry;
-import org.sventon.model.DirEntryChangeType;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryService;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
 
 import java.util.*;
 
@@ -139,7 +138,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   protected void updateInternal(final DirEntryCache entryCache, final SVNConnection connection,
                                 final RevisionUpdate revisionUpdate) {
 
-    final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+    final List<LogEntry> revisions = revisionUpdate.getRevisions();
     final int revisionCount = revisions.size();
     final long firstRevision = revisions.get(0).getRevision();
     final long lastRevision = revisions.get(revisionCount - 1).getRevision();
@@ -152,7 +151,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       // Initial population has already been performed - only apply changes for now.
       if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
         // One logEntry is one commit (or revision)
-        for (final SVNLogEntry logEntry : revisions) {
+        for (final LogEntry logEntry : revisions) {
           addRevisionToCache(entryCache, connection, logEntry, revisionUpdate.isFlushAfterUpdate());
         }
         LOGGER.debug("Update completed");
@@ -161,41 +160,34 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   }
 
   private void addRevisionToCache(final DirEntryCache entryCache, final SVNConnection connection,
-                                  final SVNLogEntry logEntry, boolean flushAfterUpdate) {
+                                  final LogEntry logEntry, boolean flushAfterUpdate) {
     try {
       final long revision = logEntry.getRevision();
       LOGGER.debug("Applying changes in revision [" + revision + "] to cache");
 
-      //noinspection unchecked
-      final Map<String, SVNLogEntryPath> map = logEntry.getChangedPaths();
-      final List<String> latestPathsList = new ArrayList<String>(map.keySet());
-      // Sort the entriesToAdd to apply changes in right order
-      Collections.sort(latestPathsList);
-
       final EntriesToAdd entriesToAdd = new EntriesToAdd();
       final EntriesToDelete entriesToDelete = new EntriesToDelete();
 
-      for (final String entryPath : latestPathsList) {
-        final SVNLogEntryPath logEntryPath = map.get(entryPath);
-        switch (DirEntryChangeType.parse(logEntryPath.getType())) {
+      for (final ChangedPath entryPath : logEntry.getChangedPaths()) {
+        switch (entryPath.getType()) {
           case ADDED:
-            LOGGER.debug("Adding entry to cache: " + logEntryPath.getPath());
-            doEntryCacheAdd(entriesToAdd, connection, logEntryPath, revision);
+            LOGGER.debug("Adding entry to cache: " + entryPath.getPath());
+            doEntryCacheAdd(entriesToAdd, connection, entryPath, revision);
             break;
           case DELETED:
-            LOGGER.debug("Removing deleted entry from cache: " + logEntryPath.getPath());
-            doEntryCacheDelete(entriesToDelete, connection, logEntryPath, revision);
+            LOGGER.debug("Removing deleted entry from cache: " + entryPath.getPath());
+            doEntryCacheDelete(entriesToDelete, connection, entryPath, revision);
             break;
           case REPLACED:
-            LOGGER.debug("Replacing entry in cache: " + logEntryPath.getPath());
-            doEntryCacheReplace(entriesToAdd, entriesToDelete, connection, logEntryPath, revision);
+            LOGGER.debug("Replacing entry in cache: " + entryPath.getPath());
+            doEntryCacheReplace(entriesToAdd, entriesToDelete, connection, entryPath, revision);
             break;
           case MODIFIED:
-            LOGGER.debug("Updating modified entry in cache: " + logEntryPath.getPath());
-            doEntryCacheModify(entriesToAdd, entriesToDelete, connection, logEntryPath, revision);
+            LOGGER.debug("Updating modified entry in cache: " + entryPath.getPath());
+            doEntryCacheModify(entriesToAdd, entriesToDelete, connection, entryPath, revision);
             break;
           default:
-            throw new RuntimeException("Unknown log entry type: " + logEntryPath.getType() + " in rev " + logEntry.getRevision());
+            throw new RuntimeException("Unknown log entry type: " + entryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
       updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache, flushAfterUpdate);
@@ -246,7 +238,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    */
   private void doEntryCacheModify(final EntriesToAdd entriesToAdd,
                                   final EntriesToDelete entriesToDelete,
-                                  final SVNConnection connection, final SVNLogEntryPath logEntryPath,
+                                  final SVNConnection connection, final ChangedPath logEntryPath,
                                   final long revision) throws SventonException {
 
     entriesToDelete.add(logEntryPath.getPath(), DirEntry.Kind.ANY);
@@ -266,7 +258,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    */
   private void doEntryCacheReplace(final EntriesToAdd entriesToAdd,
                                    final EntriesToDelete entriesToDelete,
-                                   final SVNConnection connection, final SVNLogEntryPath logEntryPath,
+                                   final SVNConnection connection, final ChangedPath logEntryPath,
                                    final long revision) throws SventonException {
 
     doEntryCacheModify(entriesToAdd, entriesToDelete, connection, logEntryPath, revision);
@@ -282,7 +274,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheDelete(final EntriesToDelete entriesToDelete,
-                                  final SVNConnection connection, final SVNLogEntryPath logEntryPath,
+                                  final SVNConnection connection, final ChangedPath logEntryPath,
                                   final long revision) throws SventonException {
 
     // Have to find out if deleted entry was a file or directory
@@ -307,7 +299,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @throws SventonException if subversion error occur.
    */
   private void doEntryCacheAdd(final EntriesToAdd entriesToAdd,
-                               final SVNConnection connection, final SVNLogEntryPath logEntryPath,
+                               final SVNConnection connection, final ChangedPath logEntryPath,
                                final long revision) throws SventonException {
 
     // Have to find out if added entry was a file or directory

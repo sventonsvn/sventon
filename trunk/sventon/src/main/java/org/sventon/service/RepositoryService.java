@@ -19,7 +19,6 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -42,7 +41,7 @@ public interface RepositoryService {
    * @return The log entry
    * @throws SventonException if a sventon specific error occurs
    */
-  SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  LogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SventonException;
 
   /**
@@ -55,7 +54,7 @@ public interface RepositoryService {
    * @return The log entries
    * @throws SventonException if subversion error
    */
-  List<SVNLogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision, final long toRevision)
+  List<LogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision, final long toRevision)
       throws SventonException;
 
   /**
@@ -73,9 +72,9 @@ public interface RepositoryService {
    * @return The log entries
    * @throws SventonException if a sventon specific error occurs
    */
-  List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
-                                  final long fromRevision, final long toRevision, final String path,
-                                  final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
+  List<LogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
+                               final long fromRevision, final long toRevision, final String path,
+                               final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
       throws SventonException;
 
   /**
@@ -183,7 +182,7 @@ public interface RepositoryService {
    * @return List of file revisions
    * @throws SventonException if a subversion error occur
    */
-  List<PathRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SventonException;
+  List<FileRevision> getFileRevisions(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Creates a side-by-side diff.
@@ -292,6 +291,6 @@ public interface RepositoryService {
    * @return List of the latest revisions.
    * @throws SventonException if unable to communicate with repository.
    */
-  List<SVNLogEntry> getLatestRevisions(final RepositoryName repositoryName, final SVNConnection connection,
-                                       final int revisionCount) throws SventonException;
+  List<LogEntry> getLatestRevisions(final RepositoryName repositoryName, final SVNConnection connection,
+                                    final int revisionCount) throws SventonException;
 }

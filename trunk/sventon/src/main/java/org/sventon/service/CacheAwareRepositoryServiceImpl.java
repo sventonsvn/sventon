@@ -18,6 +18,7 @@ import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheGateway;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.ISVNLogEntryHandler;
@@ -74,10 +75,10 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public SVNLogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  public LogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SventonException {
 
-    final SVNLogEntry logEntry;
+    final LogEntry logEntry;
     if (canReturnCachedRevisionsFor(repositoryName)) {
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
@@ -92,13 +93,13 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * currently busy updating, a cached log entry instance will be returned.
    */
   @Override
-  public List<SVNLogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
-                                         final long fromRevision, final long toRevision, final String path,
-                                         final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
+  public List<LogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
+                                      final long fromRevision, final long toRevision, final String path,
+                                      final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
       throws SventonException {
 
     final SVNRepository repository = connection.getDelegate();
-    final List<SVNLogEntry> logEntries = new ArrayList<SVNLogEntry>();
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     if (canReturnCachedRevisionsFor(repositoryName)) {
       final List<Long> revisions = new ArrayList<Long>();
       if ("/".equals(path)) {

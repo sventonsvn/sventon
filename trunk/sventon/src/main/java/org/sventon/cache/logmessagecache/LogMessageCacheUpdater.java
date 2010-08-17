@@ -14,11 +14,11 @@ package org.sventon.cache.logmessagecache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.cache.LogEntryCacheManager;
+import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
    */
   public void update(final RevisionUpdate revisionUpdate) {
     final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
-    final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+    final List<LogEntry> revisions = revisionUpdate.getRevisions();
 
     LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
@@ -79,11 +79,11 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
    * @param logMessageCache Cache instance
    * @param revisions       Revisions
    */
-  protected void updateInternal(final LogMessageCache logMessageCache, final List<SVNLogEntry> revisions) {
+  protected void updateInternal(final LogMessageCache logMessageCache, final List<LogEntry> revisions) {
     try {
       final List<LogMessageSearchItem> logEntries = new ArrayList<LogMessageSearchItem>();
-      for (final SVNLogEntry svnLogEntry : revisions) {
-        logEntries.add(new LogMessageSearchItem(svnLogEntry));
+      for (final LogEntry logEntry : revisions) {
+        logEntries.add(new LogMessageSearchItem(logEntry));
       }
       logMessageCache.add(logEntries.toArray(new LogMessageSearchItem[logEntries.size()]));
     } catch (Exception ce) {

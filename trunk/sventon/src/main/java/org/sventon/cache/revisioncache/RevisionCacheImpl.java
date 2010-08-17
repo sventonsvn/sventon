@@ -13,7 +13,7 @@ package org.sventon.cache.revisioncache;
 
 import org.apache.commons.lang.Validate;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.tmatesoft.svn.core.SVNLogEntry;
+import org.sventon.model.LogEntry;
 
 /**
  * Contains cached revisions.
@@ -37,12 +37,12 @@ public final class RevisionCacheImpl implements RevisionCache {
   }
 
   @Override
-  public SVNLogEntry get(final long revision) {
-    return (SVNLogEntry) objectCache.get(CacheKey.createKey(revision));
+  public LogEntry get(final long revision) {
+    return (LogEntry) objectCache.get(CacheKey.createKey(revision));
   }
 
   @Override
-  public void add(final SVNLogEntry logEntry) {
+  public void add(final LogEntry logEntry) {
     Validate.notNull(logEntry, "Given logEntry was null");
     objectCache.put(CacheKey.createKey(logEntry.getRevision()), logEntry);
   }

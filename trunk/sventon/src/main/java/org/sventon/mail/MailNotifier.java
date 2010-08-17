@@ -16,12 +16,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.model.LogEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.util.HTMLCreator;
-import org.sventon.util.SVNUtils;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.activation.DataHandler;
 import javax.annotation.PostConstruct;
@@ -122,7 +121,7 @@ public final class MailNotifier implements RepositoryChangeListener {
 
     executorService.execute(new Runnable() {
       public void run() {
-        final List<SVNLogEntry> revisions = revisionUpdate.getRevisions();
+        final List<LogEntry> revisions = revisionUpdate.getRevisions();
 
         if (revisions.size() > revisionCountThreshold) {
           LOGGER.info("Update contains more than max allowed updates, ["
@@ -130,8 +129,8 @@ public final class MailNotifier implements RepositoryChangeListener {
           return;
         }
 
-        for (final SVNLogEntry logEntry : revisions) {
-          if (SVNUtils.isAccessible(logEntry)) {
+        for (final LogEntry logEntry : revisions) {
+          if (logEntry.isAccessible()) {
             final RepositoryName repositoryName = revisionUpdate.getRepositoryName();
             final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
             LOGGER.info("Sending notification mail for [" + repositoryName + "], revision: " + logEntry.getRevision());
@@ -142,7 +141,7 @@ public final class MailNotifier implements RepositoryChangeListener {
     });
   }
 
-  private void sendMailMessage(SVNLogEntry logEntry, RepositoryName repositoryName, RepositoryConfiguration configuration) {
+  private void sendMailMessage(LogEntry logEntry, RepositoryName repositoryName, RepositoryConfiguration configuration) {
     try {
       final Message msg = createMessage(logEntry, repositoryName, configuration.getMailTemplate());
       final SMTPTransport transport = (SMTPTransport) session.getTransport(ssl ? "smtps" : "smtp");
@@ -171,7 +170,7 @@ public final class MailNotifier implements RepositoryChangeListener {
    * @throws MessagingException If a message exception occurs.
    * @throws IOException        if a IO exception occurs while creating the data source.
    */
-  private Message createMessage(final SVNLogEntry logEntry, RepositoryName repositoryName, String mailTemplate)
+  private Message createMessage(final LogEntry logEntry, RepositoryName repositoryName, String mailTemplate)
       throws MessagingException, IOException {
     final Message msg = new MimeMessage(session);
     msg.setFrom(new InternetAddress(from));

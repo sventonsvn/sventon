@@ -19,7 +19,6 @@ import org.sventon.SventonException;
 import org.sventon.model.LogEntry;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNLogEntry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +46,10 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
 
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
-      final List<SVNLogEntry> logEntries = getRepositoryService().getLatestRevisions(command.getName(), connection, revisionCount);
+      final List<LogEntry> logEntries = getRepositoryService().getLatestRevisions(command.getName(), connection, revisionCount);
 
       //TODO: Parse to apply Bugtraq links
-      revisions.addAll(LogEntry.convert(logEntries));
+      revisions.addAll(logEntries);
       logger.debug("Got [" + revisions.size() + "] revisions");
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
