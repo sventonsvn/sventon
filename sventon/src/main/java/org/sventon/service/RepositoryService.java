@@ -187,17 +187,16 @@ public interface RepositoryService {
   /**
    * Creates a side-by-side diff.
    *
-   * @param connection    The repository connection.
-   * @param command       DiffCommand.
-   * @param pegRevision   Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
-   * @param charset       The charset to use.
-   * @param configuration The repository configuration. @return Ordered list of diffed rows.
+   * @param connection  The repository connection.
+   * @param command     DiffCommand.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
+   * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
    * @throws DiffException    if unable to produce diff.
    */
   List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
-                                         final Revision pegRevision, final String charset, final RepositoryConfiguration configuration)
+                                         final Revision pegRevision, final String charset)
       throws SventonException, DiffException;
 
   /**
@@ -217,29 +216,26 @@ public interface RepositoryService {
   /**
    * Creates an inline diff.
    *
-   * @param connection    The repository connection.
-   * @param command       DiffCommand.
-   * @param pegRevision   Peg revision, or {@link Revision#UNDEFINED} of n/a.
-   * @param charset       The charset to use.
-   * @param configuration The repository configuration. @return The inline diff.
+   * @param connection  The repository connection.
+   * @param command     DiffCommand.
+   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED} of n/a.
+   * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
    * @throws DiffException    if unable to produce diff.
    */
-  List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision, final String charset,
-                                 final RepositoryConfiguration configuration) throws SventonException, DiffException;
+  List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
+                                 final String charset) throws SventonException, DiffException;
 
   /**
    * Creates a path diff.
    *
    * @param connection    The repository connection.
    * @param command       DiffCommand.
-   * @param configuration The repository configuration. @return The inline diff.
    * @return List of diff status.
    * @throws SventonException if a subversion error occur
    */
-  List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command,
-                             final RepositoryConfiguration configuration) throws SventonException;
+  List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command) throws SventonException;
 
   /**
    * Blame (annotates) the given file.

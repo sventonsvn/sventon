@@ -16,7 +16,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
@@ -52,7 +51,6 @@ public final class DiffController extends AbstractTemplateController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     final ModelAndView modelAndView = new ModelAndView();
-    final RepositoryConfiguration config = getRepositoryConfiguration(command.getName());
     final String charset = userRepositoryContext.getCharset();
 
     handleDiffPrevious(connection, command);
@@ -61,9 +59,9 @@ public final class DiffController extends AbstractTemplateController {
     try {
       final DirEntry.Kind nodeKind = getRepositoryService().getNodeKindForDiff(connection, command);
       if (DirEntry.Kind.DIR == nodeKind) {
-        model.putAll(handlePathDiff(connection, modelAndView, command, config));
+        model.putAll(handlePathDiff(connection, modelAndView, command));
       } else if (DirEntry.Kind.FILE == nodeKind) {
-        model.putAll(handleFileDiff(connection, modelAndView, command, config, charset));
+        model.putAll(handleFileDiff(connection, modelAndView, command, charset));
       }
     } catch (final IdenticalFilesException ife) {
       logger.debug("Files are identical");
@@ -81,10 +79,9 @@ public final class DiffController extends AbstractTemplateController {
       logger.debug("No entries has been set - diffing with previous");
       final List<FileRevision> revisions = getRepositoryService().getFileRevisions(
           connection, command.getPath(), command.getRevisionNumber());
-      command.setEntries((FileRevision[]) revisions.toArray());
+      command.setEntries(revisions.toArray(new FileRevision[revisions.size()]));
     }
   }
-
 
   private void handleDiffStyle(DiffCommand command) {
     if (DiffStyle.unspecified == command.getStyle()) {
@@ -94,8 +91,7 @@ public final class DiffController extends AbstractTemplateController {
   }
 
   private Map<String, Object> handleFileDiff(final SVNConnection connection, final ModelAndView modelAndView,
-                                             final DiffCommand command, final RepositoryConfiguration config,
-                                             final String charset)
+                                             final DiffCommand command, final String charset)
       throws SventonException, DiffException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
@@ -104,11 +100,11 @@ public final class DiffController extends AbstractTemplateController {
     switch (command.getStyle()) {
       case inline:
         modelAndView.setViewName("inlineDiff");
-        model.put("diffResult", getRepositoryService().diffInline(connection, command, pegRevision, charset, config));
+        model.put("diffResult", getRepositoryService().diffInline(connection, command, pegRevision, charset));
         break;
       case sidebyside:
         modelAndView.setViewName("sideBySideDiff");
-        model.put("diffResult", getRepositoryService().diffSideBySide(connection, command, pegRevision, charset, config));
+        model.put("diffResult", getRepositoryService().diffSideBySide(connection, command, pegRevision, charset));
         break;
       case unified:
         modelAndView.setViewName("unifiedDiff");
@@ -123,14 +119,13 @@ public final class DiffController extends AbstractTemplateController {
   }
 
   private Map<String, Object> handlePathDiff(final SVNConnection connection, final ModelAndView modelAndView,
-                                             final DiffCommand command, final RepositoryConfiguration config)
-      throws SventonException {
+                                             final DiffCommand command) throws SventonException {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     logger.debug("Diffing dirs");
     modelAndView.setViewName("pathDiff");
 
-    final List<DiffStatus> diffResult = getRepositoryService().diffPaths(connection, command, config);
+    final List<DiffStatus> diffResult = getRepositoryService().diffPaths(connection, command);
 
     logger.debug("Number of path diffs: " + diffResult.size());
     model.put("isIdentical", diffResult.isEmpty());

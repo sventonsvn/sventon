@@ -14,7 +14,6 @@ package org.sventon.model;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.sventon.colorer.Colorer;
-import org.sventon.util.KeywordHandler;
 import org.sventon.util.WebUtils;
 
 import java.io.IOException;
@@ -46,32 +45,20 @@ public final class TextFile {
       public String getColorizedContent(final String content, final String fileExtension, final String encoding) {
         return StringEscapeUtils.escapeXml(content);
       }
-    }, null, null);
+    });
   }
 
   /**
    * Constructor.
    *
-   * @param content       Content.
-   * @param path          Path.
-   * @param encoding      Encoding.
-   * @param colorer       Colorer.
-   * @param properties    Keywords to be substituted. If <tt>null</tt> no keywords will be processed.
-   * @param repositoryURL Repository URL for keyword substitution.
+   * @param content  Content.
+   * @param path     Path.
+   * @param encoding Encoding.
+   * @param colorer  Colorer.
    * @throws IOException if unable to read content.
    */
-  public TextFile(final String content, final String path, final String encoding, final Colorer colorer,
-                  final Properties properties, final String repositoryURL) throws IOException {
-
-    String processedContent;
-
-    if (properties != null) {
-      final KeywordHandler keywordHandler = new KeywordHandler(properties, repositoryURL + path);
-      processedContent = keywordHandler.substitute(content, encoding);
-    } else {
-      processedContent = content;
-    }
-
+  public TextFile(final String content, final String path, final String encoding, final Colorer colorer) throws IOException {
+    String processedContent = content;
     if (colorer != null) {
       processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
     }

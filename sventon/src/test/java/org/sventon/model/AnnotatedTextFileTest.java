@@ -22,7 +22,7 @@ public class AnnotatedTextFileTest extends TestCase {
   }
 
   public void testAnnotatedTextFileJava() throws Exception {
-    final AnnotatedTextFile file = new AnnotatedTextFile("test.java", "UTF-8", getColorer(), null, null);
+    final AnnotatedTextFile file = new AnnotatedTextFile("test.java", "UTF-8", getColorer());
     final String row1 = "public class Test {";
     final String row2 = "}";
 

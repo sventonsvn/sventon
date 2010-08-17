@@ -8,7 +8,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
@@ -19,16 +18,14 @@ import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
-import org.sventon.service.svnkit.SVNKitConnection;
-import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.sventon.util.ImageScaler;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNProperties;
 
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
+
+import static org.mockito.Mockito.mock;
 
 public class GetFileControllerTest extends TestCase {
 
@@ -66,7 +63,7 @@ public class GetFileControllerTest extends TestCase {
 
     final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
-    ctrl.setRepositoryService(new SVNKitRepositoryService());
+    ctrl.setRepositoryService(mock(RepositoryService.class));
 
     final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
     mftm.afterPropertiesSet();
@@ -76,7 +73,7 @@ public class GetFileControllerTest extends TestCase {
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);
 
     final MockHttpServletResponse res = new MockHttpServletResponse();
-    modelAndView = ctrl.svnHandle(new SVNKitConnection(new TestRepository()), command, 100, null, request, res, null);
+    modelAndView = ctrl.svnHandle(null, command, 100, null, request, res, null);
 
     assertNull(modelAndView);
     assertEquals("image/gif", res.getContentType());
@@ -90,12 +87,12 @@ public class GetFileControllerTest extends TestCase {
 
     final GetFileController ctrl = new GetFileController();
     ctrl.setApplication(application);
-    ctrl.setRepositoryService(new SVNKitRepositoryService());
+    ctrl.setRepositoryService(mock(RepositoryService.class));
 
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, (String) null);
 
     final MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-    final ModelAndView modelAndView = ctrl.svnHandle(new SVNKitConnection(new TestRepository()), command, 100, null, request, mockResponse, null);
+    final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, mockResponse, null);
 
     assertNull(modelAndView);
 
@@ -201,20 +198,10 @@ public class GetFileControllerTest extends TestCase {
     EasyMock.reset(repositoryServiceMock);
 
     // Thumbnail is now cached - verify that it's used
-
     EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
 
     EasyMock.replay(repositoryServiceMock);
     ctrl.svnHandle(null, command, 100, null, request, response, null);
     EasyMock.verify(repositoryServiceMock);
   }
-
-  static class TestRepository extends SVNRepositoryStub {
-
-    public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-      return 0;
-    }
-  }
-
-
 }

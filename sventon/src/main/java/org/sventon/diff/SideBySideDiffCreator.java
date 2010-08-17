@@ -12,20 +12,19 @@
 package org.sventon.diff;
 
 import org.apache.commons.io.IOUtils;
-import static org.sventon.diff.DiffSegment.Side.LEFT;
-import static org.sventon.diff.DiffSegment.Side.RIGHT;
 import org.sventon.model.DiffAction;
-import static org.sventon.model.DiffAction.*;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
 import org.sventon.model.TextFile;
-import org.sventon.util.KeywordHandler;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.sventon.diff.DiffSegment.Side.LEFT;
+import static org.sventon.diff.DiffSegment.Side.RIGHT;
+import static org.sventon.model.DiffAction.*;
 
 /**
  * Creates side by side diff result instances.
@@ -49,23 +48,15 @@ public final class SideBySideDiffCreator {
   /**
    * Constructor.
    *
-   * @param fromFile           From file
-   * @param fromKeywordHandler Keyword handler
-   * @param fromFileCharset    Charset
-   * @param toFile             To file
-   * @param toKeywordHandler   Keyword handler
-   * @param toFileCharset      Charset
+   * @param fromFile From file
+   * @param toFile   To file
    * @throws IOException if IO error
    */
   @SuppressWarnings({"unchecked"})
-  public SideBySideDiffCreator(final TextFile fromFile, final KeywordHandler fromKeywordHandler, final String fromFileCharset,
-                               final TextFile toFile, final KeywordHandler toKeywordHandler, final String toFileCharset)
+  public SideBySideDiffCreator(final TextFile fromFile, final TextFile toFile)
       throws IOException {
-    // TODO: Break this into two classes
-    final String leftString = appendKeywords(fromKeywordHandler, fromFile.getContent(), fromFileCharset);
-    final String rightString = appendKeywords(toKeywordHandler, toFile.getContent(), toFileCharset);
-    leftSourceLines = IOUtils.readLines(new StringReader(leftString));
-    rightSourceLines = IOUtils.readLines(new StringReader(rightString));
+    leftSourceLines = IOUtils.readLines(new StringReader(fromFile.getContent()));
+    rightSourceLines = IOUtils.readLines(new StringReader(toFile.getContent()));
   }
 
   /**
@@ -86,25 +77,6 @@ public final class SideBySideDiffCreator {
       diff.add(new SideBySideDiffRow(leftLinesList.get(i), rightLinesList.get(i)));
     }
     return diff;
-  }
-
-  /**
-   * Appends keywords if KeywordHandler is not null.
-   *
-   * @param keywordHandler Handler
-   * @param content        Content to apply keywords to
-   * @param encoding       Encoding to use.
-   * @return New content
-   * @throws UnsupportedEncodingException if given charset encoding is unsupported
-   */
-  private String appendKeywords(final KeywordHandler keywordHandler, final String content, final String encoding)
-      throws UnsupportedEncodingException {
-
-    String newContent = content;
-    if (keywordHandler != null) {
-      newContent = keywordHandler.substitute(content, encoding);
-    }
-    return newContent;
   }
 
   /**
