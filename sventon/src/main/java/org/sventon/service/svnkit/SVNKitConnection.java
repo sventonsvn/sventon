@@ -1,5 +1,6 @@
-package org.sventon;
+package org.sventon.service.svnkit;
 
+import org.sventon.SVNConnection;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**

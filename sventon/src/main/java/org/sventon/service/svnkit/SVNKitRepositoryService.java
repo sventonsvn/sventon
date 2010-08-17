@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.service;
+package org.sventon.service.svnkit;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import org.apache.commons.io.FilenameUtils;
@@ -24,6 +24,7 @@ import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
+import org.sventon.service.RepositoryService;
 import org.sventon.util.KeywordHandler;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;

@@ -2,14 +2,14 @@ package org.sventon.cache.direntrycache;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
-import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RevisionUpdate;
-import org.sventon.service.SVNKitRepositoryService;
+import org.sventon.service.svnkit.SVNKitConnection;
+import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.*;
 
 import java.io.File;

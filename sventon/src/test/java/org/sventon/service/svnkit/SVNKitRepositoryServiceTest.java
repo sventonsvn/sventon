@@ -1,8 +1,7 @@
-package org.sventon.service;
+package org.sventon.service.svnkit;
 
 import junit.framework.TestCase;
 import org.sventon.SVNConnection;
-import org.sventon.SVNKitConnection;
 import org.sventon.SVNRepositoryStub;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.diff.DiffException;
@@ -12,10 +11,11 @@ import org.sventon.model.InlineDiffRow;
 import org.sventon.model.Revision;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.SourceLine;
-import org.sventon.web.command.editor.PathRevisionEditor;
+import org.sventon.service.RepositoryService;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
+import org.sventon.web.command.editor.PathRevisionEditor;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperties;
