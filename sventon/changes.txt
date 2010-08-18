@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1752] Added: Upgraded SVNKit to version 1.3.4.
 [1673] Fixed: Bug #17345 - 'Show Log' starts from HEAD instead of from current revision.
 
 [1671] Release 2.1.6 (2010-07-05)
