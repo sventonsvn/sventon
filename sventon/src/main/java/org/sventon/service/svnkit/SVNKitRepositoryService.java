@@ -485,6 +485,25 @@ public class SVNKitRepositoryService implements RepositoryService {
     return new SideBySideDiffCreator(leftFile, rightFile).createFromDiffResult(diffResultString);
   }
 
+  @Override
+  public List<Long> getRevisionsForPath(final SVNConnection connection, final String path, final long fromRevision,
+                                        final long toRevision, final boolean stopOnCopy, final long limit)
+      throws SventonException {
+    final List<Long> revisions = new ArrayList<Long>();
+
+    try {
+      final SVNRepository repository = connection.getDelegate();
+      repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
+        public void handleLogEntry(final SVNLogEntry logEntry) {
+          revisions.add(logEntry.getRevision());
+        }
+      });
+    } catch (SVNException ex) {
+      return translateSVNException("Unable to get logs for path: " + path, ex);
+    }
+    return revisions;
+  }
+
   protected String createUnifiedDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
     final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
     final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
