@@ -11,14 +11,14 @@
  */
 package org.sventon.diff;
 
-import static org.sventon.model.DiffAction.parse;
-
-import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.parseInt;
+import static org.sventon.model.DiffAction.parse;
 
 /**
  * Diff result parser.

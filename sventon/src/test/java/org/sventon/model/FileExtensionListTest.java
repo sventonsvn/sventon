@@ -2,8 +2,6 @@ package org.sventon.model;
 
 import junit.framework.TestCase;
 import org.sventon.TestUtils;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ public class FileExtensionListTest extends TestCase {
 
     assertEquals(3, new FileExtensionList(entries).getExtensions().size());
 
-    entries.add(new DirEntry(new SVNDirEntry(null, null, "anothertest.jpg", SVNNodeKind.FILE, 0, false, 0, null, null), "/"));
+    entries.add(new DirEntry("/", "anothertest.jpg", "", null, DirEntry.Kind.FILE, 0, 0));
 
     assertEquals(3, new FileExtensionList(entries).getExtensions().size());
   }

@@ -1,24 +1,19 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.expect;
-
 import org.easymock.classextension.EasyMock;
-
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.*;
-import org.sventon.model.DirEntryComparator;
-import org.sventon.model.DirEntrySorter;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class FlattenControllerTest extends TestCase {
 

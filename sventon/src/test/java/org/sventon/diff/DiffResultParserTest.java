@@ -1,11 +1,12 @@
 package org.sventon.diff;
 
 import junit.framework.TestCase;
-import static org.sventon.diff.DiffSegment.Side.LEFT;
-import static org.sventon.diff.DiffSegment.Side.RIGHT;
 import org.sventon.model.DiffAction;
 
 import java.util.Iterator;
+
+import static org.sventon.diff.DiffSegment.Side.LEFT;
+import static org.sventon.diff.DiffSegment.Side.RIGHT;
 
 public class DiffResultParserTest extends TestCase {
 

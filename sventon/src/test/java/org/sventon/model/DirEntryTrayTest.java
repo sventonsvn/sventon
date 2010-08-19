@@ -1,9 +1,6 @@
 package org.sventon.model;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.Date;
 
@@ -11,10 +8,8 @@ public class DirEntryTrayTest extends TestCase {
 
   public void testEntryTray() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
-    SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final PeggedDirEntry entry = new PeggedDirEntry(new DirEntry(
-        new SVNDirEntry(null, url, "file1.java", SVNNodeKind.FILE, 123, false, 1, new Date(), "jesper"), "/"), 123);
+    final PeggedDirEntry entry = new PeggedDirEntry(new DirEntry("/", "file1.java", "jesper", new Date(), DirEntry.Kind.FILE, 1, 123), 123);
 
     assertEquals(0, entryTray.getSize());
     assertTrue(entryTray.add(entry));
@@ -26,16 +21,11 @@ public class DirEntryTrayTest extends TestCase {
 
   public void testDuplicateEntries() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
-    SVNURL url = SVNURL.parseURIDecoded("http://localhost/");
 
-    final DirEntry entry1 = new DirEntry(new SVNDirEntry(null, url, "file1.java",
-        SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
-
-    final DirEntry entry1Duplicate = new DirEntry(new SVNDirEntry(null, url, "file1.java",
-        SVNNodeKind.FILE, 10, false, 1, new Date(), "jesper"), "/");
-
-    final DirEntry entry2 = new DirEntry(new SVNDirEntry(null, url, "file1.java",
-        SVNNodeKind.FILE, 10, false, 2, new Date(), "jesper"), "/");
+    final Date date = new Date();
+    final DirEntry entry1 = new DirEntry("/", "file1.java", "jesper", date, DirEntry.Kind.FILE, 1, 10);
+    final DirEntry entry1Duplicate = new DirEntry("/", "file1.java", "jesper", date, DirEntry.Kind.FILE, 1, 10);
+    final DirEntry entry2 = new DirEntry("/", "file1.java", "jesper", date, DirEntry.Kind.FILE, 2, 10);
 
     assertEquals(0, entryTray.getSize());
     assertTrue(entryTray.add(new PeggedDirEntry(entry1, -1)));

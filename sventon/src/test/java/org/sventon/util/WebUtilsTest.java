@@ -2,6 +2,7 @@ package org.sventon.util;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
+
 import static org.sventon.util.WebUtils.NL;
 
 public class WebUtilsTest extends TestCase {

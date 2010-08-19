@@ -12,8 +12,8 @@
 package org.sventon.cache;
 
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.direntrycache.CompassDirEntryCache;
+import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;

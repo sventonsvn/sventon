@@ -1,9 +1,8 @@
 package org.sventon.service.svnkit;
 
 import org.sventon.model.*;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNProperties;
+import org.sventon.model.Properties;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 
 import java.util.*;
@@ -15,7 +14,7 @@ public class Converter {
 
   public static LogEntry toLogEntry(SVNLogEntry svnLogEntry) {
     return new LogEntry(svnLogEntry.getRevision(),
-        convertProperties(svnLogEntry.getRevisionProperties()),
+        convertRevisionProperties(svnLogEntry.getRevisionProperties()),
         convert(svnLogEntry.getChangedPaths()));
   }
 
@@ -28,7 +27,7 @@ public class Converter {
     return convertedPaths;
   }
 
-  private static Map<RevisionProperty, String> convertProperties(SVNProperties revisionProperties) {
+  private static Map<RevisionProperty, String> convertRevisionProperties(SVNProperties revisionProperties) {
     final Map<RevisionProperty, String> properties = new HashMap<RevisionProperty, String>();
 
     for (Object o : revisionProperties.nameSet()) {
@@ -59,7 +58,34 @@ public class Converter {
     return pathRevisions;
   }
 
+  public static Properties convertProperties(final SVNProperties svnProperties){
+    final Properties props = new Properties();
+    for (Object o : svnProperties.asMap().keySet()) {
+      final String key = (String) o;
+      final String value = SVNPropertyValue.getPropertyAsString(svnProperties.getSVNPropertyValue(key));
+      props.put(new Property(key), new PropertyValue(value));
+    }
 
+    return props;
+  }
+
+
+  public static DirEntry createDirEntry(SVNDirEntry dirEntry, String fullPath) {
+    final DirEntry entry = new DirEntry(fullPath, dirEntry.getName(), dirEntry.getAuthor(), dirEntry.getDate(),
+        DirEntry.Kind.valueOf(dirEntry.getKind().toString().toUpperCase()), dirEntry.getRevision(), dirEntry.getSize());
+
+    return entry;
+  }
+
+  public static List<DirEntry> convertDirEntries(final Collection<SVNDirEntry> svnEntries, final String fullPath){
+    final List<DirEntry> entries = new ArrayList<DirEntry>();
+
+    for (SVNDirEntry svnEntry : svnEntries) {
+      entries.add(createDirEntry(svnEntry, fullPath));
+    }
+
+    return entries;
+  }
 }
 
 

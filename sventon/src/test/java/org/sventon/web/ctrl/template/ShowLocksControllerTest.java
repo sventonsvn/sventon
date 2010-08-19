@@ -1,14 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.expect;
-
 import org.easymock.classextension.EasyMock;
-
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
@@ -18,6 +11,10 @@ import org.sventon.web.command.BaseCommand;
 
 import java.util.Collection;
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class ShowLocksControllerTest extends TestCase {
 

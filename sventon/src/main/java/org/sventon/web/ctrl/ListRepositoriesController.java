@@ -19,13 +19,14 @@ import org.sventon.appl.Application;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
-import static org.sventon.util.EncodingUtils.encode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.sventon.util.EncodingUtils.encode;
 
 /**
  * Controller that creates a list of all configured repositories.

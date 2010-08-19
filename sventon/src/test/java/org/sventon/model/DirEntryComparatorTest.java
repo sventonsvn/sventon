@@ -1,8 +1,6 @@
 package org.sventon.model;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNURL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,19 +8,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.sventon.model.DirEntryComparator.SortType.*;
-import static org.tmatesoft.svn.core.SVNNodeKind.DIR;
-import static org.tmatesoft.svn.core.SVNNodeKind.FILE;
 
 public class DirEntryComparatorTest extends TestCase {
 
   public void testCompare() throws Exception {
     List<DirEntry> entries = new ArrayList<DirEntry>();
-    DirEntry e1 = new DirEntry(new SVNDirEntry(null, null, "FirstClass.java", FILE, 134, false, 2,
-        new GregorianCalendar(2005, 4, 12).getTime(), "patrik"), "");
-    DirEntry e2 = new DirEntry(new SVNDirEntry(SVNURL.parseURIEncoded("http://test"), null,
-        "SecondClass.java", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(), "jesper"), "");
-    DirEntry e3 = new DirEntry(new SVNDirEntry(null, null, "ThirdClass.java", DIR, 136, false, 4,
-        new GregorianCalendar(2005, 4, 14).getTime(), "patrik"), "");
+    DirEntry e1 = new DirEntry("", "FirstClass.java", "patrik", new GregorianCalendar(2005, 4, 12).getTime(), DirEntry.Kind.FILE, 2, 134);
+    DirEntry e2 = new DirEntry("", "SecondClass.java", "jesper",  new GregorianCalendar(2005, 4, 13).getTime(), DirEntry.Kind.FILE, 3, 135);
+    DirEntry e3 = new DirEntry("", "ThirdClass.java", "patrik", new GregorianCalendar(2005, 4, 14).getTime(), DirEntry.Kind.DIR, 4, 136);
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);
@@ -86,14 +79,11 @@ public class DirEntryComparatorTest extends TestCase {
       // Expected
     }
 
-    // Test handling of null properties in SVNDirEntry
+    // Test handling of null properties in DirEntry
     entries = new ArrayList<DirEntry>();
-    e1 = new DirEntry(new SVNDirEntry(null, null, "FirstClass.java", FILE, 134, false, 2, new GregorianCalendar(2005, 4, 12).getTime(),
-        "patrik"), "");
-    e2 = new DirEntry(new SVNDirEntry(null, null, "", FILE, 135, false, 3, new GregorianCalendar(2005, 4, 13).getTime(),
-        "jesper"), "");
-    e3 = new DirEntry(new SVNDirEntry(null, null, "ThirdClass.java", DIR, 136, false, 4, new GregorianCalendar(2005, 4, 14).getTime(),
-        "patrik"), "");
+    e1 = new DirEntry("", "FirstClass.java",  "patrik", new GregorianCalendar(2005, 4, 12).getTime(), DirEntry.Kind.FILE, 2, 134);
+    e2 = new DirEntry("", "", "jesper", new GregorianCalendar(2005, 4, 13).getTime(), DirEntry.Kind.FILE, 3, 135);
+    e3 = new DirEntry("", "ThirdClass.java", "patrik", new GregorianCalendar(2005, 4, 14).getTime(), DirEntry.Kind.DIR, 4, 136);
     entries.add(e3);
     entries.add(e2);
     entries.add(e1);

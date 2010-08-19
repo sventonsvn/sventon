@@ -234,7 +234,8 @@ public class SVNKitRepositoryService implements RepositoryService {
     } catch (SVNException ex) {
       return translateSVNException("Could not get directory listing from [" + path + "@" + revision + "]", ex);
     }
-    return DirEntry.createDirectoryList(entries, path, properties);
+
+    return DirEntry.createDirectoryList(Converter.convertDirEntries(entries, path), Converter.convertProperties(properties));
   }
 
   @Override
@@ -250,7 +251,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     }
 
     if (dirEntry != null) {
-      return new DirEntry(dirEntry, FilenameUtils.getFullPath(path));
+      return Converter.createDirEntry(dirEntry, FilenameUtils.getFullPath(path));
     } else {
       logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
       throw new DirEntryNotFoundException(path + "@" + revision);

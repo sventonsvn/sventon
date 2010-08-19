@@ -1,13 +1,14 @@
 package org.sventon.export;
 
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.expect;
 import org.easymock.classextension.EasyMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
 import org.sventon.appl.ConfigDirectory;
 
 import java.io.File;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class ExportDirectoryFactoryImplTest extends TestCase {
 

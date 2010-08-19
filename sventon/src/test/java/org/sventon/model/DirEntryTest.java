@@ -1,8 +1,6 @@
 package org.sventon.model;
 
 import junit.framework.TestCase;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Date;
 
@@ -56,7 +54,7 @@ public class DirEntryTest extends TestCase {
   }
 
   private DirEntry toEntry(final String path, final String filename) {
-    return new DirEntry(new SVNDirEntry(null, null, filename, SVNNodeKind.FILE, 1, false, 1, new Date(), "A"), path);
+    return new DirEntry(path, filename, "A",new Date(), DirEntry.Kind.FILE, 1, 1);
   }
 
 }

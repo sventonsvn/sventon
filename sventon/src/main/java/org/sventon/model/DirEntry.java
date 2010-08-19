@@ -18,12 +18,10 @@ import org.compass.annotations.Index;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNPropertyValue;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Represents an entry in the repository.
@@ -74,80 +72,49 @@ public final class DirEntry implements Serializable {
   private DirEntry() {
   }
 
-  /**
-   * Constructor.
-   *
-   * @param entry     The <code>SVNDirEntry</code>.
-   * @param entryPath The entry repository path.
-   */
-  public DirEntry(final SVNDirEntry entry, final String entryPath) {
 
+
+  public DirEntry(final String entryPath, final String name, final String author, final Date date, final Kind kind, long revision, long size) {
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
     }
 
-    if (entry == null) {
-      throw new IllegalArgumentException("entry cannot be null.");
+    if (name == null) {
+      throw new IllegalArgumentException("name cannot be null.");
     }
 
-    final String entryName = entry.getName();
-    id = createId(entryPath, entry);
+    id = entryPath + name;
+
     try {
-      camelCasePattern = CamelCasePattern.parse(entryName).getPattern();
+      camelCasePattern = CamelCasePattern.parse(name).getPattern();
     } catch (IllegalArgumentException e) {
       // ignore
     }
-    copyEntry(entryPath, entry);
+
+    this.path = entryPath;
+    this.lastAuthor = author;
+    this.createdDate = date;
+    this.kind = kind;
+    this.name = name;
+    this.revision = revision;
+    this.size = size;
   }
 
-  /**
-   * Creates an Id.
-   *
-   * @param path  Path
-   * @param entry SVN entry
-   * @return Id
-   */
-  protected String createId(final String path, final SVNDirEntry entry) {
-    return path + entry.getName();
-  }
+
+
 
   /**
    * Creates a collection of <code>DirEntry</code> objects based
-   * on given collection of <code>SVNDirEntry</code> instances and <code>SVNProperties</code>.
+   * on given collection of <code>DirEntry</code> instances and <code>Properties</code>.
    *
-   * @param entries  Collection of SVNDirEntry.
-   * @param basePath Base repository path for the entries.
-   * @param properties The SVNProperties for these entries
+   * @param entries  List of DirEntry.
+   * @param properties The Properties for these entries
    * @return The directory list instance containing a List<DirEntry> and Properties.
    */
-  // TODO: Move the conversion of SVNEntry and SVNProperties to a SVNKit unique package/module
-  public static DirList createDirectoryList(final Collection<SVNDirEntry> entries,
-                                            final String basePath, SVNProperties properties) {
-
-    final List<DirEntry> dir = Collections.checkedList(new ArrayList<DirEntry>(), DirEntry.class);
-    for (final SVNDirEntry entry : entries) {
-      dir.add(new DirEntry(entry, basePath));
-    }
-
-    final Properties props = new Properties();
-    for (Object o : properties.asMap().keySet()) {
-      final String key = (String) o;
-      final String value = SVNPropertyValue.getPropertyAsString(properties.getSVNPropertyValue(key));
-      props.put(new Property(key), new PropertyValue(value));
-    }
-    
-    return new DirList(dir, props);
+  public static DirList createDirectoryList(final List<DirEntry> entries, Properties properties) {
+    return new DirList(entries, properties);
   }
 
-  private void copyEntry(final String path, final SVNDirEntry entry) {
-    this.path = path;
-    this.lastAuthor = entry.getAuthor() == null ? null : entry.getAuthor();
-    this.createdDate = entry.getDate();
-    this.kind = Kind.valueOf(entry.getKind().toString().toUpperCase());
-    this.name = entry.getName();
-    this.revision = entry.getRevision();
-    this.size = entry.getSize();
-  }
 
   /**
    * Gets the entry name.

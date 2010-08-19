@@ -16,9 +16,9 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.model.DirEntry;
+import org.sventon.model.DirEntrySorter;
 import org.sventon.model.FileExtensionList;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.model.DirEntrySorter;
 import org.sventon.util.FileExtensionFilter;
 import org.sventon.web.command.BaseCommand;
 
