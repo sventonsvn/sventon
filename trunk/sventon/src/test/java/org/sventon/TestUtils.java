@@ -4,7 +4,6 @@ import org.junit.Ignore;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.*;
 import org.sventon.util.DateUtil;
-import org.tmatesoft.svn.core.SVNLock;
 
 import java.io.File;
 import java.util.*;
@@ -18,7 +17,6 @@ public final class TestUtils {
   public static final String CONFIG_FILE_NAME = "sventon_config.properties";
 
   private static final Set<ChangedPath> ONE_CHANGED_PATH = new TreeSet<ChangedPath>();
-  private static final long DEFAULT_REVISION = 123;
   private static final String DEFAULT_MESSAGE = "TestMessage";
   private static final String DEFAULT_AUTHOR = "TestAuthor";
   private static final String AUTHOR_JESPER = "jesper";
@@ -36,33 +34,14 @@ public final class TestUtils {
     return getLogEntryStub(new Date(), DEFAULT_AUTHOR, 123, DEFAULT_MESSAGE, ONE_CHANGED_PATH);
   }
 
-  public static LogEntry getLogEntryStub(final Date date) {
-    return getLogEntryStub(date, DEFAULT_AUTHOR, DEFAULT_REVISION, DEFAULT_MESSAGE, ONE_CHANGED_PATH);
-  }
-
-  public static LogEntry getLogEntryStub(final Set<ChangedPath> changedPaths) {
-    return getLogEntryStub(new Date(), DEFAULT_AUTHOR, DEFAULT_REVISION, DEFAULT_MESSAGE, changedPaths);
-  }
-
   public static LogEntry getLogEntryStub(final long revision) {
     return getLogEntryStub(new Date(), DEFAULT_AUTHOR, revision, DEFAULT_MESSAGE, ONE_CHANGED_PATH);
-  }
-
-  public static LogEntry getLogEntryStub(final long revision, final String logMessage) {
-    return getLogEntryStub(new Date(), DEFAULT_AUTHOR, revision, logMessage, ONE_CHANGED_PATH);
   }
 
   public static LogEntry getLogEntryStub(final Date date, final String author, final long revision, final String message,
                                          final Set<ChangedPath> changedPaths) {
     return createLogEntry(revision, author, date, message, changedPaths);
   }
-
-  public static Map<String, SVNLock> getLocksStub(final String path) {
-    final Map<String, SVNLock> lockMap = new HashMap<String, SVNLock>();
-    lockMap.put(path, new SVNLock(path, "id", "TestOwner", "Comment", new Date(), null));
-    return lockMap;
-  }
-
 
   public static List<DirEntry> getDirectoryList() {
     final List<DirEntry> entries = new ArrayList<DirEntry>();
@@ -82,20 +61,16 @@ public final class TestUtils {
 
     entries.add(new DirEntry("/trunk/code/", "File3.java", AUTHOR_JESPER, new Date(), DirEntry.Kind.FILE, 3, 16000));
     entries.add(new DirEntry("/trunk/src/", "DirFile2.html", AUTHOR_JESPER, new Date(), DirEntry.Kind.FILE, 2, 3200));
-      
+
     return entries;
   }
 
-
-  
   public static List<DirEntry> getFlattenedDirectoriesList() {
     final List<DirEntry> list = new ArrayList<DirEntry>();
-  
+
     list.add(new DirEntry("/", "dir1", DEFAULT_AUTHOR, new Date(), DirEntry.Kind.DIR, 1, 0));
     list.add(new DirEntry("/", "dir2", DEFAULT_AUTHOR, new Date(), DirEntry.Kind.DIR, 2, 0));
     list.add(new DirEntry("/trunk/", "dir3", DEFAULT_AUTHOR, new Date(), DirEntry.Kind.DIR, 3, 0));
-
-
     return list;
   }
 
