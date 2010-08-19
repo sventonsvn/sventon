@@ -54,7 +54,7 @@ $ svn checkout -r {20060217T1530-0500}
     today.set(Calendar.MILLISECOND, 200);
     Assert.assertEquals(today.getTime(), DateUtil.parseISO8601("15:30:00.200000"));
   }
-  
+
   @Test
   public void parseISO8601Simple() throws Exception {
     final Calendar cal = Calendar.getInstance();
@@ -73,7 +73,7 @@ $ svn checkout -r {20060217T1530-0500}
   }
 
   @Test
-  public void parseISO8601TFormat() throws Exception {
+  public void parseISO8601T_UTCFormat() throws Exception {
     final Calendar cal = Calendar.getInstance();
     cal.set(2006, 02 - 1, 17, 15, 30 ,00);
     cal.set(Calendar.MILLISECOND, 0);
@@ -82,8 +82,25 @@ $ svn checkout -r {20060217T1530-0500}
     cal.set(Calendar.ZONE_OFFSET, 0);
     Assert.assertEquals(cal.getTime(), DateUtil.parseISO8601("2006-02-17T15:30Z"));
 
+    cal.set(Calendar.MILLISECOND, 314);
+    cal.set(Calendar.ZONE_OFFSET, 0); // Note we must reset the Z again. Calendar set it back to default TZD after any operation ... !
+    Assert.assertEquals(cal.getTime(), DateUtil.parseISO8601("2006-02-17T15:30:00.314Z"));
+    //2010-01-01T12:34:56.789Z
+  }
+
+  @Test
+  public void parseISO8601T_GMTFormat() throws Exception {
+    final Calendar cal = Calendar.getInstance();
+    cal.set(2006, 02 - 1, 17, 15, 30 ,00);
+    cal.set(Calendar.MILLISECOND, 0);
+
     cal.set(Calendar.ZONE_OFFSET, -(int)(MILLISECONDS.convert(4, HOURS)));
     Assert.assertEquals(cal.getTime(), DateUtil.parseISO8601("2006-02-17T15:30-04:00"));
+
+    cal.set(Calendar.MILLISECOND, 314);
+    cal.set(Calendar.ZONE_OFFSET, -(int)(MILLISECONDS.convert(4, HOURS)));
+    Assert.assertEquals(cal.getTime(), DateUtil.parseISO8601("2006-02-17T15:30:00.314-04:00"));
+
   }
 
   @Test

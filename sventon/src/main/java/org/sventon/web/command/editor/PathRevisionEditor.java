@@ -41,7 +41,7 @@ public class PathRevisionEditor extends PropertyEditorSupport {
     }
     final String path = entry.substring(0, entry.lastIndexOf(DELIMITER));
     final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 1);
-    return new PathRevision(path, Revision.create(Long.parseLong(revision)));
+    return new PathRevision(path, Revision.parse(revision));
   }
 
   @Override

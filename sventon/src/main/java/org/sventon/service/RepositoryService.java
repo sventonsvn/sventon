@@ -13,7 +13,6 @@ package org.sventon.service;
 
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
@@ -189,7 +188,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED_NUMBER} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
@@ -204,7 +203,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED_NUMBER} of n/a.
    * @param charset     The charset to use.
    * @return Diff result.
    * @throws SventonException if a subversion error occur
@@ -218,7 +217,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED} of n/a.
+   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED_NUMBER} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
