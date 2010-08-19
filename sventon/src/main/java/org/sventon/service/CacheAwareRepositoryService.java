@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author jesper@sventon.org
  */
-public final class CacheAwareRepositoryServiceImpl implements RepositoryService {
+public final class CacheAwareRepositoryService implements RepositoryService {
 
   /**
    * Logger for this class and subclasses.
@@ -61,7 +61,7 @@ public final class CacheAwareRepositoryServiceImpl implements RepositoryService 
    *
    * @param delegate Repository service to delegate to.
    */
-  public CacheAwareRepositoryServiceImpl(final RepositoryService delegate) {
+  public CacheAwareRepositoryService(final RepositoryService delegate) {
     this.delegate = delegate;
   }
 
