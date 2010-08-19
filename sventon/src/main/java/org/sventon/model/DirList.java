@@ -16,20 +16,36 @@ import java.util.List;
 /**
  * DirList holds the result of a directory list operation, i.e. a List of DirEntry's
  * and Properties.
+ *
+ * @author jorgen@sventon.org
  */
 public class DirList {
+
   private final List<DirEntry> entries;
+
   private final Properties properties;
 
-  public DirList(List<DirEntry> entries, Properties properties) {
+  /**
+   * Constructor.
+   *
+   * @param entries    Entries in a specific directory.
+   * @param properties Properties for
+   */
+  public DirList(final List<DirEntry> entries, final Properties properties) {
     this.entries = entries;
     this.properties = properties;
   }
 
+  /**
+   * @return Entries
+   */
   public List<DirEntry> getEntries() {
     return entries;
   }
 
+  /**
+   * @return Properties
+   */
   public Properties getProperties() {
     return properties;
   }
