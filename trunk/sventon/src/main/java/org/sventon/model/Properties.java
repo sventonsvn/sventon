@@ -16,26 +16,43 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Properties.
  *
+ * @author jorgen@sventon.org
  */
 public class Properties {
-  private Map<Property, PropertyValue> properties = new HashMap<Property, PropertyValue>();
 
+  private final Map<Property, PropertyValue> properties = new HashMap<Property, PropertyValue>();
 
+  /**
+   * @param key           Key
+   * @param propertyValue Value
+   */
   public void put(Property key, PropertyValue propertyValue) {
     properties.put(key, propertyValue);
   }
 
-  public PropertyValue get(final Property key){
+  /**
+   * @param key Key of property to get
+   * @return Property
+   */
+  public PropertyValue get(final Property key) {
     return properties.get(key);
   }
 
-  public String getStringValue(final Property key){
+  /**
+   * @param key Key of property to get
+   * @return Property as a string value
+   */
+  public String getStringValue(final Property key) {
     final PropertyValue value = this.get(key);
     return (value == null) ? null : value.getValue();
   }
 
-  public Set<Map.Entry<Property,PropertyValue>> entrySet(){
+  /**
+   * @return Entries
+   */
+  public Set<Map.Entry<Property, PropertyValue>> entrySet() {
     return properties.entrySet();
   }
 }
