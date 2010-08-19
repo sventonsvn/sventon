@@ -390,7 +390,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       final SVNRepository repository = connection.getDelegate();
       final long blameRevision;
-      if (Revision.UNDEFINED.getNumber() == revision) {
+      if (Revision.UNDEFINED_NUMBER == revision) {
         blameRevision = repository.getLatestRevision();
       } else {
         blameRevision = revision;

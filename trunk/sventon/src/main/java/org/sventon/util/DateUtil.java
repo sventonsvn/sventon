@@ -40,6 +40,8 @@ public class DateUtil {
   static final ZoneClosure basicZoneCalc = new ZoneClosure() {
     @Override
     public void execute(Matcher matcher, Calendar calendar) {
+//      System.out.println("Basic Zone: [10 .. 13]" + Arrays.toString(new String[]{matcher.group(10), matcher.group(11), matcher.group(12), matcher.group(13)}));
+      
       int zoneOffsetInMillis = "+".equals(matcher.group(10)) ? +1 : -1;
       int hoursOffset = Integer.parseInt(matcher.group(11));
       int minutesOffset = matcher.group(12) != null ? Integer.parseInt(matcher.group(13)) : 0;
@@ -52,6 +54,8 @@ public class DateUtil {
   static final ZoneClosure logZoneCalc = new ZoneClosure() {
     @Override
     public void execute(Matcher matcher, Calendar calendar) {
+//       System.out.println("SvnLog Zone: [10 .. 13]" + Arrays.toString(new String[]{matcher.group(10), matcher.group(11), matcher.group(12), matcher.group(13)}));
+
       // Check if no TZD is given
       if (matcher.group(10) == null){
         return;
@@ -69,6 +73,9 @@ public class DateUtil {
   static final ZoneClosure utcZoneCalc = new ZoneClosure() {
     @Override
     public void execute(Matcher matcher, Calendar calendar) {
+
+//      System.out.println("UTC Zone: [10]" + matcher.group(10));
+
       if ("Z".equals(matcher.group(10))) {
         calendar.set(Calendar.ZONE_OFFSET, 0);
         calendar.set(Calendar.DST_OFFSET, 0);
@@ -88,6 +95,8 @@ public class DateUtil {
     public Calendar calculate(Matcher matcher) {
       Calendar calendar = Calendar.getInstance();
       calendar.clear();
+
+//      System.out.println("Date Only: [1,3]" + Arrays.toString(new String[]{matcher.group(1), matcher.group(2), matcher.group(3)}));
 
       int year = Integer.parseInt(matcher.group(1));
       int month = Integer.parseInt(matcher.group(2));
@@ -121,6 +130,7 @@ public class DateUtil {
         }
       }
 
+//      System.out.println("Date and Time: [1,9]" + Arrays.toString(new String[]{matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(4), matcher.group(6), matcher.group(7), matcher.group(8), matcher.group(9)}));
       calendar.set(year, month - 1, day);
       calendar.set(Calendar.HOUR, hours);
       calendar.set(Calendar.MINUTE, minutes);
@@ -134,6 +144,7 @@ public class DateUtil {
   static final DateCalculator timeOnlyDateCalc = new DateCalculator() {
     @Override
     public Calendar calculate(Matcher matcher) {
+
       Calendar calendar = Calendar.getInstance();
       int hours = Integer.parseInt(matcher.group(1));
       int minutes = Integer.parseInt(matcher.group(2));
@@ -147,6 +158,9 @@ public class DateUtil {
           milliseconds = Integer.parseInt(millis);
         }
       }
+
+//      System.out.println("Time Only: [1,6]" + Arrays.toString(new String[]{matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(4), matcher.group(6)}));
+
       calendar.set(Calendar.HOUR_OF_DAY, hours);
       calendar.set(Calendar.MINUTE, minutes);
       calendar.set(Calendar.SECOND, seconds);
@@ -172,6 +186,11 @@ public class DateUtil {
     SVN_LOG_DATE_FORMAT_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?( ([+-])(\\d{2})(\\d{2})?)?", DateUtil.dateTimeCalc, DateUtil.logZoneCalc),
     TIME_ONLY_PATTERN("(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?", DateUtil.timeOnlyDateCalc, DateUtil.nullZoneCalc);
 
+
+    /*
+    2006-02-17T15:30:00.314Z
+     */
+    
     private Pattern pattern;
     private final DateCalculator dateCalculator;
     private final ZoneClosure zoneClosure;
@@ -187,6 +206,9 @@ public class DateUtil {
       if (!matcher.matches()){
         return null;
       }
+
+//      System.out.println("" + pattern.getClass().getSimpleName() + " match using pattern " + pattern.pattern());
+      
 
       final Calendar calendar = dateCalculator.calculate(matcher);
       zoneClosure.execute(matcher, calendar);

@@ -3,7 +3,6 @@ package org.sventon.service.svnkit;
 import junit.framework.TestCase;
 import org.sventon.SVNConnection;
 import org.sventon.SVNRepositoryStub;
-import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.*;
