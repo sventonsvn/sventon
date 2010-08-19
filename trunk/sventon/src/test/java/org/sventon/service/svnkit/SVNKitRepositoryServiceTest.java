@@ -1,24 +1,19 @@
 package org.sventon.service.svnkit;
 
 import junit.framework.TestCase;
-import org.sventon.SVNConnection;
-import org.sventon.SVNRepositoryStub;
+import org.mockito.Mockito;
 import org.sventon.diff.IdenticalFilesException;
-import org.sventon.diff.IllegalFileFormatException;
 import org.sventon.model.*;
-import org.sventon.service.RepositoryService;
-import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 import org.sventon.web.command.editor.PathRevisionEditor;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNProperties;
-import org.tmatesoft.svn.core.SVNProperty;
+import org.tmatesoft.svn.core.io.SVNRepository;
 
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SVNKitRepositoryServiceTest extends TestCase {
 
@@ -27,37 +22,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
   private static final String NL = System.getProperty("line.separator");
 
   private PathRevisionEditor editor = new PathRevisionEditor();
-
-  public void testDiffUnifiedBinaryFile() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
-
-    try {
-      service.diffUnified(connection, command, Revision.UNDEFINED, ENCODING);
-      fail("Binary files cannot be diffed");
-    } catch (IllegalFileFormatException e) {
-      // expected
-    }
-  }
 
   public void testDiffUnifiedIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
@@ -139,37 +103,6 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     assertEquals("InlineDiffRow[line=test right file contents,rowNumberLeft=<null>,rowNumberRight=2,action=ADDED]", list.get(3).toString());
     assertEquals("InlineDiffRow[line=last row,rowNumberLeft=4,rowNumberRight=3,action=UNCHANGED]", list.get(4).toString());
     assertEquals(5, list.size());
-  }
-
-  public void testDiffSideBySideBinaryFile() throws Exception {
-    final SVNConnection connection = new SVNKitConnection(new SVNRepositoryStub() {
-
-      @Override
-      public long getFile(String path, long revision, SVNProperties properties, OutputStream contents) throws SVNException {
-        properties.put(SVNProperty.MIME_TYPE, WebUtils.APPLICATION_OCTET_STREAM);
-        return 0;
-      }
-
-      @Override
-      public SVNNodeKind checkPath(String path, long revision) throws SVNException {
-        return SVNNodeKind.FILE;
-      }
-    });
-
-    final RepositoryService service = new SVNKitRepositoryService();
-
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
-
-    try {
-      service.diffSideBySide(connection, command, Revision.UNDEFINED, ENCODING);
-      fail("Binary files cannot be diffed");
-    } catch (IllegalFileFormatException e) {
-      // expected
-    }
   }
 
   public void testDiffSideBySideIdenticalEmptyFiles() throws Exception {
@@ -423,14 +356,10 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     service.translateRevision(command.getRevision(), 200, null);
     assertEquals(Revision.create(123), command.getRevision());
 
-    final SVNRepositoryStub repositoryStub = new SVNRepositoryStub() {
-      @Override
-      public long getDatedRevision(Date date) throws SVNException {
-        return 123;
-      }
-    };
     command.setRevision(Revision.parse("{2007-01-01}"));
-    final SVNKitConnection connection = new SVNKitConnection(repositoryStub);
+    final SVNRepository repositoryMock = mock(SVNRepository.class);
+    final SVNKitConnection connection = new SVNKitConnection(repositoryMock);
+    when(repositoryMock.getDatedRevision(Mockito.isA(Date.class))).thenReturn(123L);
     assertEquals(123, service.translateRevision(command.getRevision(), 200, connection).longValue());
   }
 

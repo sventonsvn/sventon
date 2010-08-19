@@ -2,27 +2,26 @@ package org.sventon.cache.direntrycache;
 
 import junit.framework.TestCase;
 import org.springframework.mock.web.MockServletContext;
-import org.sventon.SVNRepositoryStub;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.model.ChangeType;
-import org.sventon.model.ChangedPath;
-import org.sventon.model.LogEntry;
-import org.sventon.model.RepositoryName;
+import org.sventon.model.*;
+import org.sventon.model.Properties;
 import org.sventon.repository.RevisionUpdate;
-import org.sventon.service.svnkit.SVNKitConnection;
-import org.sventon.service.svnkit.SVNKitRepositoryService;
-import org.tmatesoft.svn.core.*;
+import org.sventon.service.RepositoryService;
 
 import java.io.File;
 import java.util.*;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.sventon.TestUtils.createLogEntry;
 
 public class DirEntryCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
+    final RepositoryService serviceMock = mock(RepositoryService.class);
+
     final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
@@ -36,7 +35,7 @@ public class DirEntryCacheUpdaterTest extends TestCase {
 
     final Set<ChangedPath> changedPaths2 = new TreeSet<ChangedPath>();
     changedPaths2.add(new ChangedPath("/branch", "/trunk", 123, ChangeType.ADDED));
-    changedPaths2.add(new ChangedPath("/branch/file3.def", null, -1, ChangeType.DELETED));
+    changedPaths2.add(new ChangedPath("/trunk/file3.def", null, -1, ChangeType.DELETED));
     logEntries.add(createLogEntry(124, "author", new Date(), "Log message for revision 124.", changedPaths2));
 
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
@@ -46,21 +45,45 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     configDirectory.setServletContext(servletContext);
     final Application application = new Application(configDirectory);
 
+    when(serviceMock.getLatestRevision(null)).thenReturn(124L);
+
+    when(serviceMock.getEntryInfo(null, "/file1.java", 123)).thenReturn(new DirEntry(
+        "/", "file1.java", "author", new Date(), DirEntry.Kind.FILE, 123, 12345));
+
+    when(serviceMock.getEntryInfo(null, "/file2.abc", 123)).thenReturn(new DirEntry(
+        "/", "file2.abc", "author", new Date(), DirEntry.Kind.FILE, 123, 12345));
+
+    when(serviceMock.getEntryInfo(null, "/trunk/file3.def", 123)).thenReturn(new DirEntry(
+        "/trunk", "file3.def", "author", new Date(), DirEntry.Kind.FILE, 123, 12345));
+
+    when(serviceMock.getEntryInfo(null, "/branch", 124)).thenReturn(new DirEntry(
+        "/", "branch", "author", new Date(), DirEntry.Kind.DIR, 123, 12345));
+
+    when(serviceMock.list(null, "/branch/", 124)).thenReturn(new DirList(Collections.<DirEntry>emptyList(), new Properties()));
+
+    when(serviceMock.getEntryInfo(null, "/trunk/file3.def", 123)).thenReturn(new DirEntry(
+        "/trunk", "file3.def", "author", new Date(), DirEntry.Kind.FILE, 123, 12345));
+
     final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
-    cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
-    cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),
-        new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
+    cacheUpdater.setRepositoryService(serviceMock);
+    final RepositoryName repositoryName = new RepositoryName("defaultsvn");
+    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false, false);
+    cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
     assertEquals(4, entryCache.getSize());
   }
 
   public void testInitialUpdate() throws Exception {
+    final DirList emptyDir = new DirList(Collections.<DirEntry>emptyList(), new Properties());
+    final long headRevision = 1;
+    final RepositoryService serviceMock = mock(RepositoryService.class);
+
     final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
     entryCache.init();
     assertEquals(0, entryCache.getSize());
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
-    logEntries.add(createLogEntry(1, "author", new Date(), "Log message for revision 1.", null));
+    logEntries.add(createLogEntry(headRevision, "author", new Date(), "Log message for revision 1.", null));
 
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
@@ -69,45 +92,26 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     configDirectory.setServletContext(servletContext);
     final Application application = new Application(configDirectory);
 
+    final List<DirEntry> entries = new ArrayList<DirEntry>();
+    entries.add(new DirEntry("/", "branches", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
+    entries.add(new DirEntry("/", "trunk", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
+    entries.add(new DirEntry("/", "tags", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
+    final DirList dirList = new DirList(entries, new Properties());
+
+    when(serviceMock.getLatestRevision(null)).thenReturn(headRevision);
+    when(serviceMock.list(null, "/", headRevision)).thenReturn(dirList);
+    when(serviceMock.list(null, "/branches/", headRevision)).thenReturn(emptyDir);
+    when(serviceMock.list(null, "/trunk/", headRevision)).thenReturn(emptyDir);
+    when(serviceMock.list(null, "/tags/", headRevision)).thenReturn(emptyDir);
+
     final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
     cacheUpdater.setFlushThreshold(2);
-    cacheUpdater.setRepositoryService(new SVNKitRepositoryService());
-    cacheUpdater.updateInternal(entryCache, new SVNKitConnection(new TestRepository()),
-        new RevisionUpdate(new RepositoryName("defaultsvn"), logEntries, false, false));
+    cacheUpdater.setRepositoryService(serviceMock);
+    final RepositoryName repositoryName = new RepositoryName("defaultsvn");
+    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false, false);
+    cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
     assertEquals(3, entryCache.getSize());
   }
 
-  private static class TestRepository extends SVNRepositoryStub {
-    private final Map<String, SVNDirEntry> entriesMap = new HashMap<String, SVNDirEntry>();
-
-    public TestRepository() throws SVNException {
-      entriesMap.put("/file1.java@123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file1.java"), null, "file1.java", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/file2.abc@123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/file2.abc"), null, "file2.abc", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/trunk@123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk"), null, "trunk", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/trunk/file3.def@123", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/trunk/file3.def"), null, "file3.def", SVNNodeKind.FILE, 12345, false, 123, new Date(), "author"));
-      entriesMap.put("/branch@124", new SVNDirEntry(SVNURL.parseURIDecoded("http://localhost/repo/branch"), null, "branch", SVNNodeKind.FILE, 12345, false, 124, new Date(), "author"));
-    }
-
-    @Override
-    public SVNDirEntry info(final String path, final long revision) throws SVNException {
-      return entriesMap.get(path + "@" + revision);
-    }
-
-    @Override
-    public long getLatestRevision() throws SVNException {
-      return 2;
-    }
-
-    @Override
-    public Collection<SVNDirEntry> getDir(String path, long revision, SVNProperties properties, Collection collection) throws SVNException {
-      final List<SVNDirEntry> entries = new ArrayList<SVNDirEntry>();
-      if ("/".equals(path)) {
-        entries.add(new SVNDirEntry(null, null, "branches", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-        entries.add(new SVNDirEntry(null, null, "trunk", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-        entries.add(new SVNDirEntry(null, null, "tags", SVNNodeKind.DIR, 0, false, 1, new Date(), "jesper"));
-      }
-      return entries;
-    }
-  }
 }
