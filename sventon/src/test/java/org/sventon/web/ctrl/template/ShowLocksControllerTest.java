@@ -1,25 +1,25 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-import org.easymock.classextension.EasyMock;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.TestUtils;
+import org.sventon.model.DirEntryLock;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ShowLocksControllerTest extends TestCase {
 
   public void testSvnHandle() throws Exception {
-    final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
+    final RepositoryService serviceMock = mock(RepositoryService.class);
 
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/test/");
@@ -27,14 +27,15 @@ public class ShowLocksControllerTest extends TestCase {
     command.setRevision(Revision.create(12));
 
     final ShowLocksController ctrl = new ShowLocksController();
-    ctrl.setRepositoryService(mockService);
+    ctrl.setRepositoryService(serviceMock);
 
-    expect(mockService.getLocks(null, command.getPath())).andStubReturn(TestUtils.getLocksStub(command.getPath()));
-    replay(mockService);
+    final Map<String, DirEntryLock> result = new HashMap<String, DirEntryLock>();
+    result.put("/", new DirEntryLock("id", "path", "owner", "comment", new Date(), new Date()));
+
+    when(serviceMock.getLocks(null, command.getPath())).thenReturn(result);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
     final Map model = modelAndView.getModel();
-    verify(mockService);
 
     assertEquals(1, model.size());
     final Collection locks = (Collection) model.get("currentLocks");
