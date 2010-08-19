@@ -18,23 +18,23 @@ import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheGateway;
-import org.sventon.model.LogEntry;
-import org.sventon.model.RepositoryName;
-import org.sventon.service.svnkit.SVNKitRepositoryService;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.io.SVNRepository;
+import org.sventon.colorer.Colorer;
+import org.sventon.diff.DiffException;
+import org.sventon.export.ExportDirectory;
+import org.sventon.model.*;
+import org.sventon.web.command.DiffCommand;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Cache aware sub classed implementation of RepositoryService.
  *
  * @author jesper@sventon.org
  */
-public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryService {
+public final class CacheAwareRepositoryServiceImpl implements RepositoryService {
 
   /**
    * Logger for this class and subclasses.
@@ -50,6 +50,20 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
    * The application.
    */
   private Application application;
+
+  /**
+   * Delegate service.
+   */
+  private RepositoryService delegate;
+
+  /**
+   * Constructor.
+   *
+   * @param delegate Repository service to delegate to.
+   */
+  public CacheAwareRepositoryServiceImpl(final RepositoryService delegate) {
+    this.delegate = delegate;
+  }
 
   /**
    * Sets the cache gateway instance.
@@ -83,7 +97,7 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
       logger.debug("Fetching cached revision: " + revision);
       logEntry = cacheGateway.getRevision(repositoryName, revision);
     } else {
-      logEntry = super.getLogEntry(repositoryName, connection, revision);
+      logEntry = delegate.getLogEntry(repositoryName, connection, revision);
     }
     return logEntry;
   }
@@ -98,7 +112,6 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
                                       final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
       throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     if (canReturnCachedRevisionsFor(repositoryName)) {
       final List<Long> revisions = new ArrayList<Long>();
@@ -108,20 +121,12 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
       } else {
         // To be able to return cached revisions, we first have to get the revision numbers for given path
         // Doing a logs-call, skipping the details, to get them.
-        try {
-          repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
-            public void handleLogEntry(final SVNLogEntry logEntry) {
-              revisions.add(logEntry.getRevision());
-            }
-          });
-        } catch (SVNException ex) {
-          throw new SventonException("Unable to get logs", ex);
-        }
+        revisions.addAll(delegate.getRevisionsForPath(connection, path, fromRevision, toRevision, stopOnCopy, limit));
       }
       logger.debug("Fetching [" + limit + "] cached revisions: " + revisions);
       logEntries.addAll(cacheGateway.getRevisions(repositoryName, revisions));
     } else {
-      logEntries.addAll(super.getLogEntries(repositoryName, connection, fromRevision, toRevision, path, limit,
+      logEntries.addAll(delegate.getLogEntries(repositoryName, connection, fromRevision, toRevision, path, limit,
           stopOnCopy, includeChangedPaths));
     }
     return logEntries;
@@ -138,5 +143,106 @@ public final class CacheAwareRepositoryServiceImpl extends SVNKitRepositoryServi
   private boolean canReturnCachedRevisionsFor(final RepositoryName repositoryName) {
     return application.getConfiguration(repositoryName).isCacheUsed() && !application.isUpdating(repositoryName);
   }
+
+  @Override
+  public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
+    return delegate.getLogEntriesFromRepositoryRoot(connection, fromRevision, toRevision);
+  }
+
+  @Override
+  public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision, ExportDirectory exportDirectory) throws SventonException {
+    delegate.export(connection, targets, pegRevision, exportDirectory);
+  }
+
+  @Override
+  public void getFileContents(SVNConnection connection, String path, long revision, OutputStream output) throws SventonException {
+    delegate.getFileContents(connection, path, revision, output);
+  }
+
+  @Override
+  public Properties getFileProperties(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.getFileProperties(connection, path, revision);
+  }
+
+  @Override
+  public String getFileChecksum(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.getFileChecksum(connection, path, revision);
+  }
+
+  @Override
+  public Long getLatestRevision(SVNConnection connection) throws SventonException {
+    return delegate.getLatestRevision(connection);
+  }
+
+  @Override
+  public DirEntry.Kind getNodeKind(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.getNodeKind(connection, path, revision);
+  }
+
+  @Override
+  public Map<String, DirEntryLock> getLocks(SVNConnection connection, String startPath) {
+    return delegate.getLocks(connection, startPath);
+  }
+
+  @Override
+  public DirList list(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.list(connection, path, revision);
+  }
+
+  @Override
+  public DirEntry getEntryInfo(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.getEntryInfo(connection, path, revision);
+  }
+
+  @Override
+  public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.getFileRevisions(connection, path, revision);
+  }
+
+  @Override
+  public List<SideBySideDiffRow> diffSideBySide(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
+    return delegate.diffSideBySide(connection, command, pegRevision, charset);
+  }
+
+  @Override
+  public String diffUnified(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
+    return delegate.diffUnified(connection, command, pegRevision, charset);
+  }
+
+  @Override
+  public List<InlineDiffRow> diffInline(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
+    return delegate.diffInline(connection, command, pegRevision, charset);
+  }
+
+  @Override
+  public List<DiffStatus> diffPaths(SVNConnection connection, DiffCommand command) throws SventonException {
+    return delegate.diffPaths(connection, command);
+  }
+
+  @Override
+  public AnnotatedTextFile blame(SVNConnection connection, String path, long revision, String charset, Colorer colorer) throws SventonException {
+    return delegate.blame(connection, path, revision, charset, colorer);
+  }
+
+  @Override
+  public DirEntry.Kind getNodeKindForDiff(SVNConnection connection, DiffCommand command) throws SventonException, DiffException {
+    return delegate.getNodeKindForDiff(connection, command);
+  }
+
+  @Override
+  public Long translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
+    return delegate.translateRevision(revision, headRevision, connection);
+  }
+
+  @Override
+  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
+    return delegate.getLatestRevisions(repositoryName, connection, revisionCount);
+  }
+
+  @Override
+  public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
+    return delegate.getRevisionsForPath(connection, path, fromRevision, toRevision, stopOnCopy, limit);
+  }
+
 
 }

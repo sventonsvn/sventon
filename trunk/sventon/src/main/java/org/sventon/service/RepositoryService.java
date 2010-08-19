@@ -229,8 +229,8 @@ public interface RepositoryService {
   /**
    * Creates a path diff.
    *
-   * @param connection    The repository connection.
-   * @param command       DiffCommand.
+   * @param connection The repository connection.
+   * @param command    DiffCommand.
    * @return List of diff status.
    * @throws SventonException if a subversion error occur
    */
@@ -288,4 +288,19 @@ public interface RepositoryService {
    */
   List<LogEntry> getLatestRevisions(final RepositoryName repositoryName, final SVNConnection connection,
                                     final int revisionCount) throws SventonException;
+
+  /**
+   * Gets the revision numbers in which the given path has been changed.
+   *
+   * @param connection   The repository
+   * @param fromRevision From revision
+   * @param toRevision   To revision
+   * @param path         The repository path
+   * @param limit        Revision limit
+   * @param stopOnCopy   Stop on copy
+   * @return The log entries
+   * @throws SventonException if a sventon specific error occurs
+   */
+  List<Long> getRevisionsForPath(SVNConnection connection, final String path, final long fromRevision,
+                                 final long toRevision, final boolean stopOnCopy, final long limit) throws SventonException;
 }

@@ -1,10 +1,21 @@
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
 package org.sventon.service.svnkit;
 
 import org.sventon.SVNConnection;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
- * SVNKitConnection..
+ * SVNKitConnection.
  */
 public class SVNKitConnection extends SVNConnection {
   private SVNRepository delegate;
@@ -14,7 +25,7 @@ public class SVNKitConnection extends SVNConnection {
    *
    * @param delegate Delegate
    */
-  public SVNKitConnection(SVNRepository delegate) {
+  public SVNKitConnection(final SVNRepository delegate) {
     this.delegate = delegate;
   }
 
@@ -28,8 +39,4 @@ public class SVNKitConnection extends SVNConnection {
     delegate.closeSession();
   }
 
-  @Override
-  public String getURL() {
-    return delegate.getLocation().toDecodedString();
-  }
 }
