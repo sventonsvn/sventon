@@ -30,7 +30,7 @@ import java.util.Map;
  * Controller that lists the contents of given repository path at given revision.
  * The resulting model will include:
  * <ul>
- * <li><code>svndir</code> - The list of <code>SVNDirEntry</code> instances</li>
+ * <li><code>svndir</code> - The list of <code>DirEntry</code> instances</li>
  * <li><code>properties</code> - The path's SVN properties</li>
  * </ul>
  * Note: Sub classes must specify <code>viewName</code> property.

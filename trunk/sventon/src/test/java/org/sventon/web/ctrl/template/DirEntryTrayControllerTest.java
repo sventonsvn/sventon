@@ -1,14 +1,7 @@
 package org.sventon.web.ctrl.template;
 
 import junit.framework.TestCase;
-
-import static org.easymock.EasyMock.expect;
-
 import org.easymock.classextension.EasyMock;
-
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
-
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,10 +15,12 @@ import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNNodeKind;
 
 import java.util.Map;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.verify;
 
 public class DirEntryTrayControllerTest extends TestCase {
 
@@ -48,7 +43,7 @@ public class DirEntryTrayControllerTest extends TestCase {
     configuration.setEnableEntryTray(true);
     application.addConfiguration(configuration);
 
-    entry = new DirEntry(new SVNDirEntry(null, null, "/trunk/test", SVNNodeKind.FILE, 0, false, 0, null, null), "/");
+    entry = new DirEntry("/", "/trunk/test", "", null, DirEntry.Kind.FILE, 0, 0);
 
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));

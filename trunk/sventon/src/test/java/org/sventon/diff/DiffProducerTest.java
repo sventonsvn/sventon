@@ -3,8 +3,6 @@ package org.sventon.diff;
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
-import static org.sventon.diff.DiffSegment.Side.LEFT;
-import static org.sventon.diff.DiffSegment.Side.RIGHT;
 import org.sventon.model.DiffAction;
 
 import java.io.ByteArrayInputStream;
@@ -14,6 +12,9 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import static org.sventon.diff.DiffSegment.Side.LEFT;
+import static org.sventon.diff.DiffSegment.Side.RIGHT;
 
 public class DiffProducerTest extends TestCase {
 

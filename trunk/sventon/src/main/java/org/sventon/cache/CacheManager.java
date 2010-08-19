@@ -13,7 +13,6 @@ package org.sventon.cache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.cache.CacheException;
 import org.sventon.model.RepositoryName;
 
 import java.util.Map;

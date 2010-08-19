@@ -6,7 +6,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
-import org.sventon.model.SVNURL;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.*;

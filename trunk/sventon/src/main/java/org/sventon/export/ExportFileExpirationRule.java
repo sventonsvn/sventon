@@ -13,7 +13,6 @@ package org.sventon.export;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT_PATTERN;
 
 import java.io.File;
 import java.text.ParseException;
@@ -21,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT_PATTERN;
 
 /**
  * File expiration rule.
