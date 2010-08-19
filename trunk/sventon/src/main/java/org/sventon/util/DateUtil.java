@@ -83,7 +83,7 @@ public class DateUtil {
     }
   };
 
-  static final DateCalculator basicDateCalc = new DateCalculator(){
+  static final DateCalculator dateOnlyCalc = new DateCalculator(){
     @Override
     public Calendar calculate(Matcher matcher) {
       Calendar calendar = Calendar.getInstance();
@@ -99,7 +99,7 @@ public class DateUtil {
     }
   };
 
-  static final DateCalculator extendedDateCalc = new DateCalculator(){
+  static final DateCalculator dateTimeCalc = new DateCalculator(){
     @Override
     public Calendar calculate(Matcher matcher) {
       Calendar calendar = Calendar.getInstance();
@@ -162,14 +162,14 @@ public class DateUtil {
    * ZoneClosure to parse the date (as Calendar) for a revision string 
    */
   private enum DatePattern {
-    ISO8601_EXTENDED_DATE_ONLY_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})", DateUtil.basicDateCalc, DateUtil.nullZoneCalc ),
-    ISO8601_EXTENDED_UTC_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?(Z)?", DateUtil.extendedDateCalc, DateUtil.utcZoneCalc),
-    ISO8601_EXTENDED_OFFSET_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})(:(\\d{2}))?", DateUtil.extendedDateCalc, DateUtil.basicZoneCalc),
-    ISO8601_BASIC_DATE_ONLY_PATTERN("(\\d{4})(\\d{2})(\\d{2})", DateUtil.basicDateCalc, DateUtil.nullZoneCalc),
-    ISO8601_BASIC_UTC_PATTERN("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})((\\d{2})([.,](\\d{1,6}))?)?(Z)?", DateUtil.extendedDateCalc, DateUtil.utcZoneCalc),
-    ISO8601_BASIC_OFFSET_PATTERN("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})((\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})((\\d{2}))?", DateUtil.extendedDateCalc, DateUtil.basicZoneCalc),
-    ISO8601_GNU_FORMAT_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})((\\d{2}))?", DateUtil.extendedDateCalc, DateUtil.basicZoneCalc),
-    SVN_LOG_DATE_FORMAT_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?( ([+-])(\\d{2})(\\d{2})?)?", DateUtil.extendedDateCalc, DateUtil.logZoneCalc),
+    ISO8601_DATE_ONLY_DASH_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})", DateUtil.dateOnlyCalc, DateUtil.nullZoneCalc ),
+    ISO8601_DATE_TIME_DASH_UTC_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?(Z)?", DateUtil.dateTimeCalc, DateUtil.utcZoneCalc),
+    ISO8601_DATE_TIME_DASH_OFFSET_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})(:(\\d{2}))?", DateUtil.dateTimeCalc, DateUtil.basicZoneCalc),
+    ISO8601_DATE_ONLY_COMPACT_PATTERN("(\\d{4})(\\d{2})(\\d{2})", DateUtil.dateOnlyCalc, DateUtil.nullZoneCalc),
+    ISO8601_DATE_TIME_COMPACT_UTC_PATTERN("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})((\\d{2})([.,](\\d{1,6}))?)?(Z)?", DateUtil.dateTimeCalc, DateUtil.utcZoneCalc),
+    ISO8601_DATE_TIME_COMPACT_OFFSET_PATTERN("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})((\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})((\\d{2}))?", DateUtil.dateTimeCalc, DateUtil.basicZoneCalc),
+    ISO8601_GNU_FORMAT_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2})T(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?([+-])(\\d{2})((\\d{2}))?", DateUtil.dateTimeCalc, DateUtil.basicZoneCalc),
+    SVN_LOG_DATE_FORMAT_PATTERN("(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?( ([+-])(\\d{2})(\\d{2})?)?", DateUtil.dateTimeCalc, DateUtil.logZoneCalc),
     TIME_ONLY_PATTERN("(\\d{1,2}):(\\d{2})(:(\\d{2})([.,](\\d{1,6}))?)?", DateUtil.timeOnlyDateCalc, DateUtil.nullZoneCalc);
 
     private Pattern pattern;
