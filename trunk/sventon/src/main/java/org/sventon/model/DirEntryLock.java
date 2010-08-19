@@ -1,3 +1,14 @@
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
 package org.sventon.model;
 
 import java.util.Date;
@@ -19,12 +30,12 @@ public class DirEntryLock {
   /**
    * Constructor.
    *
-   * @param id
-   * @param path
-   * @param owner
-   * @param comment
-   * @param creationDate
-   * @param expirationDate
+   * @param id             Id
+   * @param path           Locked path
+   * @param owner          Lock owner
+   * @param comment        Comment
+   * @param creationDate   Lock creation date
+   * @param expirationDate Lock expire date
    */
   public DirEntryLock(String id, String path, String owner, String comment, Date creationDate, Date expirationDate) {
     this.id = id;
@@ -35,26 +46,44 @@ public class DirEntryLock {
     this.expirationDate = expirationDate;
   }
 
+  /**
+   * @return Id
+   */
   public String getId() {
     return id;
   }
 
+  /**
+   * @return Locked path
+   */
   public String getPath() {
     return path;
   }
 
+  /**
+   * @return Lock owner
+   */
   public String getOwner() {
     return owner;
   }
 
+  /**
+   * @return Comment
+   */
   public String getComment() {
     return comment;
   }
 
+  /**
+   * @return The locks creation date
+   */
   public Date getCreationDate() {
     return creationDate;
   }
 
+  /**
+   * @return The locks expire date
+   */
   public Date getExpirationDate() {
     return expirationDate;
   }

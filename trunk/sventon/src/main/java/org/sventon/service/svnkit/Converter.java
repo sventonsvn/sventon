@@ -1,3 +1,14 @@
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
 package org.sventon.service.svnkit;
 
 import org.sventon.model.*;
@@ -8,7 +19,7 @@ import org.tmatesoft.svn.core.io.SVNFileRevision;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
+ * Converter for SVNKit specific data structures.
  */
 public class Converter {
 
@@ -58,7 +69,7 @@ public class Converter {
     return pathRevisions;
   }
 
-  public static Properties convertProperties(final SVNProperties svnProperties){
+  public static Properties convertProperties(final SVNProperties svnProperties) {
     final Properties props = new Properties();
     for (Object o : svnProperties.asMap().keySet()) {
       final String key = (String) o;
@@ -77,7 +88,7 @@ public class Converter {
     return entry;
   }
 
-  public static List<DirEntry> convertDirEntries(final Collection<SVNDirEntry> svnEntries, final String fullPath){
+  public static List<DirEntry> convertDirEntries(final Collection<SVNDirEntry> svnEntries, final String fullPath) {
     final List<DirEntry> entries = new ArrayList<DirEntry>();
 
     for (SVNDirEntry svnEntry : svnEntries) {

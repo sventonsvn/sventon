@@ -1,7 +1,20 @@
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
 package org.sventon.model;
 
 /**
+ * Property.
  *
+ * @author jorgen@sventon.org
  */
 public class Property {
   private final String name;
@@ -25,7 +38,7 @@ public class Property {
   public static final Property TREE_CONFLICT_DATA = new Property(SVN_ENTRY_PREFIX + "tree-conflicts");
   public static final Property URL = new Property(SVN_ENTRY_PREFIX + "url");
   public static final Property COPYFROM_URL = new Property(SVN_ENTRY_PREFIX + "copyfrom-url");
-  public static final Property COPYFROM_REVISION = new Property(SVN_ENTRY_PREFIX+ "copyfrom-rev");
+  public static final Property COPYFROM_REVISION = new Property(SVN_ENTRY_PREFIX + "copyfrom-rev");
   public static final Property SCHEDULE = new Property(SVN_ENTRY_PREFIX + "schedule");
   public static final Property COPIED = new Property(SVN_ENTRY_PREFIX + "copied");
   public static final Property UUID = new Property(SVN_ENTRY_PREFIX + "uuid");
@@ -74,12 +87,8 @@ public class Property {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Property property = (Property) o;
-
-    if (name != null ? !name.equals(property.name) : property.name != null) return false;
-
-    return true;
+    return !(name != null ? !name.equals(property.name) : property.name != null);
   }
 
   @Override
@@ -88,6 +97,7 @@ public class Property {
   }
 
   //TODO: Move functionality out of this class. Mime-type text and svn property has nothing to do with each other.
+
   /**
    * Check to see if the given string can be considered as describing a text MIME type
    *
@@ -95,7 +105,7 @@ public class Property {
    * @return true if given string describes a MIME type, otherwise false.
    */
   public static boolean isTextMimeType(String mimeType) {
-    return  (mimeType == null || mimeType.startsWith("text/"));
+    return (mimeType == null || mimeType.startsWith("text/"));
   }
 
 
