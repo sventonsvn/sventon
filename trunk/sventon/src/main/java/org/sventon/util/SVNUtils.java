@@ -24,4 +24,13 @@ public final class SVNUtils {
   private SVNUtils() {
   }
 
+  /**
+   * Check to see if the given string can be considered as describing a text MIME type
+   *
+   * @param mimeType the MIME type
+   * @return true if given string describes a MIME type, otherwise false.
+   */
+  public static boolean isTextMimeType(String mimeType) {
+    return (mimeType == null || mimeType.startsWith("text/"));
+  }
 }

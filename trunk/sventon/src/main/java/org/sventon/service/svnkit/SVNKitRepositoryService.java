@@ -24,6 +24,7 @@ import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
+import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -171,7 +172,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   protected final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SventonException {
     final String mimeType = getFileProperties(connection, path, revision).getStringValue(Property.MIME_TYPE);
-    return Property.isTextMimeType(mimeType);
+    return SVNUtils.isTextMimeType(mimeType);
   }
 
   @Override

@@ -19,6 +19,7 @@ import org.sventon.SVNConnection;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.*;
 import org.sventon.util.EncodingUtils;
+import org.sventon.util.SVNUtils;
 import org.sventon.util.WebUtils;
 import org.sventon.web.command.BaseCommand;
 
@@ -174,7 +175,7 @@ public final class ShowFileController extends AbstractTemplateController {
    * @return True if text file, false if not.
    */
   protected boolean isTextMimeType(final Properties properties) {
-    return Property.isTextMimeType(properties.getStringValue(Property.MIME_TYPE));
+    return SVNUtils.isTextMimeType(properties.getStringValue(Property.MIME_TYPE));
   }
 
   /**
