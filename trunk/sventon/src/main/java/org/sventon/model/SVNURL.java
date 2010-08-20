@@ -11,7 +11,13 @@
  */
 package org.sventon.model;
 
+import org.springframework.web.util.UriUtils;
 import org.sventon.SventonException;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * SVNURL.
@@ -23,19 +29,57 @@ public class SVNURL {
   /**
    * Constructor.
    *
-   * @param url URL to subversion repository.
+   * @param url the encoded URI to subversion repository.
    */
-  public SVNURL(String url) {
+  public SVNURL(String url){
     this.url = url;
   }
 
-  public static SVNURL parse(String url) throws SventonException {
-    try {
-      return new SVNURL(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(url).toString());
-    } catch (org.tmatesoft.svn.core.SVNException e) {
-      throw new SventonException("Unable to parse URL: " + url);
+  private static void validate(final String url) throws SventonException {
+    final String scheme = getScheme(url);
+    if (!Protocol.isValidProtocol(scheme)){
+      throw new SventonException("Unknown protocol " + scheme + " in URL " + url + ". Valid protocols are : " + Arrays.toString(Protocol.values()));
     }
   }
+
+  private static String getScheme(String url) throws SventonException {
+    final Pattern pattern = Pattern.compile(URI_PATTERN);
+    final Matcher matcher = pattern.matcher(url);
+    if (!matcher.matches()){
+      throw new SventonException("Malformed URI " + url);
+    }
+
+    return matcher.group(SCHEME_COMPONENT);
+  }
+
+  /**
+   * Parse a URI into a SVNURL.
+   *
+   * This parser will URI encode the string and then check to see if it is a valid subversion protocol.
+   *
+   * @param url the un-encoded URI
+   * @return a SVNURL object wrapping the encoded url string.
+   *
+   * @throws SventonException if the given URI is malformed or not possible to URI encode or not having a valid subversion protocol.
+   */
+  public static SVNURL parse(final String url) throws SventonException {
+    try {
+      final String encodedUri = UriUtils.encodeUri(url, "UTF-8");
+      validate(encodedUri);
+      
+      return new SVNURL(trim(encodedUri));
+    } catch (UnsupportedEncodingException e) {
+      throw new SventonException("Could not encode URI " + url, e);
+    }
+  }
+
+  private static String trim(String url) {
+    if (url.endsWith("/")) {
+      return url.substring(0, url.length() - 1);
+    }
+    return url;
+  }
+
 
   public String getUrl() {
     return url;
@@ -58,4 +102,50 @@ public class SVNURL {
   public String toString() {
     return url;
   }
+
+
+  // URI pattern. See RFC 2396 Appendix B
+  private static final String URI_PATTERN = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?";
+  private static final int SCHEME_COMPONENT = 2;
+
+  /**
+   * Enumeration over valid SVN protocols.
+   */
+  public enum Protocol {
+    HTTP("http"),
+    HTTPS("https"),
+    SVN("svn"),
+    SVN_SSH("svn+ssh"),
+    FILE("file");
+
+    private final String name;
+
+    Protocol(final String name) {
+      this.name = name;
+    }
+
+
+
+    /**
+     * Checks if given string is a valid svn protocol.
+     *
+     * @param protocol the string
+     * @return true if given string is a valid svn protocol, otherwise false
+     */
+    public static boolean isValidProtocol(final String protocol){
+      for (Protocol p : Protocol.values()) {
+        if (p.name.equalsIgnoreCase(protocol)){
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    @Override
+    public String toString() {
+      return name;
+    }
+  }
+
 }
