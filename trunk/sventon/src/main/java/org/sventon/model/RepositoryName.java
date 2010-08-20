@@ -74,4 +74,5 @@ public final class RepositoryName implements Serializable, Comparable {
   public int compareTo(Object o) {
     return name.compareTo(o.toString());
   }
+  
 }
