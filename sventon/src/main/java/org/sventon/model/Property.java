@@ -95,18 +95,4 @@ public class Property {
   public int hashCode() {
     return name != null ? name.hashCode() : 0;
   }
-
-  //TODO: Move functionality out of this class. Mime-type text and svn property has nothing to do with each other.
-
-  /**
-   * Check to see if the given string can be considered as describing a text MIME type
-   *
-   * @param mimeType the MIME type
-   * @return true if given string describes a MIME type, otherwise false.
-   */
-  public static boolean isTextMimeType(String mimeType) {
-    return (mimeType == null || mimeType.startsWith("text/"));
-  }
-
-
 }

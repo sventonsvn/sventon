@@ -12,6 +12,7 @@
 package org.sventon.model;
 
 import org.junit.Test;
+import org.sventon.util.SVNUtils;
 
 import static org.junit.Assert.*;
 
@@ -43,9 +44,9 @@ public class PropertyTest {
   Test to see if given string is a mime-type description. (Why here?)
    */
   public void isTextMimeType() throws Exception {
-    assertTrue(Property.isTextMimeType("text/foo-bar"));
-    assertTrue(Property.isTextMimeType(null));
-    assertFalse(Property.isTextMimeType("audio/crazy-frog"));
+    assertTrue(SVNUtils.isTextMimeType("text/foo-bar"));
+    assertTrue(SVNUtils.isTextMimeType(null));
+    assertFalse(SVNUtils.isTextMimeType("audio/crazy-frog"));
 
   }
 }
