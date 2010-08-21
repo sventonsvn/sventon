@@ -72,7 +72,7 @@
     <constructor-arg ref="repositoryServiceDelegate"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
   </bean>
-  
+
   <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
     <property name="configurationFileName" value="sventon_config.properties"/>
@@ -81,7 +81,10 @@
   </bean>
 
   <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
-  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator"/>
+
+  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
+    <property name="repositoryService" ref="repositoryService"/>
+  </bean>
 
   <bean id="rssFeedGenerator" class="org.sventon.rss.RssFeedGeneratorImpl">
     <property name="feedType" value="rss_2.0"/>

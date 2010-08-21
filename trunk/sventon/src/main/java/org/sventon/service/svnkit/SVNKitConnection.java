@@ -29,7 +29,6 @@ public class SVNKitConnection extends SVNConnection {
     this.delegate = delegate;
   }
 
-  @Override
   public SVNRepository getDelegate() {
     return delegate;
   }
