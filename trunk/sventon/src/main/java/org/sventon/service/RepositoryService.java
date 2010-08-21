@@ -275,7 +275,7 @@ public interface RepositoryService {
    * @return The revision number.
    * @throws SventonException if unable to communicate with repository.
    */
-  Long translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException;
+  Revision translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException;
 
   /**
    * Gets the <code>n</code> latest revisions.

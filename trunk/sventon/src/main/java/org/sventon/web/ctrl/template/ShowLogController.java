@@ -65,7 +65,7 @@ public final class ShowLogController extends AbstractTemplateController {
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection,
-          fromRevision, Revision.FIRST, nextPath, pageSize, stopOnCopy, true));
+          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true));
 
       String pathAtRevision = nextPath;
 
@@ -108,7 +108,7 @@ public final class ShowLogController extends AbstractTemplateController {
 
   protected long calculateFromRevision(long headRevision, Revision nextRevision) {
     final long fromRevision;
-    if (Revision.HEAD.equals(nextRevision)) {
+    if (nextRevision.isHeadRevision()) {
       fromRevision = headRevision;
     } else {
       fromRevision = nextRevision.getNumber();

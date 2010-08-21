@@ -230,7 +230,7 @@ public final class CacheAwareRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Long translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
+  public Revision translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
     return delegate.translateRevision(revision, headRevision, connection);
   }
 

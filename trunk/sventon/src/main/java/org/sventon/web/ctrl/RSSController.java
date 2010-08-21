@@ -81,11 +81,13 @@ public final class RSSController extends AbstractBaseController {
     try {
       final List<LogEntry> logEntries = new ArrayList<LogEntry>();
       connection = createRepositoryConnection(request, configuration);
-      getRepositoryService().translateRevision(command.getRevision(), getRepositoryService().getLatestRevision(connection), connection);
+      final Long headRevision = getRepositoryService().getLatestRevision(connection);
+      final Revision revision = getRepositoryService().translateRevision(command.getRevision(), headRevision, connection);
+      command.setRevision(revision);
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
-          Revision.FIRST, command.getPath(), configuration.getRssItemsCount(), false, true));
+          Revision.FIRST.getNumber(), command.getPath(), configuration.getRssItemsCount(), false, true));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (AuthenticationException aex) {
       logger.info(aex.getMessage());
