@@ -50,7 +50,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public LogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
       throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     try {
       return Converter.toLogEntry((SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
           true, false).iterator().next());
@@ -63,7 +63,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public final List<LogEntry> getLogEntriesFromRepositoryRoot(final SVNConnection connection, final long fromRevision,
                                                               final long toRevision) throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     final List<LogEntry> revisions = new ArrayList<LogEntry>();
     try {
       repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
@@ -84,7 +84,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       throws SventonException {
 
     logger.debug("Fetching [" + limit + "] revisions in the interval [" + toRevision + "-" + fromRevision + "]");
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
       repository.log(new String[]{path}, fromRevision, toRevision, includeChangedPaths, stopOnCopy, limit, new ISVNLogEntryHandler() {
@@ -102,7 +102,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public final void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
                            final ExportDirectory exportDirectory) throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     for (final PathRevision fileRevision : targets) {
       final String path = fileRevision.getPath();
       final long revision = fileRevision.getRevision().getNumber();
@@ -137,7 +137,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   @Override
   public void getFileContents(final SVNConnection connection, final String path, final long revision,
                               final OutputStream output) throws SventonException {
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     try {
       final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
       final SVNWCClient wcClient = clientManager.getWCClient();
@@ -153,7 +153,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public final Properties getFileProperties(final SVNConnection connection, final String path, final long revision)
       throws SventonException {
     final SVNProperties props = new SVNProperties();
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     try {
       repository.getFile(path, revision, props, null);
     } catch (SVNException e) {
@@ -182,7 +182,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public final Long getLatestRevision(final SVNConnection connection) throws SventonException {
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     try {
       return repository.getLatestRevision();
     } catch (SVNException ex) {
@@ -194,7 +194,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public final DirEntry.Kind getNodeKind(final SVNConnection connection, final String path, final long revision)
       throws SventonException {
     try {
-      final SVNRepository repository = connection.getDelegate();
+      final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
       final SVNNodeKind nodeKind = repository.checkPath(path, revision);
       return DirEntry.Kind.valueOf(nodeKind.toString().toUpperCase());
     } catch (SVNException svnex) {
@@ -208,7 +208,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     logger.debug("Getting lock info for path [" + path + "] and below");
 
     final Map<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
 
     try {
       for (final SVNLock lock : repository.getLocks(path)) {
@@ -227,7 +227,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   @Override
   public final DirList list(final SVNConnection connection, final String path, final long revision
   ) throws SventonException {
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     final SVNProperties properties = new SVNProperties();
     final Collection<SVNDirEntry> entries;
     try {
@@ -245,7 +245,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
     final SVNDirEntry dirEntry;
     try {
-      final SVNRepository repository = connection.getDelegate();
+      final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
       dirEntry = repository.info(path, revision);
     } catch (SVNException ex) {
       return translateSVNException("Cannot get info for [" + path + "@" + revision + "]", ex);
@@ -267,7 +267,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     //noinspection unchecked
     final List<SVNFileRevision> svnFileRevisions;
     try {
-      final SVNRepository repository = connection.getDelegate();
+      final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
       svnFileRevisions = (List<SVNFileRevision>) repository.getFileRevisions(
           path, null, 0, revision);
     } catch (SVNException ex) {
@@ -361,7 +361,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command)
       throws SventonException {
 
-    final SVNRepository repository = connection.getDelegate();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
     final SVNDiffClient diffClient = clientManager.getDiffClient();
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
@@ -390,7 +390,7 @@ public class SVNKitRepositoryService implements RepositoryService {
                                        final String charset, final Colorer colorer) throws SventonException {
 
     try {
-      final SVNRepository repository = connection.getDelegate();
+      final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
       final long blameRevision;
       if (Revision.UNDEFINED.getNumber() == revision) {
         blameRevision = repository.getLatestRevision();
@@ -457,7 +457,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       if (revisionNumber < 0) {
         final Date date = revision.getDate();
         if (date != null) {
-          final SVNRepository repository = connection.getDelegate();
+          final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
           return Revision.create(repository.getDatedRevision(date));
         } else {
           logger.warn("Unexpected revision: " + revision);
@@ -497,7 +497,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     final List<Long> revisions = new ArrayList<Long>();
 
     try {
-      final SVNRepository repository = connection.getDelegate();
+      final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
       repository.log(new String[]{path}, fromRevision, toRevision, false, stopOnCopy, limit, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
           revisions.add(logEntry.getRevision());

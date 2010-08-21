@@ -25,6 +25,7 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
+import org.sventon.service.RepositoryService;
 
 /**
  * ConfigCommandValidator.
@@ -55,6 +56,11 @@ public final class ConfigCommandValidator implements Validator {
   private Application application;
 
   /**
+   * Service for reaching the repository.
+   */
+  private RepositoryService repositoryService;
+
+  /**
    * Constructor.
    */
   public ConfigCommandValidator() {
@@ -63,8 +69,7 @@ public final class ConfigCommandValidator implements Validator {
   /**
    * Constructor for testing purposes.
    *
-   * @param testConnections If <tt>false</tt> repository
-   *                        connection will not be tested.
+   * @param testConnections If <tt>false</tt> repository connection will not be tested.
    */
   protected ConfigCommandValidator(final boolean testConnections) {
     this.testConnections = testConnections;
@@ -80,6 +85,14 @@ public final class ConfigCommandValidator implements Validator {
     this.application = application;
   }
 
+  /**
+   * @param repositoryService Repository service
+   */
+  public void setRepositoryService(final RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+  }
+
+  @Override
   public boolean supports(final Class clazz) {
     return clazz.equals(ConfigCommand.class);
   }
@@ -94,6 +107,7 @@ public final class ConfigCommandValidator implements Validator {
     this.connectionFactory = connectionFactory;
   }
 
+  @Override
   public void validate(final Object obj, final Errors errors) {
     final ConfigCommand command = (ConfigCommand) obj;
 
@@ -149,12 +163,12 @@ public final class ConfigCommandValidator implements Validator {
 
     SVNConnection connection = null;
     try {
-      connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
-          credentials);
-      connection.getDelegate().testConnection();
-    } catch (org.tmatesoft.svn.core.SVNException ex) {
+      connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(), credentials);
+      repositoryService.getLatestRevision(connection);
+
+    } catch (SventonException ex) {
       logger.info(ex);
-      throw new SventonException(ex.getMessage());
+      throw ex;
     } finally {
       if (connection != null) {
         connection.closeSession();
