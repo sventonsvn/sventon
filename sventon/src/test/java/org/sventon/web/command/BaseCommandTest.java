@@ -10,6 +10,7 @@ public class BaseCommandTest extends TestCase {
     final BaseCommand command = new BaseCommand();
     assertEquals("/", command.getPath());
     assertEquals(Revision.HEAD, command.getRevision());
+    assertTrue(command.getRevision().isHeadRevision());
   }
 
   public void testSetPath() {
@@ -36,6 +37,7 @@ public class BaseCommandTest extends TestCase {
       // expected
     }
     assertEquals(Revision.HEAD, command.getRevision());
+    assertTrue(command.getRevision().isHeadRevision());
 
     command.setRevision(Revision.parse("2"));
     assertEquals(Revision.create(2), command.getRevision());
@@ -43,16 +45,20 @@ public class BaseCommandTest extends TestCase {
     //Drutten is accepted as a revision here, but not by the BaseCommandValidator
     command.setRevision(Revision.parse("Drutten"));
     assertEquals(Revision.UNDEFINED, command.getRevision());
+    assertFalse(command.getRevision().isHeadRevision());
 
     //HEAD in different cases are converted to HEAD
     command.setRevision(Revision.parse("HEAD"));
     assertEquals(Revision.HEAD, command.getRevision());
+    assertTrue(command.getRevision().isHeadRevision());
 
     command.setRevision(Revision.parse("head"));
     assertEquals(Revision.HEAD, command.getRevision());
+    assertTrue(command.getRevision().isHeadRevision());
 
     command.setRevision(Revision.parse("HEad"));
     assertEquals(Revision.HEAD, command.getRevision());
+    assertTrue(command.getRevision().isHeadRevision());
   }
 
   public void testGetCompletePath() {

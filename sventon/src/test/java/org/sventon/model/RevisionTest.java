@@ -6,65 +6,62 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
-public class RevisionTest{
-  @Test
-  public void createUndefinedNumberRevision() {
-    assertFalse(Revision.create(-1).isNumberRevision());
-    assertSame(Revision.UNDEFINED_NUMBER, Revision.create(-1).getNumber());
-  }
-
+public class RevisionTest {
 
   @Test
-  public void createNumberRevision() {
-    assertTrue(Revision.create(42).isNumberRevision());
-    assertEquals(42, Revision.create(42).getNumber());
+  public void testCreateNumberRevision() {
+    final Revision revision = Revision.create(42);
+    assertEquals(42, revision.getNumber());
+    assertEquals("42", revision.toString());
   }
 
   @Test
-  public void createDateRevision() {
+  public void testCreateHeadRevision() {
+    final Revision revision = Revision.createHeadRevision(42);
+    assertEquals("HEAD", revision.toString());
+  }
+
+  @Test
+  public void testCreateDateRevision() {
     final Date now = new Date();
-    assertTrue(Revision.create(now).isDateRevision());
-    assertEquals(now, Revision.create(now).getDate());
+    final Revision revision = Revision.create(now);
+    assertEquals(now, revision.getDate());
   }
 
-
   @Test
-  public void createNamedRevision() {
-    assertTrue(Revision.create(Revision.NamedRevision.HEAD).isNamedRevision());
-    assertSame(Revision.UNDEFINED_NUMBER, Revision.create(-1).getNumber());
+  public void testUndefined() {
+    final Revision revision = Revision.create(-1);
+    assertSame(Revision.UNDEFINED, revision);
+    assertEquals("-1", revision.toString());
   }
 
-
   @Test
-  public void parseNamedRevision() {
-    assertSame(Revision.NamedRevision.HEAD, Revision.parse("HEAD").getNamedRevision());
-    assertSame(Revision.NamedRevision.HEAD, Revision.parse("head").getNamedRevision());
-    assertSame(Revision.NamedRevision.HEAD, Revision.parse("hEAd").getNamedRevision());
-    assertSame(Revision.NamedRevision.UNDEFINED, Revision.parse("undefined").getNamedRevision());
-    assertSame(Revision.NamedRevision.UNDEFINED, Revision.parse("unDEFined").getNamedRevision());
-    assertSame(Revision.NamedRevision.UNDEFINED, Revision.parse("unDEFined").getNamedRevision());
-
+  public void testParseNamedRevision() {
+    assertSame(Revision.HEAD, Revision.parse("HEAD"));
+    assertEquals("HEAD", Revision.parse("HEAD").toString());
+    assertSame(Revision.HEAD, Revision.parse("head"));
+    assertSame(Revision.HEAD, Revision.parse("hEAd"));
+    assertSame(Revision.UNDEFINED, Revision.parse("undefined"));
+    assertSame(Revision.UNDEFINED, Revision.parse("unDEFined"));
+    assertSame(Revision.UNDEFINED, Revision.parse("unDEFined"));
   }
 
   @Test
   public void parseNumberRevision() throws Exception {
     assertSame(Revision.UNDEFINED, Revision.parse("-1"));
-
-    assertEquals(42, Revision.parse("-r 42").getNumber());
+    assertEquals(42, Revision.parse("42").getNumber());
   }
 
   @Test
   public void parseDateRevision() throws Exception {
     Calendar cal = Calendar.getInstance();
-    cal.set(2010, 00, 01, 12, 34,56);
+    cal.set(2010, 0, 1, 12, 34, 56);
     cal.set(Calendar.MILLISECOND, 789);
     cal.set(Calendar.ZONE_OFFSET, 0);
 
-    assertEquals(cal.getTime(), Revision.parse("-r {2010-01-01T12:34:56.789Z}").getDate());
-
+    assertEquals(cal.getTime(), Revision.parse("{2010-01-01T12:34:56.789Z}").getDate());
   }
-
 
 }

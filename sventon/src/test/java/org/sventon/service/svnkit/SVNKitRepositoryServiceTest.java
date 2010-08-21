@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.mockito.Mockito;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.model.*;
-import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 import org.sventon.web.command.editor.PathRevisionEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -341,26 +340,32 @@ public class SVNKitRepositoryServiceTest extends TestCase {
   }
 
   public void testTranslateRevision() throws Exception {
-    final BaseCommand command = new BaseCommand();
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
+    Revision revision;
 
-    command.setRevision(Revision.parse("head"));
-    assertEquals(100, service.translateRevision(command.getRevision(), 100, null).longValue());
-    assertEquals(Revision.HEAD, command.getRevision());
+    revision = service.translateRevision(Revision.parse("head"), 100, null);
+    assertEquals(100, revision.getNumber());
+    assertTrue(revision.isHeadRevision());
 
-    command.setRevision(Revision.parse(""));
-    assertEquals(100, service.translateRevision(command.getRevision(), 100, null).longValue());
-    assertEquals(Revision.UNDEFINED, command.getRevision());
+    revision = service.translateRevision(Revision.parse(""), 100, null);
+    assertEquals(100, revision.getNumber());
+    assertTrue(revision.isHeadRevision());
 
-    command.setRevision(Revision.parse("123"));
-    service.translateRevision(command.getRevision(), 200, null);
-    assertEquals(Revision.create(123), command.getRevision());
+    revision = service.translateRevision(Revision.parse("123"), 200, null);
+    assertEquals(Revision.create(123), revision);
+    assertFalse(revision.isHeadRevision());
 
-    command.setRevision(Revision.parse("{2007-01-01}"));
+    revision = service.translateRevision(Revision.parse("200"), 200, null);
+    assertEquals(Revision.create(200).getNumber(), revision.getNumber());
+    assertTrue(revision.isHeadRevision());
+    assertEquals("HEAD", revision.toString());
+
     final SVNRepository repositoryMock = mock(SVNRepository.class);
-    final SVNKitConnection connection = new SVNKitConnection(repositoryMock);
     when(repositoryMock.getDatedRevision(Mockito.isA(Date.class))).thenReturn(123L);
-    assertEquals(123, service.translateRevision(command.getRevision(), 200, connection).longValue());
+
+    revision = service.translateRevision(Revision.parse("{2007-01-01}"), 200, new SVNKitConnection(repositoryMock));
+    assertEquals(123, revision.getNumber());
+    assertFalse(revision.isHeadRevision());
   }
 
 }

@@ -163,8 +163,9 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
 
       connection = createConnection(configuration, repositoryContext);
-      final long headRevision = getRepositoryService().getLatestRevision(connection);
-      command.setRevision(Revision.create(getRepositoryService().translateRevision(command.getRevision(), headRevision, connection)));
+      final Long headRevision = getRepositoryService().getLatestRevision(connection);
+      final Revision revision = getRepositoryService().translateRevision(command.getRevision(), headRevision, connection);
+      command.setRevision(revision);
 
       parseAndUpdateSortParameters(command, repositoryContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, repositoryContext);

@@ -392,7 +392,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       final SVNRepository repository = connection.getDelegate();
       final long blameRevision;
-      if (Revision.UNDEFINED_NUMBER == revision) {
+      if (Revision.UNDEFINED.getNumber() == revision) {
         blameRevision = repository.getLatestRevision();
       } else {
         blameRevision = revision;
@@ -446,21 +446,25 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Long translateRevision(Revision revision, long headRevision, final SVNConnection connection) throws SventonException {
+  public Revision translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException {
     final long revisionNumber = revision.getNumber();
 
     try {
+      if (revision.isHeadRevision() || revisionNumber == headRevision) {
+        return Revision.createHeadRevision(headRevision);
+      }
+
       if (revisionNumber < 0) {
-        if (Revision.HEAD.equals(revision)) {
-          return headRevision;
-        } else if (revisionNumber == -1 && revision.getDate() != null) {
-          return connection.getDelegate().getDatedRevision(revision.getDate());
+        final Date date = revision.getDate();
+        if (date != null) {
+          final SVNRepository repository = connection.getDelegate();
+          return Revision.create(repository.getDatedRevision(date));
         } else {
           logger.warn("Unexpected revision: " + revision);
-          return headRevision;
+          return Revision.createHeadRevision(headRevision);
         }
       }
-      return revisionNumber;
+      return Revision.create(revisionNumber);
     } catch (SVNException ex) {
       return translateSVNException("Unable to translate revision: " + revision, ex);
     }
@@ -468,7 +472,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
   @Override
   public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-    return getLogEntries(repositoryName, connection, -1, Revision.FIRST, "/", revisionCount, false, true);
+    return getLogEntries(repositoryName, connection, -1, Revision.FIRST.getNumber(), "/", revisionCount, false, true);
   }
 
   protected List<SideBySideDiffRow> createSideBySideDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {

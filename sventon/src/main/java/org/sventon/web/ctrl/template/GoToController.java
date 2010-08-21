@@ -76,8 +76,7 @@ public final class GoToController extends AbstractTemplateController {
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", Revision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
-        command.getRevisionNumber()));
+    model.put("revision", command.getRevision().toString());
 
     redirectUrl = EncodingUtils.encodeUrl(redirectUrl);
     logger.debug("Redirecting to: " + redirectUrl);

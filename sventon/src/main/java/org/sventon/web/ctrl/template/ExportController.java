@@ -68,8 +68,7 @@ public final class ExportController extends AbstractTemplateController {
 
     // Add the redirect URL parameters
     final Map<String, String> model = new HashMap<String, String>();
-    model.put("revision", Revision.HEAD.equals(command.getRevision()) ? "HEAD" : String.valueOf(
-        command.getRevisionNumber()));
+    model.put("revision", command.getRevision().toString());
 
     return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createListUrl()), true), model);
   }

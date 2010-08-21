@@ -66,6 +66,11 @@ public class BaseCommandValidatorTest extends TestCase {
     validator.validate(command, exception);
     assertEquals(0, exception.getAllErrors().size());
 
+    // Illegal date format
+    command.setRevision(Revision.parse("{2007-01}"));
+    validator.validate(command, exception);
+    assertEquals(1, exception.getAllErrors().size());
+
     //Other non numerical revisions are however not allowed
     command.setRevision(Revision.parse("2007-01-01"));
     validator.validate(command, exception);

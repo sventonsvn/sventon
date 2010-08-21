@@ -61,11 +61,6 @@ public class BaseCommand {
   private Revision revision = Revision.HEAD;
 
   /**
-   * The revision number.
-   */
-  private long revisionNumber = -1;
-
-  /**
    * Repository name.
    */
   private RepositoryName repositoryName;
@@ -120,18 +115,13 @@ public class BaseCommand {
   }
 
   /**
-   * Set revision. Any revision is legal here (but may be rejected by the
-   * validator, {@link BaseCommandValidator}).
-   * <p/>
-   * All case variations of the logical name "HEAD" will be converted to HEAD,
-   * all other revision arguments will be set as is.
+   * Set revision.
    *
    * @param revision The revision to set.
    */
   public void setRevision(final Revision revision) {
     Validate.notNull(revision);
     this.revision = revision;
-    this.revisionNumber = revision.getNumber();
   }
 
   /**
