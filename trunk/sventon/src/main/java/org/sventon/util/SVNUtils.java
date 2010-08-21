@@ -12,7 +12,7 @@
 package org.sventon.util;
 
 /**
- * Misc SVNKit utilities.
+ * Misc SVN utilities.
  *
  * @author jesper@sventon.org
  */

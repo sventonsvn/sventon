@@ -33,13 +33,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Represents the sventon application.
  * <p/>
- * Initializes sventon and performs SVNKit initialization, such as setting up logging
- * and repository access. It should be instantiated once (and only once), when
- * the application starts.
+ * Initializes sventon. It should be instantiated once (and only once), when the application starts.
  *
  * @author jesper@sventon.org
  * @author patrik@sventon.org
- * @see <a href="http://www.svnkit.com">SVNKit</a>
  */
 public final class Application {
 
