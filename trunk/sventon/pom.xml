@@ -110,7 +110,7 @@
             </goals>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/assembly-bin.xml</descriptor>
+                <descriptor>${basedir}/src/main/assembly/assembly-bin-svnkit.xml</descriptor>
               </descriptors>
               <finalName>${pom.name}-${pom.version}</finalName>
               <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
