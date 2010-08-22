@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author jesper@sventon.org
  * @author patrik@sventon.org
  */
-public final class Application {
+public class Application {
 
   /**
    * The logging instance.
@@ -122,6 +122,31 @@ public final class Application {
     if (baseURL != null) {
       logger.info("Property [" + PROPERTY_KEY_SVENTON_BASE_URL + "] set to: " + baseURL);
     }
+  }
+
+  public void reinit() throws IOException, CacheException {
+    logger.info("Starting Aplication reinitialization.");
+    //Stop quartz jobs
+    logger.info("[placeholder] Stopping cache jobs.");
+    //Reload data from config dir
+    logger.info("[placehoder] Reloading config data.");
+
+    //Compare new config data somehow.
+
+
+    //cacheManager.shutdown
+
+
+    //Init caches, also remove no longer used repos
+    logger.info("[placeholder] Refreshing cache config");
+
+    //Remove delteted repos config catalog structure.
+    logger.info("[placeholder] Cleaning up config directories");
+
+    //Start quartz jobs
+    logger.info("[placholder] Starting quartz jobs.");
+    logger.info("Application reinitialization completed.");
+
   }
 
   /**
