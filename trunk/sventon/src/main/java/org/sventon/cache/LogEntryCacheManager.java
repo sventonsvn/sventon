@@ -49,6 +49,7 @@ public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
+  @Override
   protected LogMessageCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
@@ -64,6 +65,7 @@ public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
    * @throws CacheException if unable to shutdown caches.
    */
   @PreDestroy
+  @Override
   public void shutdown() throws CacheException {
     for (final LogMessageCache cache : caches.values()) {
       cache.shutdown();

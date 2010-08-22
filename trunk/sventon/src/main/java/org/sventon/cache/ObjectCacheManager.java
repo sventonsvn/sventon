@@ -88,6 +88,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @throws org.sventon.cache.CacheException
    *          if unable to create cache.
    */
+  @Override
   protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
     final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Creating cache: " + cachePath.getAbsolutePath());
@@ -111,6 +112,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    *
    * @throws CacheException if unable to shutdown caches.
    */
+  @Override
   @PreDestroy
   public void shutdown() throws CacheException {
     for (final ObjectCache cache : caches.values()) {

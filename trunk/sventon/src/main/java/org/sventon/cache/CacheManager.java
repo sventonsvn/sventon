@@ -90,6 +90,12 @@ public abstract class CacheManager<T> {
   protected abstract T createCache(final RepositoryName repositoryName) throws CacheException;
 
   /**
+   * Request shutdown for all managed caches.
+   * @throws CacheException if shutdown fails
+   */
+  protected abstract void shutdown() throws CacheException;
+
+  /**
    * For test purposes only.
    * Adds a cache instance to the manager's list.
    *
