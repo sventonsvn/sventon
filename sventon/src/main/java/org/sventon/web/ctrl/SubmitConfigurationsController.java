@@ -75,7 +75,7 @@ public final class SubmitConfigurationsController extends AbstractController {
 
       try {
         logger.debug("Starting up caches");
-        scheduler.triggerJob("cacheUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+        scheduler.triggerJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
       } catch (SchedulerException sx) {
         logger.warn(sx);
       }
