@@ -44,9 +44,15 @@ public final class RevisionCacheManager extends CacheManager<RevisionCache> {
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
+  @Override
   protected RevisionCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     return new RevisionCacheImpl(objectCacheManager.getCache(repositoryName));
+  }
+
+  @Override
+  protected void shutdown() throws CacheException {
+    objectCacheManager.shutdown();
   }
 
 }

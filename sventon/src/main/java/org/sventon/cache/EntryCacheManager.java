@@ -48,6 +48,7 @@ public final class EntryCacheManager extends CacheManager<DirEntryCache> {
    * @return The created cache instance.
    * @throws CacheException if unable to create cache.
    */
+  @Override
   protected DirEntryCache createCache(final RepositoryName repositoryName) throws CacheException {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
@@ -64,6 +65,7 @@ public final class EntryCacheManager extends CacheManager<DirEntryCache> {
    * @throws CacheException if unable to shutdown caches.
    */
   @PreDestroy
+  @Override
   public void shutdown() throws CacheException {
     for (final DirEntryCache entryCache : caches.values()) {
       entryCache.shutdown();
