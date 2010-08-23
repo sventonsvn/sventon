@@ -26,7 +26,7 @@ import java.util.List;
  * <li>-Dsvnkit.ssh2.key=/path/to/your_dsa_or_rsa_key</li>
  * </ul>
  */
-public class CmdTool {
+public class SVNKitTestTool {
 
   /**
    * @param args

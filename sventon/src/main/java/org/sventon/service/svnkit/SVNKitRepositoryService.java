@@ -52,7 +52,7 @@ public class SVNKitRepositoryService implements RepositoryService {
 
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     try {
-      return Converter.toLogEntry((SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
+      return SVNKitConverter.toLogEntry((SVNLogEntry) repository.log(new String[]{"/"}, null, revision, revision,
           true, false).iterator().next());
     } catch (SVNException ex) {
       return translateSVNException("Error getting log entry: ", ex);
@@ -68,7 +68,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       repository.log(new String[]{"/"}, fromRevision, toRevision, true, false, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
-          revisions.add(Converter.toLogEntry(logEntry));
+          revisions.add(SVNKitConverter.toLogEntry(logEntry));
         }
       });
     } catch (SVNException ex) {
@@ -89,7 +89,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     try {
       repository.log(new String[]{path}, fromRevision, toRevision, includeChangedPaths, stopOnCopy, limit, new ISVNLogEntryHandler() {
         public void handleLogEntry(final SVNLogEntry logEntry) {
-          logEntries.add(Converter.toLogEntry(logEntry));
+          logEntries.add(SVNKitConverter.toLogEntry(logEntry));
         }
       });
     } catch (SVNException ex) {
@@ -236,7 +236,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       return translateSVNException("Could not get directory listing from [" + path + "@" + revision + "]", ex);
     }
 
-    return DirEntry.createDirectoryList(Converter.convertDirEntries(entries, path), Converter.convertProperties(properties));
+    return DirEntry.createDirectoryList(SVNKitConverter.convertDirEntries(entries, path), SVNKitConverter.convertProperties(properties));
   }
 
   @Override
@@ -252,7 +252,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     }
 
     if (dirEntry != null) {
-      return Converter.createDirEntry(dirEntry, FilenameUtils.getFullPath(path));
+      return SVNKitConverter.createDirEntry(dirEntry, FilenameUtils.getFullPath(path));
     } else {
       logger.warn("Entry [" + path + "] does not exist in revision [" + revision + "]");
       throw new DirEntryNotFoundException(path + "@" + revision);
@@ -281,7 +281,7 @@ public class SVNKitRepositoryService implements RepositoryService {
       }
       logger.debug("Found revisions: " + fileRevisionNumbers);
     }
-    return Converter.convertFileRevisions(svnFileRevisions);
+    return SVNKitConverter.convertFileRevisions(svnFileRevisions);
   }
 
   @Override
