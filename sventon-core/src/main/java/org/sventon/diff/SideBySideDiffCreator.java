@@ -29,7 +29,6 @@ import static org.sventon.model.DiffAction.*;
 /**
  * Creates side by side diff result instances.
  * Creates diff results by parsing diff produced by
- * {@link org.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
  *
  * @author jesper@sventon.org
  */

@@ -24,6 +24,7 @@ import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
+import org.sventon.service.svnkit.diff.DiffProducer;
 import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;

@@ -19,6 +19,18 @@
             <artifactId>sventon-core</artifactId>
             <version>2.5.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.sventon</groupId>
+            <artifactId>sventon-svnkit</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sventon</groupId>
+            <artifactId>sventon-javahl</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -27,7 +39,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>bin</id>
+                        <id>svnkit-bin</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -35,6 +47,20 @@
                         <configuration>
                             <descriptors>
                                 <descriptor>${basedir}/assembly-bin-svnkit.xml</descriptor>
+                            </descriptors>
+                            <finalName>${pom.name}-${pom.version}</finalName>
+                            <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>javahl-bin</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${basedir}/assembly-bin-javahl.xml</descriptor>
                             </descriptors>
                             <finalName>${pom.name}-${pom.version}</finalName>
                             <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
@@ -59,6 +85,33 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1-beta-1</version>
+                <executions>
+                    <execution>
+                        <id>svnkit</id>
+                         <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <configuration>
+                            <warName>sventon-svnkit</warName>
+                            <packagingExcludes>WEB-INF/lib/sventon-javahl-${pom.version}.jar</packagingExcludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>javahl</id>
+                         <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <configuration>
+                            <warName>sventon-javahl</warName>
+                            <packagingExcludes>
+                                WEB-INF/lib/sventon-svnkit-${pom.version}.jar,
+                                WEB-INF/lib/svnkit-*.jar
+                            </packagingExcludes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
