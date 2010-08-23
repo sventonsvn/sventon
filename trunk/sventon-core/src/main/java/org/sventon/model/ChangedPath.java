@@ -76,4 +76,14 @@ public class ChangedPath implements Serializable, Comparable<ChangedPath> {
   public int compareTo(ChangedPath that) {
     return getPath().compareTo(that.getPath());
   }
+
+  @Override
+  public String toString() {
+    return "ChangedPath{" +
+        "path='" + path + '\'' +
+        ", type=" + type +
+        ", copyPath='" + copyPath + '\'' +
+        ", copyRevision=" + copyRevision +
+        '}';
+  }
 }

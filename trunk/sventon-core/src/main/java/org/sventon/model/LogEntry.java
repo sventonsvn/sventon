@@ -53,9 +53,9 @@ public final class LogEntry implements Serializable {
   /**
    * Constructor.
    *
-   * @param revision
-   * @param properties
-   * @param changedPaths
+   * @param revision     Revision
+   * @param properties   Properties
+   * @param changedPaths Changed paths
    */
   public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final Set<ChangedPath> changedPaths) {
     this.revision = revision;
@@ -135,5 +135,15 @@ public final class LogEntry implements Serializable {
     return getDate() != null
         && (getChangedPaths() != null
         && !getChangedPaths().isEmpty());
+  }
+
+  @Override
+  public String toString() {
+    return "LogEntry{" +
+        "pathAtRevision='" + pathAtRevision + '\'' +
+        ", revision=" + revision +
+        ", changedPaths=" + changedPaths +
+        ", properties=" + properties +
+        '}';
   }
 }
