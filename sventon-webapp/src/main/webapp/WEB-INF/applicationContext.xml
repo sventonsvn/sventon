@@ -78,6 +78,7 @@
     <property name="configurationFileName" value="sventon_config.properties"/>
     <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
+    <property name="scheduler" ref="scheduler" />
   </bean>
 
   <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
