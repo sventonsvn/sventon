@@ -3,9 +3,11 @@ package org.sventon.service.javahl;
 import org.sventon.SVNConnection;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
-import org.tigris.subversion.javahl.SVNClient;
+import org.tigris.subversion.javahl.*;
 
 import java.io.File;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Test class.
@@ -50,5 +52,66 @@ public class JavaHLTestTool {
       e.printStackTrace();
     }
   }
+
+  private static byte[] getFile(SVNClient client, String url, Revision revision) throws ClientException {
+    return client.fileContent(url, revision, revision);
+  }
+
+  private static void diffPaths(SVNClient client, String url1, String url2) throws ClientException {
+    DiffSummaryReceiver receiver = new DiffSummaryReceiver() {
+      @Override
+      public void onSummary(DiffSummary descriptor) {
+        System.out.println(descriptor.getPath() + descriptor.getDiffKind());
+      }
+    };
+    client.diffSummarize(url2, Revision.HEAD, url1, Revision.HEAD, Depth.infinity, null, true, receiver);
+  }
+
+  private static void status(SVNClient client, String url) {
+    //client.status(url, )
+  }
+
+  private static void info(SVNClient client, String url) throws ClientException {
+    Info info = client.info(url);
+    System.out.println(url + " is of type " + NodeKind.getNodeKindName(info.getNodeKind()));
+  }
+
+  private static void blame(SVNClient client, String url) throws ClientException {
+    BlameCallback callback = new BlameCallback() {
+      @Override
+      public void singleLine(Date changed, long revision, String author, String line) {
+        System.out.println(revision + " " + author + " " + line);
+      }
+    };
+    client.blame(url, Revision.getInstance(1), Revision.HEAD, callback);
+  }
+
+  private static void log(SVNClient client, String url) throws ClientException {
+    LogMessageCallback callback = new LogMessageCallback() {
+      @Override
+      public void singleMessage(ChangePath[] changedPaths, long revision, Map revprops, boolean hasChildren) {
+        System.out.print(revision);
+        System.out.print(revprops.get(PropertyData.REV_LOG));
+        System.out.print(revprops.get(PropertyData.REV_AUTHOR));
+        System.out.println(revprops.get(PropertyData.REV_DATE));
+        for (ChangePath changedPath : changedPaths) {
+          System.out.println(changedPath.getPath());
+        }
+      }
+    };
+    int limit = 10;
+    client.logMessages(url, Revision.HEAD, Revision.HEAD, Revision.getInstance(1), false, true, false, null, limit, callback);
+  }
+
+  private static void list(SVNClient client, String url) throws ClientException {
+    final ListCallback callback = new ListCallback() {
+      @Override
+      public void doEntry(DirEntry dirent, Lock lock) {
+        System.out.println(dirent.getPath());
+      }
+    };
+    client.list(url, Revision.HEAD, Revision.HEAD, Depth.infinity, DirEntry.Fields.all, true, callback);
+  }
+
 
 }
