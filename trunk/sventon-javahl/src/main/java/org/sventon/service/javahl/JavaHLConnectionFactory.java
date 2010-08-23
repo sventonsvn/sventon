@@ -17,6 +17,7 @@ import org.sventon.SventonException;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
+import org.tigris.subversion.javahl.SVNClient;
 
 /**
  * JavaHLConnectionFactory.
@@ -24,8 +25,10 @@ import org.sventon.model.SVNURL;
  * @author jesper@sventon.org
  */
 public class JavaHLConnectionFactory implements SVNConnectionFactory {
+
   @Override
   public SVNConnection createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SventonException {
-    throw new UnsupportedOperationException();
+    return new JavaHLConnection(new SVNClient(), svnUrl, credentials);
   }
+
 }

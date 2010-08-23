@@ -11,14 +11,18 @@
  */
 package org.sventon.service.javahl;
 
+import org.apache.commons.lang.mutable.MutableLong;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
+import org.sventon.model.DirEntry;
+import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
+import org.tigris.subversion.javahl.*;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -67,7 +71,24 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public Long getLatestRevision(SVNConnection connection) throws SventonException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    try {
+      final MutableLong revision = new MutableLong();
+      final InfoCallback callback = new InfoCallback() {
+        @Override
+        public void singleInfo(Info2 info2) {
+          revision.setValue(info2.getLastChangedRev());
+        }
+      };
+      client.info2(conn.getUrl().toString(), org.tigris.subversion.javahl.Revision.HEAD,
+          org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, callback);
+      return revision.toLong();
+
+    } catch (ClientException ce) {
+      return translateException("Unable to get latest revision", ce);
+    }
   }
 
   @Override
@@ -139,4 +160,10 @@ public class JavaHLRepositoryService implements RepositoryService {
   public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
     throw new UnsupportedOperationException();
   }
+
+  private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
+    // TODO: Filter exceptions here and translate to sventon specific versions of auth required etc.
+    throw new SventonException(errorMessage, exception);
+  }
+
 }

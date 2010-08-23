@@ -1,5 +1,6 @@
 package org.sventon.service.svnkit;
 
+import org.sventon.SVNConnection;
 import org.sventon.model.LogEntry;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNURL;
@@ -50,14 +51,12 @@ public class SVNKitTestTool {
       repository.setAuthenticationManager(authManager);
       repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
 
-      repository.testConnection();
-
-      long latestRevision = repository.getLatestRevision();
+      final RepositoryService service = new SVNKitRepositoryService();
+      final SVNConnection connection = new SVNKitConnection(repository);
+      final long latestRevision = service.getLatestRevision(connection);
       System.out.println("[" + location.toString() + "] latest revision: " + latestRevision);
 
-      RepositoryService service = new SVNKitRepositoryService();
-
-      final List<LogEntry> logEntries = service.getLatestRevisions(null, new SVNKitConnection(repository), 2);
+      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
       for (LogEntry logEntry : logEntries) {
         System.out.println("logEntry = " + logEntry);
       }
