@@ -13,12 +13,6 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>src/main/assembly/files</directory>
-      <includes>
-        <include>**/*</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>target</directory>
       <outputDirectory></outputDirectory>
       <includes>
