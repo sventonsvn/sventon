@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Converter for SVNKit specific data structures.
  */
-public class Converter {
+public class SVNKitConverter {
 
   public static LogEntry toLogEntry(SVNLogEntry svnLogEntry) {
     return new LogEntry(svnLogEntry.getRevision(),
