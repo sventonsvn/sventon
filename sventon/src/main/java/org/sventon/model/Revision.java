@@ -91,8 +91,14 @@ public class Revision implements Serializable, Comparable<Revision> {
     }
 
     final String rev = text.trim();
+   
     if (isDateRevision(rev)) {
-      return create(DateUtil.parseISO8601(trimDateBrackets(rev)));
+      try {
+        final Date date = DateUtil.parseISO8601(trimDateBrackets(rev));
+        return create(date);
+      } catch (IllegalArgumentException e) {
+        return Revision.UNDEFINED;
+      }
     } else if (isNumberRevision(rev)) {
       return create(Long.parseLong(rev));
     } else if (isNamedRevision(rev)) {

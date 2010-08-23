@@ -64,4 +64,14 @@ public class RevisionTest {
     assertEquals(cal.getTime(), Revision.parse("{2010-01-01T12:34:56.789Z}").getDate());
   }
 
+  @Test
+  public void parseMalformedDateRevision() throws Exception {
+    assertSame(Revision.UNDEFINED, Revision.parse("-r {foobar-not-applicable}"));
+
+  }
+
+  @Test
+  public void namedVersionToString() throws Exception {
+      assertEquals("HEAD", Revision.HEAD.toString());
+  }
 }
