@@ -9,33 +9,19 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.service.svnkit;
+package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
-import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
- * SVNKitConnection.
+ * JavaHLConnection.
+ *
+ * @author jesper@sventon.org
  */
-public class SVNKitConnection implements SVNConnection {
-  private SVNRepository delegate;
-
-  /**
-   * Constructor.
-   *
-   * @param delegate Delegate
-   */
-  public SVNKitConnection(final SVNRepository delegate) {
-    this.delegate = delegate;
-  }
-
-  public SVNRepository getDelegate() {
-    return delegate;
-  }
+public class JavaHLConnection implements SVNConnection {
 
   @Override
   public void closeSession() {
-    delegate.closeSession();
+    throw new UnsupportedOperationException();
   }
-
 }

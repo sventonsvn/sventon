@@ -14,11 +14,11 @@ package org.sventon;
 /**
  * SVN connection.
  */
-public abstract class SVNConnection {
+public interface SVNConnection {
 
   /**
    * Closes the session.
    */
-  public abstract void closeSession();
+  void closeSession();
 
 }
