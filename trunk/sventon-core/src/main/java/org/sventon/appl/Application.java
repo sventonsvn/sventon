@@ -16,6 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
@@ -27,7 +29,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -46,10 +47,9 @@ public class Application {
   private final Log logger = LogFactory.getLog(getClass());
 
   /**
-   * Map of added subversion repository names and their configurations.
+   * Holder of all repository configurations in use.
    */
-  private final Map<RepositoryName, RepositoryConfiguration> repositoryConfigurations =
-      new ConcurrentHashMap<RepositoryName, RepositoryConfiguration>();
+  private final RepositoryConfigurations repositoryConfigurations = new RepositoryConfigurations();
 
   /**
    * Will be <code>true</code> if all parameters are ok.
@@ -89,6 +89,11 @@ public class Application {
   public static final String PROPERTY_KEY_SVENTON_BASE_URL = "sventon.baseURL";
 
   /**
+   * Scheduler for scheduled jobs.
+   */
+  private Scheduler scheduler;
+
+  /**
    * Constructor.
    *
    * @param configDirectory Configuration root directory. Directory will be created if it does not already exist,
@@ -97,6 +102,16 @@ public class Application {
   public Application(final ConfigDirectory configDirectory) {
     Validate.notNull(configDirectory, "Config directory cannot be null");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
+  }
+
+  /**
+   * Sets scheduler instance.
+   * The scheduler is used to fire cache update job after configuration has been done.
+   *
+   * @param scheduler The scheduler
+   */
+  public void setScheduler(final Scheduler scheduler) {
+    this.scheduler = scheduler;
   }
 
   /**
@@ -124,27 +139,52 @@ public class Application {
     }
   }
 
-  public void reinit() throws IOException, CacheException {
-    logger.info("Starting Aplication reinitialization.");
-    //Stop quartz jobs
-    logger.info("[placeholder] Stopping cache jobs.");
+  public synchronized void reinit() throws IOException, CacheException {
+    logger.info("Starting Application reinitialization.");
+    //Pause quartz job
+    logger.info("Pausing cache jobs.");
+    try {
+      scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+    } catch (SchedulerException sx) {
+      logger.warn(sx);
+    }
+
+
     //Reload data from config dir
-    logger.info("[placehoder] Reloading config data.");
+    logger.info("Reloading config data.");
+//    RepositoryConfigurations newConfigurations = loadRepositoryConfigurations(getConfigDirectories());
+
+    //Pause quartz job
+    logger.info("Pausing cache jobs.");
+    try {
+      scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+    } catch (SchedulerException sx) {
+      logger.warn(sx);
+    }
 
     //Compare new config data somehow.
+//    repositoryConfigurations2.diff(newConfigurations);
+
+    //Set new config
+//  Remove old, add new.
+
+    //Shut down cache instance no longer used.
 
 
-    //cacheManager.shutdown
+    //Init [new] caches
+    initCaches();
 
-
-    //Init caches, also remove no longer used repos
-    logger.info("[placeholder] Refreshing cache config");
-
-    //Remove delteted repos config catalog structure.
+    //Remove deleted repos config catalog structure.
     logger.info("[placeholder] Cleaning up config directories");
 
     //Start quartz jobs
-    logger.info("[placholder] Starting quartz jobs.");
+    logger.info("Starting quartz jobs.");
+    try {
+      scheduler.resumeJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+    } catch (SchedulerException sx) {
+      //TODO: how do we handle a failure here?
+      logger.warn(sx);
+    }
     logger.info("Application reinitialization completed.");
 
   }
@@ -154,7 +194,7 @@ public class Application {
    */
   public File[] getConfigDirectories() {
     return repositoriesDirectory.listFiles(
-        new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
+            new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
   }
 
   /**
@@ -164,7 +204,7 @@ public class Application {
    */
   public void initCaches() throws CacheException {
     logger.info("Initializing caches");
-    for (final RepositoryConfiguration repositoryConfiguration : repositoryConfigurations.values()) {
+    for (final RepositoryConfiguration repositoryConfiguration : repositoryConfigurations.getAllConfigurations()) {
       final RepositoryName repositoryName = repositoryConfiguration.getName();
       if (repositoryConfiguration.isCacheUsed()) {
         registerCacheManagers(cacheManagers, repositoryName);
@@ -210,7 +250,7 @@ public class Application {
         logger.info("Loading repository config: " + repositoryName);
         final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
         configuration.setPersisted();
-        addConfiguration(configuration);
+        repositoryConfigurations.add(configuration);
       } finally {
         IOUtils.closeQuietly(is);
       }
@@ -233,7 +273,7 @@ public class Application {
    * @throws IOException if IO error occur during file operations.
    */
   public void persistRepositoryConfigurations() throws IOException {
-    for (final RepositoryConfiguration repositoryConfig : repositoryConfigurations.values()) {
+    for (final RepositoryConfiguration repositoryConfig : repositoryConfigurations.getAllConfigurations()) {
       if (!repositoryConfig.isPersisted()) {
         final File configDir = getConfigurationDirectoryForRepository(repositoryConfig.getName());
         if (!configDir.exists() && !configDir.mkdirs()) {
@@ -264,7 +304,7 @@ public class Application {
    * @param configuration The repository configuration to add.
    */
   public void addConfiguration(final RepositoryConfiguration configuration) {
-    repositoryConfigurations.put(configuration.getName(), configuration);
+    repositoryConfigurations.add(configuration);
   }
 
   /**
@@ -274,10 +314,10 @@ public class Application {
    * @param name Name of repository to delete from the sventon configuration.
    */
   public void deleteConfiguration(final RepositoryName name) {
-    if (!repositoryConfigurations.containsKey(name)) {
+    if (!repositoryConfigurations.containsConfiguration(name)) {
       throw new IllegalArgumentException("Unknown repository name: " + name);
     }
-    final RepositoryConfiguration configuration = repositoryConfigurations.get(name);
+    final RepositoryConfiguration configuration = repositoryConfigurations.getConfiguration(name);
     if (configuration.isPersisted()) {
       final File configFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName());
       final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName() + "_bak");
@@ -318,7 +358,7 @@ public class Application {
    * @return Collection of repository names.
    */
   public Set<RepositoryName> getRepositoryNames() {
-    return new TreeSet<RepositoryName>(repositoryConfigurations.keySet());
+    return new TreeSet<RepositoryName>(repositoryConfigurations.getAllConfigurationNames());
   }
 
   /**
@@ -328,7 +368,7 @@ public class Application {
    * @return Collection of repository names.
    */
   public RepositoryConfiguration getConfiguration(final RepositoryName name) {
-    return repositoryConfigurations.get(name);
+    return repositoryConfigurations.getConfiguration(name);
   }
 
   /**
@@ -338,7 +378,7 @@ public class Application {
    * @return Number of repositories.
    */
   public int getRepositoryConfigurationCount() {
-    return repositoryConfigurations.size();
+    return repositoryConfigurations.count();
   }
 
   /**
