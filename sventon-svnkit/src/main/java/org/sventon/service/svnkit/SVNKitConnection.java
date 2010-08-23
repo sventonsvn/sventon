@@ -18,6 +18,10 @@ import org.tmatesoft.svn.core.io.SVNRepository;
  * SVNKitConnection.
  */
 public class SVNKitConnection implements SVNConnection {
+
+  /**
+   * SVNKit delegate.
+   */
   private SVNRepository delegate;
 
   /**
