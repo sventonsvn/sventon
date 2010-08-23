@@ -25,7 +25,7 @@ import static org.sventon.model.DiffAction.parse;
  *
  * @author jesper@sventon.org
  */
-final class DiffResultParser {
+final public class DiffResultParser {
 
   /**
    * Diff pattern.
@@ -54,9 +54,8 @@ final class DiffResultParser {
    *
    * @param normalDiffResult The diff result.
    * @return List of <code>DiffSegment</code>s.
-   * @see de.regnis.q.sequence.line.diff.QDiffNormalGenerator
    */
-  static List<DiffSegment> parseNormalDiffResult(final String normalDiffResult) {
+  public static List<DiffSegment> parseNormalDiffResult(final String normalDiffResult) {
     final List<DiffSegment> diffActions = new ArrayList<DiffSegment>();
     final Scanner scanner = new Scanner(normalDiffResult);
 

@@ -1,8 +1,10 @@
-package org.sventon.diff;
+package org.sventon.service.svnkit.diff;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.sventon.diff.DiffResultParser;
+import org.sventon.diff.DiffSegment;
 import org.sventon.model.DiffAction;
 
 import java.io.ByteArrayInputStream;
@@ -81,6 +83,7 @@ public class DiffProducerTest extends TestCase {
     assertEquals("DiffSegment: ADDED, left: 8-8, right: 8-12", action.toString());
   }
 
+  @SuppressWarnings({"ConstantConditions"})
   public void testDoNormalDiffII() throws Exception {
     final String leftString =
         "/**" + NL +

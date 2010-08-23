@@ -17,17 +17,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Diff segment bean. Represents one result segment produced by
- * {@link org.sventon.diff.DiffProducer#doNormalDiff(java.io.OutputStream)}.
+ * Diff segment bean. 
  *
  * @author jesper@sventon.org
  */
-final class DiffSegment {
+final public class DiffSegment {
 
   /**
    * Represents the two sides.
    */
-  enum Side {
+  public enum Side {
 
     /**
      * Left side.
@@ -82,7 +81,7 @@ final class DiffSegment {
    *
    * @return The diff action
    */
-  DiffAction getAction() {
+  public DiffAction getAction() {
     return action;
   }
 
@@ -92,7 +91,7 @@ final class DiffSegment {
    * @param side Side
    * @return Start
    */
-  int getLineIntervalStart(final Side side) {
+  public int getLineIntervalStart(final Side side) {
     return segmentSides.get(side).getStart();
   }
 
@@ -102,7 +101,7 @@ final class DiffSegment {
    * @param side Side
    * @return End
    */
-  int getLineIntervalEnd(final Side side) {
+  public int getLineIntervalEnd(final Side side) {
     return segmentSides.get(side).getEnd();
   }
 
