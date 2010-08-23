@@ -1,15 +1,65 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.sventon</groupId>
-  <artifactId>sventon-webapp</artifactId>
-  <name>sventon</name>
-  <version>2.5.0-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <description>sventon core library</description>
-      <parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.sventon</groupId>
+    <artifactId>sventon-webapp</artifactId>
+    <name>sventon-webapp</name>
+    <version>2.5.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <description>sventon core library</description>
+    <parent>
         <groupId>org.sventon</groupId>
         <artifactId>sventon</artifactId>
         <version>2.5.0-SNAPSHOT</version>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.sventon</groupId>
+            <artifactId>sventon-core</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bin</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${basedir}/assembly-bin-svnkit.xml</descriptor>
+                            </descriptors>
+                            <finalName>${pom.name}-${pom.version}</finalName>
+                            <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${basedir}/assembly-src.xml</descriptor>
+                            </descriptors>
+                            <finalName>${pom.name}-${pom.version}</finalName>
+                            <workDirectory>${project.build.directory}/assembly/src</workDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1-beta-1</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
