@@ -1,9 +1,7 @@
-package org.sventon;
+package org.sventon.service.svnkit;
 
 import org.sventon.model.LogEntry;
 import org.sventon.service.RepositoryService;
-import org.sventon.service.svnkit.SVNKitConnection;
-import org.sventon.service.svnkit.SVNKitRepositoryService;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
@@ -15,6 +13,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
 import java.util.List;
+
+//TODO: This test class is heavily dependent on SVNKit. It must remain in the deepest SVNKit-cellar until fixed....
 
 /**
  * Test class.
