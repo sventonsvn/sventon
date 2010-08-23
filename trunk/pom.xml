@@ -5,7 +5,7 @@
   <artifactId>sventon</artifactId>
   <name>sventon</name>
   <version>2.5.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   <description>sventon is a web client for browsing Subversion repositories</description>
   <url>http://www.sventon.org/</url>
   <inceptionYear>2005</inceptionYear>
@@ -27,6 +27,14 @@
       <url>scp://shell.berlios.de:/home/groups/sventon/htdocs/site</url>
     </site>
   </distributionManagement>
+
+  <modules>
+    <module>sventon-core</module>
+    <module>sventon-javahl</module>
+    <module>sventon-svnkit</module>
+    <module>sventon-webapp</module>
+  </modules>
+
   <developers>
     <developer>
       <id>jesper</id>
@@ -110,7 +118,7 @@
             </goals>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/assembly-bin-svnkit.xml</descriptor>
+                <descriptor>${basedir}/assembly-bin-svnkit.xml</descriptor>
               </descriptors>
               <finalName>${pom.name}-${pom.version}</finalName>
               <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
@@ -124,7 +132,7 @@
             </goals>
             <configuration>
               <descriptors>
-                <descriptor>${basedir}/src/main/assembly/assembly-src.xml</descriptor>
+                <descriptor>${basedir}/assembly-src.xml</descriptor>
               </descriptors>
               <finalName>${pom.name}-${pom.version}</finalName>
               <workDirectory>${project.build.directory}/assembly/src</workDirectory>
