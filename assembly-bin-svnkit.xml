@@ -1,0 +1,31 @@
+<assembly>
+    <id>bin-svnkit</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <moduleSets>
+        <moduleSet>
+            <includes>
+                <include>org.sventon:sventon-webapp</include>
+            </includes>
+            <binaries>
+            <unpack>false</unpack>
+            <includes>
+                <include>*svnkit*.war</include>
+            </includes>
+        </binaries>
+        </moduleSet>
+    </moduleSets>
+
+    <fileSets>
+        <fileSet>
+            <includes>
+                <include>**/licenses/**</include>
+                <include>changes.txt</include>
+                <include>readme.txt</include>
+                <include>LICENSE.txt</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

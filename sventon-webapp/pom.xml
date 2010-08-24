@@ -5,13 +5,19 @@
     <artifactId>sventon-webapp</artifactId>
     <name>sventon-webapp</name>
     <version>2.5.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <description>sventon core library</description>
     <parent>
         <groupId>org.sventon</groupId>
         <artifactId>sventon</artifactId>
         <version>2.5.0-SNAPSHOT</version>
     </parent>
+
+    <modules>
+        <module>base</module>
+        <module>svnkit</module>
+        <module>javahl</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -20,91 +26,36 @@
             <version>2.5.0-SNAPSHOT</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.sventon</groupId>
-            <artifactId>sventon-svnkit</artifactId>
-            <version>2.5.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.sventon</groupId>
-            <artifactId>sventon-javahl</artifactId>
-            <version>2.5.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>svnkit-bin</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>${basedir}/assembly-bin-svnkit.xml</descriptor>
-                            </descriptors>
-                            <finalName>${pom.name}-${pom.version}</finalName>
-                            <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>javahl-bin</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>${basedir}/assembly-bin-javahl.xml</descriptor>
-                            </descriptors>
-                            <finalName>${pom.name}-${pom.version}</finalName>
-                            <workDirectory>${project.build.directory}/assembly/bin</workDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>src</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>${basedir}/assembly-src.xml</descriptor>
-                            </descriptors>
-                            <finalName>${pom.name}-${pom.version}</finalName>
-                            <workDirectory>${project.build.directory}/assembly/src</workDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1-beta-1</version>
-                <executions>
+
+                <!--<executions>
                     <execution>
-                        <id>svnkit</id>
-                         <phase>package</phase>
+                        <id>javahl</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>war</goal>
                         </goals>
                         <configuration>
-                            <warName>sventon-svnkit</warName>
+                            <warName>svn</warName>
+                            <outputDirectory>${project.build.directory}/javahl-war</outputDirectory>
                             <packagingExcludes>WEB-INF/lib/sventon-javahl-${pom.version}.jar</packagingExcludes>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>javahl</id>
-                         <phase>package</phase>
+                        <id>svnkit</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>war</goal>
                         </goals>
                         <configuration>
-                            <warName>sventon-javahl</warName>
+                            <warName>svn</warName>
+                            <outputDirectory>${project.build.directory}/svnkit-war</outputDirectory>
                             <packagingExcludes>
                                 WEB-INF/lib/sventon-svnkit-${pom.version}.jar,
                                 WEB-INF/lib/svnkit-*.jar
@@ -112,6 +63,7 @@
                         </configuration>
                     </execution>
                 </executions>
+                -->
             </plugin>
         </plugins>
     </build>
