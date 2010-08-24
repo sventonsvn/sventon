@@ -27,6 +27,7 @@ import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,19 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public void getFileContents(SVNConnection connection, String path, long revision, OutputStream output) throws SventonException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    try {
+      final byte[] bytes = client.fileContent(conn.getUrl().getFullPath(path),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision));
+      output.write(bytes);
+    } catch (IOException e) {
+      throw new SventonException(e.getMessage());
+    } catch (ClientException ce) {
+      translateException("Unable to get file contents: " + path, ce);
+    }
   }
 
   @Override

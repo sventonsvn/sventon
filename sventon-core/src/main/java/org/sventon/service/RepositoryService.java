@@ -91,6 +91,7 @@ public interface RepositoryService {
 
   /**
    * Gets a file's contents from the repository and writes it to the given output stream.
+   * Note that keywords will be substituted.
    *
    * @param connection The repository connection
    * @param path       Target to get
