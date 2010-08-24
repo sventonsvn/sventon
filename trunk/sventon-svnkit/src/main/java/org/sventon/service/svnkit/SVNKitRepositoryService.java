@@ -112,18 +112,19 @@ public class SVNKitRepositoryService implements RepositoryService {
       final long revision = fileRevision.getRevision().getNumber();
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
-      logger.debug("Exporting file [" + path + "] revision [" + revision + "]");
       if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
         throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
       }
 
       try {
-        final File entryToExport = new File(revisionRootDir, path);
+        final File destination = new File(revisionRootDir, path);
         final SVNClientManager clientManager = SVNClientManager.newInstance(null, repository.getAuthenticationManager());
         final SVNUpdateClient updateClient = clientManager.getUpdateClient();
-        updateClient.doExport(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(
-            repository.getLocation().toDecodedString() + path), entryToExport, SVNRevision.create(pegRevision),
-            SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
+        final String pathToExport = repository.getLocation().toDecodedString() + path;
+
+        logger.debug("Exporting file [" + pathToExport + "] revision [" + revision + "]");
+        updateClient.doExport(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(pathToExport), destination,
+            SVNRevision.create(pegRevision), SVNRevision.create(revision), null, true, SVNDepth.INFINITY);
       } catch (SVNException ex) {
         translateException("Error exporting [" + path + "@" + revision + "]", ex);
       }

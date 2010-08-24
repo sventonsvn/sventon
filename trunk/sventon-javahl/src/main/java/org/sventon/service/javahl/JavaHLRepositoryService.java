@@ -12,6 +12,8 @@
 package org.sventon.service.javahl;
 
 import org.apache.commons.lang.mutable.MutableLong;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.colorer.Colorer;
@@ -24,6 +26,7 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,12 @@ import java.util.Map;
  * @author jesper@sventon.org
  */
 public class JavaHLRepositoryService implements RepositoryService {
+
+  /**
+   * Logger for this class and subclasses.
+   */
+  final Log logger = LogFactory.getLog(getClass());
+
   @Override
   public LogEntry getLogEntry(RepositoryName repositoryName, SVNConnection connection, long revision) throws SventonException {
     throw new UnsupportedOperationException();
@@ -52,7 +61,30 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision, ExportDirectory exportDirectory) throws SventonException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    for (final PathRevision fileRevision : targets) {
+      final String path = fileRevision.getPath();
+      final long revision = fileRevision.getRevision().getNumber();
+      final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
+
+      if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
+        throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
+      }
+
+      try {
+        final File destination = new File(revisionRootDir, path);
+        final String pathToExport = conn.getUrl().getFullPath(path);
+
+        logger.debug("Exporting file [" + pathToExport + "] revision [" + revision + "]");
+        client.doExport(pathToExport, destination.getAbsolutePath(),
+            org.tigris.subversion.javahl.Revision.getInstance(revision),
+            org.tigris.subversion.javahl.Revision.getInstance(pegRevision), true, false, Depth.infinity, null);
+      } catch (ClientException ex) {
+        translateException("Error exporting [" + path + "@" + revision + "]", ex);
+      }
+    }
   }
 
   @Override
@@ -122,7 +154,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       // Skip the first entry as that's the one we passed in 'path'.
       return new DirList(dirEntries.subList(1, dirEntries.size()), null);
     } catch (ClientException ce) {
-      return translateException("Unable to get latest revision", ce);
+      return translateException("Unable to list directory: " + path, ce);
     }
 
   }
