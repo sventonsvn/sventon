@@ -11,6 +11,7 @@
  */
 package org.sventon.appl;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
@@ -157,6 +158,8 @@ public class Application {
 
     } else {
 
+      File[] oldConfigDirs = getConfigDirectories();
+
       logger.info("Reloading configurations:");
       logger.info("  added: " + diff.added);
       logger.info("  removed: " + diff.removed);
@@ -176,9 +179,7 @@ public class Application {
 
       initCaches(); //(re)start caches
 
-      //TODO: How control when search is enabled after cache init?
-
-      //Start quartz jobs
+      //Resume quartz jobs, fire trigger
       try {
         scheduler.resumeJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
         scheduler.triggerJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
@@ -187,19 +188,18 @@ public class Application {
         logger.warn(sx);
       }
 
-
       //Remove deleted repos config catalog structure.
-      logger.info("[placeholder] Cleaning up config directories");
+      logger.info("Cleaning up config directories");
+      cleanupOldConfigDirectories(oldConfigDirs, diff.removed, getConfigFileBackupName());
 
     }
-
 
     logger.info("Application reinitialization completed.");
 
   }
 
   private void shutdownCaches(RepositoryConfiguration repositoryConfiguration) throws CacheException {
-    //TODO: Object cache will bu shut down twice.
+    //TODO: Object cache will be shut down twice.
     for (CacheManager cacheManager : cacheManagers) {
       cacheManager.shutdown(repositoryConfiguration.getName());
     }
@@ -358,7 +358,7 @@ public class Application {
     final RepositoryConfiguration configuration = repositoryConfigurations.getConfiguration(name);
     if (configuration.isPersisted()) {
       final File configFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName());
-      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName() + "_bak");
+      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigFileBackupName());
       logger.info("Disabling repository configuration for [" + name.toString() + "]");
       if (configFile.renameTo(configBackupFile)) {
         logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
@@ -370,6 +370,40 @@ public class Application {
       // Repository has not yet been stored and the user wants to delete it. Simply remove reference.
       repositoryConfigurations.remove(name);
     }
+  }
+
+  private String getConfigFileBackupName() {
+    return getConfigurationFileName() + "_bak";
+  }
+
+  protected void cleanupOldConfigDirectories(File[] allConfigDirs,
+                                             Set<RepositoryConfiguration> configsToDelete,
+                                             final String deleteConfigFileName) {
+    Set<String> deletedConfigurations = new HashSet<String>();
+    for (RepositoryConfiguration repositoryConfiguration : configsToDelete) {
+      deletedConfigurations.add(repositoryConfiguration.getName().toString());
+    }
+
+    for (File configDir : allConfigDirs) {
+      if (deletedConfigurations.contains(configDir.getName())) {
+        String[] matchingConfigFiles = configDir.list(new FilenameFilter() {
+          @Override
+          public boolean accept(File dir, String name) {
+            return (name.equals(deleteConfigFileName));
+          }
+        });
+
+        if (matchingConfigFiles.length == 1) {
+          try {
+            FileUtils.deleteDirectory(configDir);
+          } catch (IOException ioe) {
+            logger.warn("Config directory delete failed.", ioe);
+          }
+        }
+
+      }
+    }
+
   }
 
   /**

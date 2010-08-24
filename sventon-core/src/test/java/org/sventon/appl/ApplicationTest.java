@@ -3,6 +3,10 @@ package org.sventon.appl;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.model.Credentials;
@@ -12,21 +16,29 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
-public class ApplicationTest extends TestCase {
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.sventon.TestUtils.CONFIG_FILE_NAME;
+
+public class ApplicationTest {
 
   private ConfigDirectory configDirectory;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     configDirectory = TestUtils.getTestConfigDirectory();
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     FileUtils.deleteDirectory(configDirectory.getConfigRootDirectory());
   }
 
+  @Test
   public void testApplicationWithoutConfigurations() throws Exception {
     try {
       new Application(null);
@@ -44,6 +56,7 @@ public class ApplicationTest extends TestCase {
     assertFalse(application.hasConfigurations());
   }
 
+  @Test
   public void testPersistRepositoryConfigurations() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -53,7 +66,7 @@ public class ApplicationTest extends TestCase {
     final File repos2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
 
     final Application application = new Application(configDirectory);
-    application.setConfigurationFileName(TestUtils.CONFIG_FILE_NAME);
+    application.setConfigurationFileName(CONFIG_FILE_NAME);
 
     final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
     repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
@@ -70,14 +83,15 @@ public class ApplicationTest extends TestCase {
     application.addConfiguration(repositoryConfiguration1);
     application.addConfiguration(repositoryConfiguration2);
 
-    assertFalse(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
-    assertFalse(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
+    assertFalse(new File(repos1, CONFIG_FILE_NAME).exists());
+    assertFalse(new File(repos2, CONFIG_FILE_NAME).exists());
     application.persistRepositoryConfigurations();
     //File should now be written
-    assertTrue(new File(repos1, TestUtils.CONFIG_FILE_NAME).exists());
-    assertTrue(new File(repos2, TestUtils.CONFIG_FILE_NAME).exists());
+    assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
+    assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
   }
 
+  @Test
   public void testGetConfigurationAsProperties() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -100,6 +114,7 @@ public class ApplicationTest extends TestCase {
     assertEquals(2, application.getRepositoryConfigurationCount());
   }
 
+  @Test
   public void testGetBaseURL() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -119,6 +134,7 @@ public class ApplicationTest extends TestCase {
     assertEquals("http://validurl:81/", application.getBaseURL().toString());
   }
 
+  @Test
   public void testLoadRepositoryConfigurations() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -142,6 +158,7 @@ public class ApplicationTest extends TestCase {
     assertTrue(application.isConfigured());
   }
 
+  @Test
   public void testReloadRepositoryConfigurations() throws Exception {
     final MockServletContext servletContext = new MockServletContext();
     servletContext.setContextPath("sventon-test");
@@ -177,6 +194,108 @@ public class ApplicationTest extends TestCase {
     assertEquals(2, application.getRepositoryConfigurationCount());
     assertNotNull(application.getConfiguration(new RepositoryName(name1)));
     assertNotNull(application.getConfiguration(new RepositoryName(name2)));
+  }
+
+  @Test
+  public void cleanupDeletedRepositoryConfigurationsHappyPath() throws Exception {
+
+    //set up two repositories 
+
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    System.out.println("config dir: " + configDirectory.getConfigRootDirectory().getAbsolutePath());
+
+    final File repos1 = new File(configDirectory.getRepositoriesDirectory(), "testrepos1");
+    final File repos2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
+
+    final Application application = new Application(configDirectory);
+    application.setConfigurationFileName(CONFIG_FILE_NAME);
+
+    final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
+    repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
+    repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
+    repositoryConfiguration1.setCacheUsed(false);
+    repositoryConfiguration1.setZippedDownloadsAllowed(false);
+
+    final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
+    repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
+    repositoryConfiguration2.setUserCredentials(new Credentials("user2", "123abc"));
+    repositoryConfiguration2.setCacheUsed(false);
+    repositoryConfiguration2.setZippedDownloadsAllowed(false);
+
+    application.addConfiguration(repositoryConfiguration1);
+    application.addConfiguration(repositoryConfiguration2);
+
+    application.persistRepositoryConfigurations();
+
+    //File should now be written
+    assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
+    assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
+
+    File[] configDirBeforeRename = application.getConfigDirectories();
+
+    //Rename one repos1 to remove it
+    String removedConfigFileName = CONFIG_FILE_NAME + "_bak";
+    new File(repos1, CONFIG_FILE_NAME).renameTo(new File(repos1, removedConfigFileName));
+
+    Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
+    toDelete.add(repositoryConfiguration1);
+
+    application.cleanupOldConfigDirectories(configDirBeforeRename, toDelete, removedConfigFileName);
+    assertFalse(repos1.exists()); //Dir deleted
+    assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
+
+  }
+
+  @Test
+  public void cleanupDeletedRepositoryConfigurationsDirectoryWhenDirContainsValidConfigFileName() throws Exception {
+
+    //set up two repositories
+
+    final MockServletContext servletContext = new MockServletContext();
+    servletContext.setContextPath("sventon-test");
+    configDirectory.setServletContext(servletContext);
+
+    System.out.println("config dir: " + configDirectory.getConfigRootDirectory().getAbsolutePath());
+
+    final File repos1 = new File(configDirectory.getRepositoriesDirectory(), "testrepos1");
+    final File repos2 = new File(configDirectory.getRepositoriesDirectory(), "testrepos2");
+
+    final Application application = new Application(configDirectory);
+    application.setConfigurationFileName(CONFIG_FILE_NAME);
+
+    final RepositoryConfiguration repositoryConfiguration1 = new RepositoryConfiguration("testrepos1");
+    repositoryConfiguration1.setRepositoryUrl("http://localhost/1");
+    repositoryConfiguration1.setUserCredentials(new Credentials("user1", "abc123"));
+    repositoryConfiguration1.setCacheUsed(false);
+    repositoryConfiguration1.setZippedDownloadsAllowed(false);
+
+    final RepositoryConfiguration repositoryConfiguration2 = new RepositoryConfiguration("testrepos2");
+    repositoryConfiguration2.setRepositoryUrl("http://localhost/2");
+    repositoryConfiguration2.setUserCredentials(new Credentials("user2", "123abc"));
+    repositoryConfiguration2.setCacheUsed(false);
+    repositoryConfiguration2.setZippedDownloadsAllowed(false);
+
+    application.addConfiguration(repositoryConfiguration1);
+    application.addConfiguration(repositoryConfiguration2);
+
+    application.persistRepositoryConfigurations();
+
+    //File should now be written
+    assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
+    assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
+
+    File[] configDirBeforeRename = application.getConfigDirectories();
+
+    Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
+    toDelete.add(repositoryConfiguration1);
+
+    application.cleanupOldConfigDirectories(configDirBeforeRename, toDelete, CONFIG_FILE_NAME + "_bak");
+    assertTrue(new File(repos1, CONFIG_FILE_NAME).exists()); //Dir not deleted, the props file had a valid name
+    assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
+
   }
 
   private OutputStream storeProperties(File configFile, Properties properties) throws IOException {
