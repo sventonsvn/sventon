@@ -4,17 +4,17 @@
     <format>zip</format>
   </formats>
 
-    <moduleSets>
-      <moduleSet>
-        <includes>
-          <include>org.sventon.sventon-webapp:base</include>
-        </includes>
-          <sources>
-             
-          </sources>
-      </moduleSet>
-    </moduleSets>
-        
+  <moduleSets>
+    <moduleSet>
+      <includes>
+        <include>org.sventon.sventon-webapp:base</include>
+      </includes>
+      <sources>
+        <!-- empty -->
+      </sources>
+    </moduleSet>
+  </moduleSets>
+
 
   <fileSets>
     <fileSet>
