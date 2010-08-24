@@ -78,6 +78,7 @@ public interface RepositoryService {
 
   /**
    * Exports given list of target entries to the given destination export directory.
+   * Note that externals will also be included.
    *
    * @param connection      The repository
    * @param targets         Targets to export.
@@ -192,7 +193,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED_NUMBER} of n/a.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
@@ -207,7 +208,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED_NUMBER} of n/a.
+   * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return Diff result.
    * @throws SventonException if a subversion error occur
@@ -221,7 +222,7 @@ public interface RepositoryService {
    *
    * @param connection  The repository connection.
    * @param command     DiffCommand.
-   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED_NUMBER} of n/a.
+   * @param pegRevision Peg revision, or {@link Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
