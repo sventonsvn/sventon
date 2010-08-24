@@ -103,7 +103,7 @@ public class RepositoryConfigurations {
 
   }
 
-  public void applyDiff(ConfigsDiff diff) {
+  public void apply(ConfigsDiff diff) {
     for (RepositoryConfiguration repositoryConfiguration : diff.removed) {
       remove(repositoryConfiguration.getName());
     }

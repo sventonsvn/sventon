@@ -98,8 +98,8 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     }
 
     final ObjectCacheImpl objectCache = new ObjectCacheImpl(repositoryName.toString(), cachePath.getAbsolutePath(),
-        maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
-        diskExpiryThreadIntervalSeconds);
+            maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
+            diskExpiryThreadIntervalSeconds);
 
     objectCache.flush();
     objectCache.setMBeanServer(mBeanServer);
@@ -113,9 +113,16 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    * @throws CacheException if unable to shutdown caches.
    */
   @Override
-  @PreDestroy
   public void shutdown() throws CacheException {
     for (final ObjectCache cache : caches.values()) {
+      cache.shutdown();
+    }
+  }
+
+  @Override
+  public void shutdown(RepositoryName repositoryName) throws CacheException {
+    ObjectCache cache = getCache(repositoryName);
+    if (cache != null) {
       cache.shutdown();
     }
   }

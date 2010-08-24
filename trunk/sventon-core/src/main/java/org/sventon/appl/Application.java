@@ -141,52 +141,68 @@ public class Application {
 
   public synchronized void reinit() throws IOException, CacheException {
     logger.info("Starting Application reinitialization.");
-    //Pause quartz job
-    logger.info("Pausing cache jobs.");
-    try {
-      scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-    } catch (SchedulerException sx) {
-      logger.warn(sx);
-    }
-
 
     //Reload data from config dir
     logger.info("Reloading config data.");
-//    RepositoryConfigurations newConfigurations = loadRepositoryConfigurations(getConfigDirectories());
+    RepositoryConfigurations newConfigs = new RepositoryConfigurations();
+    loadRepositoryConfigurations(getConfigDirectories(), newConfigs);
 
-    //Pause quartz job
-    logger.info("Pausing cache jobs.");
-    try {
-      scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-    } catch (SchedulerException sx) {
-      logger.warn(sx);
+    RepositoryConfigurations.ConfigsDiff diff = repositoryConfigurations.diffByRepositoryName(newConfigs);
+
+    //TODO: For extra security store and check timestamp for props file
+
+    if (diff.added.isEmpty() && diff.removed.isEmpty()) {
+
+      logger.info("New config same as old. Configuration unchanged.");
+
+    } else {
+
+      logger.info("Reloading configurations:");
+      logger.info("  added: " + diff.added);
+      logger.info("  removed: " + diff.removed);
+
+      try {
+        scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+      } catch (SchedulerException sx) {
+        logger.warn(sx);
+      }
+
+      repositoryConfigurations.apply(diff);
+
+      for (RepositoryConfiguration repositoryConfiguration : diff.removed) {
+        logger.info("Shutting down caches for: " + repositoryConfiguration.getName());
+        shutdownCaches(repositoryConfiguration);
+      }
+
+      initCaches(); //(re)start caches
+
+      //TODO: How control when search is enabled after cache init?
+
+      //Start quartz jobs
+      try {
+        scheduler.resumeJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+        scheduler.triggerJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
+      } catch (SchedulerException sx) {
+        //TODO: how do we handle a failure here?
+        logger.warn(sx);
+      }
+
+
+      //Remove deleted repos config catalog structure.
+      logger.info("[placeholder] Cleaning up config directories");
+
     }
 
-    //Compare new config data somehow.
-//    repositoryConfigurations2.diff(newConfigurations);
 
-    //Set new config
-//  Remove old, add new.
-
-    //Shut down cache instance no longer used.
-
-
-    //Init [new] caches
-    initCaches();
-
-    //Remove deleted repos config catalog structure.
-    logger.info("[placeholder] Cleaning up config directories");
-
-    //Start quartz jobs
-    logger.info("Starting quartz jobs.");
-    try {
-      scheduler.resumeJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
-    } catch (SchedulerException sx) {
-      //TODO: how do we handle a failure here?
-      logger.warn(sx);
-    }
     logger.info("Application reinitialization completed.");
 
+  }
+
+  private void shutdownCaches(RepositoryConfiguration repositoryConfiguration) throws CacheException {
+    //TODO: Object cache will bu shut down twice.
+    for (CacheManager cacheManager : cacheManagers) {
+      cacheManager.shutdown(repositoryConfiguration.getName());
+    }
   }
 
   /**

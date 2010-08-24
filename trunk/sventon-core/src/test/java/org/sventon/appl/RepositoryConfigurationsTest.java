@@ -175,7 +175,7 @@ public class RepositoryConfigurationsTest {
 
     RepositoryConfigurations.ConfigsDiff diff = configs.diffByRepositoryName(configs2);
 
-    configs.applyDiff(diff);
+    configs.apply(diff);
 
     assertThat(configs.count(), is(2));
     assertThat(configs.getConfiguration(new RepositoryName("cheese")), sameInstance(cheeseConfig));

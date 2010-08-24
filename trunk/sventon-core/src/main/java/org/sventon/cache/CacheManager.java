@@ -91,9 +91,19 @@ public abstract class CacheManager<T> {
 
   /**
    * Request shutdown for all managed caches.
+   *
    * @throws CacheException if shutdown fails
    */
-  protected abstract void shutdown() throws CacheException;
+  public abstract void shutdown() throws CacheException;
+
+  /**
+   * Request shutdown of a cache for a given repository name.
+   * If no matching cache was found this method does nothing.
+   *
+   * @param repositoryName Repository name
+   * @throws CacheException if shutdown fails.
+   */
+  public abstract void shutdown(RepositoryName repositoryName) throws CacheException;
 
   /**
    * For test purposes only.

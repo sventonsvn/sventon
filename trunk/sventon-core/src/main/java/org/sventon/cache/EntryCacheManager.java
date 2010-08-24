@@ -71,4 +71,12 @@ public final class EntryCacheManager extends CacheManager<DirEntryCache> {
       entryCache.shutdown();
     }
   }
+
+  @Override
+  public void shutdown(RepositoryName repositoryName) throws CacheException {
+    DirEntryCache cache = getCache(repositoryName);
+    if (cache != null) {
+      cache.shutdown();
+    }
+  }
 }
