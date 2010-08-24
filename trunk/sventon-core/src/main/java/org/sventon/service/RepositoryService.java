@@ -152,6 +152,10 @@ public interface RepositoryService {
   Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath);
 
   /**
+   * List directory entries in given path.
+   * Note that this call will not descend into sub directories.
+   * The caller will have to call this method recursively if needed.
+   *
    * @param connection The repository connection
    * @param path       The entry path
    * @param revision   The revision

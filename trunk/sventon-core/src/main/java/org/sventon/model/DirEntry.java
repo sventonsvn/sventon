@@ -230,11 +230,17 @@ public final class DirEntry implements Serializable {
     return lastAuthor;
   }
 
-  /**
-   * @return String representation of this object.
-   */
+  @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    return "DirEntry{" +
+        "path='" + path + '\'' +
+        ", name='" + name + '\'' +
+        ", kind=" + kind +
+        ", camelCasePattern='" + camelCasePattern + '\'' +
+        ", size=" + size +
+        ", revision=" + revision +
+        ", createdDate=" + createdDate +
+        ", lastAuthor='" + lastAuthor + '\'' +
+        '}';
   }
-
 }

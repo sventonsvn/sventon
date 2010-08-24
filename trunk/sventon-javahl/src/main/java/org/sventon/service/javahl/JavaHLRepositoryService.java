@@ -25,6 +25,7 @@ import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,14 +77,13 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     try {
       final MutableLong revision = new MutableLong();
-      final InfoCallback callback = new InfoCallback() {
-        @Override
-        public void singleInfo(Info2 info2) {
-          revision.setValue(info2.getLastChangedRev());
-        }
-      };
       client.info2(conn.getUrl().toString(), org.tigris.subversion.javahl.Revision.HEAD,
-          org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, callback);
+          org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              revision.setValue(info2.getLastChangedRev());
+            }
+          });
       return revision.toLong();
 
     } catch (ClientException ce) {
@@ -102,8 +102,29 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public DirList list(SVNConnection connection, String path, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+  public DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
+    try {
+      client.list(conn.getUrl().getFullPath(path), org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision), Depth.immediates,
+          org.tigris.subversion.javahl.DirEntry.Fields.all, false, new ListCallback() {
+            @Override
+            public void doEntry(org.tigris.subversion.javahl.DirEntry dirEntry, Lock lock) {
+              dirEntries.add(new DirEntry(path, dirEntry.getPath(), dirEntry.getLastAuthor(),
+                  dirEntry.getLastChanged(), DirEntry.Kind.valueOf(NodeKind.getNodeKindName(
+                      dirEntry.getNodeKind()).trim().toUpperCase()), dirEntry.getLastChangedRevision().getNumber(),
+                  dirEntry.getSize()));
+            }
+          });
+      // Skip the first entry as that's the one we passed in 'path'.
+      return new DirList(dirEntries.subList(1, dirEntries.size()), null);
+    } catch (ClientException ce) {
+      return translateException("Unable to get latest revision", ce);
+    }
+
   }
 
   @Override
