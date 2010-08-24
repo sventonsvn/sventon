@@ -9,9 +9,10 @@
     <moduleSets>
         <moduleSet>
             <includes>
-                <include>org.sventon.sventon-webapp:javahl</include>
+                <include>org.sventon.sventon-webapp.javahl:svn</include>
             </includes>
             <binaries>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
                 <includeDependencies>false</includeDependencies>
                 <unpack>false</unpack>
             </binaries>
@@ -21,7 +22,7 @@
     <fileSets>
         <fileSet>
             <includes>
-                <include>**/licenses/**</include>
+                <include>licenses/**</include>
                 <include>changes.txt</include>
                 <include>readme.txt</include>
                 <include>LICENSE.txt</include>

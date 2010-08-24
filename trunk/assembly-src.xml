@@ -1,18 +1,21 @@
 <assembly>
   <id>src</id>
-
+  <formats>
+    <format>zip</format>
+  </formats>
 
     <moduleSets>
       <moduleSet>
         <includes>
-          <include>org.sventon:sventon-webapp</include>
+          <include>org.sventon.sventon-webapp:base</include>
         </includes>
+          <sources>
+             
+          </sources>
       </moduleSet>
     </moduleSets>
         
-  <formats>
-    <format>zip</format>
-  </formats>
+
   <fileSets>
     <fileSet>
       <excludes>
