@@ -101,24 +101,24 @@
         </configuration>
       </plugin>
 
-         <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly-bin-svnkit.xml</descriptor>
-                        <descriptor>assembly-bin-javahl.xml</descriptor>
-                        <descriptor>assembly-src.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>assembly-bin-svnkit.xml</descriptor>
+            <descriptor>assembly-bin-javahl.xml</descriptor>
+            <descriptor>assembly-src.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assembly</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>

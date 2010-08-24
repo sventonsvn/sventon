@@ -1,70 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.sventon</groupId>
+  <artifactId>sventon-webapp</artifactId>
+  <name>sventon-webapp</name>
+  <version>2.5.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>sventon core library</description>
+  <parent>
     <groupId>org.sventon</groupId>
-    <artifactId>sventon-webapp</artifactId>
-    <name>sventon-webapp</name>
+    <artifactId>sventon</artifactId>
     <version>2.5.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <description>sventon core library</description>
-    <parent>
-        <groupId>org.sventon</groupId>
-        <artifactId>sventon</artifactId>
-        <version>2.5.0-SNAPSHOT</version>
-    </parent>
+  </parent>
 
-    <modules>
-        <module>base</module>
-        <module>svnkit</module>
-        <module>javahl</module>
-    </modules>
+  <modules>
+    <module>base</module>
+    <module>svnkit</module>
+    <module>javahl</module>
+  </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.sventon</groupId>
-            <artifactId>sventon-core</artifactId>
-            <version>2.5.0-SNAPSHOT</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.sventon</groupId>
+      <artifactId>sventon-core</artifactId>
+      <version>2.5.0-SNAPSHOT</version>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1-beta-1</version>
-
-                <!--<executions>
-                    <execution>
-                        <id>javahl</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                        <configuration>
-                            <warName>svn</warName>
-                            <outputDirectory>${project.build.directory}/javahl-war</outputDirectory>
-                            <packagingExcludes>WEB-INF/lib/sventon-javahl-${pom.version}.jar</packagingExcludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>svnkit</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                        <configuration>
-                            <warName>svn</warName>
-                            <outputDirectory>${project.build.directory}/svnkit-war</outputDirectory>
-                            <packagingExcludes>
-                                WEB-INF/lib/sventon-svnkit-${pom.version}.jar,
-                                WEB-INF/lib/svnkit-*.jar
-                            </packagingExcludes>
-                        </configuration>
-                    </execution>
-                </executions>
-                -->
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1-beta-1</version>
+      </plugin>
+    </plugins>
+  </build>
 </project>

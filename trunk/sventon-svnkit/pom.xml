@@ -1,29 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.sventon</groupId>
+  <artifactId>sventon-svnkit</artifactId>
+  <name>sventon-svnkit</name>
+  <version>2.5.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <description>sventon core library</description>
+  <parent>
     <groupId>org.sventon</groupId>
-    <artifactId>sventon-svnkit</artifactId>
-    <name>sventon-svnkit</name>
+    <artifactId>sventon</artifactId>
     <version>2.5.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <description>sventon core library</description>
-    <parent>
-        <groupId>org.sventon</groupId>
-        <artifactId>sventon</artifactId>
-        <version>2.5.0-SNAPSHOT</version>
-    </parent>
+  </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.sventon</groupId>
-            <artifactId>sventon-core</artifactId>
-            <version>2.5.0-SNAPSHOT</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.sventon</groupId>
+      <artifactId>sventon-core</artifactId>
+      <version>2.5.0-SNAPSHOT</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.tmatesoft.svnkit</groupId>
-            <artifactId>svnkit</artifactId>
-            <version>1.3.4</version>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>org.tmatesoft.svnkit</groupId>
+      <artifactId>svnkit</artifactId>
+      <version>1.3.4</version>
+    </dependency>
+  </dependencies>
 </project>
