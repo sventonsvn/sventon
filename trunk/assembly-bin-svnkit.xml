@@ -7,14 +7,12 @@
     <moduleSets>
         <moduleSet>
             <includes>
-                <include>org.sventon:sventon-webapp</include>
+                <include>org.sventon.sventon-webapp:svnkit</include>
             </includes>
             <binaries>
-            <unpack>false</unpack>
-            <includes>
-                <include>*svnkit*.war</include>
-            </includes>
-        </binaries>
+                <includeDependencies>false</includeDependencies>
+                <unpack>false</unpack>
+            </binaries>
         </moduleSet>
     </moduleSets>
 

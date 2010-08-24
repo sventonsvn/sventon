@@ -7,8 +7,8 @@
     <name>sventon-webapp-base</name>
     <version>2.5.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <groupId>org.sventon</groupId>
-    <artifactId>sventon-webapp-base</artifactId>
+    <groupId>org.sventon.sventon-webapp</groupId>
+    <artifactId>base</artifactId>
 
     <parent>
         <groupId>org.sventon</groupId>

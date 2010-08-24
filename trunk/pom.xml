@@ -113,7 +113,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>directory</goal>
+                            <goal>assembly</goal>
                         </goals>
                     </execution>
                 </executions>
