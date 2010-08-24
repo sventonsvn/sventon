@@ -19,7 +19,7 @@
       <version>2.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.subversion</groupId>
+      <groupId>org.apache.subversion</groupId>
       <artifactId>svnjavahl</artifactId>
       <version>1.6.12</version>
     </dependency>
