@@ -27,6 +27,9 @@
         <include>readme.txt</include>
         <include>LICENSE.txt</include>
       </includes>
+      <excludes>
+        <exclude>licenses/svnkit/*</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
 </assembly>
