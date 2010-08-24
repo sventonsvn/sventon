@@ -126,7 +126,7 @@ public class Application {
 
     final File[] configDirectories = getConfigDirectories();
     if (configDirectories.length > 0) {
-      loadRepositoryConfigurations(configDirectories);
+      loadRepositoryConfigurations(configDirectories, repositoryConfigurations);
       initCaches();
     } else {
       logger.debug("No configuration files were found below: " + repositoriesDirectory.getAbsolutePath());
@@ -236,10 +236,13 @@ public class Application {
    * things will most certainly happen...
    *
    * @param configDirectories Repository configuration directories.
+   * @param configurations    Configurations instance to load configs into. If the instance is not empty, already existing
+   *                          repository configs with the same name will be overwritten.
    * @throws IOException if IO error occur during file operations.
    * @see #isConfigured()
    */
-  protected void loadRepositoryConfigurations(final File[] configDirectories) throws IOException {
+  private void loadRepositoryConfigurations(final File[] configDirectories, RepositoryConfigurations configurations)
+          throws IOException {
     for (final File configDir : configDirectories) {
       InputStream is = null;
       try {
@@ -250,7 +253,7 @@ public class Application {
         logger.info("Loading repository config: " + repositoryName);
         final RepositoryConfiguration configuration = RepositoryConfiguration.create(repositoryName, properties);
         configuration.setPersisted();
-        repositoryConfigurations.add(configuration);
+        configurations.add(configuration);
       } finally {
         IOUtils.closeQuietly(is);
       }
@@ -262,6 +265,25 @@ public class Application {
     } else {
       logger.warn("Configuration property file did exist but did not contain any configuration values");
     }
+  }
+
+  /**
+   * Loads the repository configurations from the file at path
+   * {@code configurationRootDirectory / [repository name] / configurationFilename}
+   * <p/>
+   * If a config file is found and configuration is successful this repository will be marked as configured.
+   * If no file is found initialization will fail silently and the repository will not be marked as configured.
+   * <p/>
+   * It is legal to reload an already configured {@link RepositoryConfiguration} instance.
+   * {@code configurationRootDirectory} and {@code configurationFilename} must be set before calling this method, or bad
+   * things will most certainly happen...
+   *
+   * @param configDirectories Repository configuration directories.
+   * @throws IOException if IO error occur during file operations.
+   * @see #isConfigured()
+   */
+  protected void loadRepositoryConfigurations(final File[] configDirectories) throws IOException {
+    loadRepositoryConfigurations(configDirectories, repositoryConfigurations);
   }
 
   /**
