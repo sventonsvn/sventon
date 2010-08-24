@@ -31,13 +31,21 @@ public class SVNURL {
    *
    * @param url the encoded URI to subversion repository.
    */
-  public SVNURL(String url){
+  public SVNURL(String url) {
     this.url = url;
+  }
+
+  /**
+   * @param relativePath Path relative from root.
+   * @return The full path, including the root URL.
+   */
+  public String getFullPath(final String relativePath) {
+    return url + (relativePath.startsWith("/") ? "" : "/") + relativePath;
   }
 
   private static void validate(final String url) throws SventonException {
     final String scheme = getScheme(url);
-    if (!Protocol.isValidProtocol(scheme)){
+    if (!Protocol.isValidProtocol(scheme)) {
       throw new SventonException("Unknown protocol " + scheme + " in URL " + url + ". Valid protocols are : " + Arrays.toString(Protocol.values()));
     }
   }
@@ -45,7 +53,7 @@ public class SVNURL {
   private static String getScheme(String url) throws SventonException {
     final Pattern pattern = Pattern.compile(URI_PATTERN);
     final Matcher matcher = pattern.matcher(url);
-    if (!matcher.matches()){
+    if (!matcher.matches()) {
       throw new SventonException("Malformed URI " + url);
     }
 
@@ -54,19 +62,18 @@ public class SVNURL {
 
   /**
    * Parse a URI into a SVNURL.
-   *
+   * <p/>
    * This parser will URI encode the string and then check to see if it is a valid subversion protocol.
    *
    * @param url the un-encoded URI
    * @return a SVNURL object wrapping the encoded url string.
-   *
    * @throws SventonException if the given URI is malformed or not possible to URI encode or not having a valid subversion protocol.
    */
   public static SVNURL parse(final String url) throws SventonException {
     try {
       final String encodedUri = UriUtils.encodeUri(url, "UTF-8");
       validate(encodedUri);
-      
+
       return new SVNURL(trim(encodedUri));
     } catch (UnsupportedEncodingException e) {
       throw new SventonException("Could not encode URI " + url, e);
@@ -124,17 +131,15 @@ public class SVNURL {
       this.name = name;
     }
 
-
-
     /**
      * Checks if given string is a valid svn protocol.
      *
      * @param protocol the string
      * @return true if given string is a valid svn protocol, otherwise false
      */
-    public static boolean isValidProtocol(final String protocol){
+    public static boolean isValidProtocol(final String protocol) {
       for (Protocol p : Protocol.values()) {
-        if (p.name.equalsIgnoreCase(protocol)){
+        if (p.name.equalsIgnoreCase(protocol)) {
           return true;
         }
       }

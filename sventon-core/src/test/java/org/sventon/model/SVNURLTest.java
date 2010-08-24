@@ -11,25 +11,23 @@
  */
 package org.sventon.model;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.sventon.SventonException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-/**
- *
- */
 public class SVNURLTest {
+
   @Test
   public void parseSpacesAndNonAscii() throws Exception {
-    Assert.assertEquals("http://host/path%20with%20space/project/espa%C3%B1a",
+    assertEquals("http://host/path%20with%20space/project/espa%C3%B1a",
         SVNURL.parse("http://host/path with space/project/españa").getUrl());
   }
 
   @Test
   public void parseTrailingSlash() throws Exception {
-    Assert.assertEquals("http://host/path",
+    assertEquals("http://host/path",
         SVNURL.parse("http://host/path/").getUrl());
   }
 
@@ -51,4 +49,12 @@ public class SVNURLTest {
       //Expected
     }
   }
+
+  @Test
+  public void testGetFullPath() throws Exception {
+    assertEquals("http://localhost/", SVNURL.parse("http://localhost/").getFullPath(""));
+    assertEquals("http://localhost/", SVNURL.parse("http://localhost/").getFullPath("/"));
+    assertEquals("http://localhost/trunk", SVNURL.parse("http://localhost/").getFullPath("trunk"));
+  }
+
 }

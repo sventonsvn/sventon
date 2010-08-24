@@ -41,7 +41,6 @@ public class ConfigurationReloadControllerTest {
     assertThat(response.getBody(), equalTo("Internal error."));
     assertThat(response.getStatusCode(), equalTo(INTERNAL_SERVER_ERROR));
     assertContentType(response);
-
   }
 
 
