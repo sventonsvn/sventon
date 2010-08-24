@@ -12,6 +12,7 @@
 package org.sventon.cache;
 
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.logmessagecache.LogMessageCache;
 import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
@@ -68,6 +69,14 @@ public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
   @Override
   public void shutdown() throws CacheException {
     for (final LogMessageCache cache : caches.values()) {
+      cache.shutdown();
+    }
+  }
+
+  @Override
+  public void shutdown(RepositoryName repositoryName) throws CacheException {
+    LogMessageCache cache = getCache(repositoryName);
+    if (cache != null) {
       cache.shutdown();
     }
   }

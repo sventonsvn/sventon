@@ -15,6 +15,8 @@ import org.sventon.cache.revisioncache.RevisionCache;
 import org.sventon.cache.revisioncache.RevisionCacheImpl;
 import org.sventon.model.RepositoryName;
 
+import javax.annotation.PreDestroy;
+
 /**
  * Handles RevisionCache instances.
  *
@@ -51,8 +53,14 @@ public final class RevisionCacheManager extends CacheManager<RevisionCache> {
   }
 
   @Override
-  protected void shutdown() throws CacheException {
+  @PreDestroy
+  public void shutdown() throws CacheException {
     objectCacheManager.shutdown();
+  }
+
+  @Override
+  public void shutdown(RepositoryName repositoryName) throws CacheException {
+    objectCacheManager.shutdown(repositoryName);
   }
 
 }
