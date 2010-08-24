@@ -1,5 +1,15 @@
 <assembly>
   <id>src</id>
+
+
+    <moduleSets>
+      <moduleSet>
+        <includes>
+          <include>org.sventon:sventon-webapp</include>
+        </includes>
+      </moduleSet>
+    </moduleSets>
+        
   <formats>
     <format>zip</format>
   </formats>
