@@ -21,7 +21,7 @@ import org.tigris.subversion.javahl.SVNClient;
  *
  * @author jesper@sventon.org
  */
-public class JavaHLConnection implements SVNConnection {
+public class JavaHLConnection implements SVNConnection<SVNClient> {
 
   /**
    * JavaHL delegate.
@@ -34,12 +34,12 @@ public class JavaHLConnection implements SVNConnection {
    * Constructor.
    *
    * @param delegate    SVNClient delegate
-   * @param url         Repository root URL
+   * @param rootUrl         Repository root URL
    * @param credentials Credentials
    */
-  public JavaHLConnection(final SVNClient delegate, final SVNURL url, final Credentials credentials) {
+  public JavaHLConnection(final SVNClient delegate, final SVNURL rootUrl, final Credentials credentials) {
     this.delegate = delegate;
-    this.url = url;
+    this.url = rootUrl;
     this.credentials = credentials;
   }
 
@@ -54,7 +54,8 @@ public class JavaHLConnection implements SVNConnection {
   /**
    * @return The repository URL.
    */
-  public SVNURL getUrl() {
+  @Override
+  public SVNURL getRepositoryRootUrl() {
     return url;
   }
 

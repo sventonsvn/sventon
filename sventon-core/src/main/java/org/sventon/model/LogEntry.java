@@ -17,10 +17,7 @@ import org.sventon.util.DateUtil;
 import org.sventon.util.WebUtils;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * LogEntry.
@@ -48,7 +45,7 @@ public final class LogEntry implements Serializable {
   /**
    * Map holding the RevisionProperties and the corresponding (String) value.
    */
-  private Map<RevisionProperty, String> properties = new HashMap<RevisionProperty, String>();
+  private final Map<RevisionProperty, String> properties;
 
   /**
    * Constructor.
@@ -59,7 +56,7 @@ public final class LogEntry implements Serializable {
    */
   public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final Set<ChangedPath> changedPaths) {
     this.revision = revision;
-    this.properties = properties;
+    this.properties = properties == null ? Collections.EMPTY_MAP : properties;
     this.changedPaths = changedPaths;
   }
 

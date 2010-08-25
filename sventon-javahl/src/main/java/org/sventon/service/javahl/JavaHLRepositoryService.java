@@ -21,6 +21,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
+import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
@@ -29,9 +30,7 @@ import org.tigris.subversion.javahl.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * JavaHLRepositoryService.
@@ -39,6 +38,7 @@ import java.util.Map;
  * @author jesper@sventon.org
  */
 public class JavaHLRepositoryService implements RepositoryService {
+  private static final String[] REV_PROP_NAMES = new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE};
 
   /**
    * Logger for this class and subclasses.
@@ -52,12 +52,62 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
-    throw new UnsupportedOperationException();
+    return getLogEntries(null, connection, fromRevision, toRevision, connection.getRepositoryRootUrl().getUrl(), 0, false, true);
   }
 
   @Override
   public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision, long toRevision, String path, long limit, boolean stopOnCopy, boolean includeChangedPaths) throws SventonException {
-    throw new UnsupportedOperationException();
+    final SVNClient client = (SVNClient) connection.getDelegate();
+
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+
+    try {
+      client.logMessages(path, convertRevision(toRevision), getRevisionRange(fromRevision, toRevision),
+          stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback(){
+            @Override
+            public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
+              final LogEntry logEntry = new LogEntry(l, convertRevisionPropertyMap(map), convertChangedPaths(changePaths));
+
+              logEntries.add(logEntry);
+            }
+          });
+    } catch (ClientException e) {
+      return translateException("Unable to get log entries for " + path + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
+    }
+
+    return logEntries;
+  }
+
+  private Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
+    final HashSet<ChangedPath> changedPaths = new HashSet<ChangedPath>();
+
+    for (ChangePath cp : changePaths) {
+      changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
+    }
+
+    return changedPaths;
+  }
+
+  private Map<RevisionProperty, String> convertRevisionPropertyMap(Map map) {
+    final HashMap<RevisionProperty, String> propertyMap = new HashMap<RevisionProperty, String>();
+
+    if (map != null){
+      for (Object o : map.keySet()) {
+        String property = (String) o;
+        propertyMap.put(RevisionProperty.byName(property), (String) map.get(property));
+
+      }
+    }
+
+    return propertyMap;
+  }
+
+  private RevisionRange[] getRevisionRange(long fromRevision, long toRevision) {
+    return new RevisionRange[]{new RevisionRange(convertRevision(fromRevision), convertRevision(toRevision))};
+  }
+
+  private org.tigris.subversion.javahl.Revision convertRevision(long toRevision) {
+    return org.tigris.subversion.javahl.Revision.getInstance(toRevision);
   }
 
   @Override
@@ -76,7 +126,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
       try {
         final File destination = new File(revisionRootDir, path);
-        final String pathToExport = conn.getUrl().getFullPath(path);
+        final String pathToExport = conn.getRepositoryRootUrl().getFullPath(path);
 
         logger.debug("Exporting file [" + pathToExport + "] revision [" + revision + "]");
         client.doExport(pathToExport, destination.getAbsolutePath(),
@@ -94,7 +144,7 @@ public class JavaHLRepositoryService implements RepositoryService {
     final SVNClient client = conn.getDelegate();
 
     try {
-      final byte[] bytes = client.fileContent(conn.getUrl().getFullPath(path),
+      final byte[] bytes = client.fileContent(conn.getRepositoryRootUrl().getFullPath(path),
           org.tigris.subversion.javahl.Revision.getInstance(revision),
           org.tigris.subversion.javahl.Revision.getInstance(revision));
       output.write(bytes);
@@ -122,7 +172,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     try {
       final MutableLong revision = new MutableLong();
-      client.info2(conn.getUrl().toString(), org.tigris.subversion.javahl.Revision.HEAD,
+      client.info2(conn.getRepositoryRootUrl().toString(), org.tigris.subversion.javahl.Revision.HEAD,
           org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, new InfoCallback() {
             @Override
             public void singleInfo(Info2 info2) {
@@ -153,7 +203,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
     try {
-      client.list(conn.getUrl().getFullPath(path), org.tigris.subversion.javahl.Revision.getInstance(revision),
+      client.list(conn.getRepositoryRootUrl().getFullPath(path), org.tigris.subversion.javahl.Revision.getInstance(revision),
           org.tigris.subversion.javahl.Revision.getInstance(revision), Depth.immediates,
           org.tigris.subversion.javahl.DirEntry.Fields.all, false, new ListCallback() {
             @Override

@@ -12,12 +12,15 @@
 package org.sventon.service.svnkit;
 
 import org.sventon.SVNConnection;
+import org.sventon.SventonException;
+import org.sventon.model.SVNURL;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
  * SVNKitConnection.
  */
-public class SVNKitConnection implements SVNConnection {
+public class SVNKitConnection implements SVNConnection<SVNRepository> {
 
   /**
    * SVNKit delegate.
@@ -40,6 +43,15 @@ public class SVNKitConnection implements SVNConnection {
   @Override
   public void closeSession() {
     delegate.closeSession();
+  }
+
+  @Override
+  public SVNURL getRepositoryRootUrl() throws SventonException {
+    try {
+      return SVNURL.parse(delegate.getRepositoryRoot(true).getPath());
+    } catch (SVNException e) {
+      throw new SventonException("Could not get Repository root URL.", e);
+    }
   }
 
 }

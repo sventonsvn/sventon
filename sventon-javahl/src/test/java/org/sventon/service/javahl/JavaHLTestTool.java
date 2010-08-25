@@ -1,12 +1,14 @@
 package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
+import org.sventon.model.LogEntry;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
 import org.tigris.subversion.javahl.*;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,11 +45,17 @@ public class JavaHLTestTool {
       System.out.println(client.getVersion());
       System.out.println("[" + url + "] latest revision: " + latestRevision);
 
-      //final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
-      //for (LogEntry logEntry : logEntries) {
-      //  System.out.println("logEntry = " + logEntry);
-      //}
+//      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
+//      for (LogEntry logEntry : logEntries) {
+//        System.out.println("logEntry = " + logEntry);
+//      }
 
+      final List<LogEntry> logEntries = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
+      for (LogEntry logEntry : logEntries) {
+        System.out.println("logEntry = " + logEntry);
+      }
+
+      //log(client, url);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -90,17 +98,20 @@ public class JavaHLTestTool {
     LogMessageCallback callback = new LogMessageCallback() {
       @Override
       public void singleMessage(ChangePath[] changedPaths, long revision, Map revprops, boolean hasChildren) {
-        System.out.print(revision);
-        System.out.print(revprops.get(PropertyData.REV_LOG));
-        System.out.print(revprops.get(PropertyData.REV_AUTHOR));
-        System.out.println(revprops.get(PropertyData.REV_DATE));
+        System.out.print(revision + ": ");
+        if (revprops != null){
+          System.out.print(revprops.get(PropertyData.REV_LOG));
+          System.out.print(revprops.get(PropertyData.REV_AUTHOR));
+          System.out.println(revprops.get(PropertyData.REV_DATE));
+        }
         for (ChangePath changedPath : changedPaths) {
           System.out.println(changedPath.getPath());
         }
+        System.out.println("\n");
       }
     };
     int limit = 10;
-    client.logMessages(url, Revision.HEAD, Revision.HEAD, Revision.getInstance(1), false, true, false, null, limit, callback);
+    client.logMessages(url, Revision.HEAD, Revision.HEAD, Revision.getInstance(1), false, true, false, new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE}, limit, callback);
   }
 
   private static void list(SVNClient client, String url) throws ClientException {
