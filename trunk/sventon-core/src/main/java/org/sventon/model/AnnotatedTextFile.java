@@ -120,4 +120,21 @@ public final class AnnotatedTextFile {
     return Collections.unmodifiableList(rows);
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder();
+    for (AnnotatedTextFileRow row : rows) {
+      sb.append(row.getRevision());
+      sb.append("|");
+      sb.append(row.getAuthor());
+      sb.append("|");
+      sb.append(row.getRowNumber());
+      sb.append("|");
+      sb.append(row.getDate());
+      sb.append("|");
+      sb.append(row.getContent());
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
 }
