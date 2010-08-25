@@ -14,27 +14,33 @@ package org.sventon.model;
 /**
  * RevisionProperty.
  */
-public enum RevisionProperty {
+public class RevisionProperty {
 
   /**
    * An <span class="javastring">"svn:author"</span> revision
    * property (that holds the name of the revision's author).
    */
-  AUTHOR("svn:author"),
+  public static final RevisionProperty AUTHOR = new RevisionProperty("svn:author");
 
   /**
    * An <span class="javastring">"svn:log"</span> revision property -
    * the one that stores a log message attached to a revision
    * during a commit operation.
    */
-  LOG("svn:log"),
+  public static final RevisionProperty LOG = new RevisionProperty("svn:log");
 
   /**
    * An <span class="javastring">"svn:date"</span> revision property
    * that is a date & time stamp representing the time when the
    * revision was created.
    */
-  DATE("svn:date");
+  public static final RevisionProperty DATE = new RevisionProperty("svn:date");
+
+
+  /**
+   * List of predefined revision properties.
+   */
+  private static final RevisionProperty[] PRE_DEFINED_PROP = new RevisionProperty[]{AUTHOR, LOG, DATE};
 
   /**
    * Property name.
@@ -46,7 +52,7 @@ public enum RevisionProperty {
    *
    * @param name Name of property
    */
-  RevisionProperty(final String name) {
+  private RevisionProperty(final String name) {
     this.name = name;
   }
 
@@ -58,12 +64,12 @@ public enum RevisionProperty {
   }
 
   public static RevisionProperty byName(String revisionPropertyName) {
-    for (RevisionProperty revisionProperty : RevisionProperty.values()) {
+    for (RevisionProperty revisionProperty : PRE_DEFINED_PROP) {
       if (revisionProperty.getName().equals(revisionPropertyName)) {
         return revisionProperty;
       }
     }
 
-    throw new IllegalArgumentException("No such RevisionProperty: " + revisionPropertyName);
+    return new RevisionProperty(revisionPropertyName);
   }
 }
