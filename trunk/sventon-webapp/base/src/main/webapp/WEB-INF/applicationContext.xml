@@ -62,12 +62,16 @@
 
   <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
 
-  <bean id="connectionFactory" class="org.sventon.service.svnkit.SVNKitConnectionFactory">
+  <bean id="svnProvider" class="org.sventon.service.SVNProvider" factory-method="loadProvider"/>
+
+  <bean id="connectionFactory" class="org.sventon.SVNConnectionFactory" factory-bean="svnProvider"
+      factory-method="getConnectionFactory">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="repositoryServiceDelegate" class="org.sventon.service.svnkit.SVNKitRepositoryService"/>
-
+  <bean id="repositoryServiceDelegate" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
+      factory-method="getRepositoryService"/>
+  
   <bean id="repositoryService" class="org.sventon.service.CacheAwareRepositoryService">
     <constructor-arg ref="repositoryServiceDelegate"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
