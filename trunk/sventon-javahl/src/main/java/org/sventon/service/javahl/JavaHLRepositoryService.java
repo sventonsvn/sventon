@@ -292,7 +292,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-    throw new UnsupportedOperationException();
+    return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), connection.getRepositoryRootUrl().getUrl(), revisionCount, false, true);
   }
 
   @Override

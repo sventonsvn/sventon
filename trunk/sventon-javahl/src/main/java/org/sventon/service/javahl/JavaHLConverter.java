@@ -16,9 +16,12 @@ import java.util.Set;
 
 public class JavaHLConverter {
 
+  static Revision convertRevision(long revision) {
+    if (revision == org.sventon.model.Revision.HEAD.getNumber()){
+      return Revision.HEAD;
+    }
 
-  static Revision convertRevision(long toRevision) {
-    return Revision.getInstance(toRevision);
+    return Revision.getInstance(revision);
   }
 
   static Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {

@@ -45,11 +45,14 @@ public class JavaHLTestTool {
       System.out.println(client.getVersion());
       System.out.println("[" + url + "] latest revision: " + latestRevision);
 
-//      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
-//      for (LogEntry logEntry : logEntries) {
-//        System.out.println("logEntry = " + logEntry);
-//      }
 
+      System.out.println("\nLatest Revisions:");
+      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
+      for (LogEntry logEntry : logEntries) {
+        System.out.println("logEntry = " + logEntry);
+      }
+
+      System.out.println("\nLogEntries from root:");
       final List<LogEntry> logEntries2 = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
       for (LogEntry logEntry : logEntries2) {
         System.out.println("logEntry = " + logEntry);
