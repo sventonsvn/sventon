@@ -50,10 +50,13 @@ public class JavaHLTestTool {
 //        System.out.println("logEntry = " + logEntry);
 //      }
 
-      final List<LogEntry> logEntries = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
-      for (LogEntry logEntry : logEntries) {
+      final List<LogEntry> logEntries2 = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
+      for (LogEntry logEntry : logEntries2) {
         System.out.println("logEntry = " + logEntry);
       }
+
+      final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
+      System.out.println(logEntry);
 
       //log(client, url);
     } catch (Exception e) {

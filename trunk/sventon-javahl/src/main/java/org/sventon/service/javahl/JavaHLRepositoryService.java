@@ -11,6 +11,7 @@
  */
 package org.sventon.service.javahl;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.mutable.MutableLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +48,10 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public LogEntry getLogEntry(RepositoryName repositoryName, SVNConnection connection, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+    final List<LogEntry> logEntries = getLogEntriesFromRepositoryRoot(connection, revision, revision);
+    Validate.isTrue(logEntries.size() == 1, "Too many LogEntries for a given revision. One revision always relates to exactly one LogEntry");
+
+    return logEntries.get(0);
   }
 
   @Override
@@ -62,11 +66,11 @@ public class JavaHLRepositoryService implements RepositoryService {
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
     try {
-      client.logMessages(path, convertRevision(toRevision), getRevisionRange(fromRevision, toRevision),
+      client.logMessages(path, JavaHLConverter.convertRevision(toRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
           stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback(){
             @Override
             public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
-              final LogEntry logEntry = new LogEntry(l, convertRevisionPropertyMap(map), convertChangedPaths(changePaths));
+              final LogEntry logEntry = new LogEntry(l, JavaHLConverter.convertRevisionPropertyMap(map), JavaHLConverter.convertChangedPaths(changePaths));
 
               logEntries.add(logEntry);
             }
@@ -78,37 +82,6 @@ public class JavaHLRepositoryService implements RepositoryService {
     return logEntries;
   }
 
-  private Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
-    final HashSet<ChangedPath> changedPaths = new HashSet<ChangedPath>();
-
-    for (ChangePath cp : changePaths) {
-      changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
-    }
-
-    return changedPaths;
-  }
-
-  private Map<RevisionProperty, String> convertRevisionPropertyMap(Map map) {
-    final HashMap<RevisionProperty, String> propertyMap = new HashMap<RevisionProperty, String>();
-
-    if (map != null){
-      for (Object o : map.keySet()) {
-        String property = (String) o;
-        propertyMap.put(RevisionProperty.byName(property), (String) map.get(property));
-
-      }
-    }
-
-    return propertyMap;
-  }
-
-  private RevisionRange[] getRevisionRange(long fromRevision, long toRevision) {
-    return new RevisionRange[]{new RevisionRange(convertRevision(fromRevision), convertRevision(toRevision))};
-  }
-
-  private org.tigris.subversion.javahl.Revision convertRevision(long toRevision) {
-    return org.tigris.subversion.javahl.Revision.getInstance(toRevision);
-  }
 
   @Override
   public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision, ExportDirectory exportDirectory) throws SventonException {
@@ -120,9 +93,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       final long revision = fileRevision.getRevision().getNumber();
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
-      if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
-        throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
-      }
+      Validate.isTrue(revisionRootDir.exists() && revisionRootDir.mkdirs(), "Unable to create directory: " + revisionRootDir.getAbsolutePath());
 
       try {
         final File destination = new File(revisionRootDir, path);
