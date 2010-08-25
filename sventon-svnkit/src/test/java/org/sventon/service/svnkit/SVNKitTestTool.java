@@ -56,10 +56,19 @@ public class SVNKitTestTool {
       final long latestRevision = service.getLatestRevision(connection);
       System.out.println("[" + location.toString() + "] latest revision: " + latestRevision);
 
-      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
-      for (LogEntry logEntry : logEntries) {
+//      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
+//      for (LogEntry logEntry : logEntries) {
+//        System.out.println("logEntry = " + logEntry);
+//      }
+
+
+      final List<LogEntry> logEntries2 = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
+      for (LogEntry logEntry : logEntries2) {
         System.out.println("logEntry = " + logEntry);
       }
+
+      final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
+      System.out.println(logEntry);
 
     } catch (Exception e) {
       e.printStackTrace();
