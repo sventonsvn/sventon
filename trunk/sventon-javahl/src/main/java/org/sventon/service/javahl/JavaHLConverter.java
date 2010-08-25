@@ -2,8 +2,10 @@ package org.sventon.service.javahl;
 
 import org.sventon.model.ChangeType;
 import org.sventon.model.ChangedPath;
+import org.sventon.model.DirEntry;
 import org.sventon.model.RevisionProperty;
 import org.tigris.subversion.javahl.ChangePath;
+import org.tigris.subversion.javahl.NodeKind;
 import org.tigris.subversion.javahl.Revision;
 import org.tigris.subversion.javahl.RevisionRange;
 
@@ -32,7 +34,7 @@ public class JavaHLConverter {
   static Map<RevisionProperty, String> convertRevisionPropertyMap(Map map) {
     final HashMap<RevisionProperty, String> propertyMap = new HashMap<RevisionProperty, String>();
 
-    if (map != null){
+    if (map != null) {
       for (Object o : map.keySet()) {
         String property = (String) o;
         propertyMap.put(RevisionProperty.byName(property), (String) map.get(property));
@@ -45,5 +47,9 @@ public class JavaHLConverter {
 
   static RevisionRange[] getRevisionRange(long fromRevision, long toRevision) {
     return new RevisionRange[]{new RevisionRange(convertRevision(fromRevision), convertRevision(toRevision))};
+  }
+
+  public static DirEntry.Kind convertNodeKind(int nodeKind) {
+    return DirEntry.Kind.valueOf(NodeKind.getNodeKindName(nodeKind).trim().toUpperCase());
   }
 }
