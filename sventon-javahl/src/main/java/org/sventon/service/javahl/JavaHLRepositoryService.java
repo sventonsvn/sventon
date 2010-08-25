@@ -22,7 +22,6 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
-import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
@@ -31,7 +30,10 @@ import org.tigris.subversion.javahl.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JavaHLRepositoryService.
@@ -67,7 +69,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     try {
       client.logMessages(path, JavaHLConverter.convertRevision(toRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
-          stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback(){
+          stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
             @Override
             public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
               final LogEntry logEntry = new LogEntry(l, JavaHLConverter.convertRevisionPropertyMap(map), JavaHLConverter.convertChangedPaths(changePaths));
@@ -225,7 +227,33 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public AnnotatedTextFile blame(SVNConnection connection, String path, long revision, String charset, Colorer colorer) throws SventonException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    try {
+      final String blamePath = conn.getRepositoryRootUrl().getFullPath(path);
+      logger.debug("Blaming file [" + blamePath + "] revision [" + revision + "]");
+
+      final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(path, charset, colorer);
+      final org.tigris.subversion.javahl.Revision startRev = org.tigris.subversion.javahl.Revision.getInstance(0);
+      final org.tigris.subversion.javahl.Revision endRev = org.tigris.subversion.javahl.Revision.getInstance(revision);
+      client.blame(blamePath, endRev, startRev, endRev, false, false, new BlameCallback2() {
+        @Override
+        public void singleLine(Date date, long revision, String author, Date mergedDate, long mergedRevision,
+                               String mergedAuthor, String mergedPath, String line) {
+          annotatedTextFile.addRow(date, revision, author, line);
+        }
+      });
+
+      try {
+        annotatedTextFile.colorize();
+      } catch (IOException ioex) {
+        logger.warn("Unable to colorize [" + path + "]", ioex);
+      }
+      return annotatedTextFile;
+    } catch (ClientException ce) {
+      return translateException("Error blaming [" + path + "@" + revision + "]", ce);
+    }
   }
 
   @Override
