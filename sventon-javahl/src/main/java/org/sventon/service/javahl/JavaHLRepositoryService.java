@@ -16,6 +16,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.mutable.MutableLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.AuthenticationException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.colorer.Colorer;
@@ -302,6 +303,10 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
     // TODO: Filter exceptions here and translate to sventon specific versions of auth required etc.
+    if (exception.getMessage().contains("Authorization failed")) {
+      throw new AuthenticationException(exception.getMessage(), exception);
+    }
+
     throw new SventonException(errorMessage, exception);
   }
 
