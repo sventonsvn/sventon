@@ -29,9 +29,7 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +42,7 @@ import java.util.Map;
  */
 public class JavaHLRepositoryService implements RepositoryService {
   private static final String[] REV_PROP_NAMES = new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE};
+
 
   /**
    * Logger for this class and subclasses.
@@ -131,8 +130,34 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Properties getFileProperties(SVNConnection connection, String path, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+  public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    final Properties properties = new Properties();
+
+    try {
+      client.properties(conn.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(revision), JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
+        @Override
+        public void singlePath(String path, Map prop) {
+        for (Object o : prop.keySet()) {
+            properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
+          }
+        }
+      });
+
+      for (Property entry : Property.COMMON_SVN_ENTRY_PROPERTIES) {
+        final PropertyData data = client.propertyGet(conn.getRepositoryRootUrl().getFullPath(path), entry.getName(), JavaHLConverter.convertRevision(revision));
+        if (data != null){
+          properties.put(new Property(data.getName()), new PropertyValue(data.getValue()));
+        }
+      }
+
+    } catch (ClientException e) {
+      return translateException("Could not get properties for " + path + " at revision " + revision, e);
+    }
+
+    return properties;
   }
 
   @Override

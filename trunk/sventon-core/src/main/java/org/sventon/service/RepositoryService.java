@@ -103,15 +103,15 @@ public interface RepositoryService {
       throws SventonException;
 
   /**
-   * Gets a file's properties from the repository.
+   * Get properties for an entry from the repository.
    *
    * @param connection The repository connection
    * @param path       Target of target to get properties for
    * @param revision   The revision
-   * @return The file's properties
+   * @return The entry's properties
    * @throws SventonException if a subversion error occur
    */
-  Properties getFileProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
+  Properties listProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
    * Gets a file's checksum.

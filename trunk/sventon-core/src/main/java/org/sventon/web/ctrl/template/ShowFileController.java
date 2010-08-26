@@ -106,7 +106,7 @@ public final class ShowFileController extends AbstractTemplateController {
     final boolean forceDisplay = ServletRequestUtils.getBooleanParameter(request, FORCE_ARCHIVED_ENTRY_DISPLAY, false);
     final Map<String, Object> model = new HashMap<String, Object>();
     final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    final Properties fileProperties = getRepositoryService().getFileProperties(
+    final Properties fileProperties = getRepositoryService().listProperties(
         connection, command.getPath(), command.getRevisionNumber());
 
     final String charset = userRepositoryContext.getCharset();

@@ -2,6 +2,7 @@ package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
 import org.sventon.model.LogEntry;
+import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
 import org.tigris.subversion.javahl.*;
@@ -30,6 +31,7 @@ public class JavaHLTestTool {
   public static void main(String[] args) {
 
     final String url = "svn://svn.berlios.de/sventon/";
+    //final String url = "svn://localhost/myrepro/";
     final String uid = null; // overridden by JVM parameter
     final String pwd = null; // overridden by JVM parameter
 
@@ -41,10 +43,16 @@ public class JavaHLTestTool {
       final SVNClient client = new SVNClient();
       final SVNURL svnUrl = SVNURL.parse(url);
       final SVNConnection connection = new JavaHLConnection(client, svnUrl, null);
-      final long latestRevision = service.getLatestRevision(connection);
-      System.out.println(client.getVersion());
-      System.out.println("[" + url + "] latest revision: " + latestRevision);
 
+
+      System.out.println(client.getVersion());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////          Cut & Paste Zone         ////////////////////////////////////////////////////   
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+     final long latestRevision = service.getLatestRevision(connection);
+      System.out.println("\nLatest revision for " + url + " : " + latestRevision);
 
       System.out.println("\nLatest Revisions:");
       final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
@@ -58,8 +66,22 @@ public class JavaHLTestTool {
         System.out.println("logEntry = " + logEntry);
       }
 
+      System.out.println("\nLogEntry for single revision:");
       final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
       System.out.println(logEntry);
+
+      System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
+      final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
+      System.out.println(fileProperties.toString());
+
+//      System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
+//      final Properties fileProperties = service.getFileProperties(connection, "/trunk/hello.txt", 6);
+//      System.out.println(fileProperties.toString());
+//
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////                 end               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       //log(client, url);
     } catch (Exception e) {

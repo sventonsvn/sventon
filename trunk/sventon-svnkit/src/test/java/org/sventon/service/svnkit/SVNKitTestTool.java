@@ -2,6 +2,7 @@ package org.sventon.service.svnkit;
 
 import org.sventon.SVNConnection;
 import org.sventon.model.LogEntry;
+import org.sventon.model.Properties;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
@@ -53,8 +54,13 @@ public class SVNKitTestTool {
 
       final RepositoryService service = new SVNKitRepositoryService();
       final SVNConnection connection = new SVNKitConnection(repository);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////          Cut & Paste Zone         ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       final long latestRevision = service.getLatestRevision(connection);
-      System.out.println("[" + location.toString() + "] latest revision: " + latestRevision);
+      System.out.println("\nLatest revision for " + url + " : " + latestRevision);
 
       System.out.println("\nLatest Revisions:");
       final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
@@ -68,8 +74,17 @@ public class SVNKitTestTool {
         System.out.println("logEntry = " + logEntry);
       }
 
+      System.out.println("\nLogEntry for single revision:");
       final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
       System.out.println(logEntry);
+
+      System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
+      final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
+      System.out.println(fileProperties.toString());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////                 end               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     } catch (Exception e) {
       e.printStackTrace();
