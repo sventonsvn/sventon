@@ -524,5 +524,11 @@ public final class RepositoryConfiguration {
     }
   }
 
+  @Override
+  public String toString() {
+    return "RepositoryConfiguration{" +
+            "repositoryName=" + repositoryName +
+            '}';
+  }
 }
 
