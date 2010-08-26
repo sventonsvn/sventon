@@ -74,6 +74,21 @@ public class Property {
   public static final Property MERGE_INFO = new Property(SVN_PREFIX + "mergeinfo");
 
 
+
+  public static final Property[] ALL_SVN_ENTRY_PROPERTIES = new Property[]{
+      REVISION, HAS_PROPS, HAS_PROP_MODS, CACHABLE_PROPS, PRESENT_PROPS, KEEP_LOCAL, CHANGELIST, CHECKSUM, WORKING_SIZE,
+      DEPTH, FILE_EXTERNAL_PATH, FILE_EXTERNAL_REVISION, FILE_EXTERNAL_PEG_REVISION, TREE_CONFLICT_DATA, URL, COPYFROM_URL,
+      COPYFROM_REVISION, SCHEDULE, COPIED, UUID, REPOS, PROP_TIME, EXT_TIME, NAME, KIND, CONFLICT_OLD, CONFLICT_NEW,
+      CONFLICT_WRK, PROP_REJECT_FILE, DELETED, ABSENT, INCOMPLETE, CORRUPTED, LOCK_TOKEN, LOCK_COMMENT, LOCK_OWNER,
+      LOCK_CREATION_DATE, LAST_AUTHOR, COMMITTED_DATE, COMMITTED_REVISION
+  };
+
+
+  public static final Property[] COMMON_SVN_ENTRY_PROPERTIES = new Property[]{
+      CHECKSUM, COPYFROM_URL, COPYFROM_REVISION, UUID, KIND,
+      LAST_AUTHOR, COMMITTED_DATE, COMMITTED_REVISION
+  };
+
   public Property(String name) {
     this.name = name;
   }
@@ -94,5 +109,10 @@ public class Property {
   @Override
   public int hashCode() {
     return name != null ? name.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 }

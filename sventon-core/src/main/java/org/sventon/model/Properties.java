@@ -11,9 +11,11 @@
  */
 package org.sventon.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
+import java.util.*;
 
 /**
  * Properties.
@@ -54,5 +56,10 @@ public class Properties {
    */
   public Set<Map.Entry<Property, PropertyValue>> entrySet() {
     return properties.entrySet();
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.reflectionToString(this);
   }
 }

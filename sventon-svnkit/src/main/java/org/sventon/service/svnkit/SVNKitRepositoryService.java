@@ -155,7 +155,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public final Properties getFileProperties(final SVNConnection connection, final String path, final long revision)
+  public final Properties listProperties(final SVNConnection connection, final String path, final long revision)
       throws SventonException {
     final SVNProperties props = new SVNProperties();
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
@@ -176,13 +176,13 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   protected final boolean isTextFile(final SVNConnection connection, final String path, final long revision) throws SventonException {
-    final String mimeType = getFileProperties(connection, path, revision).getStringValue(Property.MIME_TYPE);
+    final String mimeType = listProperties(connection, path, revision).getStringValue(Property.MIME_TYPE);
     return SVNUtils.isTextMimeType(mimeType);
   }
 
   @Override
   public final String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException {
-    return getFileProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
+    return listProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
   }
 
   @Override

@@ -160,8 +160,8 @@ public final class CacheAwareRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Properties getFileProperties(SVNConnection connection, String path, long revision) throws SventonException {
-    return delegate.getFileProperties(connection, path, revision);
+  public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
+    return delegate.listProperties(connection, path, revision);
   }
 
   @Override
