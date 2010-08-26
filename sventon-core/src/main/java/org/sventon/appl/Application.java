@@ -77,6 +77,11 @@ public class Application {
    */
   private String configPassword;
 
+  /**
+   * Toggles the possibility to reload the configuration from disk using a GET request to /config/reload GET.
+   */
+  private boolean configurationReloadSupported;
+
   private final List<CacheManager> cacheManagers = new ArrayList<CacheManager>();
 
   /**
@@ -554,6 +559,20 @@ public class Application {
    */
   public boolean isEditableConfig() {
     return editableConfig;
+  }
+
+  /**
+   * @return {@code true} if it is possible to reload configurations from disk using a GET request to /config/reload.
+   */
+  public boolean isConfigurationReloadSupported() {
+    return configurationReloadSupported;
+  }
+
+  /**
+   * Enables or disables the possibility to reload configurations from disk using a GET request to /config/reload.
+   */
+  public void setConfigurationReloadSupported(boolean configurationReloadSupported) {
+    this.configurationReloadSupported = configurationReloadSupported;
   }
 
   /**
