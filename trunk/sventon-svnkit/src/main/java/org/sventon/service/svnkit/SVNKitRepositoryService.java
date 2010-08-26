@@ -613,7 +613,7 @@ public class SVNKitRepositoryService implements RepositoryService {
     }
 
     if (SVNErrorCode.FS_NO_SUCH_REVISION == exception.getErrorMessage().getErrorCode()) {
-      throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
+      throw new NoSuchRevisionException("No such revision: " + exception.getMessage());
     }
 
     throw new SventonException(errorMessage, exception);

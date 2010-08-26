@@ -17,6 +17,7 @@ import org.apache.commons.lang.mutable.MutableLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.AuthenticationException;
+import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.colorer.Colorer;
@@ -325,7 +326,46 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public DirEntry.Kind getNodeKindForDiff(SVNConnection connection, DiffCommand command) throws SventonException, DiffException {
-    throw new UnsupportedOperationException();
+    final long fromRevision;
+    final long toRevision;
+
+    if (command.hasPegRevision()) {
+      fromRevision = command.getPegRevision();
+      toRevision = command.getPegRevision();
+    } else {
+      fromRevision = command.getFromRevision().getNumber();
+      toRevision = command.getToRevision().getNumber();
+    }
+
+    final DirEntry.Kind nodeKind1;
+    final DirEntry.Kind nodeKind2;
+
+    try {
+      nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
+    } catch (NoSuchRevisionException e) {
+      throw new DiffException("Path [" + command.getFromPath() + "] does not exist as revision [" + fromRevision + "]");
+    }
+    try {
+      nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
+    } catch (NoSuchRevisionException e) {
+      throw new DiffException("Path [" + command.getToPath() + "] does not exist as revision [" + toRevision + "]");
+    }
+
+    assertSameKind(nodeKind1, nodeKind2);
+    return nodeKind1;
+  }
+
+  /**
+   * TODO: Move to abstract base class?
+   *
+   * @param nodeKind1
+   * @param nodeKind2
+   * @throws DiffException
+   */
+  private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {
+    if (nodeKind1 != nodeKind2) {
+      throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
+    }
   }
 
   @Override
@@ -345,8 +385,13 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
     // TODO: Filter exceptions here and translate to sventon specific versions of auth required etc.
+
     if (exception.getMessage().contains("Authorization failed")) {
       throw new AuthenticationException(exception.getMessage(), exception);
+    }
+
+    if (exception.getMessage().contains("non-existent in revision")) {
+      throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
     }
 
     throw new SventonException(errorMessage, exception);
