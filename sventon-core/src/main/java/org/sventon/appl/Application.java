@@ -143,11 +143,11 @@ public class Application {
   public synchronized void reinit() throws IOException, CacheException {
     logger.info("Starting Application reinitialization.");
 
-    //Reload data from config dir
-    logger.info("Reloading config data.");
+    logger.debug("Reloading config data.");
     RepositoryConfigurations newConfigs = new RepositoryConfigurations();
     loadRepositoryConfigurations(getConfigDirectories(), newConfigs);
 
+    logger.debug("Calculating diff.");
     RepositoryConfigurations.ConfigsDiff diff = repositoryConfigurations.diffByRepositoryName(newConfigs);
 
     //TODO: For extra security store and check timestamp for props file
@@ -165,31 +165,35 @@ public class Application {
       logger.info("  removed: " + diff.removed);
 
       try {
+        logger.debug("Pausing change monitor jobs");
         scheduler.pauseJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
       } catch (SchedulerException sx) {
         logger.warn(sx);
       }
 
+      logger.debug("Applying config diff.");
       repositoryConfigurations.apply(diff);
 
+      logger.debug("Shutting down unused caches.");
       for (RepositoryConfiguration repositoryConfiguration : diff.removed) {
-        logger.info("Shutting down caches for: " + repositoryConfiguration.getName());
-        shutdownCaches(repositoryConfiguration);
+        if (repositoryConfiguration.isCacheUsed()) {
+          logger.info("Shutting down caches for: " + repositoryConfiguration.getName());
+          shutdownAndDeregisterCaches(repositoryConfiguration);
+        }
       }
 
+      logger.debug("(Re)starting caches");
       initCaches(); //(re)start caches
 
-      //Resume quartz jobs, fire trigger
       try {
+        logger.debug("Resuming change monitor jobs, firing trigger.");
         scheduler.resumeJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
         scheduler.triggerJob("repositoryChangeMonitorUpdateJobDetail", Scheduler.DEFAULT_GROUP);
       } catch (SchedulerException sx) {
-        //TODO: how do we handle a failure here?
         logger.warn(sx);
       }
 
-      //Remove deleted repos config catalog structure.
-      logger.info("Cleaning up config directories");
+      logger.info("Cleaning up config directories.");
       cleanupOldConfigDirectories(oldConfigDirs, diff.removed, getConfigFileBackupName());
 
     }
@@ -198,10 +202,10 @@ public class Application {
 
   }
 
-  private void shutdownCaches(RepositoryConfiguration repositoryConfiguration) throws CacheException {
-    //TODO: Object cache will be shut down twice.
+  private void shutdownAndDeregisterCaches(RepositoryConfiguration repositoryConfiguration) throws CacheException {
     for (CacheManager cacheManager : cacheManagers) {
       cacheManager.shutdown(repositoryConfiguration.getName());
+      cacheManager.removeCache(repositoryConfiguration.getName());
     }
   }
 
