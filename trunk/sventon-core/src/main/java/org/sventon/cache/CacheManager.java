@@ -118,4 +118,8 @@ public abstract class CacheManager<T> {
     return cache;
   }
 
+  public final void removeCache(final RepositoryName repositoryName) {
+    caches.remove(repositoryName);
+  }
+
 }

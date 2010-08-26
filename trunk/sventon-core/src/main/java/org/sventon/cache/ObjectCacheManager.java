@@ -112,6 +112,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    *
    * @throws CacheException if unable to shutdown caches.
    */
+  @PreDestroy
   @Override
   public void shutdown() throws CacheException {
     for (final ObjectCache cache : caches.values()) {

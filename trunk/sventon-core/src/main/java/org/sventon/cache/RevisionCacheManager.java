@@ -52,15 +52,28 @@ public final class RevisionCacheManager extends CacheManager<RevisionCache> {
     return new RevisionCacheImpl(objectCacheManager.getCache(repositoryName));
   }
 
+  /**
+   * <b>Note!</b>
+   * This method does nothing. Use the {@link ObjectCacheManager#shutdown()} on the underlying OCM instance to shutdown.
+   *
+   * @throws CacheException
+   */
   @Override
-  @PreDestroy
   public void shutdown() throws CacheException {
-    objectCacheManager.shutdown();
+    //Noop
   }
 
+  /**
+   * <b>Note!</b>
+   * This method does nothing. Use the {@link ObjectCacheManager#shutdown(org.sventon.model.RepositoryName)}
+   * on the underlying OCM instance to request cache shutdown.
+   *
+   * @param repositoryName Repository name
+   * @throws CacheException
+   */
   @Override
   public void shutdown(RepositoryName repositoryName) throws CacheException {
-    objectCacheManager.shutdown(repositoryName);
+    //Noop
   }
 
 }
