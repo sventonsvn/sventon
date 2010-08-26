@@ -48,7 +48,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author patrik@sventon.org
  */
 @Controller("configurationReloadController")
-@RequestMapping("/repos/config/reload")
+@RequestMapping("/config/reload")
 public final class ConfigurationReloadController {
 
   private final Log logger = LogFactory.getLog(getClass());

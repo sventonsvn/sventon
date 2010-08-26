@@ -234,8 +234,6 @@ public class ApplicationTest {
     assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
-    File[] configDirBeforeRename = application.getConfigDirectories();
-
     //Rename one repos1 to remove it
     String removedConfigFileName = CONFIG_FILE_NAME + "_bak";
     new File(repos1, CONFIG_FILE_NAME).renameTo(new File(repos1, removedConfigFileName));
@@ -243,7 +241,7 @@ public class ApplicationTest {
     Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
     toDelete.add(repositoryConfiguration1);
 
-    application.cleanupOldConfigDirectories(configDirBeforeRename, toDelete, removedConfigFileName);
+    application.cleanupOldConfigDirectories(application.getBackupConfigDirectories(), toDelete);
     assertFalse(repos1.exists()); //Dir deleted
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
@@ -287,12 +285,10 @@ public class ApplicationTest {
     assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
-    File[] configDirBeforeRename = application.getConfigDirectories();
-
     Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
     toDelete.add(repositoryConfiguration1);
 
-    application.cleanupOldConfigDirectories(configDirBeforeRename, toDelete, CONFIG_FILE_NAME + "_bak");
+    application.cleanupOldConfigDirectories(application.getBackupConfigDirectories(), toDelete);
     assertTrue(new File(repos1, CONFIG_FILE_NAME).exists()); //Dir not deleted, the props file had a valid name
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 

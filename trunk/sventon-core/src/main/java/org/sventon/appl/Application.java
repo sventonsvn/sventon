@@ -158,8 +158,6 @@ public class Application {
 
     } else {
 
-      File[] oldConfigDirs = getConfigDirectories();
-
       logger.info("Reloading configurations:");
       logger.info("  added: " + diff.added);
       logger.info("  removed: " + diff.removed);
@@ -194,7 +192,7 @@ public class Application {
       }
 
       logger.info("Cleaning up config directories.");
-      cleanupOldConfigDirectories(oldConfigDirs, diff.removed, getConfigFileBackupName());
+      cleanupOldConfigDirectories(getBackupConfigDirectories(), diff.removed);
 
     }
 
@@ -215,6 +213,14 @@ public class Application {
   public File[] getConfigDirectories() {
     return repositoriesDirectory.listFiles(
             new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
+  }
+
+  /**
+   * @return The configuration root directories for each repository.
+   */
+  public File[] getBackupConfigDirectories() {
+    return repositoriesDirectory.listFiles(
+            new SventonConfigDirectoryFileFilter(getConfigurationFileBackupName()));
   }
 
   /**
@@ -362,7 +368,7 @@ public class Application {
     final RepositoryConfiguration configuration = repositoryConfigurations.getConfiguration(name);
     if (configuration.isPersisted()) {
       final File configFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileName());
-      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigFileBackupName());
+      final File configBackupFile = new File(getConfigurationDirectoryForRepository(name), getConfigurationFileBackupName());
       logger.info("Disabling repository configuration for [" + name.toString() + "]");
       if (configFile.renameTo(configBackupFile)) {
         logger.debug("Config file renamed to [" + configBackupFile.getAbsolutePath() + "]");
@@ -376,38 +382,25 @@ public class Application {
     }
   }
 
-  private String getConfigFileBackupName() {
+  private String getConfigurationFileBackupName() {
     return getConfigurationFileName() + "_bak";
   }
 
   protected void cleanupOldConfigDirectories(File[] allConfigDirs,
-                                             Set<RepositoryConfiguration> configsToDelete,
-                                             final String deleteConfigFileName) {
+                                             Set<RepositoryConfiguration> configsToDelete) {
     Set<String> deletedConfigurations = new HashSet<String>();
     for (RepositoryConfiguration repositoryConfiguration : configsToDelete) {
       deletedConfigurations.add(repositoryConfiguration.getName().toString());
     }
 
     for (File configDir : allConfigDirs) {
-      if (deletedConfigurations.contains(configDir.getName())) {
-        String[] matchingConfigFiles = configDir.list(new FilenameFilter() {
-          @Override
-          public boolean accept(File dir, String name) {
-            return (name.equals(deleteConfigFileName));
-          }
-        });
-
-        if (matchingConfigFiles.length == 1) {
-          try {
-            FileUtils.deleteDirectory(configDir);
-          } catch (IOException ioe) {
-            logger.warn("Config directory delete failed.", ioe);
-          }
-        }
-
+      try {
+        logger.info("Deleteing directory: " + configDir.getAbsolutePath());
+        FileUtils.deleteDirectory(configDir);
+      } catch (IOException ioe) {
+        logger.warn("Config directory delete failed.", ioe);
       }
     }
-
   }
 
   /**

@@ -35,7 +35,7 @@
 
   <servlet-mapping>
     <servlet-name>sventon</servlet-name>
-    <url-pattern>/repos/config/reload</url-pattern>
+    <url-pattern>/config/reload</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
