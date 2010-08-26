@@ -29,7 +29,9 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +55,6 @@ public class JavaHLRepositoryService implements RepositoryService {
   public LogEntry getLogEntry(RepositoryName repositoryName, SVNConnection connection, long revision) throws SventonException {
     final List<LogEntry> logEntries = getLogEntriesFromRepositoryRoot(connection, revision, revision);
     Validate.isTrue(logEntries.size() == 1, "Too many LogEntries for a given revision. One revision always relates to exactly one LogEntry");
-
     return logEntries.get(0);
   }
 
@@ -140,7 +141,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       client.properties(conn.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(revision), JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
         @Override
         public void singlePath(String path, Map prop) {
-        for (Object o : prop.keySet()) {
+          for (Object o : prop.keySet()) {
             properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
           }
         }
@@ -148,7 +149,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
       for (Property entry : Property.COMMON_SVN_ENTRY_PROPERTIES) {
         final PropertyData data = client.propertyGet(conn.getRepositoryRootUrl().getFullPath(path), entry.getName(), JavaHLConverter.convertRevision(revision));
-        if (data != null){
+        if (data != null) {
           properties.put(new Property(data.getName()), new PropertyValue(data.getValue()));
         }
       }
@@ -180,7 +181,6 @@ public class JavaHLRepositoryService implements RepositoryService {
             }
           });
       return revision.toLong();
-
     } catch (ClientException ce) {
       return translateException("Unable to get latest revision", ce);
     }
@@ -188,7 +188,25 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public DirEntry.Kind getNodeKind(SVNConnection connection, String path, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    final List<DirEntry.Kind> nodeKinds = new ArrayList<DirEntry.Kind>();
+    try {
+      client.info2(conn.getRepositoryRootUrl().getFullPath(path),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          Depth.empty, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              nodeKinds.add(JavaHLConverter.convertNodeKind(info2.getKind()));
+            }
+          });
+      Validate.isTrue(nodeKinds.size() == 1, "Too many nodeKinds for a given entry. One entry always relates to exactly one nodeKind");
+      return nodeKinds.get(0);
+    } catch (ClientException ce) {
+      return translateException("Cannot get nodeKind for [" + path + "@" + revision + "]", ce);
+    }
   }
 
   @Override
@@ -247,7 +265,6 @@ public class JavaHLRepositoryService implements RepositoryService {
     } catch (ClientException ce) {
       return translateException("Cannot get info for [" + path + "@" + revision + "]", ce);
     }
-
   }
 
   @Override
