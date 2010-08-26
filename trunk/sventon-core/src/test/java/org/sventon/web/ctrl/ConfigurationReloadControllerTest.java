@@ -2,15 +2,14 @@ package org.sventon.web.ctrl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.sventon.appl.Application;
 import org.sventon.cache.CacheException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -43,10 +42,20 @@ public class ConfigurationReloadControllerTest {
     assertContentType(response);
   }
 
+  @Test
+  public void toggleReloadSupportFalse() {
+    when(application.isConfigurationReloadSupported()).thenReturn(false);
+    ResponseEntity<String> response = controller.reloadConfigAndReinitializeApplication();
+    assertThat(response.getBody(), equalTo("Forbidden."));
+    assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
+    assertContentType(response);
+  }
+
 
   @Before
   public void setUp() throws Exception {
     application = mock(Application.class);
+    when(application.isConfigurationReloadSupported()).thenReturn(true);
     controller = new ConfigurationReloadController(application);
   }
 }

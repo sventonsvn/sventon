@@ -65,13 +65,13 @@
   <bean id="svnProvider" class="org.sventon.service.SVNProvider" factory-method="loadProvider"/>
 
   <bean id="connectionFactory" class="org.sventon.SVNConnectionFactory" factory-bean="svnProvider"
-      factory-method="getConnectionFactory">
+        factory-method="getConnectionFactory">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
   <bean id="repositoryServiceDelegate" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
-      factory-method="getRepositoryService"/>
-  
+        factory-method="getRepositoryService"/>
+
   <bean id="repositoryService" class="org.sventon.service.CacheAwareRepositoryService">
     <constructor-arg ref="repositoryServiceDelegate"/>
     <property name="cacheGateway" ref="cacheGatewayBean"/>
@@ -83,6 +83,7 @@
     <property name="editableConfig" value="false"/>
     <property name="configPassword" value="password"/>
     <property name="scheduler" ref="scheduler"/>
+    <property name="configurationReloadSupported" value="false"/>
   </bean>
 
   <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
