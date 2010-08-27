@@ -209,52 +209,34 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Map<String, DirEntryLock> getLocks(SVNConnection connection, String startPath) {
-     final JavaHLConnection conn = (JavaHLConnection) connection;
+  public Map<String, DirEntryLock> getLocks(SVNConnection connection, final String startPath) {
+    final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClient client = conn.getDelegate();
     final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
 
 
     try {
       client.info2(conn.getRepositoryRootUrl().getFullPath(startPath),
-            org.tigris.subversion.javahl.Revision.HEAD,
-            org.tigris.subversion.javahl.Revision.HEAD,
-            Depth.infinity, null, new InfoCallback() {
-              @Override
-              public void singleInfo(Info2 info2) {
-                final Lock lock = info2.getLock();
+          org.tigris.subversion.javahl.Revision.HEAD,
+          org.tigris.subversion.javahl.Revision.HEAD,
+          Depth.infinity, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              final Lock lock = info2.getLock();
+              if (lock != null){
                 final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(), lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
-
                 locks.put(lock.getPath(), entryLock);
+              } else {
+                logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD");
               }
-            });
+            }
+          });
     } catch (ClientException e) {
       logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD", e);
     }
 
-
     return locks;
   }
-
-  /*
-   final String path = startPath == null ? "/" : startPath;
-    logger.debug("Getting lock info for path [" + path + "] and below");
-
-    final Map<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
-    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
-
-    try {
-      for (final SVNLock lock : repository.getLocks(path)) {
-        logger.debug("Lock found: " + lock);
-        final DirEntryLock dirEntryLock = new DirEntryLock(lock.getID(), lock.getPath(), lock.getOwner(),
-            lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
-        locks.put(lock.getPath(), dirEntryLock);
-      }
-    } catch (SVNException svne) {
-      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
-    }
-    return locks;
-   */
 
   @Override
   public DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {
@@ -411,18 +393,53 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public Revision translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
-    throw new UnsupportedOperationException();
+    final long revisionNumber = revision.getNumber();
+
+    if (revision.isHeadRevision() || revisionNumber == headRevision) {
+      return Revision.createHeadRevision(headRevision);
+    }
+
+    if (revisionNumber < 0) {
+      final Date date = revision.getDate();
+      if (date != null) {
+        final JavaHLConnection conn = (JavaHLConnection) connection;
+        final SVNClient client = conn.getDelegate();
+        try {
+          final MutableLong revAtDate = new MutableLong();
+          client.info2(conn.getRepositoryRootUrl().getUrl(),
+              org.tigris.subversion.javahl.Revision.getInstance(date),
+              org.tigris.subversion.javahl.Revision.getInstance(date),
+              Depth.empty, null, new InfoCallback() {
+                @Override
+                public void singleInfo(Info2 info2) {
+                  revAtDate.setValue(info2.getRev());
+                  // TODO: Is it better to look at last changed rev?
+//                    revAtDate.setValue(info2.getLastChangedRev());
+                }
+              });
+          return Revision.create(revAtDate.longValue());
+        } catch (ClientException ex) {
+          return translateException("Unable to translate revision: " + revision, ex);
+        }
+      } else {
+        logger.warn("Unexpected revision: " + revision);
+        return Revision.createHeadRevision(headRevision);
+      }
+    }
+    
+    return Revision.create(revisionNumber);
   }
 
-  @Override
-  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-    return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), connection.getRepositoryRootUrl().getUrl(), revisionCount, false, true);
-  }
 
-  @Override
-  public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
-    throw new UnsupportedOperationException();
-  }
+    @Override
+    public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
+      return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), connection.getRepositoryRootUrl().getUrl(), revisionCount, false, true);
+    }
+
+    @Override
+    public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
+      throw new UnsupportedOperationException();
+    }
 
   private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
     // TODO: Filter exceptions here and translate to sventon specific versions of auth required etc.
@@ -435,7 +452,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
     }
 
-    throw new SventonException(errorMessage, exception);
+    throw new SventonException(errorMessage + ". " +  exception.getMessage(), exception);
   }
 
 }
