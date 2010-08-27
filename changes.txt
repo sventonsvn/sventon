@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1842] Added: Feature #4561 - Rescan config files without restart
 [1752] Added: Upgraded SVNKit to version 1.3.4.
 [1673] Fixed: Bug #17345 - 'Show Log' starts from HEAD instead of from current revision.
 
