@@ -11,8 +11,6 @@
  */
 package org.sventon.service.javahl;
 
-import junit.framework.Assert;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,18 +29,16 @@ import org.tigris.subversion.javahl.*;
 import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- *
- */
 public class JavaHLRepositoryServiceTest {
   private JavaHLRepositoryService service;
 
-  @Mock private SVNConnection connection;
-  @Mock private SVNClient client;
+  @Mock
+  private SVNConnection connection;
+  @Mock
+  private SVNClientInterface client;
 
   @Test
   public void testGetLogEntries() throws Exception {
@@ -78,10 +74,10 @@ public class JavaHLRepositoryServiceTest {
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
         Object[] args = invocation.getArguments();
-        final LogMessageCallback cb  = (LogMessageCallback) args[8];
+        final LogMessageCallback cb = (LogMessageCallback) args[8];
         cb.singleMessage(changePaths, rev, propMap, false);
-          
-        return null; 
+
+        return null;
       }
     }).when(client).logMessages(eq("svn://myhost/repro/da/path"), (Revision) any(), (RevisionRange[]) any(),
         eq(false), eq(false), eq(false), (String[]) any(), anyInt(), (LogMessageCallback) any());
@@ -98,12 +94,12 @@ public class JavaHLRepositoryServiceTest {
 
     ChangedPath[] paths = new ChangedPath[2];
     changedPaths.toArray(paths);
-     Arrays.sort(paths, new Comparator<ChangedPath>(){
-       @Override
-       public int compare(ChangedPath o1, ChangedPath o2) {
-         return o1.getPath().compareTo(o2.getPath());
-       }
-     });
+    Arrays.sort(paths, new Comparator<ChangedPath>() {
+      @Override
+      public int compare(ChangedPath o1, ChangedPath o2) {
+        return o1.getPath().compareTo(o2.getPath());
+      }
+    });
     assertEquals("/branches/lemontree/src/main/da/path/myfile.txt", paths[0].getPath());
     assertEquals(ChangeType.ADDED, paths[0].getType());
     assertEquals("/trunk/src/main/da/path/myfile.txt", paths[1].getPath());
@@ -120,12 +116,11 @@ public class JavaHLRepositoryServiceTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    
+
     service = new JavaHLRepositoryService();
 
     when(connection.getDelegate()).thenReturn(client);
   }
-
 
 
 }

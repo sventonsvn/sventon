@@ -15,13 +15,14 @@ import org.sventon.SVNConnection;
 import org.sventon.model.Credentials;
 import org.sventon.model.SVNURL;
 import org.tigris.subversion.javahl.SVNClient;
+import org.tigris.subversion.javahl.SVNClientInterface;
 
 /**
  * JavaHLConnection.
  *
  * @author jesper@sventon.org
  */
-public class JavaHLConnection implements SVNConnection<SVNClient> {
+public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
 
   /**
    * JavaHL delegate.
@@ -34,7 +35,7 @@ public class JavaHLConnection implements SVNConnection<SVNClient> {
    * Constructor.
    *
    * @param delegate    SVNClient delegate
-   * @param rootUrl         Repository root URL
+   * @param rootUrl     Repository root URL
    * @param credentials Credentials
    */
   public JavaHLConnection(final SVNClient delegate, final SVNURL rootUrl, final Credentials credentials) {
