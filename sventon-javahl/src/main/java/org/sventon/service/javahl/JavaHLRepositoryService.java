@@ -63,7 +63,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision, long toRevision, String path, long limit, boolean stopOnCopy, boolean includeChangedPaths) throws SventonException {
-    final SVNClient client = (SVNClient) connection.getDelegate();
+    final SVNClientInterface client = (SVNClientInterface) connection.getDelegate();
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
@@ -80,7 +80,6 @@ public class JavaHLRepositoryService implements RepositoryService {
     } catch (ClientException e) {
       return translateException("Unable to get log entries for " + path + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
     }
-
     return logEntries;
   }
 
@@ -88,7 +87,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision, ExportDirectory exportDirectory) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     for (final PathRevision fileRevision : targets) {
       final String path = fileRevision.getPath();
@@ -114,7 +113,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public void getFileContents(SVNConnection connection, String path, long revision, OutputStream output) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     try {
       final byte[] bytes = client.fileContent(conn.getRepositoryRootUrl().getFullPath(path),
@@ -131,7 +130,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     final Properties properties = new Properties();
 
@@ -151,23 +150,21 @@ public class JavaHLRepositoryService implements RepositoryService {
           properties.put(new Property(data.getName()), new PropertyValue(data.getValue()));
         }
       }
-
     } catch (ClientException e) {
-      return translateException("Could not get properties for " + path + " at revision " + revision, e);
+      return translateException("Could not get properties for [" + path + "] at revision: " + revision, e);
     }
-
     return properties;
   }
 
   @Override
   public String getFileChecksum(SVNConnection connection, String path, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+    return listProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
   }
 
   @Override
   public Long getLatestRevision(SVNConnection connection) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     try {
       final MutableLong revision = new MutableLong();
@@ -187,7 +184,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public DirEntry.Kind getNodeKind(SVNConnection connection, String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     final List<DirEntry.Kind> nodeKinds = new ArrayList<DirEntry.Kind>();
     try {
@@ -210,7 +207,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public Map<String, DirEntryLock> getLocks(SVNConnection connection, final String startPath) {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
     final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
 
 
@@ -240,7 +237,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
     try {
@@ -266,7 +263,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public DirEntry getEntryInfo(SVNConnection connection, final String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
     try {
@@ -304,7 +301,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public String diffUnified(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
 
@@ -355,7 +352,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public List<DiffStatus> diffPaths(SVNConnection connection, final DiffCommand command) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
 
@@ -383,7 +380,7 @@ public class JavaHLRepositoryService implements RepositoryService {
   @Override
   public AnnotatedTextFile blame(SVNConnection connection, String path, long revision, String charset, Colorer colorer) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
-    final SVNClient client = conn.getDelegate();
+    final SVNClientInterface client = conn.getDelegate();
 
     try {
       final String blamePath = conn.getRepositoryRootUrl().getFullPath(path);
@@ -467,7 +464,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       final Date date = revision.getDate();
       if (date != null) {
         final JavaHLConnection conn = (JavaHLConnection) connection;
-        final SVNClient client = conn.getDelegate();
+        final SVNClientInterface client = conn.getDelegate();
         try {
           final MutableLong revAtDate = new MutableLong();
           client.info2(conn.getRepositoryRootUrl().getUrl(),
