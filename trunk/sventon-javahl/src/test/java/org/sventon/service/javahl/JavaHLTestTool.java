@@ -104,6 +104,15 @@ public class JavaHLTestTool {
       }
       System.out.println("}");
 
+
+
+      System.out.print("\nGetFileRevisions for trunk/assembly-bin-svnkit.xml {\n");
+      final List<FileRevision> revisionList = service.getFileRevisions(connection, "trunk/assembly-bin-svnkit.xml", 1817);
+      for (FileRevision fileRevision : revisionList) {
+        System.out.println("\t" + fileRevision.toString() + " ");
+      }
+      System.out.println("}");
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////                 end               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -295,6 +295,7 @@ public class JavaHLRepositoryService implements RepositoryService {
     throw new UnsupportedOperationException();
   }
 
+
   @Override
   public List<SideBySideDiffRow> diffSideBySide(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
     throw new UnsupportedOperationException();

@@ -18,29 +18,27 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
-<%@ page import="org.sventon.model.RevisionProperty" %>
-<%@ page import="org.sventon.util.DateUtil" %>
+<%@ page import="org.sventon.model.LogEntry" %>
 <%@ page import="java.util.Date" %>
 
-<c:if test="${fn:length(fileRevisions) > 1}">
+<c:if test="${fn:length(logEntries) > 1}">
     <table class="fileHistoryTable">
         <tr>
             <td colspan="2">
                 <spring:message code="previous-revisions"/>
                 <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
-                    <c:forEach var="fileRevision" items="${fileRevisions}">
-                        <c:url value="/repos/${command.name}/show${fileRevision.path}" var="showFileAtRevisionUrl">
-                            <c:param name="revision" value="${fileRevision.revision}"/>
+                    <c:forEach var="logEntry" items="${logEntries}">
+                        <c:url value="/repos/${command.name}/show${logEntry.pathAtRevision}" var="showFileAtRevisionUrl">
+                            <c:param name="revision" value="${logEntry.revision}"/>
                             <c:if test="${archivedEntry ne null}">
                                 <c:param name="archivedEntry" value="${archivedEntry}"/>
                                 <c:param name="forceDisplay" value="true"/>
                             </c:if>
                         </c:url>
-                        <jsp:useBean id="fileRevision" type="org.sventon.model.FileRevision"/>
+                        <jsp:useBean id="logEntry" type="org.sventon.model.LogEntry"/>
                         <%
-                            final String dateString = fileRevision.getProperty(RevisionProperty.DATE);
-                            final String authorString = fileRevision.getProperty(RevisionProperty.AUTHOR);
-                            final Date revDate = DateUtil.parseISO8601(dateString);
+                            final Date revDate = logEntry.getDate();
+                            final String authorString = logEntry.getAuthor();
                         %>
                         <option value="${showFileAtRevisionUrl}">
                             <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>

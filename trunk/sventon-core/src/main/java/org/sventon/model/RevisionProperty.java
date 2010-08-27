@@ -72,4 +72,9 @@ public class RevisionProperty {
 
     return new RevisionProperty(revisionPropertyName);
   }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }
