@@ -11,6 +11,7 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,9 @@ import java.util.Date;
  *
  * @author jesper@sventon.org
  */
-public class DirEntryLock {
+public class DirEntryLock implements Serializable {
+
+  private static final long serialVersionUID = -3679696499450455562L;
 
   private final String id;
   private final String path;
@@ -91,6 +94,6 @@ public class DirEntryLock {
 
   @Override
   public String toString() {
-    return "Lock " + id + " on " + path + " owned by " + owner + "created " + creationDate + ". Comment: " + comment; 
+    return "Lock " + id + " on " + path + " owned by " + owner + "created " + creationDate + ". Comment: " + comment;
   }
 }

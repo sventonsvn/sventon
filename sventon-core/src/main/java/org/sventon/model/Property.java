@@ -11,12 +11,17 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
+
 /**
  * Property.
  *
  * @author jorgen@sventon.org
  */
-public class Property {
+public class Property implements Serializable {
+
+  private static final long serialVersionUID = 3742680425755911460L;
+
   private final String name;
 
   private static final String SVN_PREFIX = "svn:";
@@ -72,7 +77,6 @@ public class Property {
   public static final Property EXTERNALS = new Property(SVN_PREFIX + "externals");
   public static final Property SPECIAL = new Property(SVN_PREFIX + "special");
   public static final Property MERGE_INFO = new Property(SVN_PREFIX + "mergeinfo");
-
 
 
   public static final Property[] ALL_SVN_ENTRY_PROPERTIES = new Property[]{

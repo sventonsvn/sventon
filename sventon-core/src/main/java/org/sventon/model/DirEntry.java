@@ -12,8 +12,6 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.compass.annotations.Index;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
@@ -73,7 +71,6 @@ public final class DirEntry implements Serializable {
   }
 
 
-
   public DirEntry(final String entryPath, final String name, final String author, final Date date, final Kind kind, long revision, long size) {
     if (entryPath == null) {
       throw new IllegalArgumentException("entryPath cannot be null.");
@@ -101,13 +98,11 @@ public final class DirEntry implements Serializable {
   }
 
 
-
-
   /**
    * Creates a collection of <code>DirEntry</code> objects based
    * on given collection of <code>DirEntry</code> instances and <code>Properties</code>.
    *
-   * @param entries  List of DirEntry.
+   * @param entries    List of DirEntry.
    * @param properties The Properties for these entries
    * @return The directory list instance containing a List<DirEntry> and Properties.
    */

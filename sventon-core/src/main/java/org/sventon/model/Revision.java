@@ -91,7 +91,7 @@ public class Revision implements Serializable, Comparable<Revision> {
     }
 
     final String rev = text.trim();
-   
+
     if (isDateRevision(rev)) {
       try {
         final Date date = DateUtil.parseISO8601(trimDateBrackets(rev));

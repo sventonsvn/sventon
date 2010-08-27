@@ -11,10 +11,14 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
+
 /**
  * Represents the diff status for a single diffed entry.
  */
-public class DiffStatus {
+public class DiffStatus implements Serializable {
+
+  private static final long serialVersionUID = -1064565009806896861L;
 
   private final ChangeType modificationType;
 

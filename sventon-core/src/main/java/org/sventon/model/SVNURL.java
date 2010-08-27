@@ -14,6 +14,7 @@ package org.sventon.model;
 import org.springframework.web.util.UriUtils;
 import org.sventon.SventonException;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -22,7 +23,9 @@ import java.util.regex.Pattern;
 /**
  * SVNURL.
  */
-public class SVNURL {
+public class SVNURL implements Serializable {
+
+  private static final long serialVersionUID = -226312079488166629L;
 
   private final String url;
 
