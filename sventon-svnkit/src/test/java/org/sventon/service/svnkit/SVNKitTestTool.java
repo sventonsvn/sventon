@@ -1,10 +1,7 @@
 package org.sventon.service.svnkit;
 
 import org.sventon.SVNConnection;
-import org.sventon.model.DirEntryLock;
-import org.sventon.model.LogEntry;
-import org.sventon.model.Properties;
-import org.sventon.model.Revision;
+import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
@@ -112,6 +109,14 @@ public class SVNKitTestTool {
       final List<Long> revisionsForPath = service.getRevisionsForPath(connection, "/trunk/assembly-bin-svnkit.xml", 1, 1817, false, 10);
       for (Long rev : revisionsForPath) {
         System.out.print(rev.toString() + " ");
+      }
+      System.out.println("}");
+
+
+      System.out.print("\nGetFileRevisions for trunk/assembly-bin-svnkit.xml {\n");
+      final List<FileRevision> revisionList = service.getFileRevisions(connection, "trunk/assembly-bin-svnkit.xml", 1817);
+      for (FileRevision fileRevision : revisionList) {
+        System.out.println("\t" + fileRevision.toString() + " ");
       }
       System.out.println("}");
 

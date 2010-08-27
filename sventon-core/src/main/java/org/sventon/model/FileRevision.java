@@ -11,6 +11,8 @@
  */
 package org.sventon.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,4 +42,8 @@ public class FileRevision extends PathRevision {
     return properties.get(value);
   }
 
+  @Override
+  public String toString() {
+    return super.toString() + " " + ToStringBuilder.reflectionToString(this); 
+  }
 }

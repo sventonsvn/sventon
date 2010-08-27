@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.model.FileRevision;
+import org.sventon.model.LogEntry;
+import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
@@ -38,6 +40,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
    * Request parameter identifying the archived entry to display.
    */
   static final String ARCHIVED_ENTRY = "archivedEntry";
+  private static final int FILE_HISTORY_LIMIT = 100;
 
   @Override
   protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
@@ -50,12 +53,15 @@ public final class GetFileHistoryController extends AbstractTemplateController {
 
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
-      final List<FileRevision> revisions = getRepositoryService().getFileRevisions(
-          connection, command.getPath(), command.getRevisionNumber());
-      Collections.reverse(revisions);
+      final List<LogEntry> revisions = getRepositoryService().getLogEntries(command.getName(), connection,
+          command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, false);
+      logger.debug("Found " + revisions.size() + " entries");
+
+
+      //Collections.reverse(revisions);
 
       model.put("currentRevision", command.getRevisionNumber());
-      model.put("fileRevisions", revisions);
+      model.put("logEntries", revisions);
       if (archivedEntry != null) {
         model.put(ARCHIVED_ENTRY, archivedEntry);
       }
