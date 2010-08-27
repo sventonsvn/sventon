@@ -12,21 +12,28 @@
 package org.sventon.model;
 
 /**
- *
+ * Represents the diff status for a single diffed entry.
  */
 public class DiffStatus {
-  private final StatusType modificationType;
-  private final SVNURL url;
+
+  private final ChangeType modificationType;
+
   private final String path;
+
   private final boolean propertyModified;
 
-  public DiffStatus(StatusType modificationType, SVNURL url, String path, boolean propertyModified) {
+  /**
+   * Constructor.
+   *
+   * @param modificationType Type of change
+   * @param path             Relative path to entry
+   * @param propertyModified True to indicate that properties were also changed.
+   */
+  public DiffStatus(ChangeType modificationType, String path, boolean propertyModified) {
     this.modificationType = modificationType;
-    this.url = url;
     this.path = path;
     this.propertyModified = propertyModified;
   }
-
 
   /**
    * Returns the type of modification for the current
@@ -34,18 +41,8 @@ public class DiffStatus {
    *
    * @return a path change type
    */
-  public StatusType getModificationType() {
+  public ChangeType getModificationType() {
     return modificationType;
-  }
-
-
-  /**
-   * Url of the item.
-   *
-   * @return item url
-   */
-  public SVNURL getUrl() {
-    return url;
   }
 
   /**
@@ -67,5 +64,10 @@ public class DiffStatus {
    */
   public boolean isPropertyModified() {
     return propertyModified;
+  }
+
+  @Override
+  public String toString() {
+    return modificationType.getCode() + " " + path + ", propertyModified=" + propertyModified;
   }
 }

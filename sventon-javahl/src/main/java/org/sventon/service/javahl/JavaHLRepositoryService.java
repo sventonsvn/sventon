@@ -353,8 +353,31 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<DiffStatus> diffPaths(SVNConnection connection, DiffCommand command) throws SventonException {
-    throw new UnsupportedOperationException();
+  public List<DiffStatus> diffPaths(SVNConnection connection, final DiffCommand command) throws SventonException {
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    final List<DiffStatus> result = new ArrayList<DiffStatus>();
+
+    try {
+      final String fromPath = conn.getRepositoryRootUrl().getFullPath(command.getFromPath());
+      final String toPath = conn.getRepositoryRootUrl().getFullPath(command.getToPath());
+      final org.tigris.subversion.javahl.Revision fromRev =
+          org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+      final org.tigris.subversion.javahl.Revision toRev =
+          org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+
+      client.diffSummarize(fromPath, fromRev, toPath, toRev, Depth.infinity, null, true, new DiffSummaryReceiver() {
+        @Override
+        public void onSummary(DiffSummary diffSummary) {
+          final ChangeType type = ChangeType.parse(diffSummary.getDiffKind().toString());
+          result.add(new DiffStatus(type, diffSummary.getPath(), diffSummary.propsChanged()));
+        }
+      });
+    } catch (ClientException ce) {
+      return translateException("Could not calculate diff for " + command.toString(), ce);
+    }
+    return result;
   }
 
   @Override

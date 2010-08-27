@@ -72,13 +72,7 @@
                         <c:forEach items="${diffResult}" var="row">
                             <jsp:useBean id="row" type="org.sventon.model.DiffStatus"/>
                             <%
-                                final ChangeType changeType;
-                                final char actionCode = row.getModificationType().getCode();
-                                if (actionCode == ' ') {
-                                    changeType = null;
-                                } else {
-                                    changeType = ChangeType.parse(actionCode);
-                                }
+                                final ChangeType changeType = row.getModificationType();
                             %>
                             <tr>
                                 <c:url value="/repos/${command.name}/goto${command.toPath}/${row.path}" var="goToUrl"/>

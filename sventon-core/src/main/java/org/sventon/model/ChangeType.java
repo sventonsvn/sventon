@@ -80,7 +80,7 @@ public enum ChangeType {
    * @return The ChangeType
    */
   public static ChangeType parse(final char code) {
-    switch (code) {
+    switch (Character.toUpperCase(code)) {
       case 'D':
         return DELETED;
       case 'M':
