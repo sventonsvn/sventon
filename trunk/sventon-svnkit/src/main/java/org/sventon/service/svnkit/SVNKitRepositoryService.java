@@ -25,7 +25,6 @@ import org.sventon.diff.SideBySideDiffCreator;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
-import org.sventon.model.SVNURL;
 import org.sventon.service.RepositoryService;
 import org.sventon.service.svnkit.diff.DiffProducer;
 import org.sventon.util.SVNUtils;
@@ -379,8 +378,8 @@ public class SVNKitRepositoryService implements RepositoryService {
           SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
             public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
               if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
-                result.add(new DiffStatus(StatusType.fromId(diffStatus.getModificationType().getID()),
-                    new SVNURL(diffStatus.getURL().getURIEncodedPath()), diffStatus.getPath(), diffStatus.isPropertiesModified()));
+                result.add(new DiffStatus(ChangeType.parse(diffStatus.getModificationType().getCode()),
+                    diffStatus.getPath(), diffStatus.isPropertiesModified()));
               }
             }
           });
