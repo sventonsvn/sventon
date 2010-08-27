@@ -25,6 +25,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
+import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
@@ -33,10 +34,7 @@ import org.tigris.subversion.javahl.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * JavaHLRepositoryService.
@@ -212,8 +210,51 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public Map<String, DirEntryLock> getLocks(SVNConnection connection, String startPath) {
-    throw new UnsupportedOperationException();
+     final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+    final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
+
+
+    try {
+      client.info2(conn.getRepositoryRootUrl().getFullPath(startPath),
+            org.tigris.subversion.javahl.Revision.HEAD,
+            org.tigris.subversion.javahl.Revision.HEAD,
+            Depth.infinity, null, new InfoCallback() {
+              @Override
+              public void singleInfo(Info2 info2) {
+                final Lock lock = info2.getLock();
+                final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(), lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
+
+                locks.put(lock.getPath(), entryLock);
+              }
+            });
+    } catch (ClientException e) {
+      logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD", e);
+    }
+
+
+    return locks;
   }
+
+  /*
+   final String path = startPath == null ? "/" : startPath;
+    logger.debug("Getting lock info for path [" + path + "] and below");
+
+    final Map<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
+    final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
+
+    try {
+      for (final SVNLock lock : repository.getLocks(path)) {
+        logger.debug("Lock found: " + lock);
+        final DirEntryLock dirEntryLock = new DirEntryLock(lock.getID(), lock.getPath(), lock.getOwner(),
+            lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
+        locks.put(lock.getPath(), dirEntryLock);
+      }
+    } catch (SVNException svne) {
+      logger.debug("Unable to get locks for path [" + path + "]. Directory may not exist in HEAD", svne);
+    }
+    return locks;
+   */
 
   @Override
   public DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {

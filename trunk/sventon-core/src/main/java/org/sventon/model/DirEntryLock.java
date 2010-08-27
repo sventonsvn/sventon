@@ -89,4 +89,8 @@ public class DirEntryLock {
   }
 
 
+  @Override
+  public String toString() {
+    return "Lock " + id + " on " + path + " owned by " + owner + "created " + creationDate + ". Comment: " + comment; 
+  }
 }

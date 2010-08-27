@@ -1,6 +1,7 @@
 package org.sventon.service.svnkit;
 
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntryLock;
 import org.sventon.model.LogEntry;
 import org.sventon.model.Properties;
 import org.sventon.service.RepositoryService;
@@ -15,6 +16,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 //TODO: This test class is heavily dependent on SVNKit. It must remain in the deepest SVNKit-cellar until fixed....
 
@@ -81,6 +83,14 @@ public class SVNKitTestTool {
       System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
       final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
       System.out.println(fileProperties.toString());
+
+
+      System.out.println("\nGet Locks");
+      final Map<String,DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt");
+      for (String s : map.keySet()) {
+        System.out.println("Path: " + s);
+        System.out.println("DirEntryLock: " + map.get(s).toString());
+      }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////                 end               ////////////////////////////////////////////////////
