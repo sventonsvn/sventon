@@ -52,7 +52,7 @@ public class JavaHLTestTool {
 /////////////////////////////////          Cut & Paste Zone         ////////////////////////////////////////////////////   
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     final long latestRevision = service.getLatestRevision(connection);
+      final long latestRevision = service.getLatestRevision(connection);
       System.out.println("\nLatest revision for " + url + " : " + latestRevision);
 
       System.out.println("\nLatest Revisions:");
@@ -70,6 +70,13 @@ public class JavaHLTestTool {
       System.out.println("\nLogEntry for single revision:");
       final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
       System.out.println(logEntry);
+
+      
+      System.out.println("\nGet LogEntries for /trunk/assembly-bin-svnkit.xml [1 .. 1817]");
+      final List<LogEntry> entries = service.getLogEntries(null, connection, 1, 1817, "/trunk/assembly-bin-svnkit.xml", 10, false, false);
+      for (LogEntry entry : entries) {
+        System.out.println("Entry: " + entry.toString());
+      }
 
       System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
       final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
@@ -90,7 +97,12 @@ public class JavaHLTestTool {
       final org.sventon.model.Revision revision = service.translateRevision(org.sventon.model.Revision.create(calendar.getTime()), 0, connection);
       System.out.println("\nTranslated revision: " + revision.toString());
 
-      
+      System.out.print("\nRevisions for path trunk/assembly-bin-svnkit.xml at [1 .. 1817]. Limit 10\n {");
+      final List<Long> revisionsForPath = service.getRevisionsForPath(connection, "/trunk/assembly-bin-svnkit.xml", 1, 1817, false, 10);
+      for (Long rev : revisionsForPath) {
+        System.out.print(rev.toString() + " ");
+      }
+      System.out.println("}");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////                 end               ////////////////////////////////////////////////////

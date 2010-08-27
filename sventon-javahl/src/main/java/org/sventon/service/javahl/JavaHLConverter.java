@@ -26,9 +26,10 @@ public class JavaHLConverter {
 
   static Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
     final HashSet<ChangedPath> changedPaths = new HashSet<ChangedPath>();
-
-    for (ChangePath cp : changePaths) {
-      changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
+    if (changePaths != null) {
+      for (ChangePath cp : changePaths) {
+        changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
+      }
     }
 
     return changedPaths;

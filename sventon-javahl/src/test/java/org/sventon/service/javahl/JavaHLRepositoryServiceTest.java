@@ -24,6 +24,7 @@ import org.sventon.SVNConnection;
 import org.sventon.model.ChangeType;
 import org.sventon.model.ChangedPath;
 import org.sventon.model.LogEntry;
+import org.sventon.model.SVNURL;
 import org.sventon.util.DateUtil;
 import org.tigris.subversion.javahl.*;
 
@@ -69,6 +70,8 @@ public class JavaHLRepositoryServiceTest {
     when(cp2.getCopySrcPath()).thenReturn(null);
     when(cp2.getCopySrcRevision()).thenReturn(-1L);
 
+    when(connection.getRepositoryRootUrl()).thenReturn(new SVNURL("svn://myhost/repro"));
+
     // Yiks! We probably need to refactor this later...
     // Matching for SVNClient.logMessages() is also a little bit too loose.
     doAnswer(new Answer() {
@@ -80,7 +83,7 @@ public class JavaHLRepositoryServiceTest {
           
         return null; 
       }
-    }).when(client).logMessages(eq("da/path"), (Revision) any(), (RevisionRange[]) any(),
+    }).when(client).logMessages(eq("svn://myhost/repro/da/path"), (Revision) any(), (RevisionRange[]) any(),
         eq(false), eq(false), eq(false), (String[]) any(), anyInt(), (LogMessageCallback) any());
 
     final List<LogEntry> logEntries = service.getLogEntries(null, connection, 1, 100, "da/path", 100, false, false);

@@ -11,6 +11,8 @@
  */
 package org.sventon.service.javahl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.mutable.MutableLong;
@@ -59,7 +61,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
-    return getLogEntries(null, connection, fromRevision, toRevision, connection.getRepositoryRootUrl().getUrl(), 0, false, true);
+    return getLogEntries(null, connection, fromRevision, toRevision, "/", 0, false, true);
   }
 
   @Override
@@ -69,7 +71,7 @@ public class JavaHLRepositoryService implements RepositoryService {
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
     try {
-      client.logMessages(path, JavaHLConverter.convertRevision(toRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
+      client.logMessages(connection.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(toRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
           stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
             @Override
             public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
@@ -433,12 +435,17 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     @Override
     public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-      return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), connection.getRepositoryRootUrl().getUrl(), revisionCount, false, true);
+      return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
     }
 
     @Override
     public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
-      throw new UnsupportedOperationException();
+      final List list = new ArrayList();
+      for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, path, limit, stopOnCopy, false) ) {
+         list.add(entry.getRevision());
+      }
+
+      return list;
     }
 
   private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
