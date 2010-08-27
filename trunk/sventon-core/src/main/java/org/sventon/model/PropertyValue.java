@@ -11,10 +11,15 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
+
 /**
- *
+ * Represents a property value in a {@link Properties} instance.
  */
-public class PropertyValue {
+public class PropertyValue implements Serializable {
+
+  private static final long serialVersionUID = 2191248457473951086L;
+
   private final String value;
 
   public PropertyValue(String value) {

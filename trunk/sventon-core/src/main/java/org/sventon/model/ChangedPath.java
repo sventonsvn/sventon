@@ -21,6 +21,8 @@ import java.io.Serializable;
  */
 public class ChangedPath implements Serializable, Comparable<ChangedPath> {
 
+  private static final long serialVersionUID = 8084820064926547460L;
+
   private final String path;
 
   private final String copyPath;

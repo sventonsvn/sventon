@@ -11,12 +11,16 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
+
 /**
  * Represents a, according to the repository, valid path/revision combination.
  *
  * @author jesper@sventon.org
  */
-public class PathRevision implements Comparable<PathRevision> {
+public class PathRevision implements Serializable, Comparable<PathRevision> {
+
+  private static final long serialVersionUID = 9203048530692746853L;
 
   /**
    * The delimiter between the path and the revision values.

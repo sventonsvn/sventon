@@ -13,12 +13,16 @@ package org.sventon.model;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * CamelCasePattern.
  *
  * @author jesper@sventon.org
  */
-public final class CamelCasePattern {
+public final class CamelCasePattern implements Serializable {
+
+  private static final long serialVersionUID = -6140176115713331470L;
 
   /**
    * Pattern.

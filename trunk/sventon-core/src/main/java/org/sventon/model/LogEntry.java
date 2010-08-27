@@ -17,7 +17,10 @@ import org.sventon.util.DateUtil;
 import org.sventon.util.WebUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * LogEntry.

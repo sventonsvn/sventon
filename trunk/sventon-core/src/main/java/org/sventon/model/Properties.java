@@ -11,18 +11,21 @@
  */
 package org.sventon.model;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Properties.
  *
  * @author jorgen@sventon.org
  */
-public class Properties {
+public class Properties implements Serializable {
+
+  private static final long serialVersionUID = 5223103683951983199L;
 
   private final Map<Property, PropertyValue> properties = new HashMap<Property, PropertyValue>();
 

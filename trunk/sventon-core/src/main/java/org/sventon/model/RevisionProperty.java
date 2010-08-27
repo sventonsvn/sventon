@@ -11,10 +11,12 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
+
 /**
  * RevisionProperty.
  */
-public class RevisionProperty {
+public class RevisionProperty implements Serializable {
 
   /**
    * An <span class="javastring">"svn:author"</span> revision
@@ -46,6 +48,7 @@ public class RevisionProperty {
    * Property name.
    */
   private final String name;
+  private static final long serialVersionUID = -6565473731138429326L;
 
   /**
    * Constructor.

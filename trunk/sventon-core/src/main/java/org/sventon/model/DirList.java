@@ -11,6 +11,7 @@
  */
 package org.sventon.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,7 +20,9 @@ import java.util.List;
  *
  * @author jorgen@sventon.org
  */
-public class DirList {
+public class DirList implements Serializable {
+
+  private static final long serialVersionUID = 760450236832559872L;
 
   private final List<DirEntry> entries;
 

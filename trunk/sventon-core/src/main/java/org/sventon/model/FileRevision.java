@@ -13,6 +13,7 @@ package org.sventon.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +23,9 @@ import java.util.Map;
  * @author jorgen@sventon.org
  * @author jesper@sventon.org
  */
-public class FileRevision extends PathRevision {
+public class FileRevision extends PathRevision implements Serializable {
 
+  private static final long serialVersionUID = -308367920544609564L;
 
   /**
    * Map holding the RevisionProperties and the corresponding (String) value.
@@ -44,6 +46,6 @@ public class FileRevision extends PathRevision {
 
   @Override
   public String toString() {
-    return super.toString() + " " + ToStringBuilder.reflectionToString(this); 
+    return super.toString() + " " + ToStringBuilder.reflectionToString(this);
   }
 }
