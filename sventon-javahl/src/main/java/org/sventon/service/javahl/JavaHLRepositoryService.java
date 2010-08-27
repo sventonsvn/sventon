@@ -11,19 +11,16 @@
  */
 package org.sventon.service.javahl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.mutable.MutableLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.AuthenticationException;
-import org.sventon.NoSuchRevisionException;
-import org.sventon.SVNConnection;
-import org.sventon.SventonException;
+import org.sventon.*;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
+import org.sventon.diff.IdenticalFilesException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
@@ -225,7 +222,7 @@ public class JavaHLRepositoryService implements RepositoryService {
             @Override
             public void singleInfo(Info2 info2) {
               final Lock lock = info2.getLock();
-              if (lock != null){
+              if (lock != null) {
                 final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(), lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
                 locks.put(lock.getPath(), entryLock);
               } else {
@@ -305,7 +302,48 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public String diffUnified(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+    final SVNClient client = conn.getDelegate();
+
+    // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
+
+    try {
+      final File outFile = createTempFileForDiff();
+
+      try {
+        final String fromPath = conn.getRepositoryRootUrl().getFullPath(command.getFromPath());
+        final String toPath = conn.getRepositoryRootUrl().getFullPath(command.getToPath());
+        final org.tigris.subversion.javahl.Revision fromRev =
+            org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+        final org.tigris.subversion.javahl.Revision toRev =
+            org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+
+        client.diff(fromPath, fromRev, toPath, toRev, null, outFile.getAbsolutePath(), Depth.empty, null, false, false, true);
+        final String diffResultString = FileUtils.readFileToString(outFile, charset);
+        if ("".equals(diffResultString)) {
+          throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+        }
+        return new TextFile(stripUnifiedDiffHeader(diffResultString)).getContent();
+      } catch (ClientException ce) {
+        return translateException("Unable to produce unified diff", ce);
+      } finally {
+        if (!outFile.delete()) {
+          outFile.deleteOnExit();
+        }
+      }
+    } catch (IOException ioex) {
+      throw new DiffException("Unable to produce unified diff", ioex);
+    }
+  }
+
+  private String stripUnifiedDiffHeader(final String diffResult) {
+    final String startMarker = "@@";
+    if (!diffResult.contains(startMarker)) return diffResult;
+    return diffResult.substring(diffResult.indexOf(startMarker));
+  }
+
+  private File createTempFileForDiff() throws IOException {
+    return File.createTempFile("sventon-temp", ".diff");
   }
 
   @Override
@@ -428,28 +466,27 @@ public class JavaHLRepositoryService implements RepositoryService {
         return Revision.createHeadRevision(headRevision);
       }
     }
-    
     return Revision.create(revisionNumber);
   }
 
+  @Override
+  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
+    return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
+  }
 
-    @Override
-    public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-      return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
+  @Override
+  public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
+    final List<Long> list = new ArrayList<Long>();
+    for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, path, limit, stopOnCopy, false)) {
+      list.add(entry.getRevision());
     }
-
-    @Override
-    public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
-      final List list = new ArrayList();
-      for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, path, limit, stopOnCopy, false) ) {
-         list.add(entry.getRevision());
-      }
-
-      return list;
-    }
+    return list;
+  }
 
   private <T extends Object> T translateException(String errorMessage, ClientException exception) throws SventonException {
     // TODO: Filter exceptions here and translate to sventon specific versions of auth required etc.
+
+    // TODO: Find a better way instead of parsing error messages!
 
     if (exception.getMessage().contains("Authorization failed")) {
       throw new AuthenticationException(exception.getMessage(), exception);
@@ -459,7 +496,11 @@ public class JavaHLRepositoryService implements RepositoryService {
       throw new NoSuchRevisionException("Unable to get node kind: " + exception.getMessage());
     }
 
-    throw new SventonException(errorMessage + ". " +  exception.getMessage(), exception);
+    if (exception.getMessage().contains("was not found in the repository")) {
+      throw new DirEntryNotFoundException("Entry not found: " + exception.getMessage());
+    }
+
+    throw new SventonException(errorMessage, exception);
   }
 
 }
