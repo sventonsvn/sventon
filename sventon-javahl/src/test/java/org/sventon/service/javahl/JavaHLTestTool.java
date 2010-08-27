@@ -1,6 +1,7 @@
 package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
+import org.sventon.model.DirEntryLock;
 import org.sventon.model.LogEntry;
 import org.sventon.model.Properties;
 import org.sventon.model.SVNURL;
@@ -74,10 +75,13 @@ public class JavaHLTestTool {
       final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
       System.out.println(fileProperties.toString());
 
-//      System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
-//      final Properties fileProperties = service.getFileProperties(connection, "/trunk/hello.txt", 6);
-//      System.out.println(fileProperties.toString());
-//
+
+      System.out.println("\nGet Locks");
+      final Map<String, DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt");
+      for (String s : map.keySet()) {
+        System.out.println("Path: " + s);
+        System.out.println("DirEntryLock: " + map.get(s).toString());
+      }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////                 end               ////////////////////////////////////////////////////
