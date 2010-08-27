@@ -1,14 +1,14 @@
 package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
-import org.sventon.model.DirEntryLock;
-import org.sventon.model.LogEntry;
-import org.sventon.model.Properties;
-import org.sventon.model.SVNURL;
+import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
 import org.tigris.subversion.javahl.*;
+import org.tigris.subversion.javahl.DirEntry;
+import org.tigris.subversion.javahl.Revision;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +82,15 @@ public class JavaHLTestTool {
         System.out.println("Path: " + s);
         System.out.println("DirEntryLock: " + map.get(s).toString());
       }
+
+
+
+      final Calendar calendar = Calendar.getInstance();
+      calendar.set(2010, 7, 17, 12, 34, 56);
+      final org.sventon.model.Revision revision = service.translateRevision(org.sventon.model.Revision.create(calendar.getTime()), 0, connection);
+      System.out.println("\nTranslated revision: " + revision.toString());
+
+      
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////                 end               ////////////////////////////////////////////////////
