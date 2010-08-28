@@ -12,7 +12,7 @@ public class JavaHLSVNProvider extends SVNProvider {
 
   @Override
   public SVNConnectionFactory getConnectionFactory(ConfigDirectory configDirectory) {
-    return new JavaHLConnectionFactory();
+    return new JavaHLConnectionFactory(configDirectory);
   }
 
   @Override

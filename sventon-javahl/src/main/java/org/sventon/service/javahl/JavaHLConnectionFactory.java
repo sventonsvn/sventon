@@ -11,13 +11,18 @@
  */
 package org.sventon.service.javahl;
 
+import org.apache.commons.lang.Validate;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
+import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
+import org.tigris.subversion.javahl.ClientException;
 import org.tigris.subversion.javahl.SVNClient;
+
+import java.io.File;
 
 /**
  * JavaHLConnectionFactory.
@@ -26,9 +31,28 @@ import org.tigris.subversion.javahl.SVNClient;
  */
 public class JavaHLConnectionFactory implements SVNConnectionFactory {
 
+  private final ConfigDirectory configurationDirectory;
+
+  /**
+   * Constructor.
+   *
+   * @param configurationDirectory Where to place the subversion config files.
+   */
+  public JavaHLConnectionFactory(ConfigDirectory configurationDirectory) {
+    Validate.notNull(configurationDirectory, "Configuration directory cannot be null!");
+    this.configurationDirectory = configurationDirectory;
+  }
+
   @Override
   public SVNConnection createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SventonException {
-    return new JavaHLConnection(new SVNClient(), svnUrl, credentials);
+    final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
+    final SVNClient client = new SVNClient();
+    try {
+      client.setConfigDirectory(configDirectory.getAbsolutePath());
+    } catch (ClientException ce) {
+      throw new SventonException("Unable to create SVN connection", ce);
+    }
+    return new JavaHLConnection(client, svnUrl, credentials);
   }
 
 }
