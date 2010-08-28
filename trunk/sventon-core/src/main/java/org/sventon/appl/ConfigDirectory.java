@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.ServletContextAware;
+import org.sventon.model.RepositoryName;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -118,6 +119,10 @@ public class ConfigDirectory implements ServletContextAware {
       sventonConfigDirectory = new File(sventonDirProperty);
       logger.info("sventon config root directory (overridden by system property) set to: " + sventonConfigDirectory);
     }
+  }
+
+  public File getConfigDirectoryFor(final RepositoryName repositoryName) {
+    return new File(getRepositoriesDirectory(), repositoryName.toString());
   }
 
   /**

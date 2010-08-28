@@ -51,12 +51,12 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
   /**
    * Constructor.
    *
-   * @param configDirectory Root directory where to place the svn config files.
-   *                        If the directory does not exist, it will be created.
+   * @param configurationDirectory Root directory where to place the svn config files.
+   *                               If the directory does not exist, it will be created.
    */
-  public SVNKitConnectionFactory(final ConfigDirectory configDirectory) {
-    Validate.notNull(configDirectory, "Configuration directory cannot be null!");
-    this.configurationDirectory = configDirectory;
+  public SVNKitConnectionFactory(final ConfigDirectory configurationDirectory) {
+    Validate.notNull(configurationDirectory, "Configuration directory cannot be null!");
+    this.configurationDirectory = configurationDirectory;
   }
 
   /**
@@ -79,7 +79,7 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
     } catch (org.tmatesoft.svn.core.SVNException e) {
       throw new SventonException(e.getMessage());
     }
-    final File configDirectory = new File(configurationDirectory.getRepositoriesDirectory(), repositoryName.toString());
+    final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
         configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
