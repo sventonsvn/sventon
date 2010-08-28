@@ -30,6 +30,8 @@ import java.util.Set;
  */
 public final class LogEntry implements Serializable {
 
+  private static final long serialVersionUID = 1625655173694918781L;
+
   /**
    * The path at revision.
    */
@@ -59,7 +61,7 @@ public final class LogEntry implements Serializable {
    */
   public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final Set<ChangedPath> changedPaths) {
     this.revision = revision;
-    this.properties = properties == null ? Collections.EMPTY_MAP : properties;
+    this.properties = properties == null ? Collections.<RevisionProperty, String>emptyMap() : properties;
     this.changedPaths = changedPaths;
   }
 
