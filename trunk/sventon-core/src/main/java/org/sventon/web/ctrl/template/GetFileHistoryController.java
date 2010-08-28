@@ -54,12 +54,9 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     try {
       logger.debug("Finding revisions for [" + command.getPath() + "]");
       final List<LogEntry> revisions = getRepositoryService().getLogEntries(command.getName(), connection,
-          command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, false);
-      logger.debug("Found " + revisions.size() + " entries");
-
-
-      //Collections.reverse(revisions);
-
+          command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, true);
+      LogEntry.setPathAtRevisionInLogEntries(revisions, command.getPath());
+      
       model.put("currentRevision", command.getRevisionNumber());
       model.put("logEntries", revisions);
       if (archivedEntry != null) {
