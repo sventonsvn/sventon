@@ -17,10 +17,7 @@ import org.sventon.util.DateUtil;
 import org.sventon.util.WebUtils;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * LogEntry.
@@ -127,6 +124,37 @@ public final class LogEntry implements Serializable {
     return WebUtils.nl2br(StringEscapeUtils.escapeXml(getMessage()));
   }
 
+
+  /**
+   * Iterate through (and modify!) the log entries and set the pathAtRevision for each entry.
+   *
+   * @param logEntries the entries to set pathAtRevision for
+   * @param path the starting path
+   */
+  public static void setPathAtRevisionInLogEntries(final List<LogEntry> logEntries, final String path){
+    String pathAtRevision = path;
+
+    for (final LogEntry logEntry : logEntries) {
+      logEntry.setPathAtRevision(pathAtRevision);
+
+      //noinspection unchecked
+      final Set<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
+      if (allChangedPaths != null){
+        for (ChangedPath entryPath : allChangedPaths) {
+          if (entryPath.getCopyPath() != null) {
+            int i = StringUtils.indexOfDifference(entryPath.getPath(), pathAtRevision);
+            if (i == -1) { // Same path
+              pathAtRevision = entryPath.getCopyPath();
+            } else if (entryPath.getPath().length() == i) { // Part path, can be a branch
+              pathAtRevision = entryPath.getCopyPath() + pathAtRevision.substring(i);
+            } else {
+              // TODO: else what? Is this OK to let the path be the previous?
+            }
+          }
+        }
+      }
+    }
+  }
   /**
    * Checks if given log entry contains accessible information, i.e. it was
    * fetched from the repository by a user with access to the affected paths.

@@ -62,32 +62,11 @@ public final class ShowLogController extends AbstractTemplateController {
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
 
-    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
+    List<LogEntry> logEntries = Collections.EMPTY_LIST;
     try {
-      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection,
-          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true));
-
-      String pathAtRevision = nextPath;
-
-      for (final LogEntry logEntry : logEntries) {
-        logEntry.setPathAtRevision(pathAtRevision);
-
-        //noinspection unchecked
-        final Set<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
-
-        for (ChangedPath entryPath : allChangedPaths) {
-          int i = StringUtils.indexOfDifference(entryPath.getPath(), pathAtRevision);
-          if (i == -1) { // Same path
-            if (entryPath.getCopyPath() != null) {
-              pathAtRevision = entryPath.getCopyPath();
-            }
-          } else if (entryPath.getPath().length() == i) { // Part path, can be a branch
-            if (entryPath.getCopyPath() != null) {
-              pathAtRevision = entryPath.getCopyPath() + pathAtRevision.substring(i);
-            }
-          }
-        }
-      }
+      logEntries = getRepositoryService().getLogEntries(command.getName(), connection,
+          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true);
+      LogEntry.setPathAtRevisionInLogEntries(logEntries, nextPath);
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
     } catch (SventonException ex) {
