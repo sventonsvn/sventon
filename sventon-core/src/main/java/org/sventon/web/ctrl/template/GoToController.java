@@ -16,9 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
-import org.sventon.SventonException;
 import org.sventon.model.DirEntry;
-import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
@@ -58,8 +56,6 @@ public final class GoToController extends AbstractTemplateController {
       logger.debug("Node kind of [" + command.getPath() + "]: " + kind);
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
-    } catch (SventonException svnex) {
-      logger.error(svnex.getMessage());
     }
 
     if (DirEntry.Kind.DIR == kind) {
