@@ -60,7 +60,7 @@
     <constructor-arg value="200"/>
   </bean>
 
-  <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.inline"/>
+  <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.unified"/>
 
   <bean id="svnProvider" class="org.sventon.service.SVNProvider" factory-method="loadProvider"/>
 
