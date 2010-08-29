@@ -50,6 +50,7 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
 
   @Override
   public void closeSession() {
+    delegate.dispose();
   }
 
   /**
