@@ -68,7 +68,7 @@ public class JavaHLRepositoryService implements RepositoryService {
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
     try {
-      client.logMessages(connection.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(toRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
+      client.logMessages(connection.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(fromRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
           stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
             @Override
             public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
