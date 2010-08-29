@@ -92,7 +92,7 @@ public class SVNKitTestTool {
 
 
       System.out.println("\nGet Locks");
-      final Map<String,DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt");
+      final Map<String,DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt", false);
       for (String s : map.keySet()) {
         System.out.println("Path: " + s);
         System.out.println("DirEntryLock: " + map.get(s).toString());
