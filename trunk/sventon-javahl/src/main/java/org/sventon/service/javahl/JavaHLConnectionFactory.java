@@ -20,6 +20,8 @@ import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
 import org.tigris.subversion.javahl.ClientException;
+import org.tigris.subversion.javahl.PromptUserPassword2;
+import org.tigris.subversion.javahl.PromptUserPassword3;
 import org.tigris.subversion.javahl.SVNClient;
 
 import java.io.File;
@@ -44,15 +46,72 @@ public class JavaHLConnectionFactory implements SVNConnectionFactory {
   }
 
   @Override
-  public SVNConnection createConnection(RepositoryName repositoryName, SVNURL svnUrl, Credentials credentials) throws SventonException {
+  public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
+                                        final Credentials credentials) throws SventonException {
     final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
     final SVNClient client = new SVNClient();
     try {
       client.setConfigDirectory(configDirectory.getAbsolutePath());
+      client.setPrompt(new Prompt(credentials.getUserName(), credentials.getPassword()));
     } catch (ClientException ce) {
       throw new SventonException("Unable to create SVN connection", ce);
     }
     return new JavaHLConnection(client, svnUrl, credentials);
+  }
+
+  static class Prompt implements PromptUserPassword3 {
+    private final String userName;
+    private final String password;
+
+    Prompt(final String userName, final String password) {
+      this.userName = userName;
+      this.password = password;
+    }
+
+    @Override
+    public boolean prompt(String s, String s1, boolean b) {
+      return true;
+    }
+
+    @Override
+    public String askQuestion(String s, String s1, boolean b, boolean b1) {
+      return null;
+    }
+
+    @Override
+    public boolean userAllowedSave() {
+      return false;
+    }
+
+    @Override
+    public int askTrustSSLServer(String s, boolean b) {
+      return PromptUserPassword2.AcceptTemporary;
+    }
+
+    @Override
+    public boolean prompt(String s, String s1) {
+      return false;
+    }
+
+    @Override
+    public boolean askYesNo(String s, String s1, boolean b) {
+      return false;
+    }
+
+    @Override
+    public String askQuestion(String s, String s1, boolean b) {
+      return null;
+    }
+
+    @Override
+    public String getUsername() {
+      return userName;
+    }
+
+    @Override
+    public String getPassword() {
+      return password;
+    }
   }
 
 }
