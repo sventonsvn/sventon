@@ -95,6 +95,7 @@ public final class RSSController extends AbstractBaseController {
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
     } catch (SventonException svnex) {
+      logger.debug(svnex.getMessage(), svnex);
       logger.error(svnex.getMessage());
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to generate RSS feed");
     } finally {
