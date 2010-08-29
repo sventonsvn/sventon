@@ -16,7 +16,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.model.FileRevision;
 import org.sventon.model.LogEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
@@ -24,7 +23,6 @@ import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

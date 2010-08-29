@@ -289,7 +289,17 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
-    throw new UnsupportedOperationException();
+    final List<LogEntry> entries = getLogEntries(null, connection, revision, Revision.FIRST.getNumber(), path, 100, false, true);
+    final List<FileRevision> revisions = new ArrayList<FileRevision>();
+
+    LogEntry.setPathAtRevisionInLogEntries(entries, path);
+
+    for (LogEntry entry : entries) {
+      final FileRevision fileRevision = new FileRevision(entry.getPathAtRevision(), Revision.create(entry.getRevision()));
+       revisions.add(fileRevision);
+    }
+
+    return revisions;
   }
 
 
