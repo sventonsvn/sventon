@@ -36,7 +36,7 @@ public final class ShowLocksController extends AbstractTemplateController {
                                    final BindException exception) throws Exception {
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("currentLocks", getRepositoryService().getLocks(connection, command.getPath()).values());
+    model.put("currentLocks", getRepositoryService().getLocks(connection, command.getPath(), true).values());
     return new ModelAndView(getViewName(), model);
   }
 

@@ -207,7 +207,7 @@ public class SVNKitRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath) {
+  public Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath, final boolean recursive) {
     final String path = startPath == null ? "/" : startPath;
     logger.debug("Getting lock info for path [" + path + "] and below");
 

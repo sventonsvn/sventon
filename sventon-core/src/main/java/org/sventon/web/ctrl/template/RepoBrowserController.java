@@ -74,7 +74,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
 
     logger.debug("Adding data to model");
     model.put("svndir", entries);
-    model.put("locks", getRepositoryService().getLocks(connection, command.getPath()));
+    model.put("locks", getRepositoryService().getLocks(connection, command.getPath(), false));
     model.put("existingExtensions", new FileExtensionList(entries).getExtensions());
     model.put("filterExtension", filterExtension);
     modelAndView.setViewName(getViewName());
