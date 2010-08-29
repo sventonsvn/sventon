@@ -15,7 +15,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.SventonException;
 import org.sventon.model.LogEntry;
 import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
@@ -49,19 +48,15 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
     final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
 
-    try {
-      logger.debug("Finding revisions for [" + command.getPath() + "]");
-      final List<LogEntry> revisions = getRepositoryService().getLogEntries(command.getName(), connection,
-          command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, true);
-      LogEntry.setPathAtRevisionInLogEntries(revisions, command.getPath());
-      
-      model.put("currentRevision", command.getRevisionNumber());
-      model.put("logEntries", revisions);
-      if (archivedEntry != null) {
-        model.put(ARCHIVED_ENTRY, archivedEntry);
-      }
-    } catch (SventonException ex) {
-      logger.error(ex.getMessage());
+    logger.debug("Finding revisions for [" + command.getPath() + "]");
+    final List<LogEntry> revisions = getRepositoryService().getLogEntries(command.getName(), connection,
+        command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, true);
+    LogEntry.setPathAtRevisionInLogEntries(revisions, command.getPath());
+
+    model.put("currentRevision", command.getRevisionNumber());
+    model.put("logEntries", revisions);
+    if (archivedEntry != null) {
+      model.put(ARCHIVED_ENTRY, archivedEntry);
     }
 
     return new ModelAndView(getViewName(), model);

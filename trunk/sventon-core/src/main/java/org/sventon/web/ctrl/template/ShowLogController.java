@@ -11,19 +11,23 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
-import org.sventon.SventonException;
-import org.sventon.model.*;
+import org.sventon.model.DirEntry;
+import org.sventon.model.LogEntry;
+import org.sventon.model.Revision;
+import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for showing logs.
@@ -62,15 +66,13 @@ public final class ShowLogController extends AbstractTemplateController {
     final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
     final long fromRevision = calculateFromRevision(headRevision, nextRevision);
 
-    List<LogEntry> logEntries = Collections.EMPTY_LIST;
+    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
-      logEntries = getRepositoryService().getLogEntries(command.getName(), connection,
-          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true);
+      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection,
+          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true));
       LogEntry.setPathAtRevisionInLogEntries(logEntries, nextPath);
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
-    } catch (SventonException ex) {
-      logger.error(ex.getMessage());
     }
 
     final Map<String, Object> model = new HashMap<String, Object>();
