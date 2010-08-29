@@ -378,7 +378,12 @@ public class JavaHLRepositoryService implements RepositoryService {
       client.diffSummarize(fromPath, fromRev, toPath, toRev, Depth.infinity, null, true, new DiffSummaryReceiver() {
         @Override
         public void onSummary(DiffSummary diffSummary) {
-          final ChangeType type = ChangeType.parse(diffSummary.getDiffKind().toString());
+          ChangeType type = null;
+          try {
+            type = ChangeType.parse(diffSummary.getDiffKind().toString());
+          } catch (IllegalArgumentException e) {
+            logger.debug("Skipping diffKind: " + diffSummary.getDiffKind());
+          }
           result.add(new DiffStatus(type, diffSummary.getPath(), diffSummary.propsChanged()));
         }
       });
