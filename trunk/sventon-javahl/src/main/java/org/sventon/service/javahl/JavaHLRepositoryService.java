@@ -205,32 +205,33 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Map<String, DirEntryLock> getLocks(SVNConnection connection, final String startPath) {
+  public Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath, final boolean recursive) {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
     final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
 
-
+    final MutableLong callbackCounter = new MutableLong(0);
     try {
       client.info2(conn.getRepositoryRootUrl().getFullPath(startPath),
           org.tigris.subversion.javahl.Revision.HEAD,
           org.tigris.subversion.javahl.Revision.HEAD,
-          Depth.infinity, null, new InfoCallback() {
+          recursive ? Depth.infinity : Depth.immediates, null, new InfoCallback() {
             @Override
             public void singleInfo(Info2 info2) {
+              System.out.println(callbackCounter);
+              callbackCounter.increment();
               final Lock lock = info2.getLock();
               if (lock != null) {
-                final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(), lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
+                final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(),
+                    lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
                 locks.put(lock.getPath(), entryLock);
-              } else {
-                logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD");
               }
             }
           });
     } catch (ClientException e) {
       logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD", e);
     }
-
+    logger.debug("GetLocks call resulted in [" + callbackCounter + "] callbacks");
     return locks;
   }
 
@@ -270,7 +271,7 @@ public class JavaHLRepositoryService implements RepositoryService {
       client.info2(conn.getRepositoryRootUrl().getFullPath(path),
           org.tigris.subversion.javahl.Revision.getInstance(revision),
           org.tigris.subversion.javahl.Revision.getInstance(revision),
-          Depth.infinity, null, new InfoCallback() {
+          Depth.empty, null, new InfoCallback() {
             @Override
             public void singleInfo(Info2 info2) {
               final String name = info2.getPath();
@@ -296,7 +297,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     for (LogEntry entry : entries) {
       final FileRevision fileRevision = new FileRevision(entry.getPathAtRevision(), Revision.create(entry.getRevision()));
-       revisions.add(fileRevision);
+      revisions.add(fileRevision);
     }
 
     return revisions;

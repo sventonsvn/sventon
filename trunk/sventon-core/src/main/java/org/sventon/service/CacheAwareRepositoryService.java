@@ -180,8 +180,8 @@ public final class CacheAwareRepositoryService implements RepositoryService {
   }
 
   @Override
-  public Map<String, DirEntryLock> getLocks(SVNConnection connection, String startPath) {
-    return delegate.getLocks(connection, startPath);
+  public Map<String, DirEntryLock> getLocks(final SVNConnection connection, String startPath, boolean recursive) {
+    return delegate.getLocks(connection, startPath, recursive);
   }
 
   @Override

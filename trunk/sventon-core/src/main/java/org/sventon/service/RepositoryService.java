@@ -149,9 +149,10 @@ public interface RepositoryService {
    *
    * @param connection The repository connection
    * @param startPath  The start path. If <code>null</code> locks will be gotten from root.
+   * @param recursive  If set to <code>true</code>, the call will recurse into sub directories.
    * @return Map containing path and locks.
    */
-  Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath);
+  Map<String, DirEntryLock> getLocks(final SVNConnection connection, final String startPath, final boolean recursive);
 
   /**
    * List directory entries in given path.

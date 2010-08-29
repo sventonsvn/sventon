@@ -32,7 +32,7 @@ public class ShowLocksControllerTest extends TestCase {
     final Map<String, DirEntryLock> result = new HashMap<String, DirEntryLock>();
     result.put("/", new DirEntryLock("id", "path", "owner", "comment", new Date(), new Date()));
 
-    when(serviceMock.getLocks(null, command.getPath())).thenReturn(result);
+    when(serviceMock.getLocks(null, command.getPath(), true)).thenReturn(result);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
     final Map model = modelAndView.getModel();

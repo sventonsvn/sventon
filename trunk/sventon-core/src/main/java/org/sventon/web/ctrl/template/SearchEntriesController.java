@@ -76,7 +76,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
     model.put("svndir", entries);
     model.put("searchString", searchString);
-    model.put("locks", getRepositoryService().getLocks(connection, command.getPath()));
+    model.put("locks", getRepositoryService().getLocks(connection, command.getPath(), false));
     model.put("startDir", startDir);
     model.put("isEntrySearch", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
