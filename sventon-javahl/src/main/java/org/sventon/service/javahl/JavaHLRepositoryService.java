@@ -25,7 +25,9 @@ import org.sventon.model.*;
 import org.sventon.model.DirEntry;
 import org.sventon.model.Properties;
 import org.sventon.model.Revision;
+import org.sventon.service.AbstractRepositoryService;
 import org.sventon.service.RepositoryService;
+import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
@@ -37,7 +39,7 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
-public class JavaHLRepositoryService implements RepositoryService {
+public class JavaHLRepositoryService extends AbstractRepositoryService  {
   private static final String[] REV_PROP_NAMES = new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE};
 
 
@@ -301,49 +303,11 @@ public class JavaHLRepositoryService implements RepositoryService {
 
 
   @Override
-  public List<SideBySideDiffRow> diffSideBySide(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-
-    // TODO: assertNotBinary(connection, command, pegRevision);
-
-    try {
-      final TextFile leftFile;
-      final TextFile rightFile;
-
-      if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
-      } else {
-        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
-      }
-      return createSideBySideDiff(command, charset, leftFile, rightFile);
-    } catch (IOException ioex) {
-      throw new DiffException("Unable to produce unified diff", ioex);
-    }
-  }
-
-
-  protected List<SideBySideDiffRow> createSideBySideDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
-    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
-    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
-    final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
-
-    diffProducer.doNormalDiff(diffResult);
-    final String diffResultString = diffResult.toString(charset);
-
-    if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
-    }
-    return new SideBySideDiffCreator(leftFile, rightFile).createFromDiffResult(diffResultString);
-  }
-
-  @Override
   public String diffUnified(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
 
-    // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
+    assertNotBinary(connection, command, pegRevision);
 
     try {
       final File outFile = createTempFileForDiff();
@@ -384,35 +348,6 @@ public class JavaHLRepositoryService implements RepositoryService {
     return File.createTempFile("sventon-temp", ".diff");
   }
 
-  @Override
-  public List<InlineDiffRow> diffInline(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-    // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
-
-    try {
-      final TextFile leftFile;
-      final TextFile rightFile;
-
-      if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
-      } else {
-        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
-      }
-
-      return InlineDiffCreator.createInlineDiff(command, charset, leftFile, rightFile);
-    } catch (IOException ioex) {
-      throw new DiffException("Unable to produce unified diff", ioex);
-    }
-  }
-
-  protected final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
-                                       final String charset) throws SventonException, IOException {
-    logger.debug("Fetching file " + path + "@" + revision);
-    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-    getFileContents(connection, path, revision, outStream);
-    return new TextFile(outStream.toString(charset));
-  }
 
   @Override
   public List<DiffStatus> diffPaths(SVNConnection connection, final DiffCommand command) throws SventonException {
@@ -478,49 +413,6 @@ public class JavaHLRepositoryService implements RepositoryService {
     }
   }
 
-  @Override
-  public DirEntry.Kind getNodeKindForDiff(SVNConnection connection, DiffCommand command) throws SventonException, DiffException {
-    final long fromRevision;
-    final long toRevision;
-
-    if (command.hasPegRevision()) {
-      fromRevision = command.getPegRevision();
-      toRevision = command.getPegRevision();
-    } else {
-      fromRevision = command.getFromRevision().getNumber();
-      toRevision = command.getToRevision().getNumber();
-    }
-
-    final DirEntry.Kind nodeKind1;
-    final DirEntry.Kind nodeKind2;
-
-    try {
-      nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
-    } catch (NoSuchRevisionException e) {
-      throw new DiffException("Path [" + command.getFromPath() + "] does not exist as revision [" + fromRevision + "]");
-    }
-    try {
-      nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
-    } catch (NoSuchRevisionException e) {
-      throw new DiffException("Path [" + command.getToPath() + "] does not exist as revision [" + toRevision + "]");
-    }
-
-    assertSameKind(nodeKind1, nodeKind2);
-    return nodeKind1;
-  }
-
-  /**
-   * TODO: Move to abstract base class?
-   *
-   * @param nodeKind1
-   * @param nodeKind2
-   * @throws DiffException
-   */
-  private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {
-    if (nodeKind1 != nodeKind2) {
-      throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
-    }
-  }
 
   @Override
   public Revision translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
@@ -561,11 +453,6 @@ public class JavaHLRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-    return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
-  }
-
-  @Override
   public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
     final List<Long> list = new ArrayList<Long>();
     for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, path, limit, stopOnCopy, false)) {
@@ -593,5 +480,7 @@ public class JavaHLRepositoryService implements RepositoryService {
 
     throw new SventonException(errorMessage, exception);
   }
+
+
 
 }
