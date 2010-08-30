@@ -9,7 +9,7 @@
 package com.uwyn.jhighlight.renderer;
 
 import com.uwyn.jhighlight.highlighter.ExplicitStateHighlighter;
-import com.uwyn.jhighlight.highlighter.JavaHighlighter;
+import com.uwyn.jhighlight.highlighter.CSharpHighlighter;
 import com.uwyn.jhighlight.renderer.XhtmlRenderer;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @version $Revision: 3108 $
  * @since 1.0
  */
-public class JavaXhtmlRenderer extends XhtmlRenderer
+public class CSharpXhtmlRenderer extends XhtmlRenderer
 {
 	public final static HashMap DEFAULT_CSS = new HashMap() {{
 			put("h1",
@@ -40,43 +40,33 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 				"font-size: 12px; " +
 				"white-space: nowrap;");
 			
-			put(".java_plain",
+			put(".csharp_plain",
 				"color: rgb(0,0,0);");
 			
-			put(".java_keyword",
+			put(".csharp_keyword",
 				"color: rgb(0,0,0); " +
 				"font-weight: bold;");
 			
-			put(".java_type",
-				"color: rgb(0,44,221);");
+			put(".csharp_type",
+				"color: rgb(128,0,0);");
 			
-			put(".java_operator",
+			put(".csharp_operator",
 				"color: rgb(0,124,31);");
 			
-			put(".java_separator",
+			put(".csharp_separator",
 				"color: rgb(0,33,255);");
 			
-			put(".java_literal",
-				"color: rgb(188,0,0);");
-			put(".java_num_literal",
-				"color: rgb(188,0,0);");
-			put(".java_string_literal",
-				"color: rgb(188,0,0);");
-
-                        put(".java_comment",
+			put(".csharp_string_literal",
+				"color: rgb(255,0,0);");
+			put(".csharp_char_literal",
+				"color: rgb(255,0,0);");                        
+			put(".csharp_num_literal",
+				"color: rgb(0,0,255);");			
+			put(".csharp_comment",
 				"color: rgb(147,147,147); " +
 				"background-color: rgb(247,247,247);");
-			
-			put(".java_javadoc_comment",
-				"color: rgb(147,147,147); " +
-				"background-color: rgb(247,247,247); " +
-				"font-style: italic;");
-			
-			put(".java_javadoc_tag",
-				"color: rgb(147,147,147); " +
-				"background-color: rgb(247,247,247); " +
-				"font-style: italic; " +
-				"font-weight: bold;");
+			put(".csharp_directive",
+				"color: rgb(0,147,0); ");
 		}};
 	
 	protected Map getDefaultCssStyles()
@@ -88,28 +78,26 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 	{
 		switch (style)
 		{
-			case JavaHighlighter.PLAIN_STYLE:
-				return "java_plain";
-			case JavaHighlighter.KEYWORD_STYLE:
-				return "java_keyword";
-			case JavaHighlighter.TYPE_STYLE:
-				return "java_type";
-			case JavaHighlighter.OPERATOR_STYLE:
-				return "java_operator";
-			case JavaHighlighter.SEPARATOR_STYLE:
-				return "java_separator";
-			case JavaHighlighter.LITERAL_STYLE:
-				return "java_literal";
-			case JavaHighlighter.NUM_LITERAL_STYLE:
-				return "java_num_literal";
-			case JavaHighlighter.STRING_LITERAL_STYLE:
-				return "java_string_literal";                                
-			case JavaHighlighter.JAVA_COMMENT_STYLE:
-				return "java_comment";
-			case JavaHighlighter.JAVADOC_COMMENT_STYLE:
-				return "java_javadoc_comment";
-			case JavaHighlighter.JAVADOC_TAG_STYLE:
-				return "java_javadoc_tag";
+			case CSharpHighlighter.PLAIN_STYLE:
+				return "csharp_plain";
+			case CSharpHighlighter.KEYWORD_STYLE:
+				return "csharp_keyword";
+			case CSharpHighlighter.TYPE_STYLE:
+				return "csharp_type";
+			case CSharpHighlighter.OPERATOR_STYLE:
+				return "csharp_operator";
+			case CSharpHighlighter.SEPARATOR_STYLE:
+				return "csharp_separator";
+			case CSharpHighlighter.STRING_LITERAL_STYLE:
+				return "csharp_string_literal";
+                        case CSharpHighlighter.NUM_LITERAL_STYLE:                                
+                                return "csharp_num_literal";
+                        case CSharpHighlighter.CHAR_LITERAL_STYLE:                                
+                                return "csharp_char_literal";                                
+			case CSharpHighlighter.COMMENT_STYLE:
+				return "csharp_comment";
+			case CSharpHighlighter.DIRECTIVE_STYLE:
+				return "csharp_directive";
 		}
 		
 		return null;
@@ -117,8 +105,7 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 	
 	protected ExplicitStateHighlighter getHighlighter()
 	{
-		JavaHighlighter highlighter = new JavaHighlighter();
-		highlighter.ASSERT_IS_KEYWORD = true;
+		CSharpHighlighter highlighter = new CSharpHighlighter();
 		
 		return highlighter;
 	}

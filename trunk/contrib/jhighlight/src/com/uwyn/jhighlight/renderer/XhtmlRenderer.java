@@ -1,4 +1,5 @@
 /*
+ * Copyright 2008 Gábor Fehér <feherga@gmail.com>
  * Copyright 2004-2006 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Distributed under the terms of either:
  * - the common development and distribution license (CDDL), v1.0; or
@@ -30,6 +31,8 @@ import java.util.logging.Logger;
  */
 public abstract class XhtmlRenderer implements Renderer
 {
+        static final String HTML_NBSP = "&#160;";
+    
 	/**
 	 * Transforms source code that's provided through an
 	 * <code>InputStream</code> to highlighted syntax in XHTML and writes it
@@ -123,7 +126,7 @@ public abstract class XhtmlRenderer implements Renderer
 					}
 				}
 				newline = false;					
-				w.write(StringUtils.replace(StringUtils.encodeHtml(StringUtils.replace(token, "\n", "")), " ", "&nbsp;"));
+				w.write(StringUtils.replace(StringUtils.encodeHtml(StringUtils.replace(token, "\n", "")), " ",  HTML_NBSP ));
 				
 				index += length;
 			}
@@ -161,7 +164,11 @@ public abstract class XhtmlRenderer implements Renderer
 	throws IOException
 	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		highlight(name, new StringBufferInputStream(in), out, encoding, fragment);
+                
+                InputStream is;
+                if (encoding == null) is = new ByteArrayInputStream(in.getBytes());
+                else is = new ByteArrayInputStream(in.getBytes(encoding));
+		highlight(name, is, out, encoding, fragment);
 		return out.toString(encoding);
 	}
 		
@@ -202,7 +209,7 @@ public abstract class XhtmlRenderer implements Renderer
 	 * @see #getCssClass(int)
 	 * @since 1.0
 	 */
-	protected String getCssClassDefinitions()
+	public String getCssClassDefinitions()
 	{
 		StringBuffer css = new StringBuffer();
 		

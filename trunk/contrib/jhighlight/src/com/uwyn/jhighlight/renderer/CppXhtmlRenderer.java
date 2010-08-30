@@ -1,4 +1,5 @@
 /*
+ * Copyright 2008 Gábor Fehér <feherga@gmail.com>
  * Copyright 2006 Arnout Engelen <arnouten[remove] at bzzt dot net>
  * Copyright 2004-2006 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Distributed under the terms of either:
@@ -56,9 +57,12 @@ public class CppXhtmlRenderer extends XhtmlRenderer
 			put(".cpp_separator",
 				"color: rgb(0,33,255);");
 			
-			put(".cpp_literal",
+			put(".cpp_num_literal",
 				"color: rgb(188,0,0);");
-			
+			put(".cpp_bool_literal",
+				"color: rgb(188,0,0);");
+			put(".cpp_string_literal",
+				"color: rgb(188,0,0);");
 			put(".cpp_comment",
 				"color: rgb(147,147,147); " +
 				"background-color: rgb(247,247,247);");
@@ -97,8 +101,12 @@ public class CppXhtmlRenderer extends XhtmlRenderer
 				return "cpp_operator";
 			case CppHighlighter.SEPARATOR_STYLE:
 				return "cpp_separator";
-			case CppHighlighter.LITERAL_STYLE:
-				return "cpp_literal";
+			case CppHighlighter.BOOL_LITERAL_STYLE:
+                                return "cpp_bool_literal";
+                        case CppHighlighter.NUM_LITERAL_STYLE:
+                                return "cpp_num_literal";
+                        case CppHighlighter.STRING_LITERAL_STYLE:
+				return "cpp_string_literal";
 			case CppHighlighter.CPP_COMMENT_STYLE:
 				return "cpp_comment";
 			case CppHighlighter.DOXYGEN_COMMENT_STYLE:

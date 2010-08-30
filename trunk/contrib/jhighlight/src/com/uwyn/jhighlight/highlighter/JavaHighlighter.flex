@@ -1,4 +1,5 @@
 /*
+ * Copyright 2008 Gábor Fehér <feherga@gmail.com>
  * Copyright 2000-2006 Omnicore Software, Hans Kratz & Dennis Strein GbR,
  *                     Geert Bevin <gbevin[remove] at uwyn dot com>.
  * Distributed under the terms of either:
@@ -35,7 +36,9 @@ import java.io.IOException;
 	public static final byte TYPE_STYLE = 3;
 	public static final byte OPERATOR_STYLE = 4;
 	public static final byte SEPARATOR_STYLE = 5;
-	public static final byte LITERAL_STYLE = 6;
+        public static final byte LITERAL_STYLE = 6;
+	public static final byte NUM_LITERAL_STYLE = 61;
+        public static final byte STRING_LITERAL_STYLE = 62;
 	public static final byte JAVA_COMMENT_STYLE = 7;
 	public static final byte JAVADOC_COMMENT_STYLE = 8;
 	public static final byte JAVADOC_TAG_STYLE = 9;
@@ -180,17 +183,20 @@ Exponent = [eE] [+\-]? [0-9]+
   /* literals */
   "true" |
   "false" |
-  "null" |
+  "null" 
+        { return LITERAL_STYLE; }
 
   (\" ( [^\"\n\\] | \\[^\n] )* (\n | \\\n | \")) |
-  (\' ( [^\'\n\\] | \\[^\n] )* (\n | \\\n | \')) |
+  (\' ( [^\'\n\\] | \\[^\n] )* (\n | \\\n | \')) 
+        { return STRING_LITERAL_STYLE; }
+
 
   {DecLiteral} |
   {HexLiteral} |
   {OctLiteral} |
 
   {FloatLiteral}
-	{ return LITERAL_STYLE; }
+	{ return NUM_LITERAL_STYLE; }
   
   /* separators */
   "(" |

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2008 Gábor Fehér <feherga@gmail.com>
  * Copyright 2004-2006 Geert Bevin <gbevin[remove] at uwyn dot com>
  * Distributed under the terms of either:
  * - the common development and distribution license (CDDL), v1.0; or
@@ -32,6 +33,11 @@ public abstract class XhtmlRendererFactory
 	public final static String CPP = "cpp";
 	public final static String CXX = "cxx";
 	public final static String CPLUSPLUS = "c++";
+        public final static String C = "c";
+        public final static String PASCAL = "pas";
+        public final static String DELPHI = "dpr";
+        public final static String CSHARP = "cs";
+        public final static String VB = "vb";
 	
 	private final static Map RENDERERS_CLASSNAMES = new HashMap() {{
 			put(GROOVY, GroovyXhtmlRenderer.class.getName());
@@ -45,6 +51,11 @@ public abstract class XhtmlRendererFactory
 			put(CPP, CppXhtmlRenderer.class.getName());
 			put(CXX, CppXhtmlRenderer.class.getName());
 			put(CPLUSPLUS, CppXhtmlRenderer.class.getName());
+                        put(C, CppXhtmlRenderer.class.getName());
+                        put(PASCAL, PascalXhtmlRenderer.class.getName());
+                        put(DELPHI, PascalXhtmlRenderer.class.getName());
+                        put(CSHARP, CSharpXhtmlRenderer.class.getName());
+                        put(VB, VisualBasicXhtmlRenderer.class.getName());
 		}};
 	
 	/**
