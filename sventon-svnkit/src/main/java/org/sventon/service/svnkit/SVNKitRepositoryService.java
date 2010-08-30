@@ -18,15 +18,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
 import org.sventon.colorer.Colorer;
-import org.sventon.diff.DiffException;
-import org.sventon.diff.IdenticalFilesException;
-import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.diff.SideBySideDiffCreator;
+import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.service.RepositoryService;
-import org.sventon.diff.DiffProducer;
 import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
@@ -354,7 +350,7 @@ public class SVNKitRepositoryService implements RepositoryService {
         rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
       }
 
-      return createInlineDiff(command, charset, leftFile, rightFile);
+      return InlineDiffCreator.createInlineDiff(command, charset, leftFile, rightFile);
 
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce inline diff", ioex);
@@ -525,51 +521,6 @@ public class SVNKitRepositoryService implements RepositoryService {
       throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
     }
     return diffResultString;
-  }
-
-  protected List<InlineDiffRow> createInlineDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
-    final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
-    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
-    final Map generatorProperties = new HashMap();
-    final int maxLines = Math.max(leftFile.getRows().size(), rightFile.getRows().size());
-    //noinspection unchecked
-    generatorProperties.put(QDiffGeneratorFactory.GUTTER_PROPERTY, maxLines);
-    final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
-        new ByteArrayInputStream(rightFile.getContent().getBytes()), charset, generatorProperties);
-
-    diffProducer.doUnifiedDiff(diffResult);
-
-    final String diffResultString = diffResult.toString(charset);
-    if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
-    }
-
-    int rowNumberLeft = 1;
-    int rowNumberRight = 1;
-    //noinspection unchecked
-    for (final String row : (List<String>) IOUtils.readLines(new StringReader(diffResultString))) {
-      if (!row.startsWith("@@")) {
-        final char action = row.charAt(0);
-        switch (action) {
-          case ' ':
-            resultRows.add(new InlineDiffRow(rowNumberLeft, rowNumberRight, DiffAction.UNCHANGED, row.substring(1).trim()));
-            rowNumberLeft++;
-            rowNumberRight++;
-            break;
-          case '+':
-            resultRows.add(new InlineDiffRow(null, rowNumberRight, DiffAction.ADDED, row.substring(1).trim()));
-            rowNumberRight++;
-            break;
-          case '-':
-            resultRows.add(new InlineDiffRow(rowNumberLeft, null, DiffAction.DELETED, row.substring(1).trim()));
-            rowNumberLeft++;
-            break;
-          default:
-            throw new IllegalArgumentException("Unknown action: " + action);
-        }
-      }
-    }
-    return resultRows;
   }
 
   private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {

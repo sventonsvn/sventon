@@ -3,6 +3,7 @@ package org.sventon.service.svnkit;
 import junit.framework.TestCase;
 import org.mockito.Mockito;
 import org.sventon.diff.IdenticalFilesException;
+import org.sventon.diff.InlineDiffCreator;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
 import org.sventon.web.command.editor.PathRevisionEditor;
@@ -94,7 +95,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     final DiffCommand command = new DiffCommand();
     command.setEntries(editor.convert(revisions));
 
-    final List<InlineDiffRow> list = service.createInlineDiff(command, ENCODING, leftFile, rightFile);
+    final List<InlineDiffRow> list = InlineDiffCreator.createInlineDiff(command, ENCODING, leftFile, rightFile);
 
     assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
     assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
