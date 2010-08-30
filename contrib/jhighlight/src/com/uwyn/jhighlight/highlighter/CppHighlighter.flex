@@ -1,4 +1,5 @@
 /*
+ * Copyright 2008 Gábor Fehér <feherga@gmail.com>
  * Copyright 2006 Arnout Engelen <arnouten[remove] at bzzt dot net>.
  * Copyright 2000-2006 Omnicore Software, Hans Kratz & Dennis Strein GbR,
  *                     Geert Bevin <gbevin[remove] at uwyn dot com>.
@@ -34,7 +35,9 @@ import java.io.IOException;
 	public static final byte TYPE_STYLE = 3;
 	public static final byte OPERATOR_STYLE = 4;
 	public static final byte SEPARATOR_STYLE = 5;
-	public static final byte LITERAL_STYLE = 6;
+	public static final byte NUM_LITERAL_STYLE = 61;
+        public static final byte STRING_LITERAL_STYLE = 62;
+        public static final byte BOOL_LITERAL_STYLE = 63;
 	public static final byte CPP_COMMENT_STYLE = 7;
 	public static final byte DOXYGEN_COMMENT_STYLE = 8;
 	public static final byte DOXYGEN_TAG_STYLE = 9;
@@ -160,7 +163,7 @@ Exponent = [eE] [+\-]? [0-9]+
   "__except" |
   "explicit" |
   "extern" |
-  "false" |
+//  "false" |
   "__fastcall" |
   "__finally" |
   "finally" |
@@ -236,7 +239,7 @@ Exponent = [eE] [+\-]? [0-9]+
   "this" |
   "thread" |
   "throw" |
-  "true" |
+//  "true" |
   "try" |
   "__try" |
   "__except" |
@@ -274,17 +277,18 @@ Exponent = [eE] [+\-]? [0-9]+
 
   /* literals */
   "true" |
-  "false" |
+  "false" 
+        {return BOOL_LITERAL_STYLE; }
 
   (\" ( [^\"\n\\] | \\[^\n] )* (\n | \\\n | \")) |
-  (\' ( [^\'\n\\] | \\[^\n] )* (\n | \\\n | \')) |
+  (\' ( [^\'\n\\] | \\[^\n] )* (\n | \\\n | \')) 
+        { return STRING_LITERAL_STYLE; }
 
   {DecLiteral} |
   {OctLiteral} |
-  {HexLiteral} |
-
+  {HexLiteral} | 
   {FloatLiteral}
-	{ return LITERAL_STYLE; }
+        { return NUM_LITERAL_STYLE; }
 
   /* preprocessor symbols */
   "#define" |

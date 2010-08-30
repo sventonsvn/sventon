@@ -9,7 +9,7 @@
 package com.uwyn.jhighlight.renderer;
 
 import com.uwyn.jhighlight.highlighter.ExplicitStateHighlighter;
-import com.uwyn.jhighlight.highlighter.JavaHighlighter;
+import com.uwyn.jhighlight.highlighter.VisualBasicHighlighter;
 import com.uwyn.jhighlight.renderer.XhtmlRenderer;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @version $Revision: 3108 $
  * @since 1.0
  */
-public class JavaXhtmlRenderer extends XhtmlRenderer
+public class VisualBasicXhtmlRenderer extends XhtmlRenderer
 {
 	public final static HashMap DEFAULT_CSS = new HashMap() {{
 			put("h1",
@@ -40,43 +40,31 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 				"font-size: 12px; " +
 				"white-space: nowrap;");
 			
-			put(".java_plain",
+			put(".vb_plain",
 				"color: rgb(0,0,0);");
 			
-			put(".java_keyword",
+			put(".vb_keyword",
 				"color: rgb(0,0,0); " +
 				"font-weight: bold;");
 			
-			put(".java_type",
-				"color: rgb(0,44,221);");
+			put(".vb_type",
+				"color: rgb(128,0,0);");
 			
-			put(".java_operator",
+			put(".vb_operator",
 				"color: rgb(0,124,31);");
 			
-			put(".java_separator",
+			put(".vb_separator",
 				"color: rgb(0,33,255);");
 			
-			put(".java_literal",
-				"color: rgb(188,0,0);");
-			put(".java_num_literal",
-				"color: rgb(188,0,0);");
-			put(".java_string_literal",
-				"color: rgb(188,0,0);");
-
-                        put(".java_comment",
+			put(".vb_string_literal",
+				"color: rgb(255,0,0);");
+			put(".vb_char_literal",
+				"color: rgb(255,0,0);");                        
+			put(".vb_num_literal",
+				"color: rgb(0,0,255);");			
+			put(".vb_comment",
 				"color: rgb(147,147,147); " +
 				"background-color: rgb(247,247,247);");
-			
-			put(".java_javadoc_comment",
-				"color: rgb(147,147,147); " +
-				"background-color: rgb(247,247,247); " +
-				"font-style: italic;");
-			
-			put(".java_javadoc_tag",
-				"color: rgb(147,147,147); " +
-				"background-color: rgb(247,247,247); " +
-				"font-style: italic; " +
-				"font-weight: bold;");
 		}};
 	
 	protected Map getDefaultCssStyles()
@@ -88,28 +76,24 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 	{
 		switch (style)
 		{
-			case JavaHighlighter.PLAIN_STYLE:
-				return "java_plain";
-			case JavaHighlighter.KEYWORD_STYLE:
-				return "java_keyword";
-			case JavaHighlighter.TYPE_STYLE:
-				return "java_type";
-			case JavaHighlighter.OPERATOR_STYLE:
-				return "java_operator";
-			case JavaHighlighter.SEPARATOR_STYLE:
-				return "java_separator";
-			case JavaHighlighter.LITERAL_STYLE:
-				return "java_literal";
-			case JavaHighlighter.NUM_LITERAL_STYLE:
-				return "java_num_literal";
-			case JavaHighlighter.STRING_LITERAL_STYLE:
-				return "java_string_literal";                                
-			case JavaHighlighter.JAVA_COMMENT_STYLE:
-				return "java_comment";
-			case JavaHighlighter.JAVADOC_COMMENT_STYLE:
-				return "java_javadoc_comment";
-			case JavaHighlighter.JAVADOC_TAG_STYLE:
-				return "java_javadoc_tag";
+			case VisualBasicHighlighter.PLAIN_STYLE:
+				return "vb_plain";
+			case VisualBasicHighlighter.KEYWORD_STYLE:
+				return "vb_keyword";
+			case VisualBasicHighlighter.TYPE_STYLE:
+				return "vb_type";
+			case VisualBasicHighlighter.OPERATOR_STYLE:
+				return "vb_operator";
+			case VisualBasicHighlighter.SEPARATOR_STYLE:
+				return "vb_separator";
+			case VisualBasicHighlighter.STRING_LITERAL_STYLE:
+				return "vb_string_literal";
+                        case VisualBasicHighlighter.NUM_LITERAL_STYLE:                                
+                                return "vb_num_literal";
+                        case VisualBasicHighlighter.CHAR_LITERAL_STYLE:                                
+                                return "vb_char_literal";                                
+			case VisualBasicHighlighter.COMMENT_STYLE:
+				return "vb_comment";
 		}
 		
 		return null;
@@ -117,8 +101,7 @@ public class JavaXhtmlRenderer extends XhtmlRenderer
 	
 	protected ExplicitStateHighlighter getHighlighter()
 	{
-		JavaHighlighter highlighter = new JavaHighlighter();
-		highlighter.ASSERT_IS_KEYWORD = true;
+		VisualBasicHighlighter highlighter = new VisualBasicHighlighter();
 		
 		return highlighter;
 	}
