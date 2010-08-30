@@ -1,13 +1,13 @@
 sventon is a Subversion web client for Java Servlet containers.
 
-A J2SE 5.0 runtime and a servlet 2.4/JSP 2.0 compliant container is
+A Java SE 6 runtime and a servlet 2.4/JSP 2.0 compliant container is
 required for deployment, thus Tomcat 6.0 is a good container companion.
 You'll also need a Subversion server set up and configured with a
-repository. For info on Subversion, see http://subversion.tigris.org
+repository. For info on Subversion, see http://subversion.apache.org
 
 The JHighlight library from https://jhighlight.dev.java.net is used for
 syntax highlighting.
-Currently the library supports colorization of the following file formats:
+Currently the library supports colorization of a number of file formats, including:
 * HTML/XHTML
 * Java
 * Groovy

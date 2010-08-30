@@ -1,7 +1,7 @@
 UPGRADING FROM A PREVIOUS SVENTON VERSION
 
 The cache implementation and the configuration property file format
-has changed between sventon version 2.1.4 and 2.1.5. This means that
+has changed between sventon version 2.1.6 and 2.5.0. This means that
 sventon will re-cache your repository.
 
 Follow these steps for a smooth upgrade.
