@@ -45,7 +45,8 @@
   </p>
   <p>
   When creating patches, use <code>svn diff</code> from the top of a sventon Subversion trunk working copy.
-  The <a href="http://subversion.tigris.org/">Subversion</a> project has an <a href="http://subversion.tigris.org/hacking.html#patches">excellent writeup about
+  The <a href="http://subversion.tigris.org/">Subversion</a> project has an
+      <a href="http://subversion.apache.org/docs/community-guide/general.html#patches">excellent writeup about
   submitting patches</a>, much of what is mentioned in this text should be applied when submitting patches to sventon as
   well.
   </p>
@@ -55,7 +56,8 @@
   <p>
   End-user and developer documentation can be found on the <a href="http://wiki.sventon.org/">sventon wiki</a>.<br/>
   <a href="http://maven.apache.org/">Maven</a> generated project pages can be found 
-  <a href="http://sventon.berlios.de/site/">here</a>. 
+  <a href="http://sventon.berlios.de/site/">here</a>. <br/>
+  <a href="http://wiki.sventon.org/index.php?n=Main.Building">Instructions for building sventon</a>
   </p>
   
   <br/>
