@@ -215,7 +215,6 @@ public class JavaHLRepositoryService implements RepositoryService {
           recursive ? Depth.infinity : Depth.immediates, null, new InfoCallback() {
             @Override
             public void singleInfo(Info2 info2) {
-              System.out.println(callbackCounter);
               callbackCounter.increment();
               final Lock lock = info2.getLock();
               if (lock != null) {
