@@ -21,6 +21,7 @@ import org.sventon.*;
 import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
+import org.sventon.diff.InlineDiffCreator;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
@@ -30,6 +31,7 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -357,7 +359,34 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<InlineDiffRow> diffInline(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-    throw new UnsupportedOperationException();
+    final JavaHLConnection conn = (JavaHLConnection) connection;
+
+    // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
+
+    try {
+      final TextFile leftFile;
+      final TextFile rightFile;
+
+      if (Revision.UNDEFINED.equals(pegRevision)) {
+        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+      } else {
+        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+      }
+
+      return InlineDiffCreator.createInlineDiff(command, charset, leftFile, rightFile);
+    } catch (IOException ioex) {
+      throw new DiffException("Unable to produce unified diff", ioex);
+    }
+  }
+
+  protected final TextFile getTextFile(final SVNConnection connection, final String path, final long revision,
+                                       final String charset) throws SventonException, IOException {
+    logger.debug("Fetching file " + path + "@" + revision);
+    final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+    getFileContents(connection, path, revision, outStream);
+    return new TextFile(outStream.toString(charset));
   }
 
   @Override
