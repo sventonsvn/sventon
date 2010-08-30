@@ -1,12 +1,12 @@
 <div class="header">Welcome to the sventon project!</div>
 <div class="body">
 <p>
-  sventon is a free, open source, web client for browsing Subversion repositories. It is powerful, straightforward to use,
+  sventon is a free, open source, web client for browsing <a href="http://subversion.apache.org/">Subversion</a> repositories. It is powerful, straightforward to use,
   and super easy to install.
   </p>
 <p>
 sventon is a pure Java application, all you need to run it is a
-<a href="http://java.sun.com/j2se/1.5.0/">J2SE 5.0 runtime</a> and a Servlet 2.4/JSP 2.0 compliant webserver,
+<a href="http://www.oracle.com/technetwork/java/javase/downloads/">Java SE 6 runtime</a> and a Servlet 2.4/JSP 2.0 compliant webserver,
 such as  <a href="http://tomcat.apache.org/">Tomcat 6.0</a>. Installation is truly simple, we will have you up and
 running in no-time!
 </p>
@@ -14,7 +14,7 @@ running in no-time!
 Some of the features making sventon a great Subversion companion:
 <ul style="margin-left:40px">
   <li>Browse and download directories and files</li>
-  <li>Source code syntax highlighting for Java, HTML, XML, C, Groovy, Pascal/Delphi, VisualBasic, C# and JavaScript.</li>
+  <li>Source code syntax highlighting for many languages, including Java, HTML, XML, C, Groovy, Pascal/Delphi, VisualBasic, C#, and JavaScript.</li>
   <li>View logs and blame individual files</li>
   <li>Diff your repository files, or view their properties</li>
   <li>Show differences between paths.</li>
