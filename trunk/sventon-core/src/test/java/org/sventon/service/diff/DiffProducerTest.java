@@ -1,4 +1,4 @@
-package org.sventon.service.svnkit.diff;
+package org.sventon.service.diff;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import junit.framework.TestCase;
