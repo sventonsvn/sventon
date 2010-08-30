@@ -19,9 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
 import org.sventon.colorer.Colorer;
-import org.sventon.diff.DiffException;
-import org.sventon.diff.IdenticalFilesException;
-import org.sventon.diff.InlineDiffCreator;
+import org.sventon.diff.*;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
@@ -31,10 +29,7 @@ import org.sventon.service.RepositoryService;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -308,7 +303,40 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<SideBySideDiffRow> diffSideBySide(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-    throw new UnsupportedOperationException();
+
+    // TODO: assertNotBinary(connection, command, pegRevision);
+
+    try {
+      final TextFile leftFile;
+      final TextFile rightFile;
+
+      if (Revision.UNDEFINED.equals(pegRevision)) {
+        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+      } else {
+        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+      }
+      return createSideBySideDiff(command, charset, leftFile, rightFile);
+    } catch (IOException ioex) {
+      throw new DiffException("Unable to produce unified diff", ioex);
+    }
+  }
+
+
+  protected List<SideBySideDiffRow> createSideBySideDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+    final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
+    final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
+    final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
+    final DiffProducer diffProducer = new DiffProducer(leftStream, rightStream, charset);
+
+    diffProducer.doNormalDiff(diffResult);
+    final String diffResultString = diffResult.toString(charset);
+
+    if ("".equals(diffResultString)) {
+      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+    }
+    return new SideBySideDiffCreator(leftFile, rightFile).createFromDiffResult(diffResultString);
   }
 
   @Override
@@ -359,8 +387,6 @@ public class JavaHLRepositoryService implements RepositoryService {
 
   @Override
   public List<InlineDiffRow> diffInline(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
-    final JavaHLConnection conn = (JavaHLConnection) connection;
-
     // TODO: Add call to: assertNotBinary(connection, command, pegRevision);
 
     try {
