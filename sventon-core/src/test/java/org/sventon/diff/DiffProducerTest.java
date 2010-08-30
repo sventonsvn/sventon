@@ -1,8 +1,9 @@
-package org.sventon.service.diff;
+package org.sventon.diff;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.sventon.diff.DiffProducer;
 import org.sventon.diff.DiffResultParser;
 import org.sventon.diff.DiffSegment;
 import org.sventon.model.DiffAction;
