@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.uwyn</groupId>
   <artifactId>jhighlight</artifactId>
@@ -11,7 +11,7 @@
     JHighlight is an embeddable pure Java syntax highlighting
     library that supports Java, HTML, XHTML, XML and LZX
     languages and outputs to XHTML.
-    
+
     It also supports RIFE templates tags and highlights them
     clearly so that you can easily identify the difference
     between your RIFE markup and the actual marked up source.
@@ -35,7 +35,7 @@
     <url>https://svn.rifers.org/jhighlight/trunk/</url>
   </scm>
   <issueManagement>
-  	<url>http://uwyn.com/issues/browse/JHL</url>
+    <url>http://uwyn.com/issues/browse/JHL</url>
   </issueManagement>
   <developers>
     <developer>
@@ -49,11 +49,18 @@
     <name>Uwyn</name>
     <url>http://uwyn.com/</url>
   </organization>
+
+  <parent>
+    <groupId>org.sventon</groupId>
+    <artifactId>sventon-contrib</artifactId>
+    <version>2.5.0-SNAPSHOT</version>
+  </parent>
+
   <properties>
-     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-   <build>
-   <sourceDirectory>src</sourceDirectory>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
         <directory>src</directory>
