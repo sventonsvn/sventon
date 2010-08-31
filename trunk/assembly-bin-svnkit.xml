@@ -23,8 +23,12 @@
         <include>licenses/**</include>
         <include>changes.txt</include>
         <include>readme.txt</include>
+        <include>upgrade.txt</include>
         <include>LICENSE.txt</include>
       </includes>
+      <excludes>
+        <exclude>licenses/svnjavahl/</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
 </assembly>
