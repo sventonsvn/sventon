@@ -256,4 +256,38 @@ public final class ConfigCommand {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ConfigCommand that = (ConfigCommand) o;
+
+    if (useCache != that.useCache) return false;
+    if (zipDownloadsAllowed != that.zipDownloadsAllowed) return false;
+    if (accessMethod != that.accessMethod) return false;
+    if (cacheUserName != null ? !cacheUserName.equals(that.cacheUserName) : that.cacheUserName != null) return false;
+    if (cacheUserPassword != null ? !cacheUserPassword.equals(that.cacheUserPassword) : that.cacheUserPassword != null)
+      return false;
+    if (name != null ? !name.equals(that.name) : that.name != null) return false;
+    if (repositoryUrl != null ? !repositoryUrl.equals(that.repositoryUrl) : that.repositoryUrl != null) return false;
+    if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+    if (userPassword != null ? !userPassword.equals(that.userPassword) : that.userPassword != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = name != null ? name.hashCode() : 0;
+    result = 31 * result + (repositoryUrl != null ? repositoryUrl.hashCode() : 0);
+    result = 31 * result + (userName != null ? userName.hashCode() : 0);
+    result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
+    result = 31 * result + (cacheUserName != null ? cacheUserName.hashCode() : 0);
+    result = 31 * result + (cacheUserPassword != null ? cacheUserPassword.hashCode() : 0);
+    result = 31 * result + (useCache ? 1 : 0);
+    result = 31 * result + (zipDownloadsAllowed ? 1 : 0);
+    result = 31 * result + (accessMethod != null ? accessMethod.hashCode() : 0);
+    return result;
+  }
 }
