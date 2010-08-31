@@ -34,8 +34,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Form controller handling add/edit of repository configurations.
- *
- * @author jesper@sventon.org
  */
 @Controller("configurationFormController")
 @RequestMapping("/repos/config")
@@ -48,6 +46,9 @@ public final class ConfigurationFormController {
    */
   private final Application application;
 
+  /**
+   * Validator for input.
+   */
   private ConfigCommandValidator validator;
 
   @Autowired
