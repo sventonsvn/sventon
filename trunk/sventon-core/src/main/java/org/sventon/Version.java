@@ -11,6 +11,9 @@
  */
 package org.sventon;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -20,6 +23,10 @@ import java.util.Properties;
  * @author jesper@sventon.org
  */
 public final class Version {
+   /**
+   * Logger for this class and subclasses.
+   */
+  final static Log logger = LogFactory.getLog(Version.class);
 
   /**
    * Version properties.
@@ -29,7 +36,7 @@ public final class Version {
   /**
    * Path to version.properties.
    */
-  private static final String VERSION_PROPERTIES_PATH = "/version.properties";
+  private static final String VERSION_PROPERTIES_PATH = "version.properties";
 
   /**
    * Release version property key.
@@ -57,11 +64,12 @@ public final class Version {
    */
   private static synchronized void assertMappingsLoaded() {
     if (VERSION_PROPERTIES.isEmpty()) {
+      InputStream is = null;
       try {
-        final InputStream is = Version.class.getClassLoader().getResourceAsStream(VERSION_PROPERTIES_PATH);
+        is = Version.class.getClassLoader().getResourceAsStream(VERSION_PROPERTIES_PATH);
         VERSION_PROPERTIES.load(is);
       } catch (Exception e) {
-        // ignored - using defaults
+         logger.debug("Could not load version properties. " + (is == null ? "Property file " + VERSION_PROPERTIES_PATH + " not found. " : "") + e.getMessage(), e);
       }
     }
   }
