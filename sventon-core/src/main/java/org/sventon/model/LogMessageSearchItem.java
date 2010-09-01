@@ -58,14 +58,14 @@ public final class LogMessageSearchItem implements Serializable {
   /**
    * Constructor.
    *
-   * @param svnLogEntry SVN log entry
+   * @param logEntry SVN log entry
    */
-  public LogMessageSearchItem(final LogEntry svnLogEntry) {
-    this.revision = svnLogEntry.getRevision();
-    this.author = svnLogEntry.getAuthor();
-    this.date = svnLogEntry.getDate() != null ? (Date) svnLogEntry.getDate().clone() : null;
-    this.message = svnLogEntry.getMessage();
-    this.paths = extractAndConcatinatePaths(svnLogEntry.getChangedPaths());
+  public LogMessageSearchItem(final LogEntry logEntry) {
+    this.revision = logEntry.getRevision();
+    this.author = logEntry.getAuthor();
+    this.date = logEntry.getDate() != null ? (Date) logEntry.getDate().clone() : null;
+    this.message = logEntry.getMessage();
+    this.paths = extractAndConcatinatePaths(logEntry.getChangedPaths());
   }
 
   /**
@@ -74,7 +74,7 @@ public final class LogMessageSearchItem implements Serializable {
    * @param changedPaths Changed paths for a certain revision.
    * @return Concatinated string of paths, or null/empty string if no changed paths in revision.
    */
-  private String extractAndConcatinatePaths(Set<ChangedPath> changedPaths) {
+  public static String extractAndConcatinatePaths(final Set<ChangedPath> changedPaths) {
     if (changedPaths != null) {
       StringBuilder pathsStringBuilder = new StringBuilder();
       for (ChangedPath changedPath : changedPaths) {
