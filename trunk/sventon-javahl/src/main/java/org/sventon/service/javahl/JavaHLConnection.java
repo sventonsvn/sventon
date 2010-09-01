@@ -27,7 +27,7 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
   /**
    * JavaHL delegate.
    */
-  private final SVNClient delegate;
+  private final SVNClientInterface delegate;
   private SVNURL url;
   private Credentials credentials;
 
@@ -38,13 +38,13 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
    * @param rootUrl     Repository root URL
    * @param credentials Credentials
    */
-  public JavaHLConnection(final SVNClient delegate, final SVNURL rootUrl, final Credentials credentials) {
+  public JavaHLConnection(final SVNClientInterface delegate, final SVNURL rootUrl, final Credentials credentials) {
     this.delegate = delegate;
     this.url = rootUrl;
     this.credentials = credentials;
   }
 
-  public SVNClient getDelegate() {
+  public SVNClientInterface getDelegate() {
     return delegate;
   }
 

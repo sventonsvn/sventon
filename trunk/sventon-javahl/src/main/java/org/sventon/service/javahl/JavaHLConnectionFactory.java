@@ -19,10 +19,7 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
-import org.tigris.subversion.javahl.ClientException;
-import org.tigris.subversion.javahl.PromptUserPassword2;
-import org.tigris.subversion.javahl.PromptUserPassword3;
-import org.tigris.subversion.javahl.SVNClient;
+import org.tigris.subversion.javahl.*;
 
 import java.io.File;
 
@@ -49,7 +46,7 @@ public class JavaHLConnectionFactory implements SVNConnectionFactory {
   public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SventonException {
     final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
-    final SVNClient client = new SVNClient();
+    final SVNClientInterface client = new SVNClient();
     try {
       client.setConfigDirectory(configDirectory.getAbsolutePath());
       client.setPrompt(new Prompt(credentials.getUserName(), credentials.getPassword()));
