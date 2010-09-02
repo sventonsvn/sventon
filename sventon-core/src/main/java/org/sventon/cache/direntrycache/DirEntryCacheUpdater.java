@@ -21,7 +21,7 @@ import org.sventon.SventonException;
 import org.sventon.appl.Application;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
-import org.sventon.cache.EntryCacheManager;
+import org.sventon.cache.DirEntryCacheManager;
 import org.sventon.model.ChangedPath;
 import org.sventon.model.DirEntry;
 import org.sventon.model.LogEntry;
@@ -45,9 +45,9 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   private static final Log LOGGER = LogFactory.getLog(DirEntryCacheUpdater.class);
 
   /**
-   * The EntryCacheManager instance.
+   * The DirEntryCacheManager instance.
    */
-  private final EntryCacheManager entryCacheManager;
+  private final DirEntryCacheManager cacheManager;
 
   /**
    * The application.
@@ -73,12 +73,12 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   /**
    * Constructor.
    *
-   * @param entryCacheManager The EntryCacheManager instance.
+   * @param cacheManager The DirEntryCacheManager instance.
    * @param application       Application
    */
-  public DirEntryCacheUpdater(final EntryCacheManager entryCacheManager, final Application application) {
+  public DirEntryCacheUpdater(final DirEntryCacheManager cacheManager, final Application application) {
     LOGGER.info("Starting");
-    this.entryCacheManager = entryCacheManager;
+    this.cacheManager = cacheManager;
     this.application = application;
   }
 
@@ -104,7 +104,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
     SVNConnection connection = null;
     try {
-      final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
+      final DirEntryCache entryCache = cacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
       connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(),
           configuration.getCacheCredentials());

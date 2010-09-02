@@ -27,18 +27,18 @@ import java.util.List;
  */
 public final class CacheGatewayImpl implements CacheGateway {
 
-  private EntryCacheManager entryCacheManager;
+  private DirEntryCacheManager cacheManager;
   private LogEntryCacheManager logEntryCacheManager;
   private RevisionCacheManager revisionCacheManager;
 
   /**
    * Sets the entry cache manager instance.
    *
-   * @param entryCacheManager EntryCacheManager instance.
+   * @param cacheManager DirEntryCacheManager instance.
    */
   @Autowired
-  public void setEntryCacheManager(final EntryCacheManager entryCacheManager) {
-    this.entryCacheManager = entryCacheManager;
+  public void setEntryCacheManager(final DirEntryCacheManager cacheManager) {
+    this.cacheManager = cacheManager;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class CacheGatewayImpl implements CacheGateway {
   public List<DirEntry> findEntries(final RepositoryName repositoryName, final String searchString,
                                     final String startDir)
       throws CacheException {
-    final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
+    final DirEntryCache entryCache = cacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
     return entryCache.findEntries(searchString, startDir);
   }
@@ -73,14 +73,14 @@ public final class CacheGatewayImpl implements CacheGateway {
   @Override
   public List<DirEntry> findEntriesByCamelCase(final RepositoryName repositoryName, final CamelCasePattern pattern,
                                                final String startDir) throws CacheException {
-    final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
+    final DirEntryCache entryCache = cacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
     return entryCache.findEntriesByCamelCasePattern(pattern, startDir);
   }
 
   @Override
   public List<DirEntry> findDirectories(final RepositoryName repositoryName, final String fromPath) throws CacheException {
-    final DirEntryCache entryCache = entryCacheManager.getCache(repositoryName);
+    final DirEntryCache entryCache = cacheManager.getCache(repositoryName);
     assertCacheExists(entryCache, repositoryName);
     return entryCache.findDirectories(fromPath);
   }

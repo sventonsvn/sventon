@@ -24,7 +24,7 @@ import java.io.File;
  *
  * @author jesper@sventon.org
  */
-public final class EntryCacheManager extends CacheManager<DirEntryCache> {
+public final class DirEntryCacheManager extends CacheManager<DirEntryCache> {
 
   /**
    * Root directory for cache files.
@@ -36,7 +36,7 @@ public final class EntryCacheManager extends CacheManager<DirEntryCache> {
    *
    * @param configDirectory Directory where to store cache files.
    */
-  public EntryCacheManager(final ConfigDirectory configDirectory) {
+  public DirEntryCacheManager(final ConfigDirectory configDirectory) {
     logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
   }

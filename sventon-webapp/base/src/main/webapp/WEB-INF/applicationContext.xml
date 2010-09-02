@@ -171,7 +171,7 @@
   </bean>
 
   <util:list id="cacheManagers">
-    <ref local="entryCacheManager"/>
+    <ref local="dirEntryCacheManager"/>
     <ref local="logEntryCacheManager"/>
     <ref local="objectCacheManager"/>
     <ref local="revisionCacheManager"/>
@@ -215,7 +215,7 @@
 
   <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.DirEntryCacheUpdater">
-    <constructor-arg ref="entryCacheManager"/>
+    <constructor-arg ref="dirEntryCacheManager"/>
     <constructor-arg ref="application"/>
   </bean>
 
@@ -228,7 +228,7 @@
     <constructor-arg ref="objectCacheManager"/>
   </bean>
 
-  <bean id="entryCacheManager" class="org.sventon.cache.EntryCacheManager">
+  <bean id="dirEntryCacheManager" class="org.sventon.cache.DirEntryCacheManager">
     <constructor-arg ref="configDirectory"/>
   </bean>
 
