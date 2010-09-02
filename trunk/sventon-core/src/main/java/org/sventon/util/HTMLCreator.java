@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.regex.Matcher;
 
 import static org.sventon.util.EncodingUtils.encode;
@@ -73,7 +74,7 @@ public final class HTMLCreator {
     int deleted = 0;
 
     //noinspection unchecked
-    final Set<ChangedPath> latestChangedPaths = logEntry.getChangedPaths();
+    final SortedSet<ChangedPath> latestChangedPaths = logEntry.getChangedPaths();
 
     for (final ChangedPath entryPath : latestChangedPaths) {
       final ChangeType type = entryPath.getType();
@@ -122,7 +123,7 @@ public final class HTMLCreator {
    * @param response          The HTTP response, used to encode the session parameter to the generated URLs. Null if n/a.
    * @return The HTML table.
    */
-  public static String createChangedPathsTable(final Set<ChangedPath> changedPaths, final long revision,
+  public static String createChangedPathsTable(final SortedSet<ChangedPath> changedPaths, final long revision,
                                                final String pathAtRevision, final String baseURL,
                                                final RepositoryName repositoryName, final boolean showLatestRevInfo,
                                                final boolean linkToHead, final HttpServletResponse response) {

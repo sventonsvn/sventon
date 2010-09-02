@@ -42,7 +42,7 @@ public final class LogEntry implements Serializable {
   /**
    * Changed paths.
    */
-  private final Set<ChangedPath> changedPaths;
+  private final SortedSet<ChangedPath> changedPaths;
 
   /**
    * Map holding the RevisionProperties and the corresponding (String) value.
@@ -56,7 +56,7 @@ public final class LogEntry implements Serializable {
    * @param properties   Properties
    * @param changedPaths Changed paths
    */
-  public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final Set<ChangedPath> changedPaths) {
+  public LogEntry(final long revision, final Map<RevisionProperty, String> properties, final SortedSet<ChangedPath> changedPaths) {
     this.revision = revision;
     this.properties = properties == null ? Collections.<RevisionProperty, String>emptyMap() : properties;
     this.changedPaths = changedPaths;
@@ -78,7 +78,7 @@ public final class LogEntry implements Serializable {
   /**
    * @return Map of the changed paths.
    */
-  public Set<ChangedPath> getChangedPaths() {
+  public SortedSet<ChangedPath> getChangedPaths() {
     //noinspection unchecked
     return changedPaths;
   }
@@ -138,7 +138,7 @@ public final class LogEntry implements Serializable {
       logEntry.setPathAtRevision(pathAtRevision);
 
       //noinspection unchecked
-      final Set<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
+      final SortedSet<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
       if (allChangedPaths != null){
         for (ChangedPath entryPath : allChangedPaths) {
           if (entryPath.getCopyPath() != null) {

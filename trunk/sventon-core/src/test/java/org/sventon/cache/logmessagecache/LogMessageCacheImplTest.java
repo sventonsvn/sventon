@@ -9,10 +9,7 @@ import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class LogMessageCacheImplTest extends TestCase {
 
@@ -31,12 +28,12 @@ public class LogMessageCacheImplTest extends TestCase {
     return TestUtils.createLogEntry(revision, "theauthor", new Date(), message);
   }
 
-  private LogEntry create(final long revision, final String message, final Set<ChangedPath> paths) {
+  private LogEntry create(final long revision, final String message, final SortedSet<ChangedPath> paths) {
     return TestUtils.createLogEntry(revision, "theauthor", new Date(), message, paths);
   }
 
-  private Set<ChangedPath> createAndAddToMap(ChangedPath changedPath) {
-    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+  private SortedSet<ChangedPath> createAndAddToMap(ChangedPath changedPath) {
+    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     changedPaths.add(changedPath);
     return changedPaths;
   }

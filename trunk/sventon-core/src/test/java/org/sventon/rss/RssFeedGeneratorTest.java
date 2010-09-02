@@ -23,7 +23,7 @@ public class RssFeedGeneratorTest extends TestCase {
     generator.setDateFormat("yyyyMMdd HH:mm:ss");
 
     List<LogEntry> logEntries = new ArrayList<LogEntry>();
-    Set<ChangedPath> changedPaths;
+    SortedSet<ChangedPath> changedPaths;
 
     final String logMessage = "&lt; &gt; / &amp; ' ; \\";
 

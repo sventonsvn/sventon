@@ -29,8 +29,8 @@ public class SVNKitConverter {
         convert(svnLogEntry.getChangedPaths()));
   }
 
-  private static Set<ChangedPath> convert(Map<String, SVNLogEntryPath> changedPaths) {
-    final Set<ChangedPath> convertedPaths = new TreeSet<ChangedPath>();
+  private static SortedSet<ChangedPath> convert(Map<String, SVNLogEntryPath> changedPaths) {
+    final SortedSet<ChangedPath> convertedPaths = new TreeSet<ChangedPath>();
     for (SVNLogEntryPath svnLogEntryPath : changedPaths.values()) {
       convertedPaths.add(new ChangedPath(svnLogEntryPath.getPath(), svnLogEntryPath.getCopyPath(),
           svnLogEntryPath.getCopyRevision(), ChangeType.parse(svnLogEntryPath.getType())));

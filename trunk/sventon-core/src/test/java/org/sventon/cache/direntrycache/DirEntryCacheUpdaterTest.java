@@ -27,13 +27,13 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     assertEquals(0, entryCache.getSize());
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
-    final Set<ChangedPath> changedPaths1 = new TreeSet<ChangedPath>();
+    final SortedSet<ChangedPath> changedPaths1 = new TreeSet<ChangedPath>();
     changedPaths1.add(new ChangedPath("/file1.java", null, -1, ChangeType.MODIFIED));
     changedPaths1.add(new ChangedPath("/file2.abc", null, -1, ChangeType.ADDED));
     changedPaths1.add(new ChangedPath("/trunk/file3.def", null, -1, ChangeType.REPLACED));
     logEntries.add(createLogEntry(123, "author", new Date(), "Log message for revision 123.", changedPaths1));
 
-    final Set<ChangedPath> changedPaths2 = new TreeSet<ChangedPath>();
+    final SortedSet<ChangedPath> changedPaths2 = new TreeSet<ChangedPath>();
     changedPaths2.add(new ChangedPath("/branch", "/trunk", 123, ChangeType.ADDED));
     changedPaths2.add(new ChangedPath("/trunk/file3.def", null, -1, ChangeType.DELETED));
     logEntries.add(createLogEntry(124, "author", new Date(), "Log message for revision 124.", changedPaths2));
