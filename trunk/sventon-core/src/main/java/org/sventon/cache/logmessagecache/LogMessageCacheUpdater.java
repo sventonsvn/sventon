@@ -13,7 +13,7 @@ package org.sventon.cache.logmessagecache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.cache.LogEntryCacheManager;
+import org.sventon.cache.LogMessageCacheManager;
 import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 import org.sventon.model.RepositoryName;
@@ -38,16 +38,16 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
   /**
    * The cache manager instance.
    */
-  private final LogEntryCacheManager logEntryCacheManager;
+  private final LogMessageCacheManager logMessageCacheManager;
 
   /**
    * Constructor.
    *
-   * @param logEntryCacheManager The cache manager instance.
+   * @param logMessageCacheManager The cache manager instance.
    */
-  public LogMessageCacheUpdater(final LogEntryCacheManager logEntryCacheManager) {
+  public LogMessageCacheUpdater(final LogMessageCacheManager logMessageCacheManager) {
     LOGGER.info("Starting");
-    this.logEntryCacheManager = logEntryCacheManager;
+    this.logMessageCacheManager = logMessageCacheManager;
   }
 
   /**
@@ -62,7 +62,7 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
     LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
     try {
-      final LogMessageCache logMessageCache = logEntryCacheManager.getCache(repositoryName);
+      final LogMessageCache logMessageCache = logMessageCacheManager.getCache(repositoryName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
         LOGGER.info("Clearing cache before population");
         logMessageCache.clear();

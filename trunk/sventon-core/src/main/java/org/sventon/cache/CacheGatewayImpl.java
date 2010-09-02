@@ -28,7 +28,7 @@ import java.util.List;
 public final class CacheGatewayImpl implements CacheGateway {
 
   private DirEntryCacheManager cacheManager;
-  private LogEntryCacheManager logEntryCacheManager;
+  private LogMessageCacheManager logMessageCacheManager;
   private RevisionCacheManager revisionCacheManager;
 
   /**
@@ -44,11 +44,11 @@ public final class CacheGatewayImpl implements CacheGateway {
   /**
    * Sets the log entry cache manager instance.
    *
-   * @param logEntryCacheManager LogEntryCacheManager instance.
+   * @param logMessageCacheManager LogMessageCacheManager instance.
    */
   @Autowired
-  public void setLogEntryCacheManager(final LogEntryCacheManager logEntryCacheManager) {
-    this.logEntryCacheManager = logEntryCacheManager;
+  public void setLogEntryCacheManager(final LogMessageCacheManager logMessageCacheManager) {
+    this.logMessageCacheManager = logMessageCacheManager;
   }
 
   /**
@@ -87,14 +87,14 @@ public final class CacheGatewayImpl implements CacheGateway {
 
   @Override
   public List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString) throws CacheException {
-    final LogMessageCache cache = logEntryCacheManager.getCache(repositoryName);
+    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString);
   }
 
   @Override
   public List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString, final String startDir) throws CacheException {
-    final LogMessageCache cache = logEntryCacheManager.getCache(repositoryName);
+    final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString, startDir);
   }

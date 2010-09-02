@@ -24,7 +24,7 @@ import java.io.File;
  *
  * @author jesper@sventon.org
  */
-public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
+public final class LogMessageCacheManager extends CacheManager<LogMessageCache> {
 
   /**
    * Directory where to store cache files.
@@ -37,7 +37,7 @@ public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
    *
    * @param configDirectory Root directory to use.
    */
-  public LogEntryCacheManager(final ConfigDirectory configDirectory) {
+  public LogMessageCacheManager(final ConfigDirectory configDirectory) {
     logger.debug("Starting cache manager. Using [" + configDirectory.getRepositoriesDirectory() + "] as root directory");
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
   }
