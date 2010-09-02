@@ -11,7 +11,7 @@ import org.sventon.model.LogMessageSearchItem;
 import java.io.File;
 import java.util.*;
 
-public class LogMessageCacheImplTest extends TestCase {
+public class CompassLogMessageCacheTest extends TestCase {
 
   private CompassLogMessageCache cache = null;
 
