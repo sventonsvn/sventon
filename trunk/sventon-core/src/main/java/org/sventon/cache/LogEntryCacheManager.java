@@ -12,9 +12,8 @@
 package org.sventon.cache;
 
 import org.sventon.appl.ConfigDirectory;
-import org.sventon.cache.direntrycache.DirEntryCache;
+import org.sventon.cache.logmessagecache.CompassLogMessageCache;
 import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.logmessagecache.LogMessageCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
@@ -55,7 +54,7 @@ public final class LogEntryCacheManager extends CacheManager<LogMessageCache> {
     logger.debug("Creating cache: " + repositoryName);
     final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
-    final LogMessageCache cache = new LogMessageCacheImpl(cacheDirectory, true);
+    final LogMessageCache cache = new CompassLogMessageCache(cacheDirectory, true);
     cache.init();
     return cache;
   }

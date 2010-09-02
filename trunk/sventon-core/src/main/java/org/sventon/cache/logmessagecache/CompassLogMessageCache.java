@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains cached log entries.
- * This implementation uses <a href="http://lucene.apache.org">Lucene</a> internally.
+ * Class responsible for caching/indexing of log messages.
  *
  * @author jesper@sventon.org
+ * @link http://www.compass-project.org/
  */
-public final class LogMessageCacheImpl implements LogMessageCache {
+public final class CompassLogMessageCache implements LogMessageCache {
 
   /**
    * The logging instance.
@@ -49,7 +49,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    *
    * @param cacheRootDirectory Cache root directory
    */
-  public LogMessageCacheImpl(final File cacheRootDirectory) {
+  public CompassLogMessageCache(final File cacheRootDirectory) {
     this(cacheRootDirectory, false);
   }
 
@@ -59,7 +59,7 @@ public final class LogMessageCacheImpl implements LogMessageCache {
    * @param cacheDirectory Cache directory
    * @param useDiskStore   If true index will be stored to disk. Otherwise it will be kept in memory.
    */
-  public LogMessageCacheImpl(final File cacheDirectory, final boolean useDiskStore) {
+  public CompassLogMessageCache(final File cacheDirectory, final boolean useDiskStore) {
     this.cacheDirectory = cacheDirectory;
     this.useDiskStore = useDiskStore;
   }
