@@ -22,7 +22,7 @@ public class CacheGatewayImplTest extends TestCase {
     servletContext.setContextPath("sventon-test");
     configDirectory.setServletContext(servletContext);
 
-    final EntryCacheManager cacheManager = new EntryCacheManager(configDirectory);
+    final DirEntryCacheManager cacheManager = new DirEntryCacheManager(configDirectory);
     final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
     entryCache.init();
     cacheManager.addCache(repositoryName, entryCache);
