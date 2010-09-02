@@ -13,10 +13,10 @@ import java.util.*;
 
 public class LogMessageCacheImplTest extends TestCase {
 
-  private LogMessageCacheImpl cache = null;
+  private CompassLogMessageCache cache = null;
 
   protected void setUp() throws Exception {
-    cache = new LogMessageCacheImpl(new File("test"));
+    cache = new CompassLogMessageCache(new File("test"));
     cache.init();
   }
 

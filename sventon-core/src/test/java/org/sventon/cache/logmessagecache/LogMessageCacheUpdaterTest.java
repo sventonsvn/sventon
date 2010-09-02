@@ -11,7 +11,7 @@ import java.util.List;
 public class LogMessageCacheUpdaterTest extends TestCase {
 
   public void testUpdate() throws Exception {
-    final LogMessageCache cache = new LogMessageCacheImpl(new File("test"), false);
+    final LogMessageCache cache = new CompassLogMessageCache(new File("test"), false);
     cache.init();
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
