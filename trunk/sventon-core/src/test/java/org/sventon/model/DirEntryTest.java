@@ -1,11 +1,14 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class DirEntryTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class DirEntryTest {
+
+  @Test
   public void testGetShortenedFullEntryName() throws Exception {
     DirEntry entry;
 
@@ -54,7 +57,7 @@ public class DirEntryTest extends TestCase {
   }
 
   private DirEntry toEntry(final String path, final String filename) {
-    return new DirEntry(path, filename, "A",new Date(), DirEntry.Kind.FILE, 1, 1);
+    return new DirEntry(path, filename, "A", new Date(), DirEntry.Kind.FILE, 1, 1);
   }
 
 }
