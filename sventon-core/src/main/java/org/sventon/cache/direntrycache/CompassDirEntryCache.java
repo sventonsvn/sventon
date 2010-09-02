@@ -229,7 +229,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   @Override
   public List<DirEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
-                                                             final String startPath) {
+                                                      final String startPath) {
     final String queryString = "path:" + startPath +
         "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*";
 

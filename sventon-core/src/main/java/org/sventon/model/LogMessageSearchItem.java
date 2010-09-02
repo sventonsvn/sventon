@@ -18,7 +18,6 @@ import org.compass.annotations.SearchableProperty;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import java.util.SortedSet;
 
 /**
@@ -139,24 +138,6 @@ public final class LogMessageSearchItem implements Serializable {
    */
   public Date getDate() {
     return date != null ? (Date) date.clone() : null;
-  }
-
-  /**
-   * Gets the paths.
-   *
-   * @return The paths.
-   */
-  public String getPaths() {
-    return paths;
-  }
-
-  /**
-   * Sets the paths.
-   *
-   * @param paths Paths.
-   */
-  public void setPaths(final String paths) {
-    this.paths = paths;
   }
 
 }

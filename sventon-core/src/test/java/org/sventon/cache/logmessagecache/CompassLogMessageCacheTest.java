@@ -9,7 +9,10 @@ import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 
 import java.io.File;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class CompassLogMessageCacheTest extends TestCase {
 
@@ -54,10 +57,16 @@ public class CompassLogMessageCacheTest extends TestCase {
     assertEquals(1, logEntries.size());
     assertEquals("First message <span class=\"searchhit\">XYZ-456</span>.", logEntries.get(0).getMessage());
 
+    cache.add(new LogMessageSearchItem(create(457, "First message XYZ-457.",
+        createAndAddToMap(new ChangedPath("/test/again/file1.java", null, -1, ChangeType.MODIFIED)))));
+
     logEntries = cache.find("XYZ*", "/");
-    assertEquals(2, logEntries.size());
+    assertEquals(3, logEntries.size());
 
     logEntries = cache.find("XYZ*", "/test/");
+    assertEquals(2, logEntries.size());
+
+    logEntries = cache.find("XYZ*", "/test/again/");
     assertEquals(1, logEntries.size());
 
     logEntries = cache.find("shouldnotfound", "/");

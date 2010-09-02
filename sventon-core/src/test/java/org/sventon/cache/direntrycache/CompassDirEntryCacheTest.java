@@ -10,11 +10,13 @@ import java.util.List;
 
 public class CompassDirEntryCacheTest extends TestCase {
 
+  private final File root = new File(".");
+
   private DirEntryCache entryCache;
 
   @Override
   protected void setUp() throws Exception {
-    entryCache = new CompassDirEntryCache(new File("."));
+    entryCache = new CompassDirEntryCache(root, false);
     entryCache.init();
   }
 
