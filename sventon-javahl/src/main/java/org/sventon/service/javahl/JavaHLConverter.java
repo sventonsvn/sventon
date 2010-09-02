@@ -21,8 +21,8 @@ public class JavaHLConverter {
     return Revision.getInstance(revision);
   }
 
-  static Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
-    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+  static SortedSet<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
+    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     if (changePaths != null) {
       for (ChangePath cp : changePaths) {
         changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));

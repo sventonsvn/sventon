@@ -89,17 +89,12 @@ public class JavaHLRepositoryServiceTest {
 
     // Verify ChangePath
     final LogEntry logEntry = logEntries.get(0);
-    final Set<ChangedPath> changedPaths = logEntry.getChangedPaths();
+    final SortedSet<ChangedPath> changedPaths = logEntry.getChangedPaths();
     assertEquals(2, changedPaths.size());
 
     ChangedPath[] paths = new ChangedPath[2];
     changedPaths.toArray(paths);
-    Arrays.sort(paths, new Comparator<ChangedPath>() {
-      @Override
-      public int compare(ChangedPath o1, ChangedPath o2) {
-        return o1.getPath().compareTo(o2.getPath());
-      }
-    });
+    
     assertEquals("/branches/lemontree/src/main/da/path/myfile.txt", paths[0].getPath());
     assertEquals(ChangeType.ADDED, paths[0].getType());
     assertEquals("/trunk/src/main/da/path/myfile.txt", paths[1].getPath());

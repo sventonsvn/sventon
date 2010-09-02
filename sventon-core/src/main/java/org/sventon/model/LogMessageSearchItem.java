@@ -19,6 +19,7 @@ import org.compass.annotations.SearchableProperty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * LogMessageSearchItem.
@@ -74,7 +75,7 @@ public final class LogMessageSearchItem implements Serializable {
    * @param changedPaths Changed paths for a certain revision.
    * @return Concatinated string of paths, or null/empty string if no changed paths in revision.
    */
-  public static String extractAndConcatinatePaths(final Set<ChangedPath> changedPaths) {
+  public static String extractAndConcatinatePaths(final SortedSet<ChangedPath> changedPaths) {
     if (changedPaths != null) {
       StringBuilder pathsStringBuilder = new StringBuilder();
       for (ChangedPath changedPath : changedPaths) {

@@ -10,6 +10,7 @@ import org.sventon.model.RepositoryName;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class HTMLCreatorTest extends TestCase {
@@ -38,7 +39,7 @@ public class HTMLCreatorTest extends TestCase {
         "  </tr>\n" +
         "</table>";
 
-    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     changedPaths.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
     changedPaths.add(new ChangedPath("/file2.html", null, 1, ChangeType.DELETED));
     changedPaths.add(new ChangedPath("/file3.abc", "/branch/file3.abc", 1, ChangeType.ADDED));

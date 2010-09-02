@@ -16,7 +16,7 @@ public final class TestUtils {
   public static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
   public static final String CONFIG_FILE_NAME = "sventon_config.properties";
 
-  private static final Set<ChangedPath> ONE_CHANGED_PATH = new TreeSet<ChangedPath>();
+  private static final SortedSet<ChangedPath> ONE_CHANGED_PATH = new TreeSet<ChangedPath>();
   private static final String DEFAULT_MESSAGE = "TestMessage";
   private static final String DEFAULT_AUTHOR = "TestAuthor";
   private static final String AUTHOR_JESPER = "jesper";
@@ -39,7 +39,7 @@ public final class TestUtils {
   }
 
   public static LogEntry getLogEntryStub(final Date date, final String author, final long revision, final String message,
-                                         final Set<ChangedPath> changedPaths) {
+                                         final SortedSet<ChangedPath> changedPaths) {
     return createLogEntry(revision, author, date, message, changedPaths);
   }
 
@@ -82,7 +82,7 @@ public final class TestUtils {
     return list;
   }
 
-  public static LogEntry createLogEntry(long revision, String author, Date date, String message, Set<ChangedPath> changedPaths) {
+  public static LogEntry createLogEntry(long revision, String author, Date date, String message, SortedSet<ChangedPath> changedPaths) {
     Map<RevisionProperty, String> props = new HashMap<RevisionProperty, String>();
     props.put(RevisionProperty.AUTHOR, author);
     props.put(RevisionProperty.LOG, message);

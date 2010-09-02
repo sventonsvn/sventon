@@ -5,6 +5,7 @@ import org.sventon.TestUtils;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class LogEntryTest extends TestCase {
@@ -25,7 +26,7 @@ public class LogEntryTest extends TestCase {
     assertFalse(TestUtils.createLogEntry(12, null, null, "message").isAccessible());
     assertFalse(TestUtils.createLogEntry(12, null, new Date(), null).isAccessible());
 
-    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     changedPaths.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
     assertTrue(TestUtils.createLogEntry(12, null, new Date(), null, changedPaths).isAccessible());
   }
