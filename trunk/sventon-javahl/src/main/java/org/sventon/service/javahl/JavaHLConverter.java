@@ -9,10 +9,7 @@ import org.tigris.subversion.javahl.NodeKind;
 import org.tigris.subversion.javahl.Revision;
 import org.tigris.subversion.javahl.RevisionRange;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class JavaHLConverter {
 
@@ -25,7 +22,7 @@ public class JavaHLConverter {
   }
 
   static Set<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
-    final HashSet<ChangedPath> changedPaths = new HashSet<ChangedPath>();
+    final Set<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     if (changePaths != null) {
       for (ChangePath cp : changePaths) {
         changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
