@@ -8,7 +8,7 @@ import org.sventon.model.DirEntry;
 import java.io.File;
 import java.util.List;
 
-public class CompassEntryCacheTest extends TestCase {
+public class CompassDirEntryCacheTest extends TestCase {
 
   private DirEntryCache entryCache;
 
