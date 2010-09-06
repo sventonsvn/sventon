@@ -1,6 +1,6 @@
 package org.sventon.cache.direntrycache;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -13,12 +13,14 @@ import org.sventon.service.RepositoryService;
 import java.io.File;
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.sventon.TestUtils.createLogEntry;
 
-public class DirEntryCacheUpdaterTest extends TestCase {
+public class DirEntryCacheUpdaterTest {
 
+  @Test
   public void testUpdate() throws Exception {
     final RepositoryService serviceMock = mock(RepositoryService.class);
 
@@ -73,6 +75,7 @@ public class DirEntryCacheUpdaterTest extends TestCase {
     assertEquals(4, entryCache.getSize());
   }
 
+  @Test
   public void testInitialUpdate() throws Exception {
     final DirList emptyDir = new DirList(Collections.<DirEntry>emptyList(), new Properties());
     final long headRevision = 1;

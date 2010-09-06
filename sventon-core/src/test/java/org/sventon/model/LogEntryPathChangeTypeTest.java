@@ -1,9 +1,13 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class LogEntryPathChangeTypeTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class LogEntryPathChangeTypeTest {
+
+  @Test
   public void testLogEntryPAthChange() throws Exception {
     // Yes - really stupid tests, I know.. :-)
     assertEquals("Added", ChangeType.ADDED.toString());
@@ -12,11 +16,13 @@ public class LogEntryPathChangeTypeTest extends TestCase {
     assertEquals("Deleted", ChangeType.DELETED.toString());
   }
 
+  @Test
   public void testLogEntryPAthChangeValueOf() throws Exception {
     assertEquals(ChangeType.DELETED, ChangeType.parse("D"));
     assertEquals("Deleted", ChangeType.parse("D").toString());
   }
 
+  @Test
   public void testLogEntryPathChangeSwitch() throws Exception {
     switch (ChangeType.MODIFIED) {
       case ADDED:
