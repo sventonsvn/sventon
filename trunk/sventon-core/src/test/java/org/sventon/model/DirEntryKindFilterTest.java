@@ -1,12 +1,16 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 
 import java.util.List;
 
-public class DirEntryKindFilterTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class DirEntryKindFilterTest {
+
+  @Test
   public void testFilter() throws Exception {
 
     final List<DirEntry> list = TestUtils.getDirectoryList();

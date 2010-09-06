@@ -1,6 +1,6 @@
 package org.sventon.cache;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.appl.ConfigDirectory;
@@ -11,7 +11,9 @@ import org.sventon.model.RepositoryName;
 
 import java.io.File;
 
-public class CacheGatewayImplTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class CacheGatewayImplTest {
 
   private final RepositoryName repositoryName = new RepositoryName("testRepos");
 
@@ -35,6 +37,7 @@ public class CacheGatewayImplTest extends TestCase {
     return cache;
   }
 
+  @Test
   public void testFindEntryInPath() throws Exception {
     final CacheGateway cache = createCache();
     assertEquals(1, cache.findEntries(repositoryName, "html", "/trunk/src/").size());
@@ -42,6 +45,7 @@ public class CacheGatewayImplTest extends TestCase {
     assertEquals(1, cache.findEntries(repositoryName, "code", "/").size());
   }
 
+  @Test
   public void testFindDirectories() throws Exception {
     final CacheGateway cache = createCache();
     assertEquals(4, cache.findDirectories(repositoryName, "/").size());

@@ -1,6 +1,6 @@
 package org.sventon.cache.revisioncache;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.cache.objectcache.ObjectCache;
 import org.sventon.cache.objectcache.ObjectCacheImpl;
@@ -9,12 +9,15 @@ import org.sventon.model.LogEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RevisionCacheUpdaterTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class RevisionCacheUpdaterTest {
 
   private ObjectCache createMemoryCache() throws Exception {
     return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
+  @Test
   public void testUpdate() throws Exception {
     final ObjectCache objectCache = createMemoryCache();
     final RevisionCacheImpl cache = new RevisionCacheImpl(objectCache);
