@@ -1,10 +1,13 @@
 package org.sventon.web.command;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.appl.RepositoryConfiguration;
 
-public class ConfigCommandTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ConfigCommandTest {
+
+  @Test
   public void testCreateRepositoryConfiguration() {
 
     final ConfigCommand command = new ConfigCommand();

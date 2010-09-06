@@ -1,11 +1,12 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.LogEntry;
-import org.sventon.model.PathRevision;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 import org.sventon.service.RepositoryService;
@@ -18,8 +19,10 @@ import java.util.Map;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class GetFileHistoryControllerTest extends TestCase {
+public class GetFileHistoryControllerTest {
 
   private final List<LogEntry> logEntries = new ArrayList<LogEntry>();
   private final BaseCommand command = new BaseCommand();
@@ -28,10 +31,11 @@ public class GetFileHistoryControllerTest extends TestCase {
   private GetFileHistoryController ctrl;
   private RepositoryName repositoryName;
 
-  protected void setUp() throws Exception {
-    logEntries.add(new LogEntry(3, null , null));
-    logEntries.add(new LogEntry(2, null , null));
-    logEntries.add(new LogEntry(1, null , null));
+  @Before
+  public void setUp() throws Exception {
+    logEntries.add(new LogEntry(3, null, null));
+    logEntries.add(new LogEntry(2, null, null));
+    logEntries.add(new LogEntry(1, null, null));
 
     repositoryName = new RepositoryName("test");
     command.setPath("/trunk/test");
@@ -44,18 +48,20 @@ public class GetFileHistoryControllerTest extends TestCase {
     ctrl.setRepositoryService(mockService);
   }
 
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     EasyMock.reset(mockService);
   }
 
   private Map executeTest() throws Exception {
-    expect(mockService.getLogEntries(repositoryName, null, command.getRevisionNumber(), 1,  command.getPath(), 100, false, true)).andStubReturn(logEntries);
+    expect(mockService.getLogEntries(repositoryName, null, command.getRevisionNumber(), 1, command.getPath(), 100, false, true)).andStubReturn(logEntries);
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
     verify(mockService);
     return modelAndView.getModel();
   }
 
+  @Test
   public void testGetFileHistoryController() throws Exception {
     final Map model = executeTest();
     assertEquals(2, model.size());
@@ -65,6 +71,7 @@ public class GetFileHistoryControllerTest extends TestCase {
     assertEquals(3, logEntries.get(0).getRevision());
   }
 
+  @Test
   public void testGetFileHistoryControllerArchivedEntry() throws Exception {
     request.setParameter(GetFileHistoryController.ARCHIVED_ENTRY, "zippedTestFile");
     final Map model = executeTest();

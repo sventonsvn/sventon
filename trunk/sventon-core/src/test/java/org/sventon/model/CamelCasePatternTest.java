@@ -1,9 +1,13 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class CamelCasePatternTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class CamelCasePatternTest {
+
+  @Test
   public void testExtractCamelCasePattern() {
     try {
       CamelCasePattern.parse(null).getPattern();

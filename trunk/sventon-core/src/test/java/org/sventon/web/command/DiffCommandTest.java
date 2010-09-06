@@ -1,13 +1,17 @@
 package org.sventon.web.command;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.diff.DiffException;
 import org.sventon.web.command.editor.PathRevisionEditor;
 
-public class DiffCommandTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class DiffCommandTest {
 
   private final PathRevisionEditor editor = new PathRevisionEditor();
 
+  @Test
   public void testDiffCommandNull() throws Exception {
     DiffCommand command = new DiffCommand();
     try {
@@ -19,6 +23,7 @@ public class DiffCommandTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffCommand() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
@@ -34,6 +39,7 @@ public class DiffCommandTest extends TestCase {
     assertEquals("OrderDetailModel.java", command.getFromTarget());
   }
 
+  @Test
   public void testDiffCommandDifferentPaths() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try2/OrderDetail.java@91",
@@ -49,6 +55,7 @@ public class DiffCommandTest extends TestCase {
     assertEquals("OrderDetailModel.java", command.getFromTarget());
   }
 
+  @Test
   public void testDiffCommandDirs() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try1/@90",
@@ -64,6 +71,7 @@ public class DiffCommandTest extends TestCase {
     assertEquals("try2", command.getToTarget());
   }
 
+  @Test
   public void testDiffCommandNoHistory() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try2/Order.java@92"
@@ -79,6 +87,7 @@ public class DiffCommandTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffCommandWrongDelimiter() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try2/OrderDetail.java##91",

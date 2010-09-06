@@ -1,21 +1,25 @@
 package org.sventon.web.command;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.sventon.web.command.ConfigCommand.AccessMethod.USER;
 
-public class ConfigCommandValidatorTest extends TestCase {
+public class ConfigCommandValidatorTest {
 
+  @Test
   public void testSupports() {
     final ConfigCommandValidator validator = new ConfigCommandValidator(false);
     assertTrue(validator.supports(ConfigCommand.class));
   }
 
+  @Test
   public void testValidate() throws Exception {
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);

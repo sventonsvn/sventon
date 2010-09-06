@@ -1,11 +1,14 @@
 package carbonfive.spring.web.pathparameter;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Map;
 
-public class TestParameterizedPathMatcher extends TestCase {
+import static org.junit.Assert.*;
 
+public class TestParameterizedPathMatcher {
+
+  @Test
   public void testMatchesWithoutName() {
     ParameterizedPathMatcher pathMatcher = new ParameterizedPathMatcher();
 
@@ -36,6 +39,7 @@ public class TestParameterizedPathMatcher extends TestCase {
     assertTrue(pathMatcher.match("org/**/servlet/bla.jsp", "org/servlet/bla.jsp"));
   }
 
+  @Test
   public void testMatchesWithName() {
     ParameterizedPathMatcher pathMatcher = new ParameterizedPathMatcher();
 
@@ -69,6 +73,7 @@ public class TestParameterizedPathMatcher extends TestCase {
     assertTrue(pathMatcher.match("/list/(*:name)/(**/*:path)*", "/list/sandbox/trunk/dev/?revision=123"));
   }
 
+  @Test
   public void testNamedGroups() {
     ParameterizedPathMatcher pathMatcher = new ParameterizedPathMatcher();
     assertMapValues(pathMatcher.namedParameters("com/(t?st.jsp:jsp)", "com/test.jsp"), "jsp", "test.jsp");
@@ -82,6 +87,7 @@ public class TestParameterizedPathMatcher extends TestCase {
         "controller", "image", "pageId", "12345");
   }
 
+  @Test
   public void testExtractPathWithinPattern() {
     ParameterizedPathMatcher pathMatcher = new ParameterizedPathMatcher();
     assertEquals("", pathMatcher.extractPathWithinPattern("/docs/cvs/commit.html", "/docs/cvs/commit.html"));

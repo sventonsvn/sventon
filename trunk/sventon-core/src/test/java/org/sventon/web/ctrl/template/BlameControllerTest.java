@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.colorer.Colorer;
 import org.sventon.model.AnnotatedTextFile;
@@ -17,9 +17,11 @@ import java.util.Map;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
-public class BlameControllerTest extends TestCase {
+public class BlameControllerTest {
 
+  @Test
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 

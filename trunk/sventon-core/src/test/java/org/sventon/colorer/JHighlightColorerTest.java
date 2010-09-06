@@ -3,14 +3,17 @@ package org.sventon.colorer;
 import com.uwyn.jhighlight.renderer.CSharpXhtmlRenderer;
 import com.uwyn.jhighlight.renderer.JavaXhtmlRenderer;
 import com.uwyn.jhighlight.renderer.XmlXhtmlRenderer;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Properties;
 
-public class JHighlightColorerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class JHighlightColorerTest {
 
   private static final String ENCODING = "UTF-8";
 
+  @Test
   public void testGetColorizedContent() throws Exception {
     final JHighlightColorer colorer = new JHighlightColorer();
     colorer.setRendererMappings(getRendererMappings());
@@ -44,6 +47,7 @@ public class JHighlightColorerTest extends TestCase {
     assertEquals("", colorer.getColorizedContent(null, "java", ENCODING));
   }
 
+  @Test
   public void testNoRenderer() throws Exception {
     final JHighlightColorer colorer = new JHighlightColorer();
     assertEquals(null, colorer.getRenderer("test"));
@@ -56,6 +60,7 @@ public class JHighlightColorerTest extends TestCase {
     }
   }
 
+  @Test
   public void testGetRenderer() throws Exception {
     final JHighlightColorer colorer = new JHighlightColorer();
     colorer.setRendererMappings(getRendererMappings());

@@ -1,19 +1,23 @@
 package org.sventon.web;
 
-import junit.framework.TestCase;
 import org.apache.commons.codec.binary.Base64;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.sventon.model.Credentials;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HttpBasicAuthenticationHandlerTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class HttpBasicAuthenticationHandlerTest {
+
+  @Test
   public void testGetAuthScheme() throws Exception {
     final HttpBasicAuthenticationHandler handler = new HttpBasicAuthenticationHandler();
     assertEquals(HttpServletRequest.BASIC_AUTH, handler.getAuthScheme());
   }
 
+  @Test
   public void testParseCredentials() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final HttpBasicAuthenticationHandler handler = new HttpBasicAuthenticationHandler();

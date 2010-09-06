@@ -1,6 +1,6 @@
 package org.sventon.rss;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.sventon.TestUtils;
@@ -14,8 +14,12 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-public class RssFeedGeneratorTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class RssFeedGeneratorTest {
+
+  @Test
   public void testGenerateFeedRSS20() throws Exception {
     final RssFeedGeneratorImpl generator = new RssFeedGeneratorImpl();
     generator.setFeedType("rss_2.0");
@@ -62,6 +66,7 @@ public class RssFeedGeneratorTest extends TestCase {
     }
   }
 
+  @Test
   public void testGetAbbreviatedLogMessage() throws Exception {
     final RssFeedGeneratorImpl generator = new RssFeedGeneratorImpl();
     assertEquals("this is...", generator.getAbbreviatedLogMessage("this is a message", 10));

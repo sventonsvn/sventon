@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.model.LogEntry;
@@ -16,9 +16,11 @@ import java.util.Map;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
-public class GetLogMessageControllerTest extends TestCase {
+public class GetLogMessageControllerTest {
 
+  @Test
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
 

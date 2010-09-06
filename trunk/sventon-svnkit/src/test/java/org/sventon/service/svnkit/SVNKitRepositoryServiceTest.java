@@ -1,6 +1,6 @@
 package org.sventon.service.svnkit;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.mockito.Mockito;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.InlineDiffCreator;
@@ -12,10 +12,11 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SVNKitRepositoryServiceTest extends TestCase {
+public class SVNKitRepositoryServiceTest {
 
   private static final String ENCODING = "UTF-8";
 
@@ -23,6 +24,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
 
   private PathRevisionEditor editor = new PathRevisionEditor();
 
+  @Test
   public void testDiffUnifiedIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
@@ -40,6 +42,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffUnifiedIdenticalFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
@@ -58,6 +61,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffUnified() throws Exception {
 
     final TextFile leftFile = new TextFile("test left file contents" + NL);
@@ -75,6 +79,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
   }
 
+  @Test
   public void testDiffInline() throws Exception {
     final TextFile leftFile = new TextFile(
         "row one" + NL +
@@ -105,6 +110,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     assertEquals(5, list.size());
   }
 
+  @Test
   public void testDiffSideBySideIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
@@ -122,6 +128,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffSideBySideIdenticalFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
@@ -142,6 +149,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiffSideBySide() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
@@ -340,6 +348,7 @@ public class SVNKitRepositoryServiceTest extends TestCase {
 
   }
 
+  @Test
   public void testTranslateRevision() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
     Revision revision;

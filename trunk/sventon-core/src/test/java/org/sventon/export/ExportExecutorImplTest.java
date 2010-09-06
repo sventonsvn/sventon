@@ -1,6 +1,6 @@
 package org.sventon.export;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.sventon.SVNConnection;
@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-public class ExportExecutorImplTest extends TestCase {
+public class ExportExecutorImplTest {
 
   private static final String UUID_STRING = "c5eaa2ba-2655-444b-aa64-c15ecff3e6da";
 
+  @Test
   public void testPrepareResponse() throws Exception {
     final ConfigDirectory configDirectoryMock = createMock(ConfigDirectory.class);
     final ExportExecutorImpl exportExecutor = new ExportExecutorImpl(configDirectoryMock);
@@ -35,6 +38,7 @@ public class ExportExecutorImplTest extends TestCase {
     assertEquals(WebUtils.APPLICATION_OCTET_STREAM, response.getContentType());
   }
 
+  @Test
   public void testExportTask() throws Exception {
     final List<PathRevision> entries = new ArrayList<PathRevision>();
 

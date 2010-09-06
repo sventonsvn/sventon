@@ -1,9 +1,13 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class EncodingUtilsTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class EncodingUtilsTest {
+
+  @Test
   public void testEncode() throws Exception {
     assertEquals("%2F", EncodingUtils.encode("/"));
     assertEquals("%2B", EncodingUtils.encode("+"));
@@ -11,6 +15,7 @@ public class EncodingUtilsTest extends TestCase {
     assertEquals("+", EncodingUtils.encode(" "));
   }
 
+  @Test
   public void testEncodeUrl() throws Exception {
     assertEquals("/test/%C3%BC.txt", EncodingUtils.encodeUrl("/test/\u00fc.txt"));
     assertEquals("/%C3%A5%C3%A4%C3%B6.txt", EncodingUtils.encodeUrl("/\u00e5\u00e4\u00f6.txt"));

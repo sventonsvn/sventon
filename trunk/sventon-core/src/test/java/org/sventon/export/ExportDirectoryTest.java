@@ -1,6 +1,6 @@
 package org.sventon.export;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.RepositoryName;
 
@@ -8,8 +8,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ExportDirectoryTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ExportDirectoryTest {
+
+  @Test
   public void testCreateTempFilename() throws Exception {
     final Date date = new Date(1111111111111L);
     final ExportDirectoryImpl exportDirectory = new ExportDirectoryImpl(

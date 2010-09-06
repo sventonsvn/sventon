@@ -1,12 +1,13 @@
 package org.sventon.advice;
 
-import junit.framework.TestCase;
 import org.easymock.EasyMock;
+import org.junit.Test;
 import org.sventon.model.RepositoryName;
 import org.sventon.repository.RepositoryChangeMonitor;
 
-public class CacheBeforeAdviceTest extends TestCase {
+public class CacheBeforeAdviceTest {
 
+  @Test
   public void testBefore() throws Throwable {
     final CacheUpdateBeforeAdvice cacheUpdateBeforeAdvice = new CacheUpdateBeforeAdvice();
     final RepositoryChangeMonitor changeMonitorMock = EasyMock.createMock(RepositoryChangeMonitor.class);

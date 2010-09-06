@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.validation.BindException;
@@ -20,9 +20,11 @@ import java.util.Map;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
-public class GoToControllerTest extends TestCase {
+public class GoToControllerTest {
 
+  @Test
   public void testSvnHandle() throws Exception {
     final RepositoryService mockService = EasyMock.createMock(RepositoryService.class);
     final MockHttpServletRequest mockRequest = new MockHttpServletRequest();

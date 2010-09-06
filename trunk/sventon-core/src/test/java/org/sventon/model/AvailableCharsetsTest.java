@@ -1,14 +1,19 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class AvailableCharsetsTest extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
+public class AvailableCharsetsTest {
+
+  @Test
   public void testGetCharsets() throws Exception {
     final AvailableCharsets availableCharsets = new AvailableCharsets("UTF-8");
     assertFalse(availableCharsets.getCharsets().isEmpty());
   }
 
+  @Test
   public void testGetDefaultCharset() throws Exception {
     try {
       new AvailableCharsets("abc");

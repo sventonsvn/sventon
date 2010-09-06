@@ -1,12 +1,15 @@
 package org.sventon.web.tags;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class AgeTagTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class AgeTagTest {
+
+  @Test
   public void testGetAsAgeString() throws Exception {
     final Calendar start = new GregorianCalendar(2007, 0, 1, 0, 0, 0);
     final Calendar stop = (Calendar) start.clone();

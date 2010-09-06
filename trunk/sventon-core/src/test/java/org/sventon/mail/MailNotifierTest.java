@@ -1,10 +1,13 @@
 package org.sventon.mail;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.model.RepositoryName;
 
-public class MailNotifierTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class MailNotifierTest {
+
+  @Test
   public void testFormatSubject() throws Exception {
     final MailNotifier mailNotifier = new MailNotifier();
     assertEquals("testRepos - revision 123", mailNotifier.formatSubject(

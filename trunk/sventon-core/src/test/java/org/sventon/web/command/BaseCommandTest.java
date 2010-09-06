@@ -1,11 +1,14 @@
 package org.sventon.web.command;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
 
-public class BaseCommandTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class BaseCommandTest {
+
+  @Test
   public void testDefaultValues() {
     final BaseCommand command = new BaseCommand();
     assertEquals("/", command.getPath());
@@ -13,6 +16,7 @@ public class BaseCommandTest extends TestCase {
     assertTrue(command.getRevision().isHeadRevision());
   }
 
+  @Test
   public void testSetPath() {
     final BaseCommand command = new BaseCommand();
 
@@ -28,6 +32,7 @@ public class BaseCommandTest extends TestCase {
     assertEquals("/Asdf.java", command.getPath());
   }
 
+  @Test
   public void testSetRevision() {
     final BaseCommand command = new BaseCommand();
     try {
@@ -61,12 +66,14 @@ public class BaseCommandTest extends TestCase {
     assertTrue(command.getRevision().isHeadRevision());
   }
 
+  @Test
   public void testGetCompletePath() {
     final BaseCommand command = new BaseCommand();
     command.setPath("trunk/src/File.java");
     assertEquals("/trunk/src/File.java", command.getPath());
   }
 
+  @Test
   public void testGetParentPath() {
     final BaseCommand cmd = new BaseCommand();
 
@@ -89,6 +96,7 @@ public class BaseCommandTest extends TestCase {
     assertEquals("/", cmd.getParentPath());
   }
 
+  @Test
   public void testGetPathPart() {
     final BaseCommand cmd = new BaseCommand();
 
@@ -111,6 +119,7 @@ public class BaseCommandTest extends TestCase {
     assertEquals("/", cmd.getPathPart());
   }
 
+  @Test
   public void testCreateListUrl() {
     final BaseCommand cmd = new BaseCommand();
     cmd.setName(new RepositoryName("test"));
@@ -122,6 +131,7 @@ public class BaseCommandTest extends TestCase {
     assertEquals("/repos/test/list/test/dir/", cmd.createListUrl());
   }
 
+  @Test
   public void testCreateShowFileUrl() {
     final BaseCommand cmd = new BaseCommand();
     cmd.setName(new RepositoryName("test"));

@@ -1,12 +1,15 @@
 package org.sventon.appl;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 
 import java.io.File;
 
-public class ConfigDirectoryTest extends TestCase {
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+public class ConfigDirectoryTest {
 
   private static final File TEMP_DIR = new File(TestUtils.TEMP_DIR);
   private static final String SEPARATOR = System.getProperty("file.separator");
@@ -15,6 +18,7 @@ public class ConfigDirectoryTest extends TestCase {
   private static final String EXPORT_DIR = "export_temp";
   private static final String REPOSITORIES_DIR = "repositories";
 
+  @Test
   public void testConfigDirectory() throws Exception {
 
     final ConfigDirectory configDir = new ConfigDirectory(TEMP_DIR, EXPORT_DIR, REPOSITORIES_DIR);
@@ -52,6 +56,7 @@ public class ConfigDirectoryTest extends TestCase {
         SERVLET_CONTEXT_PATH + SEPARATOR + REPOSITORIES_DIR));
   }
 
+  @Test
   public void testDirectoryOverrideBySettingSystemProperty() throws Exception {
     System.setProperty(ConfigDirectory.PROPERTY_KEY_SVENTON_DIR_SYSTEM, SEPARATOR + "override");
 

@@ -1,14 +1,16 @@
 package org.sventon.appl;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.model.SVNURL;
 
 import java.util.Properties;
 
+import static org.junit.Assert.*;
 import static org.sventon.appl.RepositoryConfiguration.*;
 
-public class RepositoryConfigurationTest extends TestCase {
+public class RepositoryConfigurationTest {
 
+  @Test
   public void testDefault() {
     final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties props = new Properties();
@@ -33,6 +35,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertTrue(conf.isEntryTrayEnabled());
   }
 
+  @Test
   public void testCreateRepositoryConfigurationTest() throws Exception {
     final String repositoryUrl = "svn://repositoryserver/repository";
     final Properties props = new Properties();
@@ -59,6 +62,7 @@ public class RepositoryConfigurationTest extends TestCase {
     assertEquals(20, conf.getRssItemsCount());
   }
 
+  @Test
   public void testSetRepositoryUrl() throws Exception {
     RepositoryConfiguration conf = new RepositoryConfiguration("test");
 
@@ -82,6 +86,7 @@ public class RepositoryConfigurationTest extends TestCase {
 
   }
 
+  @Test
   public void testGetAsProperties() throws Exception {
     final RepositoryConfiguration conf = new RepositoryConfiguration("test");
 

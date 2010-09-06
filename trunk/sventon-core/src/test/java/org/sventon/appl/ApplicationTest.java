@@ -1,11 +1,9 @@
 package org.sventon.appl;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
@@ -20,7 +18,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 import static org.sventon.TestUtils.CONFIG_FILE_NAME;
 
@@ -146,7 +143,7 @@ public class ApplicationTest {
 
     final String name = "defaultsvn";
     final File configDir = new File(configDirectory.getRepositoriesDirectory(), name);
-    configDir.mkdirs();
+    assertTrue(configDir.mkdirs());
 
     final File configFile = new File(configDir, configFileName);
     storeProperties(configFile, createDummyConfigProperties(name));
@@ -172,10 +169,10 @@ public class ApplicationTest {
     final String name2 = "defaultsvn2";
 
     final File configDir1 = new File(configDirectory.getRepositoriesDirectory(), name1);
-    configDir1.mkdirs();
+    assertTrue(configDir1.mkdirs());
 
     final File configDir2 = new File(configDirectory.getRepositoriesDirectory(), name2);
-    configDir2.mkdirs();
+    assertTrue(configDir2.mkdirs());
 
     storeProperties(new File(configDir1, configFileName), createDummyConfigProperties(name1));
 

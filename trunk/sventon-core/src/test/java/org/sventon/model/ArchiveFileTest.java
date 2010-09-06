@@ -1,9 +1,12 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ArchiveFileTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ArchiveFileTest {
+
+  @Test
   public void testArchiveFile() throws Exception {
     // A zip file containing one empty file called 'a'.
     byte[] content = new byte[]{

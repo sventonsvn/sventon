@@ -1,6 +1,8 @@
 package org.sventon.repository;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -16,16 +18,17 @@ import java.util.Date;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertFalse;
 
-public class RepositoryChangeMonitorImplTest extends TestCase {
+public class RepositoryChangeMonitorImplTest {
 
   private RepositoryService repositoryServiceMock = createMock(RepositoryService.class);
   private RepositoryChangeListener repositoryChangeListenerMock = createMock(RepositoryChangeListener.class);
   private List<LogEntry> firstBatchOfRevisions;
   private List<LogEntry> secondBatchOfRevisions;
 
-  @Override
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     firstBatchOfRevisions = new ArrayList<LogEntry>();
     secondBatchOfRevisions = new ArrayList<LogEntry>();
 
@@ -38,8 +41,8 @@ public class RepositoryChangeMonitorImplTest extends TestCase {
     secondBatchOfRevisions.add(TestUtils.createLogEntry(6, "jesper6", new Date(), "Log message for revision 6."));
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     reset(repositoryServiceMock);
     reset(repositoryChangeListenerMock);
   }
@@ -48,6 +51,7 @@ public class RepositoryChangeMonitorImplTest extends TestCase {
     return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
+  @Test
   public void testUpdate() throws Exception {
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);

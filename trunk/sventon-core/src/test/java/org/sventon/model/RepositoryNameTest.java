@@ -1,9 +1,13 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class RepositoryNameTest extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+public class RepositoryNameTest {
+
+  @Test
   public void testIsValid() throws Exception {
     assertFalse(RepositoryName.isValid(null));
     assertFalse(RepositoryName.isValid(""));

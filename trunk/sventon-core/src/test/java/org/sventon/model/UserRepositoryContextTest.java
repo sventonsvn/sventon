@@ -1,12 +1,15 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class UserRepositoryContextTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class UserRepositoryContextTest {
+
+  @Test
   public void testDefaults() throws Exception {
     final UserRepositoryContext context = new UserRepositoryContext();
     assertNull(context.getCharset());
@@ -16,6 +19,7 @@ public class UserRepositoryContextTest extends TestCase {
     assertNull(context.getSortType());
   }
 
+  @Test
   public void testHasCredentials() throws Exception {
     final UserRepositoryContext context = new UserRepositoryContext();
     assertFalse(context.hasCredentials());
@@ -23,6 +27,7 @@ public class UserRepositoryContextTest extends TestCase {
     assertTrue(context.hasCredentials());
   }
 
+  @Test
   public void testClearCredentials() throws Exception {
     final UserRepositoryContext context = new UserRepositoryContext();
     context.setCredentials(new Credentials("uid", "pwd"));
@@ -31,6 +36,7 @@ public class UserRepositoryContextTest extends TestCase {
     assertSame(Credentials.EMPTY, context.getCredentials());
   }
 
+  @Test
   public void testGetUserContext() throws Exception {
     final RepositoryName name = new RepositoryName("repository1");
     final HttpServletRequest request = new MockHttpServletRequest();

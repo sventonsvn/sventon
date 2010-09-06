@@ -17,6 +17,7 @@ import org.sventon.util.SVNUtils;
 import static org.junit.Assert.*;
 
 public class PropertyTest {
+
   @Test
   /*
   Test that a Property can be a custom string and not just predefined 'svn:' , 'svn:entry:' etc properties.

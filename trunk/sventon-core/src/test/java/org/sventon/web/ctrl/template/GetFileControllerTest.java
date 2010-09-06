@@ -1,7 +1,8 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -25,9 +26,10 @@ import org.sventon.web.command.BaseCommand;
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class GetFileControllerTest extends TestCase {
+public class GetFileControllerTest {
 
   private Application application;
   private ConfigDirectory configDirectory;
@@ -36,7 +38,8 @@ public class GetFileControllerTest extends TestCase {
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
 
@@ -56,6 +59,7 @@ public class GetFileControllerTest extends TestCase {
     application.addConfiguration(repositoryConfiguration);
   }
 
+  @Test
   public void testSvnHandleGetImageAsInline() throws Exception {
     final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
@@ -80,6 +84,7 @@ public class GetFileControllerTest extends TestCase {
     assertTrue(((String) res.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("inline"));
   }
 
+  @Test
   public void testSvnHandleGetFileAsAttachment() throws Exception {
     final BaseCommand command = new BaseCommand();
     command.setName(repositoryName);
@@ -100,6 +105,7 @@ public class GetFileControllerTest extends TestCase {
     assertTrue(((String) mockResponse.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("attachment"));
   }
 
+  @Test
   public void testCacheNotUsed() throws Exception {
     final RepositoryService repositoryServiceMock = EasyMock.createMock(RepositoryService.class);
 
@@ -142,6 +148,7 @@ public class GetFileControllerTest extends TestCase {
     assertEquals(622, response.getContentAsByteArray().length);
   }
 
+  @Test
   public void testCacheUsed() throws Exception {
     final RepositoryService repositoryServiceMock = EasyMock.createMock(RepositoryService.class);
 

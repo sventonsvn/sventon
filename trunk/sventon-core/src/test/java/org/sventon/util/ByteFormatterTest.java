@@ -1,15 +1,17 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Locale;
 
-public class ByteFormatterTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ByteFormatterTest {
+
+  @Test
   public void testFormat() throws Exception {
 
     //TODO: This test is platform/locale dependent, fix this when i18n is handled.
-
     assertEquals("1000", ByteFormatter.format(1000L, new Locale("sv", "SE")));
     assertEquals("1 kB", ByteFormatter.format(1200L, new Locale("sv", "SE")));
     assertEquals("1 kB", ByteFormatter.format(2047L, new Locale("sv", "SE")));

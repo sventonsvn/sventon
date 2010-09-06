@@ -1,6 +1,6 @@
 package org.sventon.web;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.sventon.model.Credentials;
@@ -8,7 +8,9 @@ import org.sventon.model.Credentials;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AbstractHttpAuthenticationHandlerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class AbstractHttpAuthenticationHandlerTest {
 
   private final AbstractHttpAuthenticationHandler handler = new AbstractHttpAuthenticationHandler() {
     public String getRealm() {
@@ -24,6 +26,7 @@ public class AbstractHttpAuthenticationHandlerTest extends TestCase {
     }
   };
 
+  @Test
   public void testIsLoginAttempt() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     assertFalse(handler.isLoginAttempt(request));
@@ -32,6 +35,7 @@ public class AbstractHttpAuthenticationHandlerTest extends TestCase {
     assertTrue(handler.isLoginAttempt(request));
   }
 
+  @Test
   public void testGetAuthzHeader() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     assertEquals("", handler.getAuthzHeader(request));
@@ -40,6 +44,7 @@ public class AbstractHttpAuthenticationHandlerTest extends TestCase {
     assertEquals("Basic xyz:abc", handler.getAuthzHeader(request));
   }
 
+  @Test
   public void testSendChallenge() throws Exception {
     final MockHttpServletResponse response = new MockHttpServletResponse();
     handler.sendChallenge(response);

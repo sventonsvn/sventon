@@ -1,9 +1,13 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class UserContextTest extends TestCase {
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
+public class UserContextTest {
+
+  @Test
   public void testAddGetRemoveUserContext() throws Exception {
     final UserContext context = new UserContext();
 
@@ -43,7 +47,7 @@ public class UserContextTest extends TestCase {
     context.remove(repository1);
     assertNull(context.getUserRepositoryContext(repository1));
 
-    //Removing non-existing context is scilently ignored
+    //Removing non-existing context is silently ignored
     context.remove(new RepositoryName("repository9"));
   }
 }

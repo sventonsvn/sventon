@@ -1,13 +1,17 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.DirEntry;
 
 import java.util.List;
 
-public class FileExtensionFilterTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class FileExtensionFilterTest {
+
+  @Test
   public void testFilter() throws Exception {
 
     final List<DirEntry> list = TestUtils.getFileEntriesDirectoryList();

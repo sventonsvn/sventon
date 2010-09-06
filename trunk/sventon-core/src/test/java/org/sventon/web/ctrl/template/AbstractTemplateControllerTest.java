@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.apache.commons.lang.mutable.MutableBoolean;
+import org.junit.Test;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
@@ -14,8 +14,11 @@ import org.sventon.web.command.BaseCommand;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AbstractTemplateControllerTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class AbstractTemplateControllerTest {
+
+  @Test
   public void testParseAndUpdateSortParameters() throws Exception {
     final UserRepositoryContext userRepositoryContext = new UserRepositoryContext();
     final AbstractTemplateController ctrl = new TestController();
@@ -35,6 +38,7 @@ public class AbstractTemplateControllerTest extends TestCase {
     assertEquals("SIZE", userRepositoryContext.getSortType().toString());
   }
 
+  @Test
   public void testCreateConnection() throws Exception {
     final AbstractTemplateController ctrl = new TestController();
     final MutableBoolean usingSharedAuthSettings = new MutableBoolean(false);

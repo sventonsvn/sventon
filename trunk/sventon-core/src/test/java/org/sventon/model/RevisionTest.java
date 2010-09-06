@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class RevisionTest {
@@ -72,6 +72,6 @@ public class RevisionTest {
 
   @Test
   public void namedVersionToString() throws Exception {
-      assertEquals("HEAD", Revision.HEAD.toString());
+    assertEquals("HEAD", Revision.HEAD.toString());
   }
 }

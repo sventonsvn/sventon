@@ -1,6 +1,7 @@
 package org.sventon.web.ctrl;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -16,13 +17,16 @@ import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
 
-public class ListRepositoriesControllerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ListRepositoriesControllerTest {
 
   private Application application;
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
     ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
@@ -33,6 +37,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     application = new Application(configDirectory);
   }
 
+  @Test
   public void testHandleRequestInternal() throws Exception {
     final ListRepositoriesController ctrl = new ListRepositoriesController();
     ctrl.setServletContext(new MockServletContext());
@@ -51,6 +56,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertEquals("listRepositories", modelAndView.getViewName());
   }
 
+  @Test
   public void testHandleRequestInternalLogout() throws Exception {
     //Create a mock session and prepare it. After the contrller call completes, the session should be empty.
     final MockHttpSession session = new MockHttpSession();
@@ -147,6 +153,7 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertEquals("PWD2", uRC2FromSession.getCredentials().getPassword());
   }
 
+  @Test
   public void testHandleRequestInternal2() throws Exception {
     final ListRepositoriesController ctrl = new ListRepositoriesController();
     ctrl.setServletContext(new MockServletContext());
@@ -185,6 +192,13 @@ public class ListRepositoriesControllerTest extends TestCase {
     assertEquals("listRepositories", modelAndView.getViewName());
   }
 
+  @Test
+  public void testCreateListUrl() {
+    final ListRepositoriesController ctrl = new ListRepositoriesController();
+    assertEquals("/repos/test/list/", ctrl.createListUrl(new RepositoryName("test")));
+    assertEquals("/repos/%C3%BC/list/", ctrl.createListUrl(new RepositoryName("\u00fc")));
+  }
+
   private RepositoryConfiguration createTestRepository(final String repositoryName) {
     final RepositoryConfiguration configuration = new RepositoryConfiguration(repositoryName);
     configuration.setRepositoryUrl("http://localhost/svn");
@@ -192,11 +206,5 @@ public class ListRepositoriesControllerTest extends TestCase {
     configuration.setZippedDownloadsAllowed(false);
     configuration.setEnableAccessControl(false);
     return configuration;
-  }
-
-  public void testCreateListUrl() {
-    final ListRepositoriesController ctrl = new ListRepositoriesController();
-    assertEquals("/repos/test/list/", ctrl.createListUrl(new RepositoryName("test")));
-    assertEquals("/repos/%C3%BC/list/", ctrl.createListUrl(new RepositoryName("\u00fc")));
   }
 }

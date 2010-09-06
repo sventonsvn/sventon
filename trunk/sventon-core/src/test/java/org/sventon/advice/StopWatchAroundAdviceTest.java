@@ -1,9 +1,12 @@
 package org.sventon.advice;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class StopWatchAroundAdviceTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class StopWatchAroundAdviceTest {
+
+  @Test
   public void testCreateMessage() throws Exception {
     final StopWatchAroundAdvice advice = new StopWatchAroundAdvice();
     assertEquals("Method [null] took [0] ms", advice.createMessage(null, 0));

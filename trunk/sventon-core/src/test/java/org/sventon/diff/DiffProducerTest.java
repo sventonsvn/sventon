@@ -1,11 +1,8 @@
 package org.sventon.diff;
 
 import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
-import org.sventon.diff.DiffProducer;
-import org.sventon.diff.DiffResultParser;
-import org.sventon.diff.DiffSegment;
+import org.junit.Test;
 import org.sventon.model.DiffAction;
 
 import java.io.ByteArrayInputStream;
@@ -16,13 +13,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.sventon.diff.DiffSegment.Side.LEFT;
 import static org.sventon.diff.DiffSegment.Side.RIGHT;
 
-public class DiffProducerTest extends TestCase {
+public class DiffProducerTest {
 
   public static final String NL = System.getProperty("line.separator");
 
+  @Test
   public void testDoNormalDiff() throws Exception {
     final String leftString =
         "[.ShellClassInfo]" + NL +
@@ -84,7 +84,7 @@ public class DiffProducerTest extends TestCase {
     assertEquals("DiffSegment: ADDED, left: 8-8, right: 8-12", action.toString());
   }
 
-  @SuppressWarnings({"ConstantConditions"})
+  @Test
   public void testDoNormalDiffII() throws Exception {
     final String leftString =
         "/**" + NL +
@@ -177,6 +177,7 @@ public class DiffProducerTest extends TestCase {
     assertEquals("DiffSegment: DELETED, left: 18-22, right: 10-10", action.toString());
   }
 
+  @Test
   public void testDoNormalDiffIII() throws Exception {
     final String leftString = NL + "test" + NL;
     final String rightString = "test" + NL;
@@ -191,6 +192,7 @@ public class DiffProducerTest extends TestCase {
     assertEquals(result, output.toString());
   }
 
+  @Test
   public void testDoNormalDiffNoDiff() throws Exception {
     final String leftString =
         "More!" + NL +
@@ -209,6 +211,7 @@ public class DiffProducerTest extends TestCase {
     assertEquals("", output.toString());
   }
 
+  @Test
   public void testDoUnifiedDiffNoGutter() throws Exception {
     final String leftString =
         "[.ShellClassInfo]" + NL +
@@ -248,6 +251,7 @@ public class DiffProducerTest extends TestCase {
     final InputStream right = IOUtils.toInputStream(rightString);
 
     final Map props = new HashMap();
+    //noinspection unchecked
     props.put(QDiffGeneratorFactory.GUTTER_PROPERTY, 0);
     final DiffProducer diffProducer = new DiffProducer(left, right, null, props);
     final OutputStream output = new ByteArrayOutputStream();
