@@ -1,6 +1,6 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.LogMessageSearchItem;
 
@@ -9,8 +9,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class LogMessageComparatorTest extends TestCase {
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
+public class LogMessageComparatorTest {
+
+  @Test
   public void testCompare() throws Exception {
     List<LogMessageSearchItem> entries = new ArrayList<LogMessageSearchItem>();
     LogMessageSearchItem c1 = new LogMessageSearchItem(TestUtils.createLogEntry(1, "jesper", new Date(), "Message 1"));

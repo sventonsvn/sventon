@@ -1,6 +1,6 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.DirEntryLock;
 import org.sventon.model.RepositoryName;
@@ -13,11 +13,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ShowLocksControllerTest extends TestCase {
+public class ShowLocksControllerTest {
 
+  @Test
   public void testSvnHandle() throws Exception {
     final RepositoryService serviceMock = mock(RepositoryService.class);
 

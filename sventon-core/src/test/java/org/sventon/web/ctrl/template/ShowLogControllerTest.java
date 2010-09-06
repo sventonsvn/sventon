@@ -1,17 +1,21 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.sventon.model.Revision;
 
-public class ShowLogControllerTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class ShowLogControllerTest {
 
   private ShowLogController controller;
 
-  @Override
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     controller = new ShowLogController();
   }
 
+  @Test
   public void testCalculateFromRevision() throws Exception {
     assertEquals(2, controller.calculateFromRevision(2, Revision.HEAD));
     assertEquals(1, controller.calculateFromRevision(2, Revision.create(1)));

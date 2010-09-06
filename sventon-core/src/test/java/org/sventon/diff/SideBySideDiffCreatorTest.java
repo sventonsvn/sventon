@@ -1,14 +1,17 @@
 package org.sventon.diff;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.model.SideBySideDiffRow;
 import org.sventon.model.TextFile;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class SideBySideDiffCreatorTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class SideBySideDiffCreatorTest {
+
+  @Test
   public void testCreateFromDiffResult() throws Exception {
     final String diffResult = "1d1\r\n<\r\n";
     final TextFile fromFile = new TextFile("\r\ntest\r\nfile\r\n");

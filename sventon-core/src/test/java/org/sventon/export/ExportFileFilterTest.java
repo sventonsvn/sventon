@@ -1,9 +1,12 @@
 package org.sventon.export;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ExportFileFilterTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ExportFileFilterTest {
+
+  @Test
   public void testAccept() throws Exception {
     final ExportFileFilter filter = new ExportFileFilter();
     assertTrue(filter.accept(null, "berlios-20060821234551243.zip"));

@@ -1,9 +1,12 @@
 package org.sventon.service;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class CacheAwareRepositoryServiceImplTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class CacheAwareRepositoryServiceImplTest {
+
+  @Test
   public void testCalculateRevisionsToFetch() throws Exception {
     final CacheAwareRepositoryService service = new CacheAwareRepositoryService(null);
     assertEquals("[3, 2]", service.calculateRevisionsToFetch(3, 2).toString());

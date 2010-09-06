@@ -28,7 +28,7 @@ import org.tigris.subversion.javahl.*;
 
 import java.util.*;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -94,7 +94,7 @@ public class JavaHLRepositoryServiceTest {
 
     ChangedPath[] paths = new ChangedPath[2];
     changedPaths.toArray(paths);
-    
+
     assertEquals("/branches/lemontree/src/main/da/path/myfile.txt", paths[0].getPath());
     assertEquals(ChangeType.ADDED, paths[0].getType());
     assertEquals("/trunk/src/main/da/path/myfile.txt", paths[1].getPath());

@@ -1,7 +1,8 @@
 package org.sventon.web.ctrl;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
 import org.quartz.impl.StdScheduler;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -15,12 +16,15 @@ import org.sventon.model.Credentials;
 
 import java.io.File;
 
-public class SubmitConfigurationsControllerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class SubmitConfigurationsControllerTest {
 
   private ConfigDirectory configDirectory;
   private Application application;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
     final MockServletContext servletContext = new MockServletContext();
@@ -30,6 +34,7 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     application.setConfigurationFileName(TestUtils.CONFIG_FILE_NAME);
   }
 
+  @Test
   public void testHandleRequestInternalConfigured() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
@@ -40,6 +45,7 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
+  @Test
   public void testHandleRequestInternalNoAddedRepository() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
@@ -51,6 +57,7 @@ public class SubmitConfigurationsControllerTest extends TestCase {
     assertEquals("error/configurationError", modelAndView.getViewName());
   }
 
+  @Test
   public void testHandleRequestInternal() throws Exception {
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();

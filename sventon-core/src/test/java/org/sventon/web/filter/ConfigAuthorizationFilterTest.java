@@ -1,7 +1,8 @@
 package org.sventon.web.filter;
 
-import junit.framework.TestCase;
 import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mock.web.*;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
@@ -10,11 +11,14 @@ import org.sventon.appl.ConfigDirectory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ConfigAuthorizationFilterTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ConfigAuthorizationFilterTest {
 
   private Application application;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
     final MockServletContext servletContext = new MockServletContext();
@@ -23,6 +27,7 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     application = new Application(configDirectory);
   }
 
+  @Test
   public void testDoFilterInternalApplicationNotConfigured() throws Exception {
     final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 
@@ -40,6 +45,7 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     assertSame(response, filterChain.getResponse());
   }
 
+  @Test
   public void testDoFilterInternalApplicationConfiguredEditDisabled() throws Exception {
     final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 
@@ -60,6 +66,7 @@ public class ConfigAuthorizationFilterTest extends TestCase {
     assertNull(filterChain.getResponse());
   }
 
+  @Test
   public void testDoFilterInternalApplicationConfiguredEditEnabledAlreadyLoggedIn() throws Exception {
     final ConfigAuthorizationFilter filter = new ConfigAuthorizationFilter(application);
 

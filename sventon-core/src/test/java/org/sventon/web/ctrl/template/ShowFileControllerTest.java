@@ -1,20 +1,25 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.sventon.web.command.BaseCommand;
 
-public class ShowFileControllerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ShowFileControllerTest {
 
   private ShowFileController ctrl;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
     fileTypeMap.afterPropertiesSet();
     ctrl = new ShowFileController(fileTypeMap);
     ctrl.setArchiveFileExtensionPattern("(jar|zip|war|ear)");
   }
 
+  @Test
   public void testIsArchiveFileExtension() throws Exception {
     final BaseCommand command = new BaseCommand();
     command.setPath("/file.zip");
@@ -35,6 +40,7 @@ public class ShowFileControllerTest extends TestCase {
     assertFalse(ctrl.isArchiveFileExtension(command));
   }
 
+  @Test
   public void testConfigurableMimeFileTypeMap() {
     final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
     fileTypeMap.afterPropertiesSet();
@@ -50,6 +56,7 @@ public class ShowFileControllerTest extends TestCase {
     assertEquals("image/gif", fileTypeMap.getContentType("/dir/file.gif"));
   }
 
+  @Test
   public void testIsImageFileExtension() throws Exception {
     final BaseCommand command = new BaseCommand();
     command.setPath("file.gif");

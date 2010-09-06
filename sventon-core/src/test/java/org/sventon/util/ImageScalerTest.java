@@ -1,11 +1,14 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.awt.*;
 
-public class ImageScalerTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ImageScalerTest {
+
+  @Test
   public void testGetThumbnail() throws Exception {
     final ImageScaler imageScaler = new ImageScaler();
 

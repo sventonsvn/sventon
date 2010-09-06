@@ -1,11 +1,15 @@
 package org.sventon.web.tags;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Properties;
 
-public class FileTypeIconTagTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+public class FileTypeIconTagTest {
+
+  @Test
   public void testCreateImageTag() throws Exception {
     final Properties mappings = new Properties();
     mappings.put("txt", "images/icon_txt.png");
@@ -27,6 +31,7 @@ public class FileTypeIconTagTest extends TestCase {
     assertEquals("<img src=\"images/icon_file_zip.png\" title=\"Web archive (WAR)\" alt=\"Web archive (WAR)\">", iconTag.createImageTag("filename.war", mappings));
   }
 
+  @Test
   public void testExtractDescriptionFromMapping() throws Exception {
     final FileTypeIconTag iconTag = new FileTypeIconTag();
 
@@ -38,6 +43,7 @@ public class FileTypeIconTagTest extends TestCase {
     assertEquals("Web archive", iconTag.extractDescriptionFromMapping("images/icon_file_zip.png;Web archive"));
   }
 
+  @Test
   public void testExtractIconFromMapping() throws Exception {
     final FileTypeIconTag iconTag = new FileTypeIconTag();
 

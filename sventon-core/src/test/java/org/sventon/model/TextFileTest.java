@@ -1,13 +1,16 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
 
-public class TextFileTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class TextFileTest {
 
   private static final String BR = System.getProperty("line.separator");
 
+  @Test
   public void testTextFilePlain() throws Exception {
     final String content = "Line one" + BR + "Line two";
     final TextFile textFile = new TextFile(content);
@@ -15,6 +18,7 @@ public class TextFileTest extends TestCase {
     assertEquals("Line one" + BR + "Line two" + BR, textFile.getContent());
   }
 
+  @Test
   public void testTextFilePlainInitialBR() throws Exception {
     final String content = BR + "Line one" + BR + "Line two";
     final TextFile textFile = new TextFile(content);
@@ -22,6 +26,7 @@ public class TextFileTest extends TestCase {
     assertEquals(BR + "Line one" + BR + "Line two" + BR, textFile.getContent());
   }
 
+  @Test
   public void testTextFilePlainWebSafe() throws Exception {
     final String content = "Line&one" + BR + "Line<two>";
     final TextFile textFile = new TextFile(content);
@@ -29,6 +34,7 @@ public class TextFileTest extends TestCase {
     assertEquals("Line&amp;one" + BR + "Line&lt;two&gt;" + BR, textFile.getContent());
   }
 
+  @Test
   public void testTextFileColorized() throws Exception {
     final String content = "class Test {" + BR + "// <test> " + BR + "}";
     final TextFile textFile = new TextFile(content, "Test.java", "UTF-8", getColorer());

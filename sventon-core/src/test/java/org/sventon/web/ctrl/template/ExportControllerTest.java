@@ -1,6 +1,6 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,9 +18,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-public class ExportControllerTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class ExportControllerTest {
   private static final String UUID_STRING = "c5eaa2ba-2655-444b-aa64-c15ecff3e6da";
 
+  @Test
   public void testExport() throws Exception {
     final File tempFile = File.createTempFile("sventon-", "-test");
     tempFile.deleteOnExit();

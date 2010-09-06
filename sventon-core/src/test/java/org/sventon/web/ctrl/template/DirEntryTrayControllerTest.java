@@ -1,7 +1,9 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,8 +23,9 @@ import java.util.Map;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
-public class DirEntryTrayControllerTest extends TestCase {
+public class DirEntryTrayControllerTest {
 
   private final BaseCommand command = new BaseCommand();
   private RepositoryService mockService;
@@ -31,7 +34,8 @@ public class DirEntryTrayControllerTest extends TestCase {
   private DirEntry entry;
   private UserRepositoryContext context;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
     final MockServletContext servletContext = new MockServletContext();
@@ -58,7 +62,8 @@ public class DirEntryTrayControllerTest extends TestCase {
     context = new UserRepositoryContext();
   }
 
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     EasyMock.reset(mockService);
   }
 
@@ -70,6 +75,7 @@ public class DirEntryTrayControllerTest extends TestCase {
     return modelAndView.getModel();
   }
 
+  @Test
   public void testAddAndRemove() throws Exception {
     request.setParameter("action", DirEntryTrayController.PARAMETER_ADD);
     assertEquals(0, context.getDirEntryTray().getSize());

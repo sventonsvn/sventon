@@ -1,11 +1,14 @@
 package org.sventon.web.command.editor;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.model.PathRevision;
 import org.sventon.model.Revision;
 
-public class PathRevisionEditorTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class PathRevisionEditorTest {
+
+  @Test
   public void testGetSetAsText() {
     final PathRevisionEditor editor = new PathRevisionEditor();
     assertEquals("", editor.getAsText());
@@ -16,7 +19,7 @@ public class PathRevisionEditorTest extends TestCase {
     assertEquals(fileRevision.getRevision(), ((PathRevision) editor.getValue()).getRevision());
   }
 
-
+  @Test
   public void testParseEntriesWithDelimitersInPath() throws Exception {
     final PathRevisionEditor editor = new PathRevisionEditor();
     final String[] parameters = new String[]{
@@ -30,6 +33,7 @@ public class PathRevisionEditorTest extends TestCase {
     assertEquals(123, entry0.getRevision().getNumber());
   }
 
+  @Test
   public void testParseEntries() throws Exception {
     final PathRevisionEditor editor = new PathRevisionEditor();
     final String[] parameters = new String[]{

@@ -1,11 +1,14 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class DirEntryTrayTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class DirEntryTrayTest {
+
+  @Test
   public void testEntryTray() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
 
@@ -19,6 +22,7 @@ public class DirEntryTrayTest extends TestCase {
     assertEquals(0, entryTray.getSize());
   }
 
+  @Test
   public void testDuplicateEntries() throws Exception {
     final DirEntryTray entryTray = new DirEntryTray();
 

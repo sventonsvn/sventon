@@ -1,6 +1,6 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,8 +11,11 @@ import org.sventon.web.command.editor.PathRevisionEditor;
 import java.util.List;
 import java.util.Map;
 
-public class ShowThumbnailsControllerTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ShowThumbnailsControllerTest {
+
+  @Test
   public void testSvnHandle() throws Exception {
     final ConfigurableMimeFileTypeMap fileTypeMap = new ConfigurableMimeFileTypeMap();
     fileTypeMap.afterPropertiesSet();

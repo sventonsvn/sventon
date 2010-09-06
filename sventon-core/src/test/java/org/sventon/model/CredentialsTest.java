@@ -1,9 +1,13 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class CredentialsTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+public class CredentialsTest {
+
+  @Test
   public void testCredentials() throws Exception {
     Credentials credentials = new Credentials("userid", null);
     assertEquals("userid", credentials.getUserName());
@@ -19,6 +23,7 @@ public class CredentialsTest extends TestCase {
   }
 
   //Test toString to make sure pwd and uid is not outputted
+  @Test
   public void testToString() throws Exception {
 
     String testString = "Credentials[" +
@@ -41,6 +46,7 @@ public class CredentialsTest extends TestCase {
     assertEquals(testString, credentials.toString());
   }
 
+  @Test
   public void testIsEmpty() throws Exception {
     Credentials credentials = new Credentials(null, null);
     assertTrue(credentials.isEmpty());

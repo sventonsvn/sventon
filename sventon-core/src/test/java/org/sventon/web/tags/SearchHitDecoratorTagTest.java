@@ -1,10 +1,13 @@
 package org.sventon.web.tags;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.web.ctrl.template.SearchEntriesController;
 
-public class SearchHitDecoratorTagTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class SearchHitDecoratorTagTest {
+
+  @Test
   public void testDecorate() throws Exception {
     assertEquals("this is a <span class=\"hit\">test</span>!", SearchHitDecoratorTag.decorate("hit",
         SearchEntriesController.SearchType.TEXT.name(), "test", "this is a test!"));

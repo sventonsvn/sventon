@@ -1,16 +1,19 @@
 package org.sventon.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import static org.junit.Assert.assertEquals;
 import static org.sventon.util.WebUtils.NL;
 
-public class WebUtilsTest extends TestCase {
+public class WebUtilsTest {
 
+  @Test
   public void testNl2br() throws Exception {
     assertEquals("one<br>two", WebUtils.nl2br("one\ntwo"));
   }
 
+  @Test
   public void testReplaceLeadingSpaces() throws Exception {
     try {
       WebUtils.replaceLeadingSpaces(null);
@@ -22,6 +25,7 @@ public class WebUtilsTest extends TestCase {
     assertEquals("&nbsp;&nbsp;class {", WebUtils.replaceLeadingSpaces("  class {"));
   }
 
+  @Test
   public void testReplaceLeadingSpacesMultiline() throws Exception {
     String line = " one " +
         NL + "  two  " +
@@ -44,6 +48,7 @@ public class WebUtilsTest extends TestCase {
     assertEquals(expected, WebUtils.replaceLeadingSpaces(line));
   }
 
+  @Test
   public void testExtractBaseURLFromRequest() throws Exception {
     MockHttpServletRequest request;
 

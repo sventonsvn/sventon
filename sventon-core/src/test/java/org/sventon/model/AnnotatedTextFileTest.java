@@ -1,16 +1,19 @@
 package org.sventon.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.colorer.Colorer;
 import org.sventon.colorer.JHighlightColorer;
 
 import java.util.Date;
 import java.util.Properties;
 
-public class AnnotatedTextFileTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class AnnotatedTextFileTest {
 
   private static final String NL = System.getProperty("line.separator");
 
+  @Test
   public void testAnnotatedTextFile() throws Exception {
     final AnnotatedTextFile file = new AnnotatedTextFile();
     final String row1 = "file row one";
@@ -21,6 +24,7 @@ public class AnnotatedTextFileTest extends TestCase {
     assertEquals(row1 + NL + row2 + NL, file.getContent());
   }
 
+  @Test
   public void testAnnotatedTextFileJava() throws Exception {
     final AnnotatedTextFile file = new AnnotatedTextFile("test.java", "UTF-8", getColorer());
     final String row1 = "public class Test {";

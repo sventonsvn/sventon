@@ -1,7 +1,7 @@
 package org.sventon.web.ctrl.template;
 
-import junit.framework.TestCase;
 import org.easymock.classextension.EasyMock;
+import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
@@ -19,11 +19,14 @@ import java.util.Map;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.replay;
 import static org.easymock.classextension.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.sventon.web.ctrl.template.SearchLogsController.SEARCH_STRING_PARAMETER;
 import static org.sventon.web.ctrl.template.SearchLogsController.START_DIR_PARAMETER;
 
-public class SearchLogsControllerTest extends TestCase {
+public class SearchLogsControllerTest {
 
+  @Test
   public void testSvnHandle() throws Exception {
     final CacheGateway mockCache = EasyMock.createMock(CacheGateway.class);
     final MockHttpServletRequest request = new MockHttpServletRequest();
@@ -49,8 +52,8 @@ public class SearchLogsControllerTest extends TestCase {
     verify(mockCache);
 
     assertEquals(4, model.size());
-    assertEquals("abc", (String) model.get(SEARCH_STRING_PARAMETER));
-    assertEquals("/trunk/", (String) model.get(START_DIR_PARAMETER));
+    assertEquals("abc", model.get(SEARCH_STRING_PARAMETER));
+    assertEquals("/trunk/", model.get(START_DIR_PARAMETER));
     assertEquals(result, model.get("logEntries"));
     assertTrue((Boolean) model.get("isLogSearch"));
   }

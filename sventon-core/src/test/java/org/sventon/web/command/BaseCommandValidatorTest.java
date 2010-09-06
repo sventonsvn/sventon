@@ -1,18 +1,23 @@
 package org.sventon.web.command;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.springframework.validation.BindException;
 import org.sventon.model.DirEntryComparator;
 import org.sventon.model.DirEntrySorter;
 import org.sventon.model.Revision;
 
-public class BaseCommandValidatorTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+public class BaseCommandValidatorTest {
+
+  @Test
   public void testSupports() {
     BaseCommandValidator validator = new BaseCommandValidator();
     assertTrue(validator.supports(BaseCommand.class));
   }
 
+  @Test
   public void testValidate() {
     BaseCommandValidator validator = new BaseCommandValidator();
 
