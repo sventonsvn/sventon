@@ -97,15 +97,15 @@ public class ParameterizedPathMatcher implements PathMatcher {
   }
 
   public Map<String, String> extractUriTemplateVariables(String pattern, String path) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return null;
   }
 
   public Comparator<String> getPatternComparator(String path) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return null;
   }
 
   public String combine(String pattern1, String pattern2) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return null;
   }
 
   private static class NamedPattern {
