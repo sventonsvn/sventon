@@ -12,14 +12,12 @@
     <artifactId>sventon</artifactId>
     <version>2.5.0-SNAPSHOT</version>
   </parent>
-
   <dependencies>
     <dependency>
       <groupId>org.sventon</groupId>
       <artifactId>sventon-core</artifactId>
       <version>2.5.0-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>
       <artifactId>svnkit</artifactId>
