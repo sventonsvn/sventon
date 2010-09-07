@@ -114,17 +114,6 @@ public interface RepositoryService {
   Properties listProperties(final SVNConnection connection, final String path, final long revision) throws SventonException;
 
   /**
-   * Gets a file's checksum.
-   *
-   * @param connection The repository connection
-   * @param path       Target of target to get properties for
-   * @param revision   The revision
-   * @return The file's checksum
-   * @throws SventonException if a subversion error occur
-   */
-  String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException;
-
-  /**
    * Gets the latest (HEAD) repository revision.
    *
    * @param connection The repository connection

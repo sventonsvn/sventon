@@ -130,9 +130,8 @@ public class GetFileController extends AbstractTemplateController {
         logger.debug("Getting file as 'thumbnail'");
         prepareResponse(CONTENT_DISPOSITION_INLINE, request, response, getContentType(command.getPath()), command);
         if (cacheUsed) {
-          final String checksum = getRepositoryService().getFileChecksum(connection, command.getPath(), command.getRevisionNumber());
           objectCache = objectCacheManager.getCache(command.getName());
-          cacheKey = new ObjectCacheKey(command.getPath(), checksum);
+          cacheKey = new ObjectCacheKey(command.getPath(), command.getRevisionNumber());
           logger.debug("Using cachekey: " + cacheKey);
           thumbnailData = (byte[]) objectCache.get(cacheKey);
 

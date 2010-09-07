@@ -11,11 +11,6 @@
  */
 package org.sventon.cache.objectcache;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import java.io.Serializable;
 
 /**
@@ -34,31 +29,36 @@ public final class ObjectCacheKey implements Serializable {
   /**
    * Checksum.
    */
-  private final String checksum;
+  private final long revisionNumber;
 
   /**
    * Constructor.
    *
-   * @param checksum Subversion entry checksum
-   * @param path     Path
+   * @param path           Path
+   * @param revisionNumber Revision
    */
-  public ObjectCacheKey(final String path, final String checksum) {
+  public ObjectCacheKey(final String path, final long revisionNumber) {
     this.path = path;
-    this.checksum = checksum;
+    this.revisionNumber = revisionNumber;
   }
 
   @Override
-  public boolean equals(final Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ObjectCacheKey)) return false;
+    final ObjectCacheKey that = (ObjectCacheKey) o;
+    return revisionNumber == that.revisionNumber && !(path != null ? !path.equals(that.path) : that.path != null);
   }
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
+    int result = path != null ? path.hashCode() : 0;
+    result = 31 * result + (int) (revisionNumber ^ (revisionNumber >>> 32));
+    return result;
   }
 
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    return "ObjectCacheKey{" + "path='" + path + '\'' + ", revisionNumber=" + revisionNumber + '}';
   }
 }

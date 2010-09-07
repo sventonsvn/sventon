@@ -11,20 +11,18 @@
  */
 package org.sventon.service.svnkit;
 
-import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
 import org.sventon.colorer.Colorer;
-import org.sventon.diff.*;
+import org.sventon.diff.DiffException;
+import org.sventon.diff.DiffProducer;
+import org.sventon.diff.IdenticalFilesException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.service.AbstractRepositoryService;
-import org.sventon.service.RepositoryService;
-import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
@@ -128,7 +126,6 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
   }
 
 
-
   @Override
   public void getFileContents(final SVNConnection connection, final String path, final long revision,
                               final OutputStream output) throws SventonException {
@@ -163,11 +160,6 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
     }
 
     return properties;
-  }
-
-  @Override
-  public final String getFileChecksum(final SVNConnection connection, final String path, final long revision) throws SventonException {
-    return listProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
   }
 
   @Override

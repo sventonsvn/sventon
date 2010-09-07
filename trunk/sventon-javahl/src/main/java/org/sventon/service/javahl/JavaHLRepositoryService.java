@@ -19,19 +19,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
 import org.sventon.colorer.Colorer;
-import org.sventon.diff.*;
+import org.sventon.diff.DiffException;
+import org.sventon.diff.IdenticalFilesException;
 import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
 import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.AbstractRepositoryService;
-import org.sventon.service.RepositoryService;
-import org.sventon.util.SVNUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -39,7 +40,7 @@ import java.util.*;
  *
  * @author jesper@sventon.org
  */
-public class JavaHLRepositoryService extends AbstractRepositoryService  {
+public class JavaHLRepositoryService extends AbstractRepositoryService {
   private static final String[] REV_PROP_NAMES = new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE};
 
 
@@ -134,30 +135,19 @@ public class JavaHLRepositoryService extends AbstractRepositoryService  {
     final Properties properties = new Properties();
 
     try {
-      client.properties(conn.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(revision), JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
-        @Override
-        public void singlePath(String path, Map prop) {
-          for (Object o : prop.keySet()) {
-            properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
-          }
-        }
-      });
-
-      for (Property entry : Property.COMMON_SVN_ENTRY_PROPERTIES) {
-        final PropertyData data = client.propertyGet(conn.getRepositoryRootUrl().getFullPath(path), entry.getName(), JavaHLConverter.convertRevision(revision));
-        if (data != null) {
-          properties.put(new Property(data.getName()), new PropertyValue(data.getValue()));
-        }
-      }
+      client.properties(conn.getRepositoryRootUrl().getFullPath(path), JavaHLConverter.convertRevision(revision),
+          JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
+            @Override
+            public void singlePath(String path, Map prop) {
+              for (Object o : prop.keySet()) {
+                properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
+              }
+            }
+          });
     } catch (ClientException e) {
       return translateException("Could not get properties for [" + path + "] at revision: " + revision, e);
     }
     return properties;
-  }
-
-  @Override
-  public String getFileChecksum(SVNConnection connection, String path, long revision) throws SventonException {
-    return listProperties(connection, path, revision).getStringValue(Property.CHECKSUM);
   }
 
   @Override
@@ -480,7 +470,6 @@ public class JavaHLRepositoryService extends AbstractRepositoryService  {
 
     throw new SventonException(errorMessage, exception);
   }
-
 
 
 }
