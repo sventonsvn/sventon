@@ -27,6 +27,12 @@ public class SVNURL implements Serializable {
 
   private static final long serialVersionUID = -226312079488166629L;
 
+  /**
+   * URI pattern. See RFC 2396 Appendix B.
+   */
+  private static final Pattern URI_PATTERN = Pattern.compile("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
+  private static final int SCHEME_COMPONENT = 2;
+
   private final String url;
 
   /**
@@ -36,6 +42,10 @@ public class SVNURL implements Serializable {
    */
   public SVNURL(String url) {
     this.url = url;
+  }
+
+  public String getUrl() {
+    return url;
   }
 
   /**
@@ -53,13 +63,11 @@ public class SVNURL implements Serializable {
     }
   }
 
-  private static String getScheme(String url) throws SventonException {
-    final Pattern pattern = Pattern.compile(URI_PATTERN);
-    final Matcher matcher = pattern.matcher(url);
+  private static String getScheme(final String url) throws SventonException {
+    final Matcher matcher = URI_PATTERN.matcher(url);
     if (!matcher.matches()) {
       throw new SventonException("Malformed URI " + url);
     }
-
     return matcher.group(SCHEME_COMPONENT);
   }
 
@@ -90,11 +98,6 @@ public class SVNURL implements Serializable {
     return url;
   }
 
-
-  public String getUrl() {
-    return url;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -112,11 +115,6 @@ public class SVNURL implements Serializable {
   public String toString() {
     return url;
   }
-
-
-  // URI pattern. See RFC 2396 Appendix B
-  private static final String URI_PATTERN = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?";
-  private static final int SCHEME_COMPONENT = 2;
 
   /**
    * Enumeration over valid SVN protocols.
@@ -146,7 +144,6 @@ public class SVNURL implements Serializable {
           return true;
         }
       }
-
       return false;
     }
 

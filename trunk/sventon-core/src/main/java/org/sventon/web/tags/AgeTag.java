@@ -30,6 +30,8 @@ public final class AgeTag extends TagSupport {
 
   private static final long serialVersionUID = 5299403672028193493L;
 
+  private static final Pattern PATTERN = Pattern.compile("(\\S+\\s\\S+).*");
+
   /**
    * Locale.
    */
@@ -57,14 +59,14 @@ public final class AgeTag extends TagSupport {
       return "";
     }
     final String s = DurationFormatUtils.formatDurationWords(stop.getTime() - start.getTime(), true, true);
-    Pattern p = Pattern.compile("(\\S+\\s\\S+).*");
-    Matcher m = p.matcher(s);
+    final Matcher m = PATTERN.matcher(s);
     m.matches();
     return m.group(1);
   }
 
   /**
    * Sets the date.
+   * Needed by the framework.
    *
    * @param date Date.
    */
