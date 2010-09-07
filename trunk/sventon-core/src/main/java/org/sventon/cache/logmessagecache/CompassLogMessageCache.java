@@ -123,7 +123,7 @@ public final class CompassLogMessageCache implements LogMessageCache {
 
   @Override
   public List<LogMessageSearchItem> find(final String queryString, final String startDir) {
-    return find("message:" + queryString + " paths:" + LogMessageSearchItem.PATHS_DELIMITER + startDir + "*");
+    return find("message:" + queryString + " paths:" + startDir + "*");
   }
 
   @Override
