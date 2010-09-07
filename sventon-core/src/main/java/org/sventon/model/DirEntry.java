@@ -18,6 +18,8 @@ import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +43,9 @@ public final class DirEntry implements Serializable {
 
   @SearchableProperty
   private String name;
+
+  @SearchableProperty()
+  private final List<String> nameFragments = new ArrayList<String>();
 
   @SearchableProperty
   private String camelCasePattern;
@@ -67,7 +72,7 @@ public final class DirEntry implements Serializable {
   /**
    * Default constructor.
    */
-  private DirEntry() {
+  DirEntry() {
   }
 
 
@@ -88,6 +93,8 @@ public final class DirEntry implements Serializable {
       // ignore
     }
 
+    nameFragments.addAll(new DirEntryNameSplitter(name).split());
+
     this.path = entryPath;
     this.lastAuthor = author;
     this.createdDate = date;
@@ -96,7 +103,6 @@ public final class DirEntry implements Serializable {
     this.revision = revision;
     this.size = size;
   }
-
 
   /**
    * Creates a collection of <code>DirEntry</code> objects based
@@ -110,6 +116,12 @@ public final class DirEntry implements Serializable {
     return new DirList(entries, properties);
   }
 
+  /**
+   * @return Generated Id
+   */
+  public String getId() {
+    return id;
+  }
 
   /**
    * Gets the entry name.
@@ -127,6 +139,13 @@ public final class DirEntry implements Serializable {
    */
   public CamelCasePattern getCamelCasePattern() {
     return new CamelCasePattern(camelCasePattern);
+  }
+
+  /**
+   * @return Unmodifiable list of the tokenized file name fragments.
+   */
+  public List<String> getNameFragments() {
+    return Collections.unmodifiableList(nameFragments);
   }
 
   /**

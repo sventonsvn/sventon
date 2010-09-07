@@ -56,6 +56,24 @@ public class DirEntryTest {
     assertEquals(".../abc", toEntry(path, "abc").getShortenedFullEntryName(0));
   }
 
+  @Test
+  public void testGetCamelCasePattern() throws Exception {
+    final DirEntry entry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.FILE, 1, 1);
+    assertEquals("ATF", entry.getCamelCasePattern().getPattern());
+  }
+
+  @Test
+  public void testGetId() throws Exception {
+    final DirEntry entry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.FILE, 1, 1);
+    assertEquals("/trunk/ATestFile.java", entry.getId());
+  }
+
+  @Test
+  public void testGetNameFragments() throws Exception {
+    final DirEntry entry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.FILE, 1, 1);
+    assertEquals("[ATest, File, java]", entry.getNameFragments().toString());
+  }
+
   private DirEntry toEntry(final String path, final String filename) {
     return new DirEntry(path, filename, "A", new Date(), DirEntry.Kind.FILE, 1, 1);
   }
