@@ -1,7 +1,9 @@
 package org.sventon.cache.logmessagecache;
 
-import junit.framework.TestCase;
 import org.apache.commons.lang.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.ChangeType;
 import org.sventon.model.ChangedPath;
@@ -9,38 +11,27 @@ import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-public class CompassLogMessageCacheTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class CompassLogMessageCacheTest {
 
   private CompassLogMessageCache cache = null;
 
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     cache = new CompassLogMessageCache(new File("test"));
     cache.init();
   }
 
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     cache.shutdown();
   }
 
-  private LogEntry create(final long revision, final String message) {
-    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message);
-  }
-
-  private LogEntry create(final long revision, final String message, final SortedSet<ChangedPath> paths) {
-    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message, paths);
-  }
-
-  private SortedSet<ChangedPath> createAndAddToMap(ChangedPath changedPath) {
-    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
-    changedPaths.add(changedPath);
-    return changedPaths;
-  }
-
+  @Test
   public void testAddAndFindWithStartDir() throws Exception {
     List<LogMessageSearchItem> logEntries;
     cache.add(new LogMessageSearchItem(create(123, "First message XYZ-123.",
@@ -57,14 +48,19 @@ public class CompassLogMessageCacheTest extends TestCase {
     assertEquals(1, logEntries.size());
     assertEquals("First message <span class=\"searchhit\">XYZ-456</span>.", logEntries.get(0).getMessage());
 
-    cache.add(new LogMessageSearchItem(create(457, "First message XYZ-457.",
-        createAndAddToMap(new ChangedPath("/test/again/file1.java", null, -1, ChangeType.MODIFIED)))));
+    final ChangedPath path1 = new ChangedPath("/test/again/file1.java", null, -1, ChangeType.MODIFIED);
+    final ChangedPath path2 = new ChangedPath("/test/again/test2.java", null, -1, ChangeType.ADDED);
+    final ChangedPath path3 = new ChangedPath("/trunk/added/", null, -1, ChangeType.ADDED);
+    cache.add(new LogMessageSearchItem(create(457, "First message XYZ-457.", createAndAddToMap(path1, path2, path3))));
 
     logEntries = cache.find("XYZ*", "/");
     assertEquals(3, logEntries.size());
 
     logEntries = cache.find("XYZ*", "/test/");
     assertEquals(2, logEntries.size());
+
+    logEntries = cache.find("XYZ*", "/trunk/");
+    assertEquals(1, logEntries.size());
 
     logEntries = cache.find("XYZ*", "/test/again/");
     assertEquals(1, logEntries.size());
@@ -73,6 +69,7 @@ public class CompassLogMessageCacheTest extends TestCase {
     assertEquals(0, logEntries.size());
   }
 
+  @Test
   public void testAddAndFind() throws Exception {
     cache.add(new LogMessageSearchItem(create(123, "First message XYZ-123.")));
 
@@ -155,6 +152,7 @@ public class CompassLogMessageCacheTest extends TestCase {
         logEntries.get(0).getMessage());
   }
 
+  @Test
   public void testAddEmptyAndNull() throws Exception {
     cache.add(new LogMessageSearchItem(create(123, "")));
     assertEquals(1, cache.getSize());
@@ -169,11 +167,26 @@ public class CompassLogMessageCacheTest extends TestCase {
     assertEquals(null, logEntry.getAuthor());
   }
 
+  @Test
   public void testUsingAndLogic() throws Exception {
     cache.add(new LogMessageSearchItem(create(234, "one two three")));
     assertEquals(1, cache.getSize());
     final LogMessageSearchItem logEntry = cache.find("one AND two").get(0);
     assertEquals("<span class=\"searchhit\">one</span> <span class=\"searchhit\">two</span> three", logEntry.getMessage());
+  }
+
+  private LogEntry create(final long revision, final String message) {
+    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message);
+  }
+
+  private LogEntry create(final long revision, final String message, final SortedSet<ChangedPath> paths) {
+    return TestUtils.createLogEntry(revision, "theauthor", new Date(), message, paths);
+  }
+
+  private SortedSet<ChangedPath> createAndAddToMap(ChangedPath... changedPath) {
+    final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
+    changedPaths.addAll(Arrays.asList(changedPath));
+    return changedPaths;
   }
 
 }

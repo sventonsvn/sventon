@@ -1,6 +1,6 @@
 package org.sventon.cache.logmessagecache;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.LogEntry;
 
@@ -8,8 +8,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogMessageCacheUpdaterTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class LogMessageCacheUpdaterTest {
+
+  @Test
   public void testUpdate() throws Exception {
     final LogMessageCache cache = new CompassLogMessageCache(new File("test"), false);
     cache.init();
