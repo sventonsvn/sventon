@@ -165,11 +165,6 @@ public final class CacheAwareRepositoryService implements RepositoryService {
   }
 
   @Override
-  public String getFileChecksum(SVNConnection connection, String path, long revision) throws SventonException {
-    return delegate.getFileChecksum(connection, path, revision);
-  }
-
-  @Override
   public Long getLatestRevision(SVNConnection connection) throws SventonException {
     return delegate.getLatestRevision(connection);
   }

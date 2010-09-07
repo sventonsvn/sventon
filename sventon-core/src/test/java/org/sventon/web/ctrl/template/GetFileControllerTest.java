@@ -188,8 +188,6 @@ public class GetFileControllerTest {
 
     request.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.DISPLAY_TYPE_THUMBNAIL);
 
-    EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
-
     repositoryServiceMock.getFileContents((SVNConnection) EasyMock.isNull(), EasyMock.matches(command.getPath()),
         EasyMock.eq(-1L), (OutputStream) EasyMock.anyObject());
 
@@ -205,8 +203,6 @@ public class GetFileControllerTest {
     EasyMock.reset(repositoryServiceMock);
 
     // Thumbnail is now cached - verify that it's used
-    EasyMock.expect(repositoryServiceMock.getFileChecksum(null, command.getPath(), -1L)).andStubReturn("checksum");
-
     EasyMock.replay(repositoryServiceMock);
     ctrl.svnHandle(null, command, 100, null, request, response, null);
     EasyMock.verify(repositoryServiceMock);
