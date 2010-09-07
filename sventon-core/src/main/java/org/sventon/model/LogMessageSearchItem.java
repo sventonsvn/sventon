@@ -17,8 +17,7 @@ import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * LogMessageSearchItem.
@@ -27,8 +26,6 @@ import java.util.SortedSet;
  */
 @Searchable(root = true)
 public final class LogMessageSearchItem implements Serializable {
-
-  public static final String PATHS_DELIMITER = "\0";
 
   public static final String NOT_AVAILABLE_TAG = "_NA_";
 
@@ -47,7 +44,8 @@ public final class LogMessageSearchItem implements Serializable {
   private String message;
 
   @SearchableProperty(index = Index.NOT_ANALYZED)
-  private String paths;
+  private final List<String> paths = new ArrayList<String>();
+
 
   /**
    * Default constructor.
@@ -65,25 +63,20 @@ public final class LogMessageSearchItem implements Serializable {
     this.author = logEntry.getAuthor();
     this.date = logEntry.getDate() != null ? (Date) logEntry.getDate().clone() : null;
     this.message = logEntry.getMessage();
-    this.paths = extractAndConcatinatePaths(logEntry.getChangedPaths());
+    this.paths.addAll(toStringList(logEntry.getChangedPaths()));
   }
 
   /**
-   * Concatinates given map of paths using {@link #PATHS_DELIMITER} as separator.
-   *
-   * @param changedPaths Changed paths for a certain revision.
-   * @return Concatinated string of paths, or null/empty string if no changed paths in revision.
+   * @param changedPaths Paths
+   * @return List of path strings
    */
-  public static String extractAndConcatinatePaths(final SortedSet<ChangedPath> changedPaths) {
-    if (changedPaths != null) {
-      StringBuilder pathsStringBuilder = new StringBuilder();
-      for (ChangedPath changedPath : changedPaths) {
-        pathsStringBuilder.append(PATHS_DELIMITER).append(changedPath.getPath());
-      }
-      return pathsStringBuilder.toString();
-    } else {
-      return null;
+  public static List<String> toStringList(final SortedSet<ChangedPath> changedPaths) {
+    if (changedPaths == null) return Collections.emptyList();
+    final List<String> paths = new ArrayList<String>();
+    for (ChangedPath changedPath : changedPaths) {
+      paths.add(changedPath.getPath());
     }
+    return paths;
   }
 
   /**
@@ -106,6 +99,7 @@ public final class LogMessageSearchItem implements Serializable {
 
   /**
    * Sets the message.
+   * Used to apply style to the log message string.
    *
    * @param message Message.
    */
@@ -124,6 +118,7 @@ public final class LogMessageSearchItem implements Serializable {
 
   /**
    * Sets the author.
+   * Used to apply style to the author string.
    *
    * @param author Author.
    */
@@ -140,4 +135,10 @@ public final class LogMessageSearchItem implements Serializable {
     return date != null ? (Date) date.clone() : null;
   }
 
+  /**
+   * @return Unmodifiable list of changed paths in this revision.
+   */
+  public List<String> getPaths() {
+    return Collections.unmodifiableList(paths);
+  }
 }

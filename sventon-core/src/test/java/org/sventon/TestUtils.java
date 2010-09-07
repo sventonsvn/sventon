@@ -23,7 +23,7 @@ public final class TestUtils {
   private static final String AUTHOR_PATRIK = "patrik";
 
   static {
-    ONE_CHANGED_PATH.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
+    ONE_CHANGED_PATH.add(new ChangedPath("/trunk/file1.java", null, 1, ChangeType.MODIFIED));
   }
 
   public static ConfigDirectory getTestConfigDirectory() {
