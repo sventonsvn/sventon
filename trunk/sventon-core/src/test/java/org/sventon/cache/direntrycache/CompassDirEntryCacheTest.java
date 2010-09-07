@@ -1,6 +1,8 @@
 package org.sventon.cache.direntrycache;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.sventon.TestUtils;
 import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntry;
@@ -8,32 +10,32 @@ import org.sventon.model.DirEntry;
 import java.io.File;
 import java.util.List;
 
-public class CompassDirEntryCacheTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class CompassDirEntryCacheTest {
 
   private final File root = new File(".");
 
   private DirEntryCache entryCache;
 
-  @Override
-  protected void setUp() throws Exception {
+  @Before
+  public void setUp() throws Exception {
     entryCache = new CompassDirEntryCache(root, false);
     entryCache.init();
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     entryCache.shutdown();
   }
 
-  private void addAll(DirEntryCache entryCache, List<DirEntry> entries) {
-    entryCache.add(entries.toArray(new DirEntry[entries.size()]));
-  }
-
+  @Test
   public void testEntryCache() throws Exception {
     assertEquals(0, entryCache.getLatestCachedRevisionNumber());
     assertEquals(0, entryCache.getSize());
   }
 
+  @Test
   public void testEntryCacheClear() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
@@ -42,22 +44,33 @@ public class CompassDirEntryCacheTest extends TestCase {
     assertEquals(0, entryCache.getSize());
   }
 
+  @Test
   public void testEntryCacheAdd() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
   }
 
+  @Test
   public void testFindEntry() throws Exception {
-    assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
-    assertEquals(13, entryCache.getSize());
-
-    assertEquals(2, entryCache.findEntries("tag", "/").size());
-    assertEquals(1, entryCache.findEntries("tag", "/TAGS/").size());
-    assertEquals(0, entryCache.findEntries("tag", "/tags/").size());
+    assertEquals(2, entryCache.findEntries("trunk", "/").size());
+    assertEquals(2, entryCache.findEntries("truNK", "/").size());
+    assertEquals(1, entryCache.findEntries("TAGS", "/").size());
+    assertEquals(5, entryCache.findEntries("java", "/").size());
+    assertEquals(1, entryCache.findEntries("java", "/trunk/code/").size());
+    assertEquals(2, entryCache.findEntries("html", "/").size());
+    assertEquals(2, entryCache.findEntries("test", "/").size());
+    assertEquals(13, entryCache.findEntries("in", "/").size());
+    assertEquals(7, entryCache.findEntries("*", "/trunk").size());
+    assertEquals(2, entryCache.findEntries("*", "/TAGS").size());
+    assertEquals(7, entryCache.findEntries("File", "/").size());
+    assertEquals(7, entryCache.findEntries("file", "/").size());
+    assertEquals(5, entryCache.findEntries("file", "/trunk/").size());
+    assertEquals(3, entryCache.findEntries("dir", "").size());
   }
 
+  @Test
   public void testFindEntryByAuthor() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
@@ -67,6 +80,7 @@ public class CompassDirEntryCacheTest extends TestCase {
     assertEquals(2, entryCache.findEntries("jesper", "/TAGS/").size());
   }
 
+  @Test
   public void testEntryCacheRemove() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
@@ -92,6 +106,7 @@ public class CompassDirEntryCacheTest extends TestCase {
     assertEquals(1, entryCache.getSize());
   }
 
+  @Test
   public void testEntryCacheFindPattern() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
@@ -105,4 +120,9 @@ public class CompassDirEntryCacheTest extends TestCase {
       System.out.println(entry);
     }
   }
+
+  private void addAll(DirEntryCache entryCache, List<DirEntry> entries) {
+    entryCache.add(entries.toArray(new DirEntry[entries.size()]));
+  }
+
 }

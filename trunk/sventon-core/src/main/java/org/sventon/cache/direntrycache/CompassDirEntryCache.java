@@ -213,8 +213,8 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   @Override
   public List<DirEntry> findEntries(final String searchString, final String startDir) {
-    final String queryString = "path:" + startDir + "* (name:*" + searchString + "*" +
-        " OR lastAuthor:*" + searchString + "*)";
+    final String queryString = "path:" + startDir + "* (nameFragments:" + searchString +
+        " OR lastAuthor:" + searchString + ")";
 
     if (logger.isDebugEnabled()) {
       logger.debug("Finding string [" + searchString + "] starting in [" + startDir + "]");
@@ -230,8 +230,9 @@ public final class CompassDirEntryCache implements DirEntryCache {
   @Override
   public List<DirEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                       final String startPath) {
-    final String queryString = "path:" + startPath +
-        "* camelCasePattern:" + camelCasePattern.toString().toLowerCase() + "*";
+
+    final String pattern = camelCasePattern.toString().toLowerCase();
+    final String queryString = "path:" + startPath + "* camelCasePattern:" + pattern + "*";
 
     if (logger.isDebugEnabled()) {
       logger.debug("Finding pattern [" + camelCasePattern + "] starting in [" + startPath + "]");
