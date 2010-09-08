@@ -405,7 +405,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
 
   @Override
-  public Revision translateRevision(Revision revision, long headRevision, SVNConnection connection) throws SventonException {
+  public Revision translateRevision(SVNConnection connection, Revision revision, long headRevision) throws SventonException {
     final long revisionNumber = revision.getNumber();
 
     if (revision.isHeadRevision() || revisionNumber == headRevision) {

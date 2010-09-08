@@ -94,7 +94,7 @@ public class JavaHLTestTool {
 
       final Calendar calendar = Calendar.getInstance();
       calendar.set(2010, 7, 17, 12, 34, 56);
-      final org.sventon.model.Revision revision = service.translateRevision(org.sventon.model.Revision.create(calendar.getTime()), 0, connection);
+      final org.sventon.model.Revision revision = service.translateRevision(connection, org.sventon.model.Revision.create(calendar.getTime()), 0);
       System.out.println("\nTranslated revision: " + revision.toString());
 
       System.out.print("\nRevisions for path trunk/assembly-bin-svnkit.xml at [1 .. 1817]. Limit 10\n {");

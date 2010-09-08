@@ -4,17 +4,14 @@ import org.sventon.SVNConnection;
 import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
 import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -42,17 +39,17 @@ public class SVNKitTestTool {
     FSRepositoryFactory.setup();
 
     final String url = "svn://svn.berlios.de/sventon/";
-    final String uid = null; // overridden by JVM parameter
-    final String pwd = null; // overridden by JVM parameter
+//    final String uid = null; // overridden by JVM parameter
+//    final String pwd = null; // overridden by JVM parameter
 
     try {
       final SVNURL location = SVNURL.parseURIDecoded(url);
       final SVNRepository repository = SVNRepositoryFactory.create(location);
       final File currentDir = new File(".");
       System.out.println("Current dir is: " + currentDir.getAbsolutePath());
-      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(currentDir, uid, pwd);
-      repository.setAuthenticationManager(authManager);
-      repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
+//      ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(currentDir, uid, pwd);
+//      repository.setAuthenticationManager(authManager);
+//      repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
 
       final RepositoryService service = new SVNKitRepositoryService();
       final SVNConnection connection = new SVNKitConnection(repository);
@@ -101,7 +98,7 @@ public class SVNKitTestTool {
 
       final Calendar calendar = Calendar.getInstance();
       calendar.set(2010, 7, 17, 12, 34, 56);
-      final Revision revision = service.translateRevision(Revision.create(calendar.getTime()), 0, connection);
+      final Revision revision = service.translateRevision(connection, Revision.create(calendar.getTime()), 0);
       System.out.println("\nTranslated revision: " + revision.toString());
 
 

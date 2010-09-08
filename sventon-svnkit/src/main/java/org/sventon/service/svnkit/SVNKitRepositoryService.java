@@ -353,7 +353,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
   }
 
   @Override
-  public Revision translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException {
+  public Revision translateRevision(final SVNConnection connection, final Revision revision, final long headRevision) throws SventonException {
     final long revisionNumber = revision.getNumber();
 
     try {
