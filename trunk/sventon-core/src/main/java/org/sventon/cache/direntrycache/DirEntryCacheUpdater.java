@@ -145,14 +145,14 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
     if (revisionCount > 0 && firstRevision == 1) {
       LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getRepositoryName());
-      doInitialCachePopulation(entryCache, connection, revisionUpdate.isFlushAfterUpdate());
+      doInitialCachePopulation(entryCache, connection);
       LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
     } else {
       // Initial population has already been performed - only apply changes for now.
       if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
         // One logEntry is one commit (or revision)
         for (final LogEntry logEntry : revisions) {
-          addRevisionToCache(entryCache, connection, logEntry, revisionUpdate.isFlushAfterUpdate());
+          addRevisionToCache(entryCache, connection, logEntry);
         }
         LOGGER.debug("Update completed");
       }
@@ -160,7 +160,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   }
 
   private void addRevisionToCache(final DirEntryCache entryCache, final SVNConnection connection,
-                                  final LogEntry logEntry, boolean flushAfterUpdate) {
+                                  final LogEntry logEntry) {
     try {
       final long revision = logEntry.getRevision();
       LOGGER.debug("Applying changes in revision [" + revision + "] to cache");
@@ -190,14 +190,13 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
             throw new RuntimeException("Unknown log entry type: " + entryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
-      updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache, flushAfterUpdate);
+      updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache);
     } catch (SventonException svnex) {
       LOGGER.error("Unable to update entryCache", svnex);
     }
   }
 
-  private void doInitialCachePopulation(final DirEntryCache entryCache, final SVNConnection connection,
-                                        final boolean flushAfterUpdate) {
+  private void doInitialCachePopulation(final DirEntryCache entryCache, final SVNConnection connection) {
 
     try {
       entryCache.clear();
@@ -205,24 +204,21 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       final EntriesToAdd entriesToAdd = new AutoFlushBuffer(entryCache, flushThreshold);
       addDirectories(entriesToAdd, connection, "/", revision, repositoryService);
       updateAndFlushCache(entriesToAdd, new EntriesToDelete(),
-          revision, entryCache, flushAfterUpdate);
+          revision, entryCache);
     } catch (SventonException svnex) {
       LOGGER.error("Unable to populate cache", svnex);
     }
   }
 
-  private void updateAndFlushCache(final EntriesToAdd entriesToAdd,
-                                   final EntriesToDelete entriesToDelete,
-                                   final long revision, DirEntryCache entryCache, boolean flushAfterUpdate) {
+  private void updateAndFlushCache(final EntriesToAdd entriesToAdd, final EntriesToDelete entriesToDelete,
+                                   final long revision, DirEntryCache entryCache) {
     entryCache.update(entriesToDelete.getEntries(), entriesToAdd.getEntries());
     entryCache.setLatestCachedRevisionNumber(revision);
 
-    if (flushAfterUpdate) {
-      try {
-        entryCache.flush();
-      } catch (final CacheException ce) {
-        LOGGER.error("Unable to flush cache", ce);
-      }
+    try {
+      entryCache.flush();
+    } catch (final CacheException ce) {
+      LOGGER.error("Unable to flush cache", ce);
     }
   }
 

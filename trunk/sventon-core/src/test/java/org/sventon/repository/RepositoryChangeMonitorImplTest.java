@@ -86,7 +86,7 @@ public class RepositoryChangeMonitorImplTest {
 
       replay(repositoryServiceMock);
       replay(repositoryChangeListenerMock);
-      changeMonitor.update(configuration.getName(), null, cache, false);
+      changeMonitor.update(configuration.getName(), null, cache);
       verify(repositoryServiceMock);
       verify(repositoryChangeListenerMock);
 

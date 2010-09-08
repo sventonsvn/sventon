@@ -69,7 +69,7 @@ public class DirEntryCacheUpdaterTest {
     final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
     cacheUpdater.setRepositoryService(serviceMock);
     final RepositoryName repositoryName = new RepositoryName("defaultsvn");
-    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false, false);
+    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false);
     cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
     assertEquals(4, entryCache.getSize());
@@ -111,7 +111,7 @@ public class DirEntryCacheUpdaterTest {
     cacheUpdater.setFlushThreshold(2);
     cacheUpdater.setRepositoryService(serviceMock);
     final RepositoryName repositoryName = new RepositoryName("defaultsvn");
-    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false, false);
+    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false);
     cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
     assertEquals(3, entryCache.getSize());

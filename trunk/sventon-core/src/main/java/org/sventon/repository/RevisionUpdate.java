@@ -29,7 +29,6 @@ public final class RevisionUpdate {
 
   private final RepositoryName repositoryName;
   private final List<LogEntry> logEntries;
-  private final boolean flushAfterUpdate;
   private final boolean clearCacheBeforeUpdate;
 
   /**
@@ -37,14 +36,12 @@ public final class RevisionUpdate {
    *
    * @param repositoryName         Repository name
    * @param logEntries             The new log entries
-   * @param flushAfterUpdate       If <tt>true</tt>, caches will be flushed after update.
    * @param clearCacheBeforeUpdate Clear cache before update, to make sure we don't get duplicates.
    */
-  public RevisionUpdate(final RepositoryName repositoryName, final List<LogEntry> logEntries, final boolean flushAfterUpdate,
+  public RevisionUpdate(final RepositoryName repositoryName, final List<LogEntry> logEntries,
                         final boolean clearCacheBeforeUpdate) {
     this.repositoryName = repositoryName;
     this.logEntries = logEntries;
-    this.flushAfterUpdate = flushAfterUpdate;
     this.clearCacheBeforeUpdate = clearCacheBeforeUpdate;
   }
 
@@ -64,15 +61,6 @@ public final class RevisionUpdate {
    */
   public RepositoryName getRepositoryName() {
     return repositoryName;
-  }
-
-  /**
-   * Gets the flush-after-update status.
-   *
-   * @return If <tt>true</tt>, caches must be flushed after update.
-   */
-  public boolean isFlushAfterUpdate() {
-    return flushAfterUpdate;
   }
 
   /**
