@@ -100,10 +100,6 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
 
   @Override
   public void update(final RepositoryName repositoryName) {
-    update(repositoryName, false);
-  }
-
-  private void update(final RepositoryName repositoryName, final boolean flushAfterUpdate) {
     if (application.isConfigured()) {
       final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
 
@@ -114,7 +110,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
           connection = connectionFactory.createConnection(configuration.getName(),
               configuration.getSVNURL(), configuration.getCacheCredentials());
           final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
-          update(repositoryName, connection, objectCache, flushAfterUpdate);
+          update(repositoryName, connection, objectCache);
         } catch (final Exception ex) {
           logger.warn("Unable to establish repository connection", ex);
         } finally {
@@ -131,7 +127,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
   public void updateAll() {
     if (application.isConfigured()) {
       for (final RepositoryName repositoryName : application.getRepositoryNames()) {
-        update(repositoryName, true);
+        update(repositoryName);
       }
     }
   }
@@ -142,10 +138,8 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
    * @param name             The Repository name
    * @param connection       Repository to use for update.
    * @param objectCache      ObjectCache instance to read/write information about last observed revisions.
-   * @param flushAfterUpdate If <tt>true</tt>, caches will be flushed after update.
    */
-  protected void update(final RepositoryName name, final SVNConnection connection, final ObjectCache objectCache,
-                        final boolean flushAfterUpdate) {
+  protected void update(final RepositoryName name, final SVNConnection connection, final ObjectCache objectCache) {
 
     try {
       final long headRevision = repositoryService.getLatestRevision(connection);
@@ -175,7 +169,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
           logEntries.addAll(repositoryService.getLogEntriesFromRepositoryRoot(connection, fromRevision, toRevision));
           logger.debug("Read [" + logEntries.size() + "] revision(s) from repository: " + name);
           logger.info(createNotificationLogMessage(fromRevision, toRevision, logEntries.size()));
-          notifyListeners(new RevisionUpdate(name, logEntries, flushAfterUpdate, clearCacheBeforeUpdate));
+          notifyListeners(new RevisionUpdate(name, logEntries, clearCacheBeforeUpdate));
           lastUpdatedRevision = toRevision;
           logger.debug("Updating 'lastUpdatedRevision' to: " + lastUpdatedRevision);
           objectCache.put(lastUpdatedKeyName, lastUpdatedRevision);
