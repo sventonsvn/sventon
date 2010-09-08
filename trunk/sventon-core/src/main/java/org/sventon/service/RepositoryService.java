@@ -265,13 +265,13 @@ public interface RepositoryService {
    * Handles the logical <i>HEAD</i> revision. Also handles date based revisions,
    * by getting the closest revision number before or at the specified date stamp.
    *
+   * @param connection   Repository connection.
    * @param revision     Revision to translate
    * @param headRevision The current HEAD revision.
-   * @param connection   Repository connection.
    * @return The revision number.
    * @throws SventonException if unable to communicate with repository.
    */
-  Revision translateRevision(final Revision revision, final long headRevision, final SVNConnection connection) throws SventonException;
+  Revision translateRevision(final SVNConnection connection, final Revision revision, final long headRevision) throws SventonException;
 
   /**
    * Gets the <code>n</code> latest revisions.

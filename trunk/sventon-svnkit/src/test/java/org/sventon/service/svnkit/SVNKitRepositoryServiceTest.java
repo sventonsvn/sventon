@@ -353,19 +353,19 @@ public class SVNKitRepositoryServiceTest {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
     Revision revision;
 
-    revision = service.translateRevision(Revision.parse("head"), 100, null);
+    revision = service.translateRevision(null, Revision.parse("head"), 100);
     assertEquals(100, revision.getNumber());
     assertTrue(revision.isHeadRevision());
 
-    revision = service.translateRevision(Revision.parse(""), 100, null);
+    revision = service.translateRevision(null, Revision.parse(""), 100);
     assertEquals(100, revision.getNumber());
     assertTrue(revision.isHeadRevision());
 
-    revision = service.translateRevision(Revision.parse("123"), 200, null);
+    revision = service.translateRevision(null, Revision.parse("123"), 200);
     assertEquals(Revision.create(123), revision);
     assertFalse(revision.isHeadRevision());
 
-    revision = service.translateRevision(Revision.parse("200"), 200, null);
+    revision = service.translateRevision(null, Revision.parse("200"), 200);
     assertEquals(Revision.create(200).getNumber(), revision.getNumber());
     assertTrue(revision.isHeadRevision());
     assertEquals("HEAD", revision.toString());
@@ -373,7 +373,7 @@ public class SVNKitRepositoryServiceTest {
     final SVNRepository repositoryMock = mock(SVNRepository.class);
     when(repositoryMock.getDatedRevision(Mockito.isA(Date.class))).thenReturn(123L);
 
-    revision = service.translateRevision(Revision.parse("{2007-01-01}"), 200, new SVNKitConnection(repositoryMock));
+    revision = service.translateRevision(new SVNKitConnection(repositoryMock), Revision.parse("{2007-01-01}"), 200);
     assertEquals(123, revision.getNumber());
     assertFalse(revision.isHeadRevision());
   }
