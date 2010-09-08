@@ -4,6 +4,7 @@
     [org.sventon.service.svnkit SVNKitConnection SVNKitRepositoryService]
     [org.sventon.export ExportDirectory]
     [org.sventon.model PathRevision Revision]
+    [org.sventon.colorer JHighlightColorer]
     [org.sventon.web.command DiffCommand]
     [org.tmatesoft.svn.core SVNURL]
     [org.tmatesoft.svn.core.internal.io.dav DAVRepositoryFactory]
@@ -104,12 +105,37 @@
         service (create-service)]
     (.diffPaths service connection diff-command)))
 
+(defn blame [url path revision charset colorer]
+  (let [connection (create-connection url)
+        service (create-service)]
+    (.blame service connection path revision charset colorer)))
+
+(defn get-node-kind-for-diff [url diff-command]
+  (let [connection (create-connection url)
+        service (create-service)]
+    (.getNodeKindForDiff service connection diff-command)))
+
+(defn translate-revision [url revision head-revision]
+  (let [connection (create-connection url)
+        service (create-service)]
+    (.translateRevision service connection revision head-revision)))
+
+(defn get-latest-revisions [url revision-count]
+  (let [connection (create-connection url)
+        service (create-service)]
+    (.getLatestRevisions service nil connection revision-count)))
+
+(defn get-revisions-for-path [url path from-rev to-rev stop-on-copy? limit]
+  (let [connection (create-connection url)
+        service (create-service)]
+    (.getRevisionsForPath service connection path from-rev to-rev stop-on-copy? limit)))
+
 
 (defn time-method [n m]
   (time (dotimes [_ n] (m))))
 
 
-(def root "svn://localhost/sventon-repo-dump")
+(def root "svn://localhost/sventon-dump")
 
 (defn run-tests [n]
   (do
@@ -204,8 +230,40 @@
 
       (println "diffPaths")
       (time-method n
-        #(diff-paths root command)))))
+        #(diff-paths root command))
 
-;(run-tests 1)
+      (println "getNodeKindForDiff")
+      (time-method n
+        #(get-node-kind-for-diff root command)))
+
+    (println "blame")
+    (time-method n
+      #(blame
+        root
+        "/trunk/sventon/src/main/java/org/sventon/AuthenticationException.java"
+        1800
+        "UTF-8"
+        (JHighlightColorer.)))
+
+    (println "translateRevision")
+    (time-method n
+      #(translate-revision root (Revision/parse "{2009-08-30}") 1900))
+
+    (println "getLatestRevisions")
+    (time-method n
+      #(get-latest-revisions root 10))
+
+    (println "getRevisionForPath")
+    (time-method n
+      #(get-revisions-for-path
+        root
+        "/trunk/readme.txt"
+        1800
+        1000
+        false
+        10))))
+
+(run-tests 1)
+
 
 
