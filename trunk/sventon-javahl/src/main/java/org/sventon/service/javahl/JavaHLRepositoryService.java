@@ -94,7 +94,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       final long revision = fileRevision.getRevision().getNumber();
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
-      Validate.isTrue(revisionRootDir.exists() && revisionRootDir.mkdirs(), "Unable to create directory: " + revisionRootDir.getAbsolutePath());
+      Validate.isTrue(revisionRootDir.exists() || revisionRootDir.mkdirs(), "Unable to create directory: " + revisionRootDir.getAbsolutePath());
 
       try {
         final File destination = new File(revisionRootDir, path);
