@@ -1,29 +1,25 @@
-(ns org.sventon.service.svnkit.perftest-svnkit
+(ns org.sventon.service.javahl
   (:import [org.sventon.service RepositoryService]
     [org.sventon SVNConnection]
-    [org.sventon.service.svnkit SVNKitConnection SVNKitRepositoryService]
+    [org.sventon.service.javahl JavaHLConnection JavaHLRepositoryService]
     [org.sventon.export ExportDirectoryImpl]
-    [org.sventon.model PathRevision Revision RepositoryName]
+    [org.sventon.model PathRevision Revision SVNURL RepositoryName]
     [org.sventon.colorer JHighlightColorer]
     [org.sventon.web.command DiffCommand]
-    [org.tmatesoft.svn.core SVNURL]
-    [org.tmatesoft.svn.core.internal.io.dav DAVRepositoryFactory]
-    [org.tmatesoft.svn.core.internal.io.fs FSRepositoryFactory]
-    [org.tmatesoft.svn.core.internal.io.svn SVNRepositoryFactoryImpl]
-    [org.tmatesoft.svn.core.io SVNRepository SVNRepositoryFactory]
+    [org.tigris.subversion.javahl SVNClient]
     [java.io OutputStream File]
     [java.nio.charset Charset]
     [org.mockito Mockito])
   )
 
 (defn create-connection [url]
-  (do (SVNRepositoryFactoryImpl/setup)
-    (DAVRepositoryFactory/setup)
-    (FSRepositoryFactory/setup)
-    (SVNKitConnection. (SVNRepositoryFactory/create (SVNURL/parseURIDecoded url)))))
+  (let [client (SVNClient.)
+        svn-url (SVNURL/parse url)
+        credentials nil]
+    (JavaHLConnection. client svn-url credentials)))
 
 (defn create-service []
-  (SVNKitRepositoryService.))
+  (JavaHLRepositoryService.))
 
 (defn get-latest-revision [url]
   (let [connection (create-connection url)
@@ -151,18 +147,21 @@
     (println "getLogEntriesFromRepositoryRoot")
     (time-method n #(get-log-entries-from-repository-root root 1000 1800))
 
-    (println "getLogEntries")
-    (time-method n #(get-log-entries root 1000 1800 "/trunk/sventon/src/main/java/org/sventon", 1000, false true))
+    ;    (println "getLogEntries")
+    ;    (time-method n #(get-log-entries root 1000 1800 "/trunk/sventon/src/main/java/org/sventon", 1000, false true))
 
-    (println "export")
-    (let [paths [(PathRevision. "/trunk/lib" (Revision/parse "1800")),
-                 (PathRevision. "/trunk/licenses" (Revision/parse "1800")),
-                 (PathRevision. "/trunk/sventon" (Revision/parse "1800"))]
-          export-dir (ExportDirectoryImpl.
-        (RepositoryName. "test")
-        (File. ".")
-        (Charset/defaultCharset))]
-      (time-method n #(export root paths 1800 export-dir)))
+    (command
+      (println "export")
+      (let [paths [(PathRevision. "/trunk/lib" (Revision/parse "1800")),
+                   (PathRevision. "/trunk/licenses" (Revision/parse "1800")),
+                   (PathRevision. "/trunk/sventon" (Revision/parse "1800"))]
+            export-dir (ExportDirectoryImpl.
+          (RepositoryName. "test")
+          (File. ".")
+          (Charset/defaultCharset))]
+        (time-method n #(export root paths 1800 export-dir)))
+      )
+
 
     (println "getFileContents")
     (time-method n
@@ -267,3 +266,6 @@
         10))))
 
 (run-tests 1)
+
+
+
