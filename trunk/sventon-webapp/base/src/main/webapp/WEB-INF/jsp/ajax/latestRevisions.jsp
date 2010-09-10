@@ -42,8 +42,6 @@
     </table>
   </c:when>
   <c:otherwise>
-    <span class="exclamationText">
-      <c:out value="${errorMessage}"/>
-    </span>
+    <span class="exclamationText">${errorMessage}</span>
   </c:otherwise>
 </c:choose>
