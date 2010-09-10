@@ -136,7 +136,7 @@
   (time (dotimes [_ n] (m))))
 
 
-(def root "svn://localhost/sventon-repo-dump")
+(def root "http://localhost/repos/svn/sventon-repo-dump/")
 
 (defn run-tests [n]
   (do
@@ -152,8 +152,7 @@
     (time-method n #(get-log-entries-from-repository-root root 1000 1800))
 
     (println "getLogEntries")
-    (time-method n #(get-log-entries root 1000 1800 "/trunk/sventon/src/main/java/org/sventon", 1000, false true))
-
+    (time-method n #(get-log-entries root 1500 1800 "/trunk/sventon/src/main/java/org/sventon", 1000, false true))
     (println "export")
     (let [paths [(PathRevision. "/trunk/lib" (Revision/parse "1800")),
                  (PathRevision. "/trunk/licenses" (Revision/parse "1800")),
