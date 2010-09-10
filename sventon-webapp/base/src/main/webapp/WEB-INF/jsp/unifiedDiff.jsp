@@ -57,7 +57,7 @@
               <th width="100%" style="background-color: white; border-bottom: 1px solid black">${command.toPath} @ revision ${command.toRevision}</th>
             </tr>
             <tr>
-              <td><c:out value="${diffResult}" escapeXml="false"/></td>
+              <td>${diffResult}</td>
             </tr>
           </table>
         </c:when>
