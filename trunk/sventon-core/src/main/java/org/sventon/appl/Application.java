@@ -20,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.sventon.Version;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.CacheManager;
@@ -40,6 +42,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author jesper@sventon.org
  * @author patrik@sventon.org
  */
+@ManagedResource
 public class Application {
 
   /**
@@ -145,6 +148,7 @@ public class Application {
     }
   }
 
+  @ManagedOperation
   public synchronized void reinit() throws IOException, CacheException {
     logger.info("Starting Application reinitialization.");
 
@@ -216,16 +220,14 @@ public class Application {
    * @return The configuration root directories for each repository.
    */
   public File[] getConfigDirectories() {
-    return repositoriesDirectory.listFiles(
-            new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
+    return repositoriesDirectory.listFiles(new SventonConfigDirectoryFileFilter(getConfigurationFileName()));
   }
 
   /**
    * @return The configuration root directories for each repository.
    */
   public File[] getBackupConfigDirectories() {
-    return repositoriesDirectory.listFiles(
-            new SventonConfigDirectoryFileFilter(getConfigurationFileBackupName()));
+    return repositoriesDirectory.listFiles(new SventonConfigDirectoryFileFilter(getConfigurationFileBackupName()));
   }
 
   /**
@@ -273,7 +275,7 @@ public class Application {
    * @see #isConfigured()
    */
   private void loadRepositoryConfigurations(final File[] configDirectories, RepositoryConfigurations configurations)
-          throws IOException {
+      throws IOException {
     for (final File configDir : configDirectories) {
       InputStream is = null;
       try {
@@ -391,8 +393,7 @@ public class Application {
     return getConfigurationFileName() + "_bak";
   }
 
-  protected void cleanupOldConfigDirectories(File[] allConfigDirs,
-                                             Set<RepositoryConfiguration> configsToDelete) {
+  protected void cleanupOldConfigDirectories(File[] allConfigDirs, Set<RepositoryConfiguration> configsToDelete) {
     Set<String> deletedConfigurations = new HashSet<String>();
     for (RepositoryConfiguration repositoryConfiguration : configsToDelete) {
       deletedConfigurations.add(repositoryConfiguration.getName().toString());
@@ -570,6 +571,8 @@ public class Application {
 
   /**
    * Enables or disables the possibility to reload configurations from disk using a GET request to /config/reload.
+   *
+   * @param configurationReloadSupported True to enable reload support.
    */
   public void setConfigurationReloadSupported(boolean configurationReloadSupported) {
     this.configurationReloadSupported = configurationReloadSupported;

@@ -71,7 +71,8 @@ public class RepositoryChangeMonitorImplTest {
     try {
       final List<RepositoryChangeListener> listeners = new ArrayList<RepositoryChangeListener>();
       listeners.add(repositoryChangeListenerMock);
-      final RepositoryChangeMonitorImpl changeMonitor = new RepositoryChangeMonitorImpl(listeners);
+      final RepositoryChangeMonitorImpl changeMonitor = new RepositoryChangeMonitorImpl();
+      changeMonitor.setListeners(listeners);
       changeMonitor.setMaxRevisionCountPerUpdate(3);
       changeMonitor.setApplication(application);
 
