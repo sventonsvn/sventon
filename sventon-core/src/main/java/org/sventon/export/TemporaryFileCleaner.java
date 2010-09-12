@@ -14,6 +14,8 @@ package org.sventon.export;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.sventon.appl.ConfigDirectory;
 
 import java.io.File;
@@ -25,6 +27,7 @@ import java.io.IOException;
  *
  * @author jesper@sventon.org
  */
+@ManagedResource
 public final class TemporaryFileCleaner {
 
   /**
@@ -68,11 +71,12 @@ public final class TemporaryFileCleaner {
   /**
    * Cleans the given directory.
    * <p/>
-   * All filenames matching <code>sventon-[millis].zip</code>
+   * All file names matching <code>sventon-[millis].zip</code>
    * older than given threshold value will be deleted.
    *
    * @throws IOException if unable to delete temporary files.
    */
+  @ManagedOperation
   public void clean() throws IOException {
     for (final File file : directory.listFiles(filenameFilter)) {
       if (expirationRule.hasExpired(file)) {

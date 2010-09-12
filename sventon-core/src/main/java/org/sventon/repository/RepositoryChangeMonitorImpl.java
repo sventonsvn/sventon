@@ -14,6 +14,8 @@ package org.sventon.repository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
@@ -36,6 +38,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
+@ManagedResource
 public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonitor {
 
   /**
@@ -86,12 +89,15 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
 
   /**
    * Constructor.
-   *
+   */
+  public RepositoryChangeMonitorImpl() {
+    logger.info("Starting repository monitor");
+  }
+
+  /**
    * @param listeners List of listeners to add
    */
-  public RepositoryChangeMonitorImpl(final List<RepositoryChangeListener> listeners) {
-    logger.info("Starting repository monitor");
-
+  public synchronized void setListeners(final List<RepositoryChangeListener> listeners) {
     for (final RepositoryChangeListener repositoryChangeListener : listeners) {
       logger.debug("Adding listener: " + repositoryChangeListener.getClass().getName());
       changeListeners.add(repositoryChangeListener);
@@ -124,6 +130,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
   }
 
   @Override
+  @ManagedOperation
   public void updateAll() {
     if (application.isConfigured()) {
       for (final RepositoryName repositoryName : application.getRepositoryNames()) {
@@ -135,9 +142,9 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
   /**
    * Update.
    *
-   * @param name             The Repository name
-   * @param connection       Repository to use for update.
-   * @param objectCache      ObjectCache instance to read/write information about last observed revisions.
+   * @param name        The Repository name
+   * @param connection  Repository to use for update.
+   * @param objectCache ObjectCache instance to read/write information about last observed revisions.
    */
   protected void update(final RepositoryName name, final SVNConnection connection, final ObjectCache objectCache) {
 
