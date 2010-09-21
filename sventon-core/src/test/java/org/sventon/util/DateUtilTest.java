@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -122,11 +123,16 @@ $ svn checkout -r {20060217T1530-0500}
   @Test
   public void formatISO8601() throws Exception {
     //yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
-    final Calendar cal = Calendar.getInstance();
-    cal.set(2010, 0, 1, 12, 34, 56);
-    cal.set(Calendar.MILLISECOND, 0);
+    final Calendar calStockholm = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"));
+    calStockholm.set(2010, 0, 1, 12, 34, 56);
+    calStockholm.set(Calendar.MILLISECOND, 0);
 
-    Assert.assertEquals("2010-01-01T12:34:56.000000Z", DateUtil.formatISO8601(cal.getTime()));
+    Assert.assertEquals("2010-01-01T11:34:56.000000Z", DateUtil.formatISO8601(calStockholm.getTime()));
+
+    Calendar calUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    calUtc.set(2010, 0, 1, 12, 34, 56);
+    calUtc.set(Calendar.MILLISECOND, 0);
+    Assert.assertEquals("2010-01-01T12:34:56.000000Z", DateUtil.formatISO8601(calUtc.getTime()));
   }
 
 

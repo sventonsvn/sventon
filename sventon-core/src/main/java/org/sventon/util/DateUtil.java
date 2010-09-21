@@ -14,6 +14,7 @@ package org.sventon.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -215,7 +216,9 @@ public class DateUtil {
 
   public static String formatISO8601(final Date date) {
     if (date == null) return "";
-    return new SimpleDateFormat(ISO8601_FORMAT_PATTERN).format(date);
+    SimpleDateFormat dateFormat = new SimpleDateFormat(ISO8601_FORMAT_PATTERN);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return dateFormat.format(date);
   }
 
 }
