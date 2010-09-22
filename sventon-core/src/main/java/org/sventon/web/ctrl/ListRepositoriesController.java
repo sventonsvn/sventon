@@ -11,20 +11,16 @@
  */
 package org.sventon.web.ctrl;
 
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
-import org.springframework.web.servlet.view.RedirectView;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.sventon.appl.Application;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.UserContext;
 import org.sventon.model.UserRepositoryContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.sventon.util.EncodingUtils.encode;
 
@@ -33,64 +29,61 @@ import static org.sventon.util.EncodingUtils.encode;
  *
  * @author jesper@sventon.org
  */
-public final class ListRepositoriesController extends AbstractController {
+@Controller
+@RequestMapping(value="/repos/list")
+@SessionAttributes(value = "userContext")
+public final class ListRepositoriesController{
+  private final Log logger = LogFactory.getLog(ListRepositoriesController.class);
 
   /**
    * The application.
    */
   private Application application;
 
-  @Override
-  protected ModelAndView handleRequestInternal(final HttpServletRequest request, final HttpServletResponse response)
-      throws Exception {
+  @Autowired
+  public ListRepositoriesController(final Application application) {
+    this.application = application;
+  }
 
-    // If application config is not ok - redirect to config.jsp
+
+  @RequestMapping(params="logout=true")
+  public String logoutBeforeListRepositories(@RequestParam final boolean logout, @RequestParam final String repositoryName, @ModelAttribute UserContext userContext, Model model){
     if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
-      return new ModelAndView(new RedirectView("/repos/listconfigs", true));
+      return "redirect:/repos/listconfigs";
     }
 
-    // Clear credentials if logout param is supplied
-    final boolean logout = ServletRequestUtils.getBooleanParameter(request, "logout", false);
-
-    if (logout) {
-      final RepositoryName repositoryName = new RepositoryName(ServletRequestUtils.getRequiredStringParameter(request, "repositoryName"));
-      final HttpSession session = request.getSession(false);
-      if (session != null) {
-        final UserContext userContext = (UserContext) session.getAttribute("userContext");
-        final UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(repositoryName);
-        if (userRepositoryContext != null) {
-          userRepositoryContext.clearCredentials();
-        }
+    if(logout && RepositoryName.isValid(repositoryName)){
+      final UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(new RepositoryName(repositoryName));
+      if (userRepositoryContext != null) {
+        logger.debug("Clear credential for repository " + repositoryName);
+        userRepositoryContext.clearCredentials();
       }
     }
 
-    final ModelAndView modelAndView;
+    return listRepositoriesOrShowIfOnlyOne(model);
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  public String listRepositoriesOrShowIfOnlyOne(Model model){
+    if (!application.isConfigured()) {
+      logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
+      return "redirect:/repos/listconfigs";
+    }
 
     if (application.getRepositoryConfigurationCount() > 1) {
-      final Map<String, Object> model = new HashMap<String, Object>();
-      model.put("repositoryNames", application.getRepositoryNames());
-      model.put("isEditableConfig", application.isEditableConfig());
-      modelAndView = new ModelAndView("listRepositories", model);
+      model.addAttribute("repositoryNames", application.getRepositoryNames());
+      model.addAttribute("isEditableConfig", application.isEditableConfig());
+      return "listRepositories";
     } else if (application.getRepositoryConfigurationCount() == 1) {
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
-      modelAndView = new ModelAndView(new RedirectView(createListUrl(repositoryName), true));
-    } else {
-      throw new IllegalStateException("No repository has been configured!");
+      return createListUrl(repositoryName, true);
     }
-    return modelAndView;
+    
+    return null;
   }
 
-  protected String createListUrl(final RepositoryName repositoryName) {
-    return "/repos/" + encode(repositoryName.toString()) + "/list/";
-  }
-
-  /**
-   * Sets the application.
-   *
-   * @param application Application
-   */
-  public void setApplication(final Application application) {
-    this.application = application;
+  protected String createListUrl(final RepositoryName repositoryName, final boolean redirect) {
+    return (redirect ? "redirect:" : "") + "/repos/" + encode(repositoryName.toString()) + "/list/";
   }
 }

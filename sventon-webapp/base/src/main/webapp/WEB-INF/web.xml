@@ -39,10 +39,14 @@
   </servlet-mapping>
 
   <servlet-mapping>
+    <servlet-name>sventon</servlet-name>
+    <url-pattern>/repos/list</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>sventon-old</servlet-name>
     <url-pattern>/repos/*</url-pattern>
   </servlet-mapping>
-
 
   <servlet-mapping>
     <servlet-name>sventon-old</servlet-name>
