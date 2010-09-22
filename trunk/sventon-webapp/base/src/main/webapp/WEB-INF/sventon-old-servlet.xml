@@ -33,8 +33,10 @@
     <property name="alwaysUseFullPath" value="true"/>
     <property name="mappings">
       <props>
+        <!--
         <prop key="/repos/">listRepositoriesController</prop>
         <prop key="/repos/list">listRepositoriesController</prop>
+        -->
         <prop key="/repos/listconfigs">listConfigurationsController</prop>
         <prop key="/repos/deleteconfig">deleteConfigurationController</prop>
         <prop key="/repos/submitconfig">submitConfigurationsController</prop>
@@ -196,10 +198,6 @@
   <bean id="blameController" class="org.sventon.web.ctrl.template.BlameController" parent="abstractTemplateController">
     <constructor-arg ref="colorer"/>
     <property name="viewName" value="blame"/>
-  </bean>
-
-  <bean id="listRepositoriesController" class="org.sventon.web.ctrl.ListRepositoriesController">
-    <property name="application" ref="application"/>
   </bean>
 
   <bean id="submitConfigurationsController" class="org.sventon.web.ctrl.SubmitConfigurationsController">
