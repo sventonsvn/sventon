@@ -1,4 +1,4 @@
-(ns org.sventon.service.javahl
+(ns org.sventon.service.javahl.perftest-javahl
   (:require [org.sventon.service.perftest])
   (:import [org.sventon.service RepositoryService]
     [org.sventon SVNConnection]
@@ -27,6 +27,6 @@
             org.sventon.service.perftest/create-connection create-connection]
     (org.sventon.service.perftest/run-tests n)))
 
-(run-svnkit-test 1)
+;(run-svnkit-test 1)
 
 

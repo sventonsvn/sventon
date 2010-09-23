@@ -31,4 +31,4 @@
             org.sventon.service.perftest/create-connection create-connection]
     (org.sventon.service.perftest/run-tests n)))
 
-(run-svnkit-test 1)
+;(run-svnkit-test 1)
