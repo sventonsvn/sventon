@@ -22,7 +22,7 @@
 (defn create-service []
   (JavaHLRepositoryService.))
 
-(defn run-svnkit-test [n]
+(defn run-javahl-test [n]
   (binding [org.sventon.service.perftest/create-service create-service
             org.sventon.service.perftest/create-connection create-connection]
     (org.sventon.service.perftest/run-tests n)))
