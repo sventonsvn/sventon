@@ -26,6 +26,12 @@ public class SVNURLTest {
   }
 
   @Test
+  public void parseHash() throws Exception {
+    assertEquals("http://host/path%20with%20#/project",
+        SVNURL.parse("http://host/path with #/project/").getUrl());
+  }
+
+  @Test
   public void parseTrailingSlash() throws Exception {
     assertEquals("http://host/path",
         SVNURL.parse("http://host/path/").getUrl());
