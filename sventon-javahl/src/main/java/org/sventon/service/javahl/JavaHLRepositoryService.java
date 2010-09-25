@@ -81,32 +81,35 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
 
   @Override
-  public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision, long toRevision, String path, long limit, boolean stopOnCopy, boolean includeChangedPaths) throws SventonException {
+  public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision,
+                                      long toRevision, String path, long limit, boolean stopOnCopy,
+                                      boolean includeChangedPaths) throws SventonException {
 
-    String encodedPath = uriEncode(path);
-
+    final String encodedPath = uriEncode(path);
     final SVNClientInterface client = (SVNClientInterface) connection.getDelegate();
-
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
     try {
-      client.logMessages(connection.getRepositoryRootUrl().getFullPath(encodedPath), JavaHLConverter.convertRevision(fromRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
-              stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
-                @Override
-                public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
-                  final LogEntry logEntry = new LogEntry(l, JavaHLConverter.convertRevisionPropertyMap(map), JavaHLConverter.convertChangedPaths(changePaths));
+      client.logMessages(connection.getRepositoryRootUrl().getFullPath(encodedPath),
+          JavaHLConverter.convertRevision(fromRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
+          stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
+            @Override
+            public void singleMessage(ChangePath[] changePaths, long l, Map map, boolean b) {
+              final LogEntry logEntry = new LogEntry(l, JavaHLConverter.convertRevisionPropertyMap(map),
+                  JavaHLConverter.convertChangedPaths(changePaths));
 
-                  logEntries.add(logEntry);
-                }
-              });
+              logEntries.add(logEntry);
+            }
+          });
     } catch (ClientException e) {
-      return translateException("Unable to get log entries for " + path + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
+      return translateException("Unable to get log entries for " + encodedPath + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
     }
     return logEntries;
   }
 
   @Override
-  public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision, ExportDirectory exportDirectory) throws SventonException {
+  public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision,
+                     final ExportDirectory exportDirectory) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
 
@@ -124,10 +127,10 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
         logger.debug("Exporting file [" + pathToExport + "] revision [" + revision + "]");
         client.doExport(pathToExport, destination.getAbsolutePath(),
-                org.tigris.subversion.javahl.Revision.getInstance(revision),
-                org.tigris.subversion.javahl.Revision.getInstance(pegRevision), true, false, Depth.infinity, null);
+            org.tigris.subversion.javahl.Revision.getInstance(revision),
+            org.tigris.subversion.javahl.Revision.getInstance(pegRevision), true, false, Depth.infinity, null);
       } catch (ClientException ex) {
-        translateException("Error exporting [" + path + "@" + revision + "]", ex);
+        translateException("Error exporting [" + encodedPath + "@" + revision + "]", ex);
       }
     }
   }
@@ -136,18 +139,17 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public void getFileContents(SVNConnection connection, String path, long revision, OutputStream output) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-
-    String encodedPath = uriEncode(path);
+    final String encodedPath = uriEncode(path);
 
     try {
       final byte[] bytes = client.fileContent(conn.getRepositoryRootUrl().getFullPath(encodedPath),
-              org.tigris.subversion.javahl.Revision.getInstance(revision),
-              org.tigris.subversion.javahl.Revision.getInstance(revision));
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision));
       output.write(bytes);
     } catch (IOException e) {
       throw new SventonException(e.getMessage());
     } catch (ClientException ce) {
-      translateException("Unable to get file contents: " + path, ce);
+      translateException("Unable to get file contents: " + encodedPath, ce);
     }
   }
 
@@ -155,23 +157,21 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-
-    String encodedPath = uriEncode(path);
-
+    final String encodedPath = uriEncode(path);
     final Properties properties = new Properties();
 
     try {
       client.properties(conn.getRepositoryRootUrl().getFullPath(encodedPath), JavaHLConverter.convertRevision(revision),
-              JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
-                @Override
-                public void singlePath(String path, Map prop) {
-                  for (Object o : prop.keySet()) {
-                    properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
-                  }
-                }
-              });
+          JavaHLConverter.convertRevision(revision), Depth.empty, null, new ProplistCallback() {
+            @Override
+            public void singlePath(String path, Map prop) {
+              for (Object o : prop.keySet()) {
+                properties.put(new Property((String) o), new PropertyValue((String) prop.get(o)));
+              }
+            }
+          });
     } catch (ClientException e) {
-      return translateException("Could not get properties for [" + path + "] at revision: " + revision, e);
+      return translateException("Could not get properties for [" + encodedPath + "] at revision: " + revision, e);
     }
     return properties;
   }
@@ -184,12 +184,12 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     try {
       final MutableLong revision = new MutableLong();
       client.info2(conn.getRepositoryRootUrl().toString(), org.tigris.subversion.javahl.Revision.HEAD,
-              org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, new InfoCallback() {
-                @Override
-                public void singleInfo(Info2 info2) {
-                  revision.setValue(info2.getLastChangedRev());
-                }
-              });
+          org.tigris.subversion.javahl.Revision.HEAD, Depth.empty, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              revision.setValue(info2.getLastChangedRev());
+            }
+          });
       return revision.toLong();
     } catch (ClientException ce) {
       return translateException("Unable to get latest revision", ce);
@@ -202,23 +202,22 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
     final String encodedPath = uriEncode(path);
-
-
     final List<DirEntry.Kind> nodeKinds = new ArrayList<DirEntry.Kind>();
+
     try {
-      client.info2(conn.getRepositoryRootUrl().getFullPath(uriEncode(encodedPath)),
-              org.tigris.subversion.javahl.Revision.getInstance(revision),
-              org.tigris.subversion.javahl.Revision.getInstance(revision),
-              Depth.empty, null, new InfoCallback() {
-                @Override
-                public void singleInfo(Info2 info2) {
-                  nodeKinds.add(JavaHLConverter.convertNodeKind(info2.getKind()));
-                }
-              });
+      client.info2(conn.getRepositoryRootUrl().getFullPath(encodedPath),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          Depth.empty, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              nodeKinds.add(JavaHLConverter.convertNodeKind(info2.getKind()));
+            }
+          });
       Validate.isTrue(nodeKinds.size() == 1, "Too many nodeKinds for a given entry. One entry always relates to exactly one nodeKind");
       return nodeKinds.get(0);
     } catch (ClientException ce) {
-      return translateException("Cannot get nodeKind for [" + uriEncode(path) + "@" + revision + "]", ce);
+      return translateException("Cannot get nodeKind for [" + encodedPath + "@" + revision + "]", ce);
     }
   }
 
@@ -227,28 +226,27 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
     final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
-
-    String encodedStartPath = uriEncode(startPath);
-
+    final String encodedStartPath = uriEncode(startPath);
     final MutableLong callbackCounter = new MutableLong(0);
+
     try {
       client.info2(conn.getRepositoryRootUrl().getFullPath(encodedStartPath),
-              org.tigris.subversion.javahl.Revision.HEAD,
-              org.tigris.subversion.javahl.Revision.HEAD,
-              recursive ? Depth.infinity : Depth.immediates, null, new InfoCallback() {
-                @Override
-                public void singleInfo(Info2 info2) {
-                  callbackCounter.increment();
-                  final Lock lock = info2.getLock();
-                  if (lock != null) {
-                    final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(),
-                            lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
-                    locks.put(lock.getPath(), entryLock);
-                  }
-                }
-              });
+          org.tigris.subversion.javahl.Revision.HEAD,
+          org.tigris.subversion.javahl.Revision.HEAD,
+          recursive ? Depth.infinity : Depth.immediates, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              callbackCounter.increment();
+              final Lock lock = info2.getLock();
+              if (lock != null) {
+                final DirEntryLock entryLock = new DirEntryLock(lock.getToken(), lock.getPath(), lock.getOwner(),
+                    lock.getComment(), lock.getCreationDate(), lock.getExpirationDate());
+                locks.put(lock.getPath(), entryLock);
+              }
+            }
+          });
     } catch (ClientException e) {
-      logger.debug("Unable to get locks for path [" + startPath + "]. Directory may not exist in HEAD", e);
+      logger.debug("Unable to get locks for path [" + encodedStartPath + "]. Directory may not exist in HEAD", e);
     }
     logger.debug("GetLocks call resulted in [" + callbackCounter + "] callbacks");
     return locks;
@@ -259,26 +257,25 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
     final String encodedPath = uriEncode(path);
-
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
+
     try {
       client.list(conn.getRepositoryRootUrl().getFullPath(encodedPath), org.tigris.subversion.javahl.Revision.getInstance(revision),
-              org.tigris.subversion.javahl.Revision.getInstance(revision), Depth.immediates,
-              org.tigris.subversion.javahl.DirEntry.Fields.all, false, new ListCallback() {
-                @Override
-                public void doEntry(org.tigris.subversion.javahl.DirEntry dirEntry, Lock lock) {
-                  dirEntries.add(new DirEntry(path, dirEntry.getPath(), dirEntry.getLastAuthor(),
-                          dirEntry.getLastChanged(), JavaHLConverter.convertNodeKind(dirEntry.getNodeKind()),
-                          dirEntry.getLastChangedRevision().getNumber(),
-                          dirEntry.getSize()));
-                }
-              });
+          org.tigris.subversion.javahl.Revision.getInstance(revision), Depth.immediates,
+          org.tigris.subversion.javahl.DirEntry.Fields.all, false, new ListCallback() {
+            @Override
+            public void doEntry(org.tigris.subversion.javahl.DirEntry dirEntry, Lock lock) {
+              dirEntries.add(new DirEntry(path, dirEntry.getPath(), dirEntry.getLastAuthor(),
+                  dirEntry.getLastChanged(), JavaHLConverter.convertNodeKind(dirEntry.getNodeKind()),
+                  dirEntry.getLastChangedRevision().getNumber(),
+                  dirEntry.getSize()));
+            }
+          });
       // Skip the first entry as that's the one we passed in 'path'.
       return new DirList(dirEntries.subList(1, dirEntries.size()), null);
     } catch (ClientException ce) {
-      return translateException("Unable to list directory: " + path, ce);
+      return translateException("Unable to list directory: " + encodedPath, ce);
     }
-
   }
 
   @Override
@@ -290,29 +287,29 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
     try {
       client.info2(conn.getRepositoryRootUrl().getFullPath(encodedPath),
-              org.tigris.subversion.javahl.Revision.getInstance(revision),
-              org.tigris.subversion.javahl.Revision.getInstance(revision),
-              Depth.empty, null, new InfoCallback() {
-                @Override
-                public void singleInfo(Info2 info2) {
-                  final String name = info2.getPath();
-                  final String author = info2.getLastChangedAuthor();
-                  final long lastChangedRev = info2.getLastChangedRev();
-                  final Date date = info2.getLastChangedDate();
-                  dirEntries.add(new DirEntry(FilenameUtils.getFullPath(path), name, author, date,
-                          JavaHLConverter.convertNodeKind(info2.getKind()), lastChangedRev, info2.getReposSize()));
-                }
-              });
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          org.tigris.subversion.javahl.Revision.getInstance(revision),
+          Depth.empty, null, new InfoCallback() {
+            @Override
+            public void singleInfo(Info2 info2) {
+              final String name = info2.getPath();
+              final String author = info2.getLastChangedAuthor();
+              final long lastChangedRev = info2.getLastChangedRev();
+              final Date date = info2.getLastChangedDate();
+              dirEntries.add(new DirEntry(FilenameUtils.getFullPath(path), name, author, date,
+                  JavaHLConverter.convertNodeKind(info2.getKind()), lastChangedRev, info2.getReposSize()));
+            }
+          });
       return dirEntries.get(0);
     } catch (ClientException ce) {
-      return translateException("Cannot get info for [" + path + "@" + revision + "]", ce);
+      return translateException("Cannot get info for [" + encodedPath + "@" + revision + "]", ce);
     }
   }
 
   @Override
   public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
-    final List<LogEntry> entries =
-            getLogEntries(null, connection, revision, Revision.FIRST.getNumber(), uriEncode(path), 100, false, true);
+    final String encodedPath = uriEncode(path);
+    final List<LogEntry> entries = getLogEntries(null, connection, revision, Revision.FIRST.getNumber(), encodedPath, 100, false, true);
     final List<FileRevision> revisions = new ArrayList<FileRevision>();
 
     LogEntry.setPathAtRevisionInLogEntries(entries, path);
@@ -337,15 +334,15 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       final File outFile = createTempFileForDiff();
 
       try {
-        final String fromPath = conn.getRepositoryRootUrl().getFullPath(command.getFromPath());
-        final String toPath = conn.getRepositoryRootUrl().getFullPath(command.getToPath());
-        final org.tigris.subversion.javahl.Revision fromRev =
-                org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
-        final org.tigris.subversion.javahl.Revision toRev =
-                org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+        final String fromPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
+        final String toPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
 
-        client.diff(uriEncode(fromPath), fromRev, uriEncode(toPath), toRev, null, outFile.getAbsolutePath(),
-                Depth.empty, null, false, false, true);
+        final org.tigris.subversion.javahl.Revision fromRev =
+            org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+        final org.tigris.subversion.javahl.Revision toRev =
+            org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+
+        client.diff(fromPath, fromRev, toPath, toRev, null, outFile.getAbsolutePath(), Depth.empty, null, false, false, true);
         final String diffResultString = FileUtils.readFileToString(outFile, charset);
         if ("".equals(diffResultString)) {
           throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
@@ -373,7 +370,6 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     return File.createTempFile("sventon-temp", ".diff");
   }
 
-
   @Override
   public List<DiffStatus> diffPaths(SVNConnection connection, final DiffCommand command) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
@@ -382,14 +378,15 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
 
     try {
-      final String fromPath = conn.getRepositoryRootUrl().getFullPath(command.getFromPath());
-      final String toPath = conn.getRepositoryRootUrl().getFullPath(command.getToPath());
-      final org.tigris.subversion.javahl.Revision fromRev =
-              org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
-      final org.tigris.subversion.javahl.Revision toRev =
-              org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+      final String fromPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
+      final String toPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
 
-      client.diffSummarize(uriEncode(fromPath), fromRev, uriEncode(toPath), toRev, Depth.infinity, null, true, new DiffSummaryReceiver() {
+      final org.tigris.subversion.javahl.Revision fromRev =
+          org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+      final org.tigris.subversion.javahl.Revision toRev =
+          org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+
+      client.diffSummarize(fromPath, fromRev, toPath, toRev, Depth.infinity, null, true, new DiffSummaryReceiver() {
         @Override
         public void onSummary(DiffSummary diffSummary) {
           ChangeType type = null;
@@ -411,15 +408,15 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public AnnotatedTextFile blame(SVNConnection connection, String path, long revision, String charset, Colorer colorer) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
+    final String blamePath = uriEncode(conn.getRepositoryRootUrl().getFullPath(path));
 
     try {
-      final String blamePath = conn.getRepositoryRootUrl().getFullPath(path);
       logger.debug("Blaming file [" + blamePath + "] revision [" + revision + "]");
 
       final AnnotatedTextFile annotatedTextFile = new AnnotatedTextFile(path, charset, colorer);
       final org.tigris.subversion.javahl.Revision startRev = org.tigris.subversion.javahl.Revision.getInstance(0);
       final org.tigris.subversion.javahl.Revision endRev = org.tigris.subversion.javahl.Revision.getInstance(revision);
-      client.blame(uriEncode(blamePath), endRev, startRev, endRev, false, false, new BlameCallback2() {
+      client.blame(blamePath, endRev, startRev, endRev, false, false, new BlameCallback2() {
         @Override
         public void singleLine(Date date, long revision, String author, Date mergedDate, long mergedRevision,
                                String mergedAuthor, String mergedPath, String line) {
@@ -430,14 +427,13 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       try {
         annotatedTextFile.colorize();
       } catch (IOException ioex) {
-        logger.warn("Unable to colorize [" + path + "]", ioex);
+        logger.warn("Unable to colorize [" + blamePath + "]", ioex);
       }
       return annotatedTextFile;
     } catch (ClientException ce) {
-      return translateException("Error blaming [" + path + "@" + revision + "]", ce);
+      return translateException("Error blaming [" + blamePath + "@" + revision + "]", ce);
     }
   }
-
 
   @Override
   public Revision translateRevision(SVNConnection connection, Revision revision, long headRevision) throws SventonException {
@@ -455,16 +451,16 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
         try {
           final MutableLong revAtDate = new MutableLong();
           client.info2(conn.getRepositoryRootUrl().getUrl(),
-                  org.tigris.subversion.javahl.Revision.getInstance(date),
-                  org.tigris.subversion.javahl.Revision.getInstance(date),
-                  Depth.empty, null, new InfoCallback() {
-                    @Override
-                    public void singleInfo(Info2 info2) {
-                      revAtDate.setValue(info2.getRev());
-                      // TODO: Is it better to look at last changed rev?
+              org.tigris.subversion.javahl.Revision.getInstance(date),
+              org.tigris.subversion.javahl.Revision.getInstance(date),
+              Depth.empty, null, new InfoCallback() {
+                @Override
+                public void singleInfo(Info2 info2) {
+                  revAtDate.setValue(info2.getRev());
+                  // TODO: Is it better to look at last changed rev?
 //                    revAtDate.setValue(info2.getLastChangedRev());
-                    }
-                  });
+                }
+              });
           return Revision.create(revAtDate.longValue());
         } catch (ClientException ex) {
           return translateException("Unable to translate revision: " + revision, ex);
@@ -478,10 +474,11 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   }
 
   @Override
-  public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
+  public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision,
+                                        boolean stopOnCopy, long limit) throws SventonException {
     final List<Long> list = new ArrayList<Long>();
-    for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, uriEncode(path), limit, stopOnCopy,
-            false)) {
+    final String encodedPath = uriEncode(path);
+    for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, encodedPath, limit, stopOnCopy, false)) {
       list.add(entry.getRevision());
     }
     return list;
@@ -506,6 +503,5 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
     throw new SventonException(errorMessage, exception);
   }
-
 
 }
