@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
-import org.sventon.model.Revision;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
