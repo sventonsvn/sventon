@@ -201,7 +201,7 @@ public class Application {
       }
 
       logger.info("Cleaning up config directories.");
-      cleanupOldConfigDirectories(getBackupConfigDirectories(), diff.removed);
+      cleanupOldConfigDirectories(getBackupConfigDirectories());
 
     }
 
@@ -224,7 +224,7 @@ public class Application {
   }
 
   /**
-   * @return The configuration root directories for each repository.
+   * @return The configuration root directories for each removed repository.
    */
   public File[] getBackupConfigDirectories() {
     return repositoriesDirectory.listFiles(new SventonConfigDirectoryFileFilter(getConfigurationFileBackupName()));
@@ -393,15 +393,10 @@ public class Application {
     return getConfigurationFileName() + "_bak";
   }
 
-  protected void cleanupOldConfigDirectories(File[] allConfigDirs, Set<RepositoryConfiguration> configsToDelete) {
-    Set<String> deletedConfigurations = new HashSet<String>();
-    for (RepositoryConfiguration repositoryConfiguration : configsToDelete) {
-      deletedConfigurations.add(repositoryConfiguration.getName().toString());
-    }
-
-    for (File configDir : allConfigDirs) {
+  protected void cleanupOldConfigDirectories(File[] configDirsToDelete) {
+    for (File configDir : configDirsToDelete) {
       try {
-        logger.info("Deleteing directory: " + configDir.getAbsolutePath());
+        logger.info("Deleting directory: " + configDir.getAbsolutePath());
         FileUtils.deleteDirectory(configDir);
       } catch (IOException ioe) {
         logger.warn("Config directory delete failed.", ioe);
