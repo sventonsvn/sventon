@@ -14,6 +14,8 @@ package org.sventon.util;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
@@ -60,6 +62,20 @@ public final class EncodingUtils {
    */
   public static String encodeUrl(final String url) {
     return FORWARD_SLASH_PATTERN.matcher(encode(url)).replaceAll("/");
+  }
+
+  /**
+   * URI encodes a path to comply with Subversion spec.
+   *
+   * @param uri Path (or any string) to convert.
+   * @return String URL encoded using UTF-8.
+   */
+  public static String encodeUri(final String uri) {
+    try {
+      return new URI(null, null, uri, null).toASCIIString();
+    } catch (URISyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
   /**

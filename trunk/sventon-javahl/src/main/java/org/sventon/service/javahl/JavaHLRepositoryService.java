@@ -27,6 +27,7 @@ import org.sventon.model.DirEntry;
 import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.AbstractRepositoryService;
+import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
@@ -36,6 +37,8 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+
+import static org.sventon.util.EncodingUtils.*;
 
 /**
  * JavaHLRepositoryService.
@@ -50,22 +53,6 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
    * Logger for this class and subclasses.
    */
   final Log logger = LogFactory.getLog(getClass());
-
-  /**
-   * URI encodes a path to comply with Subversion spec.
-   *
-   * @param path Path (or any string) to convert.
-   * @return String URL encoded using UTF-8.
-   */
-  private String uriEncode(String path) {
-    URI uri;
-    try {
-      uri = new URI(null, null, path, null);
-    } catch (URISyntaxException e) {
-      throw new IllegalArgumentException(e);
-    }
-    return uri.toASCIIString();
-  }
 
   @Override
   public LogEntry getLogEntry(RepositoryName repositoryName, SVNConnection connection, long revision) throws SventonException {
@@ -85,7 +72,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
                                       long toRevision, String path, long limit, boolean stopOnCopy,
                                       boolean includeChangedPaths) throws SventonException {
 
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     final SVNClientInterface client = (SVNClientInterface) connection.getDelegate();
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
@@ -115,7 +102,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
     for (final PathRevision fileRevision : targets) {
       final String path = fileRevision.getPath();
-      final String encodedPath = uriEncode(path);
+      final String encodedPath = encodeUri(path);
       final long revision = fileRevision.getRevision().getNumber();
       final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
 
@@ -139,7 +126,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public void getFileContents(SVNConnection connection, String path, long revision, OutputStream output) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
 
     try {
       final byte[] bytes = client.fileContent(conn.getRepositoryRootUrl().getFullPath(encodedPath),
@@ -157,7 +144,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     final Properties properties = new Properties();
 
     try {
@@ -201,7 +188,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     final List<DirEntry.Kind> nodeKinds = new ArrayList<DirEntry.Kind>();
 
     try {
@@ -226,7 +213,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
     final HashMap<String, DirEntryLock> locks = new HashMap<String, DirEntryLock>();
-    final String encodedStartPath = uriEncode(startPath);
+    final String encodedStartPath = encodeUri(startPath);
     final MutableLong callbackCounter = new MutableLong(0);
 
     try {
@@ -256,7 +243,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
 
     try {
@@ -282,7 +269,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public DirEntry getEntryInfo(SVNConnection connection, final String path, long revision) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
 
     final List<DirEntry> dirEntries = new ArrayList<DirEntry>();
     try {
@@ -308,7 +295,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
   @Override
   public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     final List<LogEntry> entries = getLogEntries(null, connection, revision, Revision.FIRST.getNumber(), encodedPath, 100, false, true);
     final List<FileRevision> revisions = new ArrayList<FileRevision>();
 
@@ -334,8 +321,8 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       final File outFile = createTempFileForDiff();
 
       try {
-        final String fromPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
-        final String toPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
+        final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
+        final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
 
         final org.tigris.subversion.javahl.Revision fromRev =
             org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
@@ -378,8 +365,8 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
 
     try {
-      final String fromPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
-      final String toPath = uriEncode(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
+      final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
+      final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
 
       final org.tigris.subversion.javahl.Revision fromRev =
           org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
@@ -408,7 +395,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public AnnotatedTextFile blame(SVNConnection connection, String path, long revision, String charset, Colorer colorer) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
-    final String blamePath = uriEncode(conn.getRepositoryRootUrl().getFullPath(path));
+    final String blamePath = encodeUri(conn.getRepositoryRootUrl().getFullPath(path));
 
     try {
       logger.debug("Blaming file [" + blamePath + "] revision [" + revision + "]");
@@ -477,7 +464,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision,
                                         boolean stopOnCopy, long limit) throws SventonException {
     final List<Long> list = new ArrayList<Long>();
-    final String encodedPath = uriEncode(path);
+    final String encodedPath = encodeUri(path);
     for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, encodedPath, limit, stopOnCopy, false)) {
       list.add(entry.getRevision());
     }
