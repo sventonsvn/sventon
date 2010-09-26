@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.sventon.TestUtils.CONFIG_FILE_NAME;
@@ -235,10 +233,10 @@ public class ApplicationTest {
     String removedConfigFileName = CONFIG_FILE_NAME + "_bak";
     new File(repos1, CONFIG_FILE_NAME).renameTo(new File(repos1, removedConfigFileName));
 
-    Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
-    toDelete.add(repositoryConfiguration1);
+    File[] files = application.getBackupConfigDirectories();
+    assertEquals(1, files.length);
 
-    application.cleanupOldConfigDirectories(application.getBackupConfigDirectories(), toDelete);
+    application.cleanupOldConfigDirectories(files);
     assertFalse(repos1.exists()); //Dir deleted
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
@@ -282,10 +280,10 @@ public class ApplicationTest {
     assertTrue(new File(repos1, CONFIG_FILE_NAME).exists());
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
-    Set<RepositoryConfiguration> toDelete = new HashSet<RepositoryConfiguration>();
-    toDelete.add(repositoryConfiguration1);
+    File[] files = application.getBackupConfigDirectories();
+    assertEquals("No files should be marked for deletion", 0, files.length);
 
-    application.cleanupOldConfigDirectories(application.getBackupConfigDirectories(), toDelete);
+    application.cleanupOldConfigDirectories(application.getBackupConfigDirectories());
     assertTrue(new File(repos1, CONFIG_FILE_NAME).exists()); //Dir not deleted, the props file had a valid name
     assertTrue(new File(repos2, CONFIG_FILE_NAME).exists());
 
