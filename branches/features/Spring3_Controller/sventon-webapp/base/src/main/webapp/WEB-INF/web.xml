@@ -44,9 +44,16 @@
   </servlet-mapping>
 
   <servlet-mapping>
+    <servlet-name>sventon</servlet-name>
+    <url-pattern>/repoz/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>sventon-old</servlet-name>
     <url-pattern>/repos/*</url-pattern>
   </servlet-mapping>
+
+
 
   <servlet-mapping>
     <servlet-name>sventon-old</servlet-name>

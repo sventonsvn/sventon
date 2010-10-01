@@ -21,7 +21,7 @@
   <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
     <c:param name="revision" value="${command.revision}" />
   </c:url>
-  <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+  <c:url value="/repoz/${command.name}/info" var="showRevInfoUrl">
     <c:param name="revision" value="${entry.revision}" />
   </c:url>
   <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">

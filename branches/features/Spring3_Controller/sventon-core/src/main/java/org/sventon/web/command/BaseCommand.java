@@ -38,6 +38,7 @@ import org.sventon.util.PathUtil;
  * @author jesper@sventon.org
  */
 public class BaseCommand {
+  private Revision headRevision;
 
   /**
    * Constructor.
@@ -329,5 +330,19 @@ public class BaseCommand {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  public void setHeadRevision(Revision headRevision) {
+    this.headRevision = headRevision;
+  }
+
+  public Revision getHeadRevision() {
+    return headRevision;
+  }
+
+
+
+  public boolean isHeadRevision() {
+    return revision.equals(headRevision);
   }
 }

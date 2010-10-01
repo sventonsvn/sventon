@@ -106,7 +106,7 @@
               <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
-              <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+              <c:url value="/repoz/${command.name}/info" var="showRevInfoUrl">
                 <c:param name="revision" value="${entry.revision}" />
               </c:url>
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
