@@ -2,14 +2,12 @@ package org.sventon.web.command;
 
 import org.junit.Test;
 import org.sventon.diff.DiffException;
-import org.sventon.web.command.editor.PathRevisionEditor;
+import org.sventon.model.PathRevision;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class DiffCommandTest {
-
-  private final PathRevisionEditor editor = new PathRevisionEditor();
 
   @Test
   public void testDiffCommandNull() throws Exception {
@@ -30,7 +28,7 @@ public class DiffCommandTest {
         "/bug/code/try2/OrderDetailModel.java@90"};
 
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(params));
+    command.setEntries(PathRevision.parse(params));
     assertEquals(91, command.getToRevision().getNumber());
     assertEquals(90, command.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetailModel.java", command.getToPath());
@@ -46,7 +44,7 @@ public class DiffCommandTest {
         "/bug/code/try2/OrderDetailModel.java@90"};
 
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(params));
+    command.setEntries(PathRevision.parse(params));
     assertEquals(91, command.getToRevision().getNumber());
     assertEquals(90, command.getFromRevision().getNumber());
     assertEquals("/bug/code/try2/OrderDetail.java", command.getToPath());
@@ -62,7 +60,7 @@ public class DiffCommandTest {
         "/bug/code/try2/@91"};
 
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(params));
+    command.setEntries(PathRevision.parse(params));
     assertEquals(90, command.getFromRevision().getNumber());
     assertEquals(91, command.getToRevision().getNumber());
     assertEquals("/bug/code/try1/", command.getFromPath());
@@ -79,7 +77,7 @@ public class DiffCommandTest {
 
     final DiffCommand command = new DiffCommand();
     try {
-      command.setEntries(editor.convert(params));
+      command.setEntries(PathRevision.parse(params));
       fail("Should throw DiffException");
     }
     catch (DiffException ex) {
@@ -95,7 +93,7 @@ public class DiffCommandTest {
 
     final DiffCommand command = new DiffCommand();
     try {
-      command.setEntries(editor.convert(params));
+      command.setEntries(PathRevision.parse(params));
       fail("Should throw IllegalArgumentException");
     }
     catch (IllegalArgumentException ex) {

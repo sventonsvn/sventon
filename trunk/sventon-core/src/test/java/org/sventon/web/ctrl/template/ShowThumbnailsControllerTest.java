@@ -6,7 +6,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.model.PathRevision;
 import org.sventon.web.command.MultipleEntriesCommand;
-import org.sventon.web.command.editor.PathRevisionEditor;
 
 import java.util.List;
 import java.util.Map;
@@ -28,8 +27,7 @@ public class ShowThumbnailsControllerTest {
         "file2.jpg@123",
         "file.abc@123"};
 
-    final PathRevisionEditor pathRevisionEditor = new PathRevisionEditor();
-    command.setEntries(pathRevisionEditor.convert(pathEntries));
+    command.setEntries(PathRevision.parse(pathEntries));
 
     final MockHttpServletRequest req = new MockHttpServletRequest();
     req.addParameter(GetFileController.DISPLAY_REQUEST_PARAMETER, GetFileController.CONTENT_DISPOSITION_INLINE);

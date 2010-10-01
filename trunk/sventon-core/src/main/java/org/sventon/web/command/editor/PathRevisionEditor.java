@@ -12,11 +12,8 @@
 package org.sventon.web.command.editor;
 
 import org.sventon.model.PathRevision;
-import org.sventon.model.Revision;
 
 import java.beans.PropertyEditorSupport;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Custom property editor for a path/revision combination.
@@ -25,23 +22,9 @@ import java.util.List;
  */
 public class PathRevisionEditor extends PropertyEditorSupport {
 
-  /**
-   * The delimiter between the path and the revision values.
-   */
-  private static final String DELIMITER = "@";
-
   @Override
   public void setAsText(final String entryAsString) {
-    setValue(toPathRevision(entryAsString));
-  }
-
-  private PathRevision toPathRevision(final String entry) {
-    if (!entry.contains(DELIMITER)) {
-      throw new IllegalArgumentException("Illegal parameter. No delimiter in entry: " + entry);
-    }
-    final String path = entry.substring(0, entry.lastIndexOf(DELIMITER));
-    final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 1);
-    return new PathRevision(path, Revision.parse(revision));
+    setValue(PathRevision.parse(entryAsString));
   }
 
   @Override
@@ -50,16 +33,8 @@ public class PathRevisionEditor extends PropertyEditorSupport {
     if (fileRevision == null) {
       return "";
     } else {
-      return fileRevision.getPath() + DELIMITER + fileRevision.getRevision();
+      return fileRevision.getPath() + PathRevision.DELIMITER + fileRevision.getRevision();
     }
-  }
-
-  public PathRevision[] convert(final String[] entries) {
-    final List<PathRevision> fileEntries = new ArrayList<PathRevision>();
-    for (String entry : entries) {
-      fileEntries.add(toPathRevision(entry));
-    }
-    return fileEntries.toArray(new PathRevision[fileEntries.size()]);
   }
 
 }
