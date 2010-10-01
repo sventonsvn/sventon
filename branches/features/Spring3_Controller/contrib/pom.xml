@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.sventon</groupId>
+  <artifactId>sventon-contrib</artifactId>
+  <name>sventon-contrib</name>
+  <version>2.5.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>sventon is a web client for browsing Subversion repositories</description>
+  <url>http://www.sventon.org/</url>
+
+  <modules>
+    <module>javahl</module>
+    <module>sequence</module>
+    <module>jhighlight</module>
+  </modules>
+</project>
