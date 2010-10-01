@@ -1,0 +1,30 @@
+<assembly>
+  <id>src</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+
+  <moduleSets>
+    <moduleSet>
+      <includes>
+        <include>org.sventon.sventon-webapp:base</include>
+      </includes>
+      <sources>
+        <!-- empty -->
+      </sources>
+    </moduleSet>
+  </moduleSets>
+
+
+  <fileSets>
+    <fileSet>
+      <excludes>
+        <exclude>**/target/**</exclude>
+        <exclude>sventon*</exclude>
+        <exclude>pom.xml.releaseBackup</exclude>
+        <exclude>release.properties</exclude>
+        <exclude>**/dev-build.properties</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>
