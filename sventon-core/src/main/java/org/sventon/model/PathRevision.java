@@ -12,6 +12,8 @@
 package org.sventon.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a, according to the repository, valid path/revision combination.
@@ -65,6 +67,23 @@ public class PathRevision implements Serializable, Comparable<PathRevision> {
   @Override
   public int compareTo(PathRevision o) {
     return this.getRevision().compareTo(o.getRevision());
+  }
+
+  public static PathRevision parse(final String entry) {
+    return parse(new String[]{entry})[0];
+  }
+
+  public static PathRevision[] parse(final String... entries) {
+    final List<PathRevision> fileEntries = new ArrayList<PathRevision>();
+    for (String entry : entries) {
+      if (!entry.contains(DELIMITER)) {
+        throw new IllegalArgumentException("Illegal parameter. No delimiter in entry: " + entry);
+      }
+      final String path = entry.substring(0, entry.lastIndexOf(DELIMITER));
+      final String revision = entry.substring(entry.lastIndexOf(DELIMITER) + 1);
+      fileEntries.add(new PathRevision(path, Revision.parse(revision)));
+    }
+    return fileEntries.toArray(new PathRevision[fileEntries.size()]);
   }
 
   @Override

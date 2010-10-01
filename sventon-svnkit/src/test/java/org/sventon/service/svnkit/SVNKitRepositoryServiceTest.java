@@ -6,7 +6,6 @@ import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.InlineDiffCreator;
 import org.sventon.model.*;
 import org.sventon.web.command.DiffCommand;
-import org.sventon.web.command.editor.PathRevisionEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.Date;
@@ -22,8 +21,6 @@ public class SVNKitRepositoryServiceTest {
 
   private static final String NL = System.getProperty("line.separator");
 
-  private PathRevisionEditor editor = new PathRevisionEditor();
-
   @Test
   public void testDiffUnifiedIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
@@ -32,7 +29,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     try {
       service.createUnifiedDiff(command, ENCODING, new TextFile(""), new TextFile(""));
@@ -50,7 +47,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     try {
       final String contents = "test file contents";
@@ -73,7 +70,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     final String s = service.createUnifiedDiff(command, ENCODING, leftFile, rightFile);
     assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
@@ -92,13 +89,11 @@ public class SVNKitRepositoryServiceTest {
             "test right file contents" + NL +
             "last row" + NL);
 
-    final SVNKitRepositoryService service = new SVNKitRepositoryService();
-
     final String[] revisions = new String[]{
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     final List<InlineDiffRow> list = InlineDiffCreator.createInlineDiff(command, ENCODING, leftFile, rightFile);
 
@@ -118,7 +113,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     try {
       service.createSideBySideDiff(command, ENCODING, new TextFile(""), new TextFile(""));
@@ -139,7 +134,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     try {
       service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
@@ -160,7 +155,7 @@ public class SVNKitRepositoryServiceTest {
         "/bug/code/try2/OrderDetailModel.java@91",
         "/bug/code/try2/OrderDetailModel.java@90"};
     final DiffCommand command = new DiffCommand();
-    command.setEntries(editor.convert(revisions));
+    command.setEntries(PathRevision.parse(revisions));
 
     List<SideBySideDiffRow> diff = service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
     assertEquals(1, diff.size());

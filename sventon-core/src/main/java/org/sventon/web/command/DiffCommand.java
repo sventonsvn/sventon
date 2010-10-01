@@ -80,6 +80,15 @@ public final class DiffCommand extends BaseCommand {
     fromFileRevision = entries[1];
   }
 
+  public void setFrom(final PathRevision pathRevision) {
+    fromFileRevision = pathRevision;
+
+  }
+
+  public void setTo(final PathRevision pathRevision) {
+    toFileRevision = pathRevision;
+  }
+
   /**
    * @return True if entries has been set (using {@link #setEntries(PathRevision[])}).
    */

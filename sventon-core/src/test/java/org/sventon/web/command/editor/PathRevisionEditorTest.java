@@ -21,11 +21,10 @@ public class PathRevisionEditorTest {
 
   @Test
   public void testParseEntriesWithDelimitersInPath() throws Exception {
-    final PathRevisionEditor editor = new PathRevisionEditor();
     final String[] parameters = new String[]{
         "/trunk/test@file.java@123",
     };
-    final PathRevision[] entries = editor.convert(parameters);
+    final PathRevision[] entries = PathRevision.parse(parameters);
     assertEquals(1, entries.length);
 
     final PathRevision entry0 = entries[0];
@@ -35,13 +34,12 @@ public class PathRevisionEditorTest {
 
   @Test
   public void testParseEntries() throws Exception {
-    final PathRevisionEditor editor = new PathRevisionEditor();
     final String[] parameters = new String[]{
         "/trunk/test.java@3",
         "/trunk/test.java@2",
         "/trunk/test.java@1"
     };
-    final PathRevision[] entries = editor.convert(parameters);
+    final PathRevision[] entries = PathRevision.parse(parameters);
     assertEquals(3, entries.length);
 
     final PathRevision entry2 = entries[0];
