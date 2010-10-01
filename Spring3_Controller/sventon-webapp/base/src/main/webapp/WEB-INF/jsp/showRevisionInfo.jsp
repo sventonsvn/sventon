@@ -41,11 +41,11 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <c:url value="/repos/${command.name}/info" var="showPrevRevInfoUrl">
+  <c:url value="/repoz/${command.name}/info" var="showPrevRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber - 1}" />
   </c:url>
 
-  <c:url value="/repos/${command.name}/info" var="showNextRevInfoUrl">
+  <c:url value="/repoz/${command.name}/info" var="showNextRevInfoUrl">
     <c:param name="revision" value="${command.revisionNumber + 1}" />
   </c:url>
 

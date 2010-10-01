@@ -44,6 +44,23 @@ public final class UserContext implements Serializable {
   }
 
   /**
+   * Get a user context given the repository name.
+   *
+   * @param repositoryName Repository name.
+   * @return Matching instance, A new context if not found.
+   */
+  public UserRepositoryContext getOrCreateUserRepositoryContext(final RepositoryName repositoryName) {
+    if (!repositoryContexts.containsKey(repositoryName)){
+      final UserRepositoryContext context = new UserRepositoryContext();
+      add(repositoryName, context);
+
+      return context;
+    }
+
+    return getUserRepositoryContext(repositoryName);
+  }
+
+  /**
    * Add new {@link UserRepositoryContext} instances.
    *
    * @param repositoryName Repository name to use for binding the context.

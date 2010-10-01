@@ -11,39 +11,47 @@
  */
 package org.sventon.web.ctrl.template;
 
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.sventon.SVNConnection;
+import org.sventon.SVNConnectionFactory;
+import org.sventon.appl.Application;
 import org.sventon.model.LogEntry;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import org.sventon.web.command.BaseCommandValidator;
+import org.sventon.web.ctrl.BaseController;
 
 /**
  * Controller to fetch details for a specific revision.
  *
  * @author jesper@sventon.org
  */
-public final class ShowRevisionInfoController extends AbstractTemplateController {
+@Controller
+@RequestMapping(value = "/repoz/{name}/info")
+@SessionAttributes(value = "userContext")
+public final class ShowRevisionInfoController extends BaseController{
+  protected static final Log logger = LogFactory.getLog(BaseController.class);
 
-  @Override
-  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
-                                   final long headRevision, final UserRepositoryContext userRepositoryContext,
-                                   final HttpServletRequest request, final HttpServletResponse response,
-                                   final BindException exception) throws Exception {
+  private static final String VIEW_NAME = "showRevisionInfo";
 
-    final long revisionNumber = command.getRevisionNumber();
-    logger.debug("Getting revision info details for revision: " + revisionNumber);
-    final LogEntry logEntry = getRepositoryService().getLogEntry(command.getName(), connection, revisionNumber);
-    //TODO: Parse to apply Bugtraq link
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("revisionInfo", logEntry);
+  @Autowired
+  public ShowRevisionInfoController(final Application application, final RepositoryService repositoryService, final SVNConnectionFactory svnConnectionFactory, BaseCommandValidator validator) {
+    super(validator, new DefaultControllerHandler(application, repositoryService, svnConnectionFactory, new ControllerClosure<String>() {
+      @Override
+      public String execute(RepositoryService service, SVNConnection connection, BaseCommand command, Model model) throws Exception {
+        logger.debug("Getting revision info details for revision: " + command.getRevision());
 
-    return new ModelAndView(getViewName(), model);
+        final LogEntry logEntry = service.getLogEntry(command.getName(), connection, command.getRevisionNumber());
+        model.addAttribute("revisionInfo", logEntry);
+
+        return VIEW_NAME;
+      }
+    }));
   }
-
 }

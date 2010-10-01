@@ -52,7 +52,7 @@
       <th><spring:message code="logmessage"/></th>
     </tr>
     <c:forEach items="${logEntries}" var="logEntry">
-      <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+      <c:url value="/repoz/${command.name}/info" var="showRevInfoUrl">
         <c:param name="revision" value="${logEntry.revision}" />
       </c:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
