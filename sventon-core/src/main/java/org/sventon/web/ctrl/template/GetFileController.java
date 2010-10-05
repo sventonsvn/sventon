@@ -190,7 +190,7 @@ public class GetFileController extends AbstractTemplateController {
                                  final BaseCommand command) {
     response.setContentType(contentType);
     response.setHeader(CONTENT_DISPOSITION_HEADER, disposition + "; filename=\"" +
-        EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
+        EncodingUtils.encodeFilename(command.getTarget(), request.getHeader("USER-AGENT")) + "\"");
   }
 
   /**
