@@ -141,7 +141,7 @@ public class ExportExecutorImpl implements ExportExecutor {
                                  final File attachment) {
     response.setContentType(WebUtils.APPLICATION_OCTET_STREAM);
     response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" +
-        EncodingUtils.encodeFilename(attachment.getName(), request) + "\"");
+        EncodingUtils.encodeFilename(attachment.getName(), request.getHeader("USER-AGENT")) + "\"");
   }
 
   /**

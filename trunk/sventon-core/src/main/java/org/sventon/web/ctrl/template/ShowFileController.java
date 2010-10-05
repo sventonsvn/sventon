@@ -151,8 +151,8 @@ public final class ShowFileController extends AbstractTemplateController {
 
       if (RAW_DISPLAY_FORMAT.equals(formatParameter)) {
         final String content = outStream.toString(charset);
-        response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER,
-            "inline; filename=\"" + EncodingUtils.encodeFilename(command.getTarget(), request) + "\"");
+        response.setHeader(WebUtils.CONTENT_DISPOSITION_HEADER, "inline; filename=\"" +
+            EncodingUtils.encodeFilename(command.getTarget(), request.getHeader("USER-AGENT")) + "\"");
         response.setContentType(WebUtils.CONTENT_TYPE_TEXT_PLAIN);
         response.getOutputStream().write(content.getBytes(charset));
         return null;

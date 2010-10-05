@@ -12,7 +12,6 @@
 package org.sventon.util;
 
 import javax.mail.internet.MimeUtility;
-import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,7 +37,7 @@ public final class EncodingUtils {
   private static final String DEFAULT_CHARSET = "UTF-8";
 
   /**
-   * Encodes given string using default encoding (UTF-8).
+   * Encodes given string into <tt>application/x-www-form-urlencoded</tt> format using default encoding (UTF-8).
    *
    * @param str String to encode.
    * @return Encoded string.
@@ -65,7 +64,7 @@ public final class EncodingUtils {
   }
 
   /**
-   * URI encodes a path to comply with Subversion spec.
+   * URI encodes a path to comply with Subversion specification (according to rfc2396).
    *
    * @param uri Path (or any string) to convert.
    * @return String URL encoded using UTF-8.
@@ -82,12 +81,11 @@ public final class EncodingUtils {
    * Hack to get the correct format of the file name, based on <code>USER-AGENT</code> string.
    * File name will be returned as-is if unable to parse <code>USER-AGENT</code>.
    *
-   * @param filename File name to encode
-   * @param request  The request
+   * @param filename  File name to encode.
+   * @param userAgent The request's USER-AGENT string.
    * @return The coded file name.
    */
-  public static String encodeFilename(final String filename, final HttpServletRequest request) {
-    final String userAgent = request.getHeader("USER-AGENT");
+  public static String encodeFilename(final String filename, final String userAgent) {
     String codedFilename = null;
     try {
       if (null != userAgent && -1 != userAgent.indexOf("MSIE")) {
