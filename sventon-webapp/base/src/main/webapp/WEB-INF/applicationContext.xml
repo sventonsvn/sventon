@@ -70,13 +70,8 @@
     <constructor-arg ref="configDirectory"/>
   </bean>
 
-  <bean id="repositoryServiceDelegate" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
+  <bean id="repositoryService" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
         factory-method="getRepositoryService"/>
-
-  <bean id="repositoryService" class="org.sventon.service.CacheAwareRepositoryService">
-    <constructor-arg ref="repositoryServiceDelegate"/>
-    <property name="cacheGateway" ref="cacheGatewayBean"/>
-  </bean>
 
   <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
@@ -175,14 +170,12 @@
     <ref local="dirEntryCacheManager"/>
     <ref local="logMessageCacheManager"/>
     <ref local="objectCacheManager"/>
-    <ref local="revisionCacheManager"/>
   </util:list>
 
   <!-- List of RevisionObservers registered to observe repository changes -->
   <util:list id="observerList">
     <ref local="entryCacheUpdater"/>
     <ref local="logEntryCacheUpdater"/>
-    <ref local="revisionCacheUpdater"/>
     <!--<ref local="mailNotifier"/>-->
   </util:list>
 
@@ -210,11 +203,6 @@
   </util:list>
 
   <!-- Updater class for applying repository changes to cache -->
-  <bean id="revisionCacheUpdater" class="org.sventon.cache.revisioncache.RevisionCacheUpdater">
-    <constructor-arg ref="revisionCacheManager"/>
-  </bean>
-
-  <!-- Updater class for applying repository changes to cache -->
   <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.DirEntryCacheUpdater">
     <constructor-arg ref="dirEntryCacheManager"/>
     <constructor-arg ref="application"/>
@@ -223,10 +211,6 @@
   <!-- Updater class for applying repository changes to cache -->
   <bean id="logEntryCacheUpdater" class="org.sventon.cache.logmessagecache.LogMessageCacheUpdater">
     <constructor-arg ref="logMessageCacheManager"/>
-  </bean>
-
-  <bean id="revisionCacheManager" class="org.sventon.cache.RevisionCacheManager">
-    <constructor-arg ref="objectCacheManager"/>
   </bean>
 
   <bean id="dirEntryCacheManager" class="org.sventon.cache.DirEntryCacheManager">
