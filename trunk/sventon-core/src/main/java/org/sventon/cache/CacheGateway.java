@@ -78,24 +78,4 @@ public interface CacheGateway {
   List<LogMessageSearchItem> find(final RepositoryName repositoryName, final String queryString, final String startDir)
       throws CacheException;
 
-  /**
-   * Gets a revision by number.
-   *
-   * @param repositoryName Repository name
-   * @param revision       Revision number of revision to get.
-   * @return The revision info
-   * @throws CacheException if error.
-   */
-  LogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException;
-
-  /**
-   * Gets multiple revisions by number.
-   *
-   * @param repositoryName Repository name
-   * @param revisions      List of revision numbers to get.
-   * @return List containing the revisions
-   * @throws CacheException if error.
-   */
-  List<LogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException;
-
 }

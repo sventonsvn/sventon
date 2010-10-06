@@ -14,10 +14,11 @@ package org.sventon.cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sventon.cache.direntrycache.DirEntryCache;
 import org.sventon.cache.logmessagecache.LogMessageCache;
-import org.sventon.cache.revisioncache.RevisionCache;
-import org.sventon.model.*;
+import org.sventon.model.CamelCasePattern;
+import org.sventon.model.DirEntry;
+import org.sventon.model.LogMessageSearchItem;
+import org.sventon.model.RepositoryName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,6 @@ public final class CacheGatewayImpl implements CacheGateway {
 
   private DirEntryCacheManager cacheManager;
   private LogMessageCacheManager logMessageCacheManager;
-  private RevisionCacheManager revisionCacheManager;
 
   /**
    * Sets the entry cache manager instance.
@@ -49,16 +49,6 @@ public final class CacheGatewayImpl implements CacheGateway {
   @Autowired
   public void setLogEntryCacheManager(final LogMessageCacheManager logMessageCacheManager) {
     this.logMessageCacheManager = logMessageCacheManager;
-  }
-
-  /**
-   * Sets the revision cache manager instance.
-   *
-   * @param revisionCacheManager RevisionCacheManager instance.
-   */
-  @Autowired
-  public void setRevisionCacheManager(final RevisionCacheManager revisionCacheManager) {
-    this.revisionCacheManager = revisionCacheManager;
   }
 
   @Override
@@ -97,24 +87,6 @@ public final class CacheGatewayImpl implements CacheGateway {
     final LogMessageCache cache = logMessageCacheManager.getCache(repositoryName);
     assertCacheExists(cache, repositoryName);
     return cache.find(queryString, startDir);
-  }
-
-  @Override
-  public LogEntry getRevision(final RepositoryName repositoryName, final long revision) throws CacheException {
-    final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
-    assertCacheExists(cache, repositoryName);
-    return cache.get(revision);
-  }
-
-  @Override
-  public List<LogEntry> getRevisions(final RepositoryName repositoryName, final List<Long> revisions) throws CacheException {
-    final RevisionCache cache = revisionCacheManager.getCache(repositoryName);
-    assertCacheExists(cache, repositoryName);
-    final List<LogEntry> cachedRevisions = new ArrayList<LogEntry>();
-    for (final Long revision : revisions) {
-      cachedRevisions.add(cache.get(revision));
-    }
-    return cachedRevisions;
   }
 
   private void assertCacheExists(final Cache cache, final RepositoryName repositoryName) throws CacheException {
