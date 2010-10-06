@@ -285,4 +285,42 @@
     <property name="locateExistingServerIfPossible" value="true"/>
   </bean>
 
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    <property name="triggers">
+      <list>
+        <ref local="repositoryChangeMonitorUpdateTrigger"/>
+        <ref local="tempFileCleanerTrigger"/>
+      </list>
+    </property>
+    <property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.scheduler.jmx.export">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="repositoryChangeMonitorUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="repositoryChangeMonitorUpdateJobDetail"/>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="repositoryChangeMonitorUpdateJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="repositoryChangeMonitor"/>
+    <property name="targetMethod" value="updateAll"/>
+  </bean>
+
+  <bean id="tempFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="tempFileCleanerJobDetail"/>
+    <property name="startDelay" value="300000"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="tempFileCleanerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="tempFileCleaner"/>
+    <property name="targetMethod" value="clean"/>
+  </bean>
+
 </beans>
