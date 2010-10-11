@@ -22,11 +22,18 @@
 (defn create-service []
   (JavaHLRepositoryService.))
 
-(defn run-javahl-test [n]
+(defn with-javahl [f]
+  "Run the given function using the JavaHL provider.
+  e.g. (with-svnkit #(org.sventon.service.perftest/get-latest-revision \"http://svn.host/path/to/repo\"))"
   (binding [org.sventon.service.perftest/create-service create-service
             org.sventon.service.perftest/create-connection create-connection]
-    (org.sventon.service.perftest/run-tests n)))
+    (f)))
 
-;(run-svnkit-test 1)
+(defn run-javahl-test [n]
+  "Run the entire testsuite as defined in ort.sventon.perftest/run-tests with the JavaHL provider"
+  (with-javahl #(org.sventon.service.perftest/run-tests n)))
+
+
+
 
 
