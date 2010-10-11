@@ -14,10 +14,13 @@
 
 (def create-service)
 
+(defmacro repo-service-exec [method url & args]
+  `(let [connection# (create-connection ~url)
+         service# (create-service)]
+    (. service# ~method connection# ~@args)))
+
 (defn get-latest-revision [url]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getLatestRevision service connection)))
+  (repo-service-exec getLatestRevision url))
 
 (defn get-log-entry [url rev]
   (let [connection (create-connection url)
@@ -25,9 +28,7 @@
     (.getLogEntry service nil connection rev)))
 
 (defn get-log-entries-from-repository-root [url from-rev to-rev]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getLogEntriesFromRepositoryRoot service connection from-rev to-rev)))
+  (repo-service-exec getLogEntriesFromRepositoryRoot url from-rev to-rev))
 
 (defn get-log-entries
   [url from-rev to-rev path limit stop-on-copy? include-changed-paths?]
@@ -36,89 +37,55 @@
     (.getLogEntries service nil connection from-rev to-rev path limit stop-on-copy? include-changed-paths?)))
 
 (defn export [url targets peg-revision export-dir]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.export service connection targets peg-revision export-dir)))
+  (repo-service-exec export url targets peg-revision export-dir))
 
 (defn get-file-contents [url path revision output]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getFileContents service connection path revision output)))
+  (repo-service-exec getFileContents url path revision output))
 
 (defn list-properties [url path revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.listProperties service connection path revision)))
+  (repo-service-exec listProperties url path revision))
 
 (defn get-node-kind [url path revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getNodeKind service connection path revision)))
+  (repo-service-exec getNodeKind url path revision))
 
 (defn get-locks [url start-path recursive?]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getLocks service connection start-path recursive?)))
+  (repo-service-exec getLocks url start-path recursive?))
 
 (defn list-dir [url path revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.list service connection path revision)))
+  (repo-service-exec list url path revision))
 
 (defn get-entry-info [url path revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getEntryInfo service connection path revision)))
+  (repo-service-exec getEntryInfo url path revision))
 
 (defn get-file-revisions [url path revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getFileRevisions service connection path revision)))
+  (repo-service-exec getFileRevisons url path revision))
 
 (defn diff-sideby-side [url diff-command peg-rev charset]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.diffSideBySide service connection diff-command peg-rev charset)))
+  (repo-service-exec diffSideBySide url diff-command peg-rev charset))
 
 (defn diff-unified [url diff-command peg-rev charset]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.diffUnified service connection diff-command peg-rev charset)))
+  (repo-service-exec diffUnified url diff-command peg-rev charset))
 
 (defn diff-inline [url diff-command peg-rev charset]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.diffInline service connection diff-command peg-rev charset)))
+  (repo-service-exec diffInline url diff-command peg-rev charset))
 
 (defn diff-paths [url diff-command]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.diffPaths service connection diff-command)))
+  (repo-service-exec diffPaths url diff-command))
 
 (defn blame [url path revision charset colorer]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.blame service connection path revision charset colorer)))
+  (repo-service-exec blame url path revision charset colorer))
 
 (defn get-node-kind-for-diff [url diff-command]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getNodeKindForDiff service connection diff-command)))
+  (repo-service-exec getNodeKindForDiff url diff-command))
 
 (defn translate-revision [url revision head-revision]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.translateRevision service connection revision head-revision)))
+  (repo-service-exec translateRevision url revision head-revision))
 
 (defn get-latest-revisions [url revision-count]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getLatestRevisions service nil connection revision-count)))
+  (repo-service-exec getLatestRevision url revision-count))
 
 (defn get-revisions-for-path [url path from-rev to-rev stop-on-copy? limit]
-  (let [connection (create-connection url)
-        service (create-service)]
-    (.getRevisionsForPath service connection path from-rev to-rev stop-on-copy? limit)))
+  (repo-service-exec url path from-rev to-rev stop-on-copy? limit))
 
 
 (defn time-method [n m]
@@ -141,6 +108,7 @@
 
     (println "getLogEntries")
     (time-method n #(get-log-entries root 1500 1800 "/trunk/sventon/src/main/java/org/sventon", 1000, false true))
+
     (println "export")
     (let [paths [(PathRevision. "/trunk/lib" (Revision/parse "1800")),
                  (PathRevision. "/trunk/licenses" (Revision/parse "1800")),
