@@ -2,13 +2,13 @@ package org.sventon.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.ConfigDirectoryFactory;
 import org.sventon.SVNConnectionFactory;
-import org.sventon.appl.ConfigDirectory;
 
 import java.util.ServiceLoader;
 
 /**
- * Represents a Subversion provider, eg. svnjavahl and SVNKit.
+ * Represents a Subversion provider, eg. <i>svnjavahl</i> and <i>SVNKit</i>.
  */
 public abstract class SVNProvider {
 
@@ -17,8 +17,15 @@ public abstract class SVNProvider {
    */
   private static final Log LOGGER = LogFactory.getLog(SVNProvider.class);
 
-  public abstract SVNConnectionFactory getConnectionFactory(ConfigDirectory configDirectory);
+  /**
+   * @param configDirectoryFactory Factory
+   * @return Connection factory
+   */
+  public abstract SVNConnectionFactory getConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory);
 
+  /**
+   * @return Service
+   */
   public abstract RepositoryService getRepositoryService();
 
   /**

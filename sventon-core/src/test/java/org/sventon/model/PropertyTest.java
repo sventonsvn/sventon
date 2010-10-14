@@ -12,9 +12,8 @@
 package org.sventon.model;
 
 import org.junit.Test;
-import org.sventon.util.SVNUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PropertyTest {
 
@@ -40,14 +39,4 @@ public class PropertyTest {
     assertEquals("svn:entry:committed-rev", Property.COMMITTED_REVISION.getName());
   }
 
-  @Test
-  /*
-  Test to see if given string is a mime-type description. (Why here?)
-   */
-  public void isTextMimeType() throws Exception {
-    assertTrue(SVNUtils.isTextMimeType("text/foo-bar"));
-    assertTrue(SVNUtils.isTextMimeType(null));
-    assertFalse(SVNUtils.isTextMimeType("audio/crazy-frog"));
-
-  }
 }

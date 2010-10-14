@@ -13,13 +13,14 @@ package org.sventon.model;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.sventon.colorer.Colorer;
-import org.sventon.util.WebUtils;
+import org.apache.commons.lang.StringUtils;
+import org.sventon.Colorer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Represents a file in plain text format.
@@ -32,7 +33,12 @@ public final class TextFile {
    * The text file rows.
    */
   private final List<TextFileRow> rows = new ArrayList<TextFileRow>();
+
   private static final String NL = System.getProperty("line.separator");
+
+  public static final String NBSP = "&nbsp;";
+
+  public static final Pattern NL_REGEXP = Pattern.compile("(\r\n|\r|\n|\n\r)");
 
   /**
    * Constructor.
@@ -62,11 +68,45 @@ public final class TextFile {
     if (colorer != null) {
       processedContent = colorer.getColorizedContent(processedContent, FilenameUtils.getExtension(path), encoding);
     }
-    final String[] fileRows = WebUtils.NL_REGEXP.split(processedContent);
+    final String[] fileRows = NL_REGEXP.split(processedContent);
     int count = 0;
     for (final String fileRow : fileRows) {
-      rows.add(new TextFileRow(++count, WebUtils.replaceLeadingSpaces(fileRow)));
+      rows.add(new TextFileRow(++count, replaceLeadingSpaces(fileRow)));
     }
+  }
+
+  /**
+   * Replaces leading spaces with the HTML entity <code>&nbsp;</code>.
+   *
+   * @param string Input string. Can be one or more lines.
+   * @return Replaced output string.
+   */
+  public static String replaceLeadingSpaces(final String string) {
+    if (StringUtils.isEmpty(string)) {
+      return string;
+    }
+
+    final StringBuilder sb = new StringBuilder();
+    final String[] lines = NL_REGEXP.split(string);
+
+    for (final String line : lines) {
+      if (!StringUtils.isWhitespace(line)) {
+        String result = org.springframework.util.StringUtils.trimLeadingWhitespace(line);
+
+        int removedSpacesCount = line.length() - result.length();
+        for (int i = 0; i < removedSpacesCount; i++) {
+          result = NBSP + result;
+        }
+        sb.append(result);
+      } else {
+        sb.append(line);
+      }
+      // Make sure to only append NEWLINE when multiple lines.
+      if (lines.length > 1) {
+        sb.append(NL);
+      }
+    }
+    return sb.toString();
   }
 
   /**

@@ -1,8 +1,9 @@
 package org.sventon.model;
 
 import org.junit.Test;
-import org.sventon.colorer.Colorer;
-import org.sventon.colorer.JHighlightColorer;
+import org.sventon.Colorer;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,23 +38,14 @@ public class TextFileTest {
   @Test
   public void testTextFileColorized() throws Exception {
     final String content = "class Test {" + BR + "// <test> " + BR + "}";
-    final TextFile textFile = new TextFile(content, "Test.java", "UTF-8", getColorer());
+    final TextFile textFile = new TextFile(content, "Test.java", "UTF-8", new Colorer() {
+      @Override
+      public String getColorizedContent(String content, String fileExtension, String encoding) throws IOException {
+        return "<test>" + content + "</test>";
+      }
+    });
     assertEquals(3, textFile.size());
-    assertEquals("<span class=\"java_keyword\">class</span><span class=\"java_plain\">&#160;</span>" +
-        "<span class=\"java_type\">Test</span><span class=\"java_plain\">&#160;</span>" +
-        "<span class=\"java_separator\">{</span><span class=\"java_plain\"></span>" + BR +
-        "<span class=\"java_comment\">//&#160;&lt;test&gt;&#160;</span>" + BR +
-        "<span class=\"java_separator\">}</span><span class=\"java_plain\"></span>" + BR, textFile.getContent());
-  }
-
-  private Colorer getColorer() {
-    final JHighlightColorer col = new JHighlightColorer();
-    final java.util.Properties mappings = new java.util.Properties();
-    mappings.put("java", new com.uwyn.jhighlight.renderer.JavaXhtmlRenderer());
-    mappings.put("html", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
-    mappings.put("xml", new com.uwyn.jhighlight.renderer.XmlXhtmlRenderer());
-    col.setRendererMappings(mappings);
-    return col;
+    assertEquals("<test>class Test {" + BR + "// <test> " + BR + "}</test>" + BR, textFile.getContent());
   }
 
 }

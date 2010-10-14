@@ -13,6 +13,8 @@
 %>
 <%@ include file="/WEB-INF/jspf/pageInclude.jspf"%>
 <%@ page import="org.sventon.util.HTMLCreator" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@ page import="org.sventon.util.WebUtils" %>
 
 <html>
 <head>
@@ -112,7 +114,7 @@
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
           </c:choose>
-          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;">${entry.webFormattedMessage}</a></td>
+          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><%=WebUtils.nl2br(StringEscapeUtils.escapeXml(entry.getMessage()))%></a></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">
@@ -152,7 +154,7 @@
   <c:if test="${isEntryTrayEnabled}">
     <%@ include file="/WEB-INF/jspf/entryTray.jspf"%>
   </c:if>
-  
+
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>
 </body>
 </html>

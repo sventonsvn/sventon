@@ -11,11 +11,10 @@
  */
 package org.sventon.service.javahl;
 
-import org.apache.commons.lang.Validate;
+import org.sventon.ConfigDirectoryFactory;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
@@ -30,22 +29,21 @@ import java.io.File;
  */
 public class JavaHLConnectionFactory implements SVNConnectionFactory {
 
-  private final ConfigDirectory configurationDirectory;
+  private final ConfigDirectoryFactory configDirectoryFactory;
 
   /**
    * Constructor.
    *
-   * @param configurationDirectory Where to place the subversion config files.
+   * @param configDirectoryFactory
    */
-  public JavaHLConnectionFactory(ConfigDirectory configurationDirectory) {
-    Validate.notNull(configurationDirectory, "Configuration directory cannot be null!");
-    this.configurationDirectory = configurationDirectory;
+  public JavaHLConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory) {
+    this.configDirectoryFactory = configDirectoryFactory;
   }
 
   @Override
   public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SventonException {
-    final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
+    final File configDirectory = configDirectoryFactory.getConfigDirectoryFor(repositoryName);
     final SVNClientInterface client = new SVNClient();
     try {
       client.setConfigDirectory(configDirectory.getAbsolutePath());

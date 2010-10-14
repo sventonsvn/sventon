@@ -15,8 +15,8 @@ import de.regnis.q.sequence.line.diff.QDiffGeneratorFactory;
 import org.apache.commons.io.IOUtils;
 import org.sventon.model.DiffAction;
 import org.sventon.model.InlineDiffRow;
+import org.sventon.model.PathRevision;
 import org.sventon.model.TextFile;
-import org.sventon.web.command.DiffCommand;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,7 +31,9 @@ import java.util.Map;
  * Helper class to calculate Inline Diff result using DiffProducer
  */
 public class InlineDiffCreator {
-    public static List<InlineDiffRow> createInlineDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+  public static List<InlineDiffRow> createInlineDiff(final PathRevision from, final PathRevision to,
+                                                     final String charset, final TextFile leftFile,
+                                                     final TextFile rightFile) throws IOException {
     final List<InlineDiffRow> resultRows = new ArrayList<InlineDiffRow>();
     final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
     final Map generatorProperties = new HashMap();
@@ -45,7 +47,7 @@ public class InlineDiffCreator {
 
     final String diffResultString = diffResult.toString(charset);
     if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+      throw new IdenticalFilesException(from.getPath() + ", " + to.getPath());
     }
 
     int rowNumberLeft = 1;

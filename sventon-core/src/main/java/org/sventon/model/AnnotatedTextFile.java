@@ -12,14 +12,14 @@
 package org.sventon.model;
 
 import org.apache.commons.io.FilenameUtils;
-import org.sventon.colorer.Colorer;
-import org.sventon.util.WebUtils;
+import org.sventon.Colorer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Represents an annotated (blamed) file.
@@ -35,6 +35,8 @@ public final class AnnotatedTextFile {
 
   private static final String NL = System.getProperty("line.separator");
 
+  public static final Pattern NL_REGEXP = Pattern.compile("(\r\n|\r|\n|\n\r)");
+  
   private final String path;
   private final String encoding;
   private final Colorer colorer;
@@ -91,7 +93,7 @@ public final class AnnotatedTextFile {
     final String colorizedContent = colorer.getColorizedContent(
         sb.toString(), FilenameUtils.getExtension(path), encoding);
 
-    final String[] fileRows = WebUtils.NL_REGEXP.split(colorizedContent);
+    final String[] fileRows = NL_REGEXP.split(colorizedContent);
     int count = 0;
     for (final String fileRow : fileRows) {
       rows.get(count++).setContent(fileRow);

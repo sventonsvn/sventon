@@ -30,8 +30,8 @@
   <c:param name="revision" value="${command.revision}" />
   <c:param name="entries" value="${command.toPath}@${command.toRevision}" />
   <c:param name="entries" value="${command.fromPath}@${command.fromRevision}" />
-  <c:if test="${command.pegRevision > 0}">
-    <c:param name="pegRevision" value="${command.pegRevision}" />
+  <c:if test="${command.pegRevision.number > 0}">
+    <c:param name="pegRevision" value="${command.pegRevision.number}" />
   </c:if>
   <c:if test="${param.showlatestrevinfo}">
     <c:param name="showlatestrevinfo" value="true" />

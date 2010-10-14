@@ -22,7 +22,7 @@
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
   <context:annotation-config/>
-  <context:mbean-export/>
+  <context:mbean-export registration="ignoreExisting"/>
 
   <bean id="sventonTempRootDir" class="java.io.File">
     <constructor-arg value="${java.io.tmpdir}"/>
@@ -33,6 +33,10 @@
     <constructor-arg ref="sventonTempRootDir"/>
     <constructor-arg value="export_temp"/>
     <constructor-arg value="repositories"/>
+  </bean>
+
+  <bean id="configDirectoryFactory" class="org.sventon.ConfigDirectoryFactory" factory-bean="configDirectory"
+      factory-method="createConfigDirectoryFactory">
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -67,7 +71,7 @@
 
   <bean id="connectionFactory" class="org.sventon.SVNConnectionFactory" factory-bean="svnProvider"
         factory-method="getConnectionFactory">
-    <constructor-arg ref="configDirectory"/>
+    <constructor-arg ref="configDirectoryFactory"/>
   </bean>
 
   <bean id="repositoryService" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"

@@ -11,13 +11,12 @@
  */
 package org.sventon.service.svnkit;
 
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.ConfigDirectoryFactory;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
@@ -46,17 +45,15 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
   /**
    * Root directory where to place the svn config files.
    */
-  private final ConfigDirectory configurationDirectory;
+  private final ConfigDirectoryFactory configDirectoryFactory;
 
   /**
    * Constructor.
    *
-   * @param configurationDirectory Root directory where to place the svn config files.
-   *                               If the directory does not exist, it will be created.
+   * @param configDirectoryFactory
    */
-  public SVNKitConnectionFactory(final ConfigDirectory configurationDirectory) {
-    Validate.notNull(configurationDirectory, "Configuration directory cannot be null!");
-    this.configurationDirectory = configurationDirectory;
+  public SVNKitConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory) {
+    this.configDirectoryFactory = configDirectoryFactory;
   }
 
   /**
@@ -79,7 +76,7 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
     } catch (org.tmatesoft.svn.core.SVNException e) {
       throw new SventonException(e.getMessage());
     }
-    final File configDirectory = configurationDirectory.getConfigDirectoryFor(repositoryName);
+    final File configDirectory = configDirectoryFactory.getConfigDirectoryFor(repositoryName);
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
         configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));

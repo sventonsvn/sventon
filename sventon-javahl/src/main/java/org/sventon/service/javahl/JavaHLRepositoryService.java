@@ -18,27 +18,21 @@ import org.apache.commons.lang.mutable.MutableLong;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
-import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
-import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.DirEntry;
 import org.sventon.model.Properties;
 import org.sventon.model.Revision;
 import org.sventon.service.AbstractRepositoryService;
-import org.sventon.util.EncodingUtils;
-import org.sventon.web.command.DiffCommand;
 import org.tigris.subversion.javahl.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 
-import static org.sventon.util.EncodingUtils.*;
+import static org.sventon.EncodingUtils.encodeUri;
 
 /**
  * JavaHLRepositoryService.
@@ -95,8 +89,8 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   }
 
   @Override
-  public void export(SVNConnection connection, List<PathRevision> targets, long pegRevision,
-                     final ExportDirectory exportDirectory) throws SventonException {
+  public void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
+                     final File exportDirectory) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
 
@@ -104,7 +98,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       final String path = fileRevision.getPath();
       final String encodedPath = encodeUri(path);
       final long revision = fileRevision.getRevision().getNumber();
-      final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
+      final File revisionRootDir = new File(exportDirectory, String.valueOf(revision));
 
       Validate.isTrue(revisionRootDir.exists() || revisionRootDir.mkdirs(), "Unable to create directory: " + revisionRootDir.getAbsolutePath());
 
@@ -311,28 +305,29 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
 
   @Override
-  public String diffUnified(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
+  public String diffUnified(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                            final Revision pegRevision, final String charset) throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
 
-    assertNotBinary(connection, command, pegRevision);
+    assertNotBinary(connection, from, to, pegRevision);
 
     try {
       final File outFile = createTempFileForDiff();
 
       try {
-        final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
-        final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
+        final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(from.getPath()));
+        final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(to.getPath()));
 
         final org.tigris.subversion.javahl.Revision fromRev =
-            org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+            org.tigris.subversion.javahl.Revision.getInstance(from.getRevision().getNumber());
         final org.tigris.subversion.javahl.Revision toRev =
-            org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+            org.tigris.subversion.javahl.Revision.getInstance(to.getRevision().getNumber());
 
         client.diff(fromPath, fromRev, toPath, toRev, null, outFile.getAbsolutePath(), Depth.empty, null, false, false, true);
         final String diffResultString = FileUtils.readFileToString(outFile, charset);
         if ("".equals(diffResultString)) {
-          throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+          throw new IdenticalFilesException(from.getPath() + ", " + to.getPath());
         }
         return new TextFile(stripUnifiedDiffHeader(diffResultString)).getContent();
       } catch (ClientException ce) {
@@ -358,20 +353,21 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   }
 
   @Override
-  public List<DiffStatus> diffPaths(SVNConnection connection, final DiffCommand command) throws SventonException {
+  public List<DiffStatus> diffPaths(final SVNConnection connection, final PathRevision from, final PathRevision to)
+      throws SventonException {
     final JavaHLConnection conn = (JavaHLConnection) connection;
     final SVNClientInterface client = conn.getDelegate();
 
     final List<DiffStatus> result = new ArrayList<DiffStatus>();
 
     try {
-      final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getFromPath()));
-      final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(command.getToPath()));
+      final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(from.getPath()));
+      final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(to.getPath()));
 
       final org.tigris.subversion.javahl.Revision fromRev =
-          org.tigris.subversion.javahl.Revision.getInstance(command.getFromRevision().getNumber());
+          org.tigris.subversion.javahl.Revision.getInstance(from.getRevision().getNumber());
       final org.tigris.subversion.javahl.Revision toRev =
-          org.tigris.subversion.javahl.Revision.getInstance(command.getToRevision().getNumber());
+          org.tigris.subversion.javahl.Revision.getInstance(to.getRevision().getNumber());
 
       client.diffSummarize(fromPath, fromRev, toPath, toRev, Depth.infinity, null, true, new DiffSummaryReceiver() {
         @Override
@@ -386,7 +382,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
         }
       });
     } catch (ClientException ce) {
-      return translateException("Could not calculate diff for " + command.toString(), ce);
+      return translateException("Could not calculate diff for [" + from + "/" + to + "]", ce);
     }
     return result;
   }

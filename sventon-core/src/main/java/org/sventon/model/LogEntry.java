@@ -11,10 +11,8 @@
  */
 package org.sventon.model;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.sventon.util.DateUtil;
-import org.sventon.util.WebUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -112,18 +110,6 @@ public final class LogEntry implements Serializable {
   public String getMessage() {
     return properties.get(RevisionProperty.LOG);
   }
-
-  /**
-   * Gets the log message formatted for display on the web.
-   * XML characters will be escaped and new lines will be translated into
-   * the HTML equivalent.
-   *
-   * @return Web format log message.
-   */
-  public String getWebFormattedMessage() {
-    return WebUtils.nl2br(StringEscapeUtils.escapeXml(getMessage()));
-  }
-
 
   /**
    * Iterate through (and modify!) the log entries and set the pathAtRevision for each entry.
