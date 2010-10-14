@@ -18,6 +18,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
 <%@ tag import="org.sventon.util.HTMLCreator" %>
+<%@ tag import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@ tag import="org.sventon.util.WebUtils" %>
 
 <%@ attribute name="name" required="true" type="org.sventon.model.RepositoryName" %>
 <%@ attribute name="logEntry" required="true" type="org.sventon.model.LogEntry" %>
@@ -39,7 +41,7 @@
         <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
         <tr>
           <td valign="top"><b><spring:message code="message"/>:</b></td>
-          <td>${logEntry.webFormattedMessage}</td>
+          <td><%=WebUtils.nl2br(StringEscapeUtils.escapeXml(logEntry.getMessage()))%></td>
         </tr>
       </table>
     </td>

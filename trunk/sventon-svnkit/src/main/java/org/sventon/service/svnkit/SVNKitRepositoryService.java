@@ -15,15 +15,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.*;
-import org.sventon.colorer.Colorer;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.DiffProducer;
 import org.sventon.diff.IdenticalFilesException;
-import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
 import org.sventon.model.Properties;
 import org.sventon.service.AbstractRepositoryService;
-import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNRepository;
@@ -98,13 +95,13 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
 
   @Override
   public final void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
-                           final ExportDirectory exportDirectory) throws SventonException {
+                           final File exportDirectory) throws SventonException {
 
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     for (final PathRevision fileRevision : targets) {
       final String path = fileRevision.getPath();
       final long revision = fileRevision.getRevision().getNumber();
-      final File revisionRootDir = new File(exportDirectory.getDirectory(), String.valueOf(revision));
+      final File revisionRootDir = new File(exportDirectory, String.valueOf(revision));
 
       if (!revisionRootDir.exists() && !revisionRootDir.mkdirs()) {
         throw new RuntimeException("Unable to create directory: " + revisionRootDir.getAbsolutePath());
@@ -268,30 +265,30 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
 
 
   @Override
-  public final String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                                  final String charset) throws SventonException, DiffException {
+  public final String diffUnified(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                                  final Revision pegRevision, final String charset) throws SventonException {
 
-    assertNotBinary(connection, command, pegRevision);
+    assertNotBinary(connection, from, to, pegRevision);
 
     try {
       final TextFile leftFile;
       final TextFile rightFile;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), from.getRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), to.getRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), pegRevision.getNumber(), charset);
       }
-      return createUnifiedDiff(command, charset, leftFile, rightFile);
+      return createUnifiedDiff(from, to, charset, leftFile, rightFile);
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
     }
   }
 
   @Override
-  public final List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command)
+  public final List<DiffStatus> diffPaths(final SVNConnection connection, final PathRevision from, final PathRevision to)
       throws SventonException {
 
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
@@ -302,8 +299,8 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
 
     try {
       diffClient.doDiffStatus(
-          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getFromPath()), SVNRevision.parse(command.getFromRevision().toString()),
-          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + command.getToPath()), SVNRevision.parse(command.getToRevision().toString()),
+          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + from.getPath()), SVNRevision.parse(from.getRevision().toString()),
+          org.tmatesoft.svn.core.SVNURL.parseURIDecoded(repoRoot + to.getPath()), SVNRevision.parse(to.getRevision().toString()),
           SVNDepth.INFINITY, false, new ISVNDiffStatusHandler() {
             public void handleDiffStatus(final org.tmatesoft.svn.core.wc.SVNDiffStatus diffStatus) throws SVNException {
               if (diffStatus.getModificationType() != org.tmatesoft.svn.core.wc.SVNStatusType.STATUS_NONE || diffStatus.isPropertiesModified()) {
@@ -313,7 +310,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
             }
           });
     } catch (SVNException e) {
-      return translateException("Could not calculate diff for " + command.toString(), e);
+      return translateException("Could not calculate diff for [" + from + "/" + to + "]", e);
     }
     return result;
   }
@@ -397,7 +394,8 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
     return revisions;
   }
 
-  protected String createUnifiedDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+  protected String createUnifiedDiff(final PathRevision from, final PathRevision to, final String charset,
+                                     final TextFile leftFile, final TextFile rightFile) throws IOException {
     final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
     final DiffProducer diffProducer = new DiffProducer(new ByteArrayInputStream(leftFile.getContent().getBytes()),
         new ByteArrayInputStream(rightFile.getContent().getBytes()), charset);
@@ -406,7 +404,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
 
     final String diffResultString = diffResult.toString(charset);
     if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+      throw new IdenticalFilesException(from.getPath() + ", " + to.getPath());
     }
     return diffResultString;
   }

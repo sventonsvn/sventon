@@ -1,36 +1,35 @@
 package org.sventon.model;
 
 import org.junit.Test;
-import org.sventon.TestUtils;
+import org.sventon.util.DateUtil;
 
-import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class LogEntryTest {
 
   @Test
-  public void testGetWebFormattedMessage() {
-    assertEquals("test", wrap("test"));
-    assertEquals("&lt;br&gt;", wrap("<br>"));
-    assertEquals("<br>A<br>B", wrap("\nA\nB"));
-    assertEquals("\\", wrap("\\"));
-  }
-
-  @Test
   public void testIsAccessible() throws Exception {
-    assertFalse(TestUtils.createLogEntry(12, null, null, null).isAccessible());
-    assertFalse(TestUtils.createLogEntry(12, null, null, "message").isAccessible());
-    assertFalse(TestUtils.createLogEntry(12, null, new Date(), null).isAccessible());
+    assertFalse(createLogEntry(12, null, null, null).isAccessible());
+    assertFalse(createLogEntry(12, null, null, "message").isAccessible());
+    assertFalse(createLogEntry(12, null, new Date(), null).isAccessible());
 
     final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     changedPaths.add(new ChangedPath("/file1.java", null, 1, ChangeType.MODIFIED));
-    assertTrue(TestUtils.createLogEntry(12, null, new Date(), null, changedPaths).isAccessible());
+    assertTrue(createLogEntry(12, null, new Date(), null, changedPaths).isAccessible());
   }
 
-  private String wrap(String message) {
-    return TestUtils.createLogEntry(1, "", null, message).getWebFormattedMessage();
+  private static LogEntry createLogEntry(long revision, String author, Date date, String message) {
+    return createLogEntry(revision, author, date, message, new TreeSet<ChangedPath>());
   }
+
+  private static LogEntry createLogEntry(long revision, String author, Date date, String message, SortedSet<ChangedPath> changedPaths) {
+    final Map<RevisionProperty, String> props = new HashMap<RevisionProperty, String>();
+    props.put(RevisionProperty.AUTHOR, author);
+    props.put(RevisionProperty.LOG, message);
+    props.put(RevisionProperty.DATE, DateUtil.formatISO8601(date));
+    return new LogEntry(revision, props, changedPaths);
+  }
+
 }

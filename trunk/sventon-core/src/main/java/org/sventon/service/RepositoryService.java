@@ -11,14 +11,12 @@
  */
 package org.sventon.service;
 
+import org.sventon.Colorer;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.colorer.Colorer;
-import org.sventon.diff.DiffException;
-import org.sventon.export.ExportDirectory;
 import org.sventon.model.*;
-import org.sventon.web.command.DiffCommand;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,6 @@ public interface RepositoryService {
 
   /**
    * Gets revision details for a specific revision number.
-   * If caching is enabled in the {@link org.sventon.appl.RepositoryConfiguration}, a cached revision will be returned.
    *
    * @param repositoryName Repository name.
    * @param connection     The repository
@@ -58,7 +55,6 @@ public interface RepositoryService {
 
   /**
    * Gets revision details for given revision interval and a specific path with limit.
-   * If caching is enabled in the {@link org.sventon.appl.RepositoryConfiguration}, cached revisions will be returned.
    *
    * @param repositoryName      Repository name.
    * @param connection          The repository
@@ -87,7 +83,7 @@ public interface RepositoryService {
    * @throws SventonException if a subversion error occur
    */
   void export(final SVNConnection connection, final List<PathRevision> targets, final long pegRevision,
-              final ExportDirectory exportDirectory) throws SventonException;
+              final File exportDirectory) throws SventonException;
 
   /**
    * Gets a file's contents from the repository and writes it to the given output stream.
@@ -183,54 +179,56 @@ public interface RepositoryService {
    * Creates a side-by-side diff.
    *
    * @param connection  The repository connection.
-   * @param command     DiffCommand.
+   * @param from        From
+   * @param to          To
    * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
-   * @throws DiffException    if unable to produce diff.
    */
-  List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final DiffCommand command,
+  List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final PathRevision from, final PathRevision to,
                                          final Revision pegRevision, final String charset)
-      throws SventonException, DiffException;
+      throws SventonException;
 
   /**
    * Creates a unified diff.
    *
    * @param connection  The repository connection.
-   * @param command     DiffCommand.
+   * @param from        From
+   * @param to          To
    * @param pegRevision Peg revision, or {@link org.sventon.model.Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return Diff result.
    * @throws SventonException if a subversion error occur
-   * @throws DiffException    if unable to produce diff.
    */
-  String diffUnified(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                     final String charset) throws SventonException, DiffException;
+  String diffUnified(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                     final Revision pegRevision, final String charset) throws SventonException;
 
   /**
    * Creates an inline diff.
    *
    * @param connection  The repository connection.
-   * @param command     DiffCommand.
+   * @param from        From
+   * @param to          To
    * @param pegRevision Peg revision, or {@link Revision#UNDEFINED} of n/a.
    * @param charset     The charset to use.
    * @return List of diff rows.
    * @throws SventonException if a subversion error occur
-   * @throws DiffException    if unable to produce diff.
    */
-  List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command, final Revision pegRevision,
-                                 final String charset) throws SventonException, DiffException;
+  List<InlineDiffRow> diffInline(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                                 final Revision pegRevision, final String charset) throws SventonException;
 
   /**
    * Creates a path diff.
    *
    * @param connection The repository connection.
-   * @param command    DiffCommand.
+   * @param from       From
+   * @param to         To
    * @return List of diff status.
    * @throws SventonException if a subversion error occur
    */
-  List<DiffStatus> diffPaths(final SVNConnection connection, final DiffCommand command) throws SventonException;
+  List<DiffStatus> diffPaths(final SVNConnection connection, final PathRevision from, final PathRevision to)
+      throws SventonException;
 
   /**
    * Blame (annotates) the given file.
@@ -249,15 +247,15 @@ public interface RepositoryService {
   /**
    * Gets the node kind for given to/from entries.
    *
-   * @param connection The repository connection
-   * @param command    DiffCommand.
+   * @param connection  The repository connection
+   * @param from        From
+   * @param to          To
+   * @param pegRevision Peg
    * @return Node kind
    * @throws SventonException if a subversion error occur
-   * @throws DiffException    Thrown if from/to entries are of different node kinds (eg. trying to diff a file and a dir)
-   *                          of if one of the given entries does not exist in given revision.
    */
-  DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
-      throws SventonException, DiffException;
+  DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                                   final Revision pegRevision) throws SventonException;
 
   /**
    * Translates the revision and the peg revision into a number, if needed.

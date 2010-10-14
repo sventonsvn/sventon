@@ -5,7 +5,6 @@ import org.mockito.Mockito;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.InlineDiffCreator;
 import org.sventon.model.*;
-import org.sventon.web.command.DiffCommand;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 import java.util.Date;
@@ -25,14 +24,11 @@ public class SVNKitRepositoryServiceTest {
   public void testDiffUnifiedIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
     try {
-      service.createUnifiedDiff(command, ENCODING, new TextFile(""), new TextFile(""));
+      service.createUnifiedDiff(from, to, ENCODING, new TextFile(""), new TextFile(""));
       fail("Exception expected");
     } catch (IdenticalFilesException e) {
       // expected
@@ -43,15 +39,12 @@ public class SVNKitRepositoryServiceTest {
   public void testDiffUnifiedIdenticalFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
     try {
       final String contents = "test file contents";
-      service.createUnifiedDiff(command, ENCODING, new TextFile(contents), new TextFile(contents));
+      service.createUnifiedDiff(from, to, ENCODING, new TextFile(contents), new TextFile(contents));
       fail("No result should be produced for identical files");
     } catch (IdenticalFilesException e) {
       // expected
@@ -66,13 +59,10 @@ public class SVNKitRepositoryServiceTest {
 
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
-    final String s = service.createUnifiedDiff(command, ENCODING, leftFile, rightFile);
+    final String s = service.createUnifiedDiff(from, to, ENCODING, leftFile, rightFile);
     assertEquals("@@ -1 +1 @@" + NL + "-test left file contents" + NL + "+test right file contents", s.trim());
   }
 
@@ -89,13 +79,10 @@ public class SVNKitRepositoryServiceTest {
             "test right file contents" + NL +
             "last row" + NL);
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
-    final List<InlineDiffRow> list = InlineDiffCreator.createInlineDiff(command, ENCODING, leftFile, rightFile);
+    final List<InlineDiffRow> list = InlineDiffCreator.createInlineDiff(from, to, ENCODING, leftFile, rightFile);
 
     assertEquals("InlineDiffRow[line=row one,rowNumberLeft=1,rowNumberRight=1,action=UNCHANGED]", list.get(0).toString());
     assertEquals("InlineDiffRow[line=row two,rowNumberLeft=2,rowNumberRight=<null>,action=DELETED]", list.get(1).toString());
@@ -109,14 +96,11 @@ public class SVNKitRepositoryServiceTest {
   public void testDiffSideBySideIdenticalEmptyFiles() throws Exception {
     final SVNKitRepositoryService service = new SVNKitRepositoryService();
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
     try {
-      service.createSideBySideDiff(command, ENCODING, new TextFile(""), new TextFile(""));
+      service.createSideBySideDiff(from, to, ENCODING, new TextFile(""), new TextFile(""));
       fail("Expected exception!");
     } catch (IdenticalFilesException e) {
       // expected
@@ -130,14 +114,11 @@ public class SVNKitRepositoryServiceTest {
     final TextFile leftFile = new TextFile("test file contents");
     final TextFile rightFile = new TextFile("test file contents");
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
     try {
-      service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
+      service.createSideBySideDiff(from, to, ENCODING, leftFile, rightFile);
       fail("Expected exception");
     } catch (IdenticalFilesException e) {
       // expected
@@ -151,13 +132,10 @@ public class SVNKitRepositoryServiceTest {
     final TextFile leftFile = new TextFile("left file");
     final TextFile rightFile = new TextFile("right file");
 
-    final String[] revisions = new String[]{
-        "/bug/code/try2/OrderDetailModel.java@91",
-        "/bug/code/try2/OrderDetailModel.java@90"};
-    final DiffCommand command = new DiffCommand();
-    command.setEntries(PathRevision.parse(revisions));
+    final PathRevision from = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@91");
+    final PathRevision to = PathRevision.parse("/bug/code/try2/OrderDetailModel.java@90");
 
-    List<SideBySideDiffRow> diff = service.createSideBySideDiff(command, ENCODING, leftFile, rightFile);
+    List<SideBySideDiffRow> diff = service.createSideBySideDiff(from, to, ENCODING, leftFile, rightFile);
     assertEquals(1, diff.size());
 
     final TextFile leftFile2 = new TextFile("/**\n" +
@@ -241,7 +219,7 @@ public class SVNKitRepositoryServiceTest {
             "21a\n" +
             "22a}\n";
 
-    diff = service.createSideBySideDiff(command, ENCODING, leftFile2, rightFile2);
+    diff = service.createSideBySideDiff(from, to, ENCODING, leftFile2, rightFile2);
 
     StringBuilder sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {
@@ -319,7 +297,7 @@ public class SVNKitRepositoryServiceTest {
             "11aOneMore=6\n" +
             "12aOneMore=9\n";
 
-    diff = service.createSideBySideDiff(command, ENCODING, leftFile3, rightFile3);
+    diff = service.createSideBySideDiff(from, to, ENCODING, leftFile3, rightFile3);
 
     sb = new StringBuilder();
     for (final SideBySideDiffRow row : diff) {

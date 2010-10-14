@@ -13,13 +13,11 @@ package org.sventon.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sventon.diff.*;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
-import org.sventon.diff.*;
 import org.sventon.model.*;
-import org.sventon.util.SVNUtils;
-import org.sventon.web.command.DiffCommand;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,37 +28,42 @@ import java.util.List;
 /**
  *
  */
-public abstract class AbstractRepositoryService implements RepositoryService{
-    /**
+public abstract class AbstractRepositoryService implements RepositoryService {
+
+  /**
    * Logger for this class and subclasses.
    */
   final Log logger = LogFactory.getLog(getClass());
 
-  
-  @Override
-  public List<SideBySideDiffRow> diffSideBySide(SVNConnection connection, DiffCommand command, Revision pegRevision, String charset) throws SventonException, DiffException {
 
-    assertNotBinary(connection, command, pegRevision);
+  @Override
+  public List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final PathRevision from,
+                                                final PathRevision to, final Revision pegRevision, final String charset)
+      throws SventonException, DiffException {
+
+    assertNotBinary(connection, from, to, pegRevision);
 
     try {
       final TextFile leftFile;
       final TextFile rightFile;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), from.getRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), to.getRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), pegRevision.getNumber(), charset);
       }
-      return createSideBySideDiff(command, charset, leftFile, rightFile);
+      return createSideBySideDiff(from, to, charset, leftFile, rightFile);
     } catch (IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);
     }
   }
 
 
-  public  List<SideBySideDiffRow> createSideBySideDiff(DiffCommand command, String charset, TextFile leftFile, TextFile rightFile) throws IOException {
+  public List<SideBySideDiffRow> createSideBySideDiff(final PathRevision from, final PathRevision to,
+                                                      final String charset, final TextFile leftFile,
+                                                      final TextFile rightFile) throws IOException {
     final ByteArrayOutputStream diffResult = new ByteArrayOutputStream();
     final InputStream leftStream = new ByteArrayInputStream(leftFile.getContent().getBytes());
     final InputStream rightStream = new ByteArrayInputStream(rightFile.getContent().getBytes());
@@ -70,7 +73,7 @@ public abstract class AbstractRepositoryService implements RepositoryService{
     final String diffResultString = diffResult.toString(charset);
 
     if ("".equals(diffResultString)) {
-      throw new IdenticalFilesException(command.getFromPath() + ", " + command.getToPath());
+      throw new IdenticalFilesException(from.getPath() + ", " + to.getPath());
     }
     return new SideBySideDiffCreator(leftFile, rightFile).createFromDiffResult(diffResultString);
   }
@@ -83,53 +86,53 @@ public abstract class AbstractRepositoryService implements RepositoryService{
     return new TextFile(outStream.toString(charset));
   }
 
-  protected void assertNotBinary(final SVNConnection connection, final DiffCommand command, final Revision pegRevision)
-      throws SventonException, IllegalFileFormatException {
+  protected void assertNotBinary(final SVNConnection connection, final PathRevision from, final PathRevision to,
+                                 final Revision pegRevision) throws SventonException, IllegalFileFormatException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
     if (Revision.UNDEFINED.equals(pegRevision)) {
-      isLeftFileTextType = isTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber());
-      isRightFileTextType = isTextFile(connection, command.getToPath(), command.getToRevision().getNumber());
+      isLeftFileTextType = isTextFile(connection, from.getPath(), from.getRevision().getNumber());
+      isRightFileTextType = isTextFile(connection, to.getPath(), to.getRevision().getNumber());
     } else {
-      isLeftFileTextType = isTextFile(connection, command.getFromPath(), pegRevision.getNumber());
-      isRightFileTextType = isTextFile(connection, command.getToPath(), pegRevision.getNumber());
+      isLeftFileTextType = isTextFile(connection, from.getPath(), pegRevision.getNumber());
+      isRightFileTextType = isTextFile(connection, to.getPath(), pegRevision.getNumber());
     }
 
     if (!isLeftFileTextType && !isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary files: " + command.getFromPath() + ", " + command.getToPath());
+      throw new IllegalFileFormatException("Cannot diff binary files: " + from.getPath() + ", " + to.getPath());
     } else if (!isLeftFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + command.getFromPath());
+      throw new IllegalFileFormatException("Cannot diff binary file: " + from.getPath());
     } else if (!isRightFileTextType) {
-      throw new IllegalFileFormatException("Cannot diff binary file: " + command.getToPath());
+      throw new IllegalFileFormatException("Cannot diff binary file: " + to.getPath());
     }
   }
 
   protected boolean isTextFile(SVNConnection connection, String path, long revision) throws SventonException {
     final String mimeType = listProperties(connection, path, revision).getStringValue(Property.MIME_TYPE);
-    return SVNUtils.isTextMimeType(mimeType);
+    return (mimeType == null || mimeType.startsWith("text/"));
   }
 
   @Override
-  public final List<InlineDiffRow> diffInline(final SVNConnection connection, final DiffCommand command,
-                                              final Revision pegRevision, final String charset)
+  public final List<InlineDiffRow> diffInline(final SVNConnection connection, final PathRevision from,
+                                              final PathRevision to, final Revision pegRevision, final String charset)
       throws SventonException, DiffException {
 
-    assertNotBinary(connection, command, pegRevision);
+    assertNotBinary(connection, from, to, pegRevision);
 
     try {
       final TextFile leftFile;
       final TextFile rightFile;
 
       if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, command.getFromPath(), command.getFromRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), command.getToRevision().getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), from.getRevision().getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), to.getRevision().getNumber(), charset);
       } else {
-        leftFile = getTextFile(connection, command.getFromPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, command.getToPath(), pegRevision.getNumber(), charset);
+        leftFile = getTextFile(connection, from.getPath(), pegRevision.getNumber(), charset);
+        rightFile = getTextFile(connection, to.getPath(), pegRevision.getNumber(), charset);
       }
 
-      return InlineDiffCreator.createInlineDiff(command, charset, leftFile, rightFile);
+      return InlineDiffCreator.createInlineDiff(from, to, charset, leftFile, rightFile);
 
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce inline diff", ioex);
@@ -137,35 +140,36 @@ public abstract class AbstractRepositoryService implements RepositoryService{
   }
 
   @Override
-  public DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final DiffCommand command)
+  public DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final PathRevision from,
+                                          final PathRevision to, final Revision pegRevision)
       throws SventonException, DiffException {
 
     final long fromRevision;
     final long toRevision;
 
-    if (command.hasPegRevision()) {
-      fromRevision = command.getPegRevision();
-      toRevision = command.getPegRevision();
+    if (!pegRevision.equals(Revision.UNDEFINED)) {
+      fromRevision = pegRevision.getNumber();
+      toRevision = pegRevision.getNumber();
     } else {
-      fromRevision = command.getFromRevision().getNumber();
-      toRevision = command.getToRevision().getNumber();
+      fromRevision = from.getRevision().getNumber();
+      toRevision = to.getRevision().getNumber();
     }
 
     final DirEntry.Kind nodeKind1;
     final DirEntry.Kind nodeKind2;
     try {
-      nodeKind1 = getNodeKind(connection, command.getFromPath(), fromRevision);
+      nodeKind1 = getNodeKind(connection, from.getPath(), fromRevision);
     } catch (NoSuchRevisionException e) {
-      throw new DiffException("Path [" + command.getFromPath() + "] does not exist as revision [" + fromRevision + "]");
+      throw new DiffException("Path [" + from.getPath() + "] does not exist as revision [" + fromRevision + "]");
     }
     try {
-      nodeKind2 = getNodeKind(connection, command.getToPath(), toRevision);
+      nodeKind2 = getNodeKind(connection, to.getPath(), toRevision);
     } catch (NoSuchRevisionException e) {
-      throw new DiffException("Path [" + command.getToPath() + "] does not exist as revision [" + toRevision + "]");
+      throw new DiffException("Path [" + to.getPath() + "] does not exist as revision [" + toRevision + "]");
     }
 
-    assertFileOrDir(nodeKind1, command.getFromPath(), fromRevision);
-    assertFileOrDir(nodeKind2, command.getToPath(), toRevision);
+    assertFileOrDir(nodeKind1, from.getPath(), fromRevision);
+    assertFileOrDir(nodeKind2, to.getPath(), toRevision);
     assertSameKind(nodeKind1, nodeKind2);
     return nodeKind1;
   }

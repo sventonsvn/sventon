@@ -1,7 +1,7 @@
 package org.sventon.service.svnkit;
 
+import org.sventon.ConfigDirectoryFactory;
 import org.sventon.SVNConnectionFactory;
-import org.sventon.appl.ConfigDirectory;
 import org.sventon.service.RepositoryService;
 import org.sventon.service.SVNProvider;
 
@@ -11,8 +11,8 @@ import org.sventon.service.SVNProvider;
 public class SVNKitSVNProvider extends SVNProvider {
 
   @Override
-  public SVNConnectionFactory getConnectionFactory(ConfigDirectory configDirectory) {
-    return new SVNKitConnectionFactory(configDirectory);
+  public SVNConnectionFactory getConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory) {
+    return new SVNKitConnectionFactory(configDirectoryFactory);
   }
 
   @Override
