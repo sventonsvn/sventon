@@ -13,10 +13,10 @@ package org.sventon.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sventon.diff.*;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
+import org.sventon.diff.*;
 import org.sventon.model.*;
 
 import java.io.ByteArrayInputStream;
@@ -33,13 +33,13 @@ public abstract class AbstractRepositoryService implements RepositoryService {
   /**
    * Logger for this class and subclasses.
    */
-  final Log logger = LogFactory.getLog(getClass());
+  protected final Log logger = LogFactory.getLog(getClass());
 
 
   @Override
   public List<SideBySideDiffRow> diffSideBySide(final SVNConnection connection, final PathRevision from,
                                                 final PathRevision to, final Revision pegRevision, final String charset)
-      throws SventonException, DiffException {
+      throws SventonException {
 
     assertNotBinary(connection, from, to, pegRevision);
 
@@ -87,7 +87,7 @@ public abstract class AbstractRepositoryService implements RepositoryService {
   }
 
   protected void assertNotBinary(final SVNConnection connection, final PathRevision from, final PathRevision to,
-                                 final Revision pegRevision) throws SventonException, IllegalFileFormatException {
+                                 final Revision pegRevision) throws SventonException {
 
     final boolean isLeftFileTextType;
     final boolean isRightFileTextType;
@@ -116,7 +116,7 @@ public abstract class AbstractRepositoryService implements RepositoryService {
   @Override
   public final List<InlineDiffRow> diffInline(final SVNConnection connection, final PathRevision from,
                                               final PathRevision to, final Revision pegRevision, final String charset)
-      throws SventonException, DiffException {
+      throws SventonException {
 
     assertNotBinary(connection, from, to, pegRevision);
 
@@ -142,7 +142,7 @@ public abstract class AbstractRepositoryService implements RepositoryService {
   @Override
   public DirEntry.Kind getNodeKindForDiff(final SVNConnection connection, final PathRevision from,
                                           final PathRevision to, final Revision pegRevision)
-      throws SventonException, DiffException {
+      throws SventonException {
 
     final long fromRevision;
     final long toRevision;
@@ -174,13 +174,13 @@ public abstract class AbstractRepositoryService implements RepositoryService {
     return nodeKind1;
   }
 
-  private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) throws DiffException {
-    if (nodeKind1 != nodeKind2) {
+  private void assertSameKind(final DirEntry.Kind nodeKind1, final DirEntry.Kind nodeKind2) {
+    if (!nodeKind1.equals(nodeKind2)) {
       throw new DiffException("Entries are different kinds! " + nodeKind1 + "!=" + nodeKind2);
     }
   }
 
-  private void assertFileOrDir(final DirEntry.Kind nodeKind, final String path, final long revision) throws DiffException {
+  private void assertFileOrDir(final DirEntry.Kind nodeKind, final String path, final long revision) {
     if (DirEntry.Kind.DIR != nodeKind && DirEntry.Kind.FILE != nodeKind) {
       throw new DiffException("Path [" + path + "] does not exist as revision [" + revision + "]");
     }

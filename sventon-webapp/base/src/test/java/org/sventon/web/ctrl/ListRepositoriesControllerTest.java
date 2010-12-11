@@ -58,7 +58,7 @@ public class ListRepositoriesControllerTest {
 
     final ExtendedModelMap modelMap = new ExtendedModelMap();
     assertEquals("listRepositories", ctrl.listRepositoriesOrShowIfOnlyOne(modelMap));
-    assertArrayEquals(Arrays.asList(new RepositoryName("test1"), new RepositoryName("test2")).toArray(), ((Set)modelMap.get("repositoryNames")).toArray());
+    assertArrayEquals(Arrays.asList(new RepositoryName("test1"), new RepositoryName("test2")).toArray(), ((Set) modelMap.get("repositoryNames")).toArray());
   }
 
   @Test
@@ -116,12 +116,12 @@ public class ListRepositoriesControllerTest {
 
   @Test
   public void listRepositoriesConfiguredButNoInstances() throws Exception {
-      final ListRepositoriesController ctrl = new ListRepositoriesController(application);
+    final ListRepositoriesController ctrl = new ListRepositoriesController(application);
 
     // configured but no instancs
     application.setConfigured(true);
     final ExtendedModelMap model = new ExtendedModelMap();
-    assertNull(ctrl.listRepositoriesOrShowIfOnlyOne(model)); 
+    assertNull(ctrl.listRepositoriesOrShowIfOnlyOne(model));
   }
 
   @Test
@@ -136,7 +136,7 @@ public class ListRepositoriesControllerTest {
 
     assertEquals("redirect:/repos/test1/list/", ctrl.listRepositoriesOrShowIfOnlyOne(null));
   }
-  
+
 
   @Test
   public void testCreateListUrl() {

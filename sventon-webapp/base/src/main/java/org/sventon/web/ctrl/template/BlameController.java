@@ -13,8 +13,8 @@ package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.sventon.SVNConnection;
 import org.sventon.Colorer;
+import org.sventon.SVNConnection;
 import org.sventon.model.AnnotatedTextFile;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;

@@ -23,7 +23,7 @@ import java.util.Properties;
  * @author jesper@sventon.org
  */
 public final class Version {
-   /**
+  /**
    * Logger for this class and subclasses.
    */
   final static Log logger = LogFactory.getLog(Version.class);
@@ -69,7 +69,7 @@ public final class Version {
         is = Version.class.getClassLoader().getResourceAsStream(VERSION_PROPERTIES_PATH);
         VERSION_PROPERTIES.load(is);
       } catch (Exception e) {
-         logger.debug("Could not load version properties. " + (is == null ? "Property file " + VERSION_PROPERTIES_PATH + " not found. " : "") + e.getMessage(), e);
+        logger.debug("Could not load version properties. " + (is == null ? "Property file " + VERSION_PROPERTIES_PATH + " not found. " : "") + e.getMessage(), e);
       }
     }
   }

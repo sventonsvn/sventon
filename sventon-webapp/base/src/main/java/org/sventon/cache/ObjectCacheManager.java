@@ -98,8 +98,8 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     }
 
     final ObjectCacheImpl objectCache = new ObjectCacheImpl(repositoryName.toString(), cachePath.getAbsolutePath(),
-            maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
-            diskExpiryThreadIntervalSeconds);
+        maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
+        diskExpiryThreadIntervalSeconds);
 
     objectCache.flush();
     objectCache.setMBeanServer(mBeanServer);

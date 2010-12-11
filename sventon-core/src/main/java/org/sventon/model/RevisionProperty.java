@@ -16,7 +16,7 @@ import java.io.Serializable;
 /**
  * RevisionProperty.
  */
-public class RevisionProperty implements Serializable {
+public final class RevisionProperty implements Serializable {
 
   /**
    * An <span class="javastring">"svn:author"</span> revision

@@ -18,7 +18,7 @@ public class RepositoryConfigurations {
    * Map of added subversion repository names and their configurations.
    */
   private final Map<RepositoryName, RepositoryConfiguration> repositoryConfigurations =
-          new ConcurrentHashMap<RepositoryName, RepositoryConfiguration>();
+      new ConcurrentHashMap<RepositoryName, RepositoryConfiguration>();
 
   public void add(RepositoryConfiguration repositoryConfiguration) {
     repositoryConfigurations.put(repositoryConfiguration.getName(), repositoryConfiguration);

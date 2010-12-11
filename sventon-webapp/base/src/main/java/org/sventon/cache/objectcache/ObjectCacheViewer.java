@@ -51,7 +51,7 @@ public final class ObjectCacheViewer {
     System.out.println("==============");
 
     for (int i = 1; i < 2000; i++) {
-      String key = "svnRevision-" + String.valueOf(i);
+      String key = "svnRevision-" + i;
       Object o = cache.get(key);
       if (o == null) {
         throw new IllegalStateException();

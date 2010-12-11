@@ -26,12 +26,12 @@ public interface HttpAuthenticationHandler {
   /**
    * HTTP Authorization header, <code>Authorization</code>.
    */
-  public static final String AUTHORIZATION_HEADER = "Authorization";
+  static final String AUTHORIZATION_HEADER = "Authorization";
 
   /**
    * HTTP Authentication header, <code>WWW-Authenticate</code>.
    */
-  public static final String AUTHENTICATE_HEADER = "WWW-Authenticate";
+  static final String AUTHENTICATE_HEADER = "WWW-Authenticate";
 
   /**
    * Checks if the request contains a login attempt.
@@ -39,14 +39,14 @@ public interface HttpAuthenticationHandler {
    * @param request Request.
    * @return True if the request contains a login attempt, false if not.
    */
-  public boolean isLoginAttempt(final HttpServletRequest request);
+  boolean isLoginAttempt(final HttpServletRequest request);
 
   /**
    * Gets the realm.
    *
    * @return Realm.
    */
-  public String getRealm();
+  String getRealm();
 
   /**
    * Sends an authentication challenge.

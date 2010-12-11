@@ -68,6 +68,6 @@ public interface LogMessageCache extends Cache {
   /**
    * Shuts down the cache.
    */
-  abstract void shutdown();
+  void shutdown();
 
 }

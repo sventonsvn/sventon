@@ -58,7 +58,7 @@ public final class DirEntryComparator implements Comparator<DirEntry>, Serializa
     if (groupDirs) {
       final DirEntry.Kind kind1 = entry1.getKind();
       final DirEntry.Kind kind2 = entry2.getKind();
-      if (kind1 != kind2) {
+      if (!kind1.equals(kind2)) {
         // Not equal kinds, have to inspect.
         if (DirEntry.Kind.DIR == kind1) {
           return -1;
