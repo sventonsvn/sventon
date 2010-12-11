@@ -2,8 +2,7 @@ package org.sventon.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class CamelCasePatternTest {
 
@@ -47,6 +46,16 @@ public class CamelCasePatternTest {
     assertEquals("OT", CamelCasePattern.parse("OneT").getPattern());
     assertEquals("OT", CamelCasePattern.parse("OneTwo").getPattern());
     assertEquals("OTT", CamelCasePattern.parse("OneTwoThree").getPattern());
+  }
+
+  @Test()
+  public void testIsAllUpperCase() {
+    assertFalse(CamelCasePattern.isAllUpperCase("a"));
+    assertFalse(CamelCasePattern.isAllUpperCase("aa"));
+    assertFalse(CamelCasePattern.isAllUpperCase("aAa"));
+    assertTrue(CamelCasePattern.isAllUpperCase("A"));
+    assertTrue(CamelCasePattern.isAllUpperCase("AA"));
+    assertFalse(CamelCasePattern.isAllUpperCase("AaA"));
   }
 
 }

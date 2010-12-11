@@ -73,7 +73,7 @@ public final class CamelCasePattern implements Serializable {
    * @param str String.
    * @return True if all is uppercase.
    */
-  private static boolean isAllUpperCase(final String str) {
+  protected static boolean isAllUpperCase(final String str) {
     return StringUtils.trimToEmpty(str).toUpperCase().equals(str);
   }
 
@@ -95,8 +95,9 @@ public final class CamelCasePattern implements Serializable {
     }
     if (sb.length() < 2) {
       throw new IllegalArgumentException("Not a valid pattern");
-    } else
+    } else {
       return new CamelCasePattern(sb.toString());
+    }
   }
 
 }
