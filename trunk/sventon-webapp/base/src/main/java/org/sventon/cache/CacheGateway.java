@@ -11,7 +11,10 @@
  */
 package org.sventon.cache;
 
-import org.sventon.model.*;
+import org.sventon.model.CamelCasePattern;
+import org.sventon.model.DirEntry;
+import org.sventon.model.LogMessageSearchItem;
+import org.sventon.model.RepositoryName;
 
 import java.util.List;
 

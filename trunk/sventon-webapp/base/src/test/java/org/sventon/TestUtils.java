@@ -3,7 +3,6 @@ package org.sventon;
 import org.junit.Ignore;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.model.*;
-import org.sventon.util.DateUtil;
 
 import java.io.File;
 import java.util.*;

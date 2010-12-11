@@ -36,7 +36,7 @@ public final class AnnotatedTextFile {
   private static final String NL = System.getProperty("line.separator");
 
   public static final Pattern NL_REGEXP = Pattern.compile("(\r\n|\r|\n|\n\r)");
-  
+
   private final String path;
   private final String encoding;
   private final Colorer colorer;

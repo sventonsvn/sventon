@@ -30,9 +30,9 @@ import static org.sventon.util.EncodingUtils.encode;
  * @author jesper@sventon.org
  */
 @Controller
-@RequestMapping(value="/repos/list")
+@RequestMapping(value = "/repos/list")
 @SessionAttributes(value = "userContext")
-public final class ListRepositoriesController{
+public final class ListRepositoriesController {
   private final Log logger = LogFactory.getLog(ListRepositoriesController.class);
 
   /**
@@ -46,14 +46,14 @@ public final class ListRepositoriesController{
   }
 
 
-  @RequestMapping(params="logout=true")
-  public String logoutBeforeListRepositories(@RequestParam final boolean logout, @RequestParam final String repositoryName, @ModelAttribute UserContext userContext, Model model){
+  @RequestMapping(params = "logout=true")
+  public String logoutBeforeListRepositories(@RequestParam final boolean logout, @RequestParam final String repositoryName, @ModelAttribute UserContext userContext, Model model) {
     if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
       return "redirect:/repos/listconfigs";
     }
 
-    if(logout && RepositoryName.isValid(repositoryName)){
+    if (logout && RepositoryName.isValid(repositoryName)) {
       final UserRepositoryContext userRepositoryContext = userContext.getUserRepositoryContext(new RepositoryName(repositoryName));
       if (userRepositoryContext != null) {
         logger.debug("Clear credential for repository " + repositoryName);
@@ -65,7 +65,7 @@ public final class ListRepositoriesController{
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public String listRepositoriesOrShowIfOnlyOne(Model model){
+  public String listRepositoriesOrShowIfOnlyOne(Model model) {
     if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
       return "redirect:/repos/listconfigs";
@@ -79,7 +79,7 @@ public final class ListRepositoriesController{
       final RepositoryName repositoryName = application.getRepositoryNames().iterator().next();
       return createListUrl(repositoryName, true);
     }
-    
+
     return null;
   }
 

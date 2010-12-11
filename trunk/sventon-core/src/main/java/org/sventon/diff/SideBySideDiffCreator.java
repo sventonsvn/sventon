@@ -96,7 +96,7 @@ public final class SideBySideDiffCreator {
       sb.append(firstList);
       sb.append("\nRight:\n");
       sb.append(secondList);
-      throw new RuntimeException(sb.toString());
+      throw new DiffException(sb.toString());
     }
   }
 

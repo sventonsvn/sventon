@@ -11,7 +11,6 @@
  */
 package org.sventon.service;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.model.LogEntry;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * Common Test Suite intended for use with different SVN providers (like JavaHL and SVNKit) to test that we get the
  * same result from the same method calls to the RepositoryService.
- *
+ * <p/>
  * //TODO: Not used because Idea could not find runtime dependencies between sventon-javahl module and sventon-core. Is it even possible?
  */
 public class CoreTestSuite {
@@ -44,7 +43,7 @@ public class CoreTestSuite {
     }
   }
 
-  public static CoreTestSuite getInstance(){
+  public static CoreTestSuite getInstance() {
     return new CoreTestSuite(
         new TestToolClosure() {
           @Override

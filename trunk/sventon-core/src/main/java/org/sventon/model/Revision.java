@@ -12,7 +12,6 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.sventon.util.DateUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +19,7 @@ import java.util.Date;
 /**
  * Represents a revision in Subversion.
  */
-public class Revision implements Serializable, Comparable<Revision> {
+public final class Revision implements Serializable, Comparable<Revision> {
 
   private static final long serialVersionUID = 2663123883312721991L;
 
@@ -151,14 +150,11 @@ public class Revision implements Serializable, Comparable<Revision> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Revision)) return false;
-
     Revision revision = (Revision) o;
-
     if (headRevision != revision.headRevision) return false;
     if (revisionNumber != revision.revisionNumber) return false;
     if (revisionDate != null ? !revisionDate.equals(revision.revisionDate) : revision.revisionDate != null)
       return false;
-
     return true;
   }
 

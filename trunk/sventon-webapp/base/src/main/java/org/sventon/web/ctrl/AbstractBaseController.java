@@ -62,7 +62,7 @@ public abstract class AbstractBaseController extends AbstractCommandController {
   private PropertyEditor pathRevisionEditor;
 
   @Override
-  protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) throws Exception {
+  protected void initBinder(final HttpServletRequest request, final ServletRequestDataBinder binder) {
     binder.registerCustomEditor(RepositoryName.class, nameEditor);
     binder.registerCustomEditor(Revision.class, revisionEditor);
     binder.registerCustomEditor(PathRevision.class, pathRevisionEditor);

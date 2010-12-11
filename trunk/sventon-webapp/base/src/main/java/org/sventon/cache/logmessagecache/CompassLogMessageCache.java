@@ -95,7 +95,7 @@ public final class CompassLogMessageCache implements LogMessageCache {
 
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<List<LogMessageSearchItem>>() {
-      public List<LogMessageSearchItem> doInCompass(CompassSession session) throws CompassException {
+      public List<LogMessageSearchItem> doInCompass(CompassSession session) {
         final CompassHits compassHits = session.find(queryString);
         final List<LogMessageSearchItem> hits = new ArrayList<LogMessageSearchItem>(compassHits.length());
         for (int i = 0; i < compassHits.length(); i++) {
@@ -130,7 +130,7 @@ public final class CompassLogMessageCache implements LogMessageCache {
   public void add(final LogMessageSearchItem... logEntries) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(CompassSession session) {
         for (LogMessageSearchItem logEntry : logEntries) {
           session.save(logEntry);
         }
@@ -142,7 +142,7 @@ public final class CompassLogMessageCache implements LogMessageCache {
   public int getSize() {
     final CompassTemplate template = new CompassTemplate(compass);
     return template.execute(new CompassCallback<Integer>() {
-      public Integer doInCompass(CompassSession session) throws CompassException {
+      public Integer doInCompass(CompassSession session) {
         final CompassHits compassHits = session.queryBuilder().matchAll().hits();
         return compassHits.length();
       }
@@ -153,7 +153,7 @@ public final class CompassLogMessageCache implements LogMessageCache {
   public void clear() {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
-      protected void doInCompassWithoutResult(CompassSession session) throws CompassException {
+      protected void doInCompassWithoutResult(CompassSession session) {
         session.delete(session.queryBuilder().matchAll());
       }
     });

@@ -12,7 +12,6 @@
 package org.sventon.model;
 
 import org.apache.commons.lang.StringUtils;
-import org.sventon.util.DateUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -115,9 +114,9 @@ public final class LogEntry implements Serializable {
    * Iterate through (and modify!) the log entries and set the pathAtRevision for each entry.
    *
    * @param logEntries the entries to set pathAtRevision for
-   * @param path the starting path
+   * @param path       the starting path
    */
-  public static void setPathAtRevisionInLogEntries(final List<LogEntry> logEntries, final String path){
+  public static void setPathAtRevisionInLogEntries(final List<LogEntry> logEntries, final String path) {
     String pathAtRevision = path;
 
     for (final LogEntry logEntry : logEntries) {
@@ -125,7 +124,7 @@ public final class LogEntry implements Serializable {
 
       //noinspection unchecked
       final SortedSet<ChangedPath> allChangedPaths = logEntry.getChangedPaths();
-      if (allChangedPaths != null){
+      if (allChangedPaths != null) {
         for (ChangedPath entryPath : allChangedPaths) {
           if (entryPath.getCopyPath() != null) {
             int i = StringUtils.indexOfDifference(entryPath.getPath(), pathAtRevision);
@@ -141,6 +140,7 @@ public final class LogEntry implements Serializable {
       }
     }
   }
+
   /**
    * Checks if given log entry contains accessible information, i.e. it was
    * fetched from the repository by a user with access to the affected paths.

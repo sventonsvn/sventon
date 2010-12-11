@@ -1,11 +1,11 @@
 package org.sventon.model;
 
 import org.junit.Test;
-import org.sventon.util.DateUtil;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LogEntryTest {
 

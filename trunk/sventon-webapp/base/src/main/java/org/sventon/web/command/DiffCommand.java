@@ -68,7 +68,7 @@ public final class DiffCommand extends BaseCommand {
    * @throws IllegalArgumentException       if given list does not contain two entries.
    * @throws org.sventon.diff.DiffException if entry does not have a history.
    */
-  public void setEntries(final PathRevision[] entries) throws DiffException {
+  public void setEntries(final PathRevision[] entries) {
     Validate.notNull(entries);
 
     if (entries.length < 2) {

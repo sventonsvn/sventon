@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Diff segment bean. 
+ * Diff segment bean.
  *
  * @author jesper@sventon.org
  */

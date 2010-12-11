@@ -194,7 +194,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
         model.put("baseURL", application.getBaseURL());
 
         if (showLatestRevInfo) {
-          model.put("revisions", getLatestRevisions(command, connection, repositoryContext, headRevision));
+          model.put("revisions", getLatestRevisions(command, connection, repositoryContext));
         }
         modelAndView.addAllObjects(model);
       }
@@ -227,7 +227,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     return modelAndView != null && !(modelAndView.getView() instanceof RedirectView);
   }
 
-  private List<LogEntry> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext, long headRevision) throws SventonException {
+  private List<LogEntry> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
     return getRepositoryService().getLatestRevisions(
         command.getName(), connection, repositoryContext.getLatestRevisionsDisplayCount());

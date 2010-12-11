@@ -31,6 +31,19 @@ import java.util.Map;
  * Helper class to calculate Inline Diff result using DiffProducer
  */
 public class InlineDiffCreator {
+
+  private InlineDiffCreator() {
+  }
+
+  /**
+   * @param from
+   * @param to
+   * @param charset
+   * @param leftFile
+   * @param rightFile
+   * @return
+   * @throws IOException
+   */
   public static List<InlineDiffRow> createInlineDiff(final PathRevision from, final PathRevision to,
                                                      final String charset, final TextFile leftFile,
                                                      final TextFile rightFile) throws IOException {

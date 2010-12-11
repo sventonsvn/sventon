@@ -31,19 +31,19 @@ public interface DirEntryCache extends Cache {
    *
    * @throws CacheException if unable to load cache.
    */
-  public abstract void init() throws CacheException;
+  abstract void init() throws CacheException;
 
   /**
    * Shuts down the cache.
    */
-  public abstract void shutdown();
+  abstract void shutdown();
 
   /**
    * Flushes the cache. Will only have effect on disk persistent caches.
    *
    * @throws CacheException if unable to flush cache.
    */
-  public abstract void flush() throws CacheException;
+  abstract void flush() throws CacheException;
 
   /**
    * Adds entries to the cache.
