@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
  * Misc helper for date operations such as uniform formatting etc
  */
 public class DateUtil {
+
   private static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
   /**
