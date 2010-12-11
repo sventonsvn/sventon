@@ -73,6 +73,26 @@ public class PathRevision implements Serializable, Comparable<PathRevision> {
     return parse(new String[]{entry})[0];
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PathRevision that = (PathRevision) o;
+
+    if (path != null ? !path.equals(that.path) : that.path != null) return false;
+    if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = path != null ? path.hashCode() : 0;
+    result = 31 * result + (revision != null ? revision.hashCode() : 0);
+    return result;
+  }
+
   public static PathRevision[] parse(final String... entries) {
     final List<PathRevision> fileEntries = new ArrayList<PathRevision>();
     for (String entry : entries) {
