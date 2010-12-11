@@ -30,7 +30,10 @@ import org.sventon.repository.RepositoryChangeListener;
 import org.sventon.repository.RevisionUpdate;
 import org.sventon.service.RepositoryService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class responsible for updating one or more entry cache instances.
@@ -65,30 +68,15 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   private SVNConnectionFactory connectionFactory;
 
   /**
-   * Max number of files in memory before buffer is flushed to the cache.
-   * Only used when cache is initially populated.
-   */
-  private int flushThreshold = 1000;
-
-  /**
    * Constructor.
    *
    * @param cacheManager The DirEntryCacheManager instance.
-   * @param application       Application
+   * @param application  Application
    */
   public DirEntryCacheUpdater(final DirEntryCacheManager cacheManager, final Application application) {
     LOGGER.info("Starting");
     this.cacheManager = cacheManager;
     this.application = application;
-  }
-
-  /**
-   * Sets the threshold.
-   *
-   * @param flushThreshold Max files in memory before flush.
-   */
-  public void setFlushThreshold(final int flushThreshold) {
-    this.flushThreshold = flushThreshold;
   }
 
   /**
@@ -143,19 +131,22 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
     final long firstRevision = revisions.get(0).getRevision();
     final long lastRevision = revisions.get(revisionCount - 1).getRevision();
 
+    boolean firstTime = false;
     if (revisionCount > 0 && firstRevision == 1) {
-      LOGGER.info("Starting initial cache population by traversing HEAD: " + revisionUpdate.getRepositoryName());
-      doInitialCachePopulation(entryCache, connection);
-      LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
-    } else {
-      // Initial population has already been performed - only apply changes for now.
-      if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
-        // One logEntry is one commit (or revision)
-        for (final LogEntry logEntry : revisions) {
-          addRevisionToCache(entryCache, connection, logEntry);
-        }
-        LOGGER.debug("Update completed");
+      firstTime = true;
+      LOGGER.info("Starting initial cache population for: " + revisionUpdate.getRepositoryName());
+    }
+
+    // Initial population has already been performed - only apply changes for now.
+    if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
+      // One logEntry is one commit (or revision)
+      for (final LogEntry logEntry : revisions) {
+        addRevisionToCache(entryCache, connection, logEntry);
       }
+      LOGGER.debug("Update completed");
+    }
+    if (firstTime) {
+      LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
     }
   }
 
@@ -165,8 +156,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       final long revision = logEntry.getRevision();
       LOGGER.debug("Applying changes in revision [" + revision + "] to cache");
 
-      final EntriesToAdd entriesToAdd = new EntriesToAdd();
-      final EntriesToDelete entriesToDelete = new EntriesToDelete();
+      final List<DirEntry> entriesToAdd = new ArrayList<DirEntry>();
+      final Map<String, DirEntry.Kind> entriesToDelete = new HashMap<String, DirEntry.Kind>();
 
       for (final ChangedPath entryPath : logEntry.getChangedPaths()) {
         switch (entryPath.getType()) {
@@ -196,23 +187,9 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
     }
   }
 
-  private void doInitialCachePopulation(final DirEntryCache entryCache, final SVNConnection connection) {
-
-    try {
-      entryCache.clear();
-      final long revision = repositoryService.getLatestRevision(connection);
-      final EntriesToAdd entriesToAdd = new AutoFlushBuffer(entryCache, flushThreshold);
-      addDirectories(entriesToAdd, connection, "/", revision, repositoryService);
-      updateAndFlushCache(entriesToAdd, new EntriesToDelete(),
-          revision, entryCache);
-    } catch (SventonException svnex) {
-      LOGGER.error("Unable to populate cache", svnex);
-    }
-  }
-
-  private void updateAndFlushCache(final EntriesToAdd entriesToAdd, final EntriesToDelete entriesToDelete,
+  private void updateAndFlushCache(final List<DirEntry> entriesToAdd, final Map<String, DirEntry.Kind> entriesToDelete,
                                    final long revision, DirEntryCache entryCache) {
-    entryCache.update(entriesToDelete.getEntries(), entriesToAdd.getEntries());
+    entryCache.update(entriesToDelete, entriesToAdd);
     entryCache.setLatestCachedRevisionNumber(revision);
 
     try {
@@ -232,12 +209,12 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param revision        The log revision
    * @throws SventonException if subversion error occur.
    */
-  private void doEntryCacheModify(final EntriesToAdd entriesToAdd,
-                                  final EntriesToDelete entriesToDelete,
+  private void doEntryCacheModify(final List<DirEntry> entriesToAdd,
+                                  final Map<String, DirEntry.Kind> entriesToDelete,
                                   final SVNConnection connection, final ChangedPath logEntryPath,
                                   final long revision) throws SventonException {
 
-    entriesToDelete.add(logEntryPath.getPath(), DirEntry.Kind.ANY);
+    entriesToDelete.put(logEntryPath.getPath(), DirEntry.Kind.ANY);
     final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
     entriesToAdd.add(entry);
   }
@@ -252,8 +229,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param revision        The log revision
    * @throws SventonException if subversion error occur.
    */
-  private void doEntryCacheReplace(final EntriesToAdd entriesToAdd,
-                                   final EntriesToDelete entriesToDelete,
+  private void doEntryCacheReplace(final List<DirEntry> entriesToAdd,
+                                   final Map<String, DirEntry.Kind> entriesToDelete,
                                    final SVNConnection connection, final ChangedPath logEntryPath,
                                    final long revision) throws SventonException {
 
@@ -269,7 +246,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param revision        The log revision
    * @throws SventonException if subversion error occur.
    */
-  private void doEntryCacheDelete(final EntriesToDelete entriesToDelete,
+  private void doEntryCacheDelete(final Map<String, DirEntry.Kind> entriesToDelete,
                                   final SVNConnection connection, final ChangedPath logEntryPath,
                                   final long revision) throws SventonException {
 
@@ -279,7 +256,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
     try {
       deletedEntry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), previousRevision);
-      entriesToDelete.add(logEntryPath.getPath(), deletedEntry.getKind());
+      entriesToDelete.put(logEntryPath.getPath(), deletedEntry.getKind());
     } catch (DirEntryNotFoundException ex) {
       LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");
     }
@@ -294,7 +271,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param revision     The log revision
    * @throws SventonException if subversion error occur.
    */
-  private void doEntryCacheAdd(final EntriesToAdd entriesToAdd,
+  private void doEntryCacheAdd(final List<DirEntry> entriesToAdd,
                                final SVNConnection connection, final ChangedPath logEntryPath,
                                final long revision) throws SventonException {
 
@@ -325,7 +302,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
    * @param repositoryService Service
    * @throws SventonException if a Subversion error occurs.
    */
-  private void addDirectories(final EntriesToAdd entriesToAdd, final SVNConnection connection, final String path,
+  private void addDirectories(final List<DirEntry> entriesToAdd, final SVNConnection connection, final String path,
                               final long revision, final RepositoryService repositoryService) throws SventonException {
 
     final List<DirEntry> entriesList = repositoryService.list(connection, path, revision).getEntries();
@@ -358,104 +335,6 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   @Autowired
   public void setRepositoryService(final RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
-  }
-
-
-  private class EntriesToAdd {
-
-    protected final List<DirEntry> entries = new ArrayList<DirEntry>();
-
-    /**
-     * Constructor.
-     */
-    public EntriesToAdd() {
-    }
-
-    /**
-     * Add.
-     *
-     * @param entries Entries
-     */
-    public void add(final DirEntry... entries) {
-      this.entries.addAll(Arrays.asList(entries));
-    }
-
-    /**
-     * Get.
-     *
-     * @return entries
-     */
-    public List<DirEntry> getEntries() {
-      return entries;
-    }
-  }
-
-
-  private class EntriesToDelete {
-
-    private final Map<String, DirEntry.Kind> entries = new HashMap<String, DirEntry.Kind>();
-
-    /**
-     * Constructor.
-     */
-    public EntriesToDelete() {
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param entries Entries
-     */
-    public EntriesToDelete(final Map<String, DirEntry.Kind> entries) {
-      this.entries.putAll(entries);
-    }
-
-    /**
-     * Add.
-     *
-     * @param path Path
-     * @param kind Node kind
-     */
-    public void add(final String path, DirEntry.Kind kind) {
-      entries.put(path, kind);
-    }
-
-    /**
-     * Get.
-     *
-     * @return entries
-     */
-    public Map<String, DirEntry.Kind> getEntries() {
-      return entries;
-    }
-  }
-
-  class AutoFlushBuffer extends EntriesToAdd {
-
-    private final DirEntryCache entryCache;
-    private final int flushThreshold;
-
-    /**
-     * Constructor.
-     *
-     * @param entryCache     Cache instance.
-     * @param flushThreshold Threshold.
-     */
-    public AutoFlushBuffer(final DirEntryCache entryCache, final int flushThreshold) {
-      this.entryCache = entryCache;
-      this.flushThreshold = flushThreshold;
-    }
-
-    @Override
-    public void add(DirEntry... e) {
-      super.add(e);
-      final int entriesCount = entries.size();
-      if (entriesCount >= flushThreshold) {
-        LOGGER.debug("Flushing cache, size: " + entriesCount);
-        entryCache.update(Collections.<String, DirEntry.Kind>emptyMap(), entries);
-        entries.clear();
-      }
-    }
   }
 
 }

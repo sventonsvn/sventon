@@ -75,46 +75,4 @@ public class DirEntryCacheUpdaterTest {
     assertEquals(4, entryCache.getSize());
   }
 
-  @Test
-  public void testInitialUpdate() throws Exception {
-    final DirList emptyDir = new DirList(Collections.<DirEntry>emptyList(), new Properties());
-    final long headRevision = 1;
-    final RepositoryService serviceMock = mock(RepositoryService.class);
-
-    final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
-    entryCache.init();
-    assertEquals(0, entryCache.getSize());
-
-    final List<LogEntry> logEntries = new ArrayList<LogEntry>();
-    logEntries.add(createLogEntry(headRevision, "author", new Date(), "Log message for revision 1.", null));
-
-    final ConfigDirectory configDirectory = TestUtils.getTestConfigDirectory();
-    configDirectory.setCreateDirectories(false);
-    final MockServletContext servletContext = new MockServletContext();
-    servletContext.setContextPath("sventon-test");
-    configDirectory.setServletContext(servletContext);
-    final Application application = new Application(configDirectory);
-
-    final List<DirEntry> entries = new ArrayList<DirEntry>();
-    entries.add(new DirEntry("/", "branches", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
-    entries.add(new DirEntry("/", "trunk", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
-    entries.add(new DirEntry("/", "tags", "jesper", new Date(), DirEntry.Kind.DIR, headRevision, 0));
-    final DirList dirList = new DirList(entries, new Properties());
-
-    when(serviceMock.getLatestRevision(null)).thenReturn(headRevision);
-    when(serviceMock.list(null, "/", headRevision)).thenReturn(dirList);
-    when(serviceMock.list(null, "/branches/", headRevision)).thenReturn(emptyDir);
-    when(serviceMock.list(null, "/trunk/", headRevision)).thenReturn(emptyDir);
-    when(serviceMock.list(null, "/tags/", headRevision)).thenReturn(emptyDir);
-
-    final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
-    cacheUpdater.setFlushThreshold(2);
-    cacheUpdater.setRepositoryService(serviceMock);
-    final RepositoryName repositoryName = new RepositoryName("defaultsvn");
-    final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false);
-    cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
-
-    assertEquals(3, entryCache.getSize());
-  }
-
 }
