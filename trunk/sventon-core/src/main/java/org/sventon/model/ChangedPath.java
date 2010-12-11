@@ -80,6 +80,30 @@ public class ChangedPath implements Serializable, Comparable<ChangedPath> {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ChangedPath that = (ChangedPath) o;
+
+    if (copyRevision != that.copyRevision) return false;
+    if (copyPath != null ? !copyPath.equals(that.copyPath) : that.copyPath != null) return false;
+    if (path != null ? !path.equals(that.path) : that.path != null) return false;
+    if (type != that.type) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = path != null ? path.hashCode() : 0;
+    result = 31 * result + (copyPath != null ? copyPath.hashCode() : 0);
+    result = 31 * result + (int) (copyRevision ^ (copyRevision >>> 32));
+    result = 31 * result + (type != null ? type.hashCode() : 0);
+    return result;
+  }
+
+  @Override
   public String toString() {
     return "ChangedPath{" +
         "path='" + path + '\'' +
