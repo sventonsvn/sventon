@@ -9,7 +9,7 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.util;
+package org.sventon.model;
 
 import org.junit.Assert;
 import org.junit.Test;

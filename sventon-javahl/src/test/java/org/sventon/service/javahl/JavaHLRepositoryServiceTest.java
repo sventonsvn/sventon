@@ -23,7 +23,7 @@ import org.sventon.model.ChangeType;
 import org.sventon.model.ChangedPath;
 import org.sventon.model.LogEntry;
 import org.sventon.model.SVNURL;
-import org.sventon.util.DateUtil;
+import org.sventon.model.DateUtil;
 import org.tigris.subversion.javahl.*;
 
 import java.util.*;
