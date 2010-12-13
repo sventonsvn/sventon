@@ -144,7 +144,14 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
         addRevisionToCache(entryCache, connection, logEntry);
       }
       LOGGER.debug("Update completed");
+
+      try {
+        entryCache.flush();
+      } catch (final CacheException ce) {
+        LOGGER.error("Unable to flush cache", ce);
+      }
     }
+    
     if (firstTime) {
       LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
     }
@@ -181,22 +188,16 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
             throw new RuntimeException("Unknown log entry type: " + entryPath.getType() + " in rev " + logEntry.getRevision());
         }
       }
-      updateAndFlushCache(entriesToAdd, entriesToDelete, revision, entryCache);
+      updateCache(entriesToAdd, entriesToDelete, revision, entryCache);
     } catch (SventonException svnex) {
       LOGGER.error("Unable to update entryCache", svnex);
     }
   }
 
-  private void updateAndFlushCache(final List<DirEntry> entriesToAdd, final Map<String, DirEntry.Kind> entriesToDelete,
+  private void updateCache(final List<DirEntry> entriesToAdd, final Map<String, DirEntry.Kind> entriesToDelete,
                                    final long revision, DirEntryCache entryCache) {
     entryCache.update(entriesToDelete, entriesToAdd);
     entryCache.setLatestCachedRevisionNumber(revision);
-
-    try {
-      entryCache.flush();
-    } catch (final CacheException ce) {
-      LOGGER.error("Unable to flush cache", ce);
-    }
   }
 
   /**
