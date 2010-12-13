@@ -43,6 +43,12 @@ public class ConfigDirectory implements ServletContextAware {
   private final String exportDirectoryName;
   private final String repositoriesDirectoryName;
 
+  /**
+   * Servlet context path where the application is deployed.
+   * Default set to 'svn'.
+   */
+  private String contextPath = "svn";
+
   private File sventonConfigDirectory;
   private File configRootDirectory = null;
   private File exportDirectory;
@@ -86,14 +92,11 @@ public class ConfigDirectory implements ServletContextAware {
     this.servletContext = servletContext;
     handleConfigDirectoryOverride();
 
-    String contextPath;
     try {
       contextPath = servletContext.getContextPath();
     } catch (NoSuchMethodError e) {
       // For backwards compatibility, simply set to "svn"
-      logger.info("Method ServletContext.getContextPath() is not supported by your servlet container. " +
-          "Defaulting to [svn].");
-      contextPath = "svn";
+      logger.info("ServletContext.getContextPath() is not supported by your servlet container. Defaulting to [svn].");
     }
 
     configRootDirectory = new File(sventonConfigDirectory, contextPath);
@@ -131,6 +134,14 @@ public class ConfigDirectory implements ServletContextAware {
   public File getConfigRootDirectory() {
     assertServletContextSet();
     return configRootDirectory;
+  }
+
+  /**
+   * @return The context path where the application has been deployed.
+   */
+  public String getContextPath() {
+    assertServletContextSet();
+    return contextPath;
   }
 
   /**
