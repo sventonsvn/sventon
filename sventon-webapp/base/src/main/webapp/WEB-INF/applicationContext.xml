@@ -22,7 +22,7 @@
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
   <context:annotation-config/>
-  <context:mbean-export registration="ignoreExisting"/>
+  <context:mbean-export registration="ignoreExisting" default-domain="#{configDirectory.contextPath}"/>
 
   <bean id="sventonTempRootDir" class="java.io.File">
     <constructor-arg value="${java.io.tmpdir}"/>
