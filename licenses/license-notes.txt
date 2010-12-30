@@ -1,5 +1,3 @@
-The sventon code is licensed under the new BSD license.  The sventon project uses
-several libraries from other open-source projects, these libraries are licensed 
-under different licenses. Read these carefully. In particular, the SVNKit library
-prohibits use in closed source projects without explicit permission from the 
-author.
+The sventon code is licensed under the GNU General Public License v3.
+The sventon project uses several libraries from other open-source projects,
+these libraries are licensed under different licenses. Read these carefully. 

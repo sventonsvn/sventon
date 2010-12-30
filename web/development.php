@@ -3,8 +3,8 @@
   <b>Monitoring progress</b>
   <p>
   sventon is an open source project licensed under the
-  <a href="http://svn.berlios.de/svnroot/repos/sventon/trunk/sventon/licenses/LICENSE">new BSD license</a>. You can
-  follow the progress of the project in different ways, including:
+  <a href="http://svn.berlios.de/svnroot/repos/sventon/trunk/LICENSE.txt">GNU General Public License, Version 3</a>.
+  You can follow the progress of the project in different ways, including:
   </p>
   <p>
   <b><a href="http://developer.berlios.de/projects/sventon/">The project page at BerliOS</a></b><br/>
@@ -67,6 +67,7 @@
   sventonproject at gmail.com<br/>
   patrik at sventon.org<br/>
   jesper at sventon.org<br/>
+  jorgen at sventon.org<br/>
   </p>
 
   <br/>
