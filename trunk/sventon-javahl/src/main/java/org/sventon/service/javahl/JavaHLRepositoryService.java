@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.util.*;
 
 import static org.sventon.EncodingUtils.encodeUri;
+import static org.tigris.subversion.javahl.PropertyData.*;
 
 /**
  * JavaHLRepositoryService.
@@ -40,7 +41,7 @@ import static org.sventon.EncodingUtils.encodeUri;
  * @author jesper@sventon.org
  */
 public class JavaHLRepositoryService extends AbstractRepositoryService {
-  private static final String[] REV_PROP_NAMES = new String[]{PropertyData.REV_LOG, PropertyData.REV_AUTHOR, PropertyData.REV_DATE};
+  private static final String[] REV_PROP_NAMES = new String[]{REV_LOG, REV_AUTHOR, REV_DATE};
 
 
   /**
@@ -59,7 +60,6 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
     return getLogEntries(null, connection, fromRevision, toRevision, "/", 0, false, true);
   }
-
 
   @Override
   public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision,

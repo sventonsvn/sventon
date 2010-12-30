@@ -12,9 +12,7 @@
 package org.sventon.service.javahl;
 
 import org.sventon.SVNConnection;
-import org.sventon.model.Credentials;
 import org.sventon.model.SVNURL;
-import org.tigris.subversion.javahl.SVNClient;
 import org.tigris.subversion.javahl.SVNClientInterface;
 
 /**
@@ -28,22 +26,21 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
    * JavaHL delegate.
    */
   private final SVNClientInterface delegate;
+
   private SVNURL url;
-  private Credentials credentials;
 
   /**
    * Constructor.
    *
-   * @param delegate    SVNClient delegate
-   * @param rootUrl     Repository root URL
-   * @param credentials Credentials
+   * @param delegate SVNClient delegate
+   * @param rootUrl  Repository root URL
    */
-  public JavaHLConnection(final SVNClientInterface delegate, final SVNURL rootUrl, final Credentials credentials) {
+  public JavaHLConnection(final SVNClientInterface delegate, final SVNURL rootUrl) {
     this.delegate = delegate;
     this.url = rootUrl;
-    this.credentials = credentials;
   }
 
+  @Override
   public SVNClientInterface getDelegate() {
     return delegate;
   }
@@ -59,13 +56,6 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
   @Override
   public SVNURL getRepositoryRootUrl() {
     return url;
-  }
-
-  /**
-   * @return Given credentials needed to access this repository.
-   */
-  public Credentials getCredentials() {
-    return credentials;
   }
 
 }
