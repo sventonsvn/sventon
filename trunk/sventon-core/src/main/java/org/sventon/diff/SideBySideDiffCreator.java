@@ -132,11 +132,11 @@ public final class SideBySideDiffCreator {
   }
 
   /**
-   * Applies the diff action CHANGED to given list of sourcelines.
+   * Applies the diff action CHANGED to given list of source lines.
    *
    * @param side        Left or right
    * @param diffSegment DiffSegment
-   * @param resultLines The sourcelines to update
+   * @param resultLines The source lines to update
    * @param offset      Row offset
    * @return Updated row offset
    */
@@ -170,12 +170,12 @@ public final class SideBySideDiffCreator {
   }
 
   /**
-   * Applies the diff action ADDED to given list of sourcelines.
+   * Applies the diff action ADDED to given list of source lines.
    *
    * @param action      Diff action.
    * @param side        Left or right
    * @param diffSegment DiffSegment
-   * @param resultLines The sourcelines to update
+   * @param resultLines The source lines to update
    * @param offset      Row offset
    * @return Updated row offset
    */

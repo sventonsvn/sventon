@@ -24,11 +24,10 @@ public interface SVNConnection<T> {
   void closeSession();
 
   /**
-   * @return the Repository Root URL
-   * @throws SventonException
+   * @return the Repository Root URL.
+   * @throws SventonException on exception
    */
   SVNURL getRepositoryRootUrl() throws SventonException;
-
 
   /**
    * A SVNConnection wraps a delegate object used to get a more fine grained handle to the different SVN operations.
