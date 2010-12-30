@@ -1,3 +1,14 @@
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2010 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
 package org.sventon.service.javahl;
 
 import org.sventon.model.ChangeType;
@@ -9,12 +20,18 @@ import org.tigris.subversion.javahl.NodeKind;
 import org.tigris.subversion.javahl.Revision;
 import org.tigris.subversion.javahl.RevisionRange;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+/**
+ * Converter for JavaHL specific data structures.
+ */
 public class JavaHLConverter {
 
   static Revision convertRevision(long revision) {
-    if (revision == org.sventon.model.Revision.HEAD.getNumber()){
+    if (revision == org.sventon.model.Revision.HEAD.getNumber()) {
       return Revision.HEAD;
     }
 
@@ -28,7 +45,6 @@ public class JavaHLConverter {
         changedPaths.add(new ChangedPath(cp.getPath(), cp.getCopySrcPath(), cp.getCopySrcRevision(), ChangeType.parse(cp.getAction())));
       }
     }
-
     return changedPaths;
   }
 
@@ -42,7 +58,6 @@ public class JavaHLConverter {
 
       }
     }
-
     return propertyMap;
   }
 

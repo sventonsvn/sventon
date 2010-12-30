@@ -34,7 +34,7 @@ public class JavaHLConnectionFactory implements SVNConnectionFactory {
   /**
    * Constructor.
    *
-   * @param configDirectoryFactory
+   * @param configDirectoryFactory Factory
    */
   public JavaHLConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory) {
     this.configDirectoryFactory = configDirectoryFactory;
@@ -51,7 +51,7 @@ public class JavaHLConnectionFactory implements SVNConnectionFactory {
     } catch (ClientException ce) {
       throw new SventonException("Unable to create SVN connection", ce);
     }
-    return new JavaHLConnection(client, svnUrl, credentials);
+    return new JavaHLConnection(client, svnUrl);
   }
 
   static class Prompt implements PromptUserPassword3 {
