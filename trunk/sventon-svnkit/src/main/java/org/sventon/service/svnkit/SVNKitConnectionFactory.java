@@ -50,7 +50,7 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
   /**
    * Constructor.
    *
-   * @param configDirectoryFactory
+   * @param configDirectoryFactory Factory
    */
   public SVNKitConnectionFactory(final ConfigDirectoryFactory configDirectoryFactory) {
     this.configDirectoryFactory = configDirectoryFactory;
