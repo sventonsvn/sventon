@@ -27,6 +27,7 @@
         <include>readme.txt</include>
         <include>upgrade.txt</include>
         <include>LICENSE.txt</include>
+        <include>gpl.txt</include>
       </includes>
       <excludes>
         <exclude>licenses/svnkit/</exclude>
