@@ -76,25 +76,20 @@ public class SVNKitConverter {
       final String value = SVNPropertyValue.getPropertyAsString(svnProperties.getSVNPropertyValue(key));
       props.put(new Property(key), new PropertyValue(value));
     }
-
     return props;
   }
 
-
   public static DirEntry createDirEntry(SVNDirEntry dirEntry, String fullPath) {
-    final DirEntry entry = new DirEntry(fullPath, dirEntry.getName(), dirEntry.getAuthor(), dirEntry.getDate(),
-        DirEntry.Kind.valueOf(dirEntry.getKind().toString().toUpperCase()), dirEntry.getRevision(), dirEntry.getSize());
-
-    return entry;
+    final DirEntry.Kind kind = DirEntry.Kind.valueOf(dirEntry.getKind().toString().toUpperCase());
+    return new DirEntry(fullPath, dirEntry.getName(), dirEntry.getAuthor(), dirEntry.getDate(),
+        kind, dirEntry.getRevision(), dirEntry.getSize());
   }
 
   public static List<DirEntry> convertDirEntries(final Collection<SVNDirEntry> svnEntries, final String fullPath) {
     final List<DirEntry> entries = new ArrayList<DirEntry>();
-
     for (SVNDirEntry svnEntry : svnEntries) {
       entries.add(createDirEntry(svnEntry, fullPath));
     }
-
     return entries;
   }
 }

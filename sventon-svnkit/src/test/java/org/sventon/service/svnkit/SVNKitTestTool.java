@@ -15,8 +15,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-//TODO: This test class is heavily dependent on SVNKit. It must remain in the deepest SVNKit-cellar until fixed....
-
 /**
  * Test class.
  * <p/>
@@ -61,11 +59,13 @@ public class SVNKitTestTool {
       final long latestRevision = service.getLatestRevision(connection);
       System.out.println("\nLatest revision for " + url + " : " + latestRevision);
 
+      
       System.out.println("\nLatest Revisions:");
       final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
       for (LogEntry logEntry : logEntries) {
         System.out.println("logEntry = " + logEntry);
       }
+
 
       System.out.println("\nLogEntries from root:");
       final List<LogEntry> logEntries2 = service.getLogEntriesFromRepositoryRoot(connection, 100, 110);
@@ -73,15 +73,18 @@ public class SVNKitTestTool {
         System.out.println("logEntry = " + logEntry);
       }
 
+
       System.out.println("\nLogEntry for single revision:");
       final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
       System.out.println(logEntry);
+
 
       System.out.println("\nGet LogEntries for /trunk/assembly-bin-svnkit.xml [1 .. 1817]");
       final List<LogEntry> entries = service.getLogEntries(null, connection, 1, 1817, "/trunk/assembly-bin-svnkit.xml", 10, false, false);
       for (LogEntry entry : entries) {
         System.out.println("Entry: " + entry.toString());
       }
+
 
       System.out.println("\nFile properties for /trunk/assembly-bin-svnkit.xml at revision 1817");
       final Properties fileProperties = service.listProperties(connection, "/trunk/assembly-bin-svnkit.xml", 1817);
