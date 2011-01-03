@@ -194,7 +194,7 @@ public final class DirEntry implements Serializable {
   }
 
   /**
-   * Retrieves the entry syze in bytes.
+   * Retrieves the entry size in bytes.
    *
    * @return the size of this entry in bytes
    */

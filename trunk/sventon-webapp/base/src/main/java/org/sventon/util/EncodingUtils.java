@@ -13,9 +13,7 @@ package org.sventon.util;
 
 import javax.mail.internet.MimeUtility;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.regex.Pattern;
 
 /**
@@ -30,6 +28,8 @@ public final class EncodingUtils {
   }
 
   private static final Pattern FORWARD_SLASH_PATTERN = Pattern.compile("%2F");
+
+  private static final Pattern PLUS_SIGN_PATTERN = Pattern.compile("\\+");
 
   /**
    * Default charset, UTF-8.
@@ -60,7 +60,7 @@ public final class EncodingUtils {
    * @return Encoded string with preserved forward slashes.
    */
   public static String encodeUrl(final String url) {
-    return FORWARD_SLASH_PATTERN.matcher(encode(url)).replaceAll("/");
+    return PLUS_SIGN_PATTERN.matcher(FORWARD_SLASH_PATTERN.matcher(encode(url)).replaceAll("/")).replaceAll("%20");
   }
 
   /**
