@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.regex.Matcher;
 
-import static org.sventon.util.EncodingUtils.encode;
+import static org.sventon.util.EncodingUtils.encodeUrl;
 
 /**
  * Class responsible for creating HTML formatted content.
@@ -230,11 +230,8 @@ public final class HTMLCreator {
   protected static String createGoToUrl(final String baseURL, final String path, final long revision,
                                         final RepositoryName repositoryName, final boolean linkToHead) {
 
-    final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append("repos/");
-    sb.append(encode(repositoryName.toString()));
-    sb.append("/goto");
-    sb.append(path);
+    final StringBuilder sb = new StringBuilder(baseURL).append("repos/");
+    sb.append(encodeUrl(repositoryName.toString() + "/goto" + path));
     sb.append("?revision=").append(linkToHead ? "HEAD" : revision);
     return sb.toString();
   }
@@ -255,11 +252,8 @@ public final class HTMLCreator {
     final String entry1 = path + "@" + revision;
     final String entry2 = path + "@" + (revision - 1);
 
-    final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append("repos/");
-    sb.append(encode(repositoryName.toString()));
-    sb.append("/diff");
-    sb.append(path);
+    final StringBuilder sb = new StringBuilder(baseURL).append("repos/");
+    sb.append(encodeUrl(repositoryName.toString() + "/diff" + path));
     sb.append("?revision=").append(linkToHead ? "HEAD" : revision);
     sb.append("&entries=").append(entry1);
     sb.append("&entries=").append(entry2);
@@ -275,11 +269,9 @@ public final class HTMLCreator {
    * @return The URL
    */
   protected static String createRevisionInfoUrl(final String baseURL, final long revision, final RepositoryName repositoryName) {
-    final StringBuilder sb = new StringBuilder(baseURL);
-    sb.append("repos/");
-    sb.append(encode(repositoryName.toString()));
-    sb.append("/info");
-    sb.append("?revision=").append(encode(String.valueOf(revision)));
+    final StringBuilder sb = new StringBuilder(baseURL).append("repos/");
+    sb.append(encodeUrl(repositoryName.toString() + "/info"));
+    sb.append("?revision=").append(encodeUrl(String.valueOf(revision)));
     return sb.toString();
   }
 
