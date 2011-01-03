@@ -68,19 +68,29 @@ public class HTMLCreatorTest {
   public void testCreateGoToUrl() throws Exception {
     assertEquals("http://localhost/repos/sandbox/goto/trunk/a.txt?revision=1",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), false));
+
     assertEquals("http://localhost/repos/sandbox/goto/trunk/a.txt?revision=HEAD",
         HTMLCreator.createGoToUrl("http://localhost/", "/trunk/a.txt", 1, new RepositoryName("sandbox"), true));
+
+    assertEquals("http://localhost/repos/sandbox/goto/trunk/%20/%25/a.txt?revision=HEAD",
+        HTMLCreator.createGoToUrl("http://localhost/", "/trunk/ /%/a.txt", 1, new RepositoryName("sandbox"), true));
   }
 
   @Test
   public void testCreateRevInfoUrl() throws Exception {
     assertEquals("http://localhost/repos/sandbox/info?revision=1",
         HTMLCreator.createRevisionInfoUrl("http://localhost/", 1, new RepositoryName("sandbox")));
+
+    assertEquals("http://localhost/repos/sand%25box/info?revision=1",
+        HTMLCreator.createRevisionInfoUrl("http://localhost/", 1, new RepositoryName("sand%box")));
   }
 
   @Test
   public void testCreateDiffUrl() throws Exception {
     assertEquals("http://localhost/repos/sandbox/diff/a.txt?revision=2&entries=/a.txt@2&entries=/a.txt@1",
         HTMLCreator.createDiffUrl("http://localhost/", "/a.txt", 2, new RepositoryName("sandbox"), false));
+
+    assertEquals("http://localhost/repos/sandbox/diff/%2B/%20/%25/a.txt?revision=2&entries=/+/ /%/a.txt@2&entries=/+/ /%/a.txt@1",
+        HTMLCreator.createDiffUrl("http://localhost/", "/+/ /%/a.txt", 2, new RepositoryName("sandbox"), false));
   }
 }
