@@ -13,24 +13,25 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="archivedEntry" required="true" type="java.lang.String" %>
 
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="showArchivedFileLinkUrl" value="/repos/${command.name}/show${command.path}">
-  <c:param name="revision" value="${command.revision}"/>
-  <c:param name="archivedEntry" value="${archivedEntry}"/>
-  <c:param name="forceDisplay" value="true"/>
-</c:url>
+<s:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="showArchivedFileLinkUrl" value="/repos/${command.name}/show${command.path}">
+  <s:param name="revision" value="${command.revision}"/>
+  <s:param name="archivedEntry" value="${archivedEntry}"/>
+  <s:param name="forceDisplay" value="true"/>
+</s:url>
 
 <c:choose>
   <c:when test="${empty archivedEntry}">

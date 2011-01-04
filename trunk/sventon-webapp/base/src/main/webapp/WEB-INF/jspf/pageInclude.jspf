@@ -20,6 +20,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

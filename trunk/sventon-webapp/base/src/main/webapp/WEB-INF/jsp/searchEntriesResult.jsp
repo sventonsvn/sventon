@@ -24,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="search.result" target="${searchString} (directory '${startDir}' and below)" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
@@ -42,15 +42,15 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
+  <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.encodedPath}');" commandName="command">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegRevision" value="${command.revisionNumber}">
     
-    <c:url value="/repos/${command.name}/searchentries${command.path}" var="sortUrl">
-      <c:param name="revision" value="${command.revision}" />
-      <c:param name="searchString" value="${searchString}" />
-      <c:param name="startDir" value="${startDir}" />
-    </c:url>
+    <s:url value="/repos/${command.name}/searchentries${command.path}" var="sortUrl">
+      <s:param name="revision" value="${command.revision}" />
+      <s:param name="searchString" value="${searchString}" />
+      <s:param name="startDir" value="${startDir}" />
+    </s:url>
 
     <table class="sventonEntriesTable">
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
@@ -58,20 +58,21 @@
       <c:set var="totalSize" value="0"/>
 
       <c:forEach items="${svndir}" var="entry">
-        <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
-          <c:param name="revision" value="${command.revision}" />
-        </c:url>
-        <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
-          <c:param name="revision" value="${command.revision}" />
-        </c:url>
-        <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-          <c:param name="revision" value="${entry.revision}" />
-        </c:url>
-        <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
-          <c:param name="revision" value="${entry.revision}" />
-          <c:param name="pegRevision" value="${command.revisionNumber}"/>
-          <c:param name="action" value="add" />
-        </c:url>
+        <jsp:useBean id="entry" type="org.sventon.model.DirEntry" />
+        <s:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
+          <s:param name="revision" value="${command.revision}" />
+        </s:url>
+        <s:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
+          <s:param name="revision" value="${command.revision}" />
+        </s:url>
+        <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+          <s:param name="revision" value="${entry.revision}" />
+        </s:url>
+        <s:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+          <s:param name="revision" value="${entry.revision}" />
+          <s:param name="pegRevision" value="${command.revisionNumber}"/>
+          <s:param name="action" value="add" />
+        </s:url>
 
         <c:set var="totalSize" value="${totalSize + entry.size}"/>
 
@@ -88,19 +89,19 @@
               </td>
               <td class="sventonCol3">
                 <a href="${listUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                  <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.shortenedFullEntryName}"/>
+                  <s:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.shortenedFullEntryName}"/>
                 </a>
               </td>
             </c:when>
             <c:otherwise>
               <td class="sventonCol2">
                 <div id="${entryTrayAddUrl}" class="entry">
-                  <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+                  <s:fileTypeIcon filename="${entry.name}"/>
                 </div>
               </td>
               <td class="sventonCol3">
                 <a href="${showFileUrl}" onmouseover="Tip('<table><tr><td style=\'white-space: nowrap\'>${entry.fullEntryName}</td></tr></table>')">
-                  <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.shortenedFullEntryName}"/>
+                  <s:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.shortenedFullEntryName}"/>
                 </a>
               </td>
             </c:otherwise>
@@ -119,10 +120,10 @@
             </a>
           </td>
           <td class="sventonCol7">
-            <sventon-ui:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.author}"/>
+            <s:searchHitDecorator cssName="searchhit" searchType="${searchType}" searchString="${searchString}" text="${entry.author}"/>
           </td>
           <td class="sventonCol8">
-            <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+            <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
               <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
             </span>
           </td>
@@ -134,7 +135,7 @@
         <td colspan="2" align="right"><b><spring:message code="total"/>:</b></td>
         <td><b>${rowCount} <spring:message code="entries"/></b></td>
         <td/>
-        <td align="right" title="${totalSize} bytes"><b><sventon-ui:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
+        <td align="right" title="${totalSize} bytes"><b><s:formatBytes size="${totalSize}" locale="${pageContext.request.locale}"/></b></td>
         <td/>
         <td/>
         <td/>

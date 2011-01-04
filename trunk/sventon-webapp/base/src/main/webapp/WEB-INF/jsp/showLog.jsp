@@ -27,7 +27,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="log.messages" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -44,7 +44,7 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form:form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.path}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
+  <form:form action="${pageContext.request.contextPath}/repos/${command.name}/diff${command.encodedPath}${entry.name}" method="get" name="logForm" onsubmit="return doDiff(this);">
 
     <!-- Needed by ASVNTC -->
     <input type="hidden" name="revision" value="${command.revision}">
@@ -73,10 +73,10 @@
 
         <jsp:useBean id="entry" type="org.sventon.model.LogEntry" />
 
-        <c:url value="/ajax/${command.name}/entrytray${entry.pathAtRevision}" var="entryTrayAddUrl">
-          <c:param name="pegRevision" value="${entry.revision}" />
-          <c:param name="action" value="add" />
-        </c:url>
+        <s:url value="/ajax/${command.name}/entrytray${entry.pathAtRevision}" var="entryTrayAddUrl">
+          <s:param name="pegRevision" value="${entry.revision}" />
+          <s:param name="action" value="add" />
+        </s:url>
 
         <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
           <c:choose>
@@ -95,22 +95,22 @@
             </c:otherwise>
           </c:choose>
           <td nowrap>
-            <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+            <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
               <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
             </span>
           </td>
           <td>${entry.author}</td>
           <c:choose>
             <c:when test="${isFile}">
-              <c:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
-                <c:param name="revision" value="${entry.revision}" />
-              </c:url>
+              <s:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
+                <s:param name="revision" value="${entry.revision}" />
+              </s:url>
               <td><a href="${showUrl}">${entry.revision}</a></td>
             </c:when>
             <c:otherwise>
-              <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-                <c:param name="revision" value="${entry.revision}" />
-              </c:url>
+              <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+                <s:param name="revision" value="${entry.revision}" />
+              </s:url>
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
           </c:choose>
@@ -126,12 +126,12 @@
         </tr>
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:forEach>
-      <c:url value="/repos/${command.name}/log${command.path}" var="showNextLogUrl">
-        <c:param name="nextPath" value="${nextPath}" />
-        <c:param name="nextRevision" value="${nextRev}" />
-        <c:param name="revision" value="${command.revision}"/>
-        <c:param name="stopOnCopy" value="${stopOnCopy}"/>
-      </c:url>
+      <s:url value="/repos/${command.name}/log${command.path}" var="showNextLogUrl">
+        <s:param name="nextPath" value="${nextPath}" />
+        <s:param name="nextRevision" value="${nextRev}" />
+        <s:param name="revision" value="${command.revision}"/>
+        <s:param name="stopOnCopy" value="${stopOnCopy}"/>
+      </s:url>
 
       <c:choose>
         <c:when test="${morePages}">

@@ -13,7 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="headRevision" required="true" type="java.lang.Long" %>
 <%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
@@ -25,9 +25,9 @@
     <spring:message code="revision.head"/> (${command.revisionNumber})
   </c:when>
   <c:otherwise>
-    <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-      <c:param name="revision" value="${command.revision}"/>
-    </c:url>
+    <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+      <s:param name="revision" value="${command.revision}"/>
+    </s:url>
     <c:choose>
       <c:when test="${clickable}">
         <a href="${showRevInfoUrl}"><span class="exclamationText">${command.revision}</span></a>

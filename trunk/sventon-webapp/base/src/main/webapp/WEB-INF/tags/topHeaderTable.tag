@@ -13,6 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="repositoryName" required="true" type="org.sventon.model.RepositoryName" %>
@@ -28,12 +29,12 @@
     </td>
     <td align="right">
       <c:if test="${(not empty repositoryNames && fn:length(repositoryNames) > 1) or isLoggedIn or isEditableConfig}">
-        <c:url value="/repos/list" var="changeReposUrl"/>
-        <c:url value="/repos/list" var="logoutUrl">
-          <c:param name="logout" value="true"/>
-          <c:param name="repositoryName" value="${repositoryName}"/>
-        </c:url>
-        <c:url value="/repos/listconfigs" var="adminUrl"/>
+        <s:url value="/repos/list" var="changeReposUrl"/>
+        <s:url value="/repos/list" var="logoutUrl">
+          <s:param name="logout" value="true"/>
+          <s:param name="repositoryName" value="${repositoryName}"/>
+        </s:url>
+        <s:url value="/repos/listconfigs" var="adminUrl"/>
         <select class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">        
           <option class="sventonSelectOption"><spring:message code="actions"/></option>
           <c:if test="${isLoggedIn}">

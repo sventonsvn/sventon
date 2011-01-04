@@ -23,7 +23,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="search.result" target="${searchString} (directory '${startDir}' and below)" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
@@ -52,12 +52,12 @@
       <th><spring:message code="logmessage"/></th>
     </tr>
     <c:forEach items="${logEntries}" var="logEntry">
-      <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-        <c:param name="revision" value="${logEntry.revision}" />
-      </c:url>
+      <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+        <s:param name="revision" value="${logEntry.revision}" />
+      </s:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td class="sventonColNoWrap">
-          <span onmouseover="Tip('<sventon-ui:age date="${logEntry.date}"/>');">
+          <span onmouseover="Tip('<s:age date="${logEntry.date}"/>');">
             <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>

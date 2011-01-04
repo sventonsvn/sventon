@@ -18,7 +18,6 @@ import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.model.DirEntry;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +47,7 @@ public final class GoToController extends AbstractTemplateController {
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    String redirectUrl;
+    final String redirectUrl;
     DirEntry.Kind kind = null;
 
     try {
@@ -74,7 +73,6 @@ public final class GoToController extends AbstractTemplateController {
     final Map<String, String> model = new HashMap<String, String>();
     model.put("revision", command.getRevision().toString());
 
-    redirectUrl = EncodingUtils.encodeUrl(redirectUrl);
     logger.debug("Redirecting to: " + redirectUrl);
     return new ModelAndView(new RedirectView(redirectUrl, true), model);
   }

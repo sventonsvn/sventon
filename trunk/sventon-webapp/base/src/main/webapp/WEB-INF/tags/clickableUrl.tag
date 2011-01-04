@@ -13,25 +13,24 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
-
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
 <%@ attribute name="clickable" required="true" type="java.lang.Boolean" %>
 
 <span id="clickableUrl">
-  <c:url value="/repos/${command.name}/list/" var="basePathUrl">
-    <c:param name="revision" value="${command.revision}" />
-  </c:url>
+  <s:url value="/repos/${command.name}/list/" var="basePathUrl">
+    <s:param name="revision" value="${command.revision}" />
+  </s:url>
   <a href="${basePathUrl}">${url}</a> /
   <c:set var="accuPath" value=""/>
   <c:forTokens items="${command.parentPath}" delims="/" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
         <c:when test="${clickable}">
-          <c:url value="/repos/${command.name}/list/${accuPath}" var="pathUrl">
-            <c:param name="revision" value="${command.revision}" />
-          </c:url>
+          <s:url value="/repos/${command.name}/list/${accuPath}" var="pathUrl">
+            <s:param name="revision" value="${command.revision}" />
+          </s:url>
           <a href="${pathUrl}">${pathSegment}</a>
         </c:when>
         <c:otherwise>${pathSegment}</c:otherwise>

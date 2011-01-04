@@ -15,10 +15,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<form:form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
+<form:form method="post" action="#" name="entryTrayForm" onsubmit="return doAction(this, '${command.name}', '${command.encodedPath}');" commandName="command">
   <!-- The last dragged entry's peg revision will rule -->
   <input type="hidden" name="revision" value="${command.pegRevision}">
 
@@ -39,19 +39,19 @@
       <c:set var="trayEntry" value="${peggedEntry.entry}" />
       <jsp:useBean id="trayEntry" type="org.sventon.model.DirEntry"/>
       
-      <c:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayListUrl">
-        <c:param name="revision" value="${peggedEntry.pegRevision}" />
-      </c:url>
-      <c:url value="/repos/${command.name}/show${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
-        <c:param name="revision" value="${peggedEntry.pegRevision}" />
-      </c:url>
-      <c:url value="/repos/${command.name}/info" var="entryTrayShowRevInfoUrl">
-        <c:param name="revision" value="${trayEntry.revision}" />
-      </c:url>
-      <c:url value="/ajax/${command.name}/entrytray${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
-        <c:param name="revision" value="${peggedEntry.pegRevision}" />
-        <c:param name="action" value="remove" />
-      </c:url>
+      <s:url value="/repos/${command.name}/list${trayEntry.fullEntryName}/" var="entryTrayListUrl">
+        <s:param name="revision" value="${peggedEntry.pegRevision}" />
+      </s:url>
+      <s:url value="/repos/${command.name}/show${trayEntry.fullEntryName}" var="entryTrayShowFileUrl">
+        <s:param name="revision" value="${peggedEntry.pegRevision}" />
+      </s:url>
+      <s:url value="/repos/${command.name}/info" var="entryTrayShowRevInfoUrl">
+        <s:param name="revision" value="${trayEntry.revision}" />
+      </s:url>
+      <s:url value="/ajax/${command.name}/entrytray${trayEntry.fullEntryName}" var="entryTrayRemoveUrl">
+        <s:param name="revision" value="${peggedEntry.pegRevision}" />
+        <s:param name="action" value="remove" />
+      </s:url>
     <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
       <td>
         <input type="checkbox" name="entries" value="${trayEntry.fullEntryName}@${peggedEntry.pegRevision}"/>
@@ -66,7 +66,7 @@
         </c:when>
         <c:otherwise>
           <td>
-            <sventon-ui:fileTypeIcon filename="${trayEntry.name}"/>
+            <s:fileTypeIcon filename="${trayEntry.name}"/>
           </td>
           <td>
             <a href="${entryTrayShowFileUrl}">${trayEntry.name}</a>&nbsp;

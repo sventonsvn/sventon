@@ -12,12 +12,12 @@
  */
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 
-<c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
+<s:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
 
 <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="document.location.href='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">

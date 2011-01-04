@@ -26,7 +26,7 @@
 <%@ include file="/WEB-INF/jspf/pageTop.jspf" %>
 <sventon:currentTargetHeader title="path.diff.view" target="${command.target}" properties="${properties}"/>
 
-<form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+<form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
     <table class="sventonFunctionLinksTable">
         <tr>
             <td style="white-space: nowrap;">
@@ -75,11 +75,11 @@
                                 final ChangeType changeType = row.getModificationType();
                             %>
                             <tr>
-                                <c:url value="/repos/${command.name}/goto${command.toPath}/${row.path}" var="goToUrl"/>
+                                <s:url value="/repos/${command.name}/goto${command.toPath}/${row.path}" var="goToUrl"/>
 
-                                <c:url value="/repos/${command.name}/diff${command.toPath}/${row.path}" var="diffUrl">
-                                    <c:param name="revision" value="${command.toRevision}"/>
-                                </c:url>
+                                <s:url value="/repos/${command.name}/diff${command.toPath}/${row.path}" var="diffUrl">
+                                    <s:param name="revision" value="${command.toRevision}"/>
+                                </s:url>
 
                                 <td valign="top"><i><%= changeType == null ? "" : changeType.toString() %>
                                 </i></td>

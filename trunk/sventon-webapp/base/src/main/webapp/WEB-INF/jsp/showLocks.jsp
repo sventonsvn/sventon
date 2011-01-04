@@ -24,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="show.locks" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -54,22 +54,22 @@
     <c:forEach items="${currentLocks}" var="lock">
       <jsp:useBean id="lock" type="org.sventon.model.DirEntryLock" />
 
-      <c:url value="/repos/${command.name}/show${lock.path}" var="showUrl">
-        <c:param name="revision" value="${command.revision}" />
-      </c:url>
+      <s:url value="/repos/${command.name}/show${lock.path}" var="showUrl">
+        <s:param name="revision" value="${command.revision}" />
+      </s:url>
 
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
-        <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
+        <td><s:fileTypeIcon filename="${entry.name}"/></td>
         <td><a href="${showUrl}">${lock.path}</a></td>
         <td>${lock.owner}</td>
         <td>${lock.comment}</td>
         <td>
-          <span onmouseover="Tip('<sventon-ui:age date="${lock.creationDate}"/>');">
+          <span onmouseover="Tip('<s:age date="${lock.creationDate}"/>');">
             <fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>
         <td>
-          <span onmouseover="Tip('<sventon-ui:age date="${lock.creationDate}"/>');">
+          <span onmouseover="Tip('<s:age date="${lock.creationDate}"/>');">
             <fmt:formatDate type="both" value="${lock.creationDate}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>

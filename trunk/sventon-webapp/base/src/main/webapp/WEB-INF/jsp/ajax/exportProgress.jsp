@@ -14,16 +14,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 
-<c:url value="/ajax/${command.name}/exportprogress" var="exportDownloadUrl">
-  <c:param name="uuid" value="${userRepositoryContext.exportUuid}" />
-  <c:param name="download" value="true" />
-</c:url>
+<s:url value="/ajax/${command.name}/exportprogress" var="exportDownloadUrl">
+  <s:param name="uuid" value="${userRepositoryContext.exportUuid}" />
+  <s:param name="download" value="true" />
+</s:url>
 
-<c:url value="/ajax/${command.name}/exportprogress" var="exportDeleteUrl">
-  <c:param name="uuid" value="${userRepositoryContext.exportUuid}" />
-  <c:param name="delete" value="true" />
-</c:url>
+<s:url value="/ajax/${command.name}/exportprogress" var="exportDeleteUrl">
+  <s:param name="uuid" value="${userRepositoryContext.exportUuid}" />
+  <s:param name="delete" value="true" />
+</s:url>
 
 <c:if test="${userRepositoryContext.isWaitingForExport eq true}">
 <div style="text-align:center; position:relative; ">
