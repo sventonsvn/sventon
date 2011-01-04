@@ -25,7 +25,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="blame" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
@@ -52,9 +52,9 @@
     </tr>
 
     <c:forEach items="${annotatedFile.unmodifiableRows}" var="row">
-      <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-        <c:param name="revision" value="${row.revision}" />
-      </c:url>
+      <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+        <s:param name="revision" value="${row.revision}" />
+      </s:url>
 
       <tr id="L${row.rowNumber}">
         <td valign="top" style="background-color: white; text-align:right;" class="blameRev_${row.revision}">

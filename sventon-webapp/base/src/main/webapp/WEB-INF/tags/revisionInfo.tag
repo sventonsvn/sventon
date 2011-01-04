@@ -12,11 +12,10 @@
   */
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ tag import="org.sventon.util.HTMLCreator" %>
 <%@ tag import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ tag import="org.sventon.util.WebUtils" %>
@@ -33,7 +32,7 @@
         <tr><td><b><spring:message code="revision"/>:</b></td><td>${logEntry.revision}</td></tr>
         <tr><td><b><spring:message code="date"/>:</b></td>
           <td>
-            <span onmouseover="Tip('<sventon-ui:age date="${logEntry.date}"/>');">
+            <span onmouseover="Tip('<s:age date="${logEntry.date}"/>');">
               <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
             </span>
           </td>

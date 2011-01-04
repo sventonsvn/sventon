@@ -13,22 +13,23 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="isArchivedEntry" required="true" type="java.lang.Boolean" %>
 
-<c:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="blameLinkUrl" value="/repos/${command.name}/blame${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
-<c:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
+<s:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="blameLinkUrl" value="/repos/${command.name}/blame${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
+<s:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
 
 <c:choose>
   <c:when test="${isArchivedEntry}">
@@ -40,9 +41,9 @@
     <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="document.location.href='${blameLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="document.location.href='${showFileUrl}&format=raw';">
 
-    <c:url value="/repos/${command.name}/diff${command.path}" var="diffPreviousUrl">
-      <c:param name="revision" value="${command.revision}"/>
-    </c:url>
+    <s:url value="/repos/${command.name}/diff${command.path}" var="diffPreviousUrl">
+      <s:param name="revision" value="${command.revision}"/>
+    </s:url>
 
     <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.path},${command.revision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
   </c:otherwise>

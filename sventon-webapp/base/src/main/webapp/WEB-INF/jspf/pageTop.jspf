@@ -38,7 +38,8 @@
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td align="left"><spring:message code="goto.revision"/></td><td colspan="2" align="left"><spring:message code="goto.path"/></td>
+            <td align="left"><label for="revisionInput"><spring:message code="goto.revision"/></label></td>
+            <td colspan="2" align="left"><label for="pathInput"><spring:message code="goto.path"/></label></td>
           </tr>
           <tr>
             <td>
@@ -49,7 +50,7 @@
             <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind>
               <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('revision_help');">
             </td>
-            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${status.value}"></spring:bind></td>
+            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${command.encodedPath}"></spring:bind></td>
             <td><input type="hidden" id="nameInput" name="name" value="${command.name}"><input type="submit" class="btn" value="<spring:message code="go"/>"></td>
           </tr>
         </table>

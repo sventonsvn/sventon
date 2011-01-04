@@ -13,14 +13,15 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="existingExtensions" required="true" type="java.util.Set" %>
 <%@ attribute name="filterExtension" required="true" type="java.lang.String" %>
 
-<c:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
-  <c:param name="revision" value="${command.revision}" />
-</c:url>
+<s:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
+  <s:param name="revision" value="${command.revision}" />
+</s:url>
 
 <select name="filterExtension" class="sventonSelect" onchange="document.location.href='${showDirLinkUrl}&filterExtension=' + this.form.filterExtension.options[this.form.filterExtension.selectedIndex].value;">
   <option value="all">&lt;<spring:message code="show.all"/>&gt;</option>

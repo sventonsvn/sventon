@@ -32,7 +32,7 @@
     </c:otherwise>
   </c:choose>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -65,7 +65,7 @@
 
   <script type="text/javascript">
     new Draggable($('fileHistoryContainerDiv'));
-    getFileHistory('${command.name}', '${command.path}', '${command.revision}', '${archivedEntry}');
+    getFileHistory('${command.name}', '${command.encodedPath}', '${command.revision}', '${archivedEntry}');
   </script>
 
 <%@ include file="/WEB-INF/jspf/pageFoot.jspf"%>

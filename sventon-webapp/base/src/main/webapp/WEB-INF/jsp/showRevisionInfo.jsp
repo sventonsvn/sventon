@@ -24,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="revision.info" target="${command.revision}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -41,13 +41,13 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <c:url value="/repos/${command.name}/info" var="showPrevRevInfoUrl">
-    <c:param name="revision" value="${command.revisionNumber - 1}" />
-  </c:url>
+  <s:url value="/repos/${command.name}/info" var="showPrevRevInfoUrl">
+    <s:param name="revision" value="${command.revisionNumber - 1}" />
+  </s:url>
 
-  <c:url value="/repos/${command.name}/info" var="showNextRevInfoUrl">
-    <c:param name="revision" value="${command.revisionNumber + 1}" />
-  </c:url>
+  <s:url value="/repos/${command.name}/info" var="showNextRevInfoUrl">
+    <s:param name="revision" value="${command.revisionNumber + 1}" />
+  </s:url>
 
   <c:if test="${command.revisionNumber - 1 gt 0}">
     <a href="${showPrevRevInfoUrl}"><img src="images/arrow_left.png" alt="Previous revision" title="<spring:message code="revision.info.previous"/>"></a>

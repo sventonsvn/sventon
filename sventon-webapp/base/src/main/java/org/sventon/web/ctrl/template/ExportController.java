@@ -17,7 +17,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
 import org.sventon.model.UserRepositoryContext;
-import org.sventon.util.EncodingUtils;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
 
@@ -69,7 +68,7 @@ public final class ExportController extends AbstractTemplateController {
     final Map<String, String> model = new HashMap<String, String>();
     model.put("revision", command.getRevision().toString());
 
-    return new ModelAndView(new RedirectView(EncodingUtils.encodeUrl(command.createListUrl()), true), model);
+    return new ModelAndView(new RedirectView(command.createListUrl(), true), model);
   }
 
 }

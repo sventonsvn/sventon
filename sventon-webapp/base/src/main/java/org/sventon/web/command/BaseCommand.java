@@ -24,6 +24,7 @@ import org.sventon.model.DirEntryComparator;
 import org.sventon.model.DirEntrySorter;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
+import org.sventon.util.EncodingUtils;
 import org.sventon.util.PathUtil;
 
 /**
@@ -87,6 +88,15 @@ public class BaseCommand {
    */
   public String getPath() {
     return path;
+  }
+
+  /**
+   * Gets the URL-safe encoded path.
+   *
+   * @return The encoded path.
+   */
+  public String getEncodedPath() {
+    return EncodingUtils.encodeUrl(path);
   }
 
   /**

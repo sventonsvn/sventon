@@ -28,6 +28,6 @@
     <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="Tip('<spring:message code="flatten.button.disabled.tooltip"/>')">
   </c:when>
   <c:otherwise>
-    <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('${command.path}', '${command.name}');" onmouseover="Tip('<spring:message code="flatten.button.tooltip"/>')">
+    <input type="button" class="btn" value="<spring:message code="flatten.button.text"/>" onclick="return doFlatten('${command.encodedPath}', '${command.name}');" onmouseover="Tip('<spring:message code="flatten.button.tooltip"/>')">
   </c:otherwise>
 </c:choose>

@@ -1,3 +1,4 @@
+<%@ page import="org.sventon.EncodingUtils" %>
 <%
 /*
  * ====================================================================
@@ -23,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="flattened.dir" target="${command.target} (and below)" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
     <table class="sventonFunctionLinksTable">
       <tr>
         <td style="white-space: nowrap;">
@@ -40,31 +41,32 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.path}');" commandName="command">
+  <form:form method="post" action="#" name="entriesForm" onsubmit="return doAction(this, '${command.name}', '${command.encodedPath}');" commandName="command">
     <input type="hidden" name="revision" value="${command.revision}">
     <input type="hidden" name="pegRevision" value="${command.revisionNumber}">
 
-    <c:url value="/repos/${command.name}/flatten${command.path}" var="sortUrl">
-      <c:param name="revision" value="${command.revision}" />
-    </c:url>
+    <s:url value="/repos/${command.name}/flatten${command.path}" var="sortUrl">
+      <s:param name="revision" value="${command.revision}" />
+    </s:url>
 
     <table class="sventonEntriesTable">
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
         <c:set var="rowCount" value="0"/>
         <c:forEach items="${svndir}" var="entry">
-          <c:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
-            <c:param name="revision" value="${command.revision}" />
-          </c:url>
-          <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-            <c:param name="revision" value="${entry.revision}" />
-          </c:url>
+          <jsp:useBean id="entry" type="org.sventon.model.DirEntry" />
+          <s:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
+            <s:param name="revision" value="${command.revision}" />
+          </s:url>
+          <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+            <s:param name="revision" value="${entry.revision}" />
+          </s:url>
 
           <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}" id="dir${rowCount}">
             <td class="sventonCol1">
               <input type="checkbox" name="entries" value="${entry.fullEntryName}@${entry.revision}"/>
             </td>
             <td class="sventonCol2">
-              <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '${entry.fullEntryName}/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
+              <a href="#" onclick="return listFiles('${rowCount}', '${command.name}', '<%=EncodingUtils.encodeUrl(entry.getFullEntryName())%>/');" onmouseover="Tip('<spring:message code="listfiles.link.tooltip"/>')">
                 <img alt="Expand" src="images/icon_folder_go.png" id="dirIcon${rowCount}" />
               </a>
             </td>
@@ -82,7 +84,7 @@
             </td>
             <td class="sventonCol7">${entry.author}</td>
             <td class="sventonCol8">
-              <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+              <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
                 <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
               </span>
             </td>

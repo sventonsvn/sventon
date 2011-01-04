@@ -31,7 +31,7 @@
     </c:otherwise>
   </c:choose>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">

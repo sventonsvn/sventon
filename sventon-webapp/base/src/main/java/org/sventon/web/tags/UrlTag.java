@@ -1,4 +1,3 @@
-<%
 /*
  * ====================================================================
  * Copyright (c) 2005-2011 sventon project. All rights reserved.
@@ -10,5 +9,22 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-%>
-<link rel="alternate" type="application/rss+xml" title="RSS" href="${pageContext.request.contextPath}/xml/${command.name}/rss${command.encodedPath}?revision=${command.revision}">
+package org.sventon.web.tags;
+
+import org.sventon.util.EncodingUtils;
+
+import javax.servlet.jsp.JspException;
+
+/**
+ * UrlTag.
+ */
+public class UrlTag extends org.apache.taglibs.standard.tag.rt.core.UrlTag {
+
+  private static final long serialVersionUID = -4556271744291309364L;
+
+  @Override
+  public int doEndTag() throws JspException {
+    super.setValue(EncodingUtils.encodeUrl(super.value));
+    return super.doEndTag();
+  }
+}

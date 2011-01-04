@@ -24,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="show.archive.file" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -55,10 +55,10 @@
     </tr>
     <c:forEach items="${entries}" var="zipEntry">
 
-      <c:url value="/repos/${command.name}/show${command.path}" var="showFileUrl">
-        <c:param name="revision" value="${command.revision}" />
-        <c:param name="archivedEntry" value="${zipEntry.name}" />
-      </c:url>
+      <s:url value="/repos/${command.name}/show${command.path}" var="showFileUrl">
+        <s:param name="revision" value="${command.revision}" />
+        <s:param name="archivedEntry" value="${zipEntry.name}" />
+      </s:url>
 
       <jsp:useBean id="entryDate" class="java.util.Date" />
       <c:set target="${entryDate}" property="time" value="${zipEntry.time}"/>
@@ -70,14 +70,14 @@
             <td>${zipEntry.name}</td>
           </c:when>
           <c:otherwise>
-            <td><sventon-ui:fileTypeIcon filename="${entry.name}"/></td>
+            <td><s:fileTypeIcon filename="${entry.name}"/></td>
             <td><a href="${showFileUrl}">${zipEntry.name}</a></td>
           </c:otherwise>
         </c:choose>
         <td class="sventonColRightAlign">${zipEntry.size}</td>
         <td class="sventonColRightAlign">${zipEntry.compressedSize}</td>
         <td class="sventonColNoWrap">
-          <span onmouseover="Tip('<sventon-ui:age date="${entryDate}"/>');">
+          <span onmouseover="Tip('<s:age date="${entryDate}"/>');">
             <fmt:formatDate type="both" value="${entryDate}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>
@@ -93,10 +93,10 @@
       <td class="sventonColRightAlign"><b><spring:message code="total"/>:</b></td>
       <td><b>${rowCount} <spring:message code="entries"/></b></td>
       <td class="sventonColRightAlign" title="${totalOrigSize} bytes">
-        <b><sventon-ui:formatBytes size="${totalOrigSize}" locale="${pageContext.request.locale}"/></b>
+        <b><s:formatBytes size="${totalOrigSize}" locale="${pageContext.request.locale}"/></b>
       </td>
       <td class="sventonColRightAlign" title="${totalCompSize} bytes">
-        <b><sventon-ui:formatBytes size="${totalCompSize}" locale="${pageContext.request.locale}"/></b>
+        <b><s:formatBytes size="${totalCompSize}" locale="${pageContext.request.locale}"/></b>
       </td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>

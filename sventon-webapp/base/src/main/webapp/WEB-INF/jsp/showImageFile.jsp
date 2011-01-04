@@ -24,7 +24,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="show.image.file" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -41,15 +41,15 @@
     <input type="hidden" name="revision" value="${command.revision}">
   </form>
 
-  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="showUrl">
-    <c:param name="revision" value="${command.revision}" />
-    <c:param name="disp" value="inline" />
-  </c:url>
+  <s:url value="/repos/${command.name}/get${command.path}${entry.name}" var="showUrl">
+    <s:param name="revision" value="${command.revision}" />
+    <s:param name="disp" value="inline" />
+  </s:url>
 
-  <c:url value="/repos/${command.name}/get${command.path}${entry.name}" var="getThumbUrl">
-    <c:param name="revision" value="${command.revision}" />
-    <c:param name="disp" value="thumbnail" />
-  </c:url>
+  <s:url value="/repos/${command.name}/get${command.path}${entry.name}" var="getThumbUrl">
+    <s:param name="revision" value="${command.revision}" />
+    <s:param name="disp" value="thumbnail" />
+  </s:url>
 
   <p>
     <a href="${showUrl}">

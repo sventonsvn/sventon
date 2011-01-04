@@ -15,20 +15,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="sventon-ui" uri="/WEB-INF/sventon.tld" %>
+<%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 
 <c:forEach items="${svndir}" var="entry">
-  <c:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
-    <c:param name="revision" value="${command.revision}" />
-  </c:url>
-  <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-    <c:param name="revision" value="${entry.revision}" />
-  </c:url>
-  <c:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
-    <c:param name="revision" value="${entry.revision}" />
-    <c:param name="pegRevision" value="${command.revisionNumber}"/>
-    <c:param name="action" value="add" />
-  </c:url>
+  <s:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
+    <s:param name="revision" value="${command.revision}" />
+  </s:url>
+  <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+    <s:param name="revision" value="${entry.revision}" />
+  </s:url>
+  <s:url value="/ajax/${command.name}/entrytray${entry.fullEntryName}" var="entryTrayAddUrl">
+    <s:param name="revision" value="${entry.revision}" />
+    <s:param name="pegRevision" value="${command.revisionNumber}"/>
+    <s:param name="action" value="add" />
+  </s:url>
 
   <tr class="sventonFileEntryTableRow expandedDir${rowNumber}">
     <td class="sventonCol1">
@@ -36,7 +36,7 @@
     </td>
     <td class="sventonCol2">
       <div id="${entryTrayAddUrl}" class="entry">
-        <sventon-ui:fileTypeIcon filename="${entry.name}"/>
+        <s:fileTypeIcon filename="${entry.name}"/>
       </div>
     </td>
     <td class="sventonCol3">
@@ -51,7 +51,7 @@
     </td>
     <td class="sventonCol7">${entry.author}</td>
     <td class="sventonCol8">
-      <span onmouseover="Tip('<sventon-ui:age date="${entry.date}"/>');">
+      <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
         <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
       </span>
     </td>

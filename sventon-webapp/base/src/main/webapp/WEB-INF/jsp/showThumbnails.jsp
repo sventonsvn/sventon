@@ -25,7 +25,7 @@
   <%@ include file="/WEB-INF/jspf/pageTop.jspf"%>
   <sventon:currentTargetHeader title="show.thumbnails" target="${command.target}" properties="${properties}"/>
 
-  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.path}');">
+  <form name="searchForm" action="#" method="get" onsubmit="return doSearch(this, '${command.name}', '${command.encodedPath}');">
   <table class="sventonFunctionLinksTable">
     <tr>
       <td style="white-space: nowrap;">
@@ -47,20 +47,20 @@
   <table style="border-collapse: collapse;">
     <c:forEach items="${thumbnailentries}" var="entry">
       <tr height="160px">
-        <c:url value="/repos/${command.name}/get${entry.path}" var="downloadUrl" >
-          <c:param name="revision" value="${command.revision}" />
-          <c:param name="disp" value="inline" />
-        </c:url>
-        <c:url value="/repos/${command.name}/get${entry.path}" var="getThumbUrl" >
-          <c:param name="revision" value="${command.revision}" />
-          <c:param name="disp" value="thumbnail" />
-        </c:url>
-        <c:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-          <c:param name="revision" value="${entry.revision}" />
-        </c:url>
-        <c:url value="/repos/${command.name}/show${entry.path}" var="showFileUrl">
-          <c:param name="revision" value="${command.revision}" />
-        </c:url>
+        <s:url value="/repos/${command.name}/get${entry.path}" var="downloadUrl" >
+          <s:param name="revision" value="${command.revision}" />
+          <s:param name="disp" value="inline" />
+        </s:url>
+        <s:url value="/repos/${command.name}/get${entry.path}" var="getThumbUrl" >
+          <s:param name="revision" value="${command.revision}" />
+          <s:param name="disp" value="thumbnail" />
+        </s:url>
+        <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
+          <s:param name="revision" value="${entry.revision}" />
+        </s:url>
+        <s:url value="/repos/${command.name}/show${entry.path}" var="showFileUrl">
+          <s:param name="revision" value="${command.revision}" />
+        </s:url>
 
         <td valign="top" style="border: 1px dashed black;">
           <spring:message code="file"/>:
