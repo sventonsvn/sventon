@@ -14,6 +14,7 @@ package org.sventon.cache.direntrycache;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.queryParser.QueryParser;
 import org.compass.core.*;
 import org.compass.core.config.CompassConfiguration;
 import org.compass.core.config.CompassEnvironment;
@@ -213,11 +214,12 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   @Override
   public List<DirEntry> findEntries(final String searchString, final String startDir) {
-    final String queryString = "path:" + startDir + "* (nameFragments:" + searchString +
-        " OR lastAuthor:" + searchString + ")";
+    final String escapedSearchString = QueryParser.escape(searchString);
+    final String queryString = "path:" + startDir + "* (name:" + escapedSearchString +
+        " OR lastAuthor:" + escapedSearchString + " OR nameFragments:" + escapedSearchString + ")";
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding string [" + searchString + "] starting in [" + startDir + "]");
+      logger.debug("Finding string [" + escapedSearchString + "] starting in [" + startDir + "]");
       logger.debug("QueryString: " + queryString);
     }
 
