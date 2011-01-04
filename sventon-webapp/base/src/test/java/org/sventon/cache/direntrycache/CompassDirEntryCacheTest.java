@@ -19,9 +19,10 @@ import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntry;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CompassDirEntryCacheTest {
 
@@ -60,6 +61,21 @@ public class CompassDirEntryCacheTest {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
+  }
+
+  @Test
+  public void testFindEntriesUsingIllegalCharacters() throws Exception {
+    assertTrue(entryCache.findEntries("-", "/").isEmpty());
+    assertTrue(entryCache.findEntries("_", "/").isEmpty());
+    entryCache.add(new DirEntry("/", "test_file.java", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
+    entryCache.add(new DirEntry("/", "test-file.java", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
+    entryCache.add(new DirEntry("/", "simple-1.0-rc1", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
+    entryCache.add(new DirEntry("/", "WEB-INF", "jesper", new Date(), DirEntry.Kind.DIR, 1, 0));
+    assertFalse(entryCache.findEntries("test_file", "/").isEmpty());
+    assertFalse(entryCache.findEntries("test-file", "/").isEmpty());
+    assertFalse(entryCache.findEntries("simple-1.0-rc1", "/").isEmpty());
+    assertTrue(entryCache.findEntries("simple-1.0", "/").isEmpty());
+    assertFalse(entryCache.findEntries("WEB-INF", "/").isEmpty());
   }
 
   @Test
