@@ -21,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.model.AvailableCharsets;
 import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
@@ -58,6 +59,7 @@ public class GoToControllerTest {
     ctrl.setServletContext(new MockServletContext());
     ctrl.setApplication(application);
     ctrl.setRepositoryService(mockService);
+    ctrl.setAvailableCharsets(new AvailableCharsets("UTF-8"));
 
     // Test NodeKind.FILE
     expect(mockService.getNodeKind(null, command.getPath(), command.getRevisionNumber())).andStubReturn(DirEntry.Kind.FILE);
@@ -99,7 +101,7 @@ public class GoToControllerTest {
     model = modelAndView.getModel();
     verify(mockService);
 
-    assertEquals(4, model.size());
+    assertEquals(10, model.size());
     assertEquals("goto", modelAndView.getViewName());
   }
 

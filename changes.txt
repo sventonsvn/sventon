@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[1973] Fixed: Bug #17801 - BaseURL is not effective on the login screen.
 [1972] Fixed: Bug #16271 - Some characters not allowed as search term.
 [1971] Fixed: Bug #16068 - Repository paths not properly URL encoded.
 [1842] Added: Feature #4561 - Rescan config files without restart.

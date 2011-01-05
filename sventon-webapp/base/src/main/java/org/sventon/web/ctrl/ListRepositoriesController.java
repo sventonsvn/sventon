@@ -47,7 +47,8 @@ public final class ListRepositoriesController {
 
 
   @RequestMapping(params = "logout=true")
-  public String logoutBeforeListRepositories(@RequestParam final boolean logout, @RequestParam final String repositoryName, @ModelAttribute UserContext userContext, Model model) {
+  public String logoutBeforeListRepositories(@RequestParam final boolean logout, @RequestParam final String repositoryName,
+                                             @ModelAttribute final UserContext userContext, final Model model) {
     if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
       return "redirect:/repos/listconfigs";
@@ -65,7 +66,7 @@ public final class ListRepositoriesController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public String listRepositoriesOrShowIfOnlyOne(Model model) {
+  public String listRepositoriesOrShowIfOnlyOne(final Model model) {
     if (!application.isConfigured()) {
       logger.debug("sventon not configured, redirecting to '/repos/listconfigs'");
       return "redirect:/repos/listconfigs";

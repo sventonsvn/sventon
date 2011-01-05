@@ -12,7 +12,6 @@
 package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.AuthenticationException;
@@ -32,6 +31,8 @@ import java.net.NoRouteToHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.web.bind.ServletRequestUtils.*;
 
 /**
  * Abstract base class for use by controllers wishing to make use of basic
@@ -153,14 +154,15 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     }
 
     if (errors.hasErrors()) {
-      return prepareExceptionModelAndView(errors, command);
+      return prepareExceptionModelAndView(errors, command, getApplicationModel(command));
     }
 
     SVNConnection connection = null;
+
     try {
       final RepositoryConfiguration configuration = application.getConfiguration(command.getName());
       final UserRepositoryContext repositoryContext = UserRepositoryContext.getContext(request, command.getName());
-      final boolean showLatestRevInfo = ServletRequestUtils.getBooleanParameter(request, "showlatestrevinfo", false);
+      final boolean showLatestRevInfo = getBooleanParameter(request, "showlatestrevinfo", false);
 
       connection = createConnection(configuration, repositoryContext);
       final Long headRevision = getRepositoryService().getLatestRevision(connection);
@@ -172,27 +174,19 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       parseAndUpdateCharsetParameter(request, repositoryContext);
       parseAndUpdateSearchModeParameter(request, repositoryContext);
 
+      logger.debug("'command' set to: " + command);
       final ModelAndView modelAndView = svnHandle(connection, command, headRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetFileController.
       if (needModelPopulation(modelAndView)) {
-        final Map<String, Object> model = new HashMap<String, Object>();
-        logger.debug("'command' set to: " + command);
-        model.put("command", command);
+        final Map<String, Object> model = new HashMap<String, Object>(getApplicationModel(command));
+        model.put("userRepositoryContext", repositoryContext);
+        model.put("useCache", configuration.isCacheUsed());
         model.put("repositoryURL", configuration.getRepositoryDisplayUrl());
+        model.put("isEntryTrayEnabled", configuration.isEntryTrayEnabled());
+        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
         model.put("headRevision", headRevision);
         model.put("isHead", command.getRevisionNumber() == headRevision);
-        model.put("isUpdating", application.isUpdating(command.getName()));
-        model.put("isEditableConfig", application.isEditableConfig());
-        model.put("isZipDownloadsAllowed", configuration.isZippedDownloadsAllowed());
-        model.put("isEntryTrayEnabled", configuration.isEntryTrayEnabled());
-        model.put("useCache", configuration.isCacheUsed());
-        model.put("repositoryNames", application.getRepositoryNames());
-        model.put("maxRevisionsCount", getMaxRevisionsCount());
-        model.put("charsets", availableCharsets.getCharsets());
-        model.put("userRepositoryContext", repositoryContext);
-        model.put("baseURL", application.getBaseURL());
-
         if (showLatestRevInfo) {
           model.put("revisions", getLatestRevisions(command, connection, repositoryContext));
         }
@@ -201,10 +195,10 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       return modelAndView;
     } catch (AuthenticationException ae) {
       logger.debug(ae.getMessage());
-      return prepareAuthenticationRequiredView(request);
+      return prepareAuthenticationRequiredView(request, getApplicationModel(command));
     } catch (DiffException ex) {
       logger.warn(ex.getMessage());
-      return prepareExceptionModelAndView(errors, command);
+      return prepareExceptionModelAndView(errors, command, getApplicationModel(command));
     } catch (Exception ex) {
       logger.error("Exception", ex);
       final Throwable cause = ex.getCause();
@@ -213,12 +207,24 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       } else {
         errors.reject(null, ex.getMessage());
       }
-      return prepareExceptionModelAndView(errors, command);
+      return prepareExceptionModelAndView(errors, command, getApplicationModel(command));
     } finally {
       if (connection != null) {
         connection.closeSession();
       }
     }
+  }
+
+  protected Map<String, Object> getApplicationModel(final BaseCommand command) {
+    final Map<String, Object> applicationModel = new HashMap<String, Object>();
+    applicationModel.put("baseURL", application.getBaseURL());
+    applicationModel.put("isUpdating", application.isUpdating(command.getName()));
+    applicationModel.put("repositoryNames", application.getRepositoryNames());
+    applicationModel.put("isEditableConfig", application.isEditableConfig());
+    applicationModel.put("charsets", availableCharsets.getCharsets());
+    applicationModel.put("maxRevisionsCount", getMaxRevisionsCount());
+    applicationModel.put("command", command);
+    return applicationModel;
   }
 
   // If the view is a RedirectView it's model has already been populated
@@ -262,7 +268,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   private void parseAndUpdateCharsetParameter(final HttpServletRequest request,
                                               final UserRepositoryContext userContext) {
-    final String charset = ServletRequestUtils.getStringParameter(request, CHARSET_REQUEST_PARAMETER, null);
+    final String charset = getStringParameter(request, CHARSET_REQUEST_PARAMETER, null);
     if (charset != null) {
       userContext.setCharset(charset);
     } else if (userContext.getCharset() == null) {
@@ -278,7 +284,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   private void parseAndUpdateSearchModeParameter(final HttpServletRequest request,
                                                  final UserRepositoryContext userContext) {
-    final String searchMode = ServletRequestUtils.getStringParameter(request, SEARCH_MODE_REQUEST_PARAMETER, null);
+    final String searchMode = getStringParameter(request, SEARCH_MODE_REQUEST_PARAMETER, null);
     if (searchMode != null) {
       userContext.setSearchMode(searchMode);
     } else if (userContext.getSearchMode() == null) {
@@ -295,8 +301,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    */
   private void parseAndUpdateLatestRevisionsDisplayCount(final HttpServletRequest request,
                                                          final UserRepositoryContext userContext) {
-    final int latestRevisionsDisplayCount =
-        ServletRequestUtils.getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
+    final int latestRevisionsDisplayCount = getIntParameter(request, REVISION_COUNT_REQUEST_PARAMETER, 0);
     if (latestRevisionsDisplayCount <= getMaxRevisionsCount() && latestRevisionsDisplayCount >= 0) {
       if (latestRevisionsDisplayCount > 0) {
         userContext.setLatestRevisionsDisplayCount(latestRevisionsDisplayCount);
@@ -334,33 +339,34 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
    * all stuff needed to redirect control to the login page.
    *
    * @param request Request.
+   * @param model   Pre-populated model.
    * @return Redirect view for logging in, with original request info stored in
    *         session to enable the authentication control to proceed with
    *         original request once the user is authenticated.
    */
-  private ModelAndView prepareAuthenticationRequiredView(final HttpServletRequest request) {
-    final Map<String, Object> model = new HashMap<String, Object>();
-    model.put("parameters", request.getParameterMap());
-    model.put("action", request.getRequestURL());
-    model.put("repositoryNames", application.getRepositoryNames());
-    model.put("isEditableConfig", application.isEditableConfig());
+  private ModelAndView prepareAuthenticationRequiredView(final HttpServletRequest request, Map<String, Object> model) {
+    final Map<String, Object> authenticationModel = new HashMap<String, Object>(model);
+    authenticationModel.put("parameters", request.getParameterMap());
+    authenticationModel.put("action", request.getRequestURL());
     logger.debug("Forwarding to 'authenticationRequired' view");
-    return new ModelAndView("error/authenticationRequired", model);
+    return new ModelAndView("error/authenticationRequired", authenticationModel);
   }
 
   /**
    * Prepares the exception model and view with basic data
    * needed to for displaying a useful error message.
    *
-   * @param exception Bind exception from Spring MVC validation.
-   * @param command   Command object.
+   * @param exception        Bind exception from Spring MVC validation.
+   * @param command          Command object.
+   * @param applicationModel Pre-populated model.
    * @return The packaged model and view.
    */
   @SuppressWarnings("unchecked")
-  final ModelAndView prepareExceptionModelAndView(final BindException exception, final BaseCommand command) {
+  final ModelAndView prepareExceptionModelAndView(final BindException exception, final BaseCommand command,
+                                                  final Map<String, Object> applicationModel) {
     final RepositoryConfiguration repositoryConfiguration = application.getConfiguration(command.getName());
     final Map<String, Object> model = exception.getModel();
-    model.put("command", command);
+    model.putAll(applicationModel);
     model.put("repositoryURL", repositoryConfiguration != null ? repositoryConfiguration.getRepositoryDisplayUrl() : "");
     return new ModelAndView("goto", model);
   }

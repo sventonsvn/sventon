@@ -63,10 +63,10 @@ public final class GoToController extends AbstractTemplateController {
       redirectUrl = command.createShowFileUrl();
     } else if (kind == null) {
       exception.rejectValue("revision", "goto.command.invalidrevision");
-      return prepareExceptionModelAndView(exception, command);
+      return prepareExceptionModelAndView(exception, command, getApplicationModel(command));
     } else {
       exception.rejectValue("path", "goto.command.invalidpath");
-      return prepareExceptionModelAndView(exception, command);
+      return prepareExceptionModelAndView(exception, command, getApplicationModel(command));
     }
 
     // Add the redirect URL parameters
