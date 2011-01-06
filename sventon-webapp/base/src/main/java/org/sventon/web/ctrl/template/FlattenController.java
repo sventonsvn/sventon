@@ -47,7 +47,7 @@ public final class FlattenController extends AbstractTemplateController {
     logger.debug("Sort params: " + userRepositoryContext.getSortType().name() + ", " + userRepositoryContext.getSortMode());
     new DirEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
-    model.put("svndir", entries);
+    model.put("dirEntries", entries);
     model.put("isFlatten", true);  // Indicates that path should be shown in browser view.
     return new ModelAndView(getViewName(), model);
   }

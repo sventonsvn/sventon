@@ -43,12 +43,12 @@ public final class ListFilesController extends ListDirectoryContentsController {
         response, exception);
 
     final Map<String, Object> model = modelAndView.getModel();
-    final List<DirEntry> entries = (List<DirEntry>) model.get("svndir");
+    final List<DirEntry> entries = (List<DirEntry>) model.get("dirEntries");
     final DirEntryKindFilter entryFilter = new DirEntryKindFilter(DirEntry.Kind.FILE);
     final int rowNumber = ServletRequestUtils.getRequiredIntParameter(request, "rowNumber");
 
     logger.debug("Adding data to model");
-    model.put("svndir", entryFilter.filter(entries));
+    model.put("dirEntries", entryFilter.filter(entries));
     model.put("rowNumber", rowNumber);
     modelAndView.setViewName(getViewName());
     return modelAndView;

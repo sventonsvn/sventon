@@ -14,7 +14,6 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.model.DirEntry;
 import org.sventon.model.DirList;
 import org.sventon.model.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
@@ -22,7 +21,6 @@ import org.sventon.web.command.BaseCommand;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +28,7 @@ import java.util.Map;
  * Controller that lists the contents of given repository path at given revision.
  * The resulting model will include:
  * <ul>
- * <li><code>svndir</code> - The list of <code>DirEntry</code> instances</li>
+ * <li><code>dirEntries</code> - The list of <code>DirEntry</code> instances</li>
  * <li><code>properties</code> - The path's SVN properties</li>
  * </ul>
  * Note: Sub classes must specify <code>viewName</code> property.
@@ -46,13 +44,14 @@ public class ListDirectoryContentsController extends AbstractTemplateController 
                                    final BindException exception) throws Exception {
 
     logger.debug("Getting directory contents for: " + command.getPath());
-    final DirList dirList = getRepositoryService().list(
-        connection, command.getPathWithTrailingSlash(), command.getRevisionNumber());
-    final List<DirEntry> entries = dirList.getEntries();
+    final String path = command.getPathWithTrailingSlash();
+    final long revision = command.getRevisionNumber();
+    final DirList dirList = getRepositoryService().list(connection, path, revision);
+    logger.debug("Directory entries in " + path + ": " + dirList.getEntriesCount());
+    logger.debug("Properties for " + path + ": " + dirList.getPropertiesCount());
 
     final Map<String, Object> model = new HashMap<String, Object>();
-    logger.debug("Directory entries: " + entries.size());
-    model.put("svndir", entries);
+    model.put("dirEntries", dirList.getEntries());
     model.put("properties", dirList.getProperties());
     final ModelAndView modelAndView = new ModelAndView();
     modelAndView.addAllObjects(model);
