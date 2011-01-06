@@ -28,7 +28,7 @@
   <table class="sventonHeader">
     <tr>
       <c:choose>
-        <c:when test="${properties ne null}">
+        <c:when test="${properties ne null and properties.size gt 0}">
           <td><spring:message code='${title}'/> - ${target}&nbsp;
             <a class="sventonHeaderLink" href="#" onclick="Element.toggle('propertiesDiv'); toggleInnerHTML('propertiesLink', '<spring:message code='show'/>', '<spring:message code='hide'/>'); return false;">
               [<span id="propertiesLink"><spring:message code='show'/></span> properties]
@@ -42,7 +42,7 @@
     </tr>
   </table>
 </div>
-<c:if test="${properties ne null}">
+<c:if test="${properties ne null and properties.size gt 0}">
   <div id="propertiesDiv" style="display:none" class="sventonPropertiesDiv">
     <br>
     <table class="sventonPropertiesTable">

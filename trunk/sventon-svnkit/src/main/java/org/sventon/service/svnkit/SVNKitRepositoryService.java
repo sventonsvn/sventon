@@ -204,18 +204,20 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
 
   @SuppressWarnings({"unchecked"})
   @Override
-  public final DirList list(final SVNConnection connection, final String path, final long revision
-  ) throws SventonException {
+  public final DirList list(final SVNConnection connection, final String path, final long revision) throws SventonException {
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
     final SVNProperties properties = new SVNProperties();
     final Collection<SVNDirEntry> entries;
+
     try {
       entries = repository.getDir(path, revision, properties, (Collection) null);
     } catch (SVNException ex) {
       return translateException("Could not get directory listing from [" + path + "@" + revision + "]", ex);
     }
 
-    return DirEntry.createDirectoryList(SVNKitConverter.convertDirEntries(entries, path), SVNKitConverter.convertProperties(properties));
+    final List<DirEntry> dirEntries = SVNKitConverter.convertDirEntries(entries, path);
+    final Properties dirProperties = SVNKitConverter.convertProperties(properties);
+    return DirEntry.createDirectoryList(dirEntries, dirProperties);
   }
 
   @Override
