@@ -11,8 +11,6 @@
  */
 package org.sventon.model;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,8 +59,15 @@ public class Properties implements Serializable {
     return properties.entrySet();
   }
 
+  /**
+   * @return Number of properties.
+   */
+  public int getSize() {
+    return properties.size();
+  }
+
   @Override
   public String toString() {
-    return ReflectionToStringBuilder.reflectionToString(this);
+    return properties.toString();
   }
 }
