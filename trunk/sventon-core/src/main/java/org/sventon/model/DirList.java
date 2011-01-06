@@ -52,4 +52,18 @@ public class DirList implements Serializable {
   public Properties getProperties() {
     return properties;
   }
+
+  /**
+   * @return Number of entries in directory.
+   */
+  public int getEntriesCount() {
+    return entries.size();
+  }
+
+  /**
+   * @return Number of properties set on directory.
+   */
+  public int getPropertiesCount() {
+    return properties.getSize();
+  }
 }
