@@ -66,12 +66,19 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
                                       long toRevision, String path, long limit, boolean stopOnCopy,
                                       boolean includeChangedPaths) throws SventonException {
 
-    final String encodedPath = encodeUri(path);
+    return getLogEntriesInternal(connection, fromRevision, toRevision, encodeUri(path), limit, stopOnCopy, includeChangedPaths);
+  }
+
+  private List<LogEntry> getLogEntriesInternal(final SVNConnection connection, final long fromRevision,
+                                              final long toRevision, final String path, final long limit,
+                                              final boolean stopOnCopy, final boolean includeChangedPaths)
+      throws SventonException {
+
     final SVNClientInterface client = (SVNClientInterface) connection.getDelegate();
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
 
     try {
-      client.logMessages(connection.getRepositoryRootUrl().getFullPath(encodedPath),
+      client.logMessages(connection.getRepositoryRootUrl().getFullPath(path),
           JavaHLConverter.convertRevision(fromRevision), JavaHLConverter.getRevisionRange(fromRevision, toRevision),
           stopOnCopy, includeChangedPaths, false, REV_PROP_NAMES, (int) limit, new LogMessageCallback() {
             @Override
@@ -83,7 +90,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
             }
           });
     } catch (ClientException e) {
-      return translateException("Unable to get log entries for " + encodedPath + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
+      return translateException("Unable to get log entries for " + path + " at revision [" + fromRevision + " .. " + toRevision + "]", e);
     }
     return logEntries;
   }
@@ -290,7 +297,8 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   @Override
   public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
     final String encodedPath = encodeUri(path);
-    final List<LogEntry> entries = getLogEntries(null, connection, revision, Revision.FIRST.getNumber(), encodedPath, 100, false, true);
+    final long toRevision = Revision.FIRST.getNumber();
+    final List<LogEntry> entries = getLogEntriesInternal(connection, revision, toRevision, encodedPath, 100, false, true);
     final List<FileRevision> revisions = new ArrayList<FileRevision>();
 
     LogEntry.setPathAtRevisionInLogEntries(entries, path);
@@ -460,7 +468,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
                                         boolean stopOnCopy, long limit) throws SventonException {
     final List<Long> list = new ArrayList<Long>();
     final String encodedPath = encodeUri(path);
-    for (LogEntry entry : getLogEntries(null, connection, fromRevision, toRevision, encodedPath, limit, stopOnCopy, false)) {
+    for (LogEntry entry : getLogEntriesInternal(connection, fromRevision, toRevision, encodedPath, limit, stopOnCopy, false)) {
       list.add(entry.getRevision());
     }
     return list;
