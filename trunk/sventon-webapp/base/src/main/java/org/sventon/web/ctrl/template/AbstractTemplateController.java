@@ -140,7 +140,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
                                    final Object cmd, final BindException errors) {
 
     final BaseCommand command = (BaseCommand) cmd;
-    logger.debug(command);
+    logger.debug("'command' set to: " + command);
 
     // If application config is not ok - redirect to config
     if (!application.isConfigured()) {
@@ -174,7 +174,6 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       parseAndUpdateCharsetParameter(request, repositoryContext);
       parseAndUpdateSearchModeParameter(request, repositoryContext);
 
-      logger.debug("'command' set to: " + command);
       final ModelAndView modelAndView = svnHandle(connection, command, headRevision, repositoryContext, request, response, errors);
 
       // It's ok for svnHandle to return null in cases like GetFileController.

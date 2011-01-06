@@ -64,6 +64,8 @@ public final class DiffController extends AbstractTemplateController {
         model.putAll(handlePathDiff(connection, modelAndView, command));
       } else if (DirEntry.Kind.FILE == nodeKind) {
         model.putAll(handleFileDiff(connection, modelAndView, command, charset));
+      } else {
+        throw new DiffException("Unable to diff entry of kind: " + nodeKind);
       }
     } catch (final IdenticalFilesException ife) {
       logger.debug("Files are identical");
@@ -130,7 +132,6 @@ public final class DiffController extends AbstractTemplateController {
     modelAndView.setViewName("pathDiff");
 
     final List<DiffStatus> diffResult = getRepositoryService().diffPaths(connection, command.getFrom(), command.getTo());
-
     logger.debug("Number of path diffs: " + diffResult.size());
     model.put("isIdentical", diffResult.isEmpty());
     model.put("diffResult", diffResult);

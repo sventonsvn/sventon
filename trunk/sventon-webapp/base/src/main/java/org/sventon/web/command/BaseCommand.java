@@ -16,8 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.sventon.model.DirEntryComparator;
@@ -338,6 +336,13 @@ public class BaseCommand {
 
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    return "BaseCommand{" +
+        "path='" + path + '\'' +
+        ", pegRevision=" + pegRevision +
+        ", revision=" + revision +
+        ", repositoryName=" + repositoryName +
+        ", sortType=" + sortType +
+        ", sortMode=" + sortMode +
+        '}';
   }
 }

@@ -213,6 +213,10 @@ public final class DiffCommand extends BaseCommand {
     }
     sb.append(", style: ");
     sb.append(getStyle());
+    sb.append(", revision: ");
+    sb.append(getRevision());
+    sb.append(", pegRevision: ");
+    sb.append(getPegRevision());
     sb.append("}");
     return sb.toString();
   }
