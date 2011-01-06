@@ -17,15 +17,42 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.DiffCommand" %>
 
-<s:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
-  <s:param name="revision" value="${command.revision}" />
-</s:url>
-<s:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
-  <s:param name="revision" value="${command.revision}" />
-</s:url>
+<c:choose>
+  <c:when test="${isFile}">
+    <s:url var="showLogLinkUrl" value="/repos/${command.name}/log${command.path}">
+      <s:param name="revision" value="${command.revision}" />
+    </s:url>
+    <s:url var="showFileUrl" value="/repos/${command.name}/show${command.path}">
+      <s:param name="revision" value="${command.revision}" />
+    </s:url>
 
-<input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
-<input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="document.location.href='${showFileUrl}';">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>"
+           onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')"
+           onclick="document.location.href='${showLogLinkUrl}';">
+
+    <input type="button" class="btn" value="<spring:message code="showfile.button.text"/>" onclick="document.location.href='${showFileUrl}';">
+
+    <s:url value="/repos/${command.name}/diff${command.fromPath}" var="diffPreviousUrl">
+      <s:param name="revision" value="${command.fromRevision}" />
+      <s:param name="style" value="${command.style}" />
+    </s:url>
+
+    <input type="button" class="btn"
+           value="<spring:message code="diffprev.button.text"/>"
+           onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.fromPath},${command.fromRevision}"/>')"
+           onclick="document.location.href='${diffPreviousUrl}';">
+  </c:when>
+  <c:otherwise>
+    <s:url var="showDirLinkUrl" value="/repos/${command.name}/list${command.path}">
+      <s:param name="revision" value="${command.revision}" />
+    </s:url>
+
+    <input type="button" class="btn" value="<spring:message code="showdir.button.text"/>" onclick="document.location.href='${showDirLinkUrl}';" onmouseover="Tip('<spring:message code="showdir.button.tooltip" arguments="${command.path}"/>')">
+
+  </c:otherwise>
+</c:choose>
+
+<input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
 
 <s:url value="/repos/${command.name}/diff${command.path}" var="diffUrl">
   <s:param name="revision" value="${command.revision}" />
@@ -38,13 +65,6 @@
     <s:param name="showlatestrevinfo" value="true" />
   </c:if>
 </s:url>
-<input type="button" class="btn" value="<spring:message code="wrap-nowrap.button.text"/>" onclick="toggleWrap();">
-
-<s:url value="/repos/${command.name}/diff${command.fromPath}" var="diffPreviousUrl">
-  <s:param name="revision" value="${command.fromRevision}" />
-  <s:param name="style" value="${command.style}" />
-</s:url>
-<input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.fromPath},${command.fromRevision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
 
 <select id="diffStyle" class="sventonSelect" onchange="document.location.href=this.options[this.selectedIndex].value;">
   <option value="${diffUrl}&style=sidebyside" ${command.style eq 'sidebyside' ? 'selected' : ''}>Side By Side</option>

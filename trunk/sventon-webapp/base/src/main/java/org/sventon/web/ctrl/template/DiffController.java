@@ -57,15 +57,17 @@ public final class DiffController extends AbstractTemplateController {
     handleDiffStyle(command);
 
     try {
+      final DirEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
+      model.put("isFile", DirEntry.Kind.FILE == nodeKind);
 
-      final DirEntry.Kind nodeKind = getRepositoryService().getNodeKindForDiff(
+      final DirEntry.Kind nodeKindForDiff = getRepositoryService().getNodeKindForDiff(
           connection, command.getFrom(), command.getTo(), command.getPegRevision());
-      if (DirEntry.Kind.DIR == nodeKind) {
+      if (DirEntry.Kind.DIR == nodeKindForDiff) {
         model.putAll(handlePathDiff(connection, modelAndView, command));
-      } else if (DirEntry.Kind.FILE == nodeKind) {
+      } else if (DirEntry.Kind.FILE == nodeKindForDiff) {
         model.putAll(handleFileDiff(connection, modelAndView, command, charset));
       } else {
-        throw new DiffException("Unable to diff entry of kind: " + nodeKind);
+        throw new DiffException("Unable to diff entry of kind: " + nodeKindForDiff);
       }
     } catch (final IdenticalFilesException ife) {
       logger.debug("Files are identical");
