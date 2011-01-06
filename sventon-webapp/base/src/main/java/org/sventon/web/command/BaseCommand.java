@@ -137,9 +137,9 @@ public class BaseCommand {
    *
    * @param pegRevision Peg revision.
    */
-  public void setPegRevision(final long pegRevision) {
-    Validate.isTrue(pegRevision > 0);
-    this.pegRevision = Revision.create(pegRevision);
+  public void setPegRevision(final Revision pegRevision) {
+    Validate.isTrue(pegRevision.getNumber() > 0);
+    this.pegRevision = pegRevision;
   }
 
   /**
