@@ -16,10 +16,7 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
-import org.sventon.model.DirEntry;
-import org.sventon.model.DirList;
-import org.sventon.model.RepositoryName;
-import org.sventon.model.Revision;
+import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
 import org.sventon.web.command.BaseCommand;
 
@@ -48,7 +45,8 @@ public class ListFilesControllerTest {
     final ListFilesController ctrl = new ListFilesController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.list(null, command.getPath(), command.getRevisionNumber())).andStubReturn(new DirList(entries, null));
+    expect(mockService.list(null, command.getPath(), command.getRevisionNumber())).andStubReturn(
+        new DirList(entries, new Properties()));
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
