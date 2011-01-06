@@ -11,6 +11,8 @@
  */
 package org.sventon.model;
 
+import org.apache.commons.lang.Validate;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class DirList implements Serializable {
    * @param properties Properties for
    */
   public DirList(final List<DirEntry> entries, final Properties properties) {
+    Validate.notNull(entries);
+    Validate.notNull(properties);
     this.entries = entries;
     this.properties = properties;
   }
