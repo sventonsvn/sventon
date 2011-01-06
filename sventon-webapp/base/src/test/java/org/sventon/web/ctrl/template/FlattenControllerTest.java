@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.TestUtils;
 import org.sventon.cache.CacheGateway;
 import org.sventon.model.*;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.List;

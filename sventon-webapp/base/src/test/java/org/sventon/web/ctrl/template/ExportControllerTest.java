@@ -20,7 +20,7 @@ import org.sventon.export.ExportExecutor;
 import org.sventon.model.PathRevision;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.MultipleEntriesCommand;
 
 import javax.servlet.http.HttpServletRequest;

@@ -19,7 +19,11 @@ import org.sventon.SventonException;
 import org.sventon.diff.DiffException;
 import org.sventon.diff.IdenticalFilesException;
 import org.sventon.diff.IllegalFileFormatException;
-import org.sventon.model.*;
+import org.sventon.model.DiffStatus;
+import org.sventon.model.DiffStyle;
+import org.sventon.model.DirEntry;
+import org.sventon.model.FileRevision;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.DiffCommand;
 

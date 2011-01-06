@@ -18,8 +18,8 @@ import org.sventon.Colorer;
 import org.sventon.model.AnnotatedTextFile;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import java.io.IOException;

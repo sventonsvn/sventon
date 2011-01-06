@@ -9,9 +9,10 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.model;
+package org.sventon.web;
 
 import org.junit.Test;
+import org.sventon.model.RepositoryName;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;

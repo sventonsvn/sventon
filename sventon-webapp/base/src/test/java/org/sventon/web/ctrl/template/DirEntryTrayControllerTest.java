@@ -25,8 +25,8 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.DirEntry;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.Revision;
-import org.sventon.model.UserRepositoryContext;
 import org.sventon.service.RepositoryService;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import java.util.Map;

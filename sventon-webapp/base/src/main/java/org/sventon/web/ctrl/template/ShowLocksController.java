@@ -14,7 +14,7 @@ package org.sventon.web.ctrl.template;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;

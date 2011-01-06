@@ -21,6 +21,7 @@ import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheGateway;
 import org.sventon.diff.DiffException;
 import org.sventon.model.*;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.ctrl.AbstractBaseController;
 
@@ -59,7 +60,7 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long, org.sventon.model.UserRepositoryContext ,
+ * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long, org.sventon.web.UserRepositoryContext ,
  * HttpServletRequest,HttpServletResponse,BindException)}
  * method.
  * </ol>
@@ -242,18 +243,19 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
   /**
    * Creates a repository connection.
    *
-   * @param configuration     Configuration
-   * @param repositoryContext Context
+   * @param configuration         Configuration
+   * @param userRepositoryContext Context
    * @return Connection
    * @throws SventonException if a subversion error occur.
    */
-  protected SVNConnection createConnection(final RepositoryConfiguration configuration, UserRepositoryContext repositoryContext) throws SventonException {
+  protected SVNConnection createConnection(final RepositoryConfiguration configuration,
+                                           final UserRepositoryContext userRepositoryContext) throws SventonException {
     final SVNConnection connection;
     final RepositoryName repositoryName = configuration.getName();
     final SVNURL svnurl = configuration.getSVNURL();
 
     if (configuration.isAccessControlEnabled()) {
-      connection = connectionFactory.createConnection(repositoryName, svnurl, repositoryContext.getCredentials());
+      connection = connectionFactory.createConnection(repositoryName, svnurl, userRepositoryContext.getCredentials());
     } else {
       connection = connectionFactory.createConnection(repositoryName, svnurl, configuration.getUserCredentials());
     }

@@ -151,7 +151,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
         LOGGER.error("Unable to flush cache", ce);
       }
     }
-    
+
     if (firstTime) {
       LOGGER.info("Cache population completed for: " + revisionUpdate.getRepositoryName());
     }
@@ -195,7 +195,7 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
   }
 
   private void updateCache(final List<DirEntry> entriesToAdd, final Map<String, DirEntry.Kind> entriesToDelete,
-                                   final long revision, DirEntryCache entryCache) {
+                           final long revision, DirEntryCache entryCache) {
     entryCache.update(entriesToDelete, entriesToAdd);
     entryCache.setLatestCachedRevisionNumber(revision);
   }

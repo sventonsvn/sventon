@@ -19,8 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.sventon.appl.Application;
 import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserContext;
+import org.sventon.web.UserRepositoryContext;
 
 import static org.sventon.util.EncodingUtils.encode;
 

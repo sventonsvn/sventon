@@ -20,6 +20,7 @@ import org.sventon.SVNConnectionFactory;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.*;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;

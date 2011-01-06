@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.SVNConnection;
 import org.sventon.export.ExportExecutor;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 import org.sventon.web.command.MultipleEntriesCommand;
 

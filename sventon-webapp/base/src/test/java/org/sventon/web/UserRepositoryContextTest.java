@@ -9,10 +9,12 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.model;
+package org.sventon.web;
 
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.sventon.model.Credentials;
+import org.sventon.model.RepositoryName;
 
 import javax.servlet.http.HttpServletRequest;
 

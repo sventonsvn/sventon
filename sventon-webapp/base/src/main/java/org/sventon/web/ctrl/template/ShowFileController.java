@@ -20,6 +20,7 @@ import org.sventon.SVNConnection;
 import org.sventon.model.*;
 import org.sventon.util.EncodingUtils;
 import org.sventon.util.WebUtils;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.activation.FileTypeMap;
