@@ -50,7 +50,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
     final String filterExtension = ServletRequestUtils.getStringParameter(request, "filterExtension", "all");
     logger.debug("filterExtension: " + filterExtension);
 
-    List<DirEntry> entries = (List<DirEntry>) model.get("svndir");
+    List<DirEntry> entries = (List<DirEntry>) model.get("dirEntries");
 
     if (bypassEmpty && entries.size() == 1) {
       final DirEntry entry = entries.get(0);
@@ -73,7 +73,7 @@ public final class RepoBrowserController extends ListDirectoryContentsController
     new DirEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
     logger.debug("Adding data to model");
-    model.put("svndir", entries);
+    model.put("dirEntries", entries);
     model.put("locks", getRepositoryService().getLocks(connection, command.getPath(), false));
     model.put("existingExtensions", new FileExtensionList(entries).getExtensions());
     model.put("filterExtension", filterExtension);

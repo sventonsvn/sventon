@@ -52,7 +52,7 @@
     <table class="sventonEntriesTable">
       <%@ include file="/WEB-INF/jspf/sortableEntriesTableHeaderRow.jspf"%>
         <c:set var="rowCount" value="0"/>
-        <c:forEach items="${svndir}" var="entry">
+        <c:forEach items="${dirEntries}" var="entry">
           <jsp:useBean id="entry" type="org.sventon.model.DirEntry" />
           <s:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
             <s:param name="revision" value="${command.revision}" />

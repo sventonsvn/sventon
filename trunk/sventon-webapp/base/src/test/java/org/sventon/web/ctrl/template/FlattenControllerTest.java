@@ -54,7 +54,7 @@ public class FlattenControllerTest {
     verify(mockCache);
 
     assertEquals(2, model.size());
-    assertEquals(entries.get(2), ((List<DirEntry>) model.get("svndir")).get(0));
+    assertEquals(entries.get(2), ((List<DirEntry>) model.get("dirEntries")).get(0));
     assertEquals(Boolean.TRUE, model.get("isFlatten"));
   }
 

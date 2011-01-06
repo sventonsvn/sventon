@@ -57,7 +57,7 @@ public class ListDirectoryContentsControllerTest {
     verify(mockService);
 
     assertEquals(2, model.size());
-    assertEquals(entries.get(0), ((List<DirEntry>) model.get("svndir")).get(0));
+    assertEquals(entries.get(0), ((List<DirEntry>) model.get("dirEntries")).get(0));
     assertNull(modelAndView.getViewName());
   }
 

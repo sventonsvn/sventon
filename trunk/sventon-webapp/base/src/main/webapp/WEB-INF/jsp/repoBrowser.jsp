@@ -84,7 +84,7 @@
         <c:set var="rowCount" value="${rowCount + 1}"/>
       </c:if>
 
-      <c:forEach items="${svndir}" var="entry">
+      <c:forEach items="${dirEntries}" var="entry">
         <s:url value="/repos/${command.name}/list${entry.fullEntryName}/" var="listUrl">
           <s:param name="revision" value="${command.revision}" />
           <s:param name="bypassEmpty" value="true" />

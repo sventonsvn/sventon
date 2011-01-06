@@ -17,7 +17,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 
-<c:forEach items="${svndir}" var="entry">
+<c:forEach items="${dirEntries}" var="entry">
   <s:url value="/repos/${command.name}/show${entry.fullEntryName}" var="showFileUrl">
     <s:param name="revision" value="${command.revision}" />
   </s:url>

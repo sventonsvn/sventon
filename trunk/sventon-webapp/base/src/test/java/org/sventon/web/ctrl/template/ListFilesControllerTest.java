@@ -57,6 +57,6 @@ public class ListFilesControllerTest {
 
     assertEquals(3, model.size());
     assertEquals(12, model.get("rowNumber"));
-    assertEquals(entries.get(0), ((List<DirEntry>) model.get("svndir")).get(0));
+    assertEquals(entries.get(0), ((List<DirEntry>) model.get("dirEntries")).get(0));
   }
 }

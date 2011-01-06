@@ -74,7 +74,7 @@ public final class SearchEntriesController extends AbstractTemplateController {
 
     new DirEntrySorter(userRepositoryContext.getSortType(), userRepositoryContext.getSortMode()).sort(entries);
 
-    model.put("svndir", entries);
+    model.put("dirEntries", entries);
     model.put("searchString", searchString);
     model.put("locks", getRepositoryService().getLocks(connection, command.getPath(), false));
     model.put("startDir", startDir);
