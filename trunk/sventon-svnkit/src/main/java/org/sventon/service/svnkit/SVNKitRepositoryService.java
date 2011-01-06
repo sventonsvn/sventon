@@ -271,16 +271,8 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
     assertNotBinary(connection, from, to, pegRevision);
 
     try {
-      final TextFile leftFile;
-      final TextFile rightFile;
-
-      if (Revision.UNDEFINED.equals(pegRevision)) {
-        leftFile = getTextFile(connection, from.getPath(), from.getRevision().getNumber(), charset);
-        rightFile = getTextFile(connection, to.getPath(), to.getRevision().getNumber(), charset);
-      } else {
-        leftFile = getTextFile(connection, from.getPath(), pegRevision.getNumber(), charset);
-        rightFile = getTextFile(connection, to.getPath(), pegRevision.getNumber(), charset);
-      }
+      final TextFile leftFile = getTextFile(connection, from.getPath(), getProperRevision(from.getRevision(), pegRevision), charset);
+      final TextFile rightFile = getTextFile(connection, to.getPath(), getProperRevision(to.getRevision(), pegRevision), charset);
       return createUnifiedDiff(from, to, charset, leftFile, rightFile);
     } catch (final IOException ioex) {
       throw new DiffException("Unable to produce unified diff", ioex);

@@ -318,11 +318,10 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
       try {
         final String fromPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(from.getPath()));
         final String toPath = encodeUri(conn.getRepositoryRootUrl().getFullPath(to.getPath()));
-
-        final org.tigris.subversion.javahl.Revision fromRev =
-            org.tigris.subversion.javahl.Revision.getInstance(from.getRevision().getNumber());
-        final org.tigris.subversion.javahl.Revision toRev =
-            org.tigris.subversion.javahl.Revision.getInstance(to.getRevision().getNumber());
+        final long fromRevision = getProperRevision(from.getRevision(), pegRevision).getNumber();
+        final long toRevision = getProperRevision(to.getRevision(), pegRevision).getNumber();
+        final org.tigris.subversion.javahl.Revision fromRev = org.tigris.subversion.javahl.Revision.getInstance(fromRevision);
+        final org.tigris.subversion.javahl.Revision toRev = org.tigris.subversion.javahl.Revision.getInstance(toRevision);
 
         client.diff(fromPath, fromRev, toPath, toRev, null, outFile.getAbsolutePath(), Depth.empty, null, false, false, true);
         final String diffResultString = FileUtils.readFileToString(outFile, charset);

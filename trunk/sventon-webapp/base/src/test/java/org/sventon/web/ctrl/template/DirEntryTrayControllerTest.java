@@ -63,7 +63,7 @@ public class DirEntryTrayControllerTest {
     command.setPath("/trunk/test");
     command.setName(new RepositoryName("test"));
     command.setRevision(Revision.create(10));
-    command.setPegRevision(5);
+    command.setPegRevision(Revision.create(5));
 
     mockService = EasyMock.createMock(RepositoryService.class);
     request = new MockHttpServletRequest();
