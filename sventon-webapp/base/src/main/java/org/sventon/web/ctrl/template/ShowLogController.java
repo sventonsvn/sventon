@@ -77,10 +77,10 @@ public final class ShowLogController extends AbstractTemplateController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     final DirEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
+    model.put("isFile", DirEntry.Kind.FILE == nodeKind);
     model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntries);
     model.put("pageSize", pageSize);
-    model.put("isFile", nodeKind == DirEntry.Kind.FILE);
     model.put("morePages", logEntries.size() == pageSize);
     model.put("nextPath", nextPath);
     model.put("nextRevision", fromRevision);
