@@ -42,6 +42,8 @@ import static org.mockito.Mockito.mock;
 
 public class GetFileControllerTest {
 
+  private final MockServletContext mockServletContext = new MockServletContext();
+
   private Application application;
   private ConfigDirectory configDirectory;
   private RepositoryConfiguration repositoryConfiguration;
@@ -54,14 +56,13 @@ public class GetFileControllerTest {
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
 
-    final MockServletContext servletContext = new MockServletContext();
-    servletContext.setContextPath("sventon-test");
+    mockServletContext.setContextPath("sventon-test");
 
     repositoryName = new RepositoryName("test");
 
     configDirectory = TestUtils.getTestConfigDirectory();
     configDirectory.setCreateDirectories(false);
-    configDirectory.setServletContext(servletContext);
+    configDirectory.setServletContext(mockServletContext);
 
     application = new Application(configDirectory);
     application.setConfigured(true);
@@ -218,4 +219,29 @@ public class GetFileControllerTest {
     ctrl.svnHandle(null, command, 100, null, request, response, null);
     EasyMock.verify(repositoryServiceMock);
   }
+
+  @Test
+  public void testSvnHandleGetFile() throws Exception {
+    final BaseCommand command = new BaseCommand();
+    command.setName(repositoryName);
+    command.setPath("/testfile.txt");
+
+    final GetFileController ctrl = new GetFileController();
+    ctrl.setApplication(application);
+    ctrl.setRepositoryService(mock(RepositoryService.class));
+
+    final ConfigurableMimeFileTypeMap mftm = new ConfigurableMimeFileTypeMap();
+    mftm.afterPropertiesSet();
+    ctrl.setMimeFileTypeMap(mftm);
+    final ModelAndView modelAndView;
+
+    final MockHttpServletResponse res = new MockHttpServletResponse();
+    ctrl.setServletContext(mockServletContext);
+    modelAndView = ctrl.svnHandle(null, command, 100, null, request, res, null);
+
+    assertNull(modelAndView);
+    assertEquals("text/plain", res.getContentType());
+    assertTrue(((String) res.getHeader(WebUtils.CONTENT_DISPOSITION_HEADER)).startsWith("attachment"));
+  }
+
 }
