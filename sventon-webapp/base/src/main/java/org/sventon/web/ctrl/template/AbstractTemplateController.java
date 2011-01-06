@@ -197,6 +197,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
       return prepareAuthenticationRequiredView(request, getApplicationModel(command));
     } catch (DiffException ex) {
       logger.warn(ex.getMessage());
+      errors.reject(null, ex.getMessage());
       return prepareExceptionModelAndView(errors, command, getApplicationModel(command));
     } catch (Exception ex) {
       logger.error("Exception", ex);
@@ -367,6 +368,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
     final Map<String, Object> model = exception.getModel();
     model.putAll(applicationModel);
     model.put("repositoryURL", repositoryConfiguration != null ? repositoryConfiguration.getRepositoryDisplayUrl() : "");
+    logger.debug("Exception model: " + model);
     return new ModelAndView("goto", model);
   }
 
