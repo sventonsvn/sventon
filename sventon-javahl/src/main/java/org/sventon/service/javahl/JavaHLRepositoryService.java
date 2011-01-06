@@ -260,7 +260,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
             }
           });
       // Skip the first entry as that's the one we passed in 'path'.
-      return new DirList(dirEntries.subList(1, dirEntries.size()), null);
+      return new DirList(dirEntries.subList(1, dirEntries.size()), new Properties());
     } catch (ClientException ce) {
       return translateException("Unable to list directory: " + encodedPath, ce);
     }

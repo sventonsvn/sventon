@@ -112,7 +112,7 @@ public final class DirEntry implements Serializable {
    * @param properties The Properties for these entries
    * @return The directory list instance containing a List<DirEntry> and Properties.
    */
-  public static DirList createDirectoryList(final List<DirEntry> entries, Properties properties) {
+  public static DirList createDirectoryList(final List<DirEntry> entries, final Properties properties) {
     return new DirList(entries, properties);
   }
 
