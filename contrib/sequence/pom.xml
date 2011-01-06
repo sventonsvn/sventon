@@ -10,12 +10,6 @@
   <name>Sequence diff handling library</name>
   <url>http://svn.svnkit.com/repos/svnkit/trunk/contrib/sequence</url>
 
-  <parent>
-    <groupId>org.sventon</groupId>
-    <artifactId>sventon-contrib</artifactId>
-    <version>2.5.0-SNAPSHOT</version>
-  </parent>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
