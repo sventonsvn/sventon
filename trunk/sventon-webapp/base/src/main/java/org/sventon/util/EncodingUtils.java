@@ -13,7 +13,9 @@ package org.sventon.util;
 
 import javax.mail.internet.MimeUtility;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
 /**

@@ -21,8 +21,8 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
-import org.sventon.model.UserContext;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserContext;
+import org.sventon.web.UserRepositoryContext;
 
 import java.util.Arrays;
 import java.util.Set;

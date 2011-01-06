@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.model.DirEntry;
-import org.sventon.model.UserRepositoryContext;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;

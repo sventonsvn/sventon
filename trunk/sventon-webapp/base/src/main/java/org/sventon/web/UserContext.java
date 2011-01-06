@@ -9,10 +9,11 @@
  * newer version instead, at your option.
  * ====================================================================
  */
-package org.sventon.model;
+package org.sventon.web;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.sventon.model.RepositoryName;
 
 import java.io.Serializable;
 import java.util.HashMap;

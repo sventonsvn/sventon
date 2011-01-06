@@ -17,7 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
-import org.sventon.model.*;
+import org.sventon.model.DirEntry;
+import org.sventon.model.DirEntryTray;
+import org.sventon.model.PeggedDirEntry;
+import org.sventon.model.RepositoryName;
+import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
 
 import javax.servlet.http.HttpServletRequest;
