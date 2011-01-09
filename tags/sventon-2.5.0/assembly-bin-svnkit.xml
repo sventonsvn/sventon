@@ -1,0 +1,35 @@
+<assembly>
+  <id>bin-svnkit</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <moduleSets>
+    <moduleSet>
+      <includes>
+        <include>org.sventon.sventon-webapp.svnkit:svn</include>
+      </includes>
+      <binaries>
+        <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+        <includeDependencies>false</includeDependencies>
+        <unpack>false</unpack>
+      </binaries>
+    </moduleSet>
+  </moduleSets>
+
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>licenses/**</include>
+        <include>changes.txt</include>
+        <include>readme.txt</include>
+        <include>upgrade.txt</include>
+        <include>LICENSE.txt</include>
+        <include>gpl.txt</include>
+      </includes>
+      <excludes>
+        <exclude>licenses/svnjavahl/</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

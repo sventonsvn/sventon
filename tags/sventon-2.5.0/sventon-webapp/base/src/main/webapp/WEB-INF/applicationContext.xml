@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * ====================================================================
+ * Copyright (c) 2005-2011 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  <context:annotation-config/>
+  <context:mbean-export registration="ignoreExisting" default-domain="#{configDirectory.contextPath}"/>
+
+  <bean id="sventonTempRootDir" class="java.io.File">
+    <constructor-arg value="${java.io.tmpdir}"/>
+    <constructor-arg value="sventon_config"/>
+  </bean>
+
+  <bean id="configDirectory" class="org.sventon.appl.ConfigDirectory">
+    <constructor-arg ref="sventonTempRootDir"/>
+    <constructor-arg value="export_temp"/>
+    <constructor-arg value="repositories"/>
+  </bean>
+
+  <bean id="configDirectoryFactory" class="org.sventon.ConfigDirectoryFactory" factory-bean="configDirectory"
+      factory-method="createConfigDirectoryFactory">
+  </bean>
+
+  <bean id="defaultEncoding" class="java.lang.String">
+    <constructor-arg value="UTF-8"/>
+  </bean>
+
+  <bean id="defaultArchiveCharset" class="java.lang.String">
+    <constructor-arg value="cp850"/>
+  </bean>
+
+  <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+  <bean id="nameEditor" class="org.sventon.web.command.editor.RepositoryNameEditor"/>
+  <bean id="revisionEditor" class="org.sventon.web.command.editor.RevisionEditor"/>
+  <bean id="pathRevisionEditor" class="org.sventon.web.command.editor.PathRevisionEditor"/>
+
+  <bean id="maxRevisionsCount" class="java.lang.Integer">
+    <constructor-arg value="10"/>
+  </bean>
+
+  <bean id="logsPerPageCount" class="java.lang.Integer">
+    <constructor-arg value="20"/>
+  </bean>
+
+  <bean id="maxThumbnailSize" class="java.lang.Integer">
+    <constructor-arg value="200"/>
+  </bean>
+
+  <util:constant id="defaultDiffView" static-field="org.sventon.model.DiffStyle.unified"/>
+
+  <bean id="svnProvider" class="org.sventon.service.SVNProvider" factory-method="loadProvider"/>
+
+  <bean id="connectionFactory" class="org.sventon.SVNConnectionFactory" factory-bean="svnProvider"
+        factory-method="getConnectionFactory">
+    <constructor-arg ref="configDirectoryFactory"/>
+  </bean>
+
+  <bean id="repositoryService" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
+        factory-method="getRepositoryService"/>
+
+  <bean id="application" class="org.sventon.appl.Application">
+    <constructor-arg ref="configDirectory"/>
+    <property name="configurationFileName" value="sventon_config.properties"/>
+    <property name="editableConfig" value="false"/>
+    <property name="configPassword" value="password"/>
+    <property name="scheduler" ref="scheduler"/>
+    <property name="configurationReloadSupported" value="false"/>
+  </bean>
+
+  <bean id="baseCommandValidator" class="org.sventon.web.command.BaseCommandValidator"/>
+
+  <bean id="configCommandValidator" class="org.sventon.web.command.ConfigCommandValidator">
+    <property name="repositoryService" ref="repositoryService"/>
+  </bean>
+
+  <bean id="rssFeedGenerator" class="org.sventon.rss.RssFeedGeneratorImpl">
+    <property name="feedType" value="rss_2.0"/>
+    <property name="logMessageLength" value="40"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+  </bean>
+
+  <bean id="configAuthorizationFilter" class="org.sventon.web.filter.ConfigAuthorizationFilter">
+    <constructor-arg ref="application"/>
+  </bean>
+
+  <bean id="characterEncodingFilter" class="org.springframework.web.filter.CharacterEncodingFilter">
+    <property name="encoding" ref="defaultEncoding"/>
+    <property name="forceEncoding" value="true"/>
+  </bean>
+
+  <bean id="availableCharsets" class="org.sventon.model.AvailableCharsets">
+    <constructor-arg ref="defaultEncoding"/>
+  </bean>
+
+  <bean id="mimeFileTypeMap" class="org.springframework.mail.javamail.ConfigurableMimeFileTypeMap"/>
+
+  <bean id="objectCacheManager" class="org.sventon.cache.ObjectCacheManager">
+    <constructor-arg index="0" ref="configDirectory"/>
+    <constructor-arg index="1" value="1000"/>
+    <constructor-arg index="2" value="true"/>
+    <constructor-arg index="3" value="true"/>
+    <constructor-arg index="4" value="0"/>
+    <constructor-arg index="5" value="0"/>
+    <constructor-arg index="6" value="true"/>
+    <constructor-arg index="7" value="120"/>
+    <property name="MBeanServer" ref="mbeanServer"/>
+  </bean>
+
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="classpath:messages"/>
+    <property name="useCodeAsDefaultMessage" value="true"/>
+    <property name="cacheSeconds" value="-1"/>
+  </bean>
+
+  <!-- Gateway class for accessing the caches -->
+  <!-- Bean configuration -->
+  <bean id="cacheGatewayBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="org.sventon.cache.CacheGateway"/>
+    <property name="target" ref="cacheGateway"/>
+    <property name="interceptorNames">
+      <list>
+        <value>stopWatchAroundAdvisor</value>
+        <value>cacheUpdateBeforeAdvisor</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Advisor pointcut definition for before advice -->
+  <bean id="stopWatchAroundAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="stopWatchAroundAdvice"/>
+    <property name="pattern" value=".*"/>
+  </bean>
+
+  <!-- Advisor pointcut definition for before advice -->
+  <bean id="cacheUpdateBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    <property name="advice" ref="cacheUpdateBeforeAdvice"/>
+    <property name="pattern" value=".*"/>
+  </bean>
+
+  <!-- Advice class -->
+  <bean id="cacheUpdateBeforeAdvice" class="org.sventon.advice.CacheUpdateBeforeAdvice"/>
+
+  <!-- Advice class -->
+  <bean id="stopWatchAroundAdvice" class="org.sventon.advice.StopWatchAroundAdvice"/>
+
+  <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl"/>
+
+  <!-- Monitors the repository and polls for changes -->
+  <bean id="repositoryChangeMonitor" class="org.sventon.repository.RepositoryChangeMonitorImpl">
+    <property name="listeners" ref="observerList"/>
+    <property name="maxRevisionCountPerUpdate" value="100"/>
+  </bean>
+
+  <util:list id="cacheManagers">
+    <ref local="dirEntryCacheManager"/>
+    <ref local="logMessageCacheManager"/>
+    <ref local="objectCacheManager"/>
+  </util:list>
+
+  <!-- List of RevisionObservers registered to observe repository changes -->
+  <util:list id="observerList">
+    <ref local="entryCacheUpdater"/>
+    <ref local="logEntryCacheUpdater"/>
+    <!--<ref local="mailNotifier"/>-->
+  </util:list>
+
+  <!-- NOTE: Make sure to change the parameters below! -->
+  <bean id="mailNotifier" class="org.sventon.mail.MailNotifier">
+    <property name="application" ref="application"/>
+    <property name="baseURL" value="http://yourserver.com/svn/"/>
+    <property name="host" value="smtp.yourserver.com"/>
+    <property name="from" value="sventon@yourserver.com"/>
+    <property name="subject" value="@@repositoryName@@ - revision @@revision@@"/>
+    <property name="port" value="25"/>
+    <property name="receivers" ref="mailNotificationReceivers"/>
+    <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+    <property name="revisionCountThreshold" value="100"/>
+    <property name="auth" value="false"/>
+    <property name="ssl" value="false"/>
+    <property name="user" value=""/>
+    <property name="password" value=""/>
+  </bean>
+
+  <!-- List of notification mail receivers -->
+  <util:list id="mailNotificationReceivers">
+    <value>me@myserver.org</value>
+    <value>you@yourserver.org</value>
+  </util:list>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="entryCacheUpdater" class="org.sventon.cache.direntrycache.DirEntryCacheUpdater">
+    <constructor-arg ref="dirEntryCacheManager"/>
+    <constructor-arg ref="application"/>
+  </bean>
+
+  <!-- Updater class for applying repository changes to cache -->
+  <bean id="logEntryCacheUpdater" class="org.sventon.cache.logmessagecache.LogMessageCacheUpdater">
+    <constructor-arg ref="logMessageCacheManager"/>
+  </bean>
+
+  <bean id="dirEntryCacheManager" class="org.sventon.cache.DirEntryCacheManager">
+    <constructor-arg ref="configDirectory"/>
+  </bean>
+
+  <bean id="logMessageCacheManager" class="org.sventon.cache.LogMessageCacheManager">
+    <constructor-arg ref="configDirectory"/>
+  </bean>
+
+  <bean id="exportFileFilter" class="org.sventon.export.ExportFileFilter"/>
+
+  <bean id="exportFileExpirationRule" class="org.sventon.export.ExportFileExpirationRule">
+    <constructor-arg value="600000"/>
+  </bean>
+
+  <bean id="exportExecutor" class="org.sventon.export.ExportExecutorImpl">
+    <constructor-arg ref="configDirectory"/>
+    <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
+  </bean>
+
+  <bean id="tempFileCleaner" class="org.sventon.export.TemporaryFileCleaner">
+    <constructor-arg ref="configDirectory"/>
+    <constructor-arg ref="exportFileFilter"/>
+    <constructor-arg ref="exportFileExpirationRule"/>
+  </bean>
+
+  <bean id="colorer" class="org.sventon.colorer.JHighlightColorer">
+    <property name="rendererMappings">
+      <map>
+        <entry key="java" value-ref="javaXhtmlRenderer"/>
+        <entry key="beanshell" value-ref="javaXhtmlRenderer"/>
+        <entry key="bsh" value-ref="javaXhtmlRenderer"/>
+        <entry key="html" value-ref="xmlXhtmlRenderer"/>
+        <entry key="htm" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="xhtml" value-ref="xmlXhtmlRenderer"/>
+        <entry key="lzx" value-ref="xmlXhtmlRenderer"/>
+        <entry key="cpp" value-ref="cppXhtmlRenderer"/>
+        <entry key="cxx" value-ref="cppXhtmlRenderer"/>
+        <entry key="c++" value-ref="cppXhtmlRenderer"/>
+        <entry key="c" value-ref="cppXhtmlRenderer"/>
+        <entry key="groovy" value-ref="groovyXhtmlRenderer"/>
+
+        <entry key="pas" value-ref="pascalXhtmlRenderer"/>
+        <entry key="dpr" value-ref="pascalXhtmlRenderer"/>
+        <entry key="cs" value-ref="csharpXhtmlRenderer"/>
+        <entry key="vb" value-ref="visualBasicXhtmlRenderer"/>
+        <entry key="bas" value-ref="visualBasicXhtmlRenderer"/>
+        <entry key="js" value-ref="javaScriptXhtmlRenderer"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="javaXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaXhtmlRenderer"/>
+  <bean id="xmlXhtmlRenderer" class="com.uwyn.jhighlight.renderer.XmlXhtmlRenderer"/>
+  <bean id="cppXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CppXhtmlRenderer"/>
+  <bean id="groovyXhtmlRenderer" class="com.uwyn.jhighlight.renderer.GroovyXhtmlRenderer"/>
+
+  <bean id="pascalXhtmlRenderer" class="com.uwyn.jhighlight.renderer.PascalXhtmlRenderer"/>
+  <bean id="csharpXhtmlRenderer" class="com.uwyn.jhighlight.renderer.CSharpXhtmlRenderer"/>
+  <bean id="visualBasicXhtmlRenderer" class="com.uwyn.jhighlight.renderer.VisualBasicXhtmlRenderer"/>
+  <bean id="javaScriptXhtmlRenderer" class="com.uwyn.jhighlight.renderer.JavaScriptXhtmlRenderer"/>
+
+  <bean id="imageScaler" class="org.sventon.util.ImageScaler"/>
+
+  <bean id="httpAuthenticationHandler" class="org.sventon.web.HttpBasicAuthenticationHandler">
+    <constructor-arg value="sventon rss feed"/>
+  </bean>
+
+  <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+    <property name="locateExistingServerIfPossible" value="true"/>
+  </bean>
+
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="waitForJobsToCompleteOnShutdown" value="true"/>
+    <property name="triggers">
+      <list>
+        <ref local="repositoryChangeMonitorUpdateTrigger"/>
+        <ref local="tempFileCleanerTrigger"/>
+      </list>
+    </property>
+    <property name="quartzProperties">
+      <props>
+        <prop key="org.quartz.scheduler.jmx.export">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="repositoryChangeMonitorUpdateTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="repositoryChangeMonitorUpdateJobDetail"/>
+    <property name="startDelay" value="0"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="repositoryChangeMonitorUpdateJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="repositoryChangeMonitor"/>
+    <property name="targetMethod" value="updateAll"/>
+  </bean>
+
+  <bean id="tempFileCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="tempFileCleanerJobDetail"/>
+    <property name="startDelay" value="300000"/>
+    <property name="repeatInterval" value="600000"/>
+  </bean>
+
+  <bean id="tempFileCleanerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="tempFileCleaner"/>
+    <property name="targetMethod" value="clean"/>
+  </bean>
+
+</beans>
