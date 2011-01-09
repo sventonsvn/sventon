@@ -3,12 +3,12 @@
   <formats>
     <format>zip</format>
   </formats>
-  <includeBaseDirectory>false</includeBaseDirectory>
+  <includeBaseDirectory>true</includeBaseDirectory>
 
   <fileSets>
     <fileSet>
       <excludes>
-        <exclude>pom.xml.releaseBackup</exclude>
+        <exclude>**/*.releaseBackup</exclude>
         <exclude>release.properties</exclude>
         <exclude>config</exclude>
         <exclude>servers</exclude>
