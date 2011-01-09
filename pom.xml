@@ -128,6 +128,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <tagBase>https://svn.berlios.de/svnroot/repos/sventon/tags</tagBase>
+          <preparationGoals>install assembly:assembly</preparationGoals>
         </configuration>
       </plugin>
     </plugins>
