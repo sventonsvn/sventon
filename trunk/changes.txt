@@ -1,6 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
-[1991] Release 2.5.0 (2011-01-07)
+[1993] Release 2.5.0 (2011-01-07)
 
 [1978] Fixed: Bug #17480 - 'Show file' fails when diff:ing two different files.
 [1973] Fixed: Bug #17801 - BaseURL is not effective on the login screen.
