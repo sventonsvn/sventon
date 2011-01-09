@@ -7,6 +7,7 @@
   </a>
   <a href="/download/" onClick="javascript:urchinTracker ('/downloads/v250');">(mirror)</a>
 
+  <br/>
   <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v216'); ">
     <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.1.6
   </a>
