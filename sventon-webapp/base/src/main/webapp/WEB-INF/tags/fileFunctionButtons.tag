@@ -35,7 +35,7 @@
 
 <c:choose>
   <c:when test="${empty archivedEntry}">
-    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.encodedTarget}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="document.location.href='${downloadLinkUrl}';">
   </c:when>
   <c:otherwise>

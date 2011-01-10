@@ -180,6 +180,17 @@ public class BaseCommand {
   }
 
   /**
+   * Gets the encoded target.
+   *
+   * @return Encoded target or "/" if target was empty.
+   * @see #getTarget()
+   */
+  public String getEncodedTarget() {
+    final String target = getTarget();
+    return EncodingUtils.encodeUrl("".equals(target) ? "/" : target);
+  }
+
+  /**
    * Get path, excluding the end/leaf. For complete path including target,see
    * {@link BaseCommand#getPath()}.
    * <p/>

@@ -30,15 +30,15 @@ public final class PathUtil {
    * <p/>
    * The returned string will have no final "/", even if it is a directory.
    *
-   * @param fullpath Path
-   * @return Target part of the path. If <tt>fullpath</tt> is null an
+   * @param fullPath Path
+   * @return Target part of the path. If <tt>fullPath</tt> is null an
    *         empty string will be returned.
    */
-  public static String getTarget(final String fullpath) {
-    if (fullpath == null) {
+  public static String getTarget(final String fullPath) {
+    if (fullPath == null) {
       return "";
     }
-    final String[] splitString = fullpath.split("/");
+    final String[] splitString = fullPath.split("/");
     final int length = splitString.length;
     if (length == 0) {
       return "";

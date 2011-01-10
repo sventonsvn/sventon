@@ -18,6 +18,7 @@ import org.sventon.diff.DiffException;
 import org.sventon.model.DiffStyle;
 import org.sventon.model.PathRevision;
 import org.sventon.model.Revision;
+import org.sventon.util.EncodingUtils;
 import org.sventon.util.PathUtil;
 
 import java.util.Arrays;
@@ -115,12 +116,12 @@ public final class DiffCommand extends BaseCommand {
   }
 
   /**
-   * Gets the from target.
+   * Gets the encoded <i>from</i> target.
    *
    * @return From target, i.e. file name without path.
    */
   public String getFromTarget() {
-    return PathUtil.getTarget(getFromPath());
+    return EncodingUtils.encodeUrl(PathUtil.getTarget(getFromPath()));
   }
 
   /**
@@ -130,6 +131,15 @@ public final class DiffCommand extends BaseCommand {
    */
   public Revision getFromRevision() {
     return fromFileRevision != null ? fromFileRevision.getRevision() : Revision.UNDEFINED;
+  }
+
+  /**
+   * Gets the diff <i>from</i> entry.
+   *
+   * @return The entry.
+   */
+  public PathRevision getFrom() {
+    return fromFileRevision;
   }
 
   /**
@@ -151,21 +161,12 @@ public final class DiffCommand extends BaseCommand {
   }
 
   /**
-   * Gets the diff <i>from</i> entry.
-   *
-   * @return The entry.
-   */
-  public PathRevision getFrom() {
-    return fromFileRevision;
-  }
-
-  /**
-   * Gets the to target.
+   * Gets the encoded <i>to</i> target.
    *
    * @return To target, i.e. file name without path.
    */
   public String getToTarget() {
-    return PathUtil.getTarget(getToPath());
+    return EncodingUtils.encodeUrl(PathUtil.getTarget(getToPath()));
   }
 
   /**
