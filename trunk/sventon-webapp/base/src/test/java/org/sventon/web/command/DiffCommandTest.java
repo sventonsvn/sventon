@@ -81,6 +81,20 @@ public class DiffCommandTest {
   }
 
   @Test
+  public void testDiffCommandEscapedTargets() throws Exception {
+    final String[] params = new String[]{
+        "/bug/code/${a}/@90",
+        "/bug/code/${b}/@91"};
+
+    final DiffCommand command = new DiffCommand();
+    command.setEntries(PathRevision.parse(params));
+    assertEquals("/bug/code/${a}/", command.getFromPath());
+    assertEquals("/bug/code/${b}/", command.getToPath());
+    assertEquals("%24%7Ba%7D", command.getFromTarget());
+    assertEquals("%24%7Bb%7D", command.getToTarget());
+  }
+
+  @Test
   public void testDiffCommandNoHistory() throws Exception {
     final String[] params = new String[]{
         "/bug/code/try2/Order.java@92"

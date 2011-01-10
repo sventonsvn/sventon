@@ -1,5 +1,6 @@
 sventon change history
 -----------------------------------------------------------------------------------------
+[2001] Fixed: Bug #17851 - NPE during browse of repository.
 [2000] Fixed: Bug #17852 - Does not work out-of-the-box on Jetty due to JSTL issue.
 
 [1997] Release 2.5.0 (2011-01-09)

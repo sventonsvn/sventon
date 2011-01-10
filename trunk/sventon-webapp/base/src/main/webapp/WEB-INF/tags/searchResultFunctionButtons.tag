@@ -26,5 +26,5 @@
   <s:param name="revision" value="${command.revision}" />
 </s:url>
 
-<input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target eq '' ? '/' : command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
+<input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.encodedTarget}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
 <input type="button" class="btn" value="<spring:message code="showlocks.button.text"/>" onclick="document.location.href='${showLockLinkUrl}';">

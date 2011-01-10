@@ -36,7 +36,7 @@
     <input type="button" class="btn" value="<spring:message code="showarchivefile.button.text"/>" onclick="document.location.href='${showFileUrl}';">
   </c:when>
   <c:otherwise>
-    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.target}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
+    <input type="button" class="btn" value="<spring:message code="showlog.button.text"/>" onmouseover="Tip('<spring:message code="showlog.button.tooltip" arguments="${command.encodedTarget}"/>')" onclick="document.location.href='${showLogLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="download.button.text"/>" onclick="document.location.href='${downloadLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="blame.button.text"/>" onclick="document.location.href='${blameLinkUrl}';">
     <input type="button" class="btn" value="<spring:message code="showrawfile.button.text"/>" onmouseover="Tip('<spring:message code="showrawfile.button.tooltip"/>')" onclick="document.location.href='${showFileUrl}&format=raw';">
@@ -45,6 +45,6 @@
       <s:param name="revision" value="${command.revision}"/>
     </s:url>
 
-    <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.path},${command.revision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
+    <input type="button" class="btn" value="<spring:message code="diffprev.button.text"/>" onmouseover="Tip('<spring:message code="diffprev.button.tooltip" arguments="${command.encodedPath},${command.revision}"/>')" onclick="document.location.href='${diffPreviousUrl}';">
   </c:otherwise>
 </c:choose>

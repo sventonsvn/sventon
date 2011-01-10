@@ -108,6 +108,32 @@ public class BaseCommandTest {
   }
 
   @Test
+  public void testGetTarget() {
+    final BaseCommand cmd = new BaseCommand();
+    cmd.setPath("/trunk/src/");
+    assertEquals("src", cmd.getTarget());
+    cmd.setPath("/trunk/src/File.java");
+    assertEquals("File.java", cmd.getTarget());
+  }
+
+  @Test
+  public void testGetEncodedTarget() {
+    final BaseCommand cmd = new BaseCommand();
+    cmd.setPath("");
+    assertEquals("/", cmd.getEncodedTarget());
+    cmd.setPath("/");
+    assertEquals("/", cmd.getEncodedTarget());
+    cmd.setPath("/src/");
+    assertEquals("src", cmd.getEncodedTarget());
+    cmd.setPath("/trunk/src/");
+    assertEquals("src", cmd.getEncodedTarget());
+    cmd.setPath("/trunk/src/File.java");
+    assertEquals("File.java", cmd.getEncodedTarget());
+    cmd.setPath("/trunk/src/${a}");
+    assertEquals("%24%7Ba%7D", cmd.getEncodedTarget());
+  }
+
+  @Test
   public void testGetPathPart() {
     final BaseCommand cmd = new BaseCommand();
 
