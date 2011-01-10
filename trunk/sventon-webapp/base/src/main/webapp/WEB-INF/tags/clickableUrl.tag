@@ -13,6 +13,7 @@
 %>
 <%@ tag body-content="empty" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="s" uri="/WEB-INF/sventon.tld" %>
 <%@ attribute name="command" required="true" type="org.sventon.web.command.BaseCommand" %>
 <%@ attribute name="url" required="true" type="java.lang.String" %>
@@ -24,7 +25,7 @@
   </s:url>
   <a href="${basePathUrl}">${url}</a> /
   <c:set var="accuPath" value=""/>
-  <c:forTokens items="${command.parentPath}" delims="/" var="pathSegment">
+  <c:forEach items="${fn:split(command.parentPath,'/')}" var="pathSegment">
     <c:set var="accuPath" scope="page" value="${accuPath}${pathSegment}/"/>
       <c:choose>
         <c:when test="${clickable}">
@@ -36,6 +37,6 @@
         <c:otherwise>${pathSegment}</c:otherwise>
       </c:choose>
     /
-  </c:forTokens>
+  </c:forEach>
 ${command.target}
 </span>
