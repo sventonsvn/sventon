@@ -24,7 +24,7 @@ import org.sventon.model.LogEntry;
 import org.sventon.model.Revision;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.web.HttpAuthenticationHandler;
-import org.sventon.web.command.BaseCommand;
+import org.sventon.web.command.RevisionRangeCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +60,7 @@ public final class RSSController extends AbstractBaseController {
 
     logger.debug("Getting RSS feed");
 
-    final BaseCommand command = (BaseCommand) cmd;
+    final RevisionRangeCommand command = (RevisionRangeCommand) cmd;
     logger.debug(command);
 
     if (!application.isConfigured()) {
@@ -87,7 +87,7 @@ public final class RSSController extends AbstractBaseController {
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
-          Revision.FIRST.getNumber(), command.getPath(), configuration.getRssItemsCount(), false, true));
+          command.getStopRevision().getNumber(), command.getPath(), configuration.getRssItemsCount(), false, true));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (AuthenticationException aex) {
       logger.info(aex.getMessage());

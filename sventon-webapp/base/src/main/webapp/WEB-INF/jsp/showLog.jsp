@@ -131,6 +131,8 @@
         <s:param name="nextRevision" value="${nextRev}" />
         <s:param name="revision" value="${command.revision}"/>
         <s:param name="stopOnCopy" value="${stopOnCopy}"/>
+        <s:param name="stopRevision" value="${stopRevision}"/>
+        <s:param name="paging" value="${paging}"/>
       </s:url>
 
       <c:choose>

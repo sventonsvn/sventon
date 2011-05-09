@@ -61,7 +61,7 @@ public interface RepositoryService {
    * @param fromRevision        From revision
    * @param toRevision          To revision
    * @param path                The repository path
-   * @param limit               Revision limit
+   * @param limit               Revision limit. Unlimited if zero or less.
    * @param stopOnCopy          Stop on copy
    * @param includeChangedPaths If <code>true</code>, all changed paths will be included in the resulting objects.
    * @return The log entries
