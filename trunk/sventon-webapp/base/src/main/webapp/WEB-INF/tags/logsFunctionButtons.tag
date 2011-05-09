@@ -28,9 +28,21 @@
 <s:url var="downloadLinkUrl" value="/repos/${command.name}/get${command.path}">
   <s:param name="revision" value="${command.revision}" />
 </s:url>
-<s:url var="showLogUrl" value="/repos/${command.name}/log${command.path}">
+<s:url var="showLogToggleSoCUrl" value="/repos/${command.name}/log${command.path}">
   <s:param name="revision" value="${command.revision}"/>
+  <s:param name="paging" value="${paging}"/>
   <s:param name="stopOnCopy" value="${!stopOnCopy}"/>
+  <c:if test="${nextPath ne null}">
+    <s:param name="nextPath" value="${nextPath}" />
+  </c:if>
+  <c:if test="${nextRevision ne null}">
+    <s:param name="nextRevision" value="${nextRevision}" />
+  </c:if>
+</s:url>
+<s:url var="showLogTogglePagingUrl" value="/repos/${command.name}/log${command.path}">
+  <s:param name="revision" value="${command.revision}"/>
+  <s:param name="stopOnCopy" value="${stopOnCopy}"/>
+  <s:param name="paging" value="${!paging}"/>
   <c:if test="${nextPath ne null}">
     <s:param name="nextPath" value="${nextPath}" />
   </c:if>
@@ -49,5 +61,5 @@
   </c:otherwise>
 </c:choose>
 <input type="button" class="btn" value="<spring:message code="show-all-details.button.text"/>" onclick="toggleLogDetails(${fn:length(logEntriesPage)}); toggleButtonText(this, '<spring:message code="show-all-details.button.text"/>', '<spring:message code="hide-all-details.button.text"/>');"/>
-<input type="checkbox" <c:if test="${stopOnCopy}">checked="checked"</c:if> onclick="document.location.href='${showLogUrl}';"/>
-<spring:message code="stop-on-copy.button.text"/>
+<input type="checkbox" <c:if test="${stopOnCopy}">checked="checked"</c:if> onclick="document.location.href='${showLogToggleSoCUrl}';"/><spring:message code="stop-on-copy.button.text"/>
+<input type="checkbox" <c:if test="${paging}">checked="checked"</c:if> onclick="document.location.href='${showLogTogglePagingUrl}';"/><spring:message code="paging.button.text"/>

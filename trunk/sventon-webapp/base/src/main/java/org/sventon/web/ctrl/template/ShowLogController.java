@@ -12,15 +12,14 @@
 package org.sventon.web.ctrl.template;
 
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.sventon.NoSuchRevisionException;
 import org.sventon.SVNConnection;
 import org.sventon.model.DirEntry;
 import org.sventon.model.LogEntry;
-import org.sventon.model.Revision;
 import org.sventon.web.UserRepositoryContext;
 import org.sventon.web.command.BaseCommand;
+import org.sventon.web.command.LogCommand;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,9 +39,9 @@ import java.util.Map;
 public final class ShowLogController extends AbstractTemplateController {
 
   /**
-   * Max entries per page, default set to 20.
+   * Max entries per page, default set to 25.
    */
-  private int pageSize = 20;
+  private int pageSize = 25;
 
   /**
    * Set page size.
@@ -55,21 +54,21 @@ public final class ShowLogController extends AbstractTemplateController {
   }
 
   @Override
-  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand command,
+  protected ModelAndView svnHandle(final SVNConnection connection, final BaseCommand cmd,
                                    final long headRevision, final UserRepositoryContext userRepositoryContext,
                                    final HttpServletRequest request, final HttpServletResponse response,
                                    final BindException exception) throws Exception {
 
-    final String nextPath = ServletRequestUtils.getStringParameter(request, "nextPath", command.getPath());
-    final Revision nextRevision = Revision.parse(ServletRequestUtils.getStringParameter(
-        request, "nextRevision", command.getRevision().toString()));
-    final boolean stopOnCopy = ServletRequestUtils.getBooleanParameter(request, "stopOnCopy", true);
-    final long fromRevision = calculateFromRevision(headRevision, nextRevision);
+
+    final LogCommand command = (LogCommand) cmd;
+    final long fromRevision = command.calculateFromRevision(headRevision);
+    final String nextPath = command.calculateNextPath();
+    final int limit = command.isPaging() ? pageSize : -1;
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
-      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection,
-          fromRevision, Revision.FIRST.getNumber(), nextPath, pageSize, stopOnCopy, true));
+      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, fromRevision,
+          command.getStopRevision().getNumber(), nextPath, limit, command.isStopOnCopy(), true));
       LogEntry.setPathAtRevisionInLogEntries(logEntries, nextPath);
     } catch (NoSuchRevisionException nsre) {
       logger.info(nsre.getMessage());
@@ -77,23 +76,20 @@ public final class ShowLogController extends AbstractTemplateController {
 
     final Map<String, Object> model = new HashMap<String, Object>();
     final DirEntry.Kind nodeKind = getRepositoryService().getNodeKind(connection, command.getPath(), command.getRevisionNumber());
-    model.put("isFile", DirEntry.Kind.FILE == nodeKind);
-    model.put("stopOnCopy", stopOnCopy);
     model.put("logEntriesPage", logEntries);
-    model.put("pageSize", pageSize);
-    model.put("morePages", logEntries.size() == pageSize);
-    model.put("nextPath", nextPath);
-    model.put("nextRevision", fromRevision);
+    model.put("isFile", DirEntry.Kind.FILE == nodeKind);
+    model.put("stopOnCopy", command.isStopOnCopy());
+    model.put("paging", command.isPaging());
+    model.put("stopRevision", command.getStopRevision());
+
+    if (command.isPaging()) {
+      model.put("pageSize", pageSize);
+      model.put("morePages", logEntries.size() == pageSize);
+      model.put("nextPath", nextPath);
+      model.put("nextRevision", fromRevision);
+    }
+
     return new ModelAndView(getViewName(), model);
   }
 
-  protected long calculateFromRevision(long headRevision, Revision nextRevision) {
-    final long fromRevision;
-    if (nextRevision.isHeadRevision()) {
-      fromRevision = headRevision;
-    } else {
-      fromRevision = nextRevision.getNumber();
-    }
-    return fromRevision;
-  }
 }

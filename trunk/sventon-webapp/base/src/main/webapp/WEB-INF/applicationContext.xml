@@ -58,7 +58,7 @@
   </bean>
 
   <bean id="logsPerPageCount" class="java.lang.Integer">
-    <constructor-arg value="20"/>
+    <constructor-arg value="25"/>
   </bean>
 
   <bean id="maxThumbnailSize" class="java.lang.Integer">
