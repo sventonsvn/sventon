@@ -19,8 +19,8 @@ import org.sventon.TestUtils;
 import org.sventon.appl.Application;
 import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
+import org.sventon.cache.objectcache.DefaultObjectCache;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.LogEntry;
 import org.sventon.service.RepositoryService;
 
@@ -31,7 +31,7 @@ import java.util.List;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertFalse;
 
-public class RepositoryChangeMonitorImplTest {
+public class DefaultRepositoryChangeMonitorTest {
 
   private RepositoryService repositoryServiceMock = createMock(RepositoryService.class);
   private RepositoryChangeListener repositoryChangeListenerMock = createMock(RepositoryChangeListener.class);
@@ -59,7 +59,7 @@ public class RepositoryChangeMonitorImplTest {
   }
 
   private ObjectCache createMemoryCache() throws Exception {
-    return new ObjectCacheImpl("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
+    return new DefaultObjectCache("sventonTestCache", null, 1000, false, false, 0, 0, false, 0);
   }
 
   @Test
@@ -82,7 +82,7 @@ public class RepositoryChangeMonitorImplTest {
     try {
       final List<RepositoryChangeListener> listeners = new ArrayList<RepositoryChangeListener>();
       listeners.add(repositoryChangeListenerMock);
-      final RepositoryChangeMonitorImpl changeMonitor = new RepositoryChangeMonitorImpl();
+      final DefaultRepositoryChangeMonitor changeMonitor = new DefaultRepositoryChangeMonitor();
       changeMonitor.setListeners(listeners);
       changeMonitor.setMaxRevisionCountPerUpdate(3);
       changeMonitor.setApplication(application);

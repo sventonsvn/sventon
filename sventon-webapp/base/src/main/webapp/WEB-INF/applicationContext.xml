@@ -92,7 +92,7 @@
     <property name="repositoryService" ref="repositoryService"/>
   </bean>
 
-  <bean id="rssFeedGenerator" class="org.sventon.rss.RssFeedGeneratorImpl">
+  <bean id="rssFeedGenerator" class="org.sventon.rss.DefaultRssFeedGenerator">
     <property name="feedType" value="rss_2.0"/>
     <property name="logMessageLength" value="40"/>
     <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
@@ -162,10 +162,10 @@
   <!-- Advice class -->
   <bean id="stopWatchAroundAdvice" class="org.sventon.advice.StopWatchAroundAdvice"/>
 
-  <bean id="cacheGateway" class="org.sventon.cache.CacheGatewayImpl"/>
+  <bean id="cacheGateway" class="org.sventon.cache.DefaultCacheGateway"/>
 
   <!-- Monitors the repository and polls for changes -->
-  <bean id="repositoryChangeMonitor" class="org.sventon.repository.RepositoryChangeMonitorImpl">
+  <bean id="repositoryChangeMonitor" class="org.sventon.repository.DefaultRepositoryChangeMonitor">
     <property name="listeners" ref="observerList"/>
     <property name="maxRevisionCountPerUpdate" value="100"/>
   </bean>
@@ -231,7 +231,7 @@
     <constructor-arg value="600000"/>
   </bean>
 
-  <bean id="exportExecutor" class="org.sventon.export.ExportExecutorImpl">
+  <bean id="exportExecutor" class="org.sventon.export.DefaultExportExecutor">
     <constructor-arg ref="configDirectory"/>
     <property name="archiveFileCharset" ref="defaultArchiveCharset"/>
   </bean>

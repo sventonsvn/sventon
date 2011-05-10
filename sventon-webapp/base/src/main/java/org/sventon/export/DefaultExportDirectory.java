@@ -29,7 +29,7 @@ import java.util.UUID;
  *
  * @author jesper@sventon.org
  */
-public final class ExportDirectoryImpl implements ExportDirectory {
+public final class DefaultExportDirectory implements ExportDirectory {
 
   /**
    * Logger for this class.
@@ -57,7 +57,7 @@ public final class ExportDirectoryImpl implements ExportDirectory {
   private final RepositoryName repositoryName;
 
   /**
-   * The charset to use for filenames and comments in compressed archive file.
+   * The charset to use for file names and comments in compressed archive file.
    */
   private final Charset charset;
 
@@ -72,9 +72,9 @@ public final class ExportDirectoryImpl implements ExportDirectory {
    *
    * @param repositoryName Repository name.
    * @param parentDir      Parent dir
-   * @param charset        The charset to use for filenames and comments in compressed archive file.
+   * @param charset        The charset to use for file names and comments in compressed archive file.
    */
-  public ExportDirectoryImpl(final RepositoryName repositoryName, final File parentDir, final Charset charset) {
+  public DefaultExportDirectory(final RepositoryName repositoryName, final File parentDir, final Charset charset) {
     this.repositoryName = repositoryName;
     this.charset = charset;
     exportDirectory = new File(parentDir, DIRECTORY_PREFIX + System.currentTimeMillis());

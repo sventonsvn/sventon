@@ -12,8 +12,8 @@
 package org.sventon.cache;
 
 import org.sventon.appl.ConfigDirectory;
+import org.sventon.cache.objectcache.DefaultObjectCache;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.RepositoryName;
 
 import javax.annotation.PreDestroy;
@@ -97,7 +97,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
       throw new CacheException("Unable to create directory: " + cachePath.getAbsolutePath());
     }
 
-    final ObjectCacheImpl objectCache = new ObjectCacheImpl(repositoryName.toString(), cachePath.getAbsolutePath(),
+    final DefaultObjectCache objectCache = new DefaultObjectCache(repositoryName.toString(), cachePath.getAbsolutePath(),
         maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
         diskExpiryThreadIntervalSeconds);
 

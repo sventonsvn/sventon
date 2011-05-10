@@ -24,7 +24,7 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
-public class CacheGatewayImplTest {
+public class DefaultCacheGatewayTest {
 
   private final RepositoryName repositoryName = new RepositoryName("testRepos");
 
@@ -43,7 +43,7 @@ public class CacheGatewayImplTest {
     for (DirEntry dirEntry : TestUtils.getDirectoryList()) {
       entryCache.add(dirEntry);
     }
-    final CacheGatewayImpl cache = new CacheGatewayImpl();
+    final DefaultCacheGateway cache = new DefaultCacheGateway();
     cache.setEntryCacheManager(cacheManager);
     return cache;
   }

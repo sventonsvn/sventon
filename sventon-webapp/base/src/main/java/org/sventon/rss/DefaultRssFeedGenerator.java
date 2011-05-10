@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class RssFeedGeneratorImpl implements RssFeedGenerator {
+public final class DefaultRssFeedGenerator implements RssFeedGenerator {
 
   /**
    * The generated feed type, default set to <tt>rss_2.0</tt>.

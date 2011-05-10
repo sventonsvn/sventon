@@ -3,7 +3,7 @@
   (:import [org.sventon.service RepositoryService]
     [org.sventon SVNConnection]
     [org.sventon.service.svnkit SVNKitConnection SVNKitRepositoryService]
-    [org.sventon.export ExportDirectoryImpl]
+    [org.sventon.export DefaultExportDirectory]
     [org.sventon.model PathRevision Revision RepositoryName]
     [org.sventon.colorer JHighlightColorer]
     [org.sventon.web.command DiffCommand]

@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
  *
  * @author jesper@sventon.org
  */
-public class ExportExecutorImpl implements ExportExecutor {
+public class DefaultExportExecutor implements ExportExecutor {
 
   /**
    * Logger for this class.
@@ -85,13 +85,13 @@ public class ExportExecutorImpl implements ExportExecutor {
    *
    * @param configDirectory The configuration directory. The export directory will be extracted.
    */
-  public ExportExecutorImpl(final ConfigDirectory configDirectory) {
+  public DefaultExportExecutor(final ConfigDirectory configDirectory) {
     this.exportRootDirectory = configDirectory.getExportDirectory();
   }
 
   @Override
   public UUID submit(final MultipleEntriesCommand command, final SVNConnection connection, final long pegRevision) {
-    final ExportDirectoryImpl exportDirectory = new ExportDirectoryImpl(command.getName(), exportRootDirectory, archiveFileCharset);
+    final DefaultExportDirectory exportDirectory = new DefaultExportDirectory(command.getName(), exportRootDirectory, archiveFileCharset);
     final UUID uuid = exportDirectory.getUUID();
     executorService.submit(new ExportTask(exportDirectory, connection, Arrays.asList(command.getEntries()), pegRevision));
     return uuid;
