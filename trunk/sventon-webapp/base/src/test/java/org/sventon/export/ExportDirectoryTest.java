@@ -26,7 +26,7 @@ public class ExportDirectoryTest {
   @Test
   public void testCreateTempFilename() throws Exception {
     final Date date = new Date(1111111111111L);
-    final ExportDirectoryImpl exportDirectory = new ExportDirectoryImpl(
+    final DefaultExportDirectory exportDirectory = new DefaultExportDirectory(
         new RepositoryName("defaultsvn"), new File(TestUtils.TEMP_DIR), null);
 
     //Since the output of SDF is dependent on local time zone we need to create the reference string

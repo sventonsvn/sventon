@@ -1,7 +1,7 @@
 (ns org.sventon.service.perftest
   (:import [org.sventon.service RepositoryService]
     [org.sventon SVNConnection]
-    [org.sventon.export ExportDirectoryImpl]
+    [org.sventon.export DefaultExportDirectory]
     [org.sventon.model PathRevision Revision RepositoryName]
     [org.sventon.colorer JHighlightColorer]
     [org.sventon.web.command DiffCommand]
@@ -113,7 +113,7 @@
     (let [paths [(PathRevision. "/trunk/lib" (Revision/parse "1800")),
                  (PathRevision. "/trunk/licenses" (Revision/parse "1800")),
                  (PathRevision. "/trunk/sventon" (Revision/parse "1800"))]
-          export-dir (ExportDirectoryImpl.
+          export-dir (DefaultExportDirectory.
         (RepositoryName. "test")
         (File. ".")
         (Charset/defaultCharset))]

@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class ObjectCacheImpl implements ObjectCache {
+public final class DefaultObjectCache implements ObjectCache {
 
   /**
    * The cache instance.
@@ -65,15 +65,15 @@ public final class ObjectCacheImpl implements ObjectCache {
    *                            Expiry thread interval
    * @throws CacheException if unable to create cache.
    */
-  public ObjectCacheImpl(final String cacheName,
-                         final String diskStorePath,
-                         final int maxElementsInMemory,
-                         final boolean overflowToDisk,
-                         final boolean eternal,
-                         final int timeToLiveSeconds,
-                         final int timeToIdleSeconds,
-                         final boolean diskPersistent,
-                         final int diskExpiryThreadIntervalSeconds) throws CacheException {
+  public DefaultObjectCache(final String cacheName,
+                            final String diskStorePath,
+                            final int maxElementsInMemory,
+                            final boolean overflowToDisk,
+                            final boolean eternal,
+                            final int timeToLiveSeconds,
+                            final int timeToIdleSeconds,
+                            final boolean diskPersistent,
+                            final int diskExpiryThreadIntervalSeconds) throws CacheException {
     try {
       final String cacheDiskStorePath = diskStorePath != null ? diskStorePath :
           ConfigDirectory.PROPERTY_KEY_SVENTON_DIR_SYSTEM;

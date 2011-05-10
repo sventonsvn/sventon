@@ -11,6 +11,7 @@
  */
 package org.sventon.export;
 
+import org.easymock.classextension.EasyMock;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -30,14 +31,28 @@ import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class ExportExecutorImplTest {
+public class DefaultExportExecutorTest {
 
   private static final String UUID_STRING = "c5eaa2ba-2655-444b-aa64-c15ecff3e6da";
 
   @Test
+  public void testSetArchiveFileCharset() throws Exception {
+    final ConfigDirectory configDirectoryMock = EasyMock.createMock(ConfigDirectory.class);
+    expect(configDirectoryMock.getExportDirectory()).andStubReturn(new File("."));
+    replay(configDirectoryMock);
+    final DefaultExportExecutor executor = new DefaultExportExecutor(configDirectoryMock);
+    assertEquals(DefaultExportExecutor.FALLBACK_CHARSET, executor.getArchiveFileCharset().toString());
+    executor.setArchiveFileCharset(null);
+    assertEquals(DefaultExportExecutor.FALLBACK_CHARSET, executor.getArchiveFileCharset().toString());
+    executor.setArchiveFileCharset("UTF-8");
+    assertEquals("UTF-8", executor.getArchiveFileCharset().toString());
+    verify(configDirectoryMock);
+  }
+
+  @Test
   public void testPrepareResponse() throws Exception {
     final ConfigDirectory configDirectoryMock = createMock(ConfigDirectory.class);
-    final ExportExecutorImpl exportExecutor = new ExportExecutorImpl(configDirectoryMock);
+    final DefaultExportExecutor exportExecutor = new DefaultExportExecutor(configDirectoryMock);
     final MockHttpServletRequest request = new MockHttpServletRequest();
     final MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -72,11 +87,11 @@ public class ExportExecutorImplTest {
     replay(exportDirectoryMock);
     replay(connection);
 
-    final ExportExecutorImpl exportExecutor = new ExportExecutorImpl(configDirectoryMock);
+    final DefaultExportExecutor exportExecutor = new DefaultExportExecutor(configDirectoryMock);
 
     exportExecutor.setRepositoryService(repositoryServiceMock);
 
-    final ExportExecutorImpl.ExportTask exportTask = exportExecutor.new ExportTask(exportDirectoryMock,
+    final DefaultExportExecutor.ExportTask exportTask = exportExecutor.new ExportTask(exportDirectoryMock,
         connection, entries, 123);
 
     exportTask.call();

@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.sventon.export.ExportDirectoryImpl.DATE_FORMAT_PATTERN;
+import static org.sventon.export.DefaultExportDirectory.DATE_FORMAT_PATTERN;
 
 /**
  * File expiration rule.

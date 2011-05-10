@@ -3,7 +3,7 @@
   (:import [org.sventon.service RepositoryService]
     [org.sventon SVNConnection]
     [org.sventon.service.javahl JavaHLConnection JavaHLRepositoryService]
-    [org.sventon.export ExportDirectoryImpl]
+    [org.sventon.export DefaultExportDirectory]
     [org.sventon.model PathRevision Revision SVNURL RepositoryName]
     [org.sventon.colorer JHighlightColorer]
     [org.sventon.web.command DiffCommand]

@@ -39,7 +39,7 @@ import java.util.List;
  * @author jesper@sventon.org
  */
 @ManagedResource
-public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonitor {
+public final class DefaultRepositoryChangeMonitor implements RepositoryChangeMonitor {
 
   /**
    * The logging instance.
@@ -90,7 +90,7 @@ public final class RepositoryChangeMonitorImpl implements RepositoryChangeMonito
   /**
    * Constructor.
    */
-  public RepositoryChangeMonitorImpl() {
+  public DefaultRepositoryChangeMonitor() {
     logger.info("Starting repository monitor");
   }
 

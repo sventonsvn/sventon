@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author jesper@sventon.org
  */
-public final class CacheGatewayImpl implements CacheGateway {
+public final class DefaultCacheGateway implements CacheGateway {
 
   private DirEntryCacheManager cacheManager;
   private LogMessageCacheManager logMessageCacheManager;

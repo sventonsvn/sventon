@@ -26,8 +26,8 @@ import org.sventon.appl.ConfigDirectory;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.cache.CacheException;
 import org.sventon.cache.ObjectCacheManager;
+import org.sventon.cache.objectcache.DefaultObjectCache;
 import org.sventon.cache.objectcache.ObjectCache;
-import org.sventon.cache.objectcache.ObjectCacheImpl;
 import org.sventon.model.RepositoryName;
 import org.sventon.service.RepositoryService;
 import org.sventon.util.ImageScaler;
@@ -168,7 +168,7 @@ public class GetFileControllerTest {
         configDirectory, 0, false, false, 0, 0, false, 0) {
       @Override
       protected ObjectCache createCache(RepositoryName cacheName) throws CacheException {
-        return new ObjectCacheImpl(cacheName.toString(), null, 1000, false, false, 0, 0, false, 0);
+        return new DefaultObjectCache(cacheName.toString(), null, 1000, false, false, 0, 0, false, 0);
       }
     };
     objectCacheManager.register(repositoryName);
