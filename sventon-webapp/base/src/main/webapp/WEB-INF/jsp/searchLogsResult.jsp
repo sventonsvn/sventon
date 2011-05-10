@@ -51,19 +51,19 @@
       <th><spring:message code="revision"/></th>
       <th><spring:message code="logmessage"/></th>
     </tr>
-    <c:forEach items="${logEntries}" var="logEntry">
+    <c:forEach items="${logEntries}" var="entry">
       <s:url value="/repos/${command.name}/info" var="showRevInfoUrl">
-        <s:param name="revision" value="${logEntry.revision}" />
+        <s:param name="revision" value="${entry.revision}" />
       </s:url>
       <tr class="${rowCount mod 2 == 0 ? 'sventonEntryEven' : 'sventonEntryOdd'}">
         <td class="sventonColNoWrap">
-          <span onmouseover="Tip('<s:age date="${logEntry.date}"/>');">
-            <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
+          <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
+            <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
           </span>
         </td>
-        <td>${logEntry.author}</td>
-        <td><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${logEntry.revision}</a></td>
-        <td>${fn:replace(logEntry.message, br, '<br>')}</td>
+        <td><s:author author="${entry.author}"/></td>
+        <td><a href="${showRevInfoUrl}" onmouseover="Tip('<spring:message code="showrevision.info.link.tooltip"/>')">${entry.revision}</a></td>
+        <td>${fn:replace(entry.message, br, '<br>')}</td>
       </tr>
       <c:set var="rowCount" value="${rowCount + 1}"/>
     </c:forEach>

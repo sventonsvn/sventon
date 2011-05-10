@@ -327,4 +327,6 @@
     <property name="targetMethod" value="clean"/>
   </bean>
 
+  <bean id="authorNameTransformer" class="org.sventon.web.transform.DefaultAuthorNameTransformer"/>
+
 </beans>

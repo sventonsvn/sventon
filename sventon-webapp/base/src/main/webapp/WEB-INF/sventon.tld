@@ -64,6 +64,18 @@
   </tag>
 
   <tag>
+    <description>Tag for decorating/transforming an author name string.</description>
+    <name>author</name>
+    <tag-class>org.sventon.web.tags.AuthorDecoratorTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>author</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
     <description>Creates a encoded URL with optional query parameters.</description>
     <name>url</name>
     <tag-class>org.sventon.web.tags.UrlTag</tag-class>

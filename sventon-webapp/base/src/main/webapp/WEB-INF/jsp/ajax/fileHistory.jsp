@@ -18,7 +18,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sventon" tagdir="/WEB-INF/tags" %>
-<%@ page import="java.util.Date" %>
 
 <c:if test="${fn:length(logEntries) > 1}">
     <table class="fileHistoryTable">
@@ -34,19 +33,12 @@
                                 <s:param name="forceDisplay" value="true"/>
                             </c:if>
                         </s:url>
-                        <jsp:useBean id="logEntry" type="org.sventon.model.LogEntry"/>
-                        <%
-                            final Date revDate = logEntry.getDate();
-                            final String authorString = logEntry.getAuthor();
-                        %>
-                        <option value="${showFileAtRevisionUrl}">
-                            <fmt:formatDate type="both" value="<%=revDate%>" dateStyle="short" timeStyle="short"/>
-                            <%
-                                if (authorString != null) {
-                                    out.print("(" + authorString + ")");
-                                }
-                            %>
-                        </option>
+                      <option value="${showFileAtRevisionUrl}">
+                        <fmt:formatDate type="both" value="${logEntry.date}" dateStyle="short" timeStyle="short"/>
+                        <c:if test="${logEntry.author ne null}">
+                          <s:author author="(${logEntry.author})"/>
+                        </c:if>
+                      </option>
                     </c:forEach>
                 </select>
             </td>
