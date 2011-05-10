@@ -49,7 +49,7 @@
         ${entry.revision}
       </a>
     </td>
-    <td class="sventonCol7">${entry.author}</td>
+    <td class="sventonCol7"><s:author author="${entry.author}"/></td>
     <td class="sventonCol8">
       <span onmouseover="Tip('<s:age date="${entry.date}"/>');">
         <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>

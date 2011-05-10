@@ -94,19 +94,20 @@ public final class HTMLCreator {
           throw new IllegalArgumentException("Unsupported type: " + type);
       }
     }
+    final String logMessage = WebUtils.nl2br(StringEscapeUtils.escapeHtml(logEntry.getMessage())); //TODO: Parse to apply Bugtraq link
+    final String author = logEntry.getAuthor();
+
     valueMap.put(ADDED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(added)));
     valueMap.put(MODIFIED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(modified)));
     valueMap.put(REPLACED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(replaced)));
     valueMap.put(DELETED_COUNT_KEY, Matcher.quoteReplacement(String.valueOf(deleted)));
-    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(
-        WebUtils.nl2br(StringEscapeUtils.escapeHtml(logEntry.getMessage()))))); //TODO: Parse to apply Bugtraq link
-    valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logEntry.getAuthor())));
+    valueMap.put(LOG_MESSAGE_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(logMessage)));
+    valueMap.put(AUTHOR_KEY, Matcher.quoteReplacement(StringUtils.trimToEmpty(author)));
     valueMap.put(DATE_KEY, dateFormat.format(logEntry.getDate()));
     valueMap.put(CHANGED_PATHS_KEY, Matcher.quoteReplacement(HTMLCreator.createChangedPathsTable(
         logEntry.getChangedPaths(), logEntry.getRevision(), null, baseURL, repositoryName, false, false, response)));
 
-    final StrSubstitutor substitutor = new StrSubstitutor(valueMap);
-    return substitutor.replace(bodyTemplate);
+    return new StrSubstitutor(valueMap).replace(bodyTemplate);
   }
 
   /**

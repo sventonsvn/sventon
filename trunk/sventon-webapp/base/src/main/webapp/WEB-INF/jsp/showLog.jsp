@@ -99,7 +99,7 @@
               <fmt:formatDate type="both" value="${entry.date}" dateStyle="short" timeStyle="short"/>
             </span>
           </td>
-          <td>${entry.author}</td>
+          <td><s:author author="${entry.author}"/></td>
           <c:choose>
             <c:when test="${isFile}">
               <s:url value="/repos/${command.name}/show${entry.pathAtRevision}" var="showUrl">
@@ -114,7 +114,7 @@
               <td><a href="${showRevInfoUrl}">${entry.revision}</a></td>
             </c:otherwise>
           </c:choose>
-          <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><%=WebUtils.nl2br(StringEscapeUtils.escapeXml(entry.getMessage()))%></a></td>
+          <td><%=WebUtils.nl2br(StringEscapeUtils.escapeXml(entry.getMessage()))%></td>
           <td><a href="#" onclick="Element.toggle('logInfoEntry${rowCount}'); toggleInnerHTML('hdr${rowCount}', '<spring:message code="less.link"/>', '<spring:message code="more.link"/>'); return false;"><span id="hdr${rowCount}"><spring:message code="more.link"/></span></a></td>
         </tr>
         <tr id="logInfoEntry${rowCount}" style="display:none" class="sventonEntryLogInfo">

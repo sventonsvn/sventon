@@ -37,7 +37,10 @@
             </span>
           </td>
         </tr>
-        <tr><td><b><spring:message code="author"/>:</b></td><td>${logEntry.author}</td></tr>
+        <tr>
+          <td><b><spring:message code="author"/>:</b></td>
+          <td><s:author author="${logEntry.author}"/></td>
+        </tr>
         <tr>
           <td valign="top"><b><spring:message code="message"/>:</b></td>
           <td><%=WebUtils.nl2br(StringEscapeUtils.escapeXml(logEntry.getMessage()))%></td>
@@ -48,10 +51,9 @@
 
   <tr>
     <td colspan="2">
-      <!-- Make sure not to rely on unboxing -->
       <!-- Cast of response variable needed by WAS -->
       <%=HTMLCreator.createChangedPathsTable(logEntry.getChangedPaths(), logEntry.getRevision(), null, "", name,
-          keepVisible.booleanValue(), linkToHead.booleanValue(), (HttpServletResponse) response)%>
+          keepVisible, linkToHead, (HttpServletResponse) response)%>
     </td>
   </tr>
 </table>

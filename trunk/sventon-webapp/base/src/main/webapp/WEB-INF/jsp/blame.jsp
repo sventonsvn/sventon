@@ -62,7 +62,7 @@
             ${row.revision}
           </a>
         </td>
-        <td class="blameAuthor">${row.author}</td>
+        <td class="blameAuthor"><s:author author="${row.author}"/></td>
         <td class="lineNo">${row.rowNumber}</td>
         <td class="lineContent">${row.content}</td>
       </tr>
