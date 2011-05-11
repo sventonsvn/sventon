@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[2005] Fixed: Bug #18112 - Unable to clean export temp files.
 [2002] Added: Feature #5343 - Toggleable paging in logs view.
 [2001] Fixed: Bug #17851 - NPE during browse of repository.
 [2000] Fixed: Bug #17852 - Does not work out-of-the-box on Jetty due to JSTL issue.
