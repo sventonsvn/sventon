@@ -14,6 +14,8 @@ package org.sventon.export;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import static org.sventon.export.DefaultExportDirectory.FILE_NAME_PATTERN;
+
 /**
  * Filter to match temporary export files using the name format <code>sventon-[millis].zip</code>.
  */
@@ -21,7 +23,7 @@ public final class ExportFileFilter implements FilenameFilter {
 
   @Override
   public boolean accept(final File dir, final String name) {
-    return name.matches("[^\\s]+-[0-9]{17}\\.zip");
+    return FILE_NAME_PATTERN.matcher(name).matches();
   }
 
 }

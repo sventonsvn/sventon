@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Represents a temporary export directory.
@@ -35,6 +36,11 @@ public final class DefaultExportDirectory implements ExportDirectory {
    * Logger for this class.
    */
   private final Log logger = LogFactory.getLog(getClass());
+
+  /**
+   * File name pattern.
+   */
+  public static final Pattern FILE_NAME_PATTERN = Pattern.compile("([^\\s]+)-([0-9]{17})\\.zip");
 
   /**
    * Date format used for file name assembling.

@@ -19,9 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.sventon.export.DefaultExportDirectory.DATE_FORMAT_PATTERN;
+import static org.sventon.export.DefaultExportDirectory.FILE_NAME_PATTERN;
 
 /**
  * File expiration rule.
@@ -34,8 +34,6 @@ public final class ExportFileExpirationRule implements ExpirationRule {
    * The logging instance.
    */
   private final Log logger = LogFactory.getLog(getClass());
-
-  private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
   /**
    * Temporary file expire time.
@@ -58,10 +56,11 @@ public final class ExportFileExpirationRule implements ExpirationRule {
    * @return True if file is old enough, according to the threshold value.
    */
   public boolean hasExpired(final File tempFile) {
-    final Matcher matcher = DIGIT_PATTERN.matcher(tempFile.getName());
+    final Matcher matcher = FILE_NAME_PATTERN.matcher(tempFile.getName());
     matcher.find();
     try {
-      final Date fileDate = new SimpleDateFormat(DATE_FORMAT_PATTERN).parse(matcher.group());
+      final String dateInMillis = matcher.group(2);
+      final Date fileDate = new SimpleDateFormat(DATE_FORMAT_PATTERN).parse(dateInMillis);
       return System.currentTimeMillis() - fileDate.getTime() > temporaryFileExpireTimeMs;
     } catch (final ParseException pe) {
       logger.warn("Unable to parse date part of filename: " + tempFile.getName(), pe);
