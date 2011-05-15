@@ -33,12 +33,13 @@
         <table class="sventonRepositoryFunctionsTable">
           <tr>
             <td>&nbsp;</td>
-            <td><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
+            <td colspan="2"><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
             <td colspan="2"><span class="exclamationText"><spring:bind path="command.path">${status.errorMessage}</spring:bind></span></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
             <td align="left"><label for="revisionInput"><spring:message code="goto.revision"/></label></td>
+            <td><img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('revision_help');"></td>
             <td colspan="2" align="left"><label for="pathInput"><spring:message code="goto.path"/></label></td>
           </tr>
           <tr>
@@ -47,9 +48,7 @@
                 <a href="#" onclick="goToHeadRevision(document.gotoForm); return false;" title="Click to go to 'HEAD' revision"><spring:message code="revision.head"/></a>
               </c:if>
             </td>
-            <td><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind>
-              <img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('revision_help');">
-            </td>
+            <td colspan="2"><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind></td>
             <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${command.encodedPath}"></spring:bind></td>
             <td><input type="hidden" id="nameInput" name="name" value="${command.name}"><input type="submit" class="btn" value="<spring:message code="go"/>"></td>
           </tr>
@@ -71,6 +70,18 @@
     </td>
   </tr>
 </table>
+
+<script language="javascript" type="text/javascript">
+  jQuery(document).ready(function() {
+    jQuery("#revisionInput").datepicker({
+      showOn: "button",
+      buttonImage: "images/icon_calendar.png",
+      buttonImageOnly: true,
+      dateFormat: "{yy-mm-dd}",
+      buttonText: "<spring:message code="date.select"/>"
+    })
+  });
+</script>
 
 <spring:hasBindErrors name="command">
   <table class="sventonSpringErrorMessageTable">
