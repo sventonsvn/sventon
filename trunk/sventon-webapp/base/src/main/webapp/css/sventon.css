@@ -452,3 +452,7 @@ a.helpDivCloseLink {
 
 .entry {
 }
+
+.ui-datepicker-trigger {
+    vertical-align: middle;
+}
