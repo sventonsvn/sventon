@@ -11,12 +11,12 @@
  * ====================================================================
  */
 %>
-<br>
-<table width="100%">
-  <tr>
-    <td colspan="2"><div id="downloadLinkDiv"/></td>
-  </tr>
-</table>
+<p><br/></p>
+
+<div style="width: 300px; margin-left: auto; margin-right: auto;">
+  <div id="progressbar"></div>
+  <div id="downloadLinkDiv"></div>
+</div>
 
 <p>
   <s:url value="/xml/${command.name}/rss${command.encodedPath}" var="rssUrl">
@@ -30,7 +30,7 @@
     var url = contextPath + '/ajax/${command.name}/exportprogress';
     var urlParams = 'uuid=${userRepositoryContext.exportUuid}';
     new Ajax.PeriodicalUpdater('downloadLinkDiv', url, {
-      asynchronous: true, frequency: 3, decay: 2, parameters: urlParams
+      asynchronous: true, frequency: 2, decay: 1.1, evalScripts:true, parameters: urlParams
     });
   </script>
 </c:if>

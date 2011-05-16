@@ -64,8 +64,8 @@ public class ExportControllerTest {
       public void delete(UUID uuid) {
       }
 
-      public boolean isExported(UUID uuid) {
-        return false;
+      public int getProgress(UUID uuid) {
+        return 1;
       }
     });
 

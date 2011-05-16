@@ -295,6 +295,7 @@ function deleteExportFile(exportDeleteUrl) {
   new Ajax.Updater({success: $('downloadLinkDiv')}, exportDeleteUrl, {
     method: 'post', onFailure: reportAjaxError, onComplete: function() {
   }});
+  $('progressbar').hide();
 }
 
 function showHideEntryTray() {

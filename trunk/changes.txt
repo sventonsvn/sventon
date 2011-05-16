@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[2008] Added: Feature #5129 - Show progress bar when exporting files.
 [2007] Added: Feature #5128 - Add date-picker to 'Goto revision' field.
 [2005] Fixed: Bug #18112 - Unable to clean export temp files.
 [2002] Added: Feature #5343 - Toggleable paging in logs view.

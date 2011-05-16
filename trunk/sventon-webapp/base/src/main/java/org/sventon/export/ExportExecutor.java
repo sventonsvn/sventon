@@ -48,12 +48,12 @@ public interface ExportExecutor {
       throws IOException;
 
   /**
-   * Checks if given UUID is exported (and finished).
+   * Gets the current export progress for given UUID.
    *
    * @param uuid Export UUID
-   * @return True or false.
+   * @return Progress (0..100)
    */
-  boolean isExported(final UUID uuid);
+  int getProgress(final UUID uuid);
 
   /**
    * Deletes the export file given an UUID.
