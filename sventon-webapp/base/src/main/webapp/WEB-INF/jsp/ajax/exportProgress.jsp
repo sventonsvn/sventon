@@ -27,17 +27,22 @@
 </s:url>
 
 <c:if test="${userRepositoryContext.isWaitingForExport eq true}">
-<div style="text-align:center; position:relative; ">
-  <c:choose>
-    <c:when test="${exportFinished eq true}">
-<a href="${exportDownloadUrl}"><span style="font-weight:bold; vertical-align:middle; color:green;">Download!</span></a>
-<a href="#" onclick="deleteExportFile('${exportDeleteUrl}'); return false;">
-  <img align="middle" src="images/delete.png" alt="<spring:message code="delete.tooltip"/>" title="<spring:message code="delete.tooltip"/>">
-</a>
-    </c:when>
-    <c:otherwise>
-<img src="images/spinner.gif" alt="spinner"><span style="vertical-align:40%; font-weight:bold; color:red;">Download in progress...</span>
-    </c:otherwise>
-  </c:choose>
-</div>
+  <script language="javascript" type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery("#progressbar").progressbar({value: ${exportProgress}})
+    });
+  </script>
+
+  <div style="text-align:center; position:relative; ">
+  <div style="width: 100px; margin-left: auto; margin-right: auto;">Exporting... ${exportProgress}&#37;</div>
+
+    <c:if test="${exportProgress eq 100}">
+      <a href="${exportDownloadUrl}"><span style="font-weight:bold; vertical-align:middle; color:green;">Click to download!</span></a>
+      <a href="#" onclick="deleteExportFile('${exportDeleteUrl}'); return false;">
+        <img align="middle" src="images/delete.png" alt="<spring:message code="delete.tooltip"/>"
+             title="<spring:message code="delete.tooltip"/>">
+      </a>
+    </c:if>
+  </div>
 </c:if>
+

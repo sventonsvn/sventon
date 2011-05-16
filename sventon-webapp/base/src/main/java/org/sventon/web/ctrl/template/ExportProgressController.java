@@ -65,9 +65,9 @@ public final class ExportProgressController extends AbstractTemplateController {
       exportExecutor.downloadByUUID(exportUuid, request, response);
       return null;
     } else {
-      final boolean finished = exportExecutor.isExported(exportUuid);
-      logger.debug("Export finished: " + finished);
-      model.put("exportFinished", finished);
+      final int progress = exportExecutor.getProgress(exportUuid);
+      logger.debug("Export progress: " + progress);
+      model.put("exportProgress", progress);
     }
     return new ModelAndView(getViewName(), model);
   }

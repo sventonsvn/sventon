@@ -38,6 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.sventon.export.ExportProgress.*;
+
 /**
  * ExportExecutor default implementation.
  *
@@ -73,7 +75,7 @@ public class DefaultExportExecutor implements ExportExecutor {
   /**
    * Map of completed exports.
    */
-  private final Map<UUID, File> completedExports = new ConcurrentHashMap<UUID, File>();
+  private final Map<UUID, Export> exportsInProgress = new ConcurrentHashMap<UUID, Export>();
 
   /**
    * Repository service.
@@ -98,22 +100,28 @@ public class DefaultExportExecutor implements ExportExecutor {
   }
 
   @Override
-  public boolean isExported(final UUID uuid) {
-    return completedExports.containsKey(uuid);
+  public int getProgress(final UUID uuid) {
+    if (!exportsInProgress.containsKey(uuid)) {
+      logger.warn("Export [" + uuid + "] is not in progress");
+      return 0;
+    } else {
+      final Export export = exportsInProgress.get(uuid);
+      return export.progress.getProgress();
+    }
   }
 
   @Override
   public void delete(final UUID uuid) {
-    completedExports.remove(uuid);
+    exportsInProgress.remove(uuid);
   }
 
   @Override
   public void downloadByUUID(final UUID uuid, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-    if (!completedExports.containsKey(uuid)) {
+    if (!exportsInProgress.containsKey(uuid)) {
       throw new IllegalStateException("No download with UUID: " + uuid);
     }
 
-    final File compressedFile = completedExports.get(uuid);
+    final File compressedFile = exportsInProgress.get(uuid).file;
     logger.debug("File size: " + compressedFile.length());
     OutputStream output = null;
     InputStream fileInputStream = null;
@@ -205,8 +213,11 @@ public class DefaultExportExecutor implements ExportExecutor {
       stopWatch.start();
       try {
         this.exportDirectory.mkdirs();
+        exportsInProgress.put(uuid, new Export(EXPORTING));
         repositoryService.export(connection, entries, pegRevision, exportDirectory);
-        completedExports.put(uuid, this.exportDirectory.compress());
+        exportsInProgress.put(uuid, new Export(COMPRESSING));
+        final File compressedFile = this.exportDirectory.compress();
+        exportsInProgress.put(uuid, new Export(DONE, compressedFile));
       } finally {
         stopWatch.stop();
         logger.info(stopWatch.shortSummary());
@@ -217,6 +228,21 @@ public class DefaultExportExecutor implements ExportExecutor {
         }
       }
       return null;
+    }
+  }
+
+  class Export {
+    private final ExportProgress progress;
+    private final File file;
+
+    Export(ExportProgress progress) {
+      this.progress = progress;
+      this.file = null;
+    }
+
+    Export(ExportProgress progress, File file) {
+      this.progress = progress;
+      this.file = file;
     }
   }
 }
