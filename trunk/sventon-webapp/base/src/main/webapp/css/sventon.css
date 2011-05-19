@@ -130,6 +130,10 @@ input.btn {
   padding: 0
 }
 
+.funcText {
+    vertical-align:middle;
+}
+
 .sventonSelectOption {
   color: #777777;
   background-color: inherit;
