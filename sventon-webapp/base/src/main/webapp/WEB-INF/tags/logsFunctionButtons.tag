@@ -61,5 +61,5 @@
   </c:otherwise>
 </c:choose>
 <input type="button" class="btn" value="<spring:message code="show-all-details.button.text"/>" onclick="toggleLogDetails(${fn:length(logEntriesPage)}); toggleButtonText(this, '<spring:message code="show-all-details.button.text"/>', '<spring:message code="hide-all-details.button.text"/>');"/>
-<input type="checkbox" <c:if test="${stopOnCopy}">checked="checked"</c:if> onclick="document.location.href='${showLogToggleSoCUrl}';"/><spring:message code="stop-on-copy.button.text"/>
-<input type="checkbox" <c:if test="${paging}">checked="checked"</c:if> onclick="document.location.href='${showLogTogglePagingUrl}';"/><spring:message code="paging.button.text"/>
+<input type="checkbox" <c:if test="${stopOnCopy}">checked="checked"</c:if> onclick="document.location.href='${showLogToggleSoCUrl}';"/><span class="funcText"><spring:message code="stop-on-copy.button.text"/></span>
+<input type="checkbox" <c:if test="${paging}">checked="checked"</c:if> onclick="document.location.href='${showLogTogglePagingUrl}';"/><span class="funcText"><spring:message code="paging.button.text"/></span>

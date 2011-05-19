@@ -20,11 +20,11 @@
 <%@ attribute name="searchMode" required="true" type="java.lang.String" %>
 
 <span style="white-space: nowrap;">
-  <spring:message code="search.text"/>
+  <span class="funcText"><spring:message code="search.text"/></span>
   <input type="radio" id="entrySearch" name="searchMode" class="rdo" value="entries" ${searchMode eq 'entries' ? 'checked' : ''}>
-  <label for="entrySearch"><spring:message code="entries"/></label>
+  <label for="entrySearch" class="funcText"><spring:message code="entries"/></label>
   <input type="radio" id="logSearch" name="searchMode" class="rdo" value="logMessages" ${searchMode eq 'logMessages' ? 'checked' : ''}>
-  <label for="logSearch"><spring:message code="logs"/></label>
+  <label for="logSearch" class="funcText"><spring:message code="logs"/></label>
 </span>
 <input type="hidden" name="startDir" value="${command.pathPart}">
 
