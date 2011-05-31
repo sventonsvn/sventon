@@ -23,7 +23,9 @@ import java.util.regex.Pattern;
  */
 public class DateUtil {
 
-  private static final String ISO8601_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
+  private static final String ISO8601_DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
+
+  private static final String ISO8601_DATE_FORMAT_PATTERN = "yyyy-MM-dd";
 
   /**
    * Interface used by pattern matcher to calculate the time and date part
@@ -42,12 +44,10 @@ public class DateUtil {
   static final ZoneClosure basicZoneCalc = new ZoneClosure() {
     @Override
     public void execute(Matcher matcher, Calendar calendar) {
-
       int zoneOffsetInMillis = "+".equals(matcher.group(10)) ? +1 : -1;
       int hoursOffset = Integer.parseInt(matcher.group(11));
       int minutesOffset = matcher.group(12) != null ? Integer.parseInt(matcher.group(13)) : 0;
       zoneOffsetInMillis = zoneOffsetInMillis * ((hoursOffset * 3600 + minutesOffset * 60) * 1000);
-
       calendar.set(Calendar.ZONE_OFFSET, zoneOffsetInMillis);
     }
   };
@@ -65,7 +65,6 @@ public class DateUtil {
       int hoursOffset = Integer.parseInt(matcher.group(12));
       int minutesOffset = matcher.group(13) != null ? Integer.parseInt(matcher.group(13)) : 0;
       zoneOffsetInMillis = zoneOffsetInMillis * ((hoursOffset * 3600 + minutesOffset * 60) * 1000);
-
       calendar.set(Calendar.ZONE_OFFSET, zoneOffsetInMillis);
     }
   };
@@ -73,7 +72,6 @@ public class DateUtil {
   static final ZoneClosure utcZoneCalc = new ZoneClosure() {
     @Override
     public void execute(Matcher matcher, Calendar calendar) {
-
       if ("Z".equals(matcher.group(10))) {
         calendar.set(Calendar.ZONE_OFFSET, 0);
         calendar.set(Calendar.DST_OFFSET, 0);
@@ -97,9 +95,7 @@ public class DateUtil {
       int year = Integer.parseInt(matcher.group(1));
       int month = Integer.parseInt(matcher.group(2));
       int day = Integer.parseInt(matcher.group(3));
-
       calendar.set(year, month - 1, day);
-
       return calendar;
     }
   };
@@ -131,7 +127,6 @@ public class DateUtil {
       calendar.set(Calendar.MINUTE, minutes);
       calendar.set(Calendar.SECOND, seconds);
       calendar.set(Calendar.MILLISECOND, milliseconds);
-
       return calendar;
     }
   };
@@ -139,7 +134,6 @@ public class DateUtil {
   static final DateCalculator timeOnlyDateCalc = new DateCalculator() {
     @Override
     public Calendar calculate(Matcher matcher) {
-
       Calendar calendar = Calendar.getInstance();
       int hours = Integer.parseInt(matcher.group(1));
       int minutes = Integer.parseInt(matcher.group(2));
@@ -158,7 +152,6 @@ public class DateUtil {
       calendar.set(Calendar.MINUTE, minutes);
       calendar.set(Calendar.SECOND, seconds);
       calendar.set(Calendar.MILLISECOND, milliseconds);
-
       return calendar;
     }
   };
@@ -201,9 +194,7 @@ public class DateUtil {
       zoneClosure.execute(matcher, calendar);
       return calendar;
     }
-
   }
-
 
   public static Date parseISO8601(final String date) {
     for (DatePattern pattern : DatePattern.values()) {
@@ -217,8 +208,7 @@ public class DateUtil {
 
   public static String formatISO8601(final Date date) {
     if (date == null) return "";
-    SimpleDateFormat dateFormat = new SimpleDateFormat(ISO8601_FORMAT_PATTERN);
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    SimpleDateFormat dateFormat = new SimpleDateFormat(ISO8601_DATE_FORMAT_PATTERN);
     return dateFormat.format(date);
   }
 

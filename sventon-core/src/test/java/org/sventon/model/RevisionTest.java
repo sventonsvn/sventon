@@ -76,6 +76,11 @@ public class RevisionTest {
   }
 
   @Test
+  public void parseShortDateRevision() throws Exception {
+    assertEquals("{2010-01-01}", Revision.parse("{2010-01-01}").toString());
+  }
+
+  @Test
   public void parseMalformedDateRevision() throws Exception {
     assertSame(Revision.UNDEFINED, Revision.parse("-r {foobar-not-applicable}"));
 

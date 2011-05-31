@@ -79,6 +79,17 @@ public final class Revision implements Serializable, Comparable<Revision> {
   }
 
   /**
+   * Constructor.
+   *
+   * @param revision       Revision date
+   * @param revisionNumber Revision number corresponding to the 'revision' parameter.
+   * @return Revision
+   */
+  public static Revision create(final Date revision, final long revisionNumber) {
+    return new Revision(revisionNumber, revision, false);
+  }
+
+  /**
    * Parse a given revision text into a Revision. The revision could be a number, date or a NamedRevision
    *
    * @param text Revision text to parse.
@@ -167,6 +178,6 @@ public final class Revision implements Serializable, Comparable<Revision> {
 
   @Override
   public String toString() {
-    return headRevision ? "HEAD" : revisionDate != null ? DateUtil.formatISO8601(revisionDate) : Long.toString(revisionNumber);
+    return headRevision ? "HEAD" : revisionDate != null ? "{" + DateUtil.formatISO8601(revisionDate) + "}" : Long.toString(revisionNumber);
   }
 }

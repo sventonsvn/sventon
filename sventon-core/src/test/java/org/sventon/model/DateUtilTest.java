@@ -106,7 +106,7 @@ $ svn checkout -r {20060217T1530-0500}
   }
 
   @Test
-  public void parseISO8601CompapctTFormat() throws Exception {
+  public void parseISO8601CompactTFormat() throws Exception {
     final Calendar cal = Calendar.getInstance();
     cal.set(2006, 2 - 1, 17, 15, 30, 0);
     cal.set(Calendar.MILLISECOND, 0);
@@ -124,15 +124,19 @@ $ svn checkout -r {20060217T1530-0500}
   public void formatISO8601() throws Exception {
     //yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
     final Calendar calStockholm = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"));
-    calStockholm.set(2010, 0, 1, 12, 34, 56);
+    calStockholm.set(2010, 0, 1, 12, 34, 0);
     calStockholm.set(Calendar.MILLISECOND, 0);
+    Assert.assertEquals("2010-01-01", DateUtil.formatISO8601(calStockholm.getTime()));
 
-    Assert.assertEquals("2010-01-01T11:34:56.000000Z", DateUtil.formatISO8601(calStockholm.getTime()));
+    final Calendar calStockholm2 = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"));
+    calStockholm2.set(2010, 0, 1, 12, 34, 56);
+    calStockholm2.set(Calendar.MILLISECOND, 0);
+    Assert.assertEquals("2010-01-01", DateUtil.formatISO8601(calStockholm2.getTime()));
 
-    Calendar calUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    final Calendar calUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     calUtc.set(2010, 0, 1, 12, 34, 56);
     calUtc.set(Calendar.MILLISECOND, 0);
-    Assert.assertEquals("2010-01-01T12:34:56.000000Z", DateUtil.formatISO8601(calUtc.getTime()));
+    Assert.assertEquals("2010-01-01", DateUtil.formatISO8601(calUtc.getTime()));
   }
 
 

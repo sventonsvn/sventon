@@ -82,8 +82,7 @@ public final class RSSController extends AbstractBaseController {
       final List<LogEntry> logEntries = new ArrayList<LogEntry>();
       connection = createRepositoryConnection(request, configuration);
       final Long headRevision = getRepositoryService().getLatestRevision(connection);
-      final Revision revision = getRepositoryService().translateRevision(connection, command.getRevision(), headRevision);
-      command.setRevision(revision);
+      command.setRevision(getRepositoryService().translateRevision(connection, command.getRevision(), headRevision));
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
       logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),

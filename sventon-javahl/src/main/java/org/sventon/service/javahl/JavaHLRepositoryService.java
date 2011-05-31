@@ -70,8 +70,8 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   }
 
   private List<LogEntry> getLogEntriesInternal(final SVNConnection connection, final long fromRevision,
-                                              final long toRevision, final String path, final long limit,
-                                              final boolean stopOnCopy, final boolean includeChangedPaths)
+                                               final long toRevision, final String path, final long limit,
+                                               final boolean stopOnCopy, final boolean includeChangedPaths)
       throws SventonException {
 
     final SVNClientInterface client = (SVNClientInterface) connection.getDelegate();
@@ -451,7 +451,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 //                    revAtDate.setValue(info2.getLastChangedRev());
                 }
               });
-          return Revision.create(revAtDate.longValue());
+          return Revision.create(date, revAtDate.longValue());
         } catch (ClientException ex) {
           return translateException("Unable to translate revision: " + revision, ex);
         }

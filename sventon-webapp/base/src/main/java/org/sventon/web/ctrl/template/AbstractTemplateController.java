@@ -167,8 +167,7 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
       connection = createConnection(configuration, repositoryContext);
       final Long headRevision = getRepositoryService().getLatestRevision(connection);
-      final Revision revision = getRepositoryService().translateRevision(connection, command.getRevision(), headRevision);
-      command.setRevision(revision);
+      command.setRevision(getRepositoryService().translateRevision(connection, command.getRevision(), headRevision));
 
       parseAndUpdateSortParameters(command, repositoryContext);
       parseAndUpdateLatestRevisionsDisplayCount(request, repositoryContext);
