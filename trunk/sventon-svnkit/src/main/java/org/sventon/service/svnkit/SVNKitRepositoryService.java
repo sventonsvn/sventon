@@ -356,7 +356,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
         final Date date = revision.getDate();
         if (date != null) {
           final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
-          return Revision.create(repository.getDatedRevision(date));
+          return Revision.create(date, repository.getDatedRevision(date));
         } else {
           logger.warn("Unexpected revision: " + revision);
           return Revision.createHeadRevision(headRevision);
