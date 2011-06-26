@@ -75,8 +75,10 @@ public class DirEntryTest {
 
   @Test
   public void testGetId() throws Exception {
-    final DirEntry entry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.FILE, 1, 1);
-    assertEquals("/trunk/ATestFile.java", entry.getId());
+    final DirEntry dirEntry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.DIR, 1, 1);
+    final DirEntry fileEntry = new DirEntry("/trunk/", "ATestFile.java", "A", new Date(), DirEntry.Kind.FILE, 1, 1);
+    assertEquals("/trunk/ATestFile.javaDIR", dirEntry.getId());
+    assertEquals("/trunk/ATestFile.javaFILE", fileEntry.getId());
   }
 
   @Test

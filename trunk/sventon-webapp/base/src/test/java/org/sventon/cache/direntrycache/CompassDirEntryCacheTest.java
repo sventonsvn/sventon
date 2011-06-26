@@ -19,8 +19,7 @@ import org.sventon.model.CamelCasePattern;
 import org.sventon.model.DirEntry;
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -120,16 +119,45 @@ public class CompassDirEntryCacheTest {
     entryCache.removeFile("/file1.java");
     assertEquals(12, entryCache.getSize());
 
-    // Must not matter in this case (entry is a file)
+    // Entry is a file!
     entryCache.removeDirectory("/file2.html");
-    assertEquals(11, entryCache.getSize());
+    assertEquals(12, entryCache.getSize());
 
     // Remove the 'trunk' recursively (trailing slash keeps the dir itself)
     entryCache.removeDirectory("/trunk/");
-    assertEquals(4, entryCache.getSize());
+    assertEquals(5, entryCache.getSize());
 
     // Remove the 'tags' recursively (without trailing slash everything is deleted)
     entryCache.removeDirectory("/TAGS");
+    assertEquals(2, entryCache.getSize());
+
+    entryCache.removeDirectory("/");
+    assertEquals(0, entryCache.getSize());
+  }
+
+  @Test
+  public void testAddFileAndDirEntryWithSameName() throws Exception {
+    assertEquals(0, entryCache.getSize());
+    entryCache.add(new DirEntry("/", "test", null, new Date(), DirEntry.Kind.DIR, 1, 0));
+    entryCache.add(new DirEntry("/", "test", null, new Date(), DirEntry.Kind.FILE, 1, 1));
+    assertEquals(2, entryCache.getSize());
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    assertEquals(0, entryCache.getSize());
+    addAll(entryCache, TestUtils.getDirectoryList());
+    assertEquals(13, entryCache.getSize());
+
+    final Map<String, DirEntry.Kind> toDelete = new LinkedHashMap<String, DirEntry.Kind>();
+    toDelete.put("/trunk", DirEntry.Kind.DIR);
+    toDelete.put("/TAGS", DirEntry.Kind.DIR);
+    toDelete.put("/file1.java", DirEntry.Kind.FILE);
+    toDelete.put("/file2.html", DirEntry.Kind.FILE);
+
+    final DirEntry dirEntry = new DirEntry("/", "fileInRoot", null, new Date(), DirEntry.Kind.FILE, 3, 1);
+    entryCache.update(toDelete, Collections.singletonList(dirEntry));
+
     assertEquals(1, entryCache.getSize());
   }
 
