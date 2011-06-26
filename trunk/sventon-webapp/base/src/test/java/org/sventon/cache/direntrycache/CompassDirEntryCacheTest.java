@@ -113,11 +113,11 @@ public class CompassDirEntryCacheTest {
     addAll(entryCache, TestUtils.getDirectoryList());
     assertEquals(13, entryCache.getSize());
 
-    entryCache.remove("/file1.java");
+    entryCache.removeFile("/file1.java");
     assertEquals(12, entryCache.getSize());
 
     // Try to remove again
-    entryCache.remove("/file1.java");
+    entryCache.removeFile("/file1.java");
     assertEquals(12, entryCache.getSize());
 
     // Must not matter in this case (entry is a file)
