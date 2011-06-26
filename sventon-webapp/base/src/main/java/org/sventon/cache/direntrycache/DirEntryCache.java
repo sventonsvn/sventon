@@ -58,11 +58,11 @@ public interface DirEntryCache extends Cache {
   void clear();
 
   /**
-   * Removes entries from the cache, based by path and file name.
+   * Removes file entries from the cache, based by path and file name.
    *
    * @param pathAndName Entry to remove from cache.
    */
-  void remove(String pathAndName);
+  void removeFile(String pathAndName);
 
   /**
    * Removes and adds entries in the same transaction.

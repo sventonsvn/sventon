@@ -160,7 +160,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
   }
 
   @Override
-  public void remove(final String pathAndName) {
+  public void removeFile(final String pathAndName) {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) {
