@@ -85,7 +85,7 @@ public final class DirEntry implements Serializable {
       throw new IllegalArgumentException("name cannot be null.");
     }
 
-    id = entryPath + name;
+    id = entryPath + name + kind.name();
 
     try {
       camelCasePattern = CamelCasePattern.parse(name).getPattern();
@@ -242,6 +242,19 @@ public final class DirEntry implements Serializable {
    */
   public String getAuthor() {
     return lastAuthor;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof DirEntry)) return false;
+    final DirEntry dirEntry = (DirEntry) o;
+    return !(id != null ? !id.equals(dirEntry.id) : dirEntry.id != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
   }
 
   @Override

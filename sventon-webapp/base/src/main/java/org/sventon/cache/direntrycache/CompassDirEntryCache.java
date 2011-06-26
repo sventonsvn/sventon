@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.sventon.model.DirEntry.Kind;
+
 /**
  * CompassDirEntryCache.
  */
@@ -164,7 +166,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(CompassSession session) {
-        session.delete(DirEntry.class, pathAndName);
+        removeFileEntry(session, pathAndName);
       }
     });
   }
@@ -181,14 +183,13 @@ public final class CompassDirEntryCache implements DirEntryCache {
         // Apply deletion...
         for (String id : entriesToDelete.keySet()) {
           final DirEntry.Kind kind = entriesToDelete.get(id);
-          if (kind == DirEntry.Kind.DIR) {
+          if (kind == Kind.DIR) {
             // Directory node deleted
             logger.debug(id + " is a directory. Doing a recursive delete");
-            session.delete(session.queryBuilder().queryString("path:" + id + "*").toQuery());
-            session.delete(DirEntry.class, id);
+            removeAllEntriesInDirectory(session, id);
           } else {
             // Single entry delete
-            session.delete(DirEntry.class, id);
+            removeFileEntry(session, id);
           }
         }
 
@@ -206,8 +207,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
     final CompassTemplate template = new CompassTemplate(compass);
     template.execute(new CompassCallbackWithoutResult() {
       protected void doInCompassWithoutResult(final CompassSession session) {
-        session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
-        session.delete(DirEntry.class, pathAndName);
+        removeAllEntriesInDirectory(session, pathAndName);
       }
     });
   }
@@ -282,6 +282,15 @@ public final class CompassDirEntryCache implements DirEntryCache {
     if (useDiskStore) {
       saveLatestRevisionNumber();
     }
+  }
+
+  private void removeFileEntry(CompassSession session, String pathAndName) {
+    session.delete(DirEntry.class, pathAndName + Kind.FILE);
+  }
+
+  private void removeAllEntriesInDirectory(final CompassSession session, final String pathAndName) {
+    session.delete(session.queryBuilder().queryString("path:" + pathAndName + "*").toQuery());
+    session.delete(DirEntry.class, pathAndName + Kind.DIR);
   }
 
   /**

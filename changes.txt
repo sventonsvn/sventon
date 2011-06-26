@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[2014] Fixed: Bug #18186 - Possible file or directory name collision in index.
 [2008] Added: Feature #5129 - Show progress bar when exporting files.
 [2007] Added: Feature #5128 - Add date-picker to 'Goto revision' field.
 [2005] Fixed: Bug #18112 - Unable to clean export temp files.
