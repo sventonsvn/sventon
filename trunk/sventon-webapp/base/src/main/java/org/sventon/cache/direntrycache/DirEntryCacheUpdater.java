@@ -137,7 +137,6 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
       LOGGER.info("Starting initial cache population for: " + revisionUpdate.getRepositoryName());
     }
 
-    // Initial population has already been performed - only apply changes for now.
     if (lastRevision > entryCache.getLatestCachedRevisionNumber()) {
       // One logEntry is one commit (or revision)
       for (final LogEntry logEntry : revisions) {
