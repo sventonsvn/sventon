@@ -74,7 +74,7 @@ public final class CamelCasePattern implements Serializable {
    * @return True if all is uppercase.
    */
   protected static boolean isAllUpperCase(final String str) {
-    return StringUtils.trimToEmpty(str).toUpperCase().equals(str);
+    return StringUtils.isAlpha(str) && StringUtils.trimToEmpty(str).toUpperCase().equals(str);
   }
 
   /**

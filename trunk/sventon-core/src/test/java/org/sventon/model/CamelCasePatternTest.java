@@ -54,6 +54,13 @@ public class CamelCasePatternTest {
       // expected
     }
 
+    try {
+      CamelCasePattern.parse("1").getPattern();
+      fail("Should trow IAE");
+    } catch (IllegalArgumentException e) {
+      // expected
+    }
+
     assertEquals("OT", CamelCasePattern.parse("OneT").getPattern());
     assertEquals("OT", CamelCasePattern.parse("OneTwo").getPattern());
     assertEquals("OTT", CamelCasePattern.parse("OneTwoThree").getPattern());
@@ -67,6 +74,7 @@ public class CamelCasePatternTest {
     assertTrue(CamelCasePattern.isAllUpperCase("A"));
     assertTrue(CamelCasePattern.isAllUpperCase("AA"));
     assertFalse(CamelCasePattern.isAllUpperCase("AaA"));
+    assertFalse(CamelCasePattern.isAllUpperCase("*"));
   }
 
 }
