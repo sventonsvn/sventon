@@ -30,7 +30,7 @@ import java.util.TreeSet;
  */
 public class JavaHLConverter {
 
-  static Revision convertRevision(long revision) {
+  static Revision convertRevision(final long revision) {
     if (revision == org.sventon.model.Revision.HEAD.getNumber()) {
       return Revision.HEAD;
     }
@@ -38,7 +38,7 @@ public class JavaHLConverter {
     return Revision.getInstance(revision);
   }
 
-  static SortedSet<ChangedPath> convertChangedPaths(ChangePath[] changePaths) {
+  static SortedSet<ChangedPath> convertChangedPaths(final ChangePath[] changePaths) {
     final SortedSet<ChangedPath> changedPaths = new TreeSet<ChangedPath>();
     if (changePaths != null) {
       for (ChangePath cp : changePaths) {
@@ -48,7 +48,7 @@ public class JavaHLConverter {
     return changedPaths;
   }
 
-  static Map<RevisionProperty, String> convertRevisionPropertyMap(Map map) {
+  static Map<RevisionProperty, String> convertRevisionPropertyMap(final Map map) {
     final HashMap<RevisionProperty, String> propertyMap = new HashMap<RevisionProperty, String>();
 
     if (map != null) {
@@ -61,11 +61,12 @@ public class JavaHLConverter {
     return propertyMap;
   }
 
-  static RevisionRange[] getRevisionRange(long fromRevision, long toRevision) {
+  static RevisionRange[] getRevisionRange(final long fromRevision, final long toRevision) {
     return new RevisionRange[]{new RevisionRange(convertRevision(fromRevision), convertRevision(toRevision))};
   }
 
-  public static DirEntry.Kind convertNodeKind(int nodeKind) {
+  static DirEntry.Kind convertNodeKind(int nodeKind) {
     return DirEntry.Kind.valueOf(NodeKind.getNodeKindName(nodeKind).trim().toUpperCase());
   }
+
 }
