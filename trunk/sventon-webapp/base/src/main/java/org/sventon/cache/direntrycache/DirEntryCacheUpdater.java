@@ -214,8 +214,8 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
                                   final SVNConnection connection, final ChangedPath logEntryPath,
                                   final long revision) throws SventonException {
 
-    entriesToDelete.put(logEntryPath.getPath(), DirEntry.Kind.ANY);
     final DirEntry entry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), revision);
+    entriesToDelete.put(entry.getPath(), entry.getKind());
     entriesToAdd.add(entry);
   }
 
