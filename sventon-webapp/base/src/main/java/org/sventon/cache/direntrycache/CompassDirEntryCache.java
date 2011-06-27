@@ -213,13 +213,14 @@ public final class CompassDirEntryCache implements DirEntryCache {
   }
 
   @Override
-  public List<DirEntry> findEntries(final String searchString, final String startDir) {
+  public List<DirEntry> findEntries(final String searchString, final String startPath) {
+    final String escapedStartPath = QueryParser.escape(startPath);
     final String escapedSearchString = QueryParser.escape(searchString);
-    final String queryString = "path:" + startDir + "* (name:" + escapedSearchString +
+    final String queryString = "path:" + escapedStartPath + "* (name:" + escapedSearchString +
         " OR lastAuthor:" + escapedSearchString + " OR nameFragments:" + escapedSearchString + ")";
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding string [" + escapedSearchString + "] starting in [" + startDir + "]");
+      logger.debug("Finding string [" + escapedSearchString + "] starting in [" + escapedStartPath + "]");
       logger.debug("QueryString: " + queryString);
     }
 
@@ -233,11 +234,12 @@ public final class CompassDirEntryCache implements DirEntryCache {
   public List<DirEntry> findEntriesByCamelCasePattern(final CamelCasePattern camelCasePattern,
                                                       final String startPath) {
 
+    final String escapedStartPath = QueryParser.escape(startPath);
     final String pattern = camelCasePattern.toString().toLowerCase();
-    final String queryString = "path:" + startPath + "* camelCasePattern:" + pattern + "*";
+    final String queryString = "path:" + escapedStartPath + "* camelCasePattern:" + pattern + "*";
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding pattern [" + camelCasePattern + "] starting in [" + startPath + "]");
+      logger.debug("Finding pattern [" + camelCasePattern + "] starting in [" + escapedStartPath + "]");
       logger.debug("QueryString: " + queryString);
     }
 
@@ -249,10 +251,11 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   @Override
   public List<DirEntry> findDirectories(final String startPath) {
-    final String queryString = "path:" + startPath + "* kind:DIR";
+    final String escapedStartPath = QueryParser.escape(startPath);
+    final String queryString = "path:" + escapedStartPath + "* kind:DIR";
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Finding directories recursively from [" + startPath + "]");
+      logger.debug("Finding directories recursively from [" + escapedStartPath + "]");
       logger.debug("QueryString: " + queryString);
     }
 
