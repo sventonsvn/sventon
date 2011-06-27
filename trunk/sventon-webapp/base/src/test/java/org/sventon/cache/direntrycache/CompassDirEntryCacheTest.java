@@ -63,18 +63,47 @@ public class CompassDirEntryCacheTest {
   }
 
   @Test
+  public void testEntryCacheAddRemoveEntriesNamedSameAsTheWildcardCharacter() throws Exception {
+    assertEquals(0, entryCache.getSize());
+    entryCache.add(new DirEntry("/", "*", null, new Date(), DirEntry.Kind.DIR, 1, 0));
+    entryCache.add(new DirEntry("/", "*", null, new Date(), DirEntry.Kind.FILE, 1, 1));
+    assertEquals(2, entryCache.getSize());
+
+    entryCache.removeFile("/*");
+    assertEquals(1, entryCache.getSize());
+
+    // Make sure the file and not the directory was removed
+    assertEquals(DirEntry.Kind.DIR, entryCache.findEntries("*", "/").get(0).getKind());
+
+    entryCache.removeDirectory("/*");
+    assertEquals(0, entryCache.getSize());
+  }
+
+  @Test
   public void testFindEntriesUsingIllegalCharacters() throws Exception {
     assertTrue(entryCache.findEntries("-", "/").isEmpty());
     assertTrue(entryCache.findEntries("_", "/").isEmpty());
     entryCache.add(new DirEntry("/", "test_file.java", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
     entryCache.add(new DirEntry("/", "test-file.java", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
     entryCache.add(new DirEntry("/", "simple-1.0-rc1", "jesper", new Date(), DirEntry.Kind.FILE, 1, 64000));
+    entryCache.add(new DirEntry("/", "*", "jesper", new Date(), DirEntry.Kind.DIR, 1, 0));
+    entryCache.add(new DirEntry("/*", "data", "jesper", new Date(), DirEntry.Kind.FILE, 1, 10));
     entryCache.add(new DirEntry("/", "WEB-INF", "jesper", new Date(), DirEntry.Kind.DIR, 1, 0));
     assertFalse(entryCache.findEntries("test_file", "/").isEmpty());
     assertFalse(entryCache.findEntries("test-file", "/").isEmpty());
     assertFalse(entryCache.findEntries("simple-1.0-rc1", "/").isEmpty());
     assertTrue(entryCache.findEntries("simple-1.0", "/").isEmpty());
     assertFalse(entryCache.findEntries("WEB-INF", "/").isEmpty());
+    assertEquals(1, entryCache.findEntries("*", "/*").size());
+  }
+
+  @Test
+  public void testFindDirectories() throws Exception {
+    addAll(entryCache, TestUtils.getDirectoryList());
+    entryCache.add(new DirEntry("/", "*", null, new Date(), DirEntry.Kind.DIR, 1, 0));
+    assertEquals(5, entryCache.findDirectories("/").size());
+    assertEquals(2, entryCache.findDirectories("/trunk").size());
+    assertEquals(0, entryCache.findDirectories("/*").size());
   }
 
   @Test
@@ -165,9 +194,11 @@ public class CompassDirEntryCacheTest {
   public void testEntryCacheFindPattern() throws Exception {
     assertEquals(0, entryCache.getSize());
     addAll(entryCache, TestUtils.getDirectoryList());
-    assertEquals(13, entryCache.getSize());
+    entryCache.add(new DirEntry("/", "*", null, new Date(), DirEntry.Kind.DIR, 1, 0));
+    assertEquals(14, entryCache.getSize());
     assertEquals(1, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("TDF"), "/").size());
     assertEquals(2, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("DF"), "/").size());
+    assertEquals(0, entryCache.findEntriesByCamelCasePattern(new CamelCasePattern("DF"), "/*").size());
   }
 
   private void print(List<DirEntry> entries) {
