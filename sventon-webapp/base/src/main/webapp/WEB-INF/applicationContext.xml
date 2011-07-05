@@ -219,6 +219,8 @@
 
   <bean id="dirEntryCacheManager" class="org.sventon.cache.DirEntryCacheManager">
     <constructor-arg ref="configDirectory"/>
+    <property name="maxEntriesPerCommit" value="1000"/>
+    <property name="threadPoolSize" value="1"/>
   </bean>
 
   <bean id="logMessageCacheManager" class="org.sventon.cache.LogMessageCacheManager">

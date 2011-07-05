@@ -11,6 +11,8 @@
  */
 package org.sventon.cache.direntrycache;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
 import org.sventon.TestUtils;
@@ -31,12 +33,22 @@ import static org.sventon.TestUtils.createLogEntry;
 
 public class DirEntryCacheUpdaterTest {
 
+  private DirEntryCache entryCache;
+
+  @Before
+  public void setUp() throws Exception {
+    entryCache = new CompassDirEntryCache(new File("test"));
+    entryCache.init();
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    entryCache.shutdown();
+  }
+
   @Test
   public void testUpdate() throws Exception {
     final RepositoryService serviceMock = mock(RepositoryService.class);
-
-    final DirEntryCache entryCache = new CompassDirEntryCache(new File("test"));
-    entryCache.init();
     assertEquals(0, entryCache.getSize());
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
@@ -83,6 +95,7 @@ public class DirEntryCacheUpdaterTest {
     final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false);
     cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
+    Thread.sleep(500L); // TODO: Get rid of this!
     assertEquals(4, entryCache.getSize());
   }
 
