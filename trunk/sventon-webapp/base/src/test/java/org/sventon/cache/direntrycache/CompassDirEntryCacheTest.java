@@ -187,6 +187,7 @@ public class CompassDirEntryCacheTest {
     final DirEntry dirEntry = new DirEntry("/", "fileInRoot", null, new Date(), DirEntry.Kind.FILE, 3, 1);
     entryCache.update(toDelete, Collections.singletonList(dirEntry));
 
+    Thread.sleep(500L); // TODO: Get rid of this!
     assertEquals(1, entryCache.getSize());
   }
 

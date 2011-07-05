@@ -14,6 +14,7 @@ package org.sventon.cache.direntrycache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StopWatch;
 import org.sventon.DirEntryNotFoundException;
 import org.sventon.SVNConnection;
 import org.sventon.SVNConnectionFactory;
@@ -90,7 +91,11 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
     LOGGER.info("Listener got [" + revisionUpdate.getRevisions().size() + "] updated revision(s) for repository: "
         + repositoryName);
 
+    final StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+
     SVNConnection connection = null;
+
     try {
       final DirEntryCache entryCache = cacheManager.getCache(repositoryName);
       final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
@@ -104,6 +109,9 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
         connection.closeSession();
       }
     }
+
+    stopWatch.stop();
+    LOGGER.info("Update completed in [" + stopWatch.getTotalTimeSeconds() + "] seconds");
   }
 
   /**
