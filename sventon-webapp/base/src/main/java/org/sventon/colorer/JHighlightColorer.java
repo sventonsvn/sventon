@@ -21,7 +21,8 @@ import org.sventon.Colorer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Colorizes given input using the JHighlight syntax highlighting library.
@@ -39,7 +40,7 @@ public final class JHighlightColorer implements Colorer {
   /**
    * File type <-> renderer mappings.
    */
-  private Properties rendererMappings = new Properties();
+  private Map<String, Renderer> rendererMappings = new HashMap<String, Renderer>();
 
   @Override
   public String getColorizedContent(final String content, final String fileExtension, final String encoding) throws IOException {
@@ -73,7 +74,7 @@ public final class JHighlightColorer implements Colorer {
    */
   protected Renderer getRenderer(final String fileExtension) {
     Validate.notNull(fileExtension, "File extension cannot be null");
-    return (Renderer) rendererMappings.get(fileExtension.toLowerCase());
+    return rendererMappings.get(fileExtension.toLowerCase());
   }
 
   /**
@@ -81,7 +82,7 @@ public final class JHighlightColorer implements Colorer {
    *
    * @param rendererMappings The mappings
    */
-  public void setRendererMappings(final Properties rendererMappings) {
+  public void setRendererMappings(final Map<String, Renderer> rendererMappings) {
     Validate.notNull(rendererMappings, "Mappings cannot be null");
     this.rendererMappings = rendererMappings;
   }

@@ -13,10 +13,12 @@ package org.sventon.colorer;
 
 import com.uwyn.jhighlight.renderer.CSharpXhtmlRenderer;
 import com.uwyn.jhighlight.renderer.JavaXhtmlRenderer;
+import com.uwyn.jhighlight.renderer.Renderer;
 import com.uwyn.jhighlight.renderer.XmlXhtmlRenderer;
 import org.junit.Test;
 
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -89,8 +91,8 @@ public class JHighlightColorerTest {
     assertTrue(colorer.getRenderer("cs") instanceof CSharpXhtmlRenderer);
   }
 
-  private Properties getRendererMappings() {
-    final Properties mappings = new Properties();
+  private Map<String, Renderer> getRendererMappings() {
+    final Map<String, Renderer> mappings = new HashMap<String, Renderer>();
     mappings.put("java", new JavaXhtmlRenderer());
     mappings.put("html", new XmlXhtmlRenderer());
     mappings.put("xml", new XmlXhtmlRenderer());
