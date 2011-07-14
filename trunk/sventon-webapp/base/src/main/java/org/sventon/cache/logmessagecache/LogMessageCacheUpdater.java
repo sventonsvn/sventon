@@ -13,6 +13,7 @@ package org.sventon.cache.logmessagecache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StopWatch;
 import org.sventon.cache.LogMessageCacheManager;
 import org.sventon.model.LogEntry;
 import org.sventon.model.LogMessageSearchItem;
@@ -61,6 +62,9 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
 
     LOGGER.info("Listener got [" + revisions.size() + "] updated revision(s) for repository: " + repositoryName);
 
+    final StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+
     try {
       final LogMessageCache logMessageCache = logMessageCacheManager.getCache(repositoryName);
       if (revisionUpdate.isClearCacheBeforeUpdate()) {
@@ -71,6 +75,9 @@ public final class LogMessageCacheUpdater implements RepositoryChangeListener {
     } catch (final Exception ex) {
       LOGGER.warn("Could not update cache instance [" + repositoryName + "]", ex);
     }
+
+    stopWatch.stop();
+    LOGGER.info("Update completed in [" + stopWatch.getTotalTimeSeconds() + "] seconds");
   }
 
   /**
