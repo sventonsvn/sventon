@@ -80,6 +80,7 @@ public final class DefaultObjectCache implements ObjectCache {
       cache = new Cache(cacheName, maxElementsInMemory, MemoryStoreEvictionPolicy.LRU, overflowToDisk, null,
           eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent, diskExpiryThreadIntervalSeconds, null);
       cacheManager = new CacheManager(createConfiguration(cacheDiskStorePath));
+      cacheManager.setName("ObjectCacheManager_" + cacheName);
       cache.getCacheConfiguration().setClearOnFlush(false);
       cacheManager.addCache(cache);
     } catch (net.sf.ehcache.CacheException ce) {
