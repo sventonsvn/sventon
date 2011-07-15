@@ -11,8 +11,6 @@
  */
 package org.sventon.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -46,13 +44,16 @@ public final class RepositoryName implements Serializable, Comparable {
   }
 
   @Override
-  public boolean equals(final Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj);
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof RepositoryName)) return false;
+    final RepositoryName that = (RepositoryName) o;
+    return !(name != null ? !name.equals(that.name) : that.name != null);
   }
 
   @Override
   public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
+    return name != null ? name.hashCode() : 0;
   }
 
   /**

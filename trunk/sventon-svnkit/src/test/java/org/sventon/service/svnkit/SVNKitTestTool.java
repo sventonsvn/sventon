@@ -61,7 +61,7 @@ public class SVNKitTestTool {
 //      repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
 
       final RepositoryService service = new SVNKitRepositoryService();
-      final SVNConnection connection = new SVNKitConnection(repository);
+      final SVNConnection connection = new SVNKitConnection(repository, new org.sventon.model.SVNURL(url));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////          Cut & Paste Zone         ////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ public class SVNKitTestTool {
       final long latestRevision = service.getLatestRevision(connection);
       System.out.println("\nLatest revision for " + url + " : " + latestRevision);
 
-      
+
       System.out.println("\nLatest Revisions:");
       final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
       for (LogEntry logEntry : logEntries) {
@@ -103,7 +103,7 @@ public class SVNKitTestTool {
 
 
       System.out.println("\nGet Locks");
-      final Map<String,DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt", false);
+      final Map<String, DirEntryLock> map = service.getLocks(connection, "/branches/features/svn_facade/sventon/readme.txt", false);
       for (String s : map.keySet()) {
         System.out.println("Path: " + s);
         System.out.println("DirEntryLock: " + map.get(s).toString());

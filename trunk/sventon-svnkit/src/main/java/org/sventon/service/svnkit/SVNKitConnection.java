@@ -14,7 +14,6 @@ package org.sventon.service.svnkit;
 import org.sventon.SVNConnection;
 import org.sventon.SventonException;
 import org.sventon.model.SVNURL;
-import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
 /**
@@ -28,12 +27,19 @@ public class SVNKitConnection implements SVNConnection<SVNRepository> {
   private SVNRepository delegate;
 
   /**
+   * URL to repository root.
+   */
+  private SVNURL url;
+
+  /**
    * Constructor.
    *
    * @param delegate Delegate
+   * @param rootUrl  Repository root URL
    */
-  public SVNKitConnection(final SVNRepository delegate) {
+  public SVNKitConnection(final SVNRepository delegate, final SVNURL rootUrl) {
     this.delegate = delegate;
+    this.url = rootUrl;
   }
 
   public SVNRepository getDelegate() {
@@ -47,11 +53,20 @@ public class SVNKitConnection implements SVNConnection<SVNRepository> {
 
   @Override
   public SVNURL getRepositoryRootUrl() throws SventonException {
-    try {
-      return SVNURL.parse(delegate.getRepositoryRoot(true).getPath());
-    } catch (SVNException e) {
-      throw new SventonException("Could not get Repository root URL.", e);
-    }
+    return url;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof SVNKitConnection)) return false;
+    final SVNKitConnection that = (SVNKitConnection) o;
+    return !(url != null ? !url.equals(that.url) : that.url != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return url != null ? url.hashCode() : 0;
   }
 
 }
