@@ -20,6 +20,7 @@ import org.sventon.SventonException;
 import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
+import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
@@ -29,6 +30,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+
+import static org.tmatesoft.svn.core.SVNURL.parseURIDecoded;
 
 /**
  * Factory class responsible for creating subversion repository connections.
@@ -72,15 +75,15 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
                                         final Credentials credentials) throws SventonException {
     final SVNRepository repository;
     try {
-      repository = SVNRepositoryFactory.create(org.tmatesoft.svn.core.SVNURL.parseURIDecoded(svnUrl.getUrl()));
-    } catch (org.tmatesoft.svn.core.SVNException e) {
+      repository = SVNRepositoryFactory.create(parseURIDecoded(svnUrl.getUrl()));
+    } catch (SVNException e) {
       throw new SventonException(e.getMessage());
     }
     final File configDirectory = configDirectoryFactory.getConfigDirectoryFor(repositoryName);
     repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
         configDirectory, credentials.getUserName(), credentials.getPassword(), false));
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
-    return new SVNKitConnection(repository);
+    return new SVNKitConnection(repository, svnUrl);
   }
 
 }

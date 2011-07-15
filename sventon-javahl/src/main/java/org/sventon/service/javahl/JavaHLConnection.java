@@ -27,6 +27,9 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
    */
   private final SVNClientInterface delegate;
 
+  /**
+   * URL to repository root.
+   */
   private SVNURL url;
 
   /**
@@ -56,6 +59,19 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
   @Override
   public SVNURL getRepositoryRootUrl() {
     return url;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof JavaHLConnection)) return false;
+    final JavaHLConnection that = (JavaHLConnection) o;
+    return !(url != null ? !url.equals(that.url) : that.url != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return url != null ? url.hashCode() : 0;
   }
 
 }
