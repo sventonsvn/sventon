@@ -32,20 +32,37 @@ public class FileRevision extends PathRevision implements Serializable {
    */
   private final Map<RevisionProperty, String> properties = new HashMap<RevisionProperty, String>();
 
-  public FileRevision(String path, Revision revision) {
+  /**
+   * Constructor.
+   *
+   * @param path     Path.
+   * @param revision Revision.
+   */
+  public FileRevision(final String path, final Revision revision) {
     super(path, revision);
   }
 
-  public void addProperty(RevisionProperty property, String propertyValue) {
+  /**
+   * Adds a revision property.
+   *
+   * @param property      Revision property to add.
+   * @param propertyValue Value of revision property.
+   */
+  public void addProperty(final RevisionProperty property, final String propertyValue) {
     properties.put(property, propertyValue);
   }
 
-  public String getProperty(RevisionProperty value) {
-    return properties.get(value);
+  /**
+   * @param property Revision property key to get value for.
+   * @return Value of revision property
+   */
+  public String getProperty(final RevisionProperty property) {
+    return properties.get(property);
   }
 
   @Override
   public String toString() {
     return super.toString() + " " + ToStringBuilder.reflectionToString(this);
   }
+
 }

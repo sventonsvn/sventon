@@ -260,10 +260,9 @@ public final class DirEntryCacheUpdater implements RepositoryChangeListener {
 
     // Have to find out if deleted entry was a file or directory
     final long previousRevision = revision - 1;
-    DirEntry deletedEntry;
 
     try {
-      deletedEntry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), previousRevision);
+      final DirEntry deletedEntry = repositoryService.getEntryInfo(connection, logEntryPath.getPath(), previousRevision);
       entriesToDelete.put(logEntryPath.getPath(), deletedEntry.getKind());
     } catch (DirEntryNotFoundException ex) {
       LOGGER.debug("Entry [" + logEntryPath.getPath() + "] does not exist in revision [" + previousRevision + "] - nothing to remove");

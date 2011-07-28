@@ -69,20 +69,13 @@ public class PathRevision implements Serializable, Comparable<PathRevision> {
     return this.getRevision().compareTo(o.getRevision());
   }
 
-  public static PathRevision parse(final String entry) {
-    return parse(new String[]{entry})[0];
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
-    PathRevision that = (PathRevision) o;
-
+    final PathRevision that = (PathRevision) o;
     if (path != null ? !path.equals(that.path) : that.path != null) return false;
     if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
-
     return true;
   }
 
@@ -93,9 +86,27 @@ public class PathRevision implements Serializable, Comparable<PathRevision> {
     return result;
   }
 
-  public static PathRevision[] parse(final String... entries) {
+  /**
+   * Parses a path/revision string.
+   *
+   * @param pathRevisionString Path/revision string. See {@link #DELIMITER}.
+   * @return Parsed instance.
+   * @see #DELIMITER
+   */
+  public static PathRevision parse(final String pathRevisionString) {
+    return parse(new String[]{pathRevisionString})[0];
+  }
+
+  /**
+   * Parses multiple path/revision strings at once.
+   *
+   * @param pathRevisionStrings Path/revision strings. See {@link #DELIMITER}.
+   * @return Parsed instances.
+   * @see #DELIMITER
+   */
+  public static PathRevision[] parse(final String... pathRevisionStrings) {
     final List<PathRevision> fileEntries = new ArrayList<PathRevision>();
-    for (String entry : entries) {
+    for (final String entry : pathRevisionStrings) {
       if (!entry.contains(DELIMITER)) {
         throw new IllegalArgumentException("Illegal parameter. No delimiter in entry: " + entry);
       }
