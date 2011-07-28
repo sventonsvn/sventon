@@ -26,8 +26,7 @@ public class DiffCommandTest {
     try {
       command.setEntries(null);
       fail("Should have thrown an IAE");
-    }
-    catch (IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // expected
     }
   }
@@ -104,8 +103,7 @@ public class DiffCommandTest {
     try {
       command.setEntries(PathRevision.parse(params));
       fail("Should throw DiffException");
-    }
-    catch (DiffException ex) {
+    } catch (DiffException ex) {
       // expected
     }
   }
@@ -120,8 +118,7 @@ public class DiffCommandTest {
     try {
       command.setEntries(PathRevision.parse(params));
       fail("Should throw IllegalArgumentException");
-    }
-    catch (IllegalArgumentException ex) {
+    } catch (IllegalArgumentException ex) {
       // expected
     }
   }
