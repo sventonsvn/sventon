@@ -32,14 +32,21 @@ public class SVNKitConnection implements SVNConnection<SVNRepository> {
   private SVNURL url;
 
   /**
+   * Name of user that created connection.
+   */
+  private String userName;
+
+  /**
    * Constructor.
    *
    * @param delegate Delegate
+   * @param userName Name of the user that created the connection.
    * @param rootUrl  Repository root URL
    */
-  public SVNKitConnection(final SVNRepository delegate, final SVNURL rootUrl) {
+  public SVNKitConnection(final SVNRepository delegate, final String userName, final SVNURL rootUrl) {
     this.delegate = delegate;
     this.url = rootUrl;
+    this.userName = userName;
   }
 
   public SVNRepository getDelegate() {
@@ -61,12 +68,16 @@ public class SVNKitConnection implements SVNConnection<SVNRepository> {
     if (this == o) return true;
     if (!(o instanceof SVNKitConnection)) return false;
     final SVNKitConnection that = (SVNKitConnection) o;
-    return !(url != null ? !url.equals(that.url) : that.url != null);
+    if (!url.equals(that.url)) return false;
+    if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return url != null ? url.hashCode() : 0;
+    int result = url.hashCode();
+    result = 31 * result + (userName != null ? userName.hashCode() : 0);
+    return result;
   }
 
 }

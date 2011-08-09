@@ -88,8 +88,8 @@ public abstract class AbstractRepositoryService implements RepositoryService {
   }
 
   @Override
-  public List<LogEntry> getLatestRevisions(RepositoryName repositoryName, SVNConnection connection, int revisionCount) throws SventonException {
-    return getLogEntries(repositoryName, connection, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
+  public List<LogEntry> getLatestRevisions(SVNConnection connection, RepositoryName repositoryName, int revisionCount) throws SventonException {
+    return getLogEntries(connection, repositoryName, Revision.HEAD.getNumber(), Revision.FIRST.getNumber(), "/", revisionCount, false, true);
   }
 
   @Override

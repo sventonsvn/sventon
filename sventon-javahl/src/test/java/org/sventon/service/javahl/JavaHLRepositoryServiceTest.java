@@ -19,12 +19,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sventon.SVNConnection;
-import org.sventon.model.ChangeType;
-import org.sventon.model.ChangedPath;
-import org.sventon.model.LogEntry;
-import org.sventon.model.SVNURL;
-import org.sventon.model.DateUtil;
+import org.sventon.model.*;
 import org.tigris.subversion.javahl.*;
+import org.tigris.subversion.javahl.Revision;
 
 import java.util.*;
 
@@ -82,7 +79,7 @@ public class JavaHLRepositoryServiceTest {
     }).when(client).logMessages(eq("svn://myhost/repro/da/path"), (Revision) any(), (RevisionRange[]) any(),
         eq(false), eq(false), eq(false), (String[]) any(), anyInt(), (LogMessageCallback) any());
 
-    final List<LogEntry> logEntries = service.getLogEntries(null, connection, 1, 100, "da/path", 100, false, false);
+    final List<LogEntry> logEntries = service.getLogEntries(connection, null, 1, 100, "da/path", 100, false, false);
 
     // Verify number of LogEntries
     assertEquals(1, logEntries.size());

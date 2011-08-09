@@ -49,7 +49,7 @@ public final class GetFileHistoryController extends AbstractTemplateController {
     final String archivedEntry = ServletRequestUtils.getStringParameter(request, ARCHIVED_ENTRY, null);
 
     logger.debug("Finding revisions for [" + command.getPath() + "]");
-    final List<LogEntry> revisions = getRepositoryService().getLogEntries(command.getName(), connection,
+    final List<LogEntry> revisions = getRepositoryService().getLogEntries(connection, command.getName(),
         command.getRevisionNumber(), Revision.FIRST.getNumber(), command.getPath(), FILE_HISTORY_LIMIT, false, true);
     LogEntry.setPathAtRevisionInLogEntries(revisions, command.getPath());
 

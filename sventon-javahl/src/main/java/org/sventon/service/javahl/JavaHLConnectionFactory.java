@@ -43,15 +43,18 @@ public class JavaHLConnectionFactory implements SVNConnectionFactory {
   @Override
   public SVNConnection createConnection(final RepositoryName repositoryName, final SVNURL svnUrl,
                                         final Credentials credentials) throws SventonException {
+
     final File configDirectory = configDirectoryFactory.getConfigDirectoryFor(repositoryName);
     final SVNClientInterface client = new SVNClient();
+    final String userName = credentials.getUserName();
+
     try {
       client.setConfigDirectory(configDirectory.getAbsolutePath());
-      client.setPrompt(new Prompt(credentials.getUserName(), credentials.getPassword()));
+      client.setPrompt(new Prompt(userName, credentials.getPassword()));
     } catch (ClientException ce) {
       throw new SventonException("Unable to create SVN connection", ce);
     }
-    return new JavaHLConnection(client, svnUrl);
+    return new JavaHLConnection(client, userName, svnUrl);
   }
 
   static class Prompt implements PromptUserPassword3 {

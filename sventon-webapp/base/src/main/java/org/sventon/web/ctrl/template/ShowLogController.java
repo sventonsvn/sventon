@@ -67,7 +67,7 @@ public final class ShowLogController extends AbstractTemplateController {
 
     final List<LogEntry> logEntries = new ArrayList<LogEntry>();
     try {
-      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, fromRevision,
+      logEntries.addAll(getRepositoryService().getLogEntries(connection, command.getName(), fromRevision,
           command.getStopRevision().getNumber(), nextPath, limit, command.isStopOnCopy(), true));
       LogEntry.setPathAtRevisionInLogEntries(logEntries, nextPath);
     } catch (NoSuchRevisionException nsre) {

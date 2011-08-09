@@ -16,13 +16,38 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+         http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+         http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
   <context:annotation-config/>
+
+  <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+    <property name="defaultDomain" value="#{configDirectory.contextPath}"/>
+    <property name="locateExistingServerIfPossible" value="true"/>
+  </bean>
+
   <context:mbean-export registration="ignoreExisting" default-domain="#{configDirectory.contextPath}"/>
+
+  <ehcache:annotation-driven cache-manager="globalCacheManager" create-missing-caches="false"/>
+
+  <bean id="globalCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    <property name="shared" value="false"/>
+    <property name="cacheManagerName" value="globalCacheManager_#{configDirectory.contextPath}"/>
+  </bean>
+
+  <bean id="ehCacheManagementService" class="net.sf.ehcache.management.ManagementService" init-method="init">
+    <constructor-arg ref="globalCacheManager"/>
+    <constructor-arg ref="mbeanServer"/>
+    <constructor-arg value="true"/>
+    <constructor-arg value="true"/>
+    <constructor-arg value="true"/>
+    <constructor-arg value="true"/>
+  </bean>
 
   <bean id="sventonTempRootDir" class="java.io.File">
     <constructor-arg value="${java.io.tmpdir}"/>
@@ -36,7 +61,7 @@
   </bean>
 
   <bean id="configDirectoryFactory" class="org.sventon.ConfigDirectoryFactory" factory-bean="configDirectory"
-      factory-method="createConfigDirectoryFactory">
+        factory-method="createConfigDirectoryFactory">
   </bean>
 
   <bean id="defaultEncoding" class="java.lang.String">
@@ -74,8 +99,19 @@
     <constructor-arg ref="configDirectoryFactory"/>
   </bean>
 
+  <bean id="repositoryService" class="org.sventon.service.RepositoryServiceCacheWrapper">
+    <constructor-arg>
+      <bean class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
+            factory-method="getRepositoryService"/>
+    </constructor-arg>
+  </bean>
+
+  <!-- Uncomment the following bean to disable the method cache -->
+  <!--
   <bean id="repositoryService" class="org.sventon.service.RepositoryService" factory-bean="svnProvider"
-        factory-method="getRepositoryService"/>
+            factory-method="getRepositoryService">
+  </bean>
+  -->
 
   <bean id="application" class="org.sventon.appl.Application">
     <constructor-arg ref="configDirectory"/>
@@ -285,10 +321,6 @@
 
   <bean id="httpAuthenticationHandler" class="org.sventon.web.HttpBasicAuthenticationHandler">
     <constructor-arg value="sventon rss feed"/>
-  </bean>
-
-  <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
-    <property name="locateExistingServerIfPossible" value="true"/>
   </bean>
 
   <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

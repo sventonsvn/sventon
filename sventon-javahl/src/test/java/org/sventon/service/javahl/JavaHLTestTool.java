@@ -14,13 +14,10 @@ package org.sventon.service.javahl;
 import org.sventon.SVNConnection;
 import org.sventon.model.*;
 import org.sventon.service.RepositoryService;
-import org.tigris.subversion.javahl.*;
-import org.tigris.subversion.javahl.DirEntry;
-import org.tigris.subversion.javahl.Revision;
+import org.tigris.subversion.javahl.SVNClient;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +51,7 @@ public class JavaHLTestTool {
       final RepositoryService service = new JavaHLRepositoryService();
       final SVNClient client = new SVNClient();
       final SVNURL svnUrl = SVNURL.parse(url);
-      final SVNConnection connection = new JavaHLConnection(client, svnUrl);
+      final SVNConnection connection = new JavaHLConnection(client, "", svnUrl);
 
 
       System.out.println(client.getVersion());
@@ -68,7 +65,7 @@ public class JavaHLTestTool {
 
 
       System.out.println("\nLatest Revisions:");
-      final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
+      final List<LogEntry> logEntries = service.getLatestRevisions(connection, null, 2);
       for (LogEntry logEntry : logEntries) {
         System.out.println("logEntry = " + logEntry);
       }
@@ -82,12 +79,12 @@ public class JavaHLTestTool {
 
 
       System.out.println("\nLogEntry for single revision:");
-      final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
+      final LogEntry logEntry = service.getLogEntry(connection, null, 1817);
       System.out.println(logEntry);
 
-      
+
       System.out.println("\nGet LogEntries for /trunk/assembly-bin-svnkit.xml [1 .. 1817]");
-      final List<LogEntry> entries = service.getLogEntries(null, connection, 1, 1817, "/trunk/assembly-bin-svnkit.xml", 10, false, false);
+      final List<LogEntry> entries = service.getLogEntries(connection, null, 1, 1817, "/trunk/assembly-bin-svnkit.xml", 10, false, false);
       for (LogEntry entry : entries) {
         System.out.println("Entry: " + entry.toString());
       }

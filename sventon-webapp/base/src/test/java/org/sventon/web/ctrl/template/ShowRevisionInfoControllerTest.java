@@ -42,7 +42,7 @@ public class ShowRevisionInfoControllerTest {
     final ShowRevisionInfoController ctrl = new ShowRevisionInfoController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getLogEntry(command.getName(), null, command.getRevisionNumber())).andStubReturn(TestUtils.getLogEntryStub());
+    expect(mockService.getLogEntry(null, command.getName(), command.getRevisionNumber())).andStubReturn(TestUtils.getLogEntryStub());
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);
