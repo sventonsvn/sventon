@@ -46,7 +46,7 @@ public final class GetLatestRevisionsController extends AbstractTemplateControll
 
     try {
       logger.debug("Getting [" + revisionCount + "] latest revisions");
-      final List<LogEntry> logEntries = getRepositoryService().getLatestRevisions(command.getName(), connection, revisionCount);
+      final List<LogEntry> logEntries = getRepositoryService().getLatestRevisions(connection, command.getName(), revisionCount);
 
       //TODO: Parse to apply Bugtraq links
       revisions.addAll(logEntries);

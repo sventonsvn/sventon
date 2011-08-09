@@ -40,7 +40,7 @@ public final class GetLogMessageController extends AbstractTemplateController {
     final Map<String, Object> model = new HashMap<String, Object>();
     final long revisionNumber = command.getRevisionNumber();
     logger.debug("Getting log message from revision [" + revisionNumber + "]");
-    final LogEntry logEntry = getRepositoryService().getLogEntry(command.getName(), connection, revisionNumber);
+    final LogEntry logEntry = getRepositoryService().getLogEntry(connection, command.getName(), revisionNumber);
     final LogMessageSearchItem searchItem = new LogMessageSearchItem(logEntry); //TODO: Parse to apply Bugtraq link
     model.put("logEntry", searchItem);
     return new ModelAndView(getViewName(), model);

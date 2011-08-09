@@ -49,7 +49,7 @@ public class GetLatestRevisionsControllerTest {
     revisions.add(TestUtils.getLogEntryStub(1));
     revisions.add(TestUtils.getLogEntryStub(2));
 
-    expect(mockService.getLatestRevisions(command.getName(), null,
+    expect(mockService.getLatestRevisions(null, command.getName(),
         userRepositoryContext.getLatestRevisionsDisplayCount())).andStubReturn(revisions);
 
     replay(mockService);

@@ -50,7 +50,7 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
   final Log logger = LogFactory.getLog(getClass());
 
   @Override
-  public LogEntry getLogEntry(RepositoryName repositoryName, SVNConnection connection, long revision) throws SventonException {
+  public LogEntry getLogEntry(SVNConnection connection, RepositoryName repositoryName, long revision) throws SventonException {
     final List<LogEntry> logEntries = getLogEntriesFromRepositoryRoot(connection, revision, revision);
     Validate.isTrue(logEntries.size() == 1, "Too many LogEntries for a given revision. One revision always relates to exactly one LogEntry");
     return logEntries.get(0);
@@ -58,11 +58,11 @@ public class JavaHLRepositoryService extends AbstractRepositoryService {
 
   @Override
   public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
-    return getLogEntries(null, connection, fromRevision, toRevision, "/", 0, false, true);
+    return getLogEntries(connection, null, fromRevision, toRevision, "/", 0, false, true);
   }
 
   @Override
-  public List<LogEntry> getLogEntries(RepositoryName repositoryName, SVNConnection connection, long fromRevision,
+  public List<LogEntry> getLogEntries(SVNConnection connection, RepositoryName repositoryName, long fromRevision,
                                       long toRevision, String path, long limit, boolean stopOnCopy,
                                       boolean includeChangedPaths) throws SventonException {
 

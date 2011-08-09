@@ -42,7 +42,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
   final Log logger = LogFactory.getLog(getClass());
 
   @Override
-  public LogEntry getLogEntry(final RepositoryName repositoryName, final SVNConnection connection, final long revision)
+  public LogEntry getLogEntry(final SVNConnection connection, final RepositoryName repositoryName, final long revision)
       throws SventonException {
 
     final SVNRepository repository = ((SVNKitConnection) connection).getDelegate();
@@ -73,7 +73,7 @@ public class SVNKitRepositoryService extends AbstractRepositoryService {
   }
 
   @Override
-  public List<LogEntry> getLogEntries(final RepositoryName repositoryName, final SVNConnection connection,
+  public List<LogEntry> getLogEntries(final SVNConnection connection, final RepositoryName repositoryName,
                                       final long fromRevision, final long toRevision, final String path,
                                       final long limit, final boolean stopOnCopy, boolean includeChangedPaths)
       throws SventonException {

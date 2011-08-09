@@ -357,7 +357,7 @@ public class SVNKitRepositoryServiceTest {
     final SVNRepository repositoryMock = mock(SVNRepository.class);
     when(repositoryMock.getDatedRevision(Mockito.isA(Date.class))).thenReturn(123L);
 
-    revision = service.translateRevision(new SVNKitConnection(repositoryMock, null), Revision.parse("{2007-01-01}"), 200);
+    revision = service.translateRevision(new SVNKitConnection(repositoryMock, null, null), Revision.parse("{2007-01-01}"), 200);
     assertEquals(123, revision.getNumber());
     assertFalse(revision.isHeadRevision());
   }

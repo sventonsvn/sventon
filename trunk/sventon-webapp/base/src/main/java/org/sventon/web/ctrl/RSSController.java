@@ -21,7 +21,6 @@ import org.sventon.SventonException;
 import org.sventon.appl.RepositoryConfiguration;
 import org.sventon.model.Credentials;
 import org.sventon.model.LogEntry;
-import org.sventon.model.Revision;
 import org.sventon.rss.RssFeedGenerator;
 import org.sventon.web.HttpAuthenticationHandler;
 import org.sventon.web.command.RevisionRangeCommand;
@@ -85,7 +84,7 @@ public final class RSSController extends AbstractBaseController {
       command.setRevision(getRepositoryService().translateRevision(connection, command.getRevision(), headRevision));
 
       logger.debug("Outputting feed for [" + command.getPath() + "]");
-      logEntries.addAll(getRepositoryService().getLogEntries(command.getName(), connection, command.getRevisionNumber(),
+      logEntries.addAll(getRepositoryService().getLogEntries(connection, command.getName(), command.getRevisionNumber(),
           command.getStopRevision().getNumber(), command.getPath(), configuration.getRssItemsCount(), false, true));
       rssFeedGenerator.outputFeed(configuration, logEntries, request, response);
     } catch (AuthenticationException aex) {

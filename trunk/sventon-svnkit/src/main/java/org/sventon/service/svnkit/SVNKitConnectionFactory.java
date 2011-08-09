@@ -21,6 +21,7 @@ import org.sventon.model.Credentials;
 import org.sventon.model.RepositoryName;
 import org.sventon.model.SVNURL;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
@@ -79,11 +80,15 @@ public class SVNKitConnectionFactory implements SVNConnectionFactory {
     } catch (SVNException e) {
       throw new SventonException(e.getMessage());
     }
+
     final File configDirectory = configDirectoryFactory.getConfigDirectoryFor(repositoryName);
-    repository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(
-        configDirectory, credentials.getUserName(), credentials.getPassword(), false));
+    final String userName = credentials.getUserName();
+    final ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(
+        configDirectory, userName, credentials.getPassword(), false);
+
+    repository.setAuthenticationManager(authManager);
     repository.setTunnelProvider(SVNWCUtil.createDefaultOptions(true));
-    return new SVNKitConnection(repository, svnUrl);
+    return new SVNKitConnection(repository, userName, svnUrl);
   }
 
 }

@@ -56,7 +56,7 @@ public class CoreTestSuite {
           @Override
           public void execute(RepositoryService service, SVNConnection connection) throws SventonException {
             System.out.println("\nLatest Revisions:");
-            final List<LogEntry> logEntries = service.getLatestRevisions(null, connection, 2);
+            final List<LogEntry> logEntries = service.getLatestRevisions(connection, null, 2);
             for (LogEntry logEntry : logEntries) {
               System.out.println("logEntry = " + logEntry);
             }
@@ -76,7 +76,7 @@ public class CoreTestSuite {
           @Override
           public void execute(RepositoryService service, SVNConnection connection) throws SventonException {
             System.out.println("\nLogEntry for single revision:");
-            final LogEntry logEntry = service.getLogEntry(null, connection, 1817);
+            final LogEntry logEntry = service.getLogEntry(connection, null, 1817);
             System.out.println(logEntry);
           }
         }

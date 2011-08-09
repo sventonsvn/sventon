@@ -33,14 +33,21 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
   private SVNURL url;
 
   /**
+   * Name of user that created connection.
+   */
+  private String userName;
+
+  /**
    * Constructor.
    *
    * @param delegate SVNClient delegate
+   * @param userName The name of the user that created the connection.
    * @param rootUrl  Repository root URL
    */
-  public JavaHLConnection(final SVNClientInterface delegate, final SVNURL rootUrl) {
+  public JavaHLConnection(final SVNClientInterface delegate, final String userName, final SVNURL rootUrl) {
     this.delegate = delegate;
     this.url = rootUrl;
+    this.userName = userName;
   }
 
   @Override
@@ -66,12 +73,16 @@ public class JavaHLConnection implements SVNConnection<SVNClientInterface> {
     if (this == o) return true;
     if (!(o instanceof JavaHLConnection)) return false;
     final JavaHLConnection that = (JavaHLConnection) o;
-    return !(url != null ? !url.equals(that.url) : that.url != null);
+    if (!url.equals(that.url)) return false;
+    if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return url != null ? url.hashCode() : 0;
+    int result = url.hashCode();
+    result = 31 * result + (userName != null ? userName.hashCode() : 0);
+    return result;
   }
 
 }

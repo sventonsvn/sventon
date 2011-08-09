@@ -83,6 +83,7 @@ public final class DefaultObjectCache implements ObjectCache {
       cacheManager.setName("ObjectCacheManager_" + cacheName);
       cache.getCacheConfiguration().setClearOnFlush(false);
       cacheManager.addCache(cache);
+      cache.setStatisticsEnabled(true);
     } catch (net.sf.ehcache.CacheException ce) {
       throw new CacheException("Unable to create cache instance", ce);
     }

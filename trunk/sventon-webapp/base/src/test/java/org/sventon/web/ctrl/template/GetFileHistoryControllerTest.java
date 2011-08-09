@@ -65,7 +65,7 @@ public class GetFileHistoryControllerTest {
   }
 
   private Map executeTest() throws Exception {
-    expect(mockService.getLogEntries(repositoryName, null, command.getRevisionNumber(), 1, command.getPath(), 100, false, true)).andStubReturn(logEntries);
+    expect(mockService.getLogEntries(null, repositoryName, command.getRevisionNumber(), 1, command.getPath(), 100, false, true)).andStubReturn(logEntries);
     replay(mockService);
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, request, null, null);
     verify(mockService);

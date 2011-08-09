@@ -43,7 +43,7 @@ public class GetLogMessageControllerTest {
     final GetLogMessageController ctrl = new GetLogMessageController();
     ctrl.setRepositoryService(mockService);
 
-    expect(mockService.getLogEntry(command.getName(), null, command.getRevisionNumber())).andStubReturn(svnLogEntry);
+    expect(mockService.getLogEntry(null, command.getName(), command.getRevisionNumber())).andStubReturn(svnLogEntry);
     replay(mockService);
 
     final ModelAndView modelAndView = ctrl.svnHandle(null, command, 100, null, null, null, null);

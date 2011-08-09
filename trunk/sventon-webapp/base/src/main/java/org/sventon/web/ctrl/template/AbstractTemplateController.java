@@ -41,8 +41,8 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
  * <p/>
  * This abstract controller is based on the GoF Template pattern, the method to
  * implement for extending controllers is
- * <code>{@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
- * HttpServletRequest,HttpServletResponse,BindException)}</code>.
+ * <code>{@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand, long, UserRepositoryContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}</code>.
  * <p/>
  * Workflow for this controller:
  * <ol>
@@ -53,15 +53,15 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
  * If this fails the user will be forwarded to an error page.
  * <li>The controller configures the <code>SVNRepository</code> object and
  * calls the extending class'
- * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long,UserRepositoryContext,
- * HttpServletRequest,HttpServletResponse,BindException)}
+ * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand, long, UserRepositoryContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}
  * method with the given {@link org.sventon.web.command.BaseCommand}
  * containing request parameters.
  * <li>After the call returns, the controller adds additional information to
  * the the model (see below) and forwards the request to the view returned
  * together with the model by the
- * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand ,long, org.sventon.web.UserRepositoryContext ,
- * HttpServletRequest,HttpServletResponse,BindException)}
+ * {@link #svnHandle(SVNConnection, org.sventon.web.command.BaseCommand, long, org.sventon.web.UserRepositoryContext,
+ * HttpServletRequest, HttpServletResponse, BindException)}
  * method.
  * </ol>
  * <b>Input arguments</b><br>
@@ -235,8 +235,8 @@ public abstract class AbstractTemplateController extends AbstractBaseController 
 
   private List<LogEntry> getLatestRevisions(BaseCommand command, SVNConnection connection, UserRepositoryContext repositoryContext) throws SventonException {
     logger.debug("Fetching [" + repositoryContext.getLatestRevisionsDisplayCount() + "] latest revisions for display");
-    return getRepositoryService().getLatestRevisions(
-        command.getName(), connection, repositoryContext.getLatestRevisionsDisplayCount());
+    return getRepositoryService().getLatestRevisions(connection, command.getName(),
+        repositoryContext.getLatestRevisionsDisplayCount());
   }
 
   /**

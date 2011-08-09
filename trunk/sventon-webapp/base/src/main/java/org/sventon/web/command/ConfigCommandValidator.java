@@ -165,7 +165,6 @@ public final class ConfigCommandValidator implements Validator {
     try {
       connection = connectionFactory.createConnection(repositoryName, configuration.getSVNURL(), credentials);
       repositoryService.getLatestRevision(connection);
-
     } catch (SventonException ex) {
       logger.info(ex);
       throw ex;
