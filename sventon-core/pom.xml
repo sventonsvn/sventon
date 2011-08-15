@@ -53,12 +53,11 @@
       <artifactId>mail</artifactId>
       <version>1.4</version>
     </dependency>
-
-    <!-- Need to be hosted locally -->
     <dependency>
-      <groupId>de.regnis.q</groupId>
-      <artifactId>sequence</artifactId>
-      <version>6.6.6</version>
+      <groupId>de.regnis.q.sequence</groupId>
+      <artifactId>sequence-library</artifactId>
+      <version>1.0.0</version>
     </dependency>
+
   </dependencies>
 </project>
