@@ -1,6 +1,7 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[2025] Added: Feature #4406 - LRU Caching of svn queries.
 [2016] Fixed: Bug #18187 - Parameter startPath not properly escaped in entry cache.
 [2014] Fixed: Bug #18186 - Possible file or directory name collision in index.
 [2008] Added: Feature #5129 - Show progress bar when exporting files.
