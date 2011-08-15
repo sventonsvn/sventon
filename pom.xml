@@ -77,6 +77,10 @@
       <id>clojure-releases</id>
       <url>http://build.clojure.org/releases</url>
     </repository>
+    <repository>
+      <id>tmate-releases</id>
+      <url>http://maven.tmatesoft.com/content/repositories/releases/</url>
+    </repository>
   </repositories>
   <properties>
     <spring.version>3.0.5.RELEASE</spring.version>
