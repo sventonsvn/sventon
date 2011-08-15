@@ -13,7 +13,6 @@
 
   <modules>
     <module>javahl</module>
-    <module>sequence</module>
     <module>jhighlight</module>
   </modules>
 </project>
