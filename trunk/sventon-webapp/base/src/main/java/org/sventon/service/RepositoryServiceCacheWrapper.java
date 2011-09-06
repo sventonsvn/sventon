@@ -21,7 +21,7 @@ public class RepositoryServiceCacheWrapper implements RepositoryService {
   /**
    * Logger for this class.
    */
-  private final Log logger = LogFactory.getLog(getClass().getName());
+  private static final Log LOGGER = LogFactory.getLog(RepositoryServiceCacheWrapper.class);
 
   private final RepositoryService delegate;
 
@@ -31,108 +31,61 @@ public class RepositoryServiceCacheWrapper implements RepositoryService {
    * @param delegate Repository Service implementation (JavaHL or SVNKit).
    */
   public RepositoryServiceCacheWrapper(final RepositoryService delegate) {
-    logger.info("Creating service wrapper for: " + delegate.getClass());
+    LOGGER.info("Creating service wrapper for: " + delegate.getClass());
     this.delegate = delegate;
   }
 
   @Override
   @Cacheable(cacheName = "latestRevisionCache")
   public Long getLatestRevision(SVNConnection connection) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()));
-    }
     return delegate.getLatestRevision(connection);
   }
 
   @Override
   @Cacheable(cacheName = "translatedRevisionCache")
   public Revision translateRevision(SVNConnection connection, Revision revision, long headRevision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "revision=[" + revision + "], " +
-          "headRevision=[" + headRevision + "]");
-    }
     return delegate.translateRevision(connection, revision, headRevision);
   }
 
   @Override
   @Cacheable(cacheName = "logEntryCache")
   public LogEntry getLogEntry(SVNConnection connection, RepositoryName repositoryName, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "revision=[" + revision + "], " +
-          "name=[" + repositoryName + "]");
-    }
     return delegate.getLogEntry(connection, repositoryName, revision);
   }
 
   @Override
   @Cacheable(cacheName = "nodeKindCache")
   public DirEntry.Kind getNodeKind(SVNConnection connection, String path, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "path=[" + path + "], " +
-          "revision=[" + revision + "]");
-    }
     return delegate.getNodeKind(connection, path, revision);
   }
 
   @Override
   @Cacheable(cacheName = "nodeKindForDiffCache")
   public DirEntry.Kind getNodeKindForDiff(SVNConnection connection, PathRevision from, PathRevision to, Revision pegRevision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "from=[" + from + "], " +
-          "to=[" + to + "], " +
-          "pegRevision=[" + pegRevision + "]");
-    }
     return delegate.getNodeKindForDiff(connection, from, to, pegRevision);
   }
 
   @Override
   @Cacheable(cacheName = "fileRevisionsCache")
   public List<FileRevision> getFileRevisions(SVNConnection connection, String path, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "path=[" + path + "], " +
-          "revision=[" + revision + "]");
-    }
     return delegate.getFileRevisions(connection, path, revision);
   }
 
   @Override
   @Cacheable(cacheName = "propertiesCache")
   public Properties listProperties(SVNConnection connection, String path, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "revision=[" + revision + "], " +
-          "name=[" + path + "]");
-    }
     return delegate.listProperties(connection, path, revision);
   }
 
   @Override
   @Cacheable(cacheName = "revisionsForPathCache")
   public List<Long> getRevisionsForPath(SVNConnection connection, String path, long fromRevision, long toRevision, boolean stopOnCopy, long limit) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "path=[" + path + "], " +
-          "from=[" + fromRevision + "], " +
-          "to=[" + toRevision + "]" +
-          "stopOnCopy=[" + stopOnCopy + "]" +
-          "limit=[" + limit + "]");
-    }
     return delegate.getRevisionsForPath(connection, path, fromRevision, toRevision, stopOnCopy, limit);
   }
 
   @Override
   @Cacheable(cacheName = "entryInfoCache")
   public DirEntry getEntryInfo(SVNConnection connection, String path, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "path=[" + path + "], " +
-          "revision=[" + revision + "]");
-    }
     return delegate.getEntryInfo(connection, path, revision);
   }
 
@@ -145,11 +98,6 @@ public class RepositoryServiceCacheWrapper implements RepositoryService {
   @Override
   @Cacheable(cacheName = "listCache")
   public DirList list(SVNConnection connection, String path, long revision) throws SventonException {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Delegating call to: " + getMethodName(Thread.currentThread().getStackTrace()) + ", " +
-          "path=[" + path + "], " +
-          "revision=[" + revision + "]");
-    }
     return delegate.list(connection, path, revision);
   }
 
@@ -204,10 +152,6 @@ public class RepositoryServiceCacheWrapper implements RepositoryService {
   @Override
   public List<LogEntry> getLogEntriesFromRepositoryRoot(SVNConnection connection, long fromRevision, long toRevision) throws SventonException {
     return delegate.getLogEntriesFromRepositoryRoot(connection, fromRevision, toRevision);
-  }
-
-  private String getMethodName(StackTraceElement[] element) {
-    return element[1].getMethodName();
   }
 
 }
