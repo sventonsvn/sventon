@@ -39,6 +39,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
   private final int timeToIdleSeconds;
   private final boolean diskPersistent;
   private final int diskExpiryThreadIntervalSeconds;
+  private final String contextPath;
   private MBeanServer mBeanServer;
 
   /**
@@ -64,6 +65,7 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
                             final boolean diskPersistent,
                             final int diskExpiryThreadIntervalSeconds) {
     this.repositoriesDirectory = configDirectory.getRepositoriesDirectory();
+    this.contextPath = configDirectory.getContextPath();
     this.maxElementsInMemory = maxElementsInMemory;
     this.overflowToDisk = overflowToDisk;
     this.eternal = eternal;
@@ -90,14 +92,16 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
    */
   @Override
   protected ObjectCache createCache(final RepositoryName repositoryName) throws CacheException {
-    final File cachePath = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
-    logger.debug("Creating cache: " + cachePath.getAbsolutePath());
+    final File cacheDirectory = new File(new File(repositoriesDirectory, repositoryName.toString()), "cache");
+    final String cachePath = cacheDirectory.getAbsolutePath();
+    logger.debug("Creating cache: " + cachePath);
 
-    if (!cachePath.exists() && !cachePath.mkdirs()) {
-      throw new CacheException("Unable to create directory: " + cachePath.getAbsolutePath());
+    if (!cacheDirectory.exists() && !cacheDirectory.mkdirs()) {
+      throw new CacheException("Unable to create directory: " + cachePath);
     }
 
-    final DefaultObjectCache objectCache = new DefaultObjectCache(repositoryName.toString(), cachePath.getAbsolutePath(),
+    final String cacheName = createCacheName(repositoryName);
+    final DefaultObjectCache objectCache = new DefaultObjectCache(cacheName, cachePath,
         maxElementsInMemory, overflowToDisk, eternal, timeToLiveSeconds, timeToIdleSeconds, diskPersistent,
         diskExpiryThreadIntervalSeconds);
 
@@ -105,6 +109,10 @@ public class ObjectCacheManager extends CacheManager<ObjectCache> {
     objectCache.setMBeanServer(mBeanServer);
     objectCache.init();
     return objectCache;
+  }
+
+  protected String createCacheName(final RepositoryName repositoryName) {
+    return contextPath + "/" + repositoryName.toString();
   }
 
   /**
