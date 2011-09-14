@@ -109,21 +109,29 @@ public final class DefaultRepositoryChangeMonitor implements RepositoryChangeMon
     if (application.isConfigured()) {
       final RepositoryConfiguration configuration = application.getConfiguration(repositoryName);
 
-      if (configuration.isCacheUsed() && !application.isUpdating(repositoryName)) {
-        application.setUpdatingCache(repositoryName, true);
-        SVNConnection connection = null;
-        try {
-          connection = connectionFactory.createConnection(configuration.getName(),
-              configuration.getSVNURL(), configuration.getCacheCredentials());
-          final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
-          update(repositoryName, connection, objectCache);
-        } catch (final Exception ex) {
-          logger.warn("Unable to establish repository connection", ex);
-        } finally {
-          if (connection != null) {
-            connection.closeSession();
-          }
-          application.setUpdatingCache(repositoryName, false);
+      synchronized (this) {
+        if (configuration.isCacheUsed() && !application.isUpdating(repositoryName)) {
+          final Thread updaterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+              application.setUpdatingCache(repositoryName, true);
+              SVNConnection connection = null;
+              try {
+                connection = connectionFactory.createConnection(configuration.getName(),
+                    configuration.getSVNURL(), configuration.getCacheCredentials());
+                final ObjectCache objectCache = objectCacheManager.getCache(repositoryName);
+                update(repositoryName, connection, objectCache);
+              } catch (final Exception ex) {
+                logger.warn("Unable to establish repository connection", ex);
+              } finally {
+                if (connection != null) {
+                  connection.closeSession();
+                }
+                application.setUpdatingCache(repositoryName, false);
+              }
+            }
+          }, "Updater-" + repositoryName.toString());
+          updaterThread.start();
         }
       }
     }
