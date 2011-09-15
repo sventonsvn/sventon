@@ -5,10 +5,12 @@ required for deployment, thus Tomcat 6.0 is a good container companion.
 You'll also need a Subversion server set up and configured with a
 repository. For info on Subversion, see http://subversion.apache.org
 
-Starting with version 2.5.0 both JavaHL and SVNKit are suppored as drivers to
+Starting with version 2.5.0 both JavaHL and SVNKit are supported as drivers to
 connect to Subversion. Using JavaHL requires that Subversion binaries including
 JavaHL bindings are installed on the system. SVNKit requires has no dependencies
-outside the war.
+outside the war. Note that you will have to build the JavaHL version yourself
+from the source code. See http://wiki.sventon.org/index.php?n=Main.Building
+for details
 
 The JHighlight library from https://jhighlight.dev.java.net is used for
 syntax highlighting.

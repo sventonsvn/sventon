@@ -2,24 +2,24 @@
 
 <div style="padding-left:3px;padding-top:5px;">
 
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v250'); ">
-    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.5.0
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker('/downloads/v251'); ">
+    <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.5.1
   </a>
-  <a href="/download/" onClick="javascript:urchinTracker ('/downloads/v250');">(mirror)</a>
+  <a href="/download/" onClick="javascript:urchinTracker('/downloads/v251');">(mirror)</a>
 
   <br/>
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v216'); ">
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker('/downloads/v216'); ">
     <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.1.6
   </a>
-  <a href="/download/sventon-2.1.6-bin.zip" onClick="javascript:urchinTracker ('/downloads/v216');">(mirror)</a>
+  <a href="/download/sventon-2.1.6-bin.zip" onClick="javascript:urchinTracker('/downloads/v216');">(mirror)</a>
 
   <br/>
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v205'); ">
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker('/downloads/v205'); ">
     <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;2.0.5
   </a>
 
   <br/>
-  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker ('/downloads/v141'); ">
+  <a href="http://developer.berlios.de/project/showfiles.php?group_id=3670" onClick="javascript:urchinTracker('/downloads/v141'); ">
     <img src="images/disk.png" align="absmiddle" vspace="2" hspace="6" border="0"/>&nbsp;1.4.1
   </a>
 
