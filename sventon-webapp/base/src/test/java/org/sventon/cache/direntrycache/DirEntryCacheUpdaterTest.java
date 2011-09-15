@@ -89,10 +89,11 @@ public class DirEntryCacheUpdaterTest {
     when(serviceMock.getEntryInfo(null, "/trunk/file3.def", 123)).thenReturn(new DirEntry(
         "/trunk", "file3.def", "author", new Date(), DirEntry.Kind.FILE, 123, 12345));
 
-    final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
-    cacheUpdater.setRepositoryService(serviceMock);
     final RepositoryName repositoryName = new RepositoryName("defaultsvn");
     final RevisionUpdate revisionUpdate = new RevisionUpdate(repositoryName, logEntries, false);
+
+    final DirEntryCacheUpdater cacheUpdater = new DirEntryCacheUpdater(null, application);
+    cacheUpdater.setRepositoryService(serviceMock);
     cacheUpdater.updateInternal(entryCache, null, revisionUpdate);
 
     Thread.sleep(500L); // TODO: Get rid of this!

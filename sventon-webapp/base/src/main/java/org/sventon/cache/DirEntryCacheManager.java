@@ -33,8 +33,6 @@ public final class DirEntryCacheManager extends CacheManager<DirEntryCache> {
 
   private int maxEntriesPerCommit;
 
-  private int threadPoolSize;
-
   /**
    * Constructor.
    *
@@ -59,7 +57,6 @@ public final class DirEntryCacheManager extends CacheManager<DirEntryCache> {
     logger.debug("Using dir: " + cacheDirectory.getAbsolutePath());
     final CompassDirEntryCache entryCache = new CompassDirEntryCache(cacheDirectory, true);
     entryCache.setMaxEntriesPerCommit(maxEntriesPerCommit);
-    entryCache.setThreadPoolSize(threadPoolSize);
     entryCache.init();
     return entryCache;
   }
@@ -91,15 +88,6 @@ public final class DirEntryCacheManager extends CacheManager<DirEntryCache> {
    */
   public void setMaxEntriesPerCommit(int maxEntriesPerCommit) {
     this.maxEntriesPerCommit = maxEntriesPerCommit;
-  }
-
-  /**
-   * Sets the number of threads in the index executor service pool.
-   *
-   * @param threadPoolSize Number of executor threads in pool.
-   */
-  public void setThreadPoolSize(int threadPoolSize) {
-    this.threadPoolSize = threadPoolSize;
   }
 
 }

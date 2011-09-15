@@ -27,9 +27,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.sventon.model.DirEntry.Kind;
@@ -71,11 +68,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   private static final int MAX_CLAUSE_DEFAULT_COUNT = 1024;
 
-  private ExecutorService executorService = null;
-
   private int maxEntriesPerCommit = 1000;
-
-  private int threadPoolSize = 1;
 
   /**
    * Constructs an in-memory cache instance.
@@ -117,8 +110,6 @@ public final class CompassDirEntryCache implements DirEntryCache {
     compass = compassConfiguration.buildCompass();
     latestCachedRevisionFile = new File(cacheDirectory, ENTRY_CACHE_FILENAME);
 
-    executorService = Executors.newFixedThreadPool(threadPoolSize);
-
     if (useDiskStore) {
       loadLatestCachedRevisionNumber();
     }
@@ -126,14 +117,7 @@ public final class CompassDirEntryCache implements DirEntryCache {
 
   @Override
   public void shutdown() {
-    try {
-      executorService.shutdown();
-      executorService.awaitTermination(10, TimeUnit.SECONDS);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    } finally {
-      compass.close();
-    }
+    compass.close();
   }
 
   @Override
@@ -193,61 +177,56 @@ public final class CompassDirEntryCache implements DirEntryCache {
   public void update(final Map<String, DirEntry.Kind> entriesToDelete,
                      final List<DirEntry> entriesToAdd) {
 
-    executorService.execute(new Runnable() {
-      @Override
-      public void run() {
-        CompassSession session = null;
-        CompassTransaction transaction = null;
+    CompassSession session = null;
+    CompassTransaction transaction = null;
 
-        try {
-          session = compass.openSession();
-          logger.debug("Applying changes inside transaction(s)...");
+    try {
+      session = compass.openSession();
+      logger.debug("Applying changes inside transaction(s)...");
 
-          int count = 0;
-          transaction = session.beginTransaction();
-          // Apply deletion...
-          for (String id : entriesToDelete.keySet()) {
-            final Kind kind = entriesToDelete.get(id);
-            if (kind == Kind.DIR) {
-              // Directory node deleted
-              logger.debug(id + " is a directory. Doing a recursive delete");
-              removeAllEntriesInDirectory(session, id);
-            } else {
-              // Single entry delete
-              removeFileEntry(session, id);
-            }
+      int count = 0;
+      transaction = session.beginTransaction();
+      // Apply deletion...
+      for (String id : entriesToDelete.keySet()) {
+        final Kind kind = entriesToDelete.get(id);
+        if (kind == Kind.DIR) {
+          // Directory node deleted
+          logger.debug(id + " is a directory. Doing a recursive delete");
+          removeAllEntriesInDirectory(session, id);
+        } else {
+          // Single entry delete
+          removeFileEntry(session, id);
+        }
 
-            if (++count % maxEntriesPerCommit == 0) {
-              logger.debug("Committing transaction at count: " + count);
-              transaction.commit();
-              transaction = session.beginTransaction();
-            }
-          }
+        if (++count % maxEntriesPerCommit == 0) {
+          logger.debug("Committing transaction at count: " + count);
           transaction.commit();
-
-          // Apply adds...
-          count = 0;
           transaction = session.beginTransaction();
-          for (DirEntry entry : entriesToAdd) {
-            session.save(entry);
-            if (++count % maxEntriesPerCommit == 0) {
-              logger.debug("Committing transaction at count: " + count);
-              transaction.commit();
-              transaction = session.beginTransaction();
-            }
-          }
-          transaction.commit();
-
-        } catch (Exception ex) {
-          if (transaction != null) {
-            transaction.rollback();
-          }
-          logger.error("Error during index update", ex);
-        } finally {
-          if (session != null) session.close();
         }
       }
-    });
+      transaction.commit();
+
+      // Apply adds...
+      count = 0;
+      transaction = session.beginTransaction();
+      for (DirEntry entry : entriesToAdd) {
+        session.save(entry);
+        if (++count % maxEntriesPerCommit == 0) {
+          logger.debug("Committing transaction at count: " + count);
+          transaction.commit();
+          transaction = session.beginTransaction();
+        }
+      }
+      transaction.commit();
+
+    } catch (Exception ex) {
+      if (transaction != null) {
+        transaction.rollback();
+      }
+      logger.error("Error during index update", ex);
+    } finally {
+      if (session != null) session.close();
+    }
   }
 
   @Override
@@ -389,15 +368,6 @@ public final class CompassDirEntryCache implements DirEntryCache {
    */
   public void setMaxEntriesPerCommit(final int maxEntriesPerCommit) {
     this.maxEntriesPerCommit = maxEntriesPerCommit;
-  }
-
-  /**
-   * Sets the number of threads in the index executor service pool.
-   *
-   * @param threadPoolSize Number of executor threads in pool.
-   */
-  public void setThreadPoolSize(final int threadPoolSize) {
-    this.threadPoolSize = threadPoolSize;
   }
 
 }
