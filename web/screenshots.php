@@ -1,7 +1,7 @@
 <div class="header">Screenshots</div>
 <div class="body">
 
-(To be updated to 2.5.0...)
+(To be updated to 2.5.1...)
 
 <hr>
 
