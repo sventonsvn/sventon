@@ -62,8 +62,8 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:svn+ssh://svn.berlios.de/svnroot/repos/sventon/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.berlios.de/svnroot/repos/sventon/trunk</developerConnection>
+    <connection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</connection>
+    <developerConnection>scm:svn:https://svn.berlios.de/svnroot/repos/sventon/trunk</developerConnection>
     <url>http://svn.sventon.org/</url>
   </scm>
   <repositories>
@@ -132,7 +132,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-          <tagBase>svn+ssh://svn.berlios.de/svnroot/repos/sventon/tags</tagBase>
+          <tagBase>https://svn.berlios.de/svnroot/repos/sventon/tags</tagBase>
           <preparationGoals>install assembly:assembly</preparationGoals>
         </configuration>
       </plugin>
