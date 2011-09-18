@@ -1,0 +1,24 @@
+<assembly>
+  <id>src</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+  <fileSets>
+    <fileSet>
+      <excludes>
+        <exclude>**/*.releaseBackup</exclude>
+        <exclude>release.properties</exclude>
+        <exclude>config</exclude>
+        <exclude>servers</exclude>
+        <exclude>sventon*</exclude>
+        <exclude>**/*.log</exclude>
+        <exclude>**/*.iml</exclude>
+        <exclude>**/*.disabled</exclude>
+        <exclude>**/target/**</exclude>
+        <exclude>**/dev-build.properties</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

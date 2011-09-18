@@ -1,0 +1,96 @@
+<%
+/*
+ * ====================================================================
+ * Copyright (c) 2005-2011 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+ */
+%>
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/js/wz_tooltip.js"></script>
+<%@ include file="/WEB-INF/jspf/spinner.jspf"%>
+
+<sventon:topHeaderTable repositoryName="${command.name}" repositoryNames="${repositoryNames}"
+                        isEditableConfig="${isEditableConfig}" isLoggedIn="${userRepositoryContext.isLoggedIn}"/>
+
+<spring:hasBindErrors name="command"><c:set var="hasErrors" scope="page" value="true"/></spring:hasBindErrors>
+
+<script type="text/javascript">
+  var latestRevisionsCount = ${userRepositoryContext.latestRevisionsDisplayCount};
+</script>
+
+<table class="sventonTopTable">
+  <tr>
+    <td valign="bottom" colspan="1">
+      <a href="#" onclick="$('latestCommitInfoDiv').visible() ? hideLatestRevisions() : getLatestRevisions('${command.name}', latestRevisionsCount); return false;">
+        [<span id="latestCommitLink"><c:choose><c:when test="${param.showlatestrevinfo eq 'true'}"><spring:message code='hide'/></c:when><c:otherwise><spring:message code='show'/></c:otherwise></c:choose></span>&nbsp;<spring:message code='recent.changes'/>]</a></td>
+    <td align="right">
+    <form name="gotoForm" method="post" action="#" onsubmit="return goto(this);">
+        <table class="sventonRepositoryFunctionsTable">
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="2"><span class="exclamationText"><spring:bind path="command.revision">${status.errorMessage}</spring:bind></span></td>
+            <td colspan="2"><span class="exclamationText"><spring:bind path="command.path">${status.errorMessage}</spring:bind></span></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td align="left"><label for="revisionInput"><spring:message code="goto.revision"/></label></td>
+            <td><img class="helpIcon" src="images/icon_help.png" alt="Help" onmouseover="return getHelpText('revision_help');"></td>
+            <td colspan="2" align="left"><label for="pathInput"><spring:message code="goto.path"/></label></td>
+          </tr>
+          <tr>
+            <td>
+              <c:if test="${!isHead}">
+                <a href="#" onclick="goToHeadRevision(document.gotoForm); return false;" title="Click to go to 'HEAD' revision"><spring:message code="revision.head"/></a>
+              </c:if>
+            </td>
+            <td colspan="2"><spring:bind path="command.revision"><input id="revisionInput" class="sventonRevision" type="text" name="revision" value="${status.value}"></spring:bind></td>
+            <td><spring:bind path="command.path"><input id="pathInput" class="sventonGoTo" type="text" name="path" value="${command.encodedPath}"></spring:bind></td>
+            <td><input type="hidden" id="nameInput" name="name" value="${command.name}"><input type="submit" class="btn" value="<spring:message code="go"/>"></td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div id="latestCommitInfoDiv" style="display: ${param.showlatestrevinfo eq null or param.showlatestrevinfo eq 'false' ? 'none' : ''};" >
+        <%@ include file="/WEB-INF/jsp/ajax/latestRevisions.jsp"%>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="sventonHeadlines" colspan="2">
+      <sventon:currentRevision command="${command}" headRevision="${headRevision}" clickable="${!hasErrors}"/> -
+      <sventon:clickableUrl command="${command}" url="${repositoryURL}" clickable="${!hasErrors}"/>
+    </td>
+  </tr>
+</table>
+
+<script language="javascript" type="text/javascript">
+  jQuery(document).ready(function() {
+    jQuery("#revisionInput").datepicker({
+      showOn: "button",
+      buttonImage: "images/icon_calendar.png",
+      buttonImageOnly: true,
+      dateFormat: "{yy-mm-dd}",
+      buttonText: "<spring:message code="date.select"/>"
+    })
+  });
+</script>
+
+<spring:hasBindErrors name="command">
+  <table class="sventonSpringErrorMessageTable">
+    <tr>
+      <td>
+        <span class="exclamationText">
+          <spring:message code="${errors.globalError.code}" text="${errors.globalError.defaultMessage}"/>
+        </span>
+      </td>
+    </tr>
+  </table>
+</spring:hasBindErrors>

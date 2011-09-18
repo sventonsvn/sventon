@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+
+  <diskStore path="java.io.tmpdir"/>
+
+  <defaultCache
+      statistics="true"
+      maxElementsInMemory="100"
+      eternal="false"
+      timeToIdleSeconds="120"
+      timeToLiveSeconds="120"
+      overflowToDisk="false"
+      diskPersistent="false"
+      memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="latestRevisionCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="5"
+         timeToLiveSeconds="10"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="translatedRevisionCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="5"
+         timeToLiveSeconds="10"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="logEntryCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="nodeKindCache"
+         statistics="true"
+         maxElementsInMemory="1000"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="nodeKindForDiffCache"
+         statistics="true"
+         maxElementsInMemory="1000"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="fileRevisionsCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="propertiesCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="revisionsForPathCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="entryInfoCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="logEntriesCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+  <cache name="listCache"
+         statistics="true"
+         maxElementsInMemory="100"
+         eternal="false"
+         timeToIdleSeconds="120"
+         timeToLiveSeconds="120"
+         overflowToDisk="false"
+         diskPersistent="false"
+         memoryStoreEvictionPolicy="LRU"
+      />
+
+</ehcache>

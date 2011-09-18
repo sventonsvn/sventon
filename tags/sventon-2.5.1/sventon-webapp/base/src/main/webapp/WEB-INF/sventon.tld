@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ * ====================================================================
+ * Copyright (c) 2005-2011 sventon project. All rights reserved.
+ *
+ * This software is licensed as described in the file LICENSE, which
+ * you should have received as part of this distribution. The terms
+ * are also available at http://www.sventon.org.
+ * If newer versions of this license are posted there, you may use a
+ * newer version instead, at your option.
+ * ====================================================================
+  -->
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+  <description>sventon jsp tag library</description>
+  <display-name>JSTL core</display-name>
+  <tlib-version>1.0</tlib-version>
+  <short-name>s</short-name>
+
+  <tag>
+    <description>Tag for formatting bytes size values.</description>
+    <name>formatBytes</name>
+    <tag-class>org.sventon.web.tags.ByteFormatterTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>size</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>locale</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Tag that returns appropriate file type icon for given file extension.</description>
+    <name>fileTypeIcon</name>
+    <tag-class>org.sventon.web.tags.FileTypeIconTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>filename</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Tag for formatting a date into an age string.</description>
+    <name>age</name>
+    <tag-class>org.sventon.web.tags.AgeTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>date</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Tag for decorating/transforming an author name string.</description>
+    <name>author</name>
+    <tag-class>org.sventon.web.tags.AuthorDecoratorTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>author</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Creates a encoded URL with optional query parameters.</description>
+    <name>url</name>
+    <tag-class>org.sventon.web.tags.UrlTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>var</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>context</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Adds a parameter to a containing 'import' tag's URL.</description>
+    <name>param</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.core.ParamTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <description>Name of the query string parameter.</description>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <description>Value of the parameter.</description>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <description>Tag for decorating a search hit using a CSS.</description>
+    <name>searchHitDecorator</name>
+    <tag-class>org.sventon.web.tags.SearchHitDecoratorTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>cssName</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>searchType</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>searchString</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>text</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+</taglib>
