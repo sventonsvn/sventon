@@ -41,6 +41,9 @@ For non-US-ASCII charsets to work correctly with Tomcat, the Tomcat connector
 attribute "URIEncoding" should be set to "UTF-8", or alternatively the attribute 
 "useBodyEncodingForURI" should be set to "true"
 
+Upgrading instructions
+See upgrade.txt
+
 Documentation and FAQ
 See http://wiki.sventon.org
 
