@@ -1,0 +1,51 @@
+=Installing sventon=
+
+_These instructions are for sventon 2.5.x_
+
+*Prerequisites SVNKit*
+  # [http://www.oracle.com/technetwork/java/javase/downloads/ Java SE 6] or later.
+  # A servlet container supporting Servlet 2.4 and JSP 2.0, such as [http://tomcat.apache.org/ Tomcat 6.0] or later.
+  # A [http://subversion.apache.org/ Subversion] repository.
+  # sventon [http://www.sventon.org/ installation file].
+
+*Prequisites JavaHL*
+In addition to the items above:
+  # Subversion client with JavaHL bindings must be installed on your system.
+
+*sventon installation*
+  # Drop the `svn.war` file in the webapps install folder on the server (in Tomcat this directory is called `webapps`).
+  # Point your browser to `http://<host>/svn` and follow on-screen instructions to configure sventon.
+  # Browse repository.
+
+==Configuration files==
+The sventon configuration files and logs are by default stored in the servlet container's temp directory, in Tomcat this is `<tomcat home>/temp`.
+
+The following FAQ entries describe how to change the location of these files:
+ * [FAQ Change log file location]
+ * [FAQ Change configuration file and cache database location]
+
+==Upgrading==
+Some upgrades are drop-ins, others require that cache indices are rebuilt. Refer to the file `upgrade.txt` in the distribution package for further info.
+
+==Installation issues==
+If you run Jetty 6.x and get an error like this:
+
+{{{
+org.apache.jasper.JasperException: /WEB-INF/tags/
+clickableUrl.tag(23,2) PWC6340: According to the TLD, rtexprvalue is
+true, and deferred-value is specified for the attribute items of the
+tag handler org.apache.taglibs.standard.tag.rt.core.ForTokensTag, but
+the argument for the setter method is not a java.lang.Object 
+[...]
+}}}
+There is a version conflict with the `standard.jar` shipping with Jetty. The easiest way seem to be to simply delete the file `standard.jar` from sventon's `/WEB-INF/lib` directory. 
+
+If you run JBoss 5.1.0 you will get an error:
+
+There is a version conflict with the `standard.jar` and `jstl.jar` shipping with JBoss. The easiest way seem to be to simply delete the file  `standard-1.1.2.jar` and `jstl-1.1.2.jar` from sventon's `/WEB-INF/lib` directory. 
+
+==Uninstalling==
+See FAQ entry [FAQ How do I uninstall sventon?]
+
+==Security==
+For production use, you may want to read up on sventon [Security].
