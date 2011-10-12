@@ -1,0 +1,12 @@
+The following properties are available for substitution in the [FAQ RSS template file]:
+
+{{{
+${logMessage}
+${author}
+${date}
+${addedCount}
+${modifiedCount}
+${replacedCount}
+${deletedCount}
+${changedPaths}
+}}}
