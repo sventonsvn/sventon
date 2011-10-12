@@ -1,0 +1,51 @@
+=sventon Configuration Directory Layout=
+
+Repository configuration files and log files for sventon are per default stored under the a root directory called `sventon_config`. This page describes the layout of this file hierarchy.
+
+==Where is it?==
+Per default this directory is stored in the temp directory of the web container. E.g. when using Apache Tomcat the directory is stored in `<tomcat_home>`/temp
+
+==Layout==
+This is a typical layout of the config directory for a sventon instance configured for browsing two repositories, `repository1` (with caching enabled) and `repository2` (with caching disabled). The file and directory names reflect default names, if these have been changed the names below will be different.
+{{{
+sventon config/
+  |
+  + svn/
+     |
+     + export_temp/
+     |
+     + repositories/
+     |  |
+     |  + repository1/
+     |  |  |
+     |  |  + sventon_config.properties
+     |  |  |
+     |  |  + cache
+     |  |
+     |  + repository2/
+     |     |
+     |     + sventon_config.properties
+     |
+     + sventon.log
+}}}
+
+===svn/===
+This is the context root directory, named after the context root path given to this sventon instance, e.g. the name of the WAR-file. Per default this is svn. If more than one instance is deployed there will be one directory per instance.
+
+===export_temp/===
+Directory for temporarily storing zip files for download created in sventon, if enabled. Files in this directory are regularily cleaned out by the application.
+
+===repositories/===
+Directory containing one directory per configured svn repository. The directory name matches exactly the name given the repository during configuration, and is also the name shown in the GUI.
+
+===repository1/===
+Configuration directory for `repository1`
+
+===sventon_config.properties===
+Properties file for this repository, see [SventonProperties  sventon.properties]
+
+===cache/===
+Directory containing caching data and search indices. May contain subdirectories.
+
+===sventon.log===
+Application log file.
