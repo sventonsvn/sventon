@@ -1,5 +1,4 @@
-<wiki:toc max_depth="1" />
-
+<wiki:toc/>
 
 === What is sventon ===
 sventon is a pure java web application for browsing [http://subversion.apache.org Subversion] version control system repositories.
@@ -96,7 +95,7 @@ Probably. See [Integrating] for a list of known tools with sventon support.
 Edit the file `WEB-INF/applicationContext.xml` and change the property `editableConfig` to `true` and set a login password by changing the property `configPassword` to something other than the default `password`.
 
 === How do I add or remove a repository in an already configured sventon instance? ===
-First you will have to make sure the [[#q20090119-1|admin functionality is enabled]]. Simply browse to `/repos/listconfigs`, eg. [[http://localhost/svn/repos/listconfigs]].
+First you will have to make sure the admin functionality is enabled. Simply browse to `/repos/listconfigs`, eg. [http://localhost/svn/repos/listconfigs].
 
 === How do I change the default diff view? ===
 Edit the file `WEB-INF/applicationContext.xml` and change the constant `defaultDiffView` to `inline`, `sidebyside` or `unified`.
