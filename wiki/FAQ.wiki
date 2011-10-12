@@ -1,0 +1,69 @@
+<wiki:toc max_depth="1" />
+
+=== What is sventon ===
+
+=== What features does sventon have? ===
+
+=== What do I need to run sventon? ===
+
+=== What platforms are supported? ===
+
+=== What configurations have been tested? ===
+
+=== How do I install and configure sventon? ===
+
+=== I get an error trying to install sventon on Jetty, what could be wrong? ===
+
+=== I am running sventon on a private server behind a public web dispatcher or proxy but the internal URLs are pointing to the private server's IP. How do I fix that? ===
+
+=== How do I uninstall sventon? ===
+
+=== How does the cache/indexing work? ===
+
+=== How do I upgrade sventon to a newer version? ===
+
+=== Will sventon in any way jeopardize my Subversion repository? ===
+
+=== Will sventon write any information to my Windows registry? ===
+
+=== Why is not file type [XYZ] colorized when displayed in sventon? ===
+
+=== Why is the binary file type [XYZ] treated as a text file when I view it in sventon? ===
+
+=== Is there a log file for sventon? ===
+
+=== Where are configuration and cache files stored? ===
+
+=== Does sventon support non-US-ASCII charsets? ===
+
+=== Can I send suggestions for new functions? ===
+
+=== Will sventon be avaliable for CVS (or any other version control system) in the future? ===
+
+=== What license do you use? ===
+
+=== What's the deal with JavaHL vs. SVNKit? ===
+
+=== Why did you start this project? ===
+
+=== Is there a publicly running version of Sventon that I can try? ===
+
+=== Can I change the layout of the RSS feed? ===
+
+=== Can I use sventon together with my favorite tool XYX? ===
+
+=== Where can I find the change history? ===
+
+=== Where can I find the sventon roadmap? ===
+
+=== How do I enable the administrator functionality? ===
+
+=== How do I add or remove a repository in an already configured sventon instance? ===
+
+=== How do I change the default diff view? ===
+
+=== How do I change the default location of the configuration and cache files? ===
+
+=== Can I run more than one sventon instance in the same servlet container? ===
+
+=== How can I use Glorbosoft XYZ to maximize team productivity? ===
