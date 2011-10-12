@@ -1,0 +1,40 @@
+Starting with sventon release 2.5.x programmatic reload of configuration files is now supported. This can be useful if one whishes to automate adding or removing repositories to a running instance of sventon.
+
+The functionality is limited to ''adding'' and ''removing'' repositories. Renaming is not supported; renaming an already configured repository has undefined results.
+
+==Adding and removing directories by updating the configuration files==
+
+===Adding a repository===
+# Create a new directory below the `sventon_config/<context root>/` directory. The name of this directory will be the name of the configured repository in sventon. Whitespace is not supported in the directory name.
+# Add a sventon properties file to the newly created directory. The name of the file must be `sventon.properties`. 
+
+See [SventonProperties sventon.properties] and [SventonConfigurationDirectoryLayout Sventon Configuration Directory Layout] for further information.
+
+===Removing a repository===
+# Rename the `sventon.properties` file of the repository you would like to delete to `sventon.properties_bak`.
+
+By renaming the properties file it is marked for deletion. When reloading the configuration repositories marked for deletion will be deleted by sventon.
+
+It is allowed to add and remove more than one repository at the same time.
+
+==Enabeling this feature==
+
+This feature must first be enbled by editing the file `WEB-INF/applicationContext.xml`. Change the property `configurationReloadSupported` to `true`.
+
+==API==
+
+After making changes to the configuration files, the following very simple REST like API can be used to reload the configuration:
+
+*Method:* `GET`
+
+*Resource:* `/config/reload`
+
+*Responses:*
+
+`200 OK` - Configuration reloaded.
+
+`403 FORBIDDEN` - Configuration reload is disabled (see above).
+
+`500 INTERNAL SERVER ERROR` - The server encountered an error while trying to reload the configuration files.
+
+Along with the HTTP status codes a short text message in english is also returned.
