@@ -1,0 +1,13 @@
+[Sventon Configuration Directory Layout]
+
+[Programmatic Reload Of Configuration Files]
+
+[SventonProperties sventon.properties]
+
+[Mail Notifier]
+
+[RSS Template]
+
+[Optional Variables]
+
+[Repository query cache]
