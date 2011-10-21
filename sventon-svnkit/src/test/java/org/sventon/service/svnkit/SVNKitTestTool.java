@@ -47,7 +47,7 @@ public class SVNKitTestTool {
     DAVRepositoryFactory.setup();
     FSRepositoryFactory.setup();
 
-    final String url = "svn://svn.berlios.de/sventon/";
+    final String url = "http://sventon.googlecode.com/svn/";
 //    final String uid = null; // overridden by JVM parameter
 //    final String pwd = null; // overridden by JVM parameter
 
