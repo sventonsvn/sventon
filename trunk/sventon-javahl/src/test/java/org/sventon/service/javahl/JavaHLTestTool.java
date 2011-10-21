@@ -39,7 +39,7 @@ public class JavaHLTestTool {
   @SuppressWarnings("unchecked")
   public static void main(String[] args) {
 
-    final String url = "svn://svn.berlios.de/sventon/";
+    final String url = "http://sventon.googlecode.com/svn/";
     //final String url = "svn://localhost/myrepro/";
     final String uid = null; // overridden by JVM parameter
     final String pwd = null; // overridden by JVM parameter

@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 /**
  * Class for scaling images.
  *
- * @author jesper@users.berlios.de
+ * @author jesper@sventon.org
  */
 public class ImageScaler {
 
