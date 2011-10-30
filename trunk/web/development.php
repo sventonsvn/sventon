@@ -3,22 +3,22 @@
   <b>Monitoring progress</b>
   <p>
   sventon is an open source project licensed under the
-  <a href="http://svn.berlios.de/svnroot/repos/sventon/trunk/LICENSE.txt">GNU General Public License, Version 3</a>.
+  <a href="http://sventon.googlecode.com/svn/trunk/LICENSE.txt">GNU General Public License, Version 3</a>.
   You can follow the progress of the project in different ways, including:
   </p>
   <p>
-  <b><a href="http://developer.berlios.de/projects/sventon/">The project page at BerliOS</a></b><br/>
-  Here you will find source code repository, bug and feature request databases as well as binary and source releases.
+  <b><a href="http://code.google.com/p/sventon/">The project page at Google Code</a></b><br/>
+  Here you will find source code repository, issue databases as well as binary and source releases.
   </p>
   <p>
   <b><a href="http://svn.sventon.org/">The sventon sventon instance</a></b><br/>
   Browse the source code and keep track of changes using the
-  <a href="http://svn.sventon.org/xml/berlios/rss/?revision=HEAD">RSS feeds</a>.
+  <a href="http://svn.sventon.org/xml/gc/rss/?revision=HEAD">RSS feeds</a>.
   </p>
   <p>
   <b><a href="http://groups.google.com/group/sventon-support/">The sventon support Google group</a></b><br/>
   Discuss usage and development with sventon committers and users. Bugs and feature requests submitted to
-  <a href="http://developer.berlios.de/projects/sventon/">trackers at BerliOS</a> are posted here as well.
+  <a href="http://code.google.com/p/sventon/">the issue tracker at Google Code</a> are posted here as well.
   </p>
 
   <br/>
@@ -29,13 +29,12 @@
   we will be happy to accept such contributions if we find them in line with where we think sventon is going.
   </p>
   <p>
-  Please have a look at <a href="http://developer.berlios.de/feature/?group_id=3670">
-  http://developer.berlios.de/feature/?group_id=3670</a> for some ideas of features we are
-  considering.
+  Please have a look at <a href="http://code.google.com/p/sventon/issues/list">
+  http://code.google.com/p/sventon/issues/list</a> for some ideas of features/enhancements we are considering.
   </p>
   <p>
   The latest development sources can be accessed anonymously from
-  <a href="http://svn.berlios.de/svnroot/repos/sventon/trunk">http://svn.berlios.de/svnroot/repos/sventon/trunk</a>.
+  <a href="http://sventon.googlecode.com/svn/trunk/">http://sventon.googlecode.com/svn/trunk/</a>.
   </p>
   <p>
   The best way of communicating is to use our
@@ -55,8 +54,6 @@
   <b>Documentation</b>
   <p>
   End-user and developer documentation can be found on the <a href="http://wiki.sventon.org/">sventon wiki</a>.<br/>
-  <a href="http://maven.apache.org/">Maven</a> generated project pages can be found 
-  <a href="http://sventon.berlios.de/site/">here</a>. <br/>
   <a href="http://wiki.sventon.org/index.php?n=Main.Building">Instructions for building sventon</a>
   </p>
   
