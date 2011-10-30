@@ -19,7 +19,7 @@
 </div>
 
 <p>
-  <s:url value="/xml/${command.name}/rss${command.encodedPath}" var="rssUrl">
+  <s:url value="/xml/${command.name}/rss${command.path}" var="rssUrl">
     <s:param name="revision" value="${command.revision}" />
   </s:url>
   <a href="${rssUrl}" title="Repository updates RSS feed"><img src="images/feed-icon-16x16.png" alt="feed icon"></a>
