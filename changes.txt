@@ -1,6 +1,8 @@
 sventon change history
 -----------------------------------------------------------------------------------------
 
+[2083] Fixed: Issue #3 - An unhandled internal application error occurs...
+
 [2046] Release 2.5.1 (2011-09-18)
 [2025] Added: Feature #4406 - LRU Caching of svn queries.
 [2016] Fixed: Bug #18187 - Parameter startPath not properly escaped in entry cache.
