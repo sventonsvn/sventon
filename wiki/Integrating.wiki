@@ -20,7 +20,7 @@ Example configuration (sventon 2.x)
 }}}
 
 
-===VisionProject===
+===!VisionProject===
 Website: [http://www.visionproject.se VisionProject]
 
 Sample issue
