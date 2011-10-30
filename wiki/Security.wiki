@@ -32,4 +32,4 @@ In addition to this you may also configure your servlet container to restrict ac
 When employing user-based authentication, user credentials will be temporarily stored in the servlet container session after the user has logged in. This information may be written to disk or sent over the network to other servlet containers at the container's discretion, depending on set-up. The information may also be extracted from the servlet container using various tools under certain circumstances. 
 
 ==Contact regarding security issues==
-If you think you have discovered a security issue with sventon, please contact [sventonproject@gmail.com] and we will get back to you as soon as possible.
+If you think you have discovered a security issue with sventon, please contact *sventonproject@gmail.com* and we will get back to you as soon as possible.
