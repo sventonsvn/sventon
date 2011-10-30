@@ -20,8 +20,11 @@ Example configuration (sventon 2.x)
 }}}
 
 
-!!![[http://www.visionproject.se|VisionProject]]
-Sample issue 
+===VisionProject===
+Website: [http://www.visionproject.se VisionProject]
+
+Sample issue
+ 
 [http://www.visionproject.se/GetSCDocument.do?docId=FT0bEI37uijltpd0eRiT6fgx&type=.gif]
 
 Sample configuration
