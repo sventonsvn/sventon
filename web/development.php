@@ -18,7 +18,7 @@
   <p>
   <b><a href="http://groups.google.com/group/sventon-support/">The sventon support Google group</a></b><br/>
   Discuss usage and development with sventon committers and users. Bugs and feature requests submitted to
-  <a href="http://code.google.com/p/sventon/">the issue tracker at Google Code</a> are posted here as well.
+  <a href="http://code.google.com/p/sventon/issues/list">the issue tracker at Google Code</a> are posted here as well.
   </p>
 
   <br/>
