@@ -1,6 +1,6 @@
 If enabled, the built in mail notifier sends a mail to the specified list of users each time a new repository revision is detected. The parameter `revisionCountThreshold` (below) makes sure to limit the number of mails per update.
 
-To enable the notifier, remove the remark from bean `mailNotifier` in the file `WEB-INF/sventon-servlet.xml`
+To enable the notifier, remove the remark from bean `mailNotifier` in the file `WEB-INF/applicationContext.xml`
 
 {{{
   <!-- NOTE: Make sure to change the parameters below! -->
