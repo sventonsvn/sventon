@@ -1,8 +1,6 @@
 =Welcome to the sventon wiki=
 
-This is the home of the [http://www.sventon.org/ sventon] documentation effort.
-
-To try the sventon live demo, visit [http://svn.sventon.org/ svn.sventon.org].
+This is the home of the sventon documentation effort.
 
 ===Wiki===
 This is a wiki, and the sventon community invites you to contribute!
