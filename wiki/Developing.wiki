@@ -1,5 +1,5 @@
 Developer documentation
 
-See [http://www.sventon.org/index.php?page=development sventon.org] for information on monitoring progress, contributing and contacting the developers.
+sventon is no longer maintained.
 
 [Building] sventon
