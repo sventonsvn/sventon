@@ -1,0 +1,18 @@
+The following repository queries are made cacheable:
+
+  * getLatestRevision (100 elements, 10s TTL)
+  * getTranslatedRevision (100 elements, 10s TTL)
+  * getLogEntry (100 elements, 120s TTL)
+  * getNodeKind (1000 elements, 120s TTL)
+  * getFileRevisions (100 elements, 120s TTL)
+  * getProperties (100 elements, 120s TTL)
+  * getRevisionsForPath (100 elements, 120s TTL)
+  * getEntryInfo (100 elements, 120s TTL)
+  * getLogEntries (100 elements, 120s TTL)
+  * list (100 elements, 120s TTL)
+
+The cache configuration can be customized by changing the values in the file `/WEB-INF/classes/ehcache.xml`. Se [Ehcache documentation](http://www.ehcache.org/documentation) for details.
+
+**Note:** The default values are set very moderate, small caches with short time-out.
+You will have to find the values that best suits your particular deployment environment.
+A good way of doing so is to study the MBeans containing JMX exposed cache statistics. [Enable JMX remote](http://tomcat.apache.org/tomcat-6.0-doc/monitoring.html) and connect to the server using eg. [JConsole](http://download.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html).

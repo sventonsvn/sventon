@@ -1,0 +1,54 @@
+Thanks to members of the developer community there is a growing number of popular tools that play nicely with sventon. This page presents the ones we know about. If something is missing from this list, please add it below!
+
+## Bug/issue tracking ##
+
+### JIRA ###
+Website: http://www.atlassian.com/software/jira/
+
+Example configuration (sventon 2.x)
+```
+#---------------------------------
+# Sventon http://www.sventon.org
+#---------------------------------
+#linkformat.changeset=http://your.host.address/svn/repos/"repo-name"/info?revision=${rev}
+#linkformat.file.added=http://your.host.address/svn/repos/"repo-name"/goto${path}?revision=${rev}
+#linkformat.file.modified=http://your.host.address/svn/repos/"repo-name"/diff/?entries=${path}@${rev-1}&entries=${path}@${rev}&style=sidebyside
+#linkformat.file.replaced=http://your.host.address/svn/repos/"repo-name"/goto${path}?revision=${rev}
+#linkformat.file.deleted=http://your.host.address/svn/repos/"repo-name"/goto${path}?revision=${rev-1}
+#linkformat.copyfrom=http://your.host.address/svn/repos/"repo-name"/goto${path}?revision=${rev-1}
+#
+```
+
+
+### VisionProject ###
+Website: [VisionProject](http://www.visionproject.se)
+
+Sample issue
+
+![http://www.visionproject.se/GetSCDocument.do?docId=FT0bEI37uijltpd0eRiT6fgx&type=.gif](http://www.visionproject.se/GetSCDocument.do?docId=FT0bEI37uijltpd0eRiT6fgx&type=.gif)
+
+Sample configuration
+![http://www.visionproject.se/GetSCDocument.do?docId=FO6nqexwLnw15cVhRB1l7pTP&type=.gif](http://www.visionproject.se/GetSCDocument.do?docId=FO6nqexwLnw15cVhRB1l7pTP&type=.gif)
+
+## Continuous integration ##
+
+### Hudson ###
+Website: https://hudson.dev.java.net/
+Support for sventon is included starting with build 1.157
+
+### Luntbuild ###
+Website: http://luntbuild.javaforge.com/
+Support for sventon is included starting with [Luntbuild version 1.5.2](http://www.javaforge.com/proj/doc.do?doc_id=36361)
+
+## Browsing tools ##
+
+### TortoiseSVN ###
+Website: http://tortoisesvn.tigris.org/
+[Generic repository browser support](http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-repoviewer.html), TSVN version 1.5+.
+
+
+---
+
+
+# sventon URL Specification #
+[URL Specification](URLSpecification.md)

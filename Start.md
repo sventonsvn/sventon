@@ -1,0 +1,6 @@
+# Welcome to the sventon wiki #
+
+This is the home of the sventon documentation effort.
+
+### Wiki ###
+This is a wiki, and the sventon community invites you to contribute!
