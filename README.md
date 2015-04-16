@@ -1,6 +1,7 @@
 # Welcome to the sventon project! #
 
-_Please note that the sventon project is no longer maintained. Current code and documentation is kept here at Google Code for reference. Thanks for using sventon._
+_Please note that the sventon project is no longer maintained._ 
+Current code and documentation is kept here at GitHub for reference. Thanks for using sventon.
 
 sventon is a free, open source, web client for browsing [Subversion](http://subversion.apache.org/) repositories. It is powerful, straightforward to use, and super easy to install.
 
