@@ -8,4 +8,4 @@ sventon is a pure Java application, all you need to run it is a [Java SE 6 runti
 
 Please see the [wiki](https://github.com/sventonsvn/sventon/wiki) for further details.
 
-The sventon dev blog whent to sleep [here](http://sventonblog.blogspot.se/).
+The sventon dev blog went to sleep [here](http://sventonblog.blogspot.se/).
