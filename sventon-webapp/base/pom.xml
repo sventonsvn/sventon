@@ -133,7 +133,7 @@
     <dependency>
      <groupId>de.regnis.q.sequence</groupId>
       <artifactId>sequence-library</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
 
     <!-- Need to be hosted locally -->
